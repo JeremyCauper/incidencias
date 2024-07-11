@@ -53,7 +53,7 @@
                             <label class="form-label mb-0" for="id_area"><b>Area *</b></label>
                             <select id="id_area" class="form-control form-control-sm">
                                 <option value="">-- Seleccione --</option>
-                                <option value="1">Soporte</option>
+                                <option value="1">Soportes</option>
                                 <option value="2">Facturacion</option>
                                 <option value="3">Supervisor</option>
                                 <option value="4">Reportes</option>
