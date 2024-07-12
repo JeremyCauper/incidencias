@@ -148,11 +148,11 @@
 
           <li class="nav-item dropdown user-dropdown">
             <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-              <img class="img-xs rounded-circle" src="{{asset('assets/images/faces/face8.jpg')}}" alt="Profile image">
+              <img class="img-xs rounded-circle" src="{{ asset('assets/images/auth/' . (Auth::user()->foto_perfil ? Auth::user()->foto_perfil : 'user_auth.jpg')) }}" alt="Profile image">
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
               <div class="dropdown-header text-center">
-                <img class="img-md rounded-circle" src="{{asset('assets/images/faces/face8.jpg')}}" alt="Profile image">
+                <img class="img-md rounded-circle" src="{{ asset('assets/images/auth/' . (Auth::user()->foto_perfil ? Auth::user()->foto_perfil : 'user_auth.jpg')) }}" alt="Profile image">
                 <p class="mb-1 mt-3 fw-semibold">{{ Auth::user()->nombres . ' ' . Auth::user()->apellidos }}</p>
                 <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
               </div>
@@ -247,7 +247,7 @@
   <!-- endinject -->
   <!-- Custom js for this page-->
   <script src="{{asset('assets/js/jquery.cookie.js')}}" type="text/javascript"></script>
-  <script src="{{assert('assets/js/dashboard.js')}}"></script>
+  <script src="{{asset('assets/vendors/sweetalert/sweetalert.min.js')}}"></script>
 </body>
 
 </html>

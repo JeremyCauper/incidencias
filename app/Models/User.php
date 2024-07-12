@@ -25,6 +25,7 @@ class User extends Authenticatable
         'email',
         'usuario',
         'contrasena',
+        'foto_perfil'
     ];
 
     /**
