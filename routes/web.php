@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\User\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -25,10 +26,15 @@ Route::get('/soporte', function () {
     return view('dashboard.soporte.panel');
 })->middleware('auth');
 
+
 Route::get('/control-de-usuario/usuarios', function () {
     return view('dashboard.users.usuarios');
 })->middleware('auth');
+Route::get('/DataTableUser', [UserController::class, 'DataTableUser']);
+
 
 Route::get('/control-de-usuario/mi-perfil', function () {
     return view('dashboard.users.miperfil');
 })->middleware('auth');
+
+Route::post('/register', [UserController::class, 'RegisterUser']);

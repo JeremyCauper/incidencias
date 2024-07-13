@@ -31861,9 +31861,10 @@ table.dataTable tbody td.select-checkbox:after {
   line-height: 2.5;
 }
 
-/* Select2 */
+/* Select2
 .select2-container--default .select2-results__option--highlighted[aria-selected] {
   background: #1F3BB3;
+  color: #FFFFFF;
 }
 .select2-container--default .select2-selection--single,
 .select2-container--default .select2-dropdown,
@@ -31916,7 +31917,7 @@ table.dataTable tbody td.select-checkbox:after {
 }
 .select2-container--default .select2-selection__arrow {
   padding-top: 45px;
-}
+}*/
 
 /* Summernote Editor */
 .note-editor.note-frame {
