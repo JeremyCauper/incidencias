@@ -47,6 +47,7 @@ Route::get('/control-de-usuario/mi-perfil', function () {
 })->middleware('auth');
 
 Route::post('/register', [UserController::class, 'RegisterUser']);
+Route::get('/consultaDni/{dni}', [UserController::class, 'consultaDni']);
 
 
 Route::get('/viewListMenu', [MenuController::class, 'viewListMenu']);

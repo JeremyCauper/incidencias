@@ -101,6 +101,65 @@
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
     }
+
+
+    .treeview {
+        list-style-type: none;
+        padding: 0;
+    }
+
+    .treeview, .treeview ul {
+        margin: 0;
+        padding: 0;
+        list-style: none;
+    }
+
+    .treeview ul {
+        position: relative;
+    }
+
+    .treeview ul::before {
+        content: "";
+        display: block;
+        width: 2px;
+        background: #ccc;
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 5px;
+        transition: all .2s ease-in;
+    }
+
+    .treeview li {
+        margin: 0;
+        padding: 0 0 0 20px;
+        line-height: 25px;
+        color: #369;
+        font-weight: 700;
+        position: relative;
+    }
+
+    .treeview .menu .submenu li input {
+        margin-left: 5px;
+    }
+
+    .treeview .submenu li label::before {
+        content: "";
+        display: block;
+        width: 14.5px;
+        height: 2px;
+        background: #D3D3D3;
+        position: absolute;
+        top: 10px;
+        left: 5px;
+        transition: all .2s ease-in;
+    }
+
+    .treeview .menu input[type="checkbox"]:checked ~ .submenu::before,
+    .treeview .menu .submenu li input[type="checkbox"]:checked ~ label::before {
+        transition: all .2s ease-in;
+        background: #007bff;
+    }
 </style>
 
 <div class="col-12 grid-margin">
@@ -118,7 +177,7 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <table class="table">
+                    <table id="tb_usuario" class="table">
                         <thead>
                             <tr>
                                 <th>Nombre Personal</th>
@@ -158,7 +217,7 @@
                         <div class="col-xl-3 col-sm-5 mb-3">
                             <label class="form-label mb-0" for="n_doc"><b>Dni/Carnet E.<span class="text-danger">*</span></b></label>
                             <div class="input-group">
-                                <input type="text" class="form-control form-control-sm" placeholder="Número de Dni" id="n_doc" name="n_doc" maxlength="20">
+                                <input type="search" class="form-control form-control-sm" placeholder="Número de Dni" id="n_doc" name="n_doc" maxlength="20">
                                 <span class="input-group-append">
                                     <button class="btn btn-primary" type="button" id="conDoc">
                                         <i class="ti-search"></i>
@@ -176,13 +235,27 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xxl-4 col-lg-7 col-sm-6 mb-3">
-                            <label class="form-label mb-0" for="email_usu"><b>Email</b></label>
-                            <input type="text" class="form-control form-control-sm" id="email_usu" name="email_usu">
+                        <div class="col-xxl-5 col-lg-4 mb-3">
+                            <label class="form-label mb-0" for="emailp_usu"><b>Correo Personal</b></label>
+                            <input type="text" class="form-control form-control-sm" id="emailp_usu" name="emailp_usu">
                         </div>
-                        <div class="col-xxl-2 col-lg-5 col-sm-6 mb-3">
+                        <div class="col-xxl-5 col-lg-4 mb-3">
+                            <label class="form-label mb-0" for="emailc_usu"><b>Correo Corporativo</b></label>
+                            <input type="text" class="form-control form-control-sm" id="emailc_usu" name="emailc_usu">
+                        </div>
+                        <div class="col-xxl-2 col-lg-4 mb-3">
                             <label class="form-label mb-0" for="fechan_usu"><b>Fecha de Nacimiento <span class="text-danger">*</span></b></label>
                             <input type="date" class="form-control form-control-sm" id="fechan_usu" name="fechan_usu">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xxl-3 col-sm-6 mb-3">
+                            <label class="form-label mb-0" for="telp_usu"><b>Tel. Personal</b></label>
+                            <input type="text" class="form-control form-control-sm" id="telp_usu" name="telp_usu">
+                        </div>
+                        <div class="col-xxl-3 col-sm-6 mb-3">
+                            <label class="form-label mb-0" for="telc_usu"><b>Tel. Corporativo</b></label>
+                            <input type="text" class="form-control form-control-sm" id="telc_usu" name="telc_usu">
                         </div>
                         <div class="col-xxl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="usuario"><b>Usuario <span class="text-danger">*</span></b></label>
@@ -238,7 +311,33 @@
                             <h2 class="card-tittle form-label"><b>Administrar Permisos del Sistema</b></h2>
                             <div class="card-body border rounded">
                                 <div class="row">
-
+                                    div
+                                    <ul class="treeview">
+                                        <li class="menu-only">
+                                            <input type="checkbox" id="title1" />
+                                            <label for="title1">Titulo</label>
+                                        </li>
+                                    </ul>
+                                    <ul class="treeview">
+                                        <li class="menu">
+                                            <input type="checkbox" id="title2" />
+                                            <label for="title2">Titulo</label>
+                                            <ul class="submenu">
+                                                <li>
+                                                    <input type="checkbox" id="subtitle1" />
+                                                    <label for="subtitle1">Subtitle1</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" id="subtitle2" />
+                                                    <label for="subtitle2">Subtitle2</label>
+                                                </li>
+                                                <li>
+                                                    <input type="checkbox" id="subtitle3" />
+                                                    <label for="subtitle3">Subtitle3</label>
+                                                </li>
+                                            </ul>
+                                        </li>
+                                    </ul>
                                 </div>
                             </div>
                         </div>
@@ -256,6 +355,7 @@
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@latest/dist/signature_pad.umd.min.js"></script>
+<script src="{{asset('assets/js/app/usuarios.js')}}"></script>
 <script>
     document.getElementById('form-usuario').addEventListener('submit', function(event) {
         event.preventDefault();
@@ -288,118 +388,28 @@
         });
     });
 
-
-
-    const fileInput = document.getElementById('foto_perfil');
-    const removeButton = document.getElementById('removeButton');
-    const PreviFPerfil = document.getElementById('PreviFPerfil');
-    const txtFotoPerfil = document.getElementById('txtFotoPerfil');
-
-    document.getElementById('uploadButton').addEventListener('click', () => {
-        fileInput.click();
-    });
-
-    fileInput.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const maxFileSize = 20 * 1024 * 1024; // 20MB
-        if (file) {
-            if (file.size > maxFileSize) {
-                alert('El archivo debe ser menor a 20MB');
-                return;
-            }
-
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                PreviFPerfil.src = e.target.result;
-                PreviFPerfil.alt = file.name;
-                removeButton.style.display = 'block';
-                document.getElementById('txtFotoPerfil').value = btoa(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    removeButton.addEventListener('click', () => {
-        PreviFPerfil.src = PreviFPerfil.getAttribute("imagedefault");
-        txtFotoPerfil.value = '';
-        removeButton.style.display = 'none';
-        fileInput.value = '';
-    });
-
-
-
-    const fileInputFirma = document.getElementById('firma_digital');
-    const PreviFirma = document.getElementById('PreviFirma');
-    const removeImgFirma = document.getElementById('removeImgFirma');
-    const textFirmaDigital = document.getElementById('textFirmaDigital');
-
-    document.getElementById('uploadImgFirma').addEventListener('click', () => {
-        fileInputFirma.click();
-    });
-
-    fileInputFirma.addEventListener('change', function(event) {
-        const file = event.target.files[0];
-        const maxFileSize = 10 * 1024 * 1024; // 10MB
-        if (file) {
-            if (file.size > maxFileSize) {
-                alert('El archivo debe ser menor a 10MB');
-                return;
-            }
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                PreviFirma.src = e.target.result;
-                PreviFirma.alt = file.name;
-                removeImgFirma.style.display = 'block';
-                textFirmaDigital.value = btoa(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-    });
-
-    document.getElementById('createFirma').addEventListener('click', async () => {
-        Swal.fire({
-            title: "CREAR FIRMA DIGITAL",
-            html: `<canvas id="signature-pad" width="400" height="200" style="border: 2px dashed #dee2e6; border-radius: 7px; padding:5px; min-width: 160px"></canvas>
-                    <button class="btn btn-primary btn-sm" id="save">Guardar</button>
-                    <button class="btn btn-danger btn-sm" id="clear">Limpiar</button>
-                    <button class="btn btn-info btn-sm" onclick="Swal.close()">Cerrar</button>`,
-            showConfirmButton: false
-        });
-
-        var canvas = document.getElementById('signature-pad');
-        var signaturePad = new SignaturePad(canvas);
-
-        document.getElementById('clear').addEventListener('click', function() {
-            signaturePad.clear();
-        });
-
-        document.getElementById('save').addEventListener('click', function() {
-            if (signaturePad.isEmpty()) {
-                alert("Por favor, dibuja una firma primero.");
-            } else {
-                var dataURL = signaturePad.toDataURL();
-                document.getElementById('textFirmaDigital').value = btoa(dataURL.toString());
-                document.getElementById('PreviFirma').src = dataURL.toString();
-                removeImgFirma.style.display = 'block';
-                Swal.close();
+    document.getElementById('conDoc').addEventListener('click', function() {
+        const nDoc = document.getElementById('n_doc').value;
+        $.ajax({
+            type: 'GET',
+            url: `{{url('/consultaDni')}}/${nDoc}`,
+            contentType: 'application/json',
+            success: function(response) {
+                if (!response.success) {
+                    return Swal.fire({
+                        'title' : 'Ocurrio un error',
+                        'icon' : 'info',
+                        'text' : response.message
+                    });
+                }
+                $('#nom_usu').val(response.data.nombres);
+                $('#ape_usu').val(`${response.data.apellidop} ${response.data.apellidom}`);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error al registrar el usuario');
+                console.log(jqXHR.responseJSON);
             }
         });
     });
-
-    removeImgFirma.addEventListener('click', () => {
-        PreviFirma.src = PreviFirma.getAttribute("imagedefault");
-        textFirmaDigital.value = '';
-        removeImgFirma.style.display = 'none';
-        fileInputFirma.value = '';
-    });
-
-    function PreviImagenes(data) {
-        Swal.fire({
-            title: '<h5 class="card-title text-linkedin">PREVISUALIZACIÓN DE LA IMAGEN CARGADA</h5>',
-            html: `<div>
-                    <img src="${data}" />
-                </div>`
-        });
-    }
 </script>
 @endsection

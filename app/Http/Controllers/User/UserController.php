@@ -10,11 +10,24 @@ use Illuminate\Support\Facades\Hash;
 
 class UserController extends Controller
 {
+    public function consultaDni(string $dni) {
+        $bdDni = DB::table('usuarios')
+            ->select('ndoc_usuario')
+            ->where('ndoc_usuario', $dni)
+            ->get();
+
+        if (count($bdDni))
+            return ["success" => false, "message" => "El usuario que desea registrar ya existe", "data" => []];
+
+        $consulta = json_decode(file_get_contents("http://localhost/new_dni/consulta.php?documento=$dni"), true);
+        return $consulta;
+    }
     public function DataTableUser()
     {
         $usuarios = DB::table('usuarios')
             ->join('tipo_usuario', 'usuarios.tipo_acceso', '=', 'tipo_usuario.id_tipo_acceso')
             ->select('usuarios.id_usuario', 'usuarios.nombres', 'usuarios.apellidos', 'tipo_usuario.descripcion', 'usuarios.usuario', 'usuarios.contrasena', 'usuarios.estatus')
+            ->where('estatus', 1)
             ->get();
 
         return $usuarios;
@@ -27,8 +40,11 @@ class UserController extends Controller
             'n_doc' => 'required|integer',
             'nom_usu' => 'required|string',
             'ape_usu' => 'required|string',
-            'email_usu' => 'required|email',
+            'emailp_usu' => 'required|email',
+            'emailc_usu' => 'required|email',
             'fechan_usu' => 'required|date',
+            'telp_usu' => 'required|string',
+            'telc_usu' => 'required|string',
             'usuario' => 'required|string',
             'contrasena' => 'required|string',
             'foto_perfil' => 'nullable|string',
@@ -62,8 +78,11 @@ class UserController extends Controller
             'ndoc_usuario' => $request->n_doc,
             'nombres' => $request->nom_usu,
             'apellidos' => $request->ape_usu,
-            'email' => $request->email_usu,
+            'email_personal' => $request->emailp_usu,
+            'email_corporativo' => $request->emailc_usu,
             'fecha_nacimiento' => $request->fechan_usu,
+            'tel_personal' => $request->telp_usu,
+            'tel_corporativo' => $request->telc_usu,
             'usuario' => $request->usuario,
             'contrasena' => Hash::make($request->contrasena),  // Encriptar la contraseña
             'foto_perfil' => $filenameFP,
