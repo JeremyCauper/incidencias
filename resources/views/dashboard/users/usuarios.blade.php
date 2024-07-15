@@ -90,6 +90,17 @@
             display: block;
         }
     }
+
+    #n_doc {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+    }
+
+    #conDoc {
+        height: 44px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
 </style>
 
 <div class="col-12 grid-margin">
@@ -145,8 +156,15 @@
                             </select>
                         </div>
                         <div class="col-xl-3 col-sm-5 mb-3">
-                            <label class="form-label mb-0" for="n_dni"><b>Dni <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control form-control-sm" placeholder="Número de Dni" id="n_dni" name="n_dni" maxlength="8">
+                            <label class="form-label mb-0" for="n_doc"><b>Dni/Carnet E.<span class="text-danger">*</span></b></label>
+                            <div class="input-group">
+                                <input type="text" class="form-control form-control-sm" placeholder="Número de Dni" id="n_doc" name="n_doc" maxlength="20">
+                                <span class="input-group-append">
+                                    <button class="btn btn-primary" type="button" id="conDoc">
+                                        <i class="ti-search"></i>
+                                    </button>
+                                </span>
+                            </div>
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="nom_usu"><b>Nombres <span class="text-danger">*</span></b></label>
@@ -214,6 +232,16 @@
                                     <option value="{{$r->id_tipo_acceso}}">{{$r->descripcion}}</option>
                                 @endforeach
                         </select>
+                    </div>
+                    <div class="col-12">
+                        <div class="card">
+                            <h2 class="card-tittle form-label"><b>Administrar Permisos del Sistema</b></h2>
+                            <div class="card-body border rounded">
+                                <div class="row">
+
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">

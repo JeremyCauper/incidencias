@@ -24,7 +24,7 @@ class UserController extends Controller
     {
         $validator = Validator::make($request->all(), [
             'id_area' => 'required|integer',
-            'n_dni' => 'required|integer',
+            'n_doc' => 'required|integer',
             'nom_usu' => 'required|string',
             'ape_usu' => 'required|string',
             'email_usu' => 'required|email',
@@ -59,7 +59,7 @@ class UserController extends Controller
         }
 
         DB::table('usuarios')->insert([
-            'dni_usuario' => $request->n_dni,
+            'ndoc_usuario' => $request->n_doc,
             'nombres' => $request->nom_usu,
             'apellidos' => $request->ape_usu,
             'email' => $request->email_usu,

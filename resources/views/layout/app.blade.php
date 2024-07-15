@@ -25,7 +25,6 @@
   <!-- inject:css -->
   <link rel="stylesheet" href="{{asset('assets/css/vertical-layout-light/style.css')}}">
   <link href="{{asset('assets/vendors/select/select2.min.css')}}" rel="stylesheet">
-  <link href="{{asset('assets/css/icons/styles.min.css')}}" rel="stylesheet">
   <!-- endinject -->
   <link rel="shortcut icon" href="{{asset('assets/images/LogoRC.png')}}" />
 </head>
