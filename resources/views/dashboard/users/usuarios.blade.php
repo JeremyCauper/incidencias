@@ -139,10 +139,9 @@
                             <label class="form-label mb-0" for="id_area"><b>Area <span class="text-danger">*</span></b></label>
                             <select id="id_area" name="id_area" class="select">
                                 <option value="">-- Seleccione --</option>
-                                <option value="1">Soporte</option>
-                                <option value="2">Facturacion</option>
-                                <option value="3">Supervisor</option>
-                                <option value="4">Reportes</option>
+                                @foreach ($areas as $r)
+                                    <option value="{{$r->id_area}}">{{$r->descripcion}}</option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-xl-3 col-sm-5 mb-3">
@@ -211,10 +210,9 @@
                         <label class="form-label mb-0" for="tipo_acceso"><b>TIPO PERSONAL <span class="text-danger">*</span></b></label>
                         <select id="tipo_acceso" name="tipo_acceso" class="select">
                             <option value="">-- Seleccione --</option>
-                            <option value="1">Gerencial</option>
-                            <option value="2">Administrativo</option>
-                            <option value="3">Tecnico</option>
-                            <option value="4">Personalizado</option>
+                                @foreach ($tipoAcceso as $r)
+                                    <option value="{{$r->id_tipo_acceso}}">{{$r->descripcion}}</option>
+                                @endforeach
                         </select>
                     </div>
                 </div>

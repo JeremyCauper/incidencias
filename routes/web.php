@@ -2,6 +2,9 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\User\UserController;
+use App\Http\Controllers\Mantenimientos\AreasController;
+use App\Http\Controllers\Mantenimientos\TipoAccesoController;
+use App\Http\Controllers\Mantenimientos\MenuController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -28,7 +31,13 @@ Route::get('/soporte', function () {
 
 
 Route::get('/control-de-usuario/usuarios', function () {
-    return view('dashboard.users.usuarios');
+    $areasController = new AreasController();
+    $areas = $areasController->fillSelect();
+    
+    $tipoAccesoController = new TipoAccesoController();
+    $tipoAcceso = $tipoAccesoController->fillSelect();
+    
+    return view('dashboard.users.usuarios', ['areas' => $areas, 'tipoAcceso' => $tipoAcceso]);
 })->middleware('auth');
 Route::get('/DataTableUser', [UserController::class, 'DataTableUser']);
 
@@ -38,3 +47,8 @@ Route::get('/control-de-usuario/mi-perfil', function () {
 })->middleware('auth');
 
 Route::post('/register', [UserController::class, 'RegisterUser']);
+
+
+Route::get('/viewListMenu', [MenuController::class, 'viewListMenu']);
+Route::get('/extractPermisos', [MenuController::class, 'extractPermisos']);
+
