@@ -103,6 +103,7 @@
     }
 
 
+
     .treeview {
         list-style-type: none;
         padding: 0;
@@ -116,6 +117,10 @@
 
     .treeview ul {
         position: relative;
+    }
+
+    .treeview input, .treeview input ~ label {
+        cursor: pointer;
     }
 
     .treeview ul::before {
@@ -160,26 +165,39 @@
         transition: all .2s ease-in;
         background: #007bff;
     }
+
+    #tb_usuario tr td {
+        padding-top: 12px;
+        padding-bottom: 12px;
+    }
+
+    .loader-demo-box {
+        position: absolute;
+        height: 100%;
+        z-index: 999;
+        background: rgba(5, 195, 251, .05);
+    }
 </style>
 
 <div class="col-12 grid-margin">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Listado de usuarios</h4>
-            <div>
+            <div class="mb-3">
                 <button class="btn btn-primary btn-sm" onclick="$('#modal_frm_usuarios').modal('show')">
                     <i class="mdi mdi-account-plus me-2"></i>
                     Nuevo Usuario
                 </button>
-                <button class="btn btn-primary btn-sm">
+                <button class="btn btn-primary btn-sm" onclick="updateTable()">
                     <i class="mdi mdi-autorenew"></i>
                 </button>
             </div>
             <div class="row">
                 <div class="col-12">
-                    <table id="tb_usuario" class="table">
+                    <table id="tb_usuario" class="table" style="width: 100%;">
                         <thead>
                             <tr>
+                                <th>Nro. Documento</th>
                                 <th>Nombre Personal</th>
                                 <th>Tipo Usuario</th>
                                 <th>Usuario</th>
@@ -198,7 +216,7 @@
 <div id="modal_frm_usuarios" class="modal fade" aria-modal="true" role="dialog">
     <form id="form-usuario">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content">
+            <div class="modal-content" style="position: relative;">
                 <div class="modal-body">
                     <h4 class="card-title mb-4 text-primary"><b>CREAR NUEVO USUARIO</b></h4>
                     <div class="col-12">
@@ -311,33 +329,26 @@
                             <h2 class="card-tittle form-label"><b>Administrar Permisos del Sistema</b></h2>
                             <div class="card-body border rounded">
                                 <div class="row">
-                                    div
-                                    <ul class="treeview">
-                                        <li class="menu-only">
-                                            <input type="checkbox" id="title1" />
-                                            <label for="title1">Titulo</label>
-                                        </li>
-                                    </ul>
-                                    <ul class="treeview">
-                                        <li class="menu">
-                                            <input type="checkbox" id="title2" />
-                                            <label for="title2">Titulo</label>
-                                            <ul class="submenu">
-                                                <li>
-                                                    <input type="checkbox" id="subtitle1" />
-                                                    <label for="subtitle1">Subtitle1</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="subtitle2" />
-                                                    <label for="subtitle2">Subtitle2</label>
-                                                </li>
-                                                <li>
-                                                    <input type="checkbox" id="subtitle3" />
-                                                    <label for="subtitle3">Subtitle3</label>
-                                                </li>
-                                            </ul>
-                                        </li>
-                                    </ul>
+                                    @foreach ($menu as $m)
+                                    <div class="col-xl-3 col-md-6 mb-2">
+                                        <ul class="treeview">
+                                            <li class="{{'menu' . (count($m['submenu']) ? '' : '-only')}}">
+                                                <input type="checkbox" class="{{count($m['submenu']) ? 'inputMenu' : ''}}" id="menu{{$m['id_m']}}" value="{{$m['id_m']}}"/>
+                                                <label for="menu{{$m['id_m']}}"><i class="{{$m['icon']}}"></i> {{$m['text']}}</label>
+                                                @if (count($m['submenu']))
+                                                <ul class="submenu">
+                                                    @foreach ($m['submenu'] as $sm)
+                                                    <li>
+                                                        <input type="checkbox" class="inputSubMenu" id="submenu{{$sm['id_sm']}}" value="{{$sm['id_sm']}}" disabled="true"/>
+                                                        <label for="submenu{{$sm['id_sm']}}">{{$sm['text']}}</label>
+                                                    </li>
+                                                    @endforeach
+                                                </ul>
+                                                @endif
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    @endforeach
                                 </div>
                             </div>
                         </div>
@@ -353,10 +364,50 @@
         </div>
     </form>
 </div>
+@endsection
 
+@section('scripts')
+<!-- jQuery Mask Plugin CDN -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@latest/dist/signature_pad.umd.min.js"></script>
 <script src="{{asset('assets/js/app/usuarios.js')}}"></script>
+<script src="{{asset('assets/js/dataTable/jquery.dataTables.min.js')}}"></script>
 <script>
+    const tb_usuario = new DataTable('#tb_usuario', {
+        scrollX: true,
+        scrollY: 300,
+        dom: '<"row"<"col-lg-12 mb-2"B>><"row"<"col-md"lr><"col-md"f>><"contenedor_tabla mt-3 mb-3"t><"row"<"col-lg-6"i><"col-lg-6"p>>',
+        ajax: {
+            url: "{{ url('/DataTableUser') }}",
+            dataSrc: "",
+            error: function(xhr, error, thrown) {
+                console.log('Error en la solicitud Ajax:', error);
+                console.log('Respuesta del servidor:', xhr);
+            }
+        },
+        language: {
+            loadingRecords: "",
+            processing: ""
+        },
+        columns: [
+            { data: 'ndoc_usuario' },
+            { data: 'nombres', render: function (data, type, row) {
+                    return `${row.nombres} ${row.apellidos}`;
+                }
+            },
+            { data: 'descripcion' },
+            { data: 'usuario' },
+            { data: 'pass_view' },
+            { data: 'estatus' },
+            { data: 'id_usuario' }
+        ],
+        processing: true
+    });
+
+    function updateTable() {
+        tb_usuario.ajax.reload();
+    }
+
     document.getElementById('form-usuario').addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -366,9 +417,6 @@
         elementos.forEach(function(elemento) {
             datosFormulario[elemento.name] = elemento.value;
         });
-
-        console.log(datosFormulario);
-
         $.ajax({
             type: 'POST',
             url: "{{url('/register')}}",
@@ -387,6 +435,50 @@
             }
         });
     });
+
+    document.querySelectorAll('.inputMenu').forEach(toggle => {
+        toggle.addEventListener('change', function() {
+            const checkboxes = this.closest('.treeview').querySelectorAll('.inputSubMenu');
+            checkboxes.forEach(checkbox => {
+                checkbox.disabled = !this.checked;
+                checkbox.checked = false;
+            });
+        });
+    });
+
+    function showUsuario(id) {
+        $('#modal_frm_usuarios').modal('show');
+        $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-demo-box"><div class="jumping-dots-loader"><span></span><span></span><span></span></div></div>`);
+        $.ajax({
+            type: 'GET',
+            url: `{{url('/showusu')}}/${id}`,
+            contentType: 'application/json',
+            success: function(response) {
+                console.log(response);
+                const data = response[0];
+                $('#form-usuario .modal-dialog .modal-content .loader-demo-box').remove();
+                $('#id_area').val(data.id_area).trigger('change.select2');
+                $('#n_doc').val(data.ndoc_usuario);
+                $('#nom_usu').val(data.nombres);
+                $('#ape_usu').val(data.apellidos);
+                $('#emailp_usu').val(data.email_personal);
+                $('#emailc_usu').val(data.email_corporativo);
+                $('#fechan_usu').val(data.fecha_nacimiento);
+                $('#telp_usu').val(data.tel_personal);
+                $('#telc_usu').val(data.tel_corporativo);
+                $('#usuario').val(data.usuario);
+                $('#contrasena').val(data.pass_view);
+                // $('#foto_perfil').val(data.foto_perfil);
+                // $('#firma_digital').val(data.firma_digital);
+                $('#tipo_acceso').val(data.tipo_acceso).trigger('change.select2');
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert('Error al registrar el usuario');
+                console.log(jqXHR.responseJSON);
+            }
+        });
+    }
+
 
     document.getElementById('conDoc').addEventListener('click', function() {
         const nDoc = document.getElementById('n_doc').value;

@@ -61,7 +61,7 @@ class MenuController extends Controller
             }
             array_push($result, $menu);
         }
-
+        
         return $result;
     }
 

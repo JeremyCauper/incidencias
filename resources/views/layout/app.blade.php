@@ -187,8 +187,29 @@
           <li class="nav-item">
             <a class="nav-link" href="{{url('/soporte')}}">
               <i class="mdi mdi-home menu-icon"></i>
-              <span class="menu-title"><b>Panel Inicio</b></span>
+              <span class="menu-title">Panel Inicio</span>
             </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="collapse" href="#Empresas" aria-expanded="false"
+              aria-controls="Empresas">
+              <i class="mdi mdi-home-modern menu-icon"></i>
+              <span class="menu-title">Empresas</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="Empresas">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="#"><b>Grupos Empresas</b></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/empresas/empresas')}}"><b>Empresas</b></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#"><b>Sucursales Empresas</b></a>
+                </li>
+              </ul>
+            </div>
           </li>
           <li class="nav-item">
             <a class="nav-link" data-bs-toggle="collapse" href="#ControlUsarios" aria-expanded="false"
@@ -199,9 +220,11 @@
             </a>
             <div class="collapse" id="ControlUsarios">
               <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{url('/control-de-usuario/usuarios')}}"><b>Usuarios</b></a>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/control-de-usuario/usuarios')}}"><b>Usuarios</b></a>
                 </li>
-                <li class="nav-item"> <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil</b></a>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil</b></a>
                 </li>
               </ul>
             </div>
@@ -250,6 +273,7 @@
   <script src="{{asset('assets/vendors/sweetalert/sweetalert.min.js')}}"></script>
   <script src="{{asset('assets/vendors/select/select2.min.js')}}"></script>
   <script src="{{asset('assets/vendors/select/form_select2.js')}}"></script>
+  @yield('scripts')
 </body>
 
 </html>

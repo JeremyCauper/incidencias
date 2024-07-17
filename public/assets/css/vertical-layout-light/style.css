@@ -10515,9 +10515,9 @@ progress {
 .jsgrid .jsgrid-table .jsgrid-filter-row select:focus, .dataTables_wrapper select:focus, .asColorPicker-input:focus {
   color: var(--bs-body-color);
   background-color: var(--bs-body-bg);
-  border-color: #86b7fe;
+  border-color: #1668ff;
   outline: 0;
-  box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+  box-shadow: 0 0 0 .04rem #1668ff;
 }
 .form-control::-webkit-date-and-time-value, .typeahead::-webkit-date-and-time-value,
 .tt-query::-webkit-date-and-time-value,
@@ -11564,7 +11564,7 @@ textarea.is-invalid.tt-hint, .select2-container--default .select2-selection--sin
 .btn-check:checked + .btn, .wizard > .actions .btn-check:checked + a, .swal2-modal .swal2-buttonswrapper .btn-check:checked + .swal2-styled, .ajax-upload-dragdrop .btn-check:checked + .ajax-file-upload, .fc .btn-check:checked + button, :not(.btn-check) + .btn:active, .wizard > .actions :not(.btn-check) + a:active, .swal2-modal .swal2-buttonswrapper :not(.btn-check) + .swal2-styled:active, .ajax-upload-dragdrop :not(.btn-check) + .ajax-file-upload:active, .fc :not(.btn-check) + button:active, .btn:first-child:active, .wizard > .actions a:first-child:active, .swal2-modal .swal2-buttonswrapper .swal2-styled:first-child:active, .ajax-upload-dragdrop .ajax-file-upload:first-child:active, .fc button:first-child:active, .btn.active, .wizard > .actions a.active, .swal2-modal .swal2-buttonswrapper .active.swal2-styled, .ajax-upload-dragdrop .active.ajax-file-upload, .fc button.active, .btn.show, .wizard > .actions a.show, .swal2-modal .swal2-buttonswrapper .show.swal2-styled, .ajax-upload-dragdrop .show.ajax-file-upload, .fc button.show {
   color: var(--bs-btn-active-color);
   background-color: var(--bs-btn-active-bg);
-  border-color: var(--bs-btn-active-border-color);
+  /* border-color: #D3D3D3; */
 }
 .btn-check:checked + .btn:focus-visible, .wizard > .actions .btn-check:checked + a:focus-visible, .swal2-modal .swal2-buttonswrapper .btn-check:checked + .swal2-styled:focus-visible, .ajax-upload-dragdrop .btn-check:checked + .ajax-file-upload:focus-visible, .fc .btn-check:checked + button:focus-visible, :not(.btn-check) + .btn:active:focus-visible, .wizard > .actions :not(.btn-check) + a:active:focus-visible, .swal2-modal .swal2-buttonswrapper :not(.btn-check) + .swal2-styled:active:focus-visible, .ajax-upload-dragdrop :not(.btn-check) + .ajax-file-upload:active:focus-visible, .fc :not(.btn-check) + button:active:focus-visible, .btn:first-child:active:focus-visible, .wizard > .actions a:first-child:active:focus-visible, .swal2-modal .swal2-buttonswrapper .swal2-styled:first-child:active:focus-visible, .ajax-upload-dragdrop .ajax-file-upload:first-child:active:focus-visible, .fc button:first-child:active:focus-visible, .btn.active:focus-visible, .wizard > .actions a.active:focus-visible, .swal2-modal .swal2-buttonswrapper .active.swal2-styled:focus-visible, .ajax-upload-dragdrop .active.ajax-file-upload:focus-visible, .fc button.active:focus-visible, .btn.show:focus-visible, .wizard > .actions a.show:focus-visible, .swal2-modal .swal2-buttonswrapper .show.swal2-styled:focus-visible, .ajax-upload-dragdrop .show.ajax-file-upload:focus-visible, .fc button.show:focus-visible {
   box-shadow: var(--bs-btn-focus-box-shadow);
@@ -24367,8 +24367,8 @@ svg {
   border-radius: 50px;
 }
 .btn.btn-sm, .wizard > .actions a.btn-sm, .swal2-modal .swal2-buttonswrapper .btn-sm.swal2-styled, .ajax-upload-dragdrop .btn-sm.ajax-file-upload, .fc button, .btn-group-sm > .btn, .wizard > .actions .btn-group-sm > a, .swal2-modal .swal2-buttonswrapper .btn-group-sm > .swal2-styled, .ajax-upload-dragdrop .btn-group-sm > .ajax-file-upload, .fc .btn-group-sm > button {
-  font-size: 0.812rem;
-  border-radius: 15px;
+  font-size: 0.7rem;
+  /* border-radius: 15px; */
 }
 .btn.btn-lg, .wizard > .actions a.btn-lg, .swal2-modal .swal2-buttonswrapper .btn-lg.swal2-styled, .ajax-upload-dragdrop .btn-lg.ajax-file-upload, .fc button.btn-lg, .btn-group-lg > .btn, .wizard > .actions .btn-group-lg > a, .swal2-modal .swal2-buttonswrapper .btn-group-lg > .swal2-styled, .ajax-upload-dragdrop .btn-group-lg > .ajax-file-upload, .fc .btn-group-lg > button {
   font-size: 0.875rem;
@@ -30699,6 +30699,13 @@ body.avgrund-active {
 .dataTables_wrapper .dataTables_info {
   font-size: 0.812rem;
 }
+
+.dataTables_length select, .dataTables_filter input {    
+  padding-top: 10px !important;
+  padding-bottom: 10px !important;
+  height: 32px !important;
+}
+
 @media (max-width: 576px) {
   .dataTables_wrapper .dataTables_info {
     margin-bottom: 1rem;
@@ -31861,64 +31868,6 @@ table.dataTable tbody td.select-checkbox:after {
   line-height: 2.5;
 }
 
-/* Select2
-.select2-container--default .select2-results__option--highlighted[aria-selected] {
-  background: #1F3BB3;
-  color: #FFFFFF;
-}
-.select2-container--default .select2-selection--single,
-.select2-container--default .select2-dropdown,
-.select2-container--default .select2-selection--multiple {
-  border-color: #dee2e6;
-}
-.select2-container--default .select2-selection--single .select2-search__field,
-.select2-container--default .select2-dropdown .select2-search__field,
-.select2-container--default .select2-selection--multiple .select2-search__field {
-  border-color: #dee2e6;
-}
-.select2-container--default .select2-selection--single {
-  height: auto;
-}
-.select2-container--default .select2-selection--single .select2-selection__rendered {
-  line-height: 14px;
-}
-.select2-container--default .select2-dropdown {
-  font-size: 0.8125rem;
-}
-.select2-container--default.select2-container--focus .select2-selection--multiple {
-  border-color: #dee2e6;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice {
-  color: #ffffff;
-  border: 0;
-  border-radius: 3px;
-  padding: 6px;
-  font-size: 0.625rem;
-  font-family: inherit;
-  line-height: 1;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice .select2-selection__choice__remove {
-  color: #ffffff;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice:nth-child(5n+1) {
-  background: #1F3BB3;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice:nth-child(5n+2) {
-  background: #34B1AA;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice:nth-child(5n+3) {
-  background: #05C3FB;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice:nth-child(5n+4) {
-  background: #F95F53;
-}
-.select2-container--default .select2-selection--multiple .select2-selection__choice:nth-child(5n+5) {
-  background: #E29E09;
-}
-.select2-container--default .select2-selection__arrow {
-  padding-top: 45px;
-}*/
-
 /* Summernote Editor */
 .note-editor.note-frame {
   border: 1px solid #dee2e6;
@@ -31926,66 +31875,6 @@ table.dataTable tbody td.select-checkbox:after {
 
 .note-popover {
   border: 1px solid #dee2e6;
-}
-
-/* SweetAlert */
-.swal2-container {
-  z-index: 1500;
-}
-
-.swal2-modal {
-  min-height: 315px;
-  -webkit-align-items: center;
-  align-items: center;
-  -webkit-justify-content: center;
-  justify-content: center;
-  -webkit-flex-direction: column;
-  flex-direction: column;
-  border-radius: 10px;
-}
-.swal2-modal .swal2-title {
-  font-size: 25px;
-  line-height: 1;
-  font-weight: 600;
-  color: #1F1F1F;
-  font-weight: initial;
-  margin-bottom: 0;
-}
-.swal2-modal .swal2-icon,
-.swal2-modal .swal2-success-ring {
-  margin-top: 0;
-  margin-bottom: 42px;
-}
-.swal2-modal .swal2-buttonswrapper {
-  margin-top: 0;
-  padding: 0;
-}
-.swal2-modal .swal2-buttonswrapper .swal2-styled {
-  margin-top: 0;
-  font-weight: initial;
-}
-.swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-confirm {
-  font-weight: initial;
-  margin-top: 32px;
-}
-.swal2-modal .swal2-buttonswrapper .swal2-styled.swal2-cancel {
-  margin-top: 32px;
-  border: 1px solid #dee2e6;
-  color: #ffffff;
-  font-weight: initial;
-}
-.swal2-modal .swal2-content {
-  font-size: 0.812rem;
-  font-weight: 600;
-  color: #1F1F1F;
-  font-weight: initial;
-  margin-top: 11px;
-}
-.swal2-modal .swal2-close {
-  font-size: 20px;
-}
-.swal2-modal .swal2-success-ring {
-  left: -30px;
 }
 
 /* Switchery */

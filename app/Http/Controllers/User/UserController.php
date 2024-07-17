@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Ramsey\Uuid\Type\Integer;
 
 class UserController extends Controller
 {
@@ -22,13 +23,30 @@ class UserController extends Controller
         $consulta = json_decode(file_get_contents("http://localhost/new_dni/consulta.php?documento=$dni"), true);
         return $consulta;
     }
+    
     public function DataTableUser()
     {
         $usuarios = DB::table('usuarios')
             ->join('tipo_usuario', 'usuarios.tipo_acceso', '=', 'tipo_usuario.id_tipo_acceso')
-            ->select('usuarios.id_usuario', 'usuarios.nombres', 'usuarios.apellidos', 'tipo_usuario.descripcion', 'usuarios.usuario', 'usuarios.contrasena', 'usuarios.estatus')
-            ->where('estatus', 1)
+            ->select('usuarios.ndoc_usuario', 'usuarios.id_usuario', 'usuarios.nombres', 'usuarios.apellidos', 'tipo_usuario.descripcion', 'usuarios.usuario', 'usuarios.pass_view', 'usuarios.estatus')
+            ->where('usuarios.estatus', 1)
             ->get();
+
+        foreach ($usuarios as $key => $val) {
+            $val->nombres = explode(' ', $val->nombres)[0];
+            $val->apellidos = explode(' ', $val->apellidos)[0];
+            $val->id_usuario = '<div class="dropdown">
+                <button class="btn btn-white btn-sm" type="button" id="dropdownMenuSizeButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <b><i class="mdi mdi-menu"></i><i class="mdi mdi-menu-down"></i></b>
+                </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton3" style="">
+                        <h6 class="dropdown-header"><b>Acciones</b></h6>
+                        <button class="dropdown-item py-2" onclick="showUsuario(' . $val->id_usuario . ')"><i class="mdi mdi-pen text-info me-2"></i> Editar</button>
+                        <button class="dropdown-item py-2" onclick="cambiarEstado(' . $val->id_usuario . ', ' . $val->estatus . ')"><i class="mdi mdi-account-convert text-danger me-2"></i> Cambiar Estado</button>
+                    </div>
+                </div>';
+            $val->estatus = '<label class="badge badge-' . ($val->estatus ? 'success' : 'danger') . '" style="font-size: .7rem;">' . ($val->estatus ? 'ACTIVO' : 'INACTIVO') . '</label>';
+        }
 
         return $usuarios;
     }
@@ -85,6 +103,7 @@ class UserController extends Controller
             'tel_corporativo' => $request->telc_usu,
             'usuario' => $request->usuario,
             'contrasena' => Hash::make($request->contrasena),  // Encriptar la contraseña
+            'pass_view' => $request->contrasena,
             'foto_perfil' => $filenameFP,
             'firma_digital' => $filenameFD,
             'tipo_acceso' => $request->tipo_acceso,
@@ -97,9 +116,97 @@ class UserController extends Controller
         return response()->json(['message' => 'Usuario registrado con éxito'], 201);
     }
 
-    public function UpdateUser(Request $request)
+    public function ShowUser(string $id)
     {
-        //
+        $showUsu = DB::table('usuarios')
+            ->where('id_usuario', $id)
+            ->get();
+
+        return $showUsu;
+    }
+
+    public function EditUser(Request $request, string $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'id_area' => 'required|integer',
+            'n_doc' => 'required|integer',
+            'nom_usu' => 'required|string',
+            'ape_usu' => 'required|string',
+            'emailp_usu' => 'required|email',
+            'emailc_usu' => 'required|email',
+            'fechan_usu' => 'required|date',
+            'telp_usu' => 'required|string',
+            'telc_usu' => 'required|string',
+            'usuario' => 'required|string',
+            'contrasena' => 'required|string',
+            'foto_perfil' => 'nullable|string',
+            'firma_digital' => 'nullable|string',
+            'tipo_acceso' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $filenameFP = $request->foto_perfil;
+        if ($request->foto_perfil) {
+            $result = $this->parseFile('fp_' . $request->usuario, 'auth', $request->foto_perfil);
+            if (!$result['success']) {
+                return response()->json(['success' => false, 'message' => 'Error al intentar crear la imagen del perfil'], 500);
+            }
+            $filenameFP = $result['filename'];
+        }
+
+        $filenameFD = $request->firma_digital;
+        if ($request->firma_digital) {
+            $result = $this->parseFile('fd_' . $request->usuario, 'firms', $request->firma_digital);
+            if (!$result['success']) {
+                return response()->json(['success' => false, 'message' => 'Error al intentar crear la firma digital'], 500);
+            }
+            $filenameFD = $result['filename'];
+        }
+
+        DB::table('usuarios')
+        ->where('id_usuario', $id)
+        ->update([
+            'ndoc_usuario' => $request->n_doc,
+            'nombres' => $request->nom_usu,
+            'apellidos' => $request->ape_usu,
+            'email_personal' => $request->emailp_usu,
+            'email_corporativo' => $request->emailc_usu,
+            'fecha_nacimiento' => $request->fechan_usu,
+            'tel_personal' => $request->telp_usu,
+            'tel_corporativo' => $request->telc_usu,
+            'usuario' => $request->usuario,
+            'contrasena' => Hash::make($request->contrasena),  // Encriptar la contraseña
+            'pass_view' => $request->contrasena,
+            'foto_perfil' => $filenameFP,
+            'firma_digital' => $filenameFD,
+            'tipo_acceso' => $request->tipo_acceso,
+            'id_area' => $request->id_area,
+            'menu_usuario' => '{}',
+            'updated_at' => now()
+        ]);
+
+        return response()->json(['message' => 'Usuario editado con éxito'], 201);
+    }
+
+    public function UpdateEstatus(Request $request, string $id)
+    {
+        $validator = Validator::make($request->all(), [
+            'estatus' => 'required|integer',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 400);
+        }
+
+        $estatus = $request->estatus ? 0 : 1;
+        DB::table('usuarios')
+        ->where('id_usuario', $id)
+        ->update(['estatus' => $estatus]);
+
+        return response()->json(['message' => 'Usuario ' . ($estatus ? '' : 'in') . 'habilitado con éxito'], 201);
     }
 
     public function parseFile($name, $dir, $data)
