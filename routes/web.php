@@ -73,3 +73,7 @@ Route::get('/soport-empresa/grupos', function () {
 Route::get('/soport-empresa/sucursales', function () {    
     return view('dashboard.company.sucursales');
 })->middleware('auth');
+
+Route::get('/iconos', function () {    
+    return view('icons');
+});
