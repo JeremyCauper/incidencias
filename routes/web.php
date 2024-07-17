@@ -62,6 +62,14 @@ Route::get('/control-de-usuario/mi-perfil', function () {
 
 
 /* Empresas Control */
-Route::get('/empresas/empresas', function () {    
-    return view('dashboard.empresas.empresas');
+Route::get('/soport-empresa/empresas', function () {    
+    return view('dashboard.company.empresas');
+})->middleware('auth');
+
+Route::get('/soport-empresa/grupos', function () {    
+    return view('dashboard.company.grupos');
+})->middleware('auth');
+
+Route::get('/soport-empresa/sucursales', function () {    
+    return view('dashboard.company.sucursales');
 })->middleware('auth');

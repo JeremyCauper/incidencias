@@ -225,7 +225,7 @@
                     <div class="row">
                         <div class="col-xl-3 col-sm-7 mb-3">
                             <label class="form-label mb-0" for="id_area"><b>Area <span class="text-danger">*</span></b></label>
-                            <select id="id_area" name="id_area" class="select">
+                            <select id="id_area" name="id_area">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($areas as $r)
                                     <option value="{{$r->id_area}}">{{$r->descripcion}}</option>
@@ -373,6 +373,13 @@
 <script src="{{asset('assets/js/app/usuarios.js')}}"></script>
 <script src="{{asset('assets/js/dataTable/jquery.dataTables.min.js')}}"></script>
 <script>
+    $(document).ready(function() {
+        $('#id_area').select2({
+            placeholder: "Seleccione un área",
+            allowClear: true
+        });
+    });
+
     const tb_usuario = new DataTable('#tb_usuario', {
         scrollX: true,
         scrollY: 300,

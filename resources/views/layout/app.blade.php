@@ -24,7 +24,7 @@
   <!-- End plugin css for this page -->
   <!-- inject:css -->
   <link rel="stylesheet" href="{{asset('assets/css/vertical-layout-light/style.css')}}">
-  <link href="{{asset('assets/vendors/select/select2.min.css')}}" rel="stylesheet">
+  <link rel="stylesheet" href="{{asset('assets/vendors/select/select2.min.css')}}">
   <!-- endinject -->
   <link rel="shortcut icon" href="{{asset('assets/images/LogoRC.png')}}" />
 </head>
@@ -53,10 +53,13 @@
         </div>
         <div>
           <a class="navbar-brand brand-logo" href="{{url('/soporte')}}">
-            <img src="https://demo.bootstrapdash.com/star-admin-2-pro/themes/assets/images/logo.svg" alt="logo" />
+            <div class="d-flex align-items-center">
+              <img class="img-xs rounded-circle" src="{{asset('assets/images/LogoRC.png')}}" style="height: 26px; width: 27px;" alt="logo" />
+              <h4 class="ms-1 mb-0"><b>RC Ingenieros</b></h4>
+            </div>
           </a>
           <a class="navbar-brand brand-logo-mini" href="{{url('/soporte')}}">
-            <img src="https://demo.bootstrapdash.com/star-admin-2-pro/themes/assets/images/logo-mini.svg" alt="logo" />
+            <img class="rounded-circle" src="{{asset('assets/images/LogoRC.png')}}" style="height: 38px; width: 39px;" alt="logo" />
           </a>
         </div>
       </div>
@@ -191,22 +194,22 @@
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#Empresas" aria-expanded="false"
-              aria-controls="Empresas">
+            <a class="nav-link" data-bs-toggle="collapse" href="#ControlEmpresas" aria-expanded="false"
+              aria-controls="ControlEmpresas">
               <i class="mdi mdi-home-modern menu-icon"></i>
               <span class="menu-title">Empresas</span>
               <i class="menu-arrow"></i>
             </a>
-            <div class="collapse" id="Empresas">
+            <div class="collapse" id="ControlEmpresas">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="#"><b>Grupos Empresas</b></a>
+                  <a class="nav-link" href="{{url('/soport-empresa/empresas')}}"><b>Empresas</b></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/empresas/empresas')}}"><b>Empresas</b></a>
+                  <a class="nav-link" href="{{url('/soport-empresa/grupos')}}"><b>Grupos Empresas</b></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#"><b>Sucursales Empresas</b></a>
+                  <a class="nav-link" href="{{url('/soport-empresa/sucursales')}}"><b>Sucursales Empresas</b></a>
                 </li>
               </ul>
             </div>
@@ -224,7 +227,7 @@
                   <a class="nav-link" href="{{url('/control-de-usuario/usuarios')}}"><b>Usuarios</b></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil</b></a>
+                  <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil Usuarios</b></a>
                 </li>
               </ul>
             </div>

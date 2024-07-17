@@ -472,8 +472,8 @@
 }
 
 .select2-search--dropdown:after {
-    content: "";
-    font-family: icomoon;
+    content: "\e610";
+    font-family: 'themify';
     position: absolute;
     top: 50%;
     left: 2.25rem;
