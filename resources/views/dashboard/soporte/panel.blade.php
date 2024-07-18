@@ -6,7 +6,7 @@
 <div class="row">
     <div class="col-12">
         <div class="row">
-            <div class="col-12 grid-margin stretch-card">
+            <div class="col-12 grid-margin">
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title mb-2">Incidencias Registradas</h6>
@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin stretch-card">
+            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin">
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title mb-2">Incidencias Asignadas</h6>
@@ -28,7 +28,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin stretch-card">
+            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin">
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title mb-2">Incidencias En Proceso</h6>
@@ -39,7 +39,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin stretch-card">
+            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin">
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title mb-2">Incidencias Resueltas</h6>
@@ -50,7 +50,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin stretch-card">
+            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin">
                 <div class="card">
                     <div class="card-body">
                         <h6 class="card-title mb-2">Clientes Registrados</h6>

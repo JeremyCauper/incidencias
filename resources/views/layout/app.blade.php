@@ -29,7 +29,7 @@
       position: absolute;
       content: "";
       width: 2px;
-      height: 50px;
+      height: 35.98px;
       background-color: #1F3BB3;
       top: 0px;
       right: 0px;
@@ -43,8 +43,8 @@
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
         <div class="me-3">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
-            <span class="icon-menu7 icon-1-5x"></span>
+          <button class="navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+            <span class="fas fa-bars"></span>
           </button>
         </div>
         <div>
@@ -64,7 +64,7 @@
 
           <li class="nav-item dropdown">
             <a class="nav-link count-indicator" id="notificationDropdown" href="#" role="button"  data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-              <i class="icon-bell2 icon-1-5x"></i>
+              <i class="fas fa-bell text-secondary"></i>
               <span class="count"></span>
             </a>
             <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
@@ -72,86 +72,17 @@
               <li><a class="dropdown-item" href="#">Another action</a></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
-            <!-- <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0"
-              aria-labelledby="notificationDropdown">
-              <a class="dropdown-item py-3 border-bottom">
-                <p class="mb-0 fw-medium float-start">You have 4 new notifications </p>
-                <span class="badge badge-pill badge-primary float-end">View all</span>
-              </a>
-              <a class="dropdown-item preview-item py-3">
-                <div class="preview-thumbnail">
-                  <i class="mdi mdi-alert m-auto text-primary"></i>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject fw-normal text-dark mb-1">Application Error</h6>
-                  <p class="fw-light small-text mb-0"> Just now </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item py-3">
-                <div class="preview-thumbnail">
-                  <i class="mdi mdi-lock-outline m-auto text-primary"></i>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject fw-normal text-dark mb-1">Settings</h6>
-                  <p class="fw-light small-text mb-0"> Private message </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item py-3">
-                <div class="preview-thumbnail">
-                  <i class="mdi mdi-airballoon m-auto text-primary"></i>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject fw-normal text-dark mb-1">New user registration</h6>
-                  <p class="fw-light small-text mb-0"> 2 days ago </p>
-                </div>
-              </a>
-            </div> -->
           </li>
 
           <li class="nav-item dropdown">
             <a class="nav-link count-indicator" id="countDropdown" href="#" role="button"  data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-              <i class="icon-envelop3 icon-1-5x"></i>
+              <i class="fas fa-envelope text-secondary"></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="countDropdown">
               <li><a class="dropdown-item" href="#">Action</a></li>
               <li><a class="dropdown-item" href="#">Another action</a></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
-            <!-- <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0"
-              aria-labelledby="countDropdown">
-              <a class="dropdown-item py-3">
-                <p class="mb-0 fw-medium float-start">You have 7 unread mails </p>
-                <span class="badge badge-pill badge-primary float-end">View all</span>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <img src="{{asset('assets/images/faces/face10.jpg')}}" alt="image" class="img-sm profile-pic">
-                </div>
-                <div class="preview-item-content flex-grow py-2">
-                  <p class="preview-subject ellipsis fw-medium text-dark">Marian Garner </p>
-                  <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <img src="{{asset('assets/images/faces/face12.jpg')}}" alt="image" class="img-sm profile-pic">
-                </div>
-                <div class="preview-item-content flex-grow py-2">
-                  <p class="preview-subject ellipsis fw-medium text-dark">David Grey </p>
-                  <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <img src="{{asset('assets/images/faces/face1.jpg')}}" alt="image" class="img-sm profile-pic">
-                </div>
-                <div class="preview-item-content flex-grow py-2">
-                  <p class="preview-subject ellipsis fw-medium text-dark">Travis Jenkins </p>
-                  <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
-                </div>
-              </a>
-            </div> -->
           </li>
 
           <li class="nav-item dropdown user-dropdown">
@@ -170,20 +101,19 @@
                 <span class="badge badge-pill badge-danger">1</span>
               </a>
               <a class="dropdown-item">
-                <i class="dropdown-item-icon mdi mdi-calendar-check-outline text-primary me-2"></i>
+                <i class="dropdown-item-icon far fa-calendar-check text-primary me-2"></i>
                 Actividad
               </a>
               <a class="dropdown-item" href="{{url('/logout')}}">
-                <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>
+                <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
                 Cerrar session
               </a>
             </div>
           </li>
-
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
           data-bs-toggle="offcanvas">
-          <span class="mdi mdi-menu"></span>
+          <span class="fas fa-bars"></span>
         </button>
       </div>
     </nav>
@@ -194,14 +124,13 @@
         <ul class="nav">
           <li class="nav-item">
             <a class="nav-link" href="{{url('/soporte')}}">
-              <i class="mdi mdi-home menu-icon"></i>
+              <i class="fas fa-house menu-icon"></i>
               <span class="menu-title">Panel Inicio</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ControlEmpresas" aria-expanded="false"
-              aria-controls="ControlEmpresas">
-              <i class="mdi mdi-home-modern menu-icon"></i>
+            <a class="nav-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlEmpresas" role="button" aria-expanded="false" aria-controls="ControlEmpresas">
+              <i class="far fa-building menu-icon"></i>
               <span class="menu-title">Empresas</span>
               <i class="menu-arrow"></i>
             </a>
@@ -220,9 +149,8 @@
             </div>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ControlUsarios" aria-expanded="false"
-              aria-controls="ControlUsarios">
-              <i class="mdi mdi-account-multiple menu-icon"></i>
+            <a class="nav-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlUsarios" role="button" aria-expanded="false" aria-controls="ControlUsarios">
+              <i class="fas fa-user-group menu-icon"></i>
               <span class="menu-title">Control de Usuarios</span>
               <i class="menu-arrow"></i>
             </a>
@@ -262,6 +190,9 @@
   <!-- container-scroller -->
 
   <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{ asset('front/js/template.js') }}"></script>
+  <script src="{{ asset('front/js/hoverable-collapse.js') }}"></script>
+  <script src="{{asset('assets/js/off-canvas.js')}}"></script>
   <!-- MDB -->
   <script type="text/javascript" src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
   <!-- plugins:js -->

@@ -185,11 +185,11 @@
             <h4 class="card-title">Listado de usuarios</h4>
             <div class="mb-3">
                 <button class="btn btn-primary btn-sm" onclick="$('#modal_frm_usuarios').modal('show')">
-                    <i class="mdi mdi-account-plus me-2"></i>
+                    <i class="fas fa-user-plus me-2"></i>
                     Nuevo Usuario
                 </button>
-                <button class="btn btn-primary btn-sm" onclick="updateTable()">
-                    <i class="mdi mdi-autorenew"></i>
+                <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <i class="fas fa-rotate-right"></i>
                 </button>
             </div>
             <div class="row">
