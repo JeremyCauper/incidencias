@@ -65,13 +65,21 @@ fileInputFirma.addEventListener('change', function(event) {
 
 document.getElementById('createFirma').addEventListener('click', async () => {
     Swal.fire({
-        title: "CREAR FIRMA DIGITAL",
-        html: `<canvas id="signature-pad" width="400" height="200" style="border: 2px dashed #dee2e6; border-radius: 7px; padding:5px; min-width: 160px"></canvas>
-                <button class="btn btn-primary btn-sm" id="save">Guardar</button>
-                <button class="btn btn-danger btn-sm" id="clear">Limpiar</button>
-                <button class="btn btn-info btn-sm" onclick="Swal.close()">Cerrar</button>`,
+        title: '<h6 class="text-primary">CREAR FIRMA DIGITAL</h6>',
+        html: `
+            <div>
+                <div class="content-signature-pad">
+                    <canvas id="signature-pad" width="400" height="250" style="border: 2px dashed #ccc;"></canvas>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary btn-sm" id="save">Guardar</button>
+                    <button class="btn btn-danger btn-sm" id="clear">Limpiar</button>
+                    <button class="btn btn-info btn-sm" onclick="Swal.close()">Cerrar</button>
+                </div>
+            </div>`,
         showConfirmButton: false
     });
+    resizeWindow();
 
     var canvas = document.getElementById('signature-pad');
     var signaturePad = new SignaturePad(canvas);
@@ -92,6 +100,24 @@ document.getElementById('createFirma').addEventListener('click', async () => {
         }
     });
 });
+
+window.addEventListener('resize', resizeWindow);
+function resizeWindow() {
+    var canvas = document.getElementById('signature-pad');
+    if (window.matchMedia('(max-width: 545px)').matches) {
+        canvas.width = 300;
+        canvas.height = 175;
+    }
+    else {
+        canvas.width = 400;
+        canvas.height = 250;
+    }
+    if (window.matchMedia('(max-width: 382px)').matches) {
+        canvas.width = 200;
+        canvas.height = 140;
+    }
+}
+
 
 removeImgFirma.addEventListener('click', () => {
     PreviFirma.src = PreviFirma.getAttribute("imagedefault");

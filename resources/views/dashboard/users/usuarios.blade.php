@@ -1,190 +1,32 @@
 @extends('layout.app')
 @section('title', 'Panel de Control')
+@section('style')
+    <link rel="stylesheet" href="{{asset('front/css/app/style-usuarios.css')}}">
+    <!-- <link rel="stylesheet" href="{{asset('front/vendor/select/select2.min.css')}}"> -->
+     <style>
+        .content-signature-pad {
+            position: relative;
+        }
 
+        .content-signature-pad::before {
+            content: "";
+            position: absolute;
+            top: 60%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 50%;
+            height: 2px;
+            background: #000000;
+        }
+     </style>
+@endsection
 @section('content')
-
-<style>
-    .modal-dialog .form-label {
-        font-size: .8rem;
-        color: #9FA6B2;
-    }
-
-    .content-image {
-        position: relative;
-        border: 2px dashed #dee2e6;
-        border-radius: 7px;
-    }
-
-    .content-image img {
-        max-width: 100%;
-        min-height: 168px;
-        max-height: 300px;
-    }
-
-    .overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.4);
-        transition: .5s;
-        opacity: 0;
-        border: 2px dashed #dee2e6;
-        border-radius: 7px;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .removeImgButton {
-        position: absolute;
-        top: 4px;
-        right: 4px;
-    }
-
-    .expandImgButton {
-        position: absolute;
-        bottom: 4px;
-        right: 4px;
-        display: none;
-    }
-
-    .content-image:hover .overlay,
-    .content-image:hover .uploadImgButton {
-        opacity: 1;
-        transition: .5s;
-    }
-
-    .btn-img {
-        border: none;
-        font-size: .9rem;
-        border-radius: 50px;
-        width: 35px;
-        height: 35px;
-        padding: 0;
-        background: #ffffff;
-        color: #1F3BB3;
-    }
-
-    @media (max-width: 576px) {
-
-        .content-image .overlay,
-        .content-image .uploadImgButton {
-            opacity: 1;
-            transition: .5s;
-        }
-
-        .content-image img {
-            min-height: 140px !important;
-            height: 140px;
-        }
-
-        .btn-img {
-            font-size: .7rem;
-            width: 30px;
-            height: 30px;
-        }
-
-        .expandImgButton {
-            display: block;
-        }
-    }
-
-    #n_doc {
-        border-top-right-radius: 0px;
-        border-bottom-right-radius: 0px;
-    }
-
-    #conDoc {
-        height: 44px;
-        border-top-left-radius: 0px;
-        border-bottom-left-radius: 0px;
-    }
-
-
-
-    .treeview {
-        list-style-type: none;
-        padding: 0;
-    }
-
-    .treeview, .treeview ul {
-        margin: 0;
-        padding: 0;
-        list-style: none;
-    }
-
-    .treeview ul {
-        position: relative;
-    }
-
-    .treeview input, .treeview input ~ label {
-        cursor: pointer;
-    }
-
-    .treeview ul::before {
-        content: "";
-        display: block;
-        width: 2px;
-        background: #ccc;
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 5px;
-        transition: all .2s ease-in;
-    }
-
-    .treeview li {
-        margin: 0;
-        padding: 0 0 0 20px;
-        line-height: 25px;
-        color: #369;
-        font-weight: 700;
-        position: relative;
-    }
-
-    .treeview .menu .submenu li input {
-        margin-left: 5px;
-    }
-
-    .treeview .submenu li label::before {
-        content: "";
-        display: block;
-        width: 14.5px;
-        height: 2px;
-        background: #D3D3D3;
-        position: absolute;
-        top: 10px;
-        left: 5px;
-        transition: all .2s ease-in;
-    }
-
-    .treeview .menu input[type="checkbox"]:checked ~ .submenu::before,
-    .treeview .menu .submenu li input[type="checkbox"]:checked ~ label::before {
-        transition: all .2s ease-in;
-        background: #007bff;
-    }
-
-    #tb_usuario tr td {
-        padding-top: 12px;
-        padding-bottom: 12px;
-    }
-
-    .loader-demo-box {
-        position: absolute;
-        height: 100%;
-        z-index: 999;
-        background: rgba(5, 195, 251, .05);
-    }
-</style>
-
 <div class="col-12 grid-margin">
     <div class="card">
         <div class="card-body">
             <h4 class="card-title">Listado de usuarios</h4>
             <div class="mb-3">
-                <button class="btn btn-primary btn-sm" onclick="$('#modal_frm_usuarios').modal('show')">
+                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_frm_usuarios">
                     <i class="fas fa-user-plus me-2"></i>
                     Nuevo Usuario
                 </button>
@@ -194,7 +36,7 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <table id="tb_usuario" class="table" style="width: 100%;">
+                    <table id="tb_usuario" class="table text-nowrap" style="width: 100%;">
                         <thead>
                             <tr>
                                 <th>Nro. Documento</th>
@@ -213,9 +55,9 @@
     </div>
 </div>
 
-<div id="modal_frm_usuarios" class="modal fade" aria-modal="true" role="dialog">
+<div id="modal_frm_usuarios" class="modal fade" tabindex="-1" aria-labelledby="modal_frm_usuarios" aria-hidden="true">
     <form id="form-usuario">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content" style="position: relative;">
                 <div class="modal-body">
                     <h4 class="card-title mb-4 text-primary"><b>CREAR NUEVO USUARIO</b></h4>
@@ -225,7 +67,7 @@
                     <div class="row">
                         <div class="col-xl-3 col-sm-7 mb-3">
                             <label class="form-label mb-0" for="id_area"><b>Area <span class="text-danger">*</span></b></label>
-                            <select id="id_area" name="id_area">
+                            <select id="id_area" class="select-search" name="id_area">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($areas as $r)
                                     <option value="{{$r->id_area}}">{{$r->descripcion}}</option>
@@ -235,53 +77,53 @@
                         <div class="col-xl-3 col-sm-5 mb-3">
                             <label class="form-label mb-0" for="n_doc"><b>Dni/Carnet E.<span class="text-danger">*</span></b></label>
                             <div class="input-group">
-                                <input type="search" class="form-control form-control-sm" placeholder="Número de Dni" id="n_doc" name="n_doc" maxlength="20">
+                                <input type="search" class="form-control" placeholder="Número de Dni" id="n_doc" name="n_doc" maxlength="20">
                                 <span class="input-group-append">
-                                    <button class="btn btn-primary" type="button" id="conDoc">
-                                        <i class="ti-search"></i>
+                                    <button class="btn btn-primary px-2" type="button" id="conDoc"  data-mdb-ripple-init style="border-radius: 0 .25rem .25rem 0;">
+                                        <i class="fas fa-magnifying-glass"></i>
                                     </button>
                                 </span>
                             </div>
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="nom_usu"><b>Nombres <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control form-control-sm" id="nom_usu" name="nom_usu">
+                            <input type="text" class="form-control" id="nom_usu" name="nom_usu">
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="ape_usu"><b>Apellidos <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control form-control-sm" id="ape_usu" name="ape_usu">
+                            <input type="text" class="form-control" id="ape_usu" name="ape_usu">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xxl-5 col-lg-4 mb-3">
                             <label class="form-label mb-0" for="emailp_usu"><b>Correo Personal</b></label>
-                            <input type="text" class="form-control form-control-sm" id="emailp_usu" name="emailp_usu">
+                            <input type="text" class="form-control" id="emailp_usu" name="emailp_usu">
                         </div>
                         <div class="col-xxl-5 col-lg-4 mb-3">
                             <label class="form-label mb-0" for="emailc_usu"><b>Correo Corporativo</b></label>
-                            <input type="text" class="form-control form-control-sm" id="emailc_usu" name="emailc_usu">
+                            <input type="text" class="form-control" id="emailc_usu" name="emailc_usu">
                         </div>
                         <div class="col-xxl-2 col-lg-4 mb-3">
                             <label class="form-label mb-0" for="fechan_usu"><b>Fecha de Nacimiento <span class="text-danger">*</span></b></label>
-                            <input type="date" class="form-control form-control-sm" id="fechan_usu" name="fechan_usu">
+                            <input type="date" class="form-control" id="fechan_usu" name="fechan_usu">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-xxl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="telp_usu"><b>Tel. Personal</b></label>
-                            <input type="text" class="form-control form-control-sm" id="telp_usu" name="telp_usu">
+                            <input type="text" class="form-control" id="telp_usu" name="telp_usu">
                         </div>
                         <div class="col-xxl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="telc_usu"><b>Tel. Corporativo</b></label>
-                            <input type="text" class="form-control form-control-sm" id="telc_usu" name="telc_usu">
+                            <input type="text" class="form-control" id="telc_usu" name="telc_usu">
                         </div>
                         <div class="col-xxl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="usuario"><b>Usuario <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control form-control-sm" id="usuario" name="usuario">
+                            <input type="text" class="form-control" id="usuario" name="usuario">
                         </div>
                         <div class="col-xxl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="contrasena"><b>Contraseña <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control form-control-sm" id="contrasena" name="contrasena">
+                            <input type="text" class="form-control" id="contrasena" name="contrasena">
                         </div>
                     </div>
                     <div class="col-12 text-center d-flex justify-content-center">
@@ -290,9 +132,9 @@
                                 <label class="form-label mb-0" for="foto_perfil"><b>Foto de Perfil</b></label>
                                 <div class="col-12 p-1 text-center content-image">
                                     <div class="overlay">
-                                        <button class="btn-img removeImgButton" style="display: none;" id="removeButton" type="button"><i class="ti-close"></i></button>
-                                        <button class="btn-img uploadImgButton" id="uploadButton" type="button"><i class="mdi mdi-cloud-upload"></i></button>
-                                        <button class="btn-img expandImgButton" type="button" onclick="PreviImagenes(PreviFPerfil.src);"><i class="mdi mdi-arrow-expand-all"></i></button>
+                                        <button class="btn-img removeImgButton" style="display: none;" id="removeButton" type="button"><i class="fas fa-xmark"></i></button>
+                                        <button class="btn-img uploadImgButton" id="uploadButton" type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
+                                        <button class="btn-img expandImgButton" type="button" onclick="PreviImagenes(PreviFPerfil.src);"><i class="fas fa-expand"></i></button>
                                     </div>
                                     <input type="file" class="d-none" id="foto_perfil">
                                     <input type="text" class="d-none" name="foto_perfil" id="txtFotoPerfil">
@@ -303,10 +145,10 @@
                                 <label class="form-label mb-0" for="firma_digital"><b>Firma Digital</b></label>
                                 <div class="col-12 p-1 text-center content-image">
                                     <div class="overlay">
-                                        <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma" type="button"><i class="ti-close"></i></button>
-                                        <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma" type="button"><i class="mdi mdi-cloud-upload"></i></button>
-                                        <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i class="mdi mdi-pencil"></i></button>
-                                        <button class="btn-img expandImgButton" type="button" onclick="PreviImagenes(PreviFirma.src);"><i class="mdi mdi-arrow-expand-all"></i></button>
+                                        <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma" type="button"><i class="fas fa-xmark"></i></button>
+                                        <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma" type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
+                                        <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i class="fas fa-pencil"></i></button>
+                                        <button class="btn-img expandImgButton" type="button" onclick="PreviImagenes(PreviFirma.src);"><i class="fas fa-expand"></i></button>
                                     </div>
                                     <input type="file" class="d-none" id="firma_digital">
                                     <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
@@ -326,7 +168,7 @@
                     </div>
                     <div class="col-12">
                         <div class="card">
-                            <h2 class="card-tittle form-label"><b>Administrar Permisos del Sistema</b></h2>
+                            <label class="form-label mb-0" for="ape_usu"><b>Administrar Permisos del Sistema <span class="text-danger">*</span></b></label>
                             <div class="card-body border rounded">
                                 <div class="row">
                                     @foreach ($menu as $m)
@@ -355,7 +197,7 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-sm" data-dismiss="modal" onclick="$('#modal_frm_usuarios').modal('hide')">Cerrar</button>
+                    <button type="button" class="btn btn-danger btn-sm" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary btn-sm">
                         Guardar
                     </button>
@@ -369,21 +211,17 @@
 @section('scripts')
 <!-- jQuery Mask Plugin CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/signature_pad@latest/dist/signature_pad.umd.min.js"></script>
-<script src="{{asset('assets/js/app/usuarios.js')}}"></script>
-<script src="{{asset('assets/js/dataTable/jquery.dataTables.min.js')}}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.3.4/signature_pad.min.js"></script>
+<script src="{{asset('front/js/app/script-usuarios.js')}}"></script>
 <script>
     $(document).ready(function() {
-        $('#id_area').select2({
-            placeholder: "Seleccione un área",
-            allowClear: true
-        });
+
+        // $('.dataTables_length label select').select2();
     });
 
     const tb_usuario = new DataTable('#tb_usuario', {
         scrollX: true,
         scrollY: 300,
-        dom: '<"row"<"col-lg-12 mb-2"B>><"row"<"col-md"lr><"col-md"f>><"contenedor_tabla mt-3 mb-3"t><"row"<"col-lg-6"i><"col-lg-6"p>>',
         ajax: {
             url: "{{ url('/DataTableUser') }}",
             dataSrc: "",
@@ -391,10 +229,6 @@
                 console.log('Error en la solicitud Ajax:', error);
                 console.log('Respuesta del servidor:', xhr);
             }
-        },
-        language: {
-            loadingRecords: "",
-            processing: ""
         },
         columns: [
             { data: 'ndoc_usuario' },
@@ -455,7 +289,7 @@
 
     function showUsuario(id) {
         $('#modal_frm_usuarios').modal('show');
-        $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-demo-box"><div class="jumping-dots-loader"><span></span><span></span><span></span></div></div>`);
+        $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="square-path-loader"></div></div>`);
         $.ajax({
             type: 'GET',
             url: `{{url('/showusu')}}/${id}`,
@@ -463,7 +297,7 @@
             success: function(response) {
                 console.log(response);
                 const data = response[0];
-                $('#form-usuario .modal-dialog .modal-content .loader-demo-box').remove();
+                $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
                 $('#id_area').val(data.id_area).trigger('change.select2');
                 $('#n_doc').val(data.ndoc_usuario);
                 $('#nom_usu').val(data.nombres);

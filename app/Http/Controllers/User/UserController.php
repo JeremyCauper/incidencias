@@ -35,16 +35,25 @@ class UserController extends Controller
         foreach ($usuarios as $key => $val) {
             $val->nombres = explode(' ', $val->nombres)[0];
             $val->apellidos = explode(' ', $val->apellidos)[0];
-            $val->id_usuario = '<div class="dropdown">
-                <button class="btn btn-white btn-sm" type="button" id="dropdownMenuSizeButton3" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <b><i class="mdi mdi-menu"></i><i class="mdi mdi-menu-down"></i></b>
+
+            $val->id_usuario = '
+            <div class="btn-group dropstart shadow-0">
+                <button
+                    type="button"
+                    class="btn btn-tertiary hover-btn btn-sm px-2 shadow-0"
+                    data-mdb-ripple-init
+                    aria-expanded="false"
+                    data-mdb-dropdown-init
+                    data-mdb-ripple-color="dark"
+                    data-mdb-dropdown-initialized="true">
+                    <b><i class="icon-menu9"></i></b>
                 </button>
-                    <div class="dropdown-menu" aria-labelledby="dropdownMenuSizeButton3" style="">
-                        <h6 class="dropdown-header"><b>Acciones</b></h6>
-                        <button class="dropdown-item py-2" onclick="showUsuario(' . $val->id_usuario . ')"><i class="mdi mdi-pen text-info me-2"></i> Editar</button>
-                        <button class="dropdown-item py-2" onclick="cambiarEstado(' . $val->id_usuario . ', ' . $val->estatus . ')"><i class="mdi mdi-account-convert text-danger me-2"></i> Cambiar Estado</button>
-                    </div>
-                </div>';
+                <div class="dropdown-menu shadow-6">
+                    <h6 class="dropdown-header text-primary"><b>Acciones</b></h6>
+                    <button class="dropdown-item py-2" onclick="showUsuario(' . $val->id_usuario . ')"><i class="fas fa-user-pen text-info me-2"></i> Editar</button>
+                    <button class="dropdown-item py-2" onclick="cambiarEstado(' . $val->id_usuario . ', ' . $val->estatus . ')"><i class="fas fa-rotate text-danger me-2"></i> Cambiar Estado</button>
+                </div>
+            </div>';
             $val->estatus = '<label class="badge badge-' . ($val->estatus ? 'success' : 'danger') . '" style="font-size: .7rem;">' . ($val->estatus ? 'ACTIVO' : 'INACTIVO') . '</label>';
         }
 
