@@ -8,6 +8,7 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="{{asset('front/images/app/LogoRC.png')}}" />
   <title>@yield('title')</title>   
   <!-- Font Awesome -->
   <link href="{{asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}" rel="stylesheet">
@@ -17,12 +18,12 @@
   <link href="{{ asset('front/vendor/simple-icon/bootstrap-icons.css') }}" rel="stylesheet">
   <link href="{{ asset('front/vendor/simple-icon/styles.min.css') }}" rel="stylesheet">
   <link href="{{ asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
   <!-- Home -->
   <link href="{{ asset('front/css/panel.css') }}" rel="stylesheet">
-  <!-- endinject -->
-  <link rel="shortcut icon" href="{{asset('front/images/app/LogoRC.png')}}" />
+
   @yield('style')
 </head>
 <style>
@@ -43,7 +44,7 @@
           <a class="navbar-brand brand-logo" href="{{url('/soporte')}}">
             <div class="d-flex align-items-center">
               <img class="img-xs rounded-circle" src="{{asset('assets/images/LogoRC.png')}}" style="height: 26px; width: 27px;" alt="logo" />
-              <h6 class="ms-1 mb-0"><b>RC Ingenieros</b></h6>
+              <h6 class="ms-1 mb-0" style="font-family: 'Roboto', sans-serif;"><b>RC Ingenieros</b></h6>
             </div>
           </a>
           <a class="navbar-brand brand-logo-mini" href="{{url('/soporte')}}">
@@ -115,7 +116,7 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" href="{{url('/soporte')}}">
+            <a class="nav-link" data-mdb-ripple-init href="{{url('/soporte')}}">
               <i class="fas fa-house menu-icon"></i>
               <span class="menu-title">Panel Inicio</span>
             </a>
@@ -191,6 +192,7 @@
   <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
   <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
+  <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
   <!-- plugins:js -->
   @yield('scripts')
 </body>

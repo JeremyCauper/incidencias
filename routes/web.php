@@ -5,6 +5,7 @@ use App\Http\Controllers\User\UserController;
 use App\Http\Controllers\Mantenimientos\AreasController;
 use App\Http\Controllers\Mantenimientos\TipoAccesoController;
 use App\Http\Controllers\Mantenimientos\MenuController;
+use App\Http\Controllers\Incidencias\IncidenciaController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -26,11 +27,15 @@ Route::get('/logout', [LoginController::class, 'logout']);
 
 
 Route::get('/soporte', function () {
-    return view('dashboard.soporte.panel');
+    $incidenciaController = new IncidenciaController();
+    $countEmpresas = $incidenciaController->countEmpresas();
+    
+    return view('dashboard.soporte.panel', ['countEmpresas' => $countEmpresas]);
 })->middleware('auth');
 
 Route::get('/viewListMenu', [MenuController::class, 'viewListMenu']);
 Route::get('/extractPermisos', [MenuController::class, 'extractPermisos']);
+
 
 
 /* Control de Usuarios */

@@ -56,7 +56,9 @@
     padding-right: 2.5rem;
     overflow: hidden;
     text-overflow: ellipsis;
-    white-space: nowrap
+    white-space: nowrap;
+    padding-top: .25rem;
+    font-size: .75rem;
 }
 
 .select2-selection--single .select2-selection__rendered>i {

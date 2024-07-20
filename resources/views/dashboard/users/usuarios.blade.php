@@ -57,15 +57,15 @@
 
 <div id="modal_frm_usuarios" class="modal fade" tabindex="-1" aria-labelledby="modal_frm_usuarios" aria-hidden="true">
     <form id="form-usuario">
-        <div class="modal-dialog modal-xl">
+        <div class="modal-dialog modal-xxl">
             <div class="modal-content" style="position: relative;">
                 <div class="modal-body">
-                    <h4 class="card-title mb-4 text-primary"><b>CREAR NUEVO USUARIO</b></h4>
-                    <div class="col-12">
+                    <h5 class="card-title mb-4 text-primary"><b>CREAR NUEVO USUARIO</b></h5>
+                    <div class="col-12 mb-2">
                         <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios (*)</span>
                     </div>
                     <div class="row">
-                        <div class="col-xl-3 col-sm-7 mb-3">
+                        <div class="col-xl-3 col-6 mb-3">
                             <label class="form-label mb-0" for="id_area"><b>Area <span class="text-danger">*</span></b></label>
                             <select id="id_area" class="select-search" name="id_area">
                                 <option value="">-- Seleccione --</option>
@@ -74,10 +74,10 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-xl-3 col-sm-5 mb-3">
+                        <div class="col-xl-3 col-6 mb-3">
                             <label class="form-label mb-0" for="n_doc"><b>Dni/Carnet E.<span class="text-danger">*</span></b></label>
                             <div class="input-group">
-                                <input type="search" class="form-control" placeholder="Número de Dni" id="n_doc" name="n_doc" maxlength="20">
+                                <input type="search" class="form-control" id="n_doc" name="n_doc" maxlength="20">
                                 <span class="input-group-append">
                                     <button class="btn btn-primary px-2" type="button" id="conDoc"  data-mdb-ripple-init style="border-radius: 0 .25rem .25rem 0;">
                                         <i class="fas fa-magnifying-glass"></i>
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
-                            <label class="form-label mb-0" for="nom_usu"><b>Nombres <span class="text-danger">*</span></b></label>
+                            <label class="form-label mb-0" for="nom_usu"><b>Nombresd <span class="text-danger">*</span></b></label>
                             <input type="text" class="form-control" id="nom_usu" name="nom_usu">
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
@@ -95,33 +95,33 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xxl-5 col-lg-4 mb-3">
+                        <div class="col-lg-5 col-sm-4 mb-3">
                             <label class="form-label mb-0" for="emailp_usu"><b>Correo Personal</b></label>
                             <input type="text" class="form-control" id="emailp_usu" name="emailp_usu">
                         </div>
-                        <div class="col-xxl-5 col-lg-4 mb-3">
+                        <div class="col-lg-5 col-sm-4 mb-3">
                             <label class="form-label mb-0" for="emailc_usu"><b>Correo Corporativo</b></label>
                             <input type="text" class="form-control" id="emailc_usu" name="emailc_usu">
                         </div>
-                        <div class="col-xxl-2 col-lg-4 mb-3">
+                        <div class="col-lg-2 col-sm-4 mb-3 form-date">
                             <label class="form-label mb-0" for="fechan_usu"><b>Fecha de Nacimiento <span class="text-danger">*</span></b></label>
-                            <input type="date" class="form-control" id="fechan_usu" name="fechan_usu">
+                            <input type="text" class="form-control" id="fechan_usu" name="fechan_usu">
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-xxl-3 col-sm-6 mb-3">
+                        <div class="col-lg-3 col-6 mb-3">
                             <label class="form-label mb-0" for="telp_usu"><b>Tel. Personal</b></label>
                             <input type="text" class="form-control" id="telp_usu" name="telp_usu">
                         </div>
-                        <div class="col-xxl-3 col-sm-6 mb-3">
+                        <div class="col-lg-3 col-6 mb-3">
                             <label class="form-label mb-0" for="telc_usu"><b>Tel. Corporativo</b></label>
                             <input type="text" class="form-control" id="telc_usu" name="telc_usu">
                         </div>
-                        <div class="col-xxl-3 col-sm-6 mb-3">
+                        <div class="col-lg-3 col-6 mb-3">
                             <label class="form-label mb-0" for="usuario"><b>Usuario <span class="text-danger">*</span></b></label>
                             <input type="text" class="form-control" id="usuario" name="usuario">
                         </div>
-                        <div class="col-xxl-3 col-sm-6 mb-3">
+                        <div class="col-lg-3 col-6 mb-3">
                             <label class="form-label mb-0" for="contrasena"><b>Contraseña <span class="text-danger">*</span></b></label>
                             <input type="text" class="form-control" id="contrasena" name="contrasena">
                         </div>
@@ -158,7 +158,7 @@
                         </div>
                     </div>
                     <div class="mb-3">
-                        <label class="form-label mb-0" for="tipo_acceso"><b>TIPO PERSONAL <span class="text-danger">*</span></b></label>
+                        <label class="form-label mb-0" for="tipo_acceso"><b>Tipo Personal <span class="text-danger">*</span></b></label>
                         <select id="tipo_acceso" name="tipo_acceso" class="select">
                             <option value="">-- Seleccione --</option>
                                 @foreach ($tipoAcceso as $r)
@@ -167,31 +167,29 @@
                         </select>
                     </div>
                     <div class="col-12">
-                        <div class="card">
-                            <label class="form-label mb-0" for="ape_usu"><b>Administrar Permisos del Sistema <span class="text-danger">*</span></b></label>
-                            <div class="card-body border rounded">
-                                <div class="row">
-                                    @foreach ($menu as $m)
-                                    <div class="col-xl-3 col-md-6 mb-2">
-                                        <ul class="treeview">
-                                            <li class="{{'menu' . (count($m['submenu']) ? '' : '-only')}}">
-                                                <input type="checkbox" class="{{count($m['submenu']) ? 'inputMenu' : ''}}" id="menu{{$m['id_m']}}" value="{{$m['id_m']}}"/>
-                                                <label for="menu{{$m['id_m']}}"><i class="{{$m['icon']}}"></i> {{$m['text']}}</label>
-                                                @if (count($m['submenu']))
-                                                <ul class="submenu">
-                                                    @foreach ($m['submenu'] as $sm)
-                                                    <li>
-                                                        <input type="checkbox" class="inputSubMenu" id="submenu{{$sm['id_sm']}}" value="{{$sm['id_sm']}}" disabled="true"/>
-                                                        <label for="submenu{{$sm['id_sm']}}">{{$sm['text']}}</label>
-                                                    </li>
-                                                    @endforeach
-                                                </ul>
-                                                @endif
-                                            </li>
-                                        </ul>
-                                    </div>
-                                    @endforeach
+                        <label class="form-label mb-0" for="ape_usu"><b>Administrar Permisos del Sistema <span class="text-danger">*</span></b></label>
+                        <div class="border rounded p-2">
+                            <div class="row">
+                                @foreach ($menu as $m)
+                                <div class="col-xl-3 col-md-6 mb-2">
+                                    <ul class="treeview">
+                                        <li class="{{'menu' . (count($m['submenu']) ? '' : '-only')}}">
+                                            <input type="checkbox" class="{{count($m['submenu']) ? 'inputMenu' : ''}}" id="menu{{$m['id_m']}}" value="{{$m['id_m']}}"/>
+                                            <label for="menu{{$m['id_m']}}"><i class="{{$m['icon']}}"></i> {{$m['text']}}</label>
+                                            @if (count($m['submenu']))
+                                            <ul class="submenu">
+                                                @foreach ($m['submenu'] as $sm)
+                                                <li>
+                                                    <input type="checkbox" class="inputSubMenu" id="submenu{{$sm['id_sm']}}" value="{{$sm['id_sm']}}" disabled="true"/>
+                                                    <label for="submenu{{$sm['id_sm']}}">{{$sm['text']}}</label>
+                                                </li>
+                                                @endforeach
+                                            </ul>
+                                            @endif
+                                        </li>
+                                    </ul>
                                 </div>
+                                @endforeach
                             </div>
                         </div>
                     </div>
@@ -214,35 +212,38 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.3.4/signature_pad.min.js"></script>
 <script src="{{asset('front/js/app/script-usuarios.js')}}"></script>
 <script>
+    let tb_usuario = null;
     $(document).ready(function() {
-
-        // $('.dataTables_length label select').select2();
-    });
-
-    const tb_usuario = new DataTable('#tb_usuario', {
-        scrollX: true,
-        scrollY: 300,
-        ajax: {
-            url: "{{ url('/DataTableUser') }}",
-            dataSrc: "",
-            error: function(xhr, error, thrown) {
-                console.log('Error en la solicitud Ajax:', error);
-                console.log('Respuesta del servidor:', xhr);
-            }
-        },
-        columns: [
-            { data: 'ndoc_usuario' },
-            { data: 'nombres', render: function (data, type, row) {
-                    return `${row.nombres} ${row.apellidos}`;
+        tb_usuario = new DataTable('#tb_usuario', {
+            scrollX: true,
+            scrollY: 300,
+            ajax: {
+                url: "{{ url('/DataTableUser') }}",
+                dataSrc: "",
+                error: function(xhr, error, thrown) {
+                    console.log('Error en la solicitud Ajax:', error);
+                    console.log('Respuesta del servidor:', xhr);
                 }
             },
-            { data: 'descripcion' },
-            { data: 'usuario' },
-            { data: 'pass_view' },
-            { data: 'estatus' },
-            { data: 'id_usuario' }
-        ],
-        processing: true
+            columns: [
+                { data: 'ndoc_usuario' },
+                { data: 'nombres', render: function (data, type, row) {
+                        return `${row.nombres} ${row.apellidos}`;
+                    }
+                },
+                { data: 'descripcion' },
+                { data: 'usuario' },
+                { data: 'pass_view' },
+                { data: 'estatus' },
+                { data: 'id_usuario' }
+            ],
+            processing: true
+        });
+
+        // $('.dataTables_length label select').select2();
+        $("#fechan_usu").flatpickr({
+            maxDate: "{{ (date('Y') - 18) . '-' . date('m-d')}}"
+        });
     });
 
     function updateTable() {
