@@ -212,6 +212,7 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.3.4/signature_pad.min.js"></script>
 <script src="{{asset('front/js/app/script-usuarios.js')}}"></script>
 <script>
+    $('[data-mdb-target="#modal_frm_usuarios"]').click();
     let tb_usuario = null;
     $(document).ready(function() {
         tb_usuario = new DataTable('#tb_usuario', {
@@ -298,7 +299,7 @@
 
     function showUsuario(id) {
         $('#modal_frm_usuarios').modal('show');
-        $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="square-path-loader"></div></div>`);
+        $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
         const urlImg = {
             'perfil':"{{asset('assets/images/auth')}}",
             'firma':"{{asset('assets/images/firms')}}"

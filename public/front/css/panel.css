@@ -3348,13 +3348,6 @@ body {
     padding-bottom: 12px;
 }
 
-/* .loader-demo-box {
-    position: absolute;
-    height: 100%;
-    z-index: 999;
-    background: rgba(5, 195, 251, .05);
-} */
-
 .modal-dialog .form-label {
     font-size: .75rem;
     color: #9FA6B2;
@@ -3533,6 +3526,51 @@ body {
         transform: translate(-40px, 40px) rotate(45deg);
     }
 }
+
+
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 6rem;
+    aspect-ratio: 1;
+    margin:auto;
+    display: grid;
+    -webkit-mask: conic-gradient(from 15deg, #0000, #000);
+    animation: l26 1s infinite steps(12);
+}
+
+.loader,
+.loader:before,
+.loader:after {
+    background:
+        radial-gradient(closest-side at 50% 12.5%,
+            #3b71ca 96%, #0000) 50% 0/20% 80% repeat-y,
+        radial-gradient(closest-side at 12.5% 50%,
+            #3b71ca 96%, #0000) 0 50%/80% 20% repeat-x;
+}
+
+.loader:before,
+.loader:after {
+    content: "";
+    grid-area: 1/1;
+    transform: rotate(30deg);
+}
+
+.loader:after {
+    transform: rotate(60deg);
+}
+
+@keyframes l26 {
+    100% {
+        transform: rotate(1turn)
+    }
+}
+
+@media (max-width: 525px) {
+    .loader {
+        width: 3rem;
+    }
+}
+
 
 
 .hover-btn:hover {
