@@ -56,7 +56,7 @@
 </div>
 
 <div id="modal_frm_usuarios" class="modal fade" tabindex="-1" aria-labelledby="modal_frm_usuarios" aria-hidden="true">
-    <form id="form-usuario">
+    <form id="form-usuario" frm-accion="0" idu="">
         <div class="modal-dialog modal-xxl">
             <div class="modal-content" style="position: relative;">
                 <div class="modal-body">
@@ -67,7 +67,7 @@
                     <div class="row">
                         <div class="col-xl-3 col-6 mb-3">
                             <label class="form-label mb-0" for="id_area"><b>Area <span class="text-danger">*</span></b></label>
-                            <select id="id_area" class="select-search" name="id_area">
+                            <select id="id_area" class="select" name="id_area">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($areas as $r)
                                     <option value="{{$r->id_area}}">{{$r->descripcion}}</option>
@@ -86,7 +86,7 @@
                             </div>
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
-                            <label class="form-label mb-0" for="nom_usu"><b>Nombresd <span class="text-danger">*</span></b></label>
+                            <label class="form-label mb-0" for="nom_usu"><b>Nombres <span class="text-danger">*</span></b></label>
                             <input type="text" class="form-control" id="nom_usu" name="nom_usu">
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
@@ -132,7 +132,7 @@
                                 <label class="form-label mb-0" for="foto_perfil"><b>Foto de Perfil</b></label>
                                 <div class="col-12 p-1 text-center content-image">
                                     <div class="overlay">
-                                        <button class="btn-img removeImgButton" style="display: none;" id="removeButton" type="button"><i class="fas fa-xmark"></i></button>
+                                        <button class="btn-img removeImgButton" style="display: none;" id="removeButton" type="button" button-reset><i class="fas fa-xmark"></i></button>
                                         <button class="btn-img uploadImgButton" id="uploadButton" type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
                                         <button class="btn-img expandImgButton" type="button" onclick="PreviImagenes(PreviFPerfil.src);"><i class="fas fa-expand"></i></button>
                                     </div>
@@ -145,7 +145,7 @@
                                 <label class="form-label mb-0" for="firma_digital"><b>Firma Digital</b></label>
                                 <div class="col-12 p-1 text-center content-image">
                                     <div class="overlay">
-                                        <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma" type="button"><i class="fas fa-xmark"></i></button>
+                                        <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma" type="button" button-reset><i class="fas fa-xmark"></i></button>
                                         <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma" type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
                                         <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i class="fas fa-pencil"></i></button>
                                         <button class="btn-img expandImgButton" type="button" onclick="PreviImagenes(PreviFirma.src);"><i class="fas fa-expand"></i></button>
@@ -240,7 +240,6 @@
             processing: true
         });
 
-        // $('.dataTables_length label select').select2();
         $("#fechan_usu").flatpickr({
             maxDate: "{{ (date('Y') - 18) . '-' . date('m-d')}}"
         });
@@ -259,9 +258,12 @@
         elementos.forEach(function(elemento) {
             datosFormulario[elemento.name] = elemento.value;
         });
+        url = [
+            "{{url('/register')}}", `{{url('/editusu')}}/${$('#form-usuario').attr('idu')}`
+        ];
         $.ajax({
             type: 'POST',
-            url: "{{url('/register')}}",
+            url: url[$('#form-usuario').attr('frm-accion')],
             contentType: 'application/json',
                 headers: {
                     'X-CSRF-TOKEN': '{{ csrf_token() }}',
@@ -269,6 +271,8 @@
             data: JSON.stringify(datosFormulario),
             success: function(response) {
                 alert('Usuario registrado con éxito');
+                updateTable();
+                $('[data-mdb-dismiss="modal"]').click();
                 console.log(response);
             },
             error: function(jqXHR, textStatus, errorThrown) {
@@ -276,6 +280,10 @@
                 console.log(jqXHR.responseJSON);
             }
         });
+    });
+
+    $('.modal').on('hidden.bs.modal', function () {
+        $('#form-usuario').attr('idu', '').attr('frm-accion', '0');
     });
 
     document.querySelectorAll('.inputMenu').forEach(toggle => {
@@ -291,6 +299,10 @@
     function showUsuario(id) {
         $('#modal_frm_usuarios').modal('show');
         $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="square-path-loader"></div></div>`);
+        const urlImg = {
+            'perfil':"{{asset('assets/images/auth')}}",
+            'firma':"{{asset('assets/images/firms')}}"
+        };
         $.ajax({
             type: 'GET',
             url: `{{url('/showusu')}}/${id}`,
@@ -299,6 +311,7 @@
                 console.log(response);
                 const data = response[0];
                 $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
+                $('#form-usuario').attr('idu', id).attr('frm-accion', '1');
                 $('#id_area').val(data.id_area).trigger('change.select2');
                 $('#n_doc').val(data.ndoc_usuario);
                 $('#nom_usu').val(data.nombres);
@@ -310,8 +323,8 @@
                 $('#telc_usu').val(data.tel_corporativo);
                 $('#usuario').val(data.usuario);
                 $('#contrasena').val(data.pass_view);
-                // $('#foto_perfil').val(data.foto_perfil);
-                // $('#firma_digital').val(data.firma_digital);
+                if (data.foto_perfil) $('#PreviFPerfil').attr('src', `${urlImg['perfil']}/${data.foto_perfil}`);
+                if (data.firma_digital) $('#PreviFirma').attr('src', `${urlImg['firma']}/${data.firma_digital}`);
                 $('#tipo_acceso').val(data.tipo_acceso).trigger('change.select2');
             },
             error: function(jqXHR, textStatus, errorThrown) {

@@ -71,7 +71,7 @@
         <div class="card-body">
             <h4 class="card-title">Incidencias Registradas</h4>
             <div>
-                <button class="btn btn-primary btn-sm" onclick="$('#modal_frm_usuarios').modal('show')">
+                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_frm_incidencias">
                     <i class="fas fa-book-medical"></i>
                     Nueva Incidencia
                 </button>
@@ -102,6 +102,55 @@
             </div>
         </div>
     </div>
+</div>
+
+<div id="modal_frm_incidencias" class="modal fade" aria-modal="true" role="dialog">
+    <form id="form-usuario">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content" style="position: relative;">
+                <div class="modal-body">
+                    <h4 class="card-title mb-4 text-primary"><b>CREAR NUEVO USUARIO</b></h4>
+                    <div class="col-12">
+                        <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios (*)</span>
+                    </div>
+                    <div class="row">
+                        <div class="col-xl-3 col-6 mb-3">
+                            <label class="form-label mb-0" for="id_area"><b>Area <span class="text-danger">*</span></b></label>
+                            <select id="id_area" class="select-search" name="id_area">
+                                <option value="">-- Seleccione --</option>
+                                    <option value="{$r->id_area}">{$r->descripcion}</option>
+                            </select>
+                        </div>
+                        <div class="col-xl-3 col-6 mb-3">
+                            <label class="form-label mb-0" for="n_doc"><b>Dni/Carnet E.<span class="text-danger">*</span></b></label>
+                            <div class="input-group">
+                                <input type="search" class="form-control" id="n_doc" name="n_doc" maxlength="20">
+                                <span class="input-group-append">
+                                    <button class="btn btn-primary px-2" type="button" id="conDoc"  data-mdb-ripple-init style="border-radius: 0 .25rem .25rem 0;">
+                                        <i class="fas fa-magnifying-glass"></i>
+                                    </button>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="col-xl-3 col-sm-6 mb-3">
+                            <label class="form-label mb-0" for="nom_usu"><b>Nombresd <span class="text-danger">*</span></b></label>
+                            <input type="text" class="form-control" id="nom_usu" name="nom_usu">
+                        </div>
+                        <div class="col-xl-3 col-sm-6 mb-3">
+                            <label class="form-label mb-0" for="ape_usu"><b>Apellidos <span class="text-danger">*</span></b></label>
+                            <input type="text" class="form-control" id="ape_usu" name="ape_usu">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger btn-sm" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary btn-sm">
+                        Guardar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
 @endsection
 

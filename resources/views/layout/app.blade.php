@@ -153,7 +153,7 @@
                   <a class="nav-link" href="{{url('/control-de-usuario/usuarios')}}"><b>Usuarios</b></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil Usuarios</b></a>
+                  <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil</b></a>
                 </li>
               </ul>
             </div>

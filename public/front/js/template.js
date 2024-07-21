@@ -144,4 +144,23 @@
     }
   }); //missing );
 
+  $('[data-mdb-dismiss="modal"]').click(function () {
+    const form = $('.modal form');
+    form.find('input').each(function () {
+      if ($(this).attr('type') === 'checkbox') {
+        $(this).prop('checked', false);
+      } else {
+        $(this).val("");
+      }
+    });
+    form.find('select').each(function () {
+      $(this).val("").trigger('change.select2');
+    });
+    form.find('button').each(function () {
+      if ($(this).is('[button-reset]')) {
+        $(this).click();
+      }
+    });
+  })
+
 })(jQuery);

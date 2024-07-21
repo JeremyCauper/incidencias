@@ -67,11 +67,11 @@ class UserController extends Controller
             'n_doc' => 'required|integer',
             'nom_usu' => 'required|string',
             'ape_usu' => 'required|string',
-            'emailp_usu' => 'required|email',
-            'emailc_usu' => 'required|email',
+            'emailp_usu' => 'nullable|email',
+            'emailc_usu' => 'nullable|email',
             'fechan_usu' => 'required|date',
-            'telp_usu' => 'required|string',
-            'telc_usu' => 'required|string',
+            'telp_usu' => 'nullable|string',
+            'telc_usu' => 'nullable|string',
             'usuario' => 'required|string',
             'contrasena' => 'required|string',
             'foto_perfil' => 'nullable|string',
@@ -141,11 +141,11 @@ class UserController extends Controller
             'n_doc' => 'required|integer',
             'nom_usu' => 'required|string',
             'ape_usu' => 'required|string',
-            'emailp_usu' => 'required|email',
-            'emailc_usu' => 'required|email',
+            'emailp_usu' => 'nullable|email',
+            'emailc_usu' => 'nullable|email',
             'fechan_usu' => 'required|date',
-            'telp_usu' => 'required|string',
-            'telc_usu' => 'required|string',
+            'telp_usu' => 'nullable|string',
+            'telc_usu' => 'nullable|string',
             'usuario' => 'required|string',
             'contrasena' => 'required|string',
             'foto_perfil' => 'nullable|string',
@@ -157,27 +157,7 @@ class UserController extends Controller
             return response()->json(['errors' => $validator->errors()], 400);
         }
 
-        $filenameFP = $request->foto_perfil;
-        if ($request->foto_perfil) {
-            $result = $this->parseFile('fp_' . $request->usuario, 'auth', $request->foto_perfil);
-            if (!$result['success']) {
-                return response()->json(['success' => false, 'message' => 'Error al intentar crear la imagen del perfil'], 500);
-            }
-            $filenameFP = $result['filename'];
-        }
-
-        $filenameFD = $request->firma_digital;
-        if ($request->firma_digital) {
-            $result = $this->parseFile('fd_' . $request->usuario, 'firms', $request->firma_digital);
-            if (!$result['success']) {
-                return response()->json(['success' => false, 'message' => 'Error al intentar crear la firma digital'], 500);
-            }
-            $filenameFD = $result['filename'];
-        }
-
-        DB::table('usuarios')
-        ->where('id_usuario', $id)
-        ->update([
+        $update = [
             'ndoc_usuario' => $request->n_doc,
             'nombres' => $request->nom_usu,
             'apellidos' => $request->ape_usu,
@@ -189,13 +169,31 @@ class UserController extends Controller
             'usuario' => $request->usuario,
             'contrasena' => Hash::make($request->contrasena),  // Encriptar la contraseña
             'pass_view' => $request->contrasena,
-            'foto_perfil' => $filenameFP,
-            'firma_digital' => $filenameFD,
             'tipo_acceso' => $request->tipo_acceso,
             'id_area' => $request->id_area,
             'menu_usuario' => '{}',
             'updated_at' => now()
-        ]);
+        ];
+
+        if ($request->foto_perfil) {
+            $result = $this->parseFile('fp_' . $request->usuario, 'auth', $request->foto_perfil);
+            if (!$result['success']) {
+                return response()->json(['success' => false, 'message' => 'Error al intentar crear la imagen del perfil'], 500);
+            }
+            $update['foto_perfil'] = $result['filename'];
+        }
+
+        if ($request->firma_digital) {
+            $result = $this->parseFile('fd_' . $request->usuario, 'firms', $request->firma_digital);
+            if (!$result['success']) {
+                return response()->json(['success' => false, 'message' => 'Error al intentar crear la firma digital'], 500);
+            }
+            $update['firma_digital'] = $result['filename'];
+        }
+
+        DB::table('usuarios')
+        ->where('id_usuario', $id)
+        ->update($update);
 
         return response()->json(['message' => 'Usuario editado con éxito'], 201);
     }
