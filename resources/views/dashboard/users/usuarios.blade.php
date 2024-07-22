@@ -67,7 +67,7 @@
                     <div class="row">
                         <div class="col-xl-3 col-6 mb-3">
                             <label class="form-label mb-0" for="id_area"><b>Area <span class="text-danger">*</span></b></label>
-                            <select id="id_area" class="select" name="id_area">
+                            <select id="id_area" class="select" name="id_area" require="Area">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($areas as $r)
                                     <option value="{{$r->id_area}}">{{$r->descripcion}}</option>
@@ -77,7 +77,7 @@
                         <div class="col-xl-3 col-6 mb-3">
                             <label class="form-label mb-0" for="n_doc"><b>Dni/Carnet E.<span class="text-danger">*</span></b></label>
                             <div class="input-group">
-                                <input type="search" class="form-control" id="n_doc" name="n_doc" maxlength="20">
+                                <input type="search" class="form-control" id="n_doc" name="n_doc" maxlength="20" require="Dni/Carnet E.">
                                 <span class="input-group-append">
                                     <button class="btn btn-primary px-2" type="button" id="conDoc"  data-mdb-ripple-init style="border-radius: 0 .25rem .25rem 0;">
                                         <i class="fas fa-magnifying-glass"></i>
@@ -87,11 +87,11 @@
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="nom_usu"><b>Nombres <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="nom_usu" name="nom_usu">
+                            <input type="text" class="form-control" id="nom_usu" name="nom_usu" require="Nombres">
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="ape_usu"><b>Apellidos <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="ape_usu" name="ape_usu">
+                            <input type="text" class="form-control" id="ape_usu" name="ape_usu" require="Apellidos">
                         </div>
                     </div>
                     <div class="row">
@@ -105,7 +105,7 @@
                         </div>
                         <div class="col-lg-2 col-sm-4 mb-3 form-date">
                             <label class="form-label mb-0" for="fechan_usu"><b>Fecha de Nacimiento <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="fechan_usu" name="fechan_usu">
+                            <input type="text" class="form-control" id="fechan_usu" name="fechan_usu" require="Fecha de Nacimiento">
                         </div>
                     </div>
                     <div class="row">
@@ -119,11 +119,11 @@
                         </div>
                         <div class="col-lg-3 col-6 mb-3">
                             <label class="form-label mb-0" for="usuario"><b>Usuario <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="usuario" name="usuario">
+                            <input type="text" class="form-control" id="usuario" name="usuario" require="Usuario">
                         </div>
                         <div class="col-lg-3 col-6 mb-3">
                             <label class="form-label mb-0" for="contrasena"><b>Contraseña <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="contrasena" name="contrasena">
+                            <input type="text" class="form-control" id="contrasena" name="contrasena" require="Contraseña">
                         </div>
                     </div>
                     <div class="col-12 text-center d-flex justify-content-center">
@@ -159,7 +159,7 @@
                     </div>
                     <div class="mb-3">
                         <label class="form-label mb-0" for="tipo_acceso"><b>Tipo Personal <span class="text-danger">*</span></b></label>
-                        <select id="tipo_acceso" name="tipo_acceso" class="select">
+                        <select id="tipo_acceso" name="tipo_acceso" class="select" require="Tipo Personal">
                             <option value="">-- Seleccione --</option>
                                 @foreach ($tipoAcceso as $r)
                                     <option value="{{$r->id_tipo_acceso}}">{{$r->descripcion}}</option>
@@ -212,7 +212,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.3.4/signature_pad.min.js"></script>
 <script src="{{asset('front/js/app/script-usuarios.js')}}"></script>
 <script>
-    $('[data-mdb-target="#modal_frm_usuarios"]').click();
     let tb_usuario = null;
     $(document).ready(function() {
         tb_usuario = new DataTable('#tb_usuario', {
@@ -252,13 +251,23 @@
 
     document.getElementById('form-usuario').addEventListener('submit', function(event) {
         event.preventDefault();
+        $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
 
         var elementos = this.querySelectorAll('[name]');
         var datosFormulario = {};
 
+        let cad_require = "";
         elementos.forEach(function(elemento) {
+            if (elemento.getAttribute("require") && elemento.value == "") {
+                cad_require += `<b>${elemento.getAttribute("require")}</b>, `;
+            }
             datosFormulario[elemento.name] = elemento.value;
         });
+        if (cad_require) {
+            $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
+            return boxAlert.box('info', 'Faltan datos', `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>`);
+        }
+        
         url = [
             "{{url('/register')}}", `{{url('/editusu')}}/${$('#form-usuario').attr('idu')}`
         ];
@@ -271,14 +280,16 @@
                 },
             data: JSON.stringify(datosFormulario),
             success: function(response) {
-                alert('Usuario registrado con éxito');
+                boxAlert.minbox('success', response.message, {background:"#3b71ca", color:"#ffffff"}, "top");
                 updateTable();
                 $('[data-mdb-dismiss="modal"]').click();
                 console.log(response);
+                $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
             },
             error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error al registrar el usuario');
+                boxAlert.box('error', '¡Ocurrio un error!', 'Error al registrar el usuario');
                 console.log(jqXHR.responseJSON);
+                $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
             }
         });
     });

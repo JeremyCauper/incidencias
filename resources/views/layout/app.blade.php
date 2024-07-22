@@ -183,6 +183,8 @@
   <!-- container-scroller -->
 
   <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
+  <script src="{{asset('front/js/AlertMananger.js')}}"></script>
   <!-- MDB -->
   <script type="text/javascript" src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
   <script src="{{ asset('front/js/template.js') }}"></script>
@@ -191,7 +193,6 @@
   <script src="{{asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
-  <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
   <!-- plugins:js -->
   @yield('scripts')

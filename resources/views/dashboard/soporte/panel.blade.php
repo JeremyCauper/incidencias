@@ -105,26 +105,25 @@
 </div>
 
 <div id="modal_frm_incidencias" class="modal fade" aria-modal="true" role="dialog">
-    <form id="form-usuario">
-        <div class="modal-dialog modal-lg">
+    <form id="form-incidencias">
+        <div class="modal-dialog modal-xxl">
             <div class="modal-content" style="position: relative;">
                 <div class="modal-body">
-                    <h4 class="card-title mb-4 text-primary"><b>CREAR NUEVO USUARIO</b></h4>
-                    <div class="col-12">
+                    <h6 class="card-title mb-4 text-primary"><b>CREAR NUEVA INCIDENCIA</b></h6>
+                    <div class="col-12 mb-2">
                         <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios (*)</span>
                     </div>
                     <div class="row">
                         <div class="col-xl-3 col-6 mb-3">
                             <label class="form-label mb-0" for="id_area"><b>Area <span class="text-danger">*</span></b></label>
-                            <select id="id_area" class="select-search" name="id_area">
+                            <select id="id_area" class="select" name="id_area" require="Area">
                                 <option value="">-- Seleccione --</option>
-                                    <option value="{$r->id_area}">{$r->descripcion}</option>
                             </select>
                         </div>
                         <div class="col-xl-3 col-6 mb-3">
                             <label class="form-label mb-0" for="n_doc"><b>Dni/Carnet E.<span class="text-danger">*</span></b></label>
                             <div class="input-group">
-                                <input type="search" class="form-control" id="n_doc" name="n_doc" maxlength="20">
+                                <input type="search" class="form-control" id="n_doc" name="n_doc" maxlength="20" require="Dni/Carnet E.">
                                 <span class="input-group-append">
                                     <button class="btn btn-primary px-2" type="button" id="conDoc"  data-mdb-ripple-init style="border-radius: 0 .25rem .25rem 0;">
                                         <i class="fas fa-magnifying-glass"></i>
@@ -133,19 +132,57 @@
                             </div>
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
-                            <label class="form-label mb-0" for="nom_usu"><b>Nombresd <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="nom_usu" name="nom_usu">
+                            <label class="form-label mb-0" for="nom_usu"><b>Nombres <span class="text-danger">*</span></b></label>
+                            <input type="text" class="form-control" id="nom_usu" name="nom_usu" require="Nombres">
                         </div>
                         <div class="col-xl-3 col-sm-6 mb-3">
                             <label class="form-label mb-0" for="ape_usu"><b>Apellidos <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="ape_usu" name="ape_usu">
+                            <input type="text" class="form-control" id="ape_usu" name="ape_usu" require="Apellidos">
                         </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-5 col-sm-4 mb-3">
+                            <label class="form-label mb-0" for="emailp_usu"><b>Correo Personal</b></label>
+                            <input type="text" class="form-control" id="emailp_usu" name="emailp_usu">
+                        </div>
+                        <div class="col-lg-5 col-sm-4 mb-3">
+                            <label class="form-label mb-0" for="emailc_usu"><b>Correo Corporativo</b></label>
+                            <input type="text" class="form-control" id="emailc_usu" name="emailc_usu">
+                        </div>
+                        <div class="col-lg-2 col-sm-4 mb-3 form-date">
+                            <label class="form-label mb-0" for="fechan_usu"><b>Fecha de Nacimiento <span class="text-danger">*</span></b></label>
+                            <input type="text" class="form-control" id="fechan_usu" name="fechan_usu" require="Fecha de Nacimiento">
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-lg-3 col-6 mb-3">
+                            <label class="form-label mb-0" for="telp_usu"><b>Tel. Personal</b></label>
+                            <input type="text" class="form-control" id="telp_usu" name="telp_usu">
+                        </div>
+                        <div class="col-lg-3 col-6 mb-3">
+                            <label class="form-label mb-0" for="telc_usu"><b>Tel. Corporativo</b></label>
+                            <input type="text" class="form-control" id="telc_usu" name="telc_usu">
+                        </div>
+                        <div class="col-lg-3 col-6 mb-3">
+                            <label class="form-label mb-0" for="usuario"><b>Usuario <span class="text-danger">*</span></b></label>
+                            <input type="text" class="form-control" id="usuario" name="usuario" require="Usuario">
+                        </div>
+                        <div class="col-lg-3 col-6 mb-3">
+                            <label class="form-label mb-0" for="contrasena"><b>Contraseña <span class="text-danger">*</span></b></label>
+                            <input type="text" class="form-control" id="contrasena" name="contrasena" require="Contraseña">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label mb-0" for="tipo_acceso"><b>Tipo Personal <span class="text-danger">*</span></b></label>
+                        <select id="tipo_acceso" name="tipo_acceso" class="select" require="Tipo Personal">
+                            <option value="">-- Seleccione --</option>
+                        </select>
                     </div>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-sm" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary btn-sm">
-                        Guardar
+                        Registrar
                     </button>
                 </div>
             </div>
@@ -163,7 +200,7 @@
             url: "{{ url('/DataTableUser') }}",
             dataSrc: "",
             error: function(xhr, error, thrown) {
-                console.log('Error en la solicitud Ajax:', error);
+                boxAlert.box('error', 'Ocurrio un error', 'Error en la solicitud Ajax: ' + error);
                 console.log('Respuesta del servidor:', xhr);
             }
         },

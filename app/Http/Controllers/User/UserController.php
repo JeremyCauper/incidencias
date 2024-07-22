@@ -11,7 +11,8 @@ use Ramsey\Uuid\Type\Integer;
 
 class UserController extends Controller
 {
-    public function consultaDni(string $dni) {
+    public function consultaDni(string $dni)
+    {
         $bdDni = DB::table('usuarios')
             ->select('ndoc_usuario')
             ->where('ndoc_usuario', $dni)
@@ -23,7 +24,7 @@ class UserController extends Controller
         $consulta = json_decode(file_get_contents("http://localhost/new_dni/consulta.php?documento=$dni"), true);
         return $consulta;
     }
-    
+
     public function DataTableUser()
     {
         $usuarios = DB::table('usuarios')
@@ -122,7 +123,7 @@ class UserController extends Controller
             'updated_at' => now()
         ]);
 
-        return response()->json(['message' => 'Usuario registrado con éxito'], 201);
+        return response()->json(['success' => true, 'message' => 'Usuario registrado con éxito'], 201);
     }
 
     public function ShowUser(string $id)
@@ -192,10 +193,10 @@ class UserController extends Controller
         }
 
         DB::table('usuarios')
-        ->where('id_usuario', $id)
-        ->update($update);
+            ->where('id_usuario', $id)
+            ->update($update);
 
-        return response()->json(['message' => 'Usuario editado con éxito'], 201);
+        return response()->json(['success' => true, 'message' => 'Usuario editado con éxito'], 201);
     }
 
     public function UpdateEstatus(Request $request, string $id)
@@ -210,10 +211,10 @@ class UserController extends Controller
 
         $estatus = $request->estatus ? 0 : 1;
         DB::table('usuarios')
-        ->where('id_usuario', $id)
-        ->update(['estatus' => $estatus]);
+            ->where('id_usuario', $id)
+            ->update(['estatus' => $estatus]);
 
-        return response()->json(['message' => 'Usuario ' . ($estatus ? '' : 'in') . 'habilitado con éxito'], 201);
+        return response()->json(['success' => true, 'message' => 'Usuario ' . ($estatus ? '' : 'in') . 'habilitado con éxito'], 201);
     }
 
     public function parseFile($name, $dir, $data)
