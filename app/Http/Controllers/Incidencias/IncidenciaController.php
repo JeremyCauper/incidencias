@@ -8,13 +8,26 @@ use Illuminate\Support\Facades\DB;
 
 class IncidenciaController extends Controller
 {
-    public function countEmpresas()
+    public function resumenInc()
     {
         try {
-            $count = json_decode(file_get_contents('https://cpe.apufact.com/portal/public/api/ListarInformacion?token=UVZCVlJrRkRWREl3TWpRPQ==&tabla=empresas'));
-            return count($count);
+            $data = [
+                'empresas' => [],
+                'sucursales' => []
+            ];
+            $empresas = json_decode(file_get_contents('https://cpe.apufact.com/portal/public/api/ListarInformacion?token=UVZCVlJrRkRWREl3TWpRPQ==&tabla=empresas'));
+            foreach ($empresas as $val) {
+                array_push($data['empresas'], ['id' => $val->id, 'ruc' => $val->Ruc, 'empresa' => $val->Ruc . ' - ' . $val->RazonSocial]);
+            }
+            $sucursales = json_decode(file_get_contents('https://cpe.apufact.com/portal/public/api/ListarInformacion?token=UVZCVlJrRkRWREl3TWpRPQ==&tabla=sucursales'));
+            foreach ($sucursales as $val) {
+                array_push($data['sucursales'], ['id' => $val->id, 'ruc' => $val->ruc, 'sucursal' => $val->Nombre]);
+            }
+            $data['cEmpresa'] = count($empresas);
+            $data['cSucursal'] = count($sucursales);
+            return $data;
         } catch (\Throwable $th) {
-            return "Service Unavailable";
+            return "Service Unavailable : " . $th;
         }
 
     }

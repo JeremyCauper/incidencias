@@ -28,13 +28,14 @@ Route::get('/logout', [LoginController::class, 'logout']);
 
 Route::get('/soporte', function () {
     $incidenciaController = new IncidenciaController();
-    $countEmpresas = $incidenciaController->countEmpresas();
+    $resumenInc = $incidenciaController->resumenInc();
     
-    return view('dashboard.soporte.panel', ['countEmpresas' => $countEmpresas]);
+    return view('dashboard.soporte.panel', ['resumenInc' => $resumenInc]);
 })->middleware('auth');
 
 Route::get('/viewListMenu', [MenuController::class, 'viewListMenu']);
 Route::get('/extractPermisos', [MenuController::class, 'extractPermisos']);
+Route::get('/resumenInc', [IncidenciaController::class, 'resumenInc']);
 
 
 

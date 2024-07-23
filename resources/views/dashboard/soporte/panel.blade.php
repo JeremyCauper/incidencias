@@ -22,7 +22,7 @@
 <div class="row">
     <div class="col-12">
         <div class="row">
-            <div class="col-12 grid-margin">
+            <div class="col-12 grid-margin">               
                 <div class="card">
                     <div class="card-body text-primary" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="far fa-clock"></i> Incidencias Registradas</h6>
@@ -58,7 +58,7 @@
                 <div class="card">
                     <a class="card-body text-secondary" href="{{url('/soport-empresa/empresas')}}" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-database"></i> Clientes Registrados</h6>
-                        <h4 class="subtitle-count"><b>{{$countEmpresas}}</b></h4>
+                        <h4 class="subtitle-count"><b>{{$resumenInc['cEmpresa']}}</b></h4>
                     </a>
                 </div>
             </div>
@@ -106,7 +106,7 @@
 
 <div id="modal_frm_incidencias" class="modal fade" aria-modal="true" role="dialog">
     <form id="form-incidencias">
-        <div class="modal-dialog modal-xxl">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content" style="position: relative;">
                 <div class="modal-body">
                     <h6 class="card-title mb-4 text-primary"><b>CREAR NUEVA INCIDENCIA</b></h6>
@@ -114,44 +114,54 @@
                         <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios (*)</span>
                     </div>
                     <div class="row">
-                        <div class="col-xl-3 col-6 mb-3">
-                            <label class="form-label mb-0" for="id_area"><b>Area <span class="text-danger">*</span></b></label>
-                            <select id="id_area" class="select" name="id_area" require="Area">
+                        <div class="col-lg-8 mb-3">
+                            <label class="form-label mb-0" for="id_empresa"><b>Empresa <span class="text-danger">*</span></b></label>
+                            <select id="id_empresa" class="select-search" name="id_empresa" require="Area">
                                 <option value="">-- Seleccione --</option>
+                                @foreach ($resumenInc['empresas'] as $e)
+                                    <option value="{{$e['id']}}" hola-ari="{{$e['ruc']}}">{{$e['empresa']}}</option>
+                                @endforeach
                             </select>
                         </div>
-                        <div class="col-xl-3 col-6 mb-3">
-                            <label class="form-label mb-0" for="n_doc"><b>Dni/Carnet E.<span class="text-danger">*</span></b></label>
-                            <div class="input-group">
-                                <input type="search" class="form-control" id="n_doc" name="n_doc" maxlength="20" require="Dni/Carnet E.">
-                                <span class="input-group-append">
-                                    <button class="btn btn-primary px-2" type="button" id="conDoc"  data-mdb-ripple-init style="border-radius: 0 .25rem .25rem 0;">
-                                        <i class="fas fa-magnifying-glass"></i>
-                                    </button>
-                                </span>
-                            </div>
-                        </div>
-                        <div class="col-xl-3 col-sm-6 mb-3">
-                            <label class="form-label mb-0" for="nom_usu"><b>Nombres <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="nom_usu" name="nom_usu" require="Nombres">
-                        </div>
-                        <div class="col-xl-3 col-sm-6 mb-3">
-                            <label class="form-label mb-0" for="ape_usu"><b>Apellidos <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="ape_usu" name="ape_usu" require="Apellidos">
+                        <div class="col-lg-4 mb-3">
+                            <label class="form-label mb-0" for="id_sucursal"><b>Sucursal <span class="text-danger">*</span></b></label>
+                            <select id="id_sucursal" class="select" name="id_sucursal" require="Area">
+                                <option value="">-- Seleccione --</option>
+                                @foreach ($resumenInc['sucursales'] as $s)
+                                    <option value="{{$s['id']}}" search-ruc="{{$s['ruc']}}">{{$s['sucursal']}}</option>
+                                @endforeach
+                            </select>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-lg-5 col-sm-4 mb-3">
-                            <label class="form-label mb-0" for="emailp_usu"><b>Correo Personal</b></label>
-                            <input type="text" class="form-control" id="emailp_usu" name="emailp_usu">
+                        <div class="col-lg-3 col-7 mb-3">
+                            <label class="form-label mb-0" for="car_contac"><b>Cargo <span class="text-danger">*</span></b></label>
+                            <select id="car_contac" class="select-search" name="car_contac" require="Area">
+                                <option value="">-- Seleccione --</option>
+                                <option value="Jefe de Playa"> Jefe de Playa</option>
+                                <option value="Islero"> Islero</option>
+                                <option value="Jefe de Planta"> Jefe de Planta</option>
+                                <option value="Administrador(a)"> Administrador(a)</option>
+                                <option value="Supervisor"> Supervisor</option>
+                                <option value="Contadora"> Contadora</option>
+                                <option value="Asistente Contable"> Asistente Contable</option>
+                                <option value="Encargado"> Encargado</option>
+                                <option value="Cajero"> Cajero</option>
+                                <option value="Jefe de Sistemas"> Jefe de Sistemas</option>
+                                <option value="Asistente de Sistemas"> Asistente de Sistemas</option>
+                            </select>
                         </div>
-                        <div class="col-lg-5 col-sm-4 mb-3">
-                            <label class="form-label mb-0" for="emailc_usu"><b>Correo Corporativo</b></label>
-                            <input type="text" class="form-control" id="emailc_usu" name="emailc_usu">
+                        <div class="col-lg-2 col-5 mb-3">
+                            <label class="form-label mb-0" for="tel_contac"><b>Telefono</b></label>
+                            <input type="text" class="form-control" id="tel_contac" name="tel_contac">
                         </div>
-                        <div class="col-lg-2 col-sm-4 mb-3 form-date">
-                            <label class="form-label mb-0" for="fechan_usu"><b>Fecha de Nacimiento <span class="text-danger">*</span></b></label>
-                            <input type="text" class="form-control" id="fechan_usu" name="fechan_usu" require="Fecha de Nacimiento">
+                        <div class="col-lg-3 col-sm-6 mb-3">
+                            <label class="form-label mb-0" for="nom_contac"><b>Nombre</b></label>
+                            <input type="text" class="form-control" id="nom_contac" name="nom_contac">
+                        </div>
+                        <div class="col-lg-4 col-sm-6 mb-3">
+                            <label class="form-label mb-0" for="cor_contac"><b>Correo</b></label>
+                            <input type="text" class="form-control" id="cor_contac" name="cor_contac">
                         </div>
                     </div>
                     <div class="row">
@@ -193,6 +203,37 @@
 
 @section('scripts')
     <script>
+        $(document).ready(function() {
+            $('#id_empresa').on('change', function() {
+                var option = $('#id_empresa option[value="' + $(this).val() + '"]');
+                console.log(option.value);
+                /*// Valor de aria-pre a buscar
+                var searchTerm = '25';
+
+                // Abrir el dropdown de Select2
+                $('#mySelect2').select2('open');
+
+                // Espera un pequeño delay para asegurarse de que el dropdown esté completamente abierto
+                setTimeout(function() {
+                    // Limpiar selección previa
+                    $('#mySelect2').val(null).trigger('change');
+
+                    // Iterar sobre cada opción en el select
+                    $('#mySelect2 option').each(function() {
+                        // Verificar si el valor de aria-pre coincide con el término de búsqueda
+                        if ($(this).attr('aria-pre') === searchTerm) {
+                            // Seleccionar la opción
+                            var selectedValues = $('#mySelect2').val() || [];
+                            selectedValues.push($(this).val());
+                            $('#mySelect2').val(selectedValues).trigger('change');
+                        }
+                    });
+
+                    // Cerrar el dropdown de Select2
+                    $('#mySelect2').select2('close');
+                }, 200);*/
+            });
+        });
         const tb_incidencia = new DataTable('#tb_incidencia', {
         scrollX: true,
         scrollY: 300,

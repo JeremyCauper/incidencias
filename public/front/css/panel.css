@@ -3371,7 +3371,7 @@ body {
     left: 0;
     width: 100%;
     height: 100%;
-    background: #d3d3d32a;
+    background: #d3d3d352;
     align-content: center;
 }
 
@@ -3418,56 +3418,6 @@ body {
     }
 }
 
-
-/* Bar loader */
-.bar-loader {
-    width: 50px;
-    height: 50px;
-    border-radius: 100%;
-    position: relative;
-    margin: 0 auto;
-}
-
-.bar-loader span {
-    display: inline-block;
-    width: 5px;
-    height: 30px;
-    background-color: rgba(249, 95, 83, 0.7);
-}
-
-.bar-loader span:nth-child(1) {
-    animation: grow 1s ease-in-out infinite;
-}
-
-.bar-loader span:nth-child(2) {
-    animation: grow 1s ease-in-out 0.15s infinite;
-}
-
-.bar-loader span:nth-child(3) {
-    animation: grow 1s ease-in-out 0.3s infinite;
-}
-
-.bar-loader span:nth-child(4) {
-    animation: grow 1s ease-in-out 0.45s infinite;
-}
-
-@keyframes grow {
-
-    0%,
-    100% {
-        -webkit-transform: scaleY(1);
-        -ms-transform: scaleY(1);
-        -o-transform: scaleY(1);
-        transform: scaleY(1);
-    }
-
-    50% {
-        -webkit-transform: scaleY(1.8);
-        -ms-transform: scaleY(1.8);
-        -o-transform: scaleY(1.8);
-        transform: scaleY(1.8);
-    }
-}
 
 /* Square path loader */
 .square-path-loader {
@@ -3532,7 +3482,7 @@ body {
 .loader {
     width: 6rem;
     aspect-ratio: 1;
-    margin:auto;
+    margin: auto;
     display: grid;
     -webkit-mask: conic-gradient(from 15deg, #0000, #000);
     animation: l26 1s infinite steps(12);
@@ -3565,12 +3515,80 @@ body {
     }
 }
 
+
+
+/* HTML: <div class="dt_processing"></div> */
+.dt_processing {
+    width: 100px;
+    aspect-ratio: 5;
+    --_g: no-repeat radial-gradient(circle closest-side, #3b71ca 90%, #0000);
+    background:
+        var(--_g) 0% 50%,
+        var(--_g) 50% 50%,
+        var(--_g) 100% 50%;
+    background-size: calc(100%/3) 100%;
+    animation: l7 .75s infinite linear;
+    position: relative;
+    margin: auto;
+}
+
+@keyframes l7 {
+    33% {
+        background-size: calc(100%/3) 0%, calc(100%/3) 100%, calc(100%/3) 100%
+    }
+
+    50% {
+        background-size: calc(100%/3) 100%, calc(100%/3) 0%, calc(100%/3) 100%
+    }
+
+    66% {
+        background-size: calc(100%/3) 100%, calc(100%/3) 100%, calc(100%/3) 0%
+    }
+}
+
+.dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting {
+    cursor: pointer;
+    position: relative;
+}
+
+.dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting:after,
+.dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting:before {
+    content: "\f0de";
+    opacity: .5;
+    font-family: "Font Awesome 6 Free";
+    position: absolute;
+    top: 50%;
+    right: .5rem;
+    font-size: .8125rem;
+    margin-top: -.40625rem;
+    display: inline-block;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+.dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting:after {
+    content: "\f0de";
+}
+
+.dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting:before {
+    content: "\f0dd";
+}
+
+.dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting_asc:after,
+.dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting_desc:before {
+    color: #3b71ca;
+    opacity: 1;
+}
+
+
+
+
 @media (max-width: 525px) {
     .loader {
         width: 3rem;
     }
 }
-
 
 
 .hover-btn:hover {
@@ -3606,4 +3624,8 @@ body {
     color: #000;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+}
+
+.select2-results__option {
+    font-size: .75rem;
 }
