@@ -70,7 +70,7 @@
     cursor: pointer;
     float: right;
     font-size: 0;
-    line-height: 1;
+    line-height: .76;
     margin-top: .1875rem;
     margin-left: .625rem;
     opacity: .75;
@@ -88,10 +88,10 @@
 }
 
 .select2-selection--single .select2-selection__clear:after {
-    content: "";
+    content: "\f00d";
     font-family: "Font Awesome 6 Free";
     display: inline-block;
-    font-size: 1rem;
+    font-size: .9rem;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale
 }

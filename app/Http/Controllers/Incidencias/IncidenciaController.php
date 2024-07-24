@@ -21,7 +21,7 @@ class IncidenciaController extends Controller
             }
             $sucursales = json_decode(file_get_contents('https://cpe.apufact.com/portal/public/api/ListarInformacion?token=UVZCVlJrRkRWREl3TWpRPQ==&tabla=sucursales'));
             foreach ($sucursales as $val) {
-                array_push($data['sucursales'], ['id' => $val->id, 'ruc' => $val->ruc, 'sucursal' => $val->Nombre]);
+                $data['sucursales'][$val->ruc][] = ['id' => $val->id, 'sucursal' => $val->Nombre];
             }
             $data['cEmpresa'] = count($empresas);
             $data['cSucursal'] = count($sucursales);

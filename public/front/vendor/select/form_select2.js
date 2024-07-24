@@ -3,7 +3,11 @@ $(document).ready(function () {
         "select": {
             minimumResultsForSearch: Infinity
         },
-        "select_search": {}
+        "select_search": {},
+        "select_clear": {
+            placeholder: '-- Seleccione --',
+            allowClear: true
+        }
     };
 
     // Función para inicializar select2
@@ -24,6 +28,11 @@ $(document).ready(function () {
         initializeSelect2($(this), selectConfig.select_search, $('body'));
     });
 
+    // Allow clear selection
+    $('.select-clear').each(function () {
+        initializeSelect2($(this), selectConfig.select_clear, $('body'));
+    });
+
     // Aplica select2 a todos los selects dentro de los modales al mostrarse
     $('.modal').on('shown.bs.modal', function () {
         const modal = $(this).closest('.modal');
@@ -33,6 +42,9 @@ $(document).ready(function () {
             }
             if ($(this).hasClass('select-search')) {
                 initializeSelect2($(this), selectConfig.select_search, modal);
+            }
+            if ($(this).hasClass('select-clear')) {
+                initializeSelect2($(this), selectConfig.select_clear, modal);
             }
         });
     });
