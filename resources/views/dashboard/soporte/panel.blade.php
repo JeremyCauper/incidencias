@@ -113,7 +113,7 @@
                     <div class="col-12 mb-2">
                         <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios (*)</span>
                     </div>
-                    <div class="mt-4 p-3 rounded-3 fieldset mb-3">
+                    <div class="mt-4 p-3 rounded-3 fieldset mb-3 shadow-1-strong">
                         <h6 class="legend text-primary">Datos Empresa</h6>
                         <div class="row">
                             <div class="col-lg-8 mb-1">
@@ -127,13 +127,13 @@
                             </div>
                             <div class="col-lg-4 mb-1">
                                 <label class="form-label mb-0" for="id_sucursal"><b>Sucursal <span class="text-danger">*</span></b></label>
-                                <select id="id_sucursal" class="select" name="id_sucursal" require="Area">
+                                <select id="id_sucursal" class="select" name="id_sucursal" require="Area" disabled="true">
                                     <option value="">-- Seleccione --</option>
                                 </select>
                             </div>
                         </div>
                     </div>
-                    <div class="mt-4 p-3 rounded-3 fieldset mb-3">
+                    <div class="mt-4 p-3 rounded-3 fieldset mb-3 shadow-1-strong">
                         <h6 class="legend text-primary">Datos Contacto</h6>
                         <div class="row">
                             <div class="col-lg-3 col-7 mb-1">
@@ -168,7 +168,7 @@
                         </div>
                     </div>
                     
-                    <div class="mt-4 p-3 rounded-3 fieldset mb-3">
+                    <div class="mt-4 p-3 rounded-3 fieldset mb-3 shadow-1-strong">
                         <h6 class="legend text-primary">Datos Incidencia</h6>
                         <div class="row">
                             <div class="col-sm-4 mb-1">
@@ -204,7 +204,7 @@
                         </div>
                     </div>
                     
-                    <div class="mt-4 p-3 rounded-3 fieldset mb-3">
+                    <div class="mt-4 p-3 rounded-3 fieldset mb-3 shadow-1-strong">
                         <h6 class="legend text-primary">Asignar Personal</h6>
                         <div class="row">
                             <div class="col-md-6">
@@ -219,7 +219,7 @@
                                     <button type="button" class="btn btn-primary px-2" onclick="tecnicoAsigManenger('create')" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
                                 </div>
                             </div>
-                            <div class="col-12" id="content_asig_personal">
+                            <div class="col-12" id="content_asig_personal" style="overflow: auto;">
                             </div>
                         </div>
                     </div>

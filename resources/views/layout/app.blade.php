@@ -1,9 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
 
-
-<!-- Mirrored from demo.bootstrapdash.com/star-admin-2-pro/themes/vertical-default-light/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 26 Jun 2024 17:36:14 GMT -->
-
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
@@ -196,7 +193,7 @@
   <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
-  <script src="{{asset('front/vendor/select/form_select2_old.js')}}"></script>
+  <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
   <!-- plugins:js -->
   @yield('scripts')
 </body>

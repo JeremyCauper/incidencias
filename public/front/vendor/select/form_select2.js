@@ -1,10 +1,10 @@
 $(document).ready(function () {
-    const selectConfig = {
+    const config = {
         "select": {
             minimumResultsForSearch: Infinity
         },
-        "select_search": {},
-        "select_clear": {
+        "search": {},
+        "clear": {
             placeholder: '-- Seleccione --',
             allowClear: true
         }
@@ -14,37 +14,37 @@ $(document).ready(function () {
     function initializeSelect2(selectElement, config, modal) {
         selectElement.select2({
             ...config,
-            dropdownParent: modal
+            dropdownParent: modal || null
         });
     }
 
     // Inicialización por defecto
     $('.select').each(function () {
-        initializeSelect2($(this), selectConfig.select, $('body'));
+        initializeSelect2($(this), config.select);
     });
 
     // Inicialización con búsqueda
     $('.select-search').each(function () {
-        initializeSelect2($(this), selectConfig.select_search, $('body'));
+        initializeSelect2($(this), config.search);
     });
 
     // Allow clear selection
     $('.select-clear').each(function () {
-        initializeSelect2($(this), selectConfig.select_clear, $('body'));
-    });
+        initializeSelect2($(this), config.clear);
+    });-
 
     // Aplica select2 a todos los selects dentro de los modales al mostrarse
     $('.modal').on('shown.bs.modal', function () {
-        const modal = $(this).closest('.modal');
+        const modal = $('.modal .modal-content .modal-body');
         modal.find('select').each(function () {
             if ($(this).hasClass('select')) {
-                initializeSelect2($(this), selectConfig.select, modal);
+                initializeSelect2($(this), config.select, modal);
             }
             if ($(this).hasClass('select-search')) {
-                initializeSelect2($(this), selectConfig.select_search, modal);
+                initializeSelect2($(this), config.search, modal);
             }
             if ($(this).hasClass('select-clear')) {
-                initializeSelect2($(this), selectConfig.select_clear, modal);
+                initializeSelect2($(this), config.clear, modal);
             }
         });
     });

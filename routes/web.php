@@ -83,3 +83,7 @@ Route::get('/soport-empresa/sucursales', function () {
 Route::get('/iconos', function () {    
     return view('icons');
 });
+
+Route::get('/maps', function () {    
+    return view('maps');
+});

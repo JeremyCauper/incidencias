@@ -247,7 +247,6 @@
     outline: 0;
     color: inherit;
     margin-left: .25rem;
-    -webkit-appearance: textfield
 }
 
 .select2-selection--multiple .select2-search--inline .select2-search__field::-webkit-search-cancel-button {
