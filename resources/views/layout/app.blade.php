@@ -18,7 +18,8 @@
   <link href="{{ asset('front/vendor/simple-icon/bootstrap-icons.css') }}" rel="stylesheet">
   <link href="{{ asset('front/vendor/simple-icon/styles.min.css') }}" rel="stylesheet">
   <link href="{{ asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+
+  <link rel="stylesheet" href="{{asset('front/vendor/flatpickr/flatpickr.min.css')}}">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
   <!-- Home -->
@@ -182,18 +183,20 @@
   </div>
   <!-- container-scroller -->
 
+  
+  <!-- JQuery -->
   <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
-  <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
-  <script src="{{asset('front/js/AlertMananger.js')}}"></script>
   <!-- MDB -->
   <script type="text/javascript" src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
+  <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
+  <script src="{{asset('front/js/AlertMananger.js')}}"></script>
   <script src="{{ asset('front/js/template.js') }}"></script>
   <script src="{{ asset('front/js/hoverable-collapse.js') }}"></script>
   <script src="{{asset('assets/js/off-canvas.js')}}"></script>
-  <script src="{{asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
-  <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
+  <script src="{{asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
+  <script src="{{asset('front/vendor/select/form_select2_old.js')}}"></script>
   <!-- plugins:js -->
   @yield('scripts')
 </body>

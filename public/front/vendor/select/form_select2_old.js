@@ -50,36 +50,6 @@ var Select2Selects = function () {
             width: 400
         });
 
-        // Initialize with options
-        $('.select-icons-clear').select2({
-            templateResult: iconFormat2,
-            minimumResultsForSearch: Infinity,
-            templateSelection: iconFormat2,
-            escapeMarkup: function (m) { return m; },
-            placeholder: '-- Seleccione --',
-            allowClear: true
-        });
-
-
-        // Format icon
-        function iconFormat2(icon) {
-            var originalOption = icon.element;
-            if (!icon.id) { return icon.text; }
-            var valor = icon.text.split('::');
-            var $icon = `<div class="d-flex justify-content-between">
-                <span>${valor[0]}</span>
-                <b>${atob(valor[1])}</b>
-            </div>`;// '<i class="icon-home8"></i>' + icon.text;
-
-            return $icon;
-        }
-        // Initialize with options
-        $('.select-icons').select2({
-            templateResult: iconFormat2,
-            minimumResultsForSearch: Infinity,
-            templateSelection: iconFormat2,
-            escapeMarkup: function (m) { return m; }
-        });
 
         //
         // Advanced examples
@@ -156,12 +126,12 @@ var Select2Selects = function () {
         }
 
         // Initialize with options
-        // $('.select-icons').select2({
-        //     templateResult: iconFormat,
-        //     minimumResultsForSearch: Infinity,
-        //     templateSelection: iconFormat,
-        //     escapeMarkup: function (m) { return m; }
-        // });
+        $('.select-icons').select2({
+            templateResult: iconFormat,
+            minimumResultsForSearch: Infinity,
+            templateSelection: iconFormat,
+            escapeMarkup: function (m) { return m; }
+        });
 
 
         //
@@ -247,7 +217,6 @@ var Select2Selects = function () {
                 dataType: 'json',
                 delay: 250,
                 data: function (params) {
-                    console.log(params);
                     return {
                         q: params.term, // search term
                         page: params.page

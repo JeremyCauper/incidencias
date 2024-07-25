@@ -75,7 +75,7 @@ class AlertMananger {
         });
         Toast.fire({
             icon: icon,
-            title: title,
+            html: title,
             ...op
         });
     }

@@ -23,6 +23,10 @@ class IncidenciaController extends Controller
             foreach ($sucursales as $val) {
                 $data['sucursales'][$val->ruc][] = ['id' => $val->id, 'sucursal' => $val->Nombre];
             }
+            $usuarios = DB::table('usuarios')->where('usuarios.estatus', 1)->get();
+            foreach ($usuarios as $val) {
+                $data['usuarios'][] = ['value' => $val->id_usuario . "|" . $val->ndoc_usuario . "|" . $val->nombres . " " . $val->apellidos, 'text' => $val->ndoc_usuario . " - " . $val->nombres . " " . $val->apellidos];
+            }
             $data['cEmpresa'] = count($empresas);
             $data['cSucursal'] = count($sucursales);
             return $data;

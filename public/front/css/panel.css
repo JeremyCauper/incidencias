@@ -3667,3 +3667,17 @@ body {
     transition: background-color 0.3s;
     border: 1px solid transparent;
 }
+
+.fieldset {
+    position: relative;
+    border: .125rem solid #e0e0e0;
+}
+
+.legend {
+    position: absolute;
+    top: -.55rem;
+    background: white;
+    padding: 0px 6px;
+    font-weight: bold;
+    font-size: .85rem;
+}
