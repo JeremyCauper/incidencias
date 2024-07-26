@@ -1,0 +1,12 @@
+.title-count {
+    font-weight: bold;
+    font-size: .8rem;
+}
+
+.subtitle-count {
+    margin-bottom: 0px;
+}
+
+.grid-margin .card .card-body {
+    cursor: pointer !important;
+}

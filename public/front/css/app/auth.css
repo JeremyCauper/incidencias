@@ -1,0 +1,79 @@
+@media screen and (max-width: 600px) {
+    .navbar div span {
+        display: none;
+    }
+}
+
+.title-login {
+    position: relative;
+    color: #6c757d;
+}
+
+.title-login::before,
+.title-login::after {
+    content: "";
+    height: 2px;
+    position: absolute;
+    top: 40%;
+    width: 19%;
+}
+
+.title-login::before {
+    background: linear-gradient(to left, #6c757d 0%, #fff 100%);
+    border-top-right-radius: 15px;
+    border-bottom-right-radius: 15px;
+    left: 0;
+}
+
+.title-login::after {
+    background: linear-gradient(to right, #6c757d 0%, #fff 100%);
+    border-top-left-radius: 15px;
+    border-bottom-left-radius: 15px;
+    right: 0;
+}
+
+
+
+.hidden {
+    display: none;
+}
+
+@keyframes bounceIn {
+    0% {
+        transform: scale(0);
+    }
+
+    60% {
+        transform: scale(1.02);
+    }
+
+    80% {
+        transform: scale(0.98);
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes bounceOut {
+    0% {
+        transform: scale(1);
+    }
+
+    20% {
+        transform: scale(1.02);
+    }
+
+    100% {
+        transform: scale(0);
+    }
+}
+
+.show {
+    animation: bounceIn 0.5s forwards;
+}
+
+.hide {
+    animation: bounceOut 0.5s forwards;
+}

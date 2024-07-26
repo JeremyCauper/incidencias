@@ -23,31 +23,37 @@ class IncidenciaController extends Controller
             foreach ($sucursales as $val) {
                 $data['sucursales'][$val->ruc][] = ['id' => $val->id, 'sucursal' => $val->Nombre];
             }
-            $usuarios = DB::table('usuarios')->where('usuarios.estatus', 1)->get();
+            $usuarios = DB::table('usuarios')->where('estatus', 1)->get();
             foreach ($usuarios as $val) {
                 $data['usuarios'][] = ['value' => $val->id_usuario . "|" . $val->ndoc_usuario . "|" . $val->nombres . " " . $val->apellidos, 'text' => $val->ndoc_usuario . " - " . $val->nombres . " " . $val->apellidos];
             }
+            $data['cargo_contaco'] = DB::table('cargo_contacto')->select('descripcion')->where('estatus', 1)->get();
+            $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
             $data['cEmpresa'] = count($empresas);
             $data['cSucursal'] = count($sucursales);
             return $data;
         } catch (\Throwable $th) {
             return "Service Unavailable : " . $th;
         }
-
     }
-    
+
     /**
      * Display a listing of the resource.
      */
-    public function DataTableIncidencias()
+    public function DataTableInc()
     {
+        $data = [];
+        $empresas = json_decode(file_get_contents('https://cpe.apufact.com/portal/public/api/ListarInformacion?token=UVZCVlJrRkRWREl3TWpRPQ==&tabla=empresas'));
+
+        $sucursales = json_decode(file_get_contents('https://cpe.apufact.com/portal/public/api/ListarInformacion?token=UVZCVlJrRkRWREl3TWpRPQ==&tabla=sucursales'));
+
         $usuarios = DB::table('usuarios')
             ->join('tipo_usuario', 'usuarios.tipo_acceso', '=', 'tipo_usuario.id_tipo_acceso')
             ->select('usuarios.ndoc_usuario', 'usuarios.id_usuario', 'usuarios.nombres', 'usuarios.apellidos', 'tipo_usuario.descripcion', 'usuarios.usuario', 'usuarios.pass_view', 'usuarios.estatus')
             ->where('usuarios.estatus', 1)
             ->get();
 
-        foreach ($usuarios as $key => $val) {
+        /*foreach ($usuarios as $key => $val) {
             $val->nombres = explode(' ', $val->nombres)[0];
             $val->apellidos = explode(' ', $val->apellidos)[0];
 
@@ -70,11 +76,11 @@ class IncidenciaController extends Controller
                 </div>
             </div>';
             $val->estatus = '<label class="badge badge-' . ($val->estatus ? 'success' : 'danger') . '" style="font-size: .7rem;">' . ($val->estatus ? 'ACTIVO' : 'INACTIVO') . '</label>';
-        }
+        }*/
 
         return $usuarios;
     }
-    
+
     /**
      * Display a listing of the resource.
      */
@@ -88,7 +94,30 @@ class IncidenciaController extends Controller
      */
     public function create()
     {
-        //
+        try {
+            // Iniciar transacción
+            DB::beginTransaction();
+
+            // Insertar en la primera tabla
+            $id_primera_tabla = DB::table('primera_tabla')->insertGetId([
+                'columna1' => 'valor1',
+                'columna2' => 'valor2',
+            ]);
+
+            // Insertar en la segunda tabla
+            DB::table('segunda_tabla')->insert([
+                'columna1' => 'valor1',
+                'columna2' => 'valor2',
+                'id_primera_tabla' => $id_primera_tabla,
+            ]);
+
+            // Confirmar transacción
+            DB::commit();
+        } catch (\Exception $e) {
+            // Deshacer transacción si ocurre un error
+            DB::rollBack();
+            throw $e;
+        }
     }
 
     /**

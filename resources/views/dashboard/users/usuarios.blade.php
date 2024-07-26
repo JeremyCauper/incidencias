@@ -1,24 +1,7 @@
 @extends('layout.app')
 @section('title', 'Panel de Control')
 @section('style')
-    <link rel="stylesheet" href="{{asset('front/css/app/style-usuarios.css')}}">
-    <!-- <link rel="stylesheet" href="{{asset('front/vendor/select/select2.min.css')}}"> -->
-     <style>
-        .content-signature-pad {
-            position: relative;
-        }
-
-        .content-signature-pad::before {
-            content: "";
-            position: absolute;
-            top: 60%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 50%;
-            height: 2px;
-            background: #000000;
-        }
-     </style>
+    <link rel="stylesheet" href="{{asset('front/css/app/usuarios.css')}}">
 @endsection
 @section('content')
 <div class="col-12 grid-margin">
@@ -138,7 +121,7 @@
                                     </div>
                                     <input type="file" class="d-none" id="foto_perfil">
                                     <input type="text" class="d-none" name="foto_perfil" id="txtFotoPerfil">
-                                    <img id="PreviFPerfil" src="{{asset('assets/images/auth/user_auth.jpg')}}" imageDefault="{{asset('assets/images/auth/user_auth.jpg')}}">
+                                    <img id="PreviFPerfil" src="{{asset('front/images/auth/user_auth.jpg')}}" imageDefault="{{asset('front/images/auth/user_auth.jpg')}}">
                                 </div>
                             </div>
                             <div class="col-6 mb-3">
@@ -152,7 +135,7 @@
                                     </div>
                                     <input type="file" class="d-none" id="firma_digital">
                                     <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
-                                    <img id="PreviFirma" src="{{asset('assets/images/firms/firm.png')}}" imageDefault="{{asset('assets/images/firms/firm.png')}}">
+                                    <img id="PreviFirma" src="{{asset('front/images/firms/firm.png')}}" imageDefault="{{asset('front/images/firms/firm.png')}}">
                                 </div>
                             </div>
                         </div>
@@ -196,7 +179,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger btn-sm" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary btn-sm">
+                    <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init>
                         Guardar
                     </button>
                 </div>
@@ -208,167 +191,10 @@
 
 @section('scripts')
 <!-- jQuery Mask Plugin CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/signature_pad/1.3.4/signature_pad.min.js"></script>
-<script src="{{asset('front/js/app/script-usuarios.js')}}"></script>
 <script>
-    let tb_usuario = null;
-    $(document).ready(function() {
-        tb_usuario = new DataTable('#tb_usuario', {
-            scrollX: true,
-            scrollY: 300,
-            ajax: {
-                url: "{{ url('/DataTableUser') }}",
-                dataSrc: "",
-                error: function(xhr, error, thrown) {
-                    console.log('Error en la solicitud Ajax:', error);
-                    console.log('Respuesta del servidor:', xhr);
-                }
-            },
-            columns: [
-                { data: 'ndoc_usuario' },
-                { data: 'nombres', render: function (data, type, row) {
-                        return `${row.nombres} ${row.apellidos}`;
-                    }
-                },
-                { data: 'descripcion' },
-                { data: 'usuario' },
-                { data: 'pass_view' },
-                { data: 'estatus' },
-                { data: 'id_usuario' }
-            ],
-            processing: true
-        });
-
-        $("#fechan_usu").flatpickr({
-            maxDate: "{{ (date('Y') - 18) . '-' . date('m-d')}}"
-        });
-    });
-
-    function updateTable() {
-        tb_usuario.ajax.reload();
-    }
-
-    document.getElementById('form-usuario').addEventListener('submit', function(event) {
-        event.preventDefault();
-        $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
-
-        var elementos = this.querySelectorAll('[name]');
-        var datosFormulario = {};
-
-        let cad_require = "";
-        elementos.forEach(function(elemento) {
-            if (elemento.getAttribute("require") && elemento.value == "") {
-                cad_require += `<b>${elemento.getAttribute("require")}</b>, `;
-            }
-            datosFormulario[elemento.name] = elemento.value;
-        });
-        if (cad_require) {
-            $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
-            return boxAlert.box('info', 'Faltan datos', `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>`);
-        }
-        
-        url = [
-            "{{url('/register')}}", `{{url('/editusu')}}/${$('#form-usuario').attr('idu')}`
-        ];
-        $.ajax({
-            type: 'POST',
-            url: url[$('#form-usuario').attr('frm-accion')],
-            contentType: 'application/json',
-                headers: {
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}',
-                },
-            data: JSON.stringify(datosFormulario),
-            success: function(response) {
-                boxAlert.minbox('success', response.message, {background:"#3b71ca", color:"#ffffff"}, "top");
-                updateTable();
-                $('[data-mdb-dismiss="modal"]').click();
-                console.log(response);
-                $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                boxAlert.box('error', '¡Ocurrio un error!', 'Error al registrar el usuario');
-                console.log(jqXHR.responseJSON);
-                $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
-            }
-        });
-    });
-
-    $('.modal').on('hidden.bs.modal', function () {
-        $('#form-usuario').attr('idu', '').attr('frm-accion', '0');
-    });
-
-    document.querySelectorAll('.inputMenu').forEach(toggle => {
-        toggle.addEventListener('change', function() {
-            const checkboxes = this.closest('.treeview').querySelectorAll('.inputSubMenu');
-            checkboxes.forEach(checkbox => {
-                checkbox.disabled = !this.checked;
-                checkbox.checked = false;
-            });
-        });
-    });
-
-    function showUsuario(id) {
-        $('#modal_frm_usuarios').modal('show');
-        $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
-        const urlImg = {
-            'perfil':"{{asset('assets/images/auth')}}",
-            'firma':"{{asset('assets/images/firms')}}"
-        };
-        $.ajax({
-            type: 'GET',
-            url: `{{url('/showusu')}}/${id}`,
-            contentType: 'application/json',
-            success: function(response) {
-                console.log(response);
-                const data = response[0];
-                $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
-                $('#form-usuario').attr('idu', id).attr('frm-accion', '1');
-                $('#id_area').val(data.id_area).trigger('change.select2');
-                $('#n_doc').val(data.ndoc_usuario);
-                $('#nom_usu').val(data.nombres);
-                $('#ape_usu').val(data.apellidos);
-                $('#emailp_usu').val(data.email_personal);
-                $('#emailc_usu').val(data.email_corporativo);
-                $('#fechan_usu').val(data.fecha_nacimiento);
-                $('#telp_usu').val(data.tel_personal);
-                $('#telc_usu').val(data.tel_corporativo);
-                $('#usuario').val(data.usuario);
-                $('#contrasena').val(data.pass_view);
-                if (data.foto_perfil) $('#PreviFPerfil').attr('src', `${urlImg['perfil']}/${data.foto_perfil}`);
-                if (data.firma_digital) $('#PreviFirma').attr('src', `${urlImg['firma']}/${data.firma_digital}`);
-                $('#tipo_acceso').val(data.tipo_acceso).trigger('change.select2');
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error al registrar el usuario');
-                console.log(jqXHR.responseJSON);
-            }
-        });
-    }
-
-
-    document.getElementById('conDoc').addEventListener('click', function() {
-        const nDoc = document.getElementById('n_doc').value;
-        $.ajax({
-            type: 'GET',
-            url: `{{url('/consultaDni')}}/${nDoc}`,
-            contentType: 'application/json',
-            success: function(response) {
-                if (!response.success) {
-                    return Swal.fire({
-                        'title' : 'Ocurrio un error',
-                        'icon' : 'info',
-                        'text' : response.message
-                    });
-                }
-                $('#nom_usu').val(response.data.nombres);
-                $('#ape_usu').val(`${response.data.apellidop} ${response.data.apellidom}`);
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                alert('Error al registrar el usuario');
-                console.log(jqXHR.responseJSON);
-            }
-        });
-    });
+    const __fecha = "{{ (date('Y') - 18) . '-' . date('m-d')}}";
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script src="{{asset('front/vendor/signature/signature_pad.min.js')}}"></script>
+<script src="{{asset('front/js/app/usuarios.js')}}"></script>
 @endsection

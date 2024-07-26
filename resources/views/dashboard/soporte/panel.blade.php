@@ -2,20 +2,7 @@
 @section('title', 'Panel de Control')
 
 @section('style')
-    <style>
-        .title-count {
-            font-weight: bold;
-            font-size: .8rem;
-        }
-
-        .subtitle-count {
-            margin-bottom: 0px;
-        }
-
-        .grid-margin .card .card-body {
-            cursor: pointer !important;
-        }
-    </style>
+<link rel="stylesheet" href="{{asset('front/css/app/panel.css')}}">
 @endsection
 @section('content')
 
@@ -107,9 +94,10 @@
 <div class="modal fade" id="modal_frm_incidencias" aria-labelledby="modal_frm_incidencias" aria-hidden="true">
     <form id="form-incidencias">
         <div class="modal-dialog modal-xl">
-            <div class="modal-content">
+            <div class="modal-content" style="position: relative;">
                 <div class="modal-body">
-                    <h6 class="card-title mb-4 text-primary"><b>CREAR NUEVA INCIDENCIA</b></h6>
+                    <h6 class="card-title mb-4 text-primary"><b>CREAR NUEVA INCIDENCIA -</b><b class="ms-2" id="cod_inc">{{$resumenInc['cod_inc']}}</b></h6>
+                    <input type="text" class="d-none" name="cod_inc" value="{{$resumenInc['cod_inc']}}">
                     <div class="col-12 mb-2">
                         <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios (*)</span>
                     </div>
@@ -140,17 +128,9 @@
                                 <label class="form-label mb-0" for="car_contac"><b>Cargo <span class="text-danger">*</span></b></label>
                                 <select id="car_contac" class="select-clear" name="car_contac" require="Cargo">
                                     <option value="">-- Seleccione --</option>
-                                    <option value="Jefe de Playa"> Jefe de Playa</option>
-                                    <option value="Islero"> Islero</option>
-                                    <option value="Jefe de Planta"> Jefe de Planta</option>
-                                    <option value="Administrador(a)"> Administrador(a)</option>
-                                    <option value="Supervisor"> Supervisor</option>
-                                    <option value="Contadora"> Contadora</option>
-                                    <option value="Asistente Contable"> Asistente Contable</option>
-                                    <option value="Encargado"> Encargado</option>
-                                    <option value="Cajero"> Cajero</option>
-                                    <option value="Jefe de Sistemas"> Jefe de Sistemas</option>
-                                    <option value="Asistente de Sistemas"> Asistente de Sistemas</option>
+                                    @foreach ($resumenInc['cargo_contaco'] as $cc)
+                                        <option value="{{$cc->descripcion}}">{{$cc->descripcion}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-lg-2 col-5 mb-1">
@@ -184,17 +164,17 @@
                             <div class="col-sm-4 col-6 mb-1">
                                 <label class="form-label mb-0" for="priori_inc"><b>Prioridad <span class="text-danger">*</span></b></label>
                                 <select class="select" id="priori_inc" name="priori_inc" require="Prioridad">
-                                    <option value="1">Alta</option>
-                                    <option value="2">Media</option>
-                                    <option value="3">Baja</option>
-                                    <option value="4">Critica</option>
+                                    <option value="Alta">Alta</option>
+                                    <option value="Media">Media</option>
+                                    <option value="Baja">Baja</option>
+                                    <option value="Critica">Critica</option>
                                 </select>
                             </div>
                             <div class="col-sm-4 col-6 mb-1">
                                 <label class="form-label mb-0" for="soport_inc"><b>Soporte <span class="text-danger">*</span></b></label>
                                 <select class="select" id="soport_inc" name="soport_inc" require="Soporte">
-                                    <option value="1">Remoto</option>
-                                    <option value="2">Presencial</option>
+                                    <option value="Remoto">Remoto</option>
+                                    <option value="Presencial">Presencial</option>
                                 </select>
                             </div>
                         </div>
@@ -235,78 +215,56 @@
 @endsection
 
 @section('scripts')
-    <script>
-        $(document).ready(function() {
-            $('#id_empresa').on('change', function() {
-                const sucursales = <?php echo json_encode($resumenInc['sucursales']); ?>;
-                $('#id_sucursal').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
-                if (!$(this).val()) return false;
-                console.log($(this));
-                var option = $('#id_empresa option[value="' + $(this).val() + '"]').attr('select-ruc');
-                sucursales[option].forEach(s => {
-                    $('#id_sucursal').append($('<option>').val(s.id).html(s.sucursal));
-                });
-                $('#id_sucursal').attr('disabled', false);
-            });
-        });
+<script>
+    const sucursales = <?php echo json_encode($resumenInc['sucursales']); ?>;
 
-        const tb_incidencia = new DataTable('#tb_incidencia', {
-            scrollX: true,
-            scrollY: 300,
-            ajax: {
-                url: "{{ url('/DataTableUser') }}",
-                dataSrc: "",
-                error: function(xhr, error, thrown) {
-                    boxAlert.box('error', 'Ocurrio un error', 'Error en la solicitud Ajax: ' + error);
-                    console.log('Respuesta del servidor:', xhr);
-                }
-            },
-            columns: [
-                { data: 'ndoc_usuario' },
-                { data: 'nombres', render: function (data, type, row) {
-                        return `${row.nombres} ${row.apellidos}`;
-                    }
-                },
-                { data: 'descripcion' },
-                { data: 'usuario' },
-                { data: 'pass_view' },
-                { data: 'estatus' },
-                { data: 'id_usuario' }
-            ],
-            processing: true
-        });
+    document.getElementById('form-incidencias').addEventListener('submit', function (event) {
+        event.preventDefault();
+        $('#form-incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
 
-        function updateTable() {
-            tb_usuario.ajax.reload();
-        }
+        var elementos = this.querySelectorAll('[name]');
+        var dataForm = {};
 
-        function tecnicoAsigManenger(accion, row) {
-            switch (accion) {
-                case 'create':
-                    const personal = $('#selectPersonal').val();
-                    if (!personal)
-                        return false;
-                    if (!$(`#content_asig_personal table`).length) {
-                        const tabla = $('<table>', { class: 'table w-100 text-nowrap' });
-                        const thead = $('<thead>').html($('<tr>').html('<th>#</th><th>Nro. Documento</th><th>Nombres y Apellidos</th><th>Acciones</th>'));
-                        $('#content_asig_personal').html(tabla.append(thead).append($('<tbody>')));
-                    }
-                    const obj = personal.split('|');
-                    const tr = $('<tr>', { 'aria-row': `reg${obj[0]}` }).html(`<td>${obj[0]}</td><td>${obj[1]}</td><td>${obj[2]}</td><td><button type="button" class="btn btn-danger btn-sm px-2"  onclick="tecnicoAsigManenger('delete', 'reg${obj[0]}')"><i class="far fa-trash-can"></i></button></td>`);
-
-                    if ($(`#content_asig_personal table tbody tr[aria-row="reg${obj[0]}"]`).length)
-                        return boxAlert.minbox('info', '<h6 class="mb-0" style="font-size:.75rem">NO PUEDO INGRESAR EL MISMO PERSONAL DOS VECES</h6>', {background:"#628acc", color:"#ffffff"}, "top");
-                    $(`#content_asig_personal table tbody`).append(tr);
-                    $('#selectPersonal').val('').trigger('change.select2');
-                    break;
-
-                case 'delete':
-                    $(`#content_asig_personal table tbody tr[aria-row="${row}"]`).remove();
-                    if (!$(`#content_asig_personal table tbody tr`).length) {
-                        $('#content_asig_personal table').remove();
-                    }
-                    break;
+        let cad_require = "";
+        elementos.forEach(function (elemento) {
+            if (elemento.getAttribute("require") && elemento.value == "") {
+                cad_require += `<b>${elemento.getAttribute("require")}</b>, `;
             }
-        }
-    </script>
+            dataForm[elemento.name] = elemento.value;
+        });
+        dataForm['personal_asig'] = tecnicoAsigManenger('extract');
+        console.log(dataForm);
+        // if (cad_require) {
+        //     $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
+        //     return boxAlert.box('info', 'Faltan datos', `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>`);
+        // }
+
+        // url = [
+        //     `/register`, `/editusu/${$('#form-usuario').attr('idu')}`
+        // ];
+        // $.ajax({
+        //     type: 'POST',
+        //     url: __url + url[$('#form-usuario').attr('frm-accion')],
+        //     contentType: 'application/json',
+        //     headers: {
+        //         'X-CSRF-TOKEN': __token,
+        //     },
+        //     data: JSON.stringify(dataForm),
+        //     success: function (response) {
+        //         boxAlert.minbox('success', response.message, { background: "#3b71ca", color: "#ffffff" }, "top");
+        //         updateTable();
+        //         $('[data-mdb-dismiss="modal"]').click();
+        //         console.log(response);
+        //         $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
+        //     },
+        //     error: function (jqXHR, textStatus, errorThrown) {
+        //         boxAlert.box('error', '¡Ocurrio un error!', 'Error al registrar el usuario');
+        //         console.log(jqXHR.responseJSON);
+        //         $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
+        //     }
+        // });
+    });
+
+</script>
+<script src="{{asset('front/js/app/panel.js')}}"></script>
 @endsection

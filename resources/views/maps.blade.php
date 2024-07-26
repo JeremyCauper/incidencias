@@ -1,37 +1,131 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+
 <head>
-  <title>Geolocalización con JavaScript</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Popup Animation</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+  }
+
+  #popup {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0);
+    padding: 20px;
+    background-color: white;
+    border: 1px solid #ccc;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease-in-out;
+    z-index: 1000;
+  }
+
+  @keyframes bounceIn {
+    0% {
+      transform: translate(-50%, -50%) scale(0);
+    }
+
+    60% {
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    80% {
+      transform: translate(-50%, -50%) scale(0.95);
+    }
+
+    100% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+  }
+
+  @keyframes bounceOut {
+    0% {
+      transform: translate(-50%, -50%) scale(1);
+    }
+
+    20% {
+      transform: translate(-50%, -50%) scale(1.2);
+    }
+
+    100% {
+      transform: translate(-50%, -50%) scale(0);
+    }
+  }
+
+  #popup.show {
+    animation: bounceIn 0.5s forwards;
+  }
+
+  #popup.hide {
+    animation: bounceOut 0.5s forwards;
+  }
+
+  #popup.hidden {
+    display: none;
+  }
+
+  #showPopupBtn,
+  #closePopupBtn {
+    cursor: pointer;
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+
+  #showPopupBtn:hover,
+  #closePopupBtn:hover {
+    background-color: #0056b3;
+  }
+</style>
+
 <body>
-  <button onclick="getLocation()">Obtener ubicación</button>
-  <p id="location">Ubicación: </p>
+  <button id="showPopupBtn">Show Popup</button>
+  <div id="popup" class="popup hidden">
+    <p>This is a popup!</p>
+    <button id="closePopupBtn">Close</button>
+  </div>
 
   <script>
-    function getLocation() {
-      if ("geolocation" in navigator) {
-        navigator.geolocation.getCurrentPosition(success, error, {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0
+    document.addEventListener('DOMContentLoaded', (event) => {
+      const showPopupBtn = document.getElementById('showPopupBtn');
+      const closePopupBtn = document.getElementById('closePopupBtn');
+      const popup = document.getElementById('popup');
+
+      showPopupBtn.addEventListener('click', () => {
+        popup.classList.remove('hidden');
+        popup.classList.remove('hide');
+        popup.classList.add('show');
+
+        setTimeout(() => {
+          popup.classList.remove('show');
+          popup.classList.add('hide');
+          popup.addEventListener('animationend', () => {
+            popup.classList.add('hidden');
+          }, {
+            once: true
+          });
+        }, 5000);
+      });
+
+      closePopupBtn.addEventListener('click', () => {
+        popup.classList.remove('show');
+        popup.classList.add('hide');
+        popup.addEventListener('animationend', () => {
+          popup.classList.add('hidden');
+        }, {
+          once: true
         });
-      } else {
-        alert("Geolocation is not supported by your browser");
-      }
-    }
-
-    function success(position) {
-      const latitude = position.coords.latitude;
-      const longitude = position.coords.longitude;
-      const altitude = position.coords.altitude !== null ? position.coords.altitude : "No disponible";
-
-      document.getElementById('location').textContent = `Latitud: ${latitude}, Longitud: ${longitude}, Altitud: ${altitude}`;
-    }
-
-    function error(err) {
-      console.warn(`ERROR(${err.code}): ${err.message}`);
-      document.getElementById('location').textContent = "No se pudo obtener la ubicación";
-    }
+      });
+    });
   </script>
 </body>
+
 </html>

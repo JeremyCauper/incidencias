@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
   <link rel="shortcut icon" href="{{asset('front/images/app/LogoRC.png')}}" />
-  <title>@yield('title')</title>   
+  <title>@yield('title')</title>
   <!-- Font Awesome -->
   <link href="{{asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}" rel="stylesheet">
   <!-- MDB -->
@@ -20,8 +20,7 @@
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
   <!-- Home -->
-  <link href="{{ asset('front/css/panel.css') }}" rel="stylesheet">
-
+  <link href="{{ asset('front/css/app.css') }}" rel="stylesheet">
   @yield('style')
 </head>
 <style>
@@ -41,12 +40,12 @@
         <div>
           <a class="navbar-brand brand-logo" href="{{url('/soporte')}}">
             <div class="d-flex align-items-center">
-              <img class="img-xs rounded-circle" src="{{asset('assets/images/LogoRC.png')}}" style="height: 26px; width: 27px;" alt="logo" />
+              <img class="img-xs rounded-circle" src="{{asset('front/images/app/LogoRC.png')}}" style="height: 26px; width: 27px;" alt="logo" />
               <h6 class="ms-1 mb-0" style="font-family: 'Roboto', sans-serif;"><b>RC Ingenieros</b></h6>
             </div>
           </a>
           <a class="navbar-brand brand-logo-mini" href="{{url('/soporte')}}">
-            <img class="rounded-circle" src="{{asset('assets/images/LogoRC.png')}}" style="height: 38px; width: 39px;" alt="logo" />
+            <img class="rounded-circle" src="{{asset('front/images/app/LogoRC.png')}}" style="height: 38px; width: 39px;" alt="logo" />
           </a>
         </div>
       </div>
@@ -54,7 +53,7 @@
         <ul class="navbar-nav ms-auto">
 
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator" id="notificationDropdown" href="#" role="button"  data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+            <a class="nav-link count-indicator" id="notificationDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
               <i class="fas fa-bell text-secondary"></i>
               <span class="count"></span>
             </a>
@@ -66,7 +65,7 @@
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator" id="countDropdown" href="#" role="button"  data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+            <a class="nav-link count-indicator" id="countDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
               <i class="fas fa-envelope text-secondary"></i>
             </a>
             <ul class="dropdown-menu" aria-labelledby="countDropdown">
@@ -77,12 +76,12 @@
           </li>
 
           <li class="nav-item dropdown user-dropdown">
-            <a class="nav-link" id="UserDropdown" href="#" role="button"  data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-              <img class="img-xs rounded-circle" src="{{ asset('assets/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image">
+            <a class="nav-link" id="UserDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+              <img class="img-xs rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image">
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
               <div class="dropdown-header text-center">
-                <img class="img-md rounded-circle" src="{{ asset('assets/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image">
+                <img class="img-md rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image">
                 <p class="mb-1 mt-3 fw-semibold">{{ Auth::user()->nombres . ' ' . Auth::user()->apellidos }}</p>
                 <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
               </div>
@@ -102,8 +101,7 @@
             </div>
           </li>
         </ul>
-        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-          data-bs-toggle="offcanvas">
+        <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button" data-bs-toggle="offcanvas">
           <span class="fas fa-bars"></span>
         </button>
       </div>
@@ -180,16 +178,21 @@
   </div>
   <!-- container-scroller -->
 
-  
+
+  <script>
+    const __url = "{{url('')}}";
+    const __asset = "{{asset('/front/')}}";
+    const __token = "{{ csrf_token() }}";
+  </script>
   <!-- JQuery -->
   <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
   <!-- MDB -->
   <script type="text/javascript" src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
   <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{asset('front/js/AlertMananger.js')}}"></script>
-  <script src="{{ asset('front/js/template.js') }}"></script>
-  <script src="{{ asset('front/js/hoverable-collapse.js') }}"></script>
-  <script src="{{asset('assets/js/off-canvas.js')}}"></script>
+  <script src="{{asset('front/js/template.js') }}"></script>
+  <script src="{{asset('front/js/hoverable-collapse.js') }}"></script>
+  <script src="{{asset('front/js/off-canvas.js')}}"></script>
   <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>

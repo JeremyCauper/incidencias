@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', url('/inicio'));
 Route::get('/inicio', [LoginController::class, 'viewLogin'])->name('login')->middleware('guest');
-Route::post('/inicio', [LoginController::class, 'login']);
+Route::post('/iniciar', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
 
