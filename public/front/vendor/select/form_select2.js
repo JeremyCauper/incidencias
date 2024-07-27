@@ -7,6 +7,9 @@ $(document).ready(function () {
         "clear": {
             placeholder: '-- Seleccione --',
             allowClear: true
+        },
+        "tags": {
+            tags: true
         }
     };
 
@@ -31,7 +34,12 @@ $(document).ready(function () {
     // Allow clear selection
     $('.select-clear').each(function () {
         initializeSelect2($(this), config.clear);
-    });-
+    });
+
+    // Allow tags selection
+    $('.select-tags').each(function () {
+        initializeSelect2($(this), config.tags);
+    });
 
     // Aplica select2 a todos los selects dentro de los modales al mostrarse
     $('.modal').on('shown.bs.modal', function () {
@@ -45,6 +53,9 @@ $(document).ready(function () {
             }
             if ($(this).hasClass('select-clear')) {
                 initializeSelect2($(this), config.clear, modal);
+            }
+            if ($(this).hasClass('select-tags')) {
+                initializeSelect2($(this), config.tags, modal);
             }
         });
     });

@@ -3,14 +3,29 @@
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Mantenimientos\AreasController;
+use App\Http\Controllers\Mantenimientos\MenuController;
+use App\Http\Controllers\Mantenimientos\TipoAccesoController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use Ramsey\Uuid\Type\Integer;
 
 class UserController extends Controller
 {
+    protected $areasController;
+    protected $tipoAccesoController;
+    protected $menuController;
+
+    public function __construct(AreasController $areasc, TipoAccesoController $tipoAccesoc, MenuController $menuc)
+    {
+        $this->areasController = $areasc;
+        $this->tipoAccesoController = $tipoAccesoc;
+        $this->menuController = $menuc;
+    }
+
     public function consultaDni(string $dni)
     {
         $bdDni = DB::table('usuarios')
@@ -25,7 +40,7 @@ class UserController extends Controller
         return $consulta;
     }
 
-    public function DataTableUser()
+    public function datatable()
     {
         $usuarios = DB::table('usuarios')
             ->join('tipo_usuario', 'usuarios.tipo_acceso', '=', 'tipo_usuario.id_tipo_acceso')
@@ -61,7 +76,37 @@ class UserController extends Controller
         return $usuarios;
     }
 
-    public function RegisterUser(Request $request)
+    public function config()
+    {
+        try {
+            $data = [];
+
+            $data['areas'] = $this->areasController->fillSelect();
+            $data['tipoAcceso'] = $this->tipoAccesoController->fillSelect();
+            $data['menu'] = $this->menuController->extractPermisos();
+
+            return $data;
+        } catch (\Throwable $th) {
+            Log::error('Error retrieving data: ' . $th->getMessage());
+            return response()->json(['error' => 'Service Unavailable', 'message' => $th->getMessage()], 503);
+        }
+    }
+
+    public function view()
+    {
+        try {
+            $config = $this->config();
+
+            if (isset($config['error']))
+                return view('error_view', ['message' => $config['message']]);
+
+            return view('dashboard.users.usuarios', $config);
+        } catch (\Exception $e) {
+            return view('error_view', ['message' => 'An unexpected error occurred: ' . $e->getMessage()]);
+        }
+    }
+
+    public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
             'id_area' => 'required|integer',
@@ -126,7 +171,7 @@ class UserController extends Controller
         return response()->json(['success' => true, 'message' => 'Usuario registrado con éxito'], 201);
     }
 
-    public function ShowUser(string $id)
+    public function show(string $id)
     {
         $showUsu = DB::table('usuarios')
             ->where('id_usuario', $id)
@@ -135,7 +180,7 @@ class UserController extends Controller
         return $showUsu;
     }
 
-    public function EditUser(Request $request, string $id)
+    public function edit(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
             'id_area' => 'required|integer',
@@ -199,7 +244,7 @@ class UserController extends Controller
         return response()->json(['success' => true, 'message' => 'Usuario editado con éxito'], 201);
     }
 
-    public function UpdateEstatus(Request $request, string $id)
+    public function editstatus(Request $request, string $id)
     {
         $validator = Validator::make($request->all(), [
             'estatus' => 'required|integer',

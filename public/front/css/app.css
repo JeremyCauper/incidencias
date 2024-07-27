@@ -3670,7 +3670,7 @@ body {
 
 .fieldset {
     position: relative;
-    border: .01rem solid #7095d3;
+    border-top: .125rem solid #7095d3;
 }
 
 .legend {

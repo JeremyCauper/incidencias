@@ -8,7 +8,7 @@ const tb_usuario = new DataTable('#tb_usuario', {
     scrollX: true,
     scrollY: 300,
     ajax: {
-        url: `${__url}/DataTableUser`,
+        url: `${__url}/usuarios/datatable`,
         dataSrc: "",
         error: function (xhr, error, thrown) {
             console.log('Error en la solicitud Ajax:', error);
@@ -55,7 +55,7 @@ document.getElementById('form-usuario').addEventListener('submit', function (eve
     }
 
     url = [
-        `/register`, `/editusu/${$('#form-usuario').attr('idu')}`
+        `/usuarios/create`, `/usuarios/edit/${$('#form-usuario').attr('idu')}`
     ];
     $.ajax({
         type: 'POST',
@@ -103,7 +103,7 @@ function showUsuario(id) {
     };
     $.ajax({
         type: 'GET',
-        url: `${__url}/showusu/${id}`,
+        url: `${__url}/usuarios/show/${id}`,
         contentType: 'application/json',
         success: function (response) {
             console.log(response);

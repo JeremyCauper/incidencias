@@ -2,7 +2,6 @@ $(document).ready(function () {
     $('#id_empresa').on('change', function () {
         $('#id_sucursal').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
         if (!$(this).val()) return false;
-        console.log($(this));
         var option = $('#id_empresa option[value="' + $(this).val() + '"]').attr('select-ruc');
         sucursales[option].forEach(s => {
             $('#id_sucursal').append($('<option>').val(s.id).html(s.sucursal));
@@ -15,7 +14,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     scrollX: true,
     scrollY: 300,
     ajax: {
-        url: `${__url}/DataTableInc`,
+        url: `${__url}/soporte/datatable`,
         dataSrc: "",
         error: function (xhr, error, thrown) {
             boxAlert.box('error', 'Ocurrio un error', 'Error en la solicitud Ajax: ' + error);
@@ -74,7 +73,7 @@ function tecnicoAsigManenger(accion, row) {
             const dataPer = [];
             Array.from($(`#content_asig_personal table tbody tr`)).some(function (elemento) {
                 const trattr = elemento.getAttribute("tr-personal");
-                dataPer.push([ c_ind, trattr ]);
+                dataPer.push({'cod_incidencia': c_ind, 'id_usuario': trattr });
             });
             return dataPer;
             break;

@@ -4,43 +4,52 @@ namespace App\Http\Controllers\Incidencias;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Validator;
 
 class IncidenciaController extends Controller
 {
-    public function resumenInc()
+    public function dataInd()
     {
         try {
             $data = [
                 'empresas' => [],
                 'sucursales' => []
             ];
+            
             $empresas = json_decode(file_get_contents('https://cpe.apufact.com/portal/public/api/ListarInformacion?token=UVZCVlJrRkRWREl3TWpRPQ==&tabla=empresas'));
             foreach ($empresas as $val) {
                 array_push($data['empresas'], ['id' => $val->id, 'ruc' => $val->Ruc, 'empresa' => $val->Ruc . ' - ' . $val->RazonSocial]);
             }
+
             $sucursales = json_decode(file_get_contents('https://cpe.apufact.com/portal/public/api/ListarInformacion?token=UVZCVlJrRkRWREl3TWpRPQ==&tabla=sucursales'));
             foreach ($sucursales as $val) {
                 $data['sucursales'][$val->ruc][] = ['id' => $val->id, 'sucursal' => $val->Nombre];
             }
+
             $usuarios = DB::table('usuarios')->where('estatus', 1)->get();
             foreach ($usuarios as $val) {
                 $data['usuarios'][] = ['value' => $val->id_usuario . "|" . $val->ndoc_usuario . "|" . $val->nombres . " " . $val->apellidos, 'text' => $val->ndoc_usuario . " - " . $val->nombres . " " . $val->apellidos];
             }
+
             $data['cargo_contaco'] = DB::table('cargo_contacto')->select('descripcion')->where('estatus', 1)->get();
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
             $data['cEmpresa'] = count($empresas);
             $data['cSucursal'] = count($sucursales);
+
             return $data;
         } catch (\Throwable $th) {
-            return "Service Unavailable : " . $th;
+            Log::error('Error retrieving data: ' . $th->getMessage());
+            return response()->json(['error' => 'Service Unavailable', 'message' => $th->getMessage()], 503);
         }
     }
 
     /**
      * Display a listing of the resource.
      */
-    public function DataTableInc()
+    public function datatable()
     {
         $data = [];
         $empresas = json_decode(file_get_contents('https://cpe.apufact.com/portal/public/api/ListarInformacion?token=UVZCVlJrRkRWREl3TWpRPQ==&tabla=empresas'));
@@ -82,50 +91,102 @@ class IncidenciaController extends Controller
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a view of the resource.
      */
-    public function index()
+    public function view()
     {
-        //
+        try {
+            $dataInd = $this->dataInd();
+    
+            if (isset($dataInd['error']))
+                return view('error_view', ['message' => $dataInd['message']]);
+    
+            return view('dashboard.soporte.panel', ['dataInd' => $dataInd]);
+        } catch (\Exception $e) {
+            return view('error_view', ['message' => 'An unexpected error occurred: ' . $e->getMessage()]);
+        }
     }
 
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Request $request)
     {
         try {
-            // Iniciar transacción
+            $validator = Validator::make($request->all(), [
+                'cod_inc' => 'required|string',
+                'id_empresa' => 'required|integer',
+                'id_sucursal' => 'required|integer',
+                'tel_contac' => 'required|string',
+                'nro_doc' => 'nullable|integer',
+                'nom_contac' => 'required|string',
+                'car_contac' => 'required|string',
+                'cor_contac' => 'nullable|string',
+                'tip_est_inc' => 'required|string',
+                'priori_inc' => 'required|string',
+                'tip_soport' => 'required|string',
+                'tip_inc' => 'required|string',
+                'observasion' => 'nullable|string',
+                'fecha_imforme' => 'required|date',
+                'hora_informe' => 'required|date_format:H:i'
+            ]);
+    
+            if ($validator->fails())
+                return response()->json(['errors' => $validator->errors()], 400);
+
+            $personal_asig = $request->personal_asig;
+            $estado_info = count($personal_asig) ? 1 : 0;
+
             DB::beginTransaction();
-
-            // Insertar en la primera tabla
-            $id_primera_tabla = DB::table('primera_tabla')->insertGetId([
-                'columna1' => 'valor1',
-                'columna2' => 'valor2',
+            DB::table('tb_incidencias')->insert([
+                'cod_incidencia' => $request->cod_inc,
+                'id_empresa' => $request->id_empresa,
+                'id_sucursal' => $request->id_sucursal,
+                'id_usuario' => Auth::user()->id_usuario,
+                'tipo_estacion' => $request->tip_est_inc,
+                'prioridad' => $request->priori_inc,
+                'tipo_soporte' => $request->tip_soport,
+                'tipo_incidencia' => $request->tip_inc,
+                'observasion' => $request->observasion,
+                'fecha_informe' => $request->fecha_imforme,
+                'hora_informe' => $request->hora_informe,
+                'estado_informe' => $estado_info,
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
 
-            // Insertar en la segunda tabla
-            DB::table('segunda_tabla')->insert([
-                'columna1' => 'valor1',
-                'columna2' => 'valor2',
-                'id_primera_tabla' => $id_primera_tabla,
+            DB::table('contactos_empresas')->insert([
+                'telefono' => $request->tel_contac,
+                'nro_doc' => $request->nro_doc,
+                'nombres' => $request->nom_contac,
+                'cargo' => $request->car_contac,
+                'correo' => $request->cor_contac,
+                'id_empresa' => $request->id_empresa,
+                'id_sucursal' => $request->id_sucursal,
+                'created_at' => now(),
+                'updated_at' => now()
             ]);
 
-            // Confirmar transacción
+            if (count($personal_asig))
+                DB::table('tb_inc_asignadas')->insert($personal_asig);
+
             DB::commit();
-        } catch (\Exception $e) {
-            // Deshacer transacción si ocurre un error
-            DB::rollBack();
-            throw $e;
-        }
-    }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
+            $data = [];
+            $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
+            return response()->json([
+                'success' => true,
+                'message' => 'Datos insertados exitosamente.',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un error al insertar los datos: ' . $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
     }
 
     /**

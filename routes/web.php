@@ -20,45 +20,36 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+// Gestion del login
 Route::redirect('/', url('/inicio'));
 Route::get('/inicio', [LoginController::class, 'viewLogin'])->name('login')->middleware('guest');
 Route::post('/iniciar', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
 
-Route::get('/soporte', function () {
-    $incidenciaController = new IncidenciaController();
-    $resumenInc = $incidenciaController->resumenInc();
-    
-    return view('dashboard.soporte.panel', ['resumenInc' => $resumenInc]);
-})->middleware('auth');
+
+// Gestion de incidencias
+Route::get('/soporte', [IncidenciaController::class, 'view'])->middleware('auth');
+Route::get('/soporte/datatable', [IncidenciaController::class, 'datatable']);
+Route::post('/soporte/create', [IncidenciaController::class, 'create']);
+Route::get('/soporte/show/{id}', [IncidenciaController::class, 'show']);
+Route::post('/soporte/edit/{id}', [IncidenciaController::class, 'edit']);
 
 Route::get('/viewListMenu', [MenuController::class, 'viewListMenu']);
 Route::get('/extractPermisos', [MenuController::class, 'extractPermisos']);
-Route::get('/resumenInc', [IncidenciaController::class, 'resumenInc']);
 
 
 
-/* Control de Usuarios */
-Route::get('/control-de-usuario/usuarios', function () {
-    $areasController = new AreasController();
-    $areas = $areasController->fillSelect();
-    
-    $tipoAccesoController = new TipoAccesoController();
-    $tipoAcceso = $tipoAccesoController->fillSelect();
-    
-    $menuController = new MenuController();
-    $menu = $menuController->extractPermisos();
-    
-    return view('dashboard.users.usuarios', ['areas' => $areas, 'tipoAcceso' => $tipoAcceso, 'menu' => $menu]);
-})->middleware('auth');
+// Gestion de Usuarios
+Route::get('/control-de-usuario/usuarios', [UserController::class, 'view'])->middleware('auth');
 
+Route::get('/usuarios/datatable', [UserController::class, 'datatable']);
+Route::post('/usuarios/create', [UserController::class, 'create']);
+Route::get('/usuarios/show/{id}', [UserController::class, 'show']);
+Route::post('/usuarios/edit/{id}', [UserController::class, 'edit']);
+Route::post('/usuarios/editstatus/{id}', [UserController::class, 'editstatus']);
 Route::get('/consultaDni/{dni}', [UserController::class, 'consultaDni']);
-Route::get('/DataTableUser', [UserController::class, 'DataTableUser']);
-Route::post('/register', [UserController::class, 'RegisterUser']);
-Route::get('/showusu/{id}', [UserController::class, 'ShowUser']);
-Route::post('/editusu/{id}', [UserController::class, 'EditUser']);
-Route::post('/updateEstatus/{id}', [UserController::class, 'UpdateEstatus']);
+
 
 
 Route::get('/control-de-usuario/mi-perfil', function () {
@@ -67,7 +58,7 @@ Route::get('/control-de-usuario/mi-perfil', function () {
 
 
 
-/* Empresas Control */
+// Gestion de Empresas
 Route::get('/soport-empresa/empresas', function () {    
     return view('dashboard.company.empresas');
 })->middleware('auth');
@@ -80,10 +71,8 @@ Route::get('/soport-empresa/sucursales', function () {
     return view('dashboard.company.sucursales');
 })->middleware('auth');
 
-Route::get('/iconos', function () {    
-    return view('icons');
-});
 
-Route::get('/maps', function () {    
-    return view('maps');
+
+Route::get('/datepicker', function () {    
+    return view('pruebas.datepicker');
 });
