@@ -1,6 +1,8 @@
 $(document).ready(function () {
     const config = {
         "select": {
+            placeholder: '-- Seleccione --',
+            allowClear: true,
             minimumResultsForSearch: Infinity
         },
         "search": {},

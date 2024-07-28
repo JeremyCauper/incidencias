@@ -8,6 +8,26 @@ $(document).ready(function () {
         });
         $('#id_sucursal').attr('disabled', false);
     });
+
+    $('#tip_incidencia').on('change', function () {
+        $('#inc_problem, #inc_subproblem').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
+        if (!$(this).val()) return false;
+        obj_problem.forEach(e => {
+            if (e.tipo_incidencia == $(this).val())
+                $('#inc_problem').append($('<option>').val(e.id).text(e.text));
+        });
+        $('#inc_problem').attr('disabled', false);
+    });
+
+    $('#inc_problem').on('change', function () {
+        $('#inc_subproblem').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
+        if (!$(this).val()) return false;
+        obj_subproblem.forEach(e => {
+            if (e.id_problema == $(this).val())
+                $('#inc_subproblem').append($('<option>').val(e.id).text(e.text));
+        });
+        $('#inc_subproblem').attr('disabled', false);
+    });
 });
 
 const tb_incidencia = new DataTable('#tb_incidencia', {
@@ -22,17 +42,19 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
         }
     },
     columns: [
-        { data: 'ndoc_usuario' },
+        { data: 'cod_incidencia' },
+        { data: 'id_empresa' },
+        { data: 'id_sucursal' },
+        { data: 'created_at' },
+        { data: 'id_tipo_estacion' },
+        { data: 'id_tipo_incidencia' },
         {
-            data: 'nombres', render: function (data, type, row) {
-                return `${row.nombres} ${row.apellidos}`;
+            data: 'id_problema', render: function (data, type, row) {
+                return `${data} / ${row.id_subproblema}`;
             }
         },
-        { data: 'descripcion' },
-        { data: 'usuario' },
-        { data: 'pass_view' },
-        { data: 'estatus' },
-        { data: 'id_usuario' }
+        { data: 'estado_informe' },
+        { data: 'acciones' }
     ],
     processing: true
 });
@@ -73,7 +95,7 @@ function tecnicoAsigManenger(accion, row) {
             const dataPer = [];
             Array.from($(`#content_asig_personal table tbody tr`)).some(function (elemento) {
                 const trattr = elemento.getAttribute("tr-personal");
-                dataPer.push({'cod_incidencia': c_ind, 'id_usuario': trattr });
+                dataPer.push({ 'cod_incidencia': c_ind, 'id_usuario': trattr });
             });
             return dataPer;
             break;

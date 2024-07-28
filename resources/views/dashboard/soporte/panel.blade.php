@@ -6,10 +6,10 @@
 @endsection
 @section('content')
 
-<div class="row">
+<div class="row panel-view">
     <div class="col-12">
         <div class="row">
-            <div class="col-12 grid-margin">               
+            <div class="col-xxl-3 col-6 grid-margin">               
                 <div class="card">
                     <div class="card-body text-primary" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="far fa-clock"></i> Incidencias Registradas</h6>
@@ -17,7 +17,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin">
+            <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-info" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-user-check"></i> Incidencias Asignadas</h6>
@@ -25,7 +25,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin">
+            <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-warning" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En Proceso</h6>
@@ -33,20 +33,12 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin">
+            <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-success" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Incidencias Resueltas</h6>
                         <h4 class="subtitle-count"><b>16708</b></h4>
                     </div>
-                </div>
-            </div>
-            <div class="col-12 col-sm-6 col-md-6 col-xxl-3 grid-margin">
-                <div class="card">
-                    <a class="card-body text-secondary" href="{{url('/soport-empresa/empresas')}}" data-mdb-ripple-init>
-                        <h6 class="card-title title-count mb-2"><i class="fas fa-database"></i> Clientes Registrados</h6>
-                        <h4 class="subtitle-count"><b>{{$dataInd['cEmpresa']}}</b></h4>
-                    </a>
                 </div>
             </div>
         </div>
@@ -68,18 +60,16 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <table id="tb_incidencia" class="table text-nowrap">
+                    <table id="tb_incidencia" class="table text-nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Codigo</th>
                                 <th>Empresa</th>
                                 <th>Sucursal</th>
-                                <th>Contacto</th>
                                 <th>Registrado</th>
-                                <th>Tecnico</th>
                                 <th>Estacion</th>
                                 <th>Atencion</th>
-                                <th>Informe</th>
+                                <th>Problema</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>
@@ -125,23 +115,23 @@
                         <h6 class="legend text-primary">Datos Contacto</h6>
                         <div class="row">
                             <div class="col-lg-4 col-6 mb-3">
-                                <label class="form-label mb-0" for="tel_contac"><b>Telefono <span class="text-danger">*</span></b></label>
-                                <select id="tel_contac" class="select-tags" name="tel_contac" require="Telefono"></select>
+                                <label class="form-label mb-0" for="tel_contac"><b>Telefono</b></label>
+                                <select id="tel_contac" class="select-tags" name="tel_contac"></select>
                             </div>
                             <div class="col-lg-4 col-6 mb-3">
                                 <label class="form-label mb-0" for="nro_doc"><b>Dni</b></label>
                                 <input type="text" class="form-control" id="nro_doc" name="nro_doc">
                             </div>
                             <div class="col-lg-4 col-12 mb-3">
-                                <label class="form-label mb-0" for="nom_contac"><b>Nombre <span class="text-danger">*</span></b></label>
-                                <input type="text" class="form-control" id="nom_contac" name="nom_contac" require="Nombre">
+                                <label class="form-label mb-0" for="nom_contac"><b>Nombre</b></label>
+                                <input type="text" class="form-control" id="nom_contac" name="nom_contac">
                             </div>
                             <div class="col-lg-6 col-5 mb-3">
-                                <label class="form-label mb-0" for="car_contac"><b>Cargo <span class="text-danger">*</span></b></label>
-                                <select id="car_contac" class="select-clear" name="car_contac" require="Cargo">
+                                <label class="form-label mb-0" for="car_contac"><b>Cargo</b></label>
+                                <select id="car_contac" class="select-clear" name="car_contac">
                                     <option value="">-- Seleccione --</option>
                                     @foreach ($dataInd['cargo_contaco'] as $cc)
-                                        <option value="{{$cc->descripcion}}">{{$cc->descripcion}}</option>
+                                        <option value="{{$cc->id}}">{{$cc->descripcion}}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -156,13 +146,12 @@
                         <h6 class="legend text-primary">Datos Incidencia</h6>
                         <div class="row">
                             <div class="col-lg-4 col-7 mb-3">
-                                <label class="form-label mb-0" for="tip_est_inc"><b>Tipo Estación <span class="text-danger">*</span></b></label>
-                                <select class="select-clear" id="tip_est_inc" name="tip_est_inc" require="Tipo Estación">
+                                <label class="form-label mb-0" for="tip_estacion"><b>Tipo Estación <span class="text-danger">*</span></b></label>
+                                <select class="select-clear" id="tip_estacion" name="tip_estacion" require="Tipo Estación">
                                     <option value="">-- Seleccione --</option>
-                                    <option value="GNV">GNV</option>
-                                    <option value="GLP Y LIQUIDOS">GLP Y LIQUIDOS</option>
-                                    <option value="GNC">GNC</option>
-                                    <option value="OFICINA">OFICINA</option>
+                                    @foreach ($dataInd['tipo_estacion'] as $v)
+                                        <option value="{{$v->id}}">{{$v->descripcion}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-lg-2 col-5 mb-3">
@@ -177,20 +166,30 @@
                             <div class="col-lg-4 col-7 mb-3">
                                 <label class="form-label mb-0" for="tip_soport"><b>Tipo Soporte <span class="text-danger">*</span></b></label>
                                 <select class="select" id="tip_soport" name="tip_soport" require="Tipo Soporte">
-                                    <option value="Soporte Tecnico">Soporte Tecnico</option>
-                                    <option value="Visita Tecnica">Visita Tecnica</option>
-                                    <option value="Soporte Nocturno">Soporte Nocturno</option>
-                                    <option value="Mantenimiento ">Mantenimiento </option>
-                                    <option value="Cambio Servidor">Cambio Servidor</option>
-                                    <option value="Actualizacion de Sistema">Actualizacion de Sistema</option>
-                                    <option value="Mantenimiento Impresora">Mantenimiento Impresora</option>
+                                <option value="">-- Seleccione --</option>
+                                    @foreach ($dataInd['tipo_soporte'] as $v)
+                                        <option value="{{$v->id}}">{{$v->descripcion}}</option>
+                                    @endforeach
                                 </select>
                             </div>
                             <div class="col-lg-2 col-5 mb-3">
-                                <label class="form-label mb-0" for="tip_inc"><b>Tipo Incidencia <span class="text-danger">*</span></b></label>
-                                <select class="select" id="tip_inc" name="tip_inc" require="Tipo Incidencia">
-                                    <option value="Remoto">Remoto</option>
-                                    <option value="Presencial">Presencial</option>
+                                <label class="form-label mb-0" for="tip_incidencia"><b>Tipo Incidencia <span class="text-danger">*</span></b></label>
+                                <select class="select" id="tip_incidencia" name="tip_incidencia" require="Tipo Incidencia">
+                                <option value="">-- Seleccione --</option>
+                                    @foreach ($dataInd['tipo_incidencia'] as $v)
+                                        <option value="{{$v->id}}">{{$v->descripcion}}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label mb-0" for="inc_problem"><b>Problema <span class="text-danger">*</span></b></label>
+                                <select class="select-clear" id="inc_problem" name="inc_problem" require="Problema" disabled>
+                                </select>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label class="form-label mb-0" for="inc_subproblem"><b>Sub Problema <span class="text-danger">*</span></b></label>
+                                <select class="select-clear" id="inc_subproblem" name="inc_subproblem" require="Sub Problema" disabled>
                                 </select>
                             </div>
                         </div>
@@ -245,6 +244,8 @@
 @section('scripts')
 <script>
     const sucursales = <?php echo json_encode($dataInd['sucursales']); ?>;
+    const obj_problem = <?php echo json_encode($dataInd['problema']); ?>;
+    const obj_subproblem = <?php echo json_encode($dataInd['subproblema']); ?>;
 
     document.getElementById('form-incidencias').addEventListener('submit', function (event) {
         event.preventDefault();

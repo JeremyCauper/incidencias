@@ -30,6 +30,7 @@ Route::get('/logout', [LoginController::class, 'logout']);
 
 // Gestion de incidencias
 Route::get('/soporte', [IncidenciaController::class, 'view'])->middleware('auth');
+Route::get('/soporte/dataInd', [IncidenciaController::class, 'dataInd']);
 Route::get('/soporte/datatable', [IncidenciaController::class, 'datatable']);
 Route::post('/soporte/create', [IncidenciaController::class, 'create']);
 Route::get('/soporte/show/{id}', [IncidenciaController::class, 'show']);

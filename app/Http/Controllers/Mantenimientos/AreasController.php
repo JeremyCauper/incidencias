@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\DB;
 class AreasController extends Controller
 {
     public function fillSelect() {
-        $areas = DB::table('areas')
+        $areas = DB::table('tb_area')
         ->where('estatus', 1)
         ->get();
 

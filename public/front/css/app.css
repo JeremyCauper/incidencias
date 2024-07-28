@@ -730,7 +730,71 @@ body {
 
 @media (max-width: 767px) {
     .content-wrapper {
-        padding: 0 1.5rem 1.5rem 1.5rem;
+        padding: 1.5rem;
+    }
+}
+
+:root {
+    --bs-panel-view-padding: 1.5rem 1.5rem;
+    --bs-panel-view-margin: 1.5rem;
+    --bs-panel-view-fonts-h6i: .9rem;
+    --bs-panel-view-fonts-h4: 1.9rem;
+}
+
+.panel-view .card .card-body {
+    padding: var(--bs-panel-view-padding);
+}
+
+.panel-view .grid-margin {
+    margin-bottom: var(--bs-panel-view-margin);
+}
+
+.panel-view .card .card-body h6,
+.panel-view .card .card-body h6 i {
+    font-size: var(--bs-panel-view-fonts-h6i);
+}
+
+.panel-view .card .card-body h4 {
+    font-size: var(--bs-panel-view-fonts-h4);
+}
+
+@media (max-width: 730px) {
+    :root {
+        --bs-panel-view-fonts-h6i: .8rem;
+        --bs-panel-view-fonts-h4: 1.6rem;
+    }
+}
+
+@media (max-width: 630px) {
+    :root {
+        --bs-panel-view-padding: 1rem 1.15rem;
+        --bs-panel-view-fonts-h6i: .7rem;
+        --bs-panel-view-fonts-h4: 1.5rem;
+    }
+}
+
+@media (max-width: 530px) {
+    :root {
+        --bs-panel-view-padding: 1rem .85rem;
+        --bs-panel-view-margin: .65rem;
+        --bs-panel-view-fonts-h6i: .6rem;
+        --bs-panel-view-fonts-h4: 1.4rem;
+    }
+}
+
+@media (max-width: 430px) {
+    :root {
+        --bs-panel-view-padding: .8rem .6rem;
+        --bs-panel-view-margin: .5rem;
+        --bs-panel-view-fonts-h6i: .5rem;
+        --bs-panel-view-fonts-h4: 1.3rem;
+    }
+}
+
+@media (max-width: 350px) {
+    :root {
+        --bs-panel-view-fonts-h6i: .4rem;
+        --bs-panel-view-fonts-h4: 1.2rem;
     }
 }
 
