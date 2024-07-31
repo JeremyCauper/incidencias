@@ -13,7 +13,7 @@
                 <div class="card">
                     <div class="card-body text-primary" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="far fa-clock"></i> Incidencias Registradas</h6>
-                        <h4 class="subtitle-count"><b>17944</b></h4>
+                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['count']}}</b></h4>
                     </div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                 <div class="card">
                     <div class="card-body text-info" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-user-check"></i> Incidencias Asignadas</h6>
-                        <h4 class="subtitle-count"><b>6</b></h4>
+                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_a']}}</b></h4>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                 <div class="card">
                     <div class="card-body text-warning" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En Proceso</h6>
-                        <h4 class="subtitle-count"><b>5</b></h4>
+                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_p']}}</b></h4>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                 <div class="card">
                     <div class="card-body text-success" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Incidencias Resueltas</h6>
-                        <h4 class="subtitle-count"><b>16708</b></h4>
+                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_r']}}</b></h4>
                     </div>
                 </div>
             </div>
@@ -238,6 +238,115 @@
             </div>
         </div>
     </form>
+</div>
+
+<div class="modal fade" id="modal_viewdetalle" aria-labelledby="modal_viewdetalle" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h7 class="modal-title">Detalle del Comprobante  :  <span class="label form-control-sm" id="recibo">B001-00049917</span>  <span class="badge badge-success " id="tipo">BOLETA - EXO.</span>  </h7>
+                    
+            </div>
+            <center id="imgCargando" style="display: none;">
+                <img src="http://cpe.apufact.com/portal/public/img/sistema/cargando.gif" width="80px" style="z-index:3;" class="pt-4"> <label class="pt-4">  Consultando Comprobante... </label>
+            </center>
+            <form id="frmdatos" style=""> 
+                <div class="modal-body" style="font-size:11px">
+                    <table class="table table-xs" width="100%" style="margin-top:-15px">
+                        <thead>
+                          <tr>
+                            <th width="8%"></th><th width="30%"></th><th width="35%"></th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td colspan="3">  <span class="font-weight-semibold" id="Empresa">20605809686 - GRIFOS ESSA PUCALLPA S.A.C.</span> </td>
+                          </tr>
+                          <tr>
+                            <td colspan="2"> <span id="direccion" class="">Direccion : CARRETERA FEDERICO BASADRE NRO. 298 UCAYALI PADRE ABAD PADRE ABAD</span> </td>
+                            <td> <span id="sucursal" class="">Sucursal : E/S PRINCIPAL</span> </td>
+                          </tr>
+                          <tr>
+                            <td><span class="font-weight-semibold">Cliente : </span></td>
+                            <td id="cliente">00000000 - Clientes  Varios</td>
+                            <td><span class="font-weight-semibold">Emitido :</span> <span id="emitido" class="font-weight-semibold col-form-label-sm">2024-07-31 14:29:00</span> </td>
+                          </tr>
+                          <tr>
+                            <td><span class="font-weight-semibold ">Direccion :</span></td>
+                            <td id="dircli" class=" text-left">-</td>
+                            <td><span class="font-weight-semibold ">Moneda :</span> <span id="moneda" class="font-weight-semibold col-form-label-sm">SOLES</span> </td>
+                          </tr>
+                          <tr id="DatosRefNc" style="display:none">
+                            <td><span class="font-weight-semibold">Doc. Ref. :</span></td>
+                            <td id="docref" class="text-left"></td>
+                            <td> <span class="font-weight-semibold">Motivo :</span> <span id="motivo" class="font-weight-semibold col-form-label-sm"></span>  </td>
+                          </tr>
+                        </tbody>
+                    </table>
+                    <div class="table-responsive table-scrollable">
+                        <tfooter class="">
+                              </tfooter><table class="table table-xs" width="100%">
+                            <thead class="bg-primary text-white text-center">
+                              <tr class="">
+                                <th width="10%">Codigo</th><th width="60%">Descripcion</th><th width="10%">Cantidad</th><th width="10%">Precio</th><th width="10%">Importe</th>
+                              </tr>
+                            </thead>
+                            <tbody id="ItemsT" class=""><tr><td>2</td><td>DIESEL B5</td><td class="text-right">22.69</td><td class="text-right">12.99</td><td class="text-right">294.78</td></tr></tbody>
+                            <tbody><tr>
+                                <td colspan="3" id="leyenda" class="text-left">SON : DOSCIENTOS NOVENTA Y CUATRO CON 78/100 SOLES</td>
+                                <td class="">  SubTotal </td>
+                                <td id="subtot" class="text-right">0.00</td>
+                              </tr>
+                              <tr>
+                                <td colspan="3"></td>
+                                <td class="">  Igv </td>
+                                <td id="igv" class="text-right">0.00</td>
+                              </tr>
+                              <tr>
+                                <td colspan="3"></td>
+                                <td class="">  Descuento </td>
+                                <td id="dsct" class="text-right">0.00</td>
+                              </tr>
+                              <tr>
+                                <td colspan="3"> </td>
+                                <td class="">  Total </td>
+                                <td id="total" class="text-right">294.78</td>
+                              </tr>
+                            
+                        </tbody></table>
+                    </div>
+                    <h6 class="font-weight-semibold col-form-label-sm">Seguimiento Sunat </h6>
+                    <table class="table table-xs text-center" width="100%">
+                        <thead class="bg-primary text-white">
+                            <tr class="">
+                            <th width="35%">Recepcionado</th>
+                            <th width="35%">Enviado</th>
+                            <th width="30%">Codigo Sunat</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr class="">
+                            <td id="recepcionado">2024-07-31 14:29:49</td>
+                            <td id="enviado">2024-07-31 14:29:55</td>
+                            <td id="estadosnt">0</td>
+                            </tr>
+                            <tr class="">
+                            <td colspan="3" id="rsptsunat">La Boleta de Venta numero B001-49917, ha sido aceptado</td>
+                            </tr>
+                            <tr>
+                            <td colspan="3" id="docbaja"></td>
+                            </tr>
+                            
+                        </tbody>
+                    </table>
+                      
+                </div>
+            </form>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
+            </div>
+		</div>
+	</div>
 </div>
 @endsection
 

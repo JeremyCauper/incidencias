@@ -34,6 +34,26 @@ class IncidenciaController extends Controller
                 ];
             });
 
+            $data['count_panel'] = [
+                "count" => count(GlobalHelper::getIncDataTable()),
+                "inc_a" => 0,   
+                "inc_p" => 0,
+                "inc_r" => 0,
+            ];
+            foreach (GlobalHelper::getIncDataTable() as $val) {
+                switch ($val->estado_informe) {
+                    case 0:
+                        $data['count_panel']['inc_a']++;
+                        break;
+                    case 1:
+                        $data['count_panel']['inc_p']++;
+                        break;
+                    case 2:
+                        $data['count_panel']['inc_r']++;
+                        break;
+                }
+            }
+
             $data['cargo_contaco'] = GlobalHelper::getCargoContact();
             $data['tipo_estacion'] = GlobalHelper::getTipEstacion();
             $data['tipo_soporte'] = GlobalHelper::getTipSoporte();
@@ -75,10 +95,7 @@ class IncidenciaController extends Controller
         $subproblema = GlobalHelper::getSubProblema();
         $__subproblema = $this->getparsedata($subproblema);
 
-        $incidencias = DB::table('tb_incidencias')
-            ->select('cod_incidencia', 'id_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as acciones', 'estatus')
-            ->where('estatus', 1)
-            ->get();
+        $incidencias = GlobalHelper::getIncDataTable();
         foreach ($incidencias as $val) {
             $val->id_empresa = $company[$val->id_empresa];
             $val->id_sucursal = $subcompany[$val->id_sucursal];
@@ -101,10 +118,12 @@ class IncidenciaController extends Controller
                 </button>
                 <div class="dropdown-menu shadow-6">
                     <h6 class="dropdown-header text-primary"><b>Acciones</b></h6>
-                    <button class="dropdown-item py-2" onclick="show(' . $val->acciones . ')"><i class="fas fa-chalkboard text-primary me-2"></i> Ver Detalle</button>
+                    <button class="dropdown-item py-2" onclick="showDetail(' . $val->acciones . ')"><i class="fas fa-eye text-success me-2"></i> Ver Detalle</button>
                     <button class="dropdown-item py-2" onclick="showEdit(' . $val->acciones . ')"><i class="fas fa-pen text-info me-2"></i> Editar</button>
+                    <button class="dropdown-item py-2" onclick="assign(' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>
                     <button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
-                    <button class="dropdown-item py-2" onclick=""><i class="fas fa-user-plus me-2"></i> Asignar</button>
+                    <button class="dropdown-item py-2" onclick="fillservices(' . $val->acciones . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>
+                    <button class="dropdown-item py-2" onclick="reloadInd(' . $val->acciones . ')"><i class="fas fa-clock-rotate-left text-warning me-2"></i> Reiniciar Incidencia</button>
                 </div>
             </div>';
         }
@@ -204,6 +223,7 @@ class IncidenciaController extends Controller
                 DB::table('tb_inc_asignadas')->insert($personal_asig);
 
             DB::commit();
+            GlobalHelper::getIncDataTable(true);
 
             $data = [];
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
@@ -358,6 +378,7 @@ class IncidenciaController extends Controller
             }
 
             DB::commit();
+            GlobalHelper::getIncDataTable(true);
 
             $data = [];
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
@@ -394,6 +415,7 @@ class IncidenciaController extends Controller
                 DB::beginTransaction();
                 DB::table('tb_incidencias')->where('id_incidencia', $id)->update(['estatus' => 0]);
                 DB::commit();
+                GlobalHelper::getIncDataTable(true);
 
                 return response()->json([
                     'success' => true,
@@ -411,6 +433,10 @@ class IncidenciaController extends Controller
                 'message' => 'Hubo un error al editar incidencia: ' . $e->getMessage()
             ], 500);
         }
+    }
+
+    public function assign(Request $request) {
+        //
     }
 
     function getparsedata($data)

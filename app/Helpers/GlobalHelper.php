@@ -79,6 +79,15 @@ class GlobalHelper
         return $subproblema;
     }
 
+    public static function getIncDataTable($vaciar = false)
+    {
+        $inc_datatable = self::fechTable($vaciar, 'inc_datatable', 'tb_incidencias', ['cod_incidencia', 'id_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as acciones', 'estatus']);
+        return $inc_datatable;
+    }
+
+
+
+
 
     public static function fechTable($reset, $Ncache, $Ntable, $columns) {
         $data = Cache::get($Ncache);
