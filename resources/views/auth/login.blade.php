@@ -58,6 +58,7 @@
     
     <script src="{{asset('front/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
+    <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
     <script>
         const __url = "{{url('')}}";
         const __token = "{{ csrf_token() }}";

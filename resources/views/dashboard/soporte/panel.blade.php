@@ -82,12 +82,12 @@
 </div>
 
 <div class="modal fade" id="modal_frm_incidencias" aria-labelledby="modal_frm_incidencias" aria-hidden="true">
-    <form id="form-incidencias">
+    <form id="form-incidencias" frm-accion="0" idu="">
         <div class="modal-dialog modal-xl">
             <div class="modal-content" style="position: relative;">
                 <div class="modal-body">
-                    <h6 class="card-title mb-4 text-primary"><b>CREAR NUEVA INCIDENCIA -</b><b class="ms-2" id="cod_inc">{{$dataInd['cod_inc']}}</b></h6>
-                    <input type="text" class="d-none" name="cod_inc" value="{{$dataInd['cod_inc']}}">
+                    <h6 class="card-title mb-4 text-primary"><b>CREAR NUEVA INCIDENCIA -</b><b class="ms-2" id="cod_inc_text">{{$dataInd['cod_inc']}}</b></h6>
+                    <input type="text" class="d-none" name="cod_inc" id="cod_inc" value="{{$dataInd['cod_inc']}}">
                     <div class="col-12 mb-2">
                         <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios (*)</span>
                     </div>
@@ -243,6 +243,7 @@
 
 @section('scripts')
 <script>
+    let cod_incidencia = '<?= $dataInd['cod_inc'] ?>';
     const sucursales = <?php echo json_encode($dataInd['sucursales']); ?>;
     const obj_problem = <?php echo json_encode($dataInd['problema']); ?>;
     const obj_subproblem = <?php echo json_encode($dataInd['subproblema']); ?>;
@@ -268,27 +269,32 @@
             return boxAlert.box('info', 'Faltan datos', `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>`);
         }
 
-        // url = [
-        //     `/register`, `/editusu/${$('#form-incidencias').attr('idu')}`
-        // ];
+        url = [
+            `/soporte/create`, `/soporte/edit/${$('#form-incidencias').attr('idu')}`
+        ];
         $.ajax({
             type: 'POST',
-            url: `${__url}/soporte/create`,
+            url: __url + url[$('#form-incidencias').attr('frm-accion')],
             contentType: 'application/json',
             headers: {
                 'X-CSRF-TOKEN': __token,
             },
             data: JSON.stringify(dataForm),
-            success: function (response) {
-                // boxAlert.minbox('success', response.message, { background: "#3b71ca", color: "#ffffff" }, "top");
-                // updateTable();
-                // $('[data-mdb-dismiss="modal"]').click();
-                console.log(response);
+            success: function (data) {
                 $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+                if (data.success) {
+                    cod_incidencia = data.data.cod_inc;
+                    $('#modal_frm_incidencias').modal('hide');
+                    boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
+                    updateTable();
+                    return true;
+                }
+                boxAlert.box('error', '¡Ocurrio un error!', data.message);
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                // boxAlert.box('error', '¡Ocurrio un error!', 'Error al registrar el usuario');
-                console.log(jqXHR.responseJSON);
+                const obj_error = jqXHR.responseJSON;
+                boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
+                console.log(obj_error);
                 $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();
             }
         });

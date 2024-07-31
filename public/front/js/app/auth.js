@@ -31,7 +31,7 @@ document.getElementById('form-login').addEventListener('submit', function (event
                 $('#btn-ingresar').html('Ingresar').attr('disabled', false);
             }
         },
-        error: function (xhr, status, error) {
+        error: async function (xhr, status, error) {
             const statusCode = xhr.status;
             let errorMessage = 'Ha ocurrido un error al intentar iniciar sesión.';
 
@@ -46,8 +46,17 @@ document.getElementById('form-login').addEventListener('submit', function (event
                     errorMessage = 'No se encontró el recurso solicitado.';
                     break;
                 case 419:
-                    alert('La pagina venció, se actualizará');
-                    window.location.href = `${__url}/inicio`;
+                    Swal.fire({
+                        title: "La pagina venció",
+                        text: "Recargue nuevamente la pagina",
+                        icon: "warning",
+                        showCancelButton: false,
+                        confirmButtonColor: "#3085d6",
+                        confirmButtonText: "Recargar",
+                        allowOutsideClick: false
+                    }).then((result) => {
+                        if (result.isConfirmed) location.reload();;
+                    });
                     return true;
                     break;
                 case 500:

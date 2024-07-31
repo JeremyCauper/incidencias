@@ -145,7 +145,7 @@
     }
   }); //missing );
 
-  $('[data-mdb-dismiss="modal"]').click(function () {
+  $('.modal').on('hidden.bs.modal', function () {
     const form = $('.modal form');
     form.find('input').each(function () {
       if ($(this).attr('type') === 'checkbox') {

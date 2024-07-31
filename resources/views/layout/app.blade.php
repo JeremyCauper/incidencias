@@ -180,6 +180,7 @@
 
 
   <script>
+    setTimeout(function () {location.reload();}, 7205000);
     const __url = "{{url('')}}";
     const __asset = "{{asset('/front/')}}";
     const __token = "{{ csrf_token() }}";
