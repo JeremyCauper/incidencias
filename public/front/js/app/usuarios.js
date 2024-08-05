@@ -98,8 +98,8 @@ function showUsuario(id) {
     $('#modal_frm_usuarios').modal('show');
     $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
     const urlImg = {
-        'perfil': `${__asset}images/auth`,
-        'firma': `${__asset}images/firms`
+        'perfil': `${__asset}/images/auth`,
+        'firma': `${__asset}/images/firms`
     };
     $.ajax({
         type: 'GET',

@@ -3,6 +3,12 @@
 
 @section('style')
 <link rel="stylesheet" href="{{asset('front/css/app/panel.css')}}">
+<style>
+    .list-group .list-group-item {
+        font-size: .9rem;
+        padding: .8rem 0;
+    }
+</style>
 @endsection
 @section('content')
 
@@ -11,7 +17,7 @@
         <div class="row">
             <div class="col-xxl-3 col-6 grid-margin">               
                 <div class="card">
-                    <div class="card-body text-primary" data-mdb-ripple-init>
+                    <div class="card-body text-success" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="far fa-clock"></i> Incidencias Registradas</h6>
                         <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['count']}}</b></h4>
                     </div>
@@ -28,16 +34,16 @@
             <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-warning" data-mdb-ripple-init>
-                        <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En Proceso</h6>
-                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_p']}}</b></h4>
+                        <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Incidencias Sin Asignadas</h6>
+                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_s']}}</b></h4>
                     </div>
                 </div>
             </div>
             <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
-                    <div class="card-body text-success" data-mdb-ripple-init>
-                        <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Incidencias Resueltas</h6>
-                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_r']}}</b></h4>
+                    <div class="card-body text-primary" data-mdb-ripple-init>
+                        <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En Proceso</h6>
+                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_p']}}</b></h4>
                     </div>
                 </div>
             </div>
@@ -218,14 +224,14 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group mt-2 mb-3">
-                                    <span class="input-group-text border-0" id="search-addon"><i class="fas fa-chalkboard-user"></i></span>
-                                    <select class="select-clear" id="selectPersonal" aria-describedby="search-addon">
+                                    <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
+                                    <select class="select-clear" id="selectPersonal">
                                         <option value=""></option>
                                         @foreach ($dataInd['usuarios'] as $u)
                                             <option value="{{$u['value']}}">{{$u['text']}}</option>
                                         @endforeach
                                     </select>
-                                    <button type="button" class="btn btn-primary px-2" onclick="tecnicoAsigManenger('create')" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
+                                    <button type="button" class="btn btn-primary px-2" onclick="tecnicoAsigManenger('create', 'selectPersonal', 'content_asig_personal')" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
                                 </div>
                             </div>
                             <div class="col-12" id="content_asig_personal" style="overflow: auto;">
@@ -248,28 +254,28 @@
             <div class="modal-header bg-primary text-white">
                 <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia</h6> 
             </div>
-            <div class="modal-body" style="font-size:11px">
-                <table class="table table-xs" width="100%" style="margin-top:-15px">
-                    <thead>
-                        <tr><th width="8%"></th><th width="30%"></th><th width="35%"></th></tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td colspan="3">  <span class="font-weight-semibold" id="Empresa">20345774042 - SERVICENTRO AGUKI SA.</span> </td>
-                        </tr>
-                        <tr>
-                            <td colspan="2"><span class="font-weight-semibold">Direccion:</span><span id="direccion"> AV. ELMER FAUCETT NRO. 5482 (ULTIMA CDRA. AV. ELMER FAUCETT)</span></td>
-                            <td><span class="font-weight-semibold">Sucursal:</span><span id="sucursal"> E/S PRINCIPAL</span> </td>
-                        </tr>
-                    </tbody>
-                </table>
-                <h6 class="font-weight-semibold col-form-label-sm text-primary">Seguimiento Incidencia</h6>
+            <div class="modal-body">
+                <div class="list-group list-group-light">
+                    <div class="text-end" style="font-size: 1.4rem;">
+                        <span class="badge badge-warning badge-lg" aria-item="cod">INC-00000001</span>
+                    </div>
+                    <div class="list-group-item">
+                        <span class="font-weight-semibold" aria-item="empresa">20345774042 - SERVICENTRO AGUKI SA.</span>
+                    </div>
+                    <div class="list-group-item">
+                        <span class="font-weight-semibold">Direccion:</span><span aria-item="direccion"> AV. ELMER FAUCETT NRO. 5482 (ULTIMA CDRA. AV. ELMER FAUCETT)</span>
+                    </div>
+                    <div class="list-group-item">
+                        <span class="font-weight-semibold">Sucursal:</span><span aria-item="sucursal"> E/S PRINCIPAL</span>
+                    </div>
+                </div>
+                <h6 class="font-weight-semibold col-form-label-sm text-primary mt-2">Seguimiento Incidencia</h6>
                 <div class="">
                     <ul class="list-group list-group-light">
                         <li class="list-group-item">
                             <div class="row">
                                 <div style="width: 70px;">
-                                    <img class="rounded-circle" style="width: 55px;" src="http://localhost/incidencias/public/front/images/auth/user_auth.jpg" alt="Profile image">
+                                    <img class="rounded-circle" style="width: 55px;" src="{{ asset('front/images/auth/user_auth.jpg') }}" alt="Profile image">
                                 </div>
                                 <div class="col">
                                     <h6 class="mb-2">Nombre usuario</h6>
@@ -281,19 +287,7 @@
                         <li class="list-group-item">
                             <div class="row">
                                 <div style="width: 70px;">
-                                    <img class="rounded-circle" style="width: 55px;" src="http://localhost/incidencias/public/front/images/auth/user_auth.jpg" alt="Profile image">
-                                </div>
-                                <div class="col">
-                                    <h6 class="mb-2">Nombre usuario</h6>
-                                    <p class="mb-1">Registro La Incidencia con codigo</p>
-                                    <p class="mb-1"><i class="fab fa-whatsapp"></i> 987456321 / <i class="far fa-envelope"></i> jcauper@gmail.com</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div style="width: 70px;">
-                                    <img class="rounded-circle" style="width: 55px;" src="http://localhost/incidencias/public/front/images/auth/user_auth.jpg" alt="Profile image">
+                                    <img class="rounded-circle" style="width: 55px;" src="{{ asset('front/images/auth/user_auth.jpg') }}" alt="Profile image">
                                 </div>
                                 <div class="col">
                                     <h6 class="mb-2">Nombre usuario</h6>
@@ -304,6 +298,7 @@
                         </li>
                     </ul>
                 </div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link " data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
             </div>
@@ -315,129 +310,46 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h6 class="modal-title">Asignar Personal <span class="badge badge-success " id="tipo">INC-00000001</span></h6> 
+                <h6 class="modal-title">Asignar Personal</h6> 
             </div>
-            <form id="frmdatos">
-            <div class="card">
-                <div class="card-title">
-                  <h2><i class="fa fa-globe"></i> Incidencia
-                    <small> Informada: 2024-07-31 11:15:50</small>
-                  </h2>
-                  <ul class="nav navbar-right panel_toolbox">
-                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
-                    </li>
-
-                    <li><a class="close-link"><i class="fa fa-close"></i></a>
-                    </li>
-                  </ul>
-                  <div class="clearfix"></div>
+            <div class="modal-body">
+                <div class="list-group list-group-light">
+                    <div class="text-end" style="font-size: 1.4rem;">
+                        <span class="badge badge-warning badge-lg" aria-item="cod"></span>
+                    </div>
+                    <div class="list-group-item">
+                        <span class="font-weight-semibold" aria-item="empresa"></span>
+                    </div>
+                    <div class="list-group-item">
+                        <span class="font-weight-semibold">Direccion: </span><span aria-item="direccion"></span>
+                    </div>
+                    <div class="list-group-item">
+                        <span class="font-weight-semibold">Sucursal: </span><span aria-item="sucursal"></span>
+                    </div>
                 </div>
-                <div class="card-body">
-
-                  <section class="content invoice">
-                    <form id="frm_datos" name="frm_datos">
-                      <!-- title row -->
-                      <div class="row">
-                        <div class="col-xs-12 invoice-header">
-
+                <div class="mt-4 p-3 pb-0 fieldset mb-3">
+                        <h6 class="legend text-primary">Asignar Personal</h6>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="input-group mt-2 mb-3">
+                                    <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
+                                    <select class="select-clear" id="selectPersonalAssign">
+                                        <option value=""></option>
+                                        @foreach ($dataInd['usuarios'] as $u)
+                                            <option value="{{$u['value']}}">{{$u['text']}}</option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn btn-primary px-2" onclick="tecnicoAsigManenger('create', 'selectPersonalAssign', 'content_asig_personalAssign')" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
+                                </div>
+                            </div>
+                            <div class="col-12" id="content_asig_personalAssign" style="overflow: auto;">
+                            </div>
                         </div>
-                        <!-- /.col -->
-                      </div>
-                      <!-- info row -->
-                      <div class="row invoice-info">
-                        <input type="hidden" name="id_inci" id="id_inci" value="18128">
-                        <div class="col-sm-4 invoice-col">
-                          Informado
-
-                          <address>
-                            <strong>Empresa : 20127765279 - COESTI S.A.</strong>
-                            <br>Sucursal : -
-                            <br>Contacto :                             <br>Telefono :                             <br>Correo :                           </address>
-                        </div>
-                        <!-- /.col -->
-                        <!-- /.col -->
-                        <div class="col-sm-4 invoice-col">
-                          Problema
-                          <address>
-                            <strong></strong>
-                          </address>
-                        </div>
-                        <div class="col-sm-4 invoice-col">
-                          <p id="datos_asignacion"></p>
-                          <div class="alert alert-danger" id="alerta_soporte" style="display: none;">
-                            Debe Seleccionar El Tipo de Soporte!
-                          </div>
-                          <div class="alert alert-danger" id="alerta_personal" style="display: none;">
-                            Debe Ingresar al menos un Personal!
-                          </div>
-                          <div class="alert alert-success" id="alerta_asignacion" style="display: none;">
-                            Asignacion Existosa!
-                          </div>
-                        </div>
-                        <!-- /.col -->
-                      </div>
-                      <!-- /.row -->
-
-                      <!-- Table row -->
-                      <div class="row ">
-                        <!-- /.col -->
-                        <div class="col-md-6">
-                          <div class="col-md-3">
-                            <label for=""> Tipo Soporte </label>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-md-6">
-                          <div class="col-md-3">
-                            <label for="personal">Personal</label>
-                          </div>
-                          <div class="col-md-7">
-                            <input type="hidden" id="d_personal" class="form-control" value="">
-                            <input type="text" id="n_personal" class="form-control" onchange="borrar()" autocomplete="off">
-                          </div>
-                          <div class="col-md-2">
-                            <button type="button" class="btn btn-sm btn-primary" id="btn_per" onclick="llenar_tabla();"> <i class="fa fa-plus"></i> </button>
-                          </div>
-                        </div>
-                        <div class="col-md-12 col-sm-12 table">
-                          <br>
-                          <table class="table table-striped">
-                            <thead>
-                              <tr>
-                                <th>Dni / Identificación</th>
-                                <th>Nombres y Apellidos</th>
-                                <th>Eliminar</th>
-                              </tr>
-                            </thead>
-                            <tbody id="listado_per">
-
-                            <tr><td> <input type="hidden" name="id_pers[]" id="id_pers[]" value="39"> 72050072</td><td>JOSE ALBERTO CABANILLAS RAMOS</td><td> <button type="button" class="btn btn-sm btn-danger borrar" title="Eliminar" onclick="borrar2(72050072)"> <i class="fa fa-trash"> </i> </button> </td></tr></tbody>
-                          </table>
-                        </div>
-                        <div class="col-md-12 col-sm-12 col-xs-12">
-                          <div class="col-md-12">
-                            <label for="sad">Comentario :</label>
-                          </div>
-                          <div class="col-md-12 col-sm-12 col-xs-12">
-                            <textarea class="form-control" name="comentario" id="comentario" cols="3"></textarea>
-                            <br>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div class="row no-print">
-                        <div class="col-sm-12">
-                          <button type="button" class="btn btn-success pull-right" id="btn_g" onclick="update_asignacion();"><i class="fa fa-edit"></i> Actualizar Asignación</button>
-                        </div>
-                      </div>
-                    </form>
-                  </section>
-                </div>
-              </div>
-            </form>
+                    </div>
+            </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init onclick="createAssign()">Registrar</button>
             </div>
 		</div>
 	</div>
@@ -465,7 +377,7 @@
             }
             dataForm[elemento.name] = elemento.value;
         });
-        dataForm['personal_asig'] = tecnicoAsigManenger('extract');
+        dataForm['personal_asig'] = tecnicoAsigManenger('extract', $('[name="cod_inc"]').val(), 'content_asig_personal');
         console.log(dataForm);
         if (cad_require) {
             $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();

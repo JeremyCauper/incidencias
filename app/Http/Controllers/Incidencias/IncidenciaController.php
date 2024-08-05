@@ -27,7 +27,7 @@ class IncidenciaController extends Controller
                 $data['sucursales'][$val->ruc][] = ['id' => $val->id, 'sucursal' => $val->Nombre];
             }
 
-            $data['usuarios'] = DB::table('usuarios')->where('estatus', 1)->get()->map(function ($u) {
+            $data['usuarios'] = GlobalHelper::getUsuarios()->map(function ($u) {
                 return [
                     'value' => "{$u->id_usuario}|{$u->ndoc_usuario}|{$u->nombres} {$u->apellidos}",
                     'text' => "{$u->ndoc_usuario} - {$u->nombres} {$u->apellidos}"
@@ -36,20 +36,20 @@ class IncidenciaController extends Controller
 
             $data['count_panel'] = [
                 "count" => count(GlobalHelper::getIncDataTable()),
-                "inc_a" => 0,   
+                "inc_a" => 0,
                 "inc_p" => 0,
-                "inc_r" => 0,
+                "inc_s" => 0,
             ];
             foreach (GlobalHelper::getIncDataTable() as $val) {
                 switch ($val->estado_informe) {
                     case 0:
-                        $data['count_panel']['inc_a']++;
+                        $data['count_panel']['inc_s']++;
                         break;
                     case 1:
-                        $data['count_panel']['inc_p']++;
+                        $data['count_panel']['inc_a']++;
                         break;
                     case 2:
-                        $data['count_panel']['inc_r']++;
+                        $data['count_panel']['inc_p']++;
                         break;
                 }
             }
@@ -95,7 +95,7 @@ class IncidenciaController extends Controller
         $subproblema = GlobalHelper::getSubProblema();
         $__subproblema = $this->getparsedata($subproblema);
 
-        $incidencias = GlobalHelper::getIncDataTable();
+        $incidencias = GlobalHelper::getIncDataTable(true);
         foreach ($incidencias as $val) {
             $val->id_empresa = $company[$val->id_empresa];
             $val->id_sucursal = $subcompany[$val->id_sucursal];
@@ -122,8 +122,8 @@ class IncidenciaController extends Controller
                     <button class="dropdown-item py-2" onclick="showEdit(' . $val->acciones . ')"><i class="fas fa-pen text-info me-2"></i> Editar</button>
                     <button class="dropdown-item py-2" onclick="assign(' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>
                     <button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
+                    <button class="dropdown-item py-2" onclick="reloadInd(' . $val->acciones . ')"><i class="fas fa-stopwatch text-warning me-2"></i> Iniciar Incidencia</button>
                     <button class="dropdown-item py-2" onclick="fillservices(' . $val->acciones . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>
-                    <button class="dropdown-item py-2" onclick="reloadInd(' . $val->acciones . ')"><i class="fas fa-clock-rotate-left text-warning me-2"></i> Reiniciar Incidencia</button>
                 </div>
             </div>';
         }
@@ -248,12 +248,22 @@ class IncidenciaController extends Controller
     public function show(string $id)
     {
         try {
-            $incidencias = DB::table('tb_incidencias')
-                ->where('id_incidencia', $id)
-                ->first();
+            $incidencias = DB::table('tb_incidencias')->where('id_incidencia', $id)->first();
 
             if (!$incidencias) {
                 return response()->json(['success' => false, 'message' => 'Incidencia no encontrada']);
+            }
+
+            $empresas = GlobalHelper::getCompany();
+            $company = [];
+            foreach ($empresas as $val) {
+                $company[$val->id] = "{$val->Ruc} - {$val->RazonSocial}";
+            }
+    
+            $sucursales = GlobalHelper::getBranchOffice();
+            $subcompany = [];
+            foreach ($sucursales as $val) {
+                $subcompany[$val->id] = ['sucursal' => $val->Nombre, 'direccion' => $val->Direccion];
             }
 
             $contactos = DB::table('contactos_empresas')
@@ -274,17 +284,18 @@ class IncidenciaController extends Controller
                 ->pluck('id_usuario')
                 ->toArray();
 
-            $usuarios = DB::table('usuarios')
-                ->where('estatus', 1)
-                ->get()
-                ->map(function ($usuario) {
-                    return [
-                        'id' => $usuario->id_usuario,
-                        'value' => "{$usuario->id_usuario}|{$usuario->ndoc_usuario}|{$usuario->nombres} {$usuario->apellidos}",
-                        'text' => "{$usuario->ndoc_usuario} - {$usuario->nombres} {$usuario->apellidos}"
-                    ];
-                });
+            $usuarios = GlobalHelper::getUsuarios()->map(function ($usuario) {
+                return [
+                    'id' => $usuario->id_usuario,
+                    'value' => "{$usuario->id_usuario}|{$usuario->ndoc_usuario}|{$usuario->nombres} {$usuario->apellidos}",
+                    'text' => "{$usuario->ndoc_usuario} - {$usuario->nombres} {$usuario->apellidos}"
+                ];
+            });
 
+
+            $incidencias->empresa = $company[$incidencias->id_empresa];
+            $incidencias->sucursal = $subcompany[$incidencias->id_sucursal]['sucursal'];
+            $incidencias->direccion = $subcompany[$incidencias->id_sucursal]['direccion'];
             $incidencias->personal_asig = $usuarios->whereIn('id', $asignados)->values();
 
             return $incidencias;
@@ -435,8 +446,47 @@ class IncidenciaController extends Controller
         }
     }
 
-    public function assign(Request $request) {
-        //
+    public function editAssign(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'cod_inc' => 'required|string'
+            ]);
+
+            if ($validator->fails())
+                return response()->json(['errors' => $validator->errors()], 400);
+
+            $personal_asig = $request->personal_asig;
+            $estado_info = count($personal_asig) ? 1 : 0;
+
+            DB::beginTransaction();
+
+            if (count($personal_asig)) {
+                DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->cod_inc)->delete();
+                DB::table('tb_inc_asignadas')->insert($personal_asig);
+            }
+
+            DB::table('tb_incidencias')
+                ->where('cod_incidencia', $request->cod_inc)
+                ->update(['estado_informe' => 1]);
+            DB::commit();
+            GlobalHelper::getIncDataTable(true);
+
+            $data = [];
+            $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
+            return response()->json([
+                'success' => true,
+                'message' => 'Incidencia editada con éxito',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un error al editar incidencia: ' . $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
     }
 
     function getparsedata($data)

@@ -1,4 +1,8 @@
 $(document).ready(function () {
+    formatSelect('modal_frm_incidencias');
+    formatSelect('modal_viewdetalle');
+    formatSelect('modal_assign');
+
     $('#id_empresa').on('change', function () {
         fillEmpresa($(this).val());
     });
@@ -11,9 +15,10 @@ $(document).ready(function () {
         fillSubProblem($(this).val());
     });
 
-    $('#modal_frm_incidencias').on('hidden.bs.modal', function () {
+    $('.modal').on('hidden.bs.modal', function () {
         changeCodInc(cod_incidencia);
         $(`#content_asig_personal table`).remove();
+        $(`#content_asig_personalAssign table`).remove();
         $('#form-incidencias').attr('idu', '').attr('frm-accion', '0');
         fillEmpresa("");
         fillProblem("");
@@ -88,7 +93,7 @@ function showEdit(id) {
 
             (data.personal_asig).forEach(element => {
                 $('#selectPersonal').val(element.value).trigger('change.select2');
-                tecnicoAsigManenger('create');
+                tecnicoAsigManenger('create', 'selectPersonal', 'content_asig_personal');
             });
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -126,10 +131,83 @@ async function idelete(id) {
 
 function showDetail(id) {
     $('#modal_viewdetalle').modal('show');
+    $('#modal_viewdetalle .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
+
+    $.ajax({
+        type: 'GET',
+        url: `${__url}/soporte/show/${id}`,
+        contentType: 'application/json',
+        success: function (data) {
+            $('#modal_viewdetalle .modal-dialog .modal-content .loader-of-modal').remove();
+            console.log(data);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error al registrar el usuario');
+            console.log(jqXHR.responseJSON);
+        }
+    });
 }
 
 function assign(id) {
     $('#modal_assign').modal('show');
+    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
+
+    $.ajax({
+        type: 'GET',
+        url: `${__url}/soporte/show/${id}`,
+        contentType: 'application/json',
+        success: function (data) {
+            $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
+            $('#modal_assign [aria-item="cod"]').html(data.cod_incidencia);
+            $('#modal_assign [aria-item="empresa"]').html(data.empresa);
+            $('#modal_assign [aria-item="direccion"]').html(data.direccion);
+            $('#modal_assign [aria-item="sucursal"]').html(data.sucursal);
+            (data.personal_asig).forEach(element => {
+                $('#selectPersonalAssign').val(element.value).trigger('change.select2');
+                tecnicoAsigManenger('create', 'selectPersonalAssign', 'content_asig_personalAssign');
+            });
+            $('#selectPersonalAssign').val('').trigger('change.select2');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error al registrar el usuario');
+            console.log(jqXHR.responseJSON);
+        }
+    });
+}
+
+async function createAssign() {
+    if (!await boxAlert.confirm('¿Esta seguro de realizar esta accion?')) return true;
+    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
+
+    const cod = $('#modal_assign [aria-item="cod"]').html();
+    $.ajax({
+        type: 'POST',
+        url: `${__url}/soporte/editAssign`,
+        contentType: 'application/json',
+        headers: {
+            'X-CSRF-TOKEN': __token,
+        },
+        data: JSON.stringify({
+            cod_inc: cod,
+            personal_asig: tecnicoAsigManenger('extract', cod, 'content_asig_personalAssign')
+        }),
+        success: function (data) {
+            $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
+            if (data.success) {
+                cod_incidencia = data.data.cod_inc;
+                boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
+                updateTable();
+                return true;
+            }
+            boxAlert.box('error', '¡Ocurrio un error!', data.message);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            const obj_error = jqXHR.responseJSON;
+            boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
+            console.log(obj_error);
+            $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
+        }
+    });
 }
 
 
@@ -173,37 +251,37 @@ function fillSubProblem(val) {
     $('#inc_subproblem').attr('disabled', false);
 }
 
-function tecnicoAsigManenger(accion, row) {
+function tecnicoAsigManenger(accion, select, content, row) {
     switch (accion) {
         case 'create':
-            const personal = $('#selectPersonal').val();
+            const personal = $(`#${select}`).val();
             if (!personal)
                 return false;
-            if (!$(`#content_asig_personal table`).length) {
+            if (!$(`#${content} table`).length) {
                 const tabla = $('<table>', { class: 'table w-100 text-nowrap' });
                 const thead = $('<thead>').html($('<tr>').html('<th>#</th><th>Nro. Documento</th><th>Nombres y Apellidos</th><th>Acciones</th>'));
-                $('#content_asig_personal').html(tabla.append(thead).append($('<tbody>')));
+                $(`#${content}`).html(tabla.append(thead).append($('<tbody>')));
             }
             const obj = personal.split('|');
-            const tr = $('<tr>', { 'aria-row': `reg${obj[0]}`, 'tr-personal': obj[0] }).html(`<td>${obj[0]}</td><td>${obj[1]}</td><td>${obj[2]}</td><td><button type="button" class="btn btn-danger btn-sm px-2"  onclick="tecnicoAsigManenger('delete', 'reg${obj[0]}')"><i class="far fa-trash-can"></i></button></td>`);
+            const tr = $('<tr>', { 'aria-row': `reg${obj[0]}`, 'tr-personal': obj[0] }).html(`<td>${obj[0]}</td><td>${obj[1]}</td><td>${obj[2]}</td><td><button type="button" class="btn btn-danger btn-sm px-2"  onclick="tecnicoAsigManenger('delete', '${select}', '${content}', 'reg${obj[0]}')"><i class="far fa-trash-can"></i></button></td>`);
 
-            if ($(`#content_asig_personal table tbody tr[aria-row="reg${obj[0]}"]`).length)
+            if ($(`#${content} table tbody tr[aria-row="reg${obj[0]}"]`).length)
                 return boxAlert.minbox('info', '<h6 class="mb-0" style="font-size:.75rem">NO PUEDO INGRESAR EL MISMO PERSONAL DOS VECES</h6>', { background: "#628acc", color: "#ffffff" }, "top");
-            $(`#content_asig_personal table tbody`).append(tr);
-            $('#selectPersonal').val('').trigger('change.select2');
+            $(`#${content} table tbody`).append(tr);
+            $(`#${select}`).val('').trigger('change.select2');
             break;
 
         case 'delete':
-            $(`#content_asig_personal table tbody tr[aria-row="${row}"]`).remove();
-            if (!$(`#content_asig_personal table tbody tr`).length) {
-                $('#content_asig_personal table').remove();
+            $(`#${content} table tbody tr[aria-row="${row}"]`).remove();
+            if (!$(`#${content} table tbody tr`).length) {
+                $(`#${content} table`).remove();
             }
             break;
 
         case 'extract':
-            const c_ind = $('[name="cod_inc"]').val();
+            let c_ind = select;
             const dataPer = [];
-            Array.from($(`#content_asig_personal table tbody tr`)).some(function (elemento) {
+            Array.from($(`#${content} table tbody tr`)).some(function (elemento) {
                 const trattr = elemento.getAttribute("tr-personal");
                 dataPer.push({ 'cod_incidencia': c_ind, 'id_usuario': trattr });
             });

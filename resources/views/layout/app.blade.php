@@ -148,7 +148,7 @@
                 <li class="nav-item">
                   <a class="nav-link" href="{{url('/control-de-usuario/usuarios')}}"><b>Usuarios</b></a>
                 </li>
-                <li class="nav-item">
+                <li class="nav-item d-none">
                   <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil</b></a>
                 </li>
               </ul>
@@ -182,7 +182,7 @@
   <script>
     setTimeout(function () {location.reload();}, 7205000);
     const __url = "{{url('')}}";
-    const __asset = "{{asset('/front/')}}";
+    const __asset = "{{asset('/front')}}";
     const __token = "{{ csrf_token() }}";
   </script>
   <!-- JQuery -->

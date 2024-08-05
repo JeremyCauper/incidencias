@@ -36,7 +36,6 @@
                             <th>Monitoreo</th>
                             <th>Registrado</th>
                             <th>Estado</th>
-                            <th>Acciones</th>
                             </tr>
                         </thead>
                     </table>
@@ -95,8 +94,10 @@
             { data: 'Correo' },
             { data: 'Monitoreo' },
             { data: 'Registrado' },
-            { data: 'Estado' },
-            { data: 'id' },
+            { data: 'Estado', render: function (data, type, row) {
+                    return `<span class="badge badge-${data ? 'success' : 'danger'}">${data ? 'Activo' : 'Inactivo'}</span>`;
+                } 
+            }
         ],
         processing: true
     });

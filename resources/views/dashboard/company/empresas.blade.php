@@ -11,7 +11,8 @@
         <div class="card-body">
             <h4 class="card-title">Listado de Empresas</h4>
             <div class="mb-3">
-                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_frm_empresas">
+                <!-- <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_frm_empresas"> -->
+                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init>
                     <i class="fas fa-plus me-1"></i>
                     Nueva Empresa
                 </button>
@@ -30,7 +31,7 @@
                                 <th>Direccion</th>
                                 <th>Telefono</th>
                                 <th>Fecha Registro</th>
-                                <th>Acciones</th>
+                                <th>Estado</th>
                             </tr>
                         </thead>
                     </table>
@@ -84,7 +85,10 @@
             { data: 'DomicilioFiscal' },
             { data: 'Telefono' },
             { data: 'FechaRegistro' },
-            { data: 'Estado' }
+            { data: 'Estado', render: function (data, type, row) {
+                    return `<span class="badge badge-${data ? 'success' : 'danger'}">${data ? 'Activo' : 'Inactivo'}</span>`;
+                } 
+            }
         ],
         processing: true
     });
