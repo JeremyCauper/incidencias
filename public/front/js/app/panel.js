@@ -128,6 +128,16 @@ function showDetail(id) {
     $('#modal_viewdetalle').modal('show');
 }
 
+function assign(id) {
+    $('#modal_assign').modal('show');
+}
+
+
+
+
+
+
+
 function changeCodInc(val) {
     $('#cod_inc').val(val);
     $('#cod_inc_text').html(val);

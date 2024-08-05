@@ -85,8 +85,10 @@
     <form id="form-incidencias" frm-accion="0" idu="">
         <div class="modal-dialog modal-xl">
             <div class="modal-content" style="position: relative;">
+                <div class="modal-header bg-primary text-white">                        
+                    <h6 class="modal-title"><b>CREAR NUEVA INCIDENCIA: </b><b id="cod_inc_text">{{$dataInd['cod_inc']}}</b><b class="ms-3 badge badge-success" id="contrato"></b></h6>
+                </div>
                 <div class="modal-body">
-                    <h6 class="card-title mb-4 text-primary"><b>CREAR NUEVA INCIDENCIA -</b><b class="ms-2" id="cod_inc_text">{{$dataInd['cod_inc']}}</b></h6>
                     <input type="text" class="d-none" name="cod_inc" id="cod_inc" value="{{$dataInd['cod_inc']}}">
                     <div class="col-12 mb-2">
                         <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios (*)</span>
@@ -244,106 +246,198 @@
 	<div class="modal-dialog modal-lg">
 		<div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h7 class="modal-title">Detalle del Comprobante  :  <span class="label form-control-sm" id="recibo">B001-00049917</span>  <span class="badge badge-success " id="tipo">BOLETA - EXO.</span>  </h7>
-                    
+                <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia</h6> 
             </div>
-            <center id="imgCargando" style="display: none;">
-                <img src="http://cpe.apufact.com/portal/public/img/sistema/cargando.gif" width="80px" style="z-index:3;" class="pt-4"> <label class="pt-4">  Consultando Comprobante... </label>
-            </center>
-            <form id="frmdatos" style=""> 
-                <div class="modal-body" style="font-size:11px">
-                    <table class="table table-xs" width="100%" style="margin-top:-15px">
-                        <thead>
-                          <tr>
-                            <th width="8%"></th><th width="30%"></th><th width="35%"></th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          <tr>
-                            <td colspan="3">  <span class="font-weight-semibold" id="Empresa">20605809686 - GRIFOS ESSA PUCALLPA S.A.C.</span> </td>
-                          </tr>
-                          <tr>
-                            <td colspan="2"> <span id="direccion" class="">Direccion : CARRETERA FEDERICO BASADRE NRO. 298 UCAYALI PADRE ABAD PADRE ABAD</span> </td>
-                            <td> <span id="sucursal" class="">Sucursal : E/S PRINCIPAL</span> </td>
-                          </tr>
-                          <tr>
-                            <td><span class="font-weight-semibold">Cliente : </span></td>
-                            <td id="cliente">00000000 - Clientes  Varios</td>
-                            <td><span class="font-weight-semibold">Emitido :</span> <span id="emitido" class="font-weight-semibold col-form-label-sm">2024-07-31 14:29:00</span> </td>
-                          </tr>
-                          <tr>
-                            <td><span class="font-weight-semibold ">Direccion :</span></td>
-                            <td id="dircli" class=" text-left">-</td>
-                            <td><span class="font-weight-semibold ">Moneda :</span> <span id="moneda" class="font-weight-semibold col-form-label-sm">SOLES</span> </td>
-                          </tr>
-                          <tr id="DatosRefNc" style="display:none">
-                            <td><span class="font-weight-semibold">Doc. Ref. :</span></td>
-                            <td id="docref" class="text-left"></td>
-                            <td> <span class="font-weight-semibold">Motivo :</span> <span id="motivo" class="font-weight-semibold col-form-label-sm"></span>  </td>
-                          </tr>
-                        </tbody>
-                    </table>
-                    <div class="table-responsive table-scrollable">
-                        <tfooter class="">
-                              </tfooter><table class="table table-xs" width="100%">
-                            <thead class="bg-primary text-white text-center">
-                              <tr class="">
-                                <th width="10%">Codigo</th><th width="60%">Descripcion</th><th width="10%">Cantidad</th><th width="10%">Precio</th><th width="10%">Importe</th>
+            <div class="modal-body" style="font-size:11px">
+                <table class="table table-xs" width="100%" style="margin-top:-15px">
+                    <thead>
+                        <tr><th width="8%"></th><th width="30%"></th><th width="35%"></th></tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">  <span class="font-weight-semibold" id="Empresa">20345774042 - SERVICENTRO AGUKI SA.</span> </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2"><span class="font-weight-semibold">Direccion:</span><span id="direccion"> AV. ELMER FAUCETT NRO. 5482 (ULTIMA CDRA. AV. ELMER FAUCETT)</span></td>
+                            <td><span class="font-weight-semibold">Sucursal:</span><span id="sucursal"> E/S PRINCIPAL</span> </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <h6 class="font-weight-semibold col-form-label-sm text-primary">Seguimiento Incidencia</h6>
+                <div class="">
+                    <ul class="list-group list-group-light">
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div style="width: 70px;">
+                                    <img class="rounded-circle" style="width: 55px;" src="http://localhost/incidencias/public/front/images/auth/user_auth.jpg" alt="Profile image">
+                                </div>
+                                <div class="col">
+                                    <h6 class="mb-2">Nombre usuario</h6>
+                                    <p class="mb-1">Registro La Incidencia con codigo</p>
+                                    <p class="mb-1"><i class="fab fa-whatsapp"></i> 987456321 / <i class="far fa-envelope"></i> jcauper@gmail.com</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div style="width: 70px;">
+                                    <img class="rounded-circle" style="width: 55px;" src="http://localhost/incidencias/public/front/images/auth/user_auth.jpg" alt="Profile image">
+                                </div>
+                                <div class="col">
+                                    <h6 class="mb-2">Nombre usuario</h6>
+                                    <p class="mb-1">Registro La Incidencia con codigo</p>
+                                    <p class="mb-1"><i class="fab fa-whatsapp"></i> 987456321 / <i class="far fa-envelope"></i> jcauper@gmail.com</p>
+                                </div>
+                            </div>
+                        </li>
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div style="width: 70px;">
+                                    <img class="rounded-circle" style="width: 55px;" src="http://localhost/incidencias/public/front/images/auth/user_auth.jpg" alt="Profile image">
+                                </div>
+                                <div class="col">
+                                    <h6 class="mb-2">Nombre usuario</h6>
+                                    <p class="mb-1">Registro La Incidencia con codigo</p>
+                                    <p class="mb-1"><i class="fab fa-whatsapp"></i> 987456321 / <i class="far fa-envelope"></i> jcauper@gmail.com</p>
+                                </div>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link " data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+            </div>
+		</div>
+	</div>
+</div>
+
+<div class="modal fade" id="modal_assign" aria-labelledby="modal_assign" aria-hidden="true">
+	<div class="modal-dialog modal-lg">
+		<div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h6 class="modal-title">Asignar Personal <span class="badge badge-success " id="tipo">INC-00000001</span></h6> 
+            </div>
+            <form id="frmdatos">
+            <div class="card">
+                <div class="card-title">
+                  <h2><i class="fa fa-globe"></i> Incidencia
+                    <small> Informada: 2024-07-31 11:15:50</small>
+                  </h2>
+                  <ul class="nav navbar-right panel_toolbox">
+                    <li><a class="collapse-link"><i class="fa fa-chevron-up"></i></a>
+                    </li>
+
+                    <li><a class="close-link"><i class="fa fa-close"></i></a>
+                    </li>
+                  </ul>
+                  <div class="clearfix"></div>
+                </div>
+                <div class="card-body">
+
+                  <section class="content invoice">
+                    <form id="frm_datos" name="frm_datos">
+                      <!-- title row -->
+                      <div class="row">
+                        <div class="col-xs-12 invoice-header">
+
+                        </div>
+                        <!-- /.col -->
+                      </div>
+                      <!-- info row -->
+                      <div class="row invoice-info">
+                        <input type="hidden" name="id_inci" id="id_inci" value="18128">
+                        <div class="col-sm-4 invoice-col">
+                          Informado
+
+                          <address>
+                            <strong>Empresa : 20127765279 - COESTI S.A.</strong>
+                            <br>Sucursal : -
+                            <br>Contacto :                             <br>Telefono :                             <br>Correo :                           </address>
+                        </div>
+                        <!-- /.col -->
+                        <!-- /.col -->
+                        <div class="col-sm-4 invoice-col">
+                          Problema
+                          <address>
+                            <strong></strong>
+                          </address>
+                        </div>
+                        <div class="col-sm-4 invoice-col">
+                          <p id="datos_asignacion"></p>
+                          <div class="alert alert-danger" id="alerta_soporte" style="display: none;">
+                            Debe Seleccionar El Tipo de Soporte!
+                          </div>
+                          <div class="alert alert-danger" id="alerta_personal" style="display: none;">
+                            Debe Ingresar al menos un Personal!
+                          </div>
+                          <div class="alert alert-success" id="alerta_asignacion" style="display: none;">
+                            Asignacion Existosa!
+                          </div>
+                        </div>
+                        <!-- /.col -->
+                      </div>
+                      <!-- /.row -->
+
+                      <!-- Table row -->
+                      <div class="row ">
+                        <!-- /.col -->
+                        <div class="col-md-6">
+                          <div class="col-md-3">
+                            <label for=""> Tipo Soporte </label>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-md-6">
+                          <div class="col-md-3">
+                            <label for="personal">Personal</label>
+                          </div>
+                          <div class="col-md-7">
+                            <input type="hidden" id="d_personal" class="form-control" value="">
+                            <input type="text" id="n_personal" class="form-control" onchange="borrar()" autocomplete="off">
+                          </div>
+                          <div class="col-md-2">
+                            <button type="button" class="btn btn-sm btn-primary" id="btn_per" onclick="llenar_tabla();"> <i class="fa fa-plus"></i> </button>
+                          </div>
+                        </div>
+                        <div class="col-md-12 col-sm-12 table">
+                          <br>
+                          <table class="table table-striped">
+                            <thead>
+                              <tr>
+                                <th>Dni / Identificación</th>
+                                <th>Nombres y Apellidos</th>
+                                <th>Eliminar</th>
                               </tr>
                             </thead>
-                            <tbody id="ItemsT" class=""><tr><td>2</td><td>DIESEL B5</td><td class="text-right">22.69</td><td class="text-right">12.99</td><td class="text-right">294.78</td></tr></tbody>
-                            <tbody><tr>
-                                <td colspan="3" id="leyenda" class="text-left">SON : DOSCIENTOS NOVENTA Y CUATRO CON 78/100 SOLES</td>
-                                <td class="">  SubTotal </td>
-                                <td id="subtot" class="text-right">0.00</td>
-                              </tr>
-                              <tr>
-                                <td colspan="3"></td>
-                                <td class="">  Igv </td>
-                                <td id="igv" class="text-right">0.00</td>
-                              </tr>
-                              <tr>
-                                <td colspan="3"></td>
-                                <td class="">  Descuento </td>
-                                <td id="dsct" class="text-right">0.00</td>
-                              </tr>
-                              <tr>
-                                <td colspan="3"> </td>
-                                <td class="">  Total </td>
-                                <td id="total" class="text-right">294.78</td>
-                              </tr>
-                            
-                        </tbody></table>
-                    </div>
-                    <h6 class="font-weight-semibold col-form-label-sm">Seguimiento Sunat </h6>
-                    <table class="table table-xs text-center" width="100%">
-                        <thead class="bg-primary text-white">
-                            <tr class="">
-                            <th width="35%">Recepcionado</th>
-                            <th width="35%">Enviado</th>
-                            <th width="30%">Codigo Sunat</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr class="">
-                            <td id="recepcionado">2024-07-31 14:29:49</td>
-                            <td id="enviado">2024-07-31 14:29:55</td>
-                            <td id="estadosnt">0</td>
-                            </tr>
-                            <tr class="">
-                            <td colspan="3" id="rsptsunat">La Boleta de Venta numero B001-49917, ha sido aceptado</td>
-                            </tr>
-                            <tr>
-                            <td colspan="3" id="docbaja"></td>
-                            </tr>
-                            
-                        </tbody>
-                    </table>
-                      
+                            <tbody id="listado_per">
+
+                            <tr><td> <input type="hidden" name="id_pers[]" id="id_pers[]" value="39"> 72050072</td><td>JOSE ALBERTO CABANILLAS RAMOS</td><td> <button type="button" class="btn btn-sm btn-danger borrar" title="Eliminar" onclick="borrar2(72050072)"> <i class="fa fa-trash"> </i> </button> </td></tr></tbody>
+                          </table>
+                        </div>
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                          <div class="col-md-12">
+                            <label for="sad">Comentario :</label>
+                          </div>
+                          <div class="col-md-12 col-sm-12 col-xs-12">
+                            <textarea class="form-control" name="comentario" id="comentario" cols="3"></textarea>
+                            <br>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row no-print">
+                        <div class="col-sm-12">
+                          <button type="button" class="btn btn-success pull-right" id="btn_g" onclick="update_asignacion();"><i class="fa fa-edit"></i> Actualizar Asignación</button>
+                        </div>
+                      </div>
+                    </form>
+                  </section>
                 </div>
+              </div>
             </form>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
             </div>
 		</div>
 	</div>

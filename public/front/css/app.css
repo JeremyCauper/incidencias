@@ -3745,3 +3745,7 @@ body {
     font-weight: bold;
     font-size: .85rem;
 }
+
+.font-weight-semibold {
+    font-weight: 550;
+}
