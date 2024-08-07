@@ -4,9 +4,31 @@
 @section('style')
 <link rel="stylesheet" href="{{asset('front/css/app/panel.css')}}">
 <style>
+    .th-acciones {
+        right: 0px;
+        position: sticky !important;
+        width: 90px !important;
+    }
+
+    .td-acciones {
+        position: sticky;
+        right: 0;
+        text-align: center !important;
+        background-color: #fff !important;
+    }
+
+    .td-acciones .dropstart .dropdown-menu {
+        z-index: 99999 !important;
+        transform: translate(-62px, 0px) !important;
+    }
+
     .list-group .list-group-item {
         font-size: .9rem;
         padding: .8rem 0;
+    }
+
+    #tb_incidencia thead, #tb_incidencia tbody {
+        font-size: 12px !important;
     }
 </style>
 @endsection
@@ -19,7 +41,7 @@
                 <div class="card">
                     <div class="card-body text-success" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="far fa-clock"></i> Incidencias Registradas</h6>
-                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['count']}}</b></h4>
+                        <h4 class="subtitle-count"><b data-panel="_count">0</b></h4>
                     </div>
                 </div>
             </div>
@@ -27,15 +49,15 @@
                 <div class="card">
                     <div class="card-body text-info" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-user-check"></i> Incidencias Asignadas</h6>
-                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_a']}}</b></h4>
+                        <h4 class="subtitle-count"><b data-panel="_inc_a">0</b></h4>
                     </div>
                 </div>
             </div>
             <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-warning" data-mdb-ripple-init>
-                        <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Incidencias Sin Asignadas</h6>
-                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_s']}}</b></h4>
+                        <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Incidencias Sin Asignar</h6>
+                        <h4 class="subtitle-count"><b data-panel="_inc_s">0</b></h4>
                     </div>
                 </div>
             </div>
@@ -43,7 +65,7 @@
                 <div class="card">
                     <div class="card-body text-primary" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En Proceso</h6>
-                        <h4 class="subtitle-count"><b>{{$dataInd['count_panel']['inc_p']}}</b></h4>
+                        <h4 class="subtitle-count"><b data-panel="_inc_p">0</b></h4>
                     </div>
                 </div>
             </div>
@@ -56,7 +78,7 @@
         <div class="card-body">
             <h4 class="card-title">Incidencias Registradas</h4>
             <div>
-                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_frm_incidencias">
+                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_incidencias">
                     <i class="fas fa-book-medical"></i>
                     Nueva Incidencia
                 </button>
@@ -66,7 +88,7 @@
             </div>
             <div class="row">
                 <div class="col-12">
-                    <table id="tb_incidencia" class="table text-nowrap w-100">
+                    <table id="tb_incidencia" class="table table-hover text-nowrap w-100">
                         <thead>
                             <tr>
                                 <th>Codigo</th>
@@ -77,7 +99,7 @@
                                 <th>Atencion</th>
                                 <th>Problema</th>
                                 <th>Estado</th>
-                                <th>Acciones</th>
+                                <th class="bg-white px-2 th-acciones">Acciones</th>
                             </tr>
                         </thead>
                     </table>
@@ -87,10 +109,10 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal_frm_incidencias" aria-labelledby="modal_frm_incidencias" aria-hidden="true">
-    <form id="form-incidencias" frm-accion="0" idu="">
-        <div class="modal-dialog modal-xl">
-            <div class="modal-content" style="position: relative;">
+<div class="modal fade" id="modal_incidencias" aria-labelledby="modal_incidencias" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content" style="position: relative;">
+            <form id="form-incidencias" frm-accion="0" idu="">
                 <div class="modal-header bg-primary text-white">                        
                     <h6 class="modal-title"><b>CREAR NUEVA INCIDENCIA: </b><b id="cod_inc_text">{{$dataInd['cod_inc']}}</b><b class="ms-3 badge badge-success" id="contrato"></b></h6>
                 </div>
@@ -243,9 +265,9 @@
                     <button type="button" class="btn btn-danger btn-sm" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init>Registrar</button>
                 </div>
-            </div>
+            </form>
         </div>
-    </form>
+    </div>
 </div>
 
 <div class="modal fade" id="modal_viewdetalle" aria-labelledby="modal_viewdetalle" aria-hidden="true">
@@ -365,7 +387,7 @@
 
     document.getElementById('form-incidencias').addEventListener('submit', function (event) {
         event.preventDefault();
-        $('#form-incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
+        $('#modal_incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
 
         var elementos = this.querySelectorAll('[name]');
         var dataForm = {};
@@ -380,7 +402,7 @@
         dataForm['personal_asig'] = tecnicoAsigManenger('extract', $('[name="cod_inc"]').val(), 'content_asig_personal');
         console.log(dataForm);
         if (cad_require) {
-            $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+            $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
             return boxAlert.box('info', 'Faltan datos', `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>`);
         }
 
@@ -396,10 +418,10 @@
             },
             data: JSON.stringify(dataForm),
             success: function (data) {
-                $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+                $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
                 if (data.success) {
                     cod_incidencia = data.data.cod_inc;
-                    $('#modal_frm_incidencias').modal('hide');
+                    $('#modal_incidencias').modal('hide');
                     boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
                     updateTable();
                     return true;
@@ -410,7 +432,7 @@
                 const obj_error = jqXHR.responseJSON;
                 boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
                 console.log(obj_error);
-                $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+                $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
             }
         });
     });

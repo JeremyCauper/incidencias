@@ -74,6 +74,12 @@ class IncidenciaController extends Controller
      */
     public function datatable()
     {
+        $e_informe = [
+            ['c' => 'warning', 't' => 'Sin Asignar'],
+            ['c' => 'info', 't' => 'Asignada'],
+            ['c' => 'primary', 't' => 'En Proceso']
+        ];
+        
         $empresas = GlobalHelper::getCompany();
         $company = [];
         foreach ($empresas as $val) {
@@ -103,6 +109,7 @@ class IncidenciaController extends Controller
             $val->id_tipo_incidencia = $__incidencia[$val->id_tipo_incidencia];
             $val->id_problema = $__problema[$val->id_problema];
             $val->id_subproblema = $__subproblema[$val->id_subproblema];
+            $text_e_informe = '<label class="badge badge-' . $e_informe[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $e_informe[$val->estado_informe]['t'] . '</label>';
             $val->acciones = '
             <div class="btn-group dropstart shadow-0">
                 <button
@@ -116,18 +123,39 @@ class IncidenciaController extends Controller
                     <b><i class="icon-menu9"></i></b>
                 </button>
                 <div class="dropdown-menu shadow-6">
-                    <h6 class="dropdown-header text-primary"><b>Acciones</b></h6>
+                    <h6 class="dropdown-header text-secondary d-flex justify-content-between align-items-center">' . $text_e_informe . '<i class="fas fa-gear"></i></h6>
                     <button class="dropdown-item py-2" onclick="showDetail(' . $val->acciones . ')"><i class="fas fa-eye text-success me-2"></i> Ver Detalle</button>
                     <button class="dropdown-item py-2" onclick="showEdit(' . $val->acciones . ')"><i class="fas fa-pen text-info me-2"></i> Editar</button>
-                    <button class="dropdown-item py-2" onclick="assign(' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>
-                    <button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
-                    <button class="dropdown-item py-2" onclick="reloadInd(' . $val->cod_incidencia . ', ' . $val->estado_informe . ')"><i class="fas fa-stopwatch text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar' ) .' Incidencia</button>
-                    <button class="dropdown-item py-2" onclick="fillservices(' . $val->acciones . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>
+                    <button class="dropdown-item py-2" onclick="assign(' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>'
+                    . ($val->estado_informe == 1 || $val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="reloadInd(' . ("'{$val->cod_incidencia}'") . ', ' . $val->estado_informe . ')"><i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia</button>' : '')
+                    . ($val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="fillservices(' . $val->acciones . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>' : '') .
+                    '<button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
                 </div>
             </div>';
-            $val->estado_informe = '<label class="badge badge-' . ($val->estado_informe ? 'primary' : 'warning') . '" style="font-size: .7rem;">' . ($val->estado_informe ? 'Asignado' : 'Sin Asignar') . '</label>';
+            $val->estado_informe = $text_e_informe;
         }
-        return $incidencias;
+
+        $_count = [
+            "count" => count(GlobalHelper::getIncDataTable()),
+            "inc_a" => 0,
+            "inc_p" => 0,
+            "inc_s" => 0,
+        ];
+        foreach (GlobalHelper::getIncDataTable() as $val) {
+            switch ($val->estado_informe) {
+                case 0:
+                    $_count['inc_s']++;
+                    break;
+                case 1:
+                    $_count['inc_a']++;
+                    break;
+                case 2:
+                    $_count['inc_p']++;
+                    break;
+            }
+        }
+
+        return ['data' => $incidencias, 'count' => $_count];
     }
 
     /**
@@ -446,24 +474,35 @@ class IncidenciaController extends Controller
         }
     }
 
-    public function initInc(string $cod)
+    public function initInc(Request $request, string $cod)
     {
         try {
-            DB::beginTransaction();
-
-            DB::table('tb_inc_incidencias')->insert([
-                'id_usuario' => Auth::user()->id_usuario,
-                'cod_incidencia' => $cod
+            $validator = Validator::make($request->all(), [
+                'estado' => 'required|integer',
             ]);
 
-            DB::table('tb_incidencias')->where('cod_incidencia', $cod)->update(['estado_informe' => 2]);
+            if ($validator->fails())
+                return response()->json(['errors' => $validator->errors()], 400);
+
+            DB::beginTransaction();
+
+            $accion = $request->estado == 1 ? 2 : 1;
+            if ($accion == 1) {
+                DB::table('tb_inc_seguimiento')->where('cod_incidencia', $cod)->delete();
+            } else {
+                DB::table('tb_inc_seguimiento')->insert([
+                    'id_usuario' => Auth::user()->id_usuario,
+                    'cod_incidencia' => $cod
+                ]);
+            }
+            DB::table('tb_incidencias')->where('cod_incidencia', $cod)->update(['estado_informe' => $accion]);
 
             DB::commit();
             GlobalHelper::getIncDataTable(true);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Incidencia eliminada'
+                'message' => 'Incidencia ' . ($accion == 2 ? '' : 're') . 'iniciada'
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();

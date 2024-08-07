@@ -1,5 +1,5 @@
 $(document).ready(function () {
-    formatSelect('modal_frm_incidencias');
+    formatSelect('modal_incidencias');
     formatSelect('modal_viewdetalle');
     formatSelect('modal_assign');
 
@@ -31,7 +31,13 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     scrollY: 300,
     ajax: {
         url: `${__url}/soporte/datatable`,
-        dataSrc: "",
+        dataSrc: function (json) {
+            $('b[data-panel="_count"]').html(json.count.count);
+            $('b[data-panel="_inc_a"]').html(json.count.inc_a);
+            $('b[data-panel="_inc_s"]').html(json.count.inc_s);
+            $('b[data-panel="_inc_p"]').html(json.count.inc_p);
+            return json.data;
+        },
         error: function (xhr, error, thrown) {
             boxAlert.box('error', 'Ocurrio un error', 'Error en la solicitud Ajax: ' + error);
             console.log('Respuesta del servidor:', xhr);
@@ -52,6 +58,9 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
         { data: 'estado_informe' },
         { data: 'acciones' }
     ],
+    createdRow: function (row, data, dataIndex) {
+        $(row).find('td:eq(8)').addClass('td-acciones');
+    },
     processing: true
 });
 
@@ -60,15 +69,15 @@ function updateTable() {
 }
 
 function showEdit(id) {
-    $('#modal_frm_incidencias').modal('show');
-    $('#form-incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
+    $('#modal_incidencias').modal('show');
+    $('#modal_incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
 
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/show/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+            $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
             $('#form-incidencias').attr('idu', id).attr('frm-accion', '1');
             changeCodInc(data.cod_incidencia);
             $('#id_empresa').val(data.id_empresa).trigger('change.select2');
@@ -112,6 +121,7 @@ async function idelete(id) {
         headers: {
             'X-CSRF-TOKEN': __token,
         },
+        beforeSend: boxAlert.loading,
         success: function (data) {
             if (data.success) {
                 boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
@@ -124,20 +134,22 @@ async function idelete(id) {
             const obj_error = jqXHR.responseJSON;
             boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
             console.log(obj_error);
-            $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+            $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
 }
 
-async function reloadInd(cod) {
-    if (!await boxAlert.confirm('¿Esta seguro de iniciar la incidencia?')) return true;
+async function reloadInd(cod, estado) {
+    if (!await boxAlert.confirm(`¿Esta seguro de ${estado == 2 ? 're' : ''}iniciar la incidencia?`)) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/soporte/initInc/${cod}`,
+        data: JSON.stringify({ 'estado': estado }),
         contentType: 'application/json',
         headers: {
             'X-CSRF-TOKEN': __token,
         },
+        beforeSend: boxAlert.loading,
         success: function (data) {
             if (data.success) {
                 boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
@@ -150,14 +162,14 @@ async function reloadInd(cod) {
             const obj_error = jqXHR.responseJSON;
             boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
             console.log(obj_error);
-            $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+            $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
 }
 
 function showDetail(id) {
     $('#modal_viewdetalle').modal('show');
-    $('#modal_viewdetalle .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
+    $('#modal_viewdetalle .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
 
     $.ajax({
         type: 'GET',
@@ -176,7 +188,7 @@ function showDetail(id) {
 
 function assign(id) {
     $('#modal_assign').modal('show');
-    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
+    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
 
     $.ajax({
         type: 'GET',
@@ -203,7 +215,7 @@ function assign(id) {
 
 async function createAssign() {
     if (!await boxAlert.confirm('¿Esta seguro de realizar esta accion?')) return true;
-    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
+    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
 
     const cod = $('#modal_assign [aria-item="cod"]').html();
     $.ajax({
