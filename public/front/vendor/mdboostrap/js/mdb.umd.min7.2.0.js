@@ -2277,7 +2277,7 @@
         m = x.y,
         l ? Object.assign({}, O, ((T = {})[y] = b ? "0" : "",
         T[v] = _ ? "0" : "",
-        T.transform = (w.devicePixelRatio || 1) <= 1 ? "translate(" + f + "px, " + m + "px)" : "translate3d(" + f + "px, " + m + "px, 0)",
+        T.transform = (w.devicePixelRatio || 1) <= 1 ? "translate(" + (f - 21) + "px, " + m + "px)" : "translate3d(" + f + "px, " + m + "px, 0)",
         T)) : Object.assign({}, O, ((e = {})[y] = b ? m + "px" : "",
         e[v] = _ ? f + "px" : "",
         e.transform = "",

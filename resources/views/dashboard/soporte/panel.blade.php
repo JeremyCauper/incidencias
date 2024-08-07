@@ -17,11 +17,6 @@
         background-color: #fff !important;
     }
 
-    .td-acciones .dropstart .dropdown-menu {
-        z-index: 99999 !important;
-        transform: translate(-62px, 0px) !important;
-    }
-
     .list-group .list-group-item {
         font-size: .9rem;
         padding: .8rem 0;
