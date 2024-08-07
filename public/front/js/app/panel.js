@@ -129,6 +129,32 @@ async function idelete(id) {
     });
 }
 
+async function reloadInd(cod) {
+    if (!await boxAlert.confirm('¿Esta seguro de iniciar la incidencia?')) return true;
+    $.ajax({
+        type: 'POST',
+        url: `${__url}/soporte/initInc/${cod}`,
+        contentType: 'application/json',
+        headers: {
+            'X-CSRF-TOKEN': __token,
+        },
+        success: function (data) {
+            if (data.success) {
+                boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
+                updateTable();
+                return true;
+            }
+            boxAlert.box('error', '¡Ocurrio un error!', data.message);
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            const obj_error = jqXHR.responseJSON;
+            boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
+            console.log(obj_error);
+            $('#form-incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+        }
+    });
+}
+
 function showDetail(id) {
     $('#modal_viewdetalle').modal('show');
     $('#modal_viewdetalle .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);

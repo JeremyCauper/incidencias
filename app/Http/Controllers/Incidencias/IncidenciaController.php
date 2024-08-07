@@ -103,7 +103,6 @@ class IncidenciaController extends Controller
             $val->id_tipo_incidencia = $__incidencia[$val->id_tipo_incidencia];
             $val->id_problema = $__problema[$val->id_problema];
             $val->id_subproblema = $__subproblema[$val->id_subproblema];
-            $val->estado_informe = '<label class="badge badge-' . ($val->estado_informe ? 'primary' : 'warning') . '" style="font-size: .7rem;">' . ($val->estado_informe ? 'Asignado' : 'Sin Asignar') . '</label>';
             $val->acciones = '
             <div class="btn-group dropstart shadow-0">
                 <button
@@ -122,10 +121,11 @@ class IncidenciaController extends Controller
                     <button class="dropdown-item py-2" onclick="showEdit(' . $val->acciones . ')"><i class="fas fa-pen text-info me-2"></i> Editar</button>
                     <button class="dropdown-item py-2" onclick="assign(' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>
                     <button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
-                    <button class="dropdown-item py-2" onclick="reloadInd(' . $val->acciones . ')"><i class="fas fa-stopwatch text-warning me-2"></i> Iniciar Incidencia</button>
+                    <button class="dropdown-item py-2" onclick="reloadInd(' . $val->cod_incidencia . ', ' . $val->estado_informe . ')"><i class="fas fa-stopwatch text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar' ) .' Incidencia</button>
                     <button class="dropdown-item py-2" onclick="fillservices(' . $val->acciones . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>
                 </div>
             </div>';
+            $val->estado_informe = '<label class="badge badge-' . ($val->estado_informe ? 'primary' : 'warning') . '" style="font-size: .7rem;">' . ($val->estado_informe ? 'Asignado' : 'Sin Asignar') . '</label>';
         }
         return $incidencias;
     }
@@ -259,7 +259,7 @@ class IncidenciaController extends Controller
             foreach ($empresas as $val) {
                 $company[$val->id] = "{$val->Ruc} - {$val->RazonSocial}";
             }
-    
+
             $sucursales = GlobalHelper::getBranchOffice();
             $subcompany = [];
             foreach ($sucursales as $val) {
@@ -436,6 +436,34 @@ class IncidenciaController extends Controller
             return response()->json([
                 'success' => false,
                 'message' => 'No tiene los permisos requeridos'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un error al editar incidencia: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function initInc(string $cod)
+    {
+        try {
+            DB::beginTransaction();
+
+            DB::table('tb_inc_incidencias')->insert([
+                'id_usuario' => Auth::user()->id_usuario,
+                'cod_incidencia' => $cod
+            ]);
+
+            DB::table('tb_incidencias')->where('cod_incidencia', $cod)->update(['estado_informe' => 2]);
+
+            DB::commit();
+            GlobalHelper::getIncDataTable(true);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Incidencia eliminada'
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
