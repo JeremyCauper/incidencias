@@ -3647,6 +3647,97 @@ body {
     }
 }
 
+.loader-of-modal {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    z-index: 999;
+    background: #dadada60;
+    border-radius: inherit;
+    align-content: center;
+}
+
+/* HTML: <div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div> */
+.gear {
+    width: 25px;
+    margin: auto;
+    padding: 0px;
+    animation: l19 2s infinite linear;
+}
+
+.gear div {
+    width: 25px;
+    aspect-ratio: 1;
+    display: grid;
+    padding: 0px;
+    outline: 1.5rem solid #3b71ca;
+    border-radius: 50%;
+    position: relative;
+}
+
+.gear div label {
+    position: absolute;
+    top: -18px;
+    left: -18px;
+    width: 60px;
+    padding: 0px;
+    aspect-ratio: 1;
+    border: .65rem dotted #ffffff;
+    border-radius: 50%;
+    transform: rotate(22.5deg);
+}
+
+.gear div span {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 25px;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    /* background: #1bc946; */
+}
+
+.gear div span::after,
+.gear div span::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 0px;
+    left: 2px;
+    border-top: solid 0px;
+    border-bottom: solid 9px #3b71ca;
+    border-right: solid 5px transparent;
+    border-left: solid 5px transparent;
+}
+
+.gear div span::after {
+    top: -31px;
+}
+
+.gear div span::before {
+    bottom: -31px;
+    transform: rotate(180deg);
+}
+
+.gear div span:nth-child(2) {
+    transform: rotate(45deg);
+}
+
+.gear div span:nth-child(3) {
+    transform: rotate(90deg);
+}
+
+.gear div span:nth-child(4) {
+    transform: rotate(135deg);
+}
+
+@keyframes l19 {
+    100% {
+        transform: rotate(1turn)
+    }
+}
+
+
 
 .dataTables_scrollHead {
     height: 49px !important;

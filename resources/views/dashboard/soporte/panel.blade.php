@@ -81,6 +81,17 @@
                     <i class="fas fa-rotate-right"></i>
                 </button>
             </div>
+            <!-- <div style="height: 200px;">
+                <div class="gear">
+                    <div>
+                        <label></label>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div> -->
             <div class="row">
                 <div class="col-12">
                     <table id="tb_incidencia" class="table table-hover text-nowrap w-100">
@@ -89,6 +100,7 @@
                                 <th>Codigo</th>
                                 <th>Empresa</th>
                                 <th>Sucursal</th>
+                                <th>Direccion</th>
                                 <th>Registrado</th>
                                 <th>Estacion</th>
                                 <th>Atencion</th>
@@ -274,16 +286,16 @@
             <div class="modal-body">
                 <div class="list-group list-group-light">
                     <div class="text-end" style="font-size: 1.4rem;">
-                        <span class="badge badge-warning badge-lg" aria-item="cod">INC-00000001</span>
+                        <span class="badge badge-secondary badge-lg" aria-item="cod"></span>
                     </div>
                     <div class="list-group-item">
-                        <span class="font-weight-semibold" aria-item="empresa">20345774042 - SERVICENTRO AGUKI SA.</span>
+                        <span class="font-weight-semibold" aria-item="empresa"></span>
                     </div>
                     <div class="list-group-item">
-                        <span class="font-weight-semibold">Direccion:</span><span aria-item="direccion"> AV. ELMER FAUCETT NRO. 5482 (ULTIMA CDRA. AV. ELMER FAUCETT)</span>
+                        <span class="font-weight-semibold">Direccion: </span><span aria-item="direccion"></span>
                     </div>
                     <div class="list-group-item">
-                        <span class="font-weight-semibold">Sucursal:</span><span aria-item="sucursal"> E/S PRINCIPAL</span>
+                        <span class="font-weight-semibold">Sucursal: </span><span aria-item="sucursal"></span>
                     </div>
                 </div>
                 <h6 class="font-weight-semibold col-form-label-sm text-primary mt-2">Seguimiento Incidencia</h6>
@@ -332,7 +344,7 @@
             <div class="modal-body">
                 <div class="list-group list-group-light">
                     <div class="text-end" style="font-size: 1.4rem;">
-                        <span class="badge badge-warning badge-lg" aria-item="cod"></span>
+                        <span class="badge badge-secondary badge-lg" aria-item="cod"></span>
                     </div>
                     <div class="list-group-item">
                         <span class="font-weight-semibold" aria-item="empresa"></span>
@@ -382,7 +394,7 @@
 
     document.getElementById('form-incidencias').addEventListener('submit', function (event) {
         event.preventDefault();
-        $('#modal_incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
+        $('#modal_incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
 
         var elementos = this.querySelectorAll('[name]');
         var dataForm = {};

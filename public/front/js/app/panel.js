@@ -47,6 +47,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
         { data: 'cod_incidencia' },
         { data: 'id_empresa' },
         { data: 'id_sucursal' },
+        { data: 'direccion' },
         { data: 'created_at' },
         { data: 'id_tipo_estacion' },
         { data: 'id_tipo_incidencia' },
@@ -59,7 +60,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
         { data: 'acciones' }
     ],
     createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(8)').addClass('td-acciones');
+        $(row).find('td:eq(9)').addClass('td-acciones');
     },
     processing: true
 });
@@ -70,7 +71,7 @@ function updateTable() {
 
 function showEdit(id) {
     $('#modal_incidencias').modal('show');
-    $('#modal_incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
+    $('#modal_incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
 
     $.ajax({
         type: 'GET',
@@ -139,7 +140,7 @@ async function idelete(id) {
     });
 }
 
-async function reloadInd(cod, estado) {
+async function reloadInd(e, cod, estado) {
     if (!await boxAlert.confirm(`¿Esta seguro de ${estado == 2 ? 're' : ''}iniciar la incidencia?`)) return true;
     $.ajax({
         type: 'POST',
@@ -167,9 +168,15 @@ async function reloadInd(cod, estado) {
     });
 }
 
-function showDetail(id) {
+function showDetail(e, cod) {
+    const tr = e.parentNode.parentNode.parentNode.parentNode;
+    const tds = tr.querySelectorAll('td');
+    $('#modal_viewdetalle [aria-item="cod"]').html(tds[0].innerHTML);
+    $('#modal_viewdetalle [aria-item="empresa"]').html(tds[1].innerHTML);
+    $('#modal_viewdetalle [aria-item="direccion"]').html(tds[3].innerHTML);
+    $('#modal_viewdetalle [aria-item="sucursal"]').html(tds[2].innerHTML);
     $('#modal_viewdetalle').modal('show');
-    $('#modal_viewdetalle .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
+    /*$('#modal_viewdetalle .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
 
     $.ajax({
         type: 'GET',
@@ -183,12 +190,19 @@ function showDetail(id) {
             alert('Error al registrar el usuario');
             console.log(jqXHR.responseJSON);
         }
-    });
+    });*/
 }
 
-function assign(id) {
+function assign(e, id) {
+    const tr = e.parentNode.parentNode.parentNode.parentNode;
+    const tds = tr.querySelectorAll('td');
+    $('#modal_assign [aria-item="cod"]').html(tds[0].innerHTML);
+    $('#modal_assign [aria-item="empresa"]').html(tds[1].innerHTML);
+    $('#modal_assign [aria-item="direccion"]').html(tds[3].innerHTML);
+    $('#modal_assign [aria-item="sucursal"]').html(tds[2].innerHTML);
+
     $('#modal_assign').modal('show');
-    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
+    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
 
     $.ajax({
         type: 'GET',
@@ -196,10 +210,6 @@ function assign(id) {
         contentType: 'application/json',
         success: function (data) {
             $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
-            $('#modal_assign [aria-item="cod"]').html(data.cod_incidencia);
-            $('#modal_assign [aria-item="empresa"]').html(data.empresa);
-            $('#modal_assign [aria-item="direccion"]').html(data.direccion);
-            $('#modal_assign [aria-item="sucursal"]').html(data.sucursal);
             (data.personal_asig).forEach(element => {
                 $('#selectPersonalAssign').val(element.value).trigger('change.select2');
                 tecnicoAsigManenger('create', 'selectPersonalAssign', 'content_asig_personalAssign');
@@ -215,7 +225,7 @@ function assign(id) {
 
 async function createAssign() {
     if (!await boxAlert.confirm('¿Esta seguro de realizar esta accion?')) return true;
-    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader-rc"></div></div>`);
+    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
 
     const cod = $('#modal_assign [aria-item="cod"]').html();
     $.ajax({

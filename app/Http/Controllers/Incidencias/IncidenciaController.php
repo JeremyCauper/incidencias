@@ -79,7 +79,7 @@ class IncidenciaController extends Controller
             ['c' => 'info', 't' => 'Asignada'],
             ['c' => 'primary', 't' => 'En Proceso']
         ];
-        
+
         $empresas = GlobalHelper::getCompany();
         $company = [];
         foreach ($empresas as $val) {
@@ -89,7 +89,7 @@ class IncidenciaController extends Controller
         $sucursales = GlobalHelper::getBranchOffice();
         $subcompany = [];
         foreach ($sucursales as $val) {
-            $subcompany[$val->id] = $val->Nombre;
+            $subcompany[$val->id] = [$val->Nombre, $val->Direccion];
         }
 
         $tipo_estacion = GlobalHelper::getTipEstacion();
@@ -104,7 +104,8 @@ class IncidenciaController extends Controller
         $incidencias = GlobalHelper::getIncDataTable(true);
         foreach ($incidencias as $val) {
             $val->id_empresa = $company[$val->id_empresa];
-            $val->id_sucursal = $subcompany[$val->id_sucursal];
+            $val->direccion = $subcompany[$val->id_sucursal][1];
+            $val->id_sucursal = $subcompany[$val->id_sucursal][0];
             $val->id_tipo_estacion = $__estacion[$val->id_tipo_estacion];
             $val->id_tipo_incidencia = $__incidencia[$val->id_tipo_incidencia];
             $val->id_problema = $__problema[$val->id_problema];
@@ -124,12 +125,12 @@ class IncidenciaController extends Controller
                 </button>
                 <div class="dropdown-menu shadow-6">
                     <h6 class="dropdown-header text-secondary d-flex justify-content-between align-items-center">' . $text_e_informe . '<i class="fas fa-gear"></i></h6>
-                    <button class="dropdown-item py-2" onclick="showDetail(' . $val->acciones . ')"><i class="fas fa-eye text-success me-2"></i> Ver Detalle</button>
+                    <button class="dropdown-item py-2" onclick="showDetail(this, ' . ("'{$val->cod_incidencia}'") . ')"><i class="fas fa-eye text-success me-2"></i> Ver Detalle</button>
                     <button class="dropdown-item py-2" onclick="showEdit(' . $val->acciones . ')"><i class="fas fa-pen text-info me-2"></i> Editar</button>
-                    <button class="dropdown-item py-2" onclick="assign(' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>'
-                    . ($val->estado_informe == 1 || $val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="reloadInd(' . ("'{$val->cod_incidencia}'") . ', ' . $val->estado_informe . ')"><i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia</button>' : '')
-                    . ($val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="fillservices(' . $val->acciones . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>' : '') .
-                    '<button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
+                    <button class="dropdown-item py-2" onclick="assign(this, ' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>'
+                . ($val->estado_informe == 1 || $val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="reloadInd(' . ("'{$val->cod_incidencia}'") . ', ' . $val->estado_informe . ')"><i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia</button>' : '')
+                . ($val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="fillservices(' . $val->acciones . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>' : '') .
+                '<button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
                 </div>
             </div>';
             $val->estado_informe = $text_e_informe;
@@ -492,7 +493,9 @@ class IncidenciaController extends Controller
             } else {
                 DB::table('tb_inc_seguimiento')->insert([
                     'id_usuario' => Auth::user()->id_usuario,
-                    'cod_incidencia' => $cod
+                    'cod_incidencia' => $cod,
+                    'updated_at' => now(),
+                    'created_at' => now()
                 ]);
             }
             DB::table('tb_incidencias')->where('cod_incidencia', $cod)->update(['estado_informe' => $accion]);
@@ -554,6 +557,15 @@ class IncidenciaController extends Controller
                 'data' => []
             ], 500);
         }
+    }
+
+    public function detail(string $cod)
+    {
+        $inc = DB::table('tb_incidencias')->where(['estatus' => 1, 'cod_incidencia' => $cod])->get();
+        
+        $usuario = GlobalHelper::getUsuarios()->whereIn('id_usuario', $inc->id_usuario);
+
+        return $usuario;
     }
 
     function getparsedata($data)

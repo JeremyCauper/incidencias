@@ -5,13 +5,12 @@ class AlertMananger {
 
     loading() {
         Swal.fire({
-            title: '<div class="loader-rc"></div>',
+            title: '<div class="my-5"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>',
             text: 'Realizando los cambios, por favor espere',
             allowOutsideClick: false,
             showConfirmButton: false
         });
     }
-
 
     async confirm(message) {
         if (!(await Swal.fire({
