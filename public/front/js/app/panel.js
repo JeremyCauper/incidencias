@@ -23,6 +23,7 @@ $(document).ready(function () {
         fillEmpresa("");
         fillProblem("");
         fillSubProblem("");
+        $('#content-seguimiento').html('');
     });
 });
 
@@ -39,7 +40,8 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
             return json.data;
         },
         error: function (xhr, error, thrown) {
-            boxAlert.box('error', 'Ocurrio un error', 'Error en la solicitud Ajax: ' + error);
+            const obj_error = xhr.responseJSON;
+            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
             console.log('Respuesta del servidor:', xhr);
         }
     },
@@ -107,7 +109,7 @@ function showEdit(id) {
             });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error al registrar el usuario');
+            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: 'Error al registrar el usuario' });
             console.log(jqXHR.responseJSON);
         }
     });
@@ -125,7 +127,7 @@ async function idelete(id) {
         beforeSend: boxAlert.loading,
         success: function (data) {
             if (data.success) {
-                boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
+                boxAlert.minbox({ h: data.message });
                 updateTable();
                 return true;
             }
@@ -133,15 +135,15 @@ async function idelete(id) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
-            boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
+            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
             console.log(obj_error);
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
 }
 
-async function reloadInd(e, cod, estado) {
-    if (!await boxAlert.confirm(`¿Esta seguro de ${estado == 2 ? 're' : ''}iniciar la incidencia?`)) return true;
+async function reloadInd(cod, estado) {
+    if (!await boxAlert.confirm(`¿Esta seguro de <b>${estado == 2 ? 're' : ''}iniciar</b> la incidencia?`)) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/soporte/initInc/${cod}`,
@@ -153,7 +155,7 @@ async function reloadInd(e, cod, estado) {
         beforeSend: boxAlert.loading,
         success: function (data) {
             if (data.success) {
-                boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
+                boxAlert.minbox({ h: data.message });
                 updateTable();
                 return true;
             }
@@ -161,7 +163,7 @@ async function reloadInd(e, cod, estado) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
-            boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
+            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
             console.log(obj_error);
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
@@ -176,21 +178,21 @@ function showDetail(e, cod) {
     $('#modal_viewdetalle [aria-item="direccion"]').html(tds[3].innerHTML);
     $('#modal_viewdetalle [aria-item="sucursal"]').html(tds[2].innerHTML);
     $('#modal_viewdetalle').modal('show');
-    /*$('#modal_viewdetalle .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+    $('#modal_viewdetalle .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
 
     $.ajax({
         type: 'GET',
-        url: `${__url}/soporte/show/${id}`,
+        url: `${__url}/soporte/detail/${cod}`,
         contentType: 'application/json',
         success: function (data) {
             $('#modal_viewdetalle .modal-dialog .modal-content .loader-of-modal').remove();
-            console.log(data);
+            $('#content-seguimiento').html(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             alert('Error al registrar el usuario');
             console.log(jqXHR.responseJSON);
         }
-    });*/
+    });
 }
 
 function assign(e, id) {
@@ -217,7 +219,8 @@ function assign(e, id) {
             $('#selectPersonalAssign').val('').trigger('change.select2');
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error al registrar el usuario');
+            const obj_error = jqXHR.responseJSON;
+            boxAlert.box({ i: 'error', t: 'Error al extraer datos de la incidencia', h: obj_error.message });
             console.log(jqXHR.responseJSON);
         }
     });
@@ -240,18 +243,20 @@ async function createAssign() {
             personal_asig: tecnicoAsigManenger('extract', cod, 'content_asig_personalAssign')
         }),
         success: function (data) {
+            console.log(data);
+            
             $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
-                boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
+                boxAlert.minbox({ h: data.message });
                 updateTable();
                 return true;
             }
-            boxAlert.box('error', '¡Ocurrio un error!', data.message);
+            boxAlert.box({ i : 'error', t : '¡Ocurrio un error!', h : data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
-            boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
+            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
             console.log(obj_error);
             $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
         }

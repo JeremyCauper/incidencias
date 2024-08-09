@@ -300,8 +300,8 @@
                 </div>
                 <h6 class="font-weight-semibold col-form-label-sm text-primary mt-2">Seguimiento Incidencia</h6>
                 <div class="">
-                    <ul class="list-group list-group-light">
-                        <li class="list-group-item">
+                    <ul class="list-group list-group-light" id="content-seguimiento">
+                        <!-- <li class="list-group-item">
                             <div class="row">
                                 <div style="width: 70px;">
                                     <img class="rounded-circle" style="width: 55px;" src="{{ asset('front/images/auth/user_auth.jpg') }}" alt="Profile image">
@@ -312,19 +312,7 @@
                                     <p class="mb-1"><i class="fab fa-whatsapp"></i> 987456321 / <i class="far fa-envelope"></i> jcauper@gmail.com</p>
                                 </div>
                             </div>
-                        </li>
-                        <li class="list-group-item">
-                            <div class="row">
-                                <div style="width: 70px;">
-                                    <img class="rounded-circle" style="width: 55px;" src="{{ asset('front/images/auth/user_auth.jpg') }}" alt="Profile image">
-                                </div>
-                                <div class="col">
-                                    <h6 class="mb-2">Nombre usuario</h6>
-                                    <p class="mb-1">Registro La Incidencia con codigo</p>
-                                    <p class="mb-1"><i class="fab fa-whatsapp"></i> 987456321 / <i class="far fa-envelope"></i> jcauper@gmail.com</p>
-                                </div>
-                            </div>
-                        </li>
+                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -410,7 +398,7 @@
         console.log(dataForm);
         if (cad_require) {
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
-            return boxAlert.box('info', 'Faltan datos', `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>`);
+            return boxAlert.box({i:'info', t:'Faltan datos', h:`<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>`});
         }
 
         url = [
@@ -429,7 +417,7 @@
                 if (data.success) {
                     cod_incidencia = data.data.cod_inc;
                     $('#modal_incidencias').modal('hide');
-                    boxAlert.minbox('success', data.message, { background: "#3b71ca", color: "#ffffff" }, "top");
+                    boxAlert.minbox({h: data.message});
                     updateTable();
                     return true;
                 }
@@ -437,7 +425,7 @@
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 const obj_error = jqXHR.responseJSON;
-                boxAlert.box('error', '¡Ocurrio un error!', obj_error.message);
+                boxAlert.box({i:'error', t:'Ocurrio un error en el processo', h:obj_error.message});
                 console.log(obj_error);
                 $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
             }

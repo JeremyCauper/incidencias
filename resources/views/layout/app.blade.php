@@ -17,6 +17,9 @@
   <link href="{{ asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
 
   <link rel="stylesheet" href="{{asset('front/vendor/flatpickr/flatpickr.min.css')}}">
+  
+  <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/animate.min.css')}}">
+  <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/default.css')}}">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
   <!-- Home -->

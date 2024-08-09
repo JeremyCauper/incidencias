@@ -3705,17 +3705,17 @@ body {
     height: 0px;
     left: 2px;
     border-top: solid 0px;
-    border-bottom: solid 9px #3b71ca;
+    border-bottom: solid 12px #3b71ca;
     border-right: solid 5px transparent;
     border-left: solid 5px transparent;
 }
 
 .gear div span::after {
-    top: -31px;
+    top: -34px;
 }
 
 .gear div span::before {
-    bottom: -31px;
+    bottom: -34px;
     transform: rotate(180deg);
 }
 

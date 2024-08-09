@@ -207,6 +207,9 @@ class IncidenciaController extends Controller
                 return response()->json(['errors' => $validator->errors()], 400);
 
             $personal_asig = $request->personal_asig;
+            $personal_asig[0]['creador'] = Auth::user()->id_usuario;
+            $personal_asig[0]['updated_at'] = now();
+            $personal_asig[0]['created_at'] = now();
             $estado_info = count($personal_asig) ? 1 : 0;
 
             DB::beginTransaction();
@@ -527,6 +530,9 @@ class IncidenciaController extends Controller
                 return response()->json(['errors' => $validator->errors()], 400);
 
             $personal_asig = $request->personal_asig;
+            $personal_asig[0]['creador'] = Auth::user()->id_usuario;
+            $personal_asig[0]['updated_at'] = now();
+            $personal_asig[0]['created_at'] = now();
             $estado_info = count($personal_asig) ? 1 : 0;
 
             DB::beginTransaction();
@@ -561,11 +567,61 @@ class IncidenciaController extends Controller
 
     public function detail(string $cod)
     {
-        $inc = DB::table('tb_incidencias')->where(['estatus' => 1, 'cod_incidencia' => $cod])->get();
-        
-        $usuario = GlobalHelper::getUsuarios()->whereIn('id_usuario', $inc->id_usuario);
+        $inc = DB::table('tb_incidencias')->where(['estatus' => 1, 'cod_incidencia' => $cod])->first();
+        $inc_asig = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get();
+        $inc_seg = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $cod)->get();
+        $usuarios = [];
+        foreach (GlobalHelper::getUsuarios() as $val) {
+            $usuarios[$val->id_usuario] = $val;
+        }
 
-        return $usuario;
+        $data = [
+            [
+                'img' => asset("front/images/auth/{$usuarios[$inc->id_usuario]->foto_perfil}"),
+                'nombre' => "{$usuarios[$inc->id_usuario]->nombres} {$usuarios[$inc->id_usuario]->apellidos}",
+                'text' => "Registro la incidencia el {$inc->created_at}",
+                'data' => '<i class="fab fa-whatsapp"></i> ' . $usuarios[$inc->id_usuario]->email_corporativo . ' / <i class="far fa-envelope"></i> ' . $usuarios[$inc->id_usuario]->email_corporativo
+            ]
+        ];
+
+        foreach ($inc_asig as $v) {
+            array_push($data, [
+                'img' => asset("front/images/auth/{$usuarios[$v->creador]->foto_perfil}"),
+                'nombre' => "{$usuarios[$v->creador]->nombres} {$usuarios[$v->creador]->apellidos}",
+                'text' => "Asigno la Incidencia a {$usuarios[$v->id_usuario]->nombres} {$usuarios[$v->id_usuario]->apellidos}",
+                'data' => '<i class="fab fa-whatsapp"></i> ' . $usuarios[$v->id_usuario]->email_corporativo . ' / <i class="far fa-envelope"></i> ' . $usuarios[$v->id_usuario]->email_corporativo
+            ]);
+        }
+
+        foreach ($inc_seg as $v) {
+            array_push($data, [
+                'img' => asset("front/images/auth/{$usuarios[$v->id_usuario]->foto_perfil}"),
+                'nombre' => "{$usuarios[$v->id_usuario]->nombres} {$usuarios[$v->id_usuario]->apellidos}",
+                'text' => $v->estado ? "Finalizó la incidencia" : "Dio inicio a la incidencia",
+                'data' => '<i class="fab fa-whatsapp"></i> ' . $usuarios[$v->id_usuario]->email_corporativo . ' / <i class="far fa-envelope"></i> ' . $usuarios[$v->id_usuario]->email_corporativo
+            ]);
+        }
+
+        $html = '';
+        foreach ($data as $v) {
+            $html .= '
+            <li class="list-group-item">
+                <div class="row">
+                    <div style="width: 70px;">
+                        <img class="rounded-circle" style="width: 55px;" src="' . $v['img'] . '" alt="Profile image">
+                    </div>
+                    <div class="col">
+                        <h6 class="mb-1 text-info" style="font-size: .9rem;font-weight: 600;font-family: ' . ("'Roboto'") . ';">' . $v['nombre'] . '</h6>
+                        <p class="mb-1" style="font-size: .73rem;font-family: ' . ("'Roboto'") . ';">' . $v['text'] . '</p>
+                        <p class="mb-1" style="font-size: .73rem;font-family: ' . ("'Roboto'") . ';">' . $v['data'] . '</p>
+                    </div>
+                </div>
+            </li>
+            ';
+        }
+
+
+        return $html;
     }
 
     function getparsedata($data)
