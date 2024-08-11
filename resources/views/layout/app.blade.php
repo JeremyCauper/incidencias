@@ -24,6 +24,9 @@
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
   <!-- Home -->
   <link href="{{ asset('front/css/app.css') }}" rel="stylesheet">
+  <!-- JQuery -->
+  <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   @yield('style')
 </head>
 <style>
@@ -188,11 +191,8 @@
     const __asset = "{{asset('/front')}}";
     const __token = "{{ csrf_token() }}";
   </script>
-  <!-- JQuery -->
-  <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
   <!-- MDB -->
   <script type="text/javascript" src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
-  <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{asset('front/js/AlertMananger.js')}}"></script>
   <script src="{{asset('front/js/template.js') }}"></script>
   <script src="{{asset('front/js/hoverable-collapse.js') }}"></script>

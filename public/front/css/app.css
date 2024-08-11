@@ -3413,9 +3413,12 @@ body {
     /* line-height: 2.5; */
 }
 
+.swal2-container .form-label,
 .modal-dialog .form-label {
     font-size: .75rem;
+    font-weight: 600;
     color: #9FA6B2;
+    margin-bottom: .2rem;
 }
 
 .contenedor_tabla {

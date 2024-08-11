@@ -2,6 +2,7 @@ $(document).ready(function () {
     formatSelect('modal_incidencias');
     formatSelect('modal_viewdetalle');
     formatSelect('modal_assign');
+    formatSelect('modal_ordens');
 
     $('#id_empresa').on('change', function () {
         fillEmpresa($(this).val());
@@ -40,8 +41,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
             return json.data;
         },
         error: function (xhr, error, thrown) {
-            const obj_error = xhr.responseJSON;
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
+            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: xhr.responseJSON });
             console.log('Respuesta del servidor:', xhr);
         }
     },
@@ -261,6 +261,10 @@ async function createAssign() {
             $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
+}
+
+async function createOrden(id) {
+    $('#modal_ordens').modal('show');
 }
 
 

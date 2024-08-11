@@ -6,6 +6,7 @@ use App\Http\Controllers\Mantenimientos\AreasController;
 use App\Http\Controllers\Mantenimientos\TipoAccesoController;
 use App\Http\Controllers\Mantenimientos\MenuController;
 use App\Http\Controllers\Incidencias\IncidenciaController;
+use App\Http\Controllers\ConsultasController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -19,6 +20,9 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+// Consulta Dni
+Route::get('/ConsultaDni/{dni}', [ConsultasController::class, 'ConsultaDni']);
 
 // Gestion del login
 Route::redirect('/', url('/inicio'));
