@@ -454,9 +454,9 @@
 
                         <!-- INICIO CABECERA -->
                         <div class="d-flex justify-content-between mb-2">
-                            <input type="hidden" name="n_orden" id="n_orden" value="2024-ST00505">
-                            <h6><strong>N° Orden: </strong><span>2024-ST00505</span></h6>
-                            <h6><strong>Fecha: </strong><span>2024-08-08 16:02:31</span></h6>
+                            <input type="hidden" name="n_orden" id="n_orden" value="ST24-00000001">
+                            <h6><strong>N° Orden: </strong><span>ST24-00000001</span></h6>
+                            <h6><strong>Fecha: </strong><span aria-item="registrado"></span></h6>
                         </div>
 
                         <!-- TER CABECERA -->
@@ -465,10 +465,10 @@
                         </div>
 
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                            <div class="list-group list-group-light">
-                                <div class="list-group-item">
+                            <div class="list-group list-group-light" aria-item="tecnicos">
+                                <!-- <div class="list-group-item">
                                     <span class="">JORGE LUIS HONORES OCAMPO</span>
-                                </div>
+                                </div> -->
                             </div>
                         </div>
 

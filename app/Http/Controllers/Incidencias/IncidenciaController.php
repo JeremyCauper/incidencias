@@ -129,7 +129,7 @@ class IncidenciaController extends Controller
                     <button class="dropdown-item py-2" onclick="showEdit(' . $val->acciones . ')"><i class="fas fa-pen text-info me-2"></i> Editar</button>
                     <button class="dropdown-item py-2" onclick="assign(this, ' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>'
                 . ($val->estado_informe == 1 || $val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="reloadInd(' . ("'{$val->cod_incidencia}'") . ', ' . $val->estado_informe . ')"><i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia</button>' : '')
-                . ($val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="createOrden(' . $val->acciones . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>' : '') .
+                . ($val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="createOrden(this, ' . ("'{$val->cod_incidencia}'") . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>' : '') .
                 '<button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
                 </div>
             </div>';
@@ -622,6 +622,24 @@ class IncidenciaController extends Controller
 
 
         return $html;
+    }
+
+    public function detailOrden(string $cod) {
+        $data = [
+            'tecnicos' => ""
+        ];
+        $inc_asig = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get();
+        
+        foreach (GlobalHelper::getUsuarios() as $val) {
+            $usuarios[$val->id_usuario] = $val;
+        }
+
+        foreach ($inc_asig as $v) {
+            $tecnico = "{$usuarios[$v->id_usuario]->nombres} {$usuarios[$v->id_usuario]->apellidos}";
+            $data['tecnicos'] .= '<div class="list-group-item"><span class="">' . $tecnico . '</span></div>';
+        }
+
+        return $data;
     }
 
     function getparsedata($data)

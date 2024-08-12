@@ -43,6 +43,7 @@ Route::post('/soporte/editAssign', [IncidenciaController::class, 'editAssign']);
 Route::post('/soporte/destroy/{id}', [IncidenciaController::class, 'destroy']);
 Route::post('/soporte/initInc/{cod}', [IncidenciaController::class, 'initInc']);
 Route::get('/soporte/detail/{cod}', [IncidenciaController::class, 'detail']);
+Route::get('/soporte/detailOrden/{cod}', [IncidenciaController::class, 'detailOrden']);
 
 Route::get('/viewListMenu', [MenuController::class, 'viewListMenu']);
 Route::get('/extractPermisos', [MenuController::class, 'extractPermisos']);
