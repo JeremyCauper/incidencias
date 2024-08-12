@@ -26,6 +26,15 @@ $(document).ready(function () {
         fillSubProblem("");
         $('#content-seguimiento').html('');
     });
+
+    setInterval(() => {
+        let t = new Date();
+        const formatD = (t) => { return t.toString().padStart(2, "0") }
+        let _time = `${formatD(t.getHours())}:${formatD(t.getMinutes())}:${formatD(t.getSeconds())}`;
+        let _date = `${formatD(t.getFullYear())}-${formatD(t.getMonth() + 1)}-${formatD(t.getDate())}`
+        $('#fecha_f').val(_date).attr('disabled', true);
+        $('#hora_f').val(_time).attr('disabled', true);
+    }, 1000);
 });
 
 const tb_incidencia = new DataTable('#tb_incidencia', {
@@ -280,7 +289,6 @@ async function createOrden(e, cod) {
         url: `${__url}/soporte/detailOrden/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
             $('#modal_ordens .modal-dialog .modal-content .loader-of-modal').remove();
             $('#modal_ordens [aria-item="tecnicos"]').html(data.tecnicos);
         },

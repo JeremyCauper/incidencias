@@ -79,6 +79,12 @@ class GlobalHelper
         return $subproblema;
     }
 
+    public static function getMateriales($vaciar = false)
+    {
+        $materiales = self::fechTable($vaciar, 'materiales', 'tb_materiales', ['id_materiales as id', 'producto', 'estatus']);
+        return $materiales;
+    }
+
     public static function getUsuarios($vaciar = false)
     {
         $data = Cache::get('usuarios');

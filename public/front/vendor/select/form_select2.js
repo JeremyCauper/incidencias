@@ -12,8 +12,27 @@ $(document).ready(function () {
         },
         "tags": {
             tags: true
+        },
+        "icons": {
+            templateResult: iconFormat,
+            minimumResultsForSearch: Infinity,
+            templateSelection: iconFormat,
+            escapeMarkup: function (m) { return m; }
         }
     };
+
+    // Format icon
+    function iconFormat(icon) {
+        var originalOption = icon.element;
+        if (!icon.id) { return icon.text; }
+        var valor = icon.text.split('::');
+        var $icon = `<div class="d-flex justify-content-between">
+            <span>${valor[0]}</span>
+            <b>${atob(valor[1])}</b>
+        </div>`;// '<i class="icon-home8"></i>' + icon.text;
+
+        return $icon;
+    }
 
     // Función para inicializar select2
     function initializeSelect2(selectElement, config, modal) {
@@ -43,6 +62,11 @@ $(document).ready(function () {
         initializeSelect2($(this), config.tags);
     });
 
+    // Allow icons selection
+    $('.select-icons').each(function () {
+        initializeSelect2($(this), config.icons);
+    });
+
     // Aplica select2 a todos los selects dentro de los modales al mostrarse
     window.formatSelect = function(mod) {
         $(`#${mod}`).on('shown.bs.modal', function () {
@@ -59,6 +83,9 @@ $(document).ready(function () {
                 }
                 if ($(this).hasClass('select-tags')) {
                     initializeSelect2($(this), config.tags, modal);
+                }
+                if ($(this).hasClass('select-icons')) {
+                    initializeSelect2($(this), config.icons, modal);
                 }
             });
         });

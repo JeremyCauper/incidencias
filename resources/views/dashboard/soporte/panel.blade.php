@@ -456,7 +456,7 @@
                         <div class="d-flex justify-content-between mb-2">
                             <input type="hidden" name="n_orden" id="n_orden" value="ST24-00000001">
                             <h6><strong>N° Orden: </strong><span>ST24-00000001</span></h6>
-                            <h6><strong>Fecha: </strong><span aria-item="registrado"></span></h6>
+                            <h6><strong>Fecha Inicio: </strong><span aria-item="registrado"></span></h6>
                         </div>
 
                         <!-- TER CABECERA -->
@@ -514,14 +514,14 @@
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group pt-2">
-                                        <label class="form-label" for="exampleInputEmail1">Inicio </label>
-                                        <input type="date" class="form-control form-control-sm  inputs" id="fecha_s" name="fecha_s" value="2024-08-09" placeholder="">
+                                        <label class="form-label" for="exampleInputEmail1">Fecha Fin </label>
+                                        <input type="text" class="form-control form-control-sm" id="fecha_f" name="fecha_f">
                                     </div>
                                 </div>
                                 <div class="col-md-3">
                                     <div class="form-group pt-2">
-                                        <label class="form-label" for="exampleInputEmail1"> Fin </label>
-                                        <input type="time" class="form-control form-control-sm inputs" id="h_f" name="h_f" value="17:24">
+                                        <label class="form-label" for="exampleInputEmail1">Hora Fin </label>
+                                        <input type="text" class="form-control form-control-sm" id="hora_f" name="hora_f">
                                     </div>
                                 </div>
                             </div>
@@ -533,13 +533,13 @@
 
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                             <div class="row">
-                                <div class="col-md-8">
+                                <div class="col-lg-8">
                                     <div class="input-group mt-2 mb-3">
                                         <span class="input-group-text border-0"><i class="fas fa-diagram-successor"></i></span>
                                         <select class="select-clear">
                                             <option value=""></option>
-                                            @foreach ($dataInd['usuarios'] as $u)
-                                            <option value="{{$u['value']}}">{{$u['text']}}</option>
+                                            @foreach ($dataInd['materiales'] as $m)
+                                            <option value="{{$m->id}}">{{$m->producto}}</option>
                                             @endforeach
                                         </select>
                                         <button type="button" class="btn btn-primary px-2" onclick="" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
@@ -562,16 +562,16 @@
                             </div>
                         </div>
 
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                        <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
                             <div class="row justify-content-between firmas-orden">
-                                <div class="col-md-4 text-center">
-                                    <img class="border rounded-1" id="" alt="" height="130" width="160">
+                                <div class="col-lg-4 text-center">
+                                    <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '' : ''}} id="" alt="" height="130" width="160">
                                     <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma Tecnico</p>
                                     <p>RICARDO CALDERON INGENIEROS SAC</p>
                                     <p>{{Auth::user()->nombres . ' ' . Auth::user()->apellidos}}</p>
                                 </div>
 
-                                <div class="col-md-4 text-center">
+                                <div class="col-lg-4 text-center">
                                     <img class="border rounded-1" id="" alt="" height="130" width="160">
                                     <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma Cliente</p>
                                     <p>COESTI S.A.</p>

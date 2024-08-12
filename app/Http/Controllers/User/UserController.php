@@ -270,7 +270,7 @@ class UserController extends Controller
         $formato = '.' . explode('/', $imgFormat['mime'])[1];
         $filename = $name . $formato;
 
-        $path = public_path("assets/images/$dir");
+        $path = public_path("front/images/$dir");
         $filePath = "$path/$filename";
 
         if (file_put_contents($filePath, $imgInfo)) {
