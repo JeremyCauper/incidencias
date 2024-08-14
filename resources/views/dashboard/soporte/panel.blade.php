@@ -539,14 +539,14 @@
                                         <select class="select-clear">
                                             <option value=""></option>
                                             @foreach ($dataInd['materiales'] as $m)
-                                            <option value="{{$m->id}}">{{$m->producto}}</option>
+                                            <option value="{{$m->id}}" data-value="{{base64_encode(json_encode(['id'=>$m->id, 'producto'=>$m->producto, 'cantidad'=>$m->id]))}}">{{$m->producto}}</option>
                                             @endforeach
                                         </select>
-                                        <button type="button" class="btn btn-primary px-2" onclick="" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
+                                        <button type="button" class="btn btn-primary px-2" id="createMaterial" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
                                     </div>
                                 </div>
-                                <div class="col-12" id="content_asig_personal" style="overflow: auto;">
-                                    <!-- <table id="tabla1" class="table  table-striped table-bordered" width="100%">
+                                <!-- <div class="col-12" style="overflow: auto;">
+                                     <table id="tabla1" class="table  table-striped table-bordered" width="100%">
                                         <thead>
                                             <tr>
                                                 <th>#</th>
@@ -557,8 +557,26 @@
                                                 <th>ACCION</th>
                                             </tr>
                                         </thead>
-                                    </table> -->
-                                </div>
+                                        <tbody>
+                                            <tr>
+                                                <td>1</td>
+                                                <td>JACKTOOL DE LA CARA 10 SULFATADO</td>
+                                                <td>
+                                                    <div class="input-group input-group-sm mb-3">
+                                                        <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-minus" style="font-size: .75rem;"></i></button>
+                                                        <input type="number" class="form-control form-control-sm" style="width: 60px;" aria-label="Amount (to the nearest dollar)">
+                                                        <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
+                                                    </div>
+                                                </td>
+                                                <td></td>
+                                                <td></td>
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-sm px-2" onclick="this.parentNode.parentNode.remove()"><i class="far fa-trash-can"></i></button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table> 
+                                </div> -->
                             </div>
                         </div>
 
@@ -661,7 +679,6 @@
     });
 
     document.getElementById('doc_clienteFirma').addEventListener('click', async function(event) {
-        
         var rect = this.getBoundingClientRect();
         var beforeWidth = 14;
         var beforeHeight = 14;

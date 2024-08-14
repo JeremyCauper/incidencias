@@ -35,6 +35,23 @@ $(document).ready(function () {
         $('#fecha_f').val(_date).attr('disabled', true);
         $('#hora_f').val(_time).attr('disabled', true);
     }, 1000);
+
+
+    $('#createMaterial').ctableAdmin({
+        thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
+        tbody: [
+            { data: 'id' },
+            { data: 'producto' },
+            { data: 'cantidad', render: function (data) {
+                    return `<div class="input-group input-group-sm mb-3">
+                                <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-minus" style="font-size: .75rem;"></i></button>
+                                <input type="number" class="form-control form-control-sm" style="width: 60px;" aria-label="Amount (to the nearest dollar)">
+                                <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
+                            </div>`;
+                } 
+            }
+        ]
+    });
 });
 
 const tb_incidencia = new DataTable('#tb_incidencia', {

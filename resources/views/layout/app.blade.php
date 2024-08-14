@@ -201,6 +201,7 @@
   <script src="{{asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
   <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
+  <script src="{{asset('front/js/TableManeger.js')}}"></script>
   <!-- plugins:js -->
   @yield('scripts')
 </body>
