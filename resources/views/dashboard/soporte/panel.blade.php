@@ -3,99 +3,6 @@
 
 @section('style')
 <link rel="stylesheet" href="{{asset('front/css/app/panel.css')}}">
-<style>
-    .th-acciones {
-        right: 0px;
-        position: sticky !important;
-        width: 90px !important;
-    }
-
-    .td-acciones {
-        position: sticky;
-        right: 0;
-        text-align: center !important;
-        background-color: #fff !important;
-    }
-
-    .list-group .list-group-item {
-        font-size: .9rem;
-        padding: .8rem 0;
-    }
-
-    #tb_incidencia thead,
-    #tb_incidencia tbody {
-        font-size: 12px !important;
-    }
-
-    .tittle {
-        font-weight: bold;
-        font-size: .9rem;
-    }
-
-    .firmas-orden div p {
-        font-size: .7rem;
-        padding: .4rem;
-        margin-bottom: .1rem;
-        border-radius: .5rem;
-    }
-
-    #doc_clienteFirma {
-        cursor: pointer;
-        position: relative;
-    }
-
-    .doc-fsearch {
-        height: 26.78px;
-        border: 0.1rem solid #cdcdcd;
-    }
-
-    .doc-fsearch:hover {
-        background-color: #f3f3f3;
-    }
-
-    .doc-fsearch::before,
-    .doc-fsearch::after {
-        position: absolute;
-        color: inherit;
-        display: block;
-        top: 55%;
-        font-size: .75rem;
-        margin-top: -.4375rem;
-        line-height: 1;
-        opacity: .6;
-        -webkit-font-smoothing: antialiased;
-    }
-
-    .doc-fsearch::before {
-        content: "\f002";
-        font-family: "Font Awesome 6 Free";
-        left: 2.25rem;
-    }
-
-    .doc-fsearch::after {
-        content: "Buscar cliente";
-        font-family: "Roboto";
-        left: 3.65rem;
-        font-weight: 500;
-    }
-
-    .doc-fclear {
-        padding-right: 1.7rem !important;
-    }
-
-    .doc-fclear::before {
-        content: "\f00d";
-        font-family: "Font Awesome 6 Free";
-        position: absolute;
-        right: .65rem;
-        top: 50%;
-        font-size: .9rem;
-        margin-top: -.4375rem;
-        line-height: 1;
-        opacity: .6;
-        -webkit-font-smoothing: antialiased;
-    }
-</style>
 @endsection
 @section('content')
 
@@ -455,7 +362,7 @@
                         <!-- INICIO CABECERA -->
                         <div class="d-flex justify-content-between mb-2">
                             <input type="hidden" name="n_orden" id="n_orden" value="ST24-00000001">
-                            <h6><strong>N° Orden: </strong><span>ST24-00000001</span></h6>
+                            <h6><strong>N° Orden: </strong><span><input class="form-control form-control-sm" type="text" name="" id="" value="ST24-00000001"></span></h6>
                             <h6><strong>Fecha Inicio: </strong><span aria-item="registrado"></span></h6>
                         </div>
 
@@ -531,17 +438,22 @@
                             <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
                         </div>
 
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                        <div class="col-md-12 col-sm-12 col-xs-12 my-2 pb-2">
                             <div class="row">
-                                <div class="col-lg-8">
+                                <div class="col-lg-12">
                                     <div class="input-group mt-2 mb-3">
                                         <span class="input-group-text border-0"><i class="fas fa-diagram-successor"></i></span>
-                                        <select class="select-clear">
+                                        <select class="select-clear" id="selector-material">
                                             <option value=""></option>
                                             @foreach ($dataInd['materiales'] as $m)
-                                            <option value="{{$m->id}}" data-value="{{base64_encode(json_encode(['id'=>$m->id, 'producto'=>$m->producto, 'cantidad'=>$m->id]))}}">{{$m->producto}}</option>
+                                            <option value="{{$m->id}}" data-value="{{base64_encode(json_encode(['id'=>$m->id, 'producto'=>$m->producto, 'cantidad'=>0]))}}">{{$m->producto}}</option>
                                             @endforeach
                                         </select>
+                                        <div class="input-group mx-2 disabled" id="content-cantidad" style="width: auto;">
+                                            <button type="button" onclick="manCantidad('minus')" class="btn btn-primary px-2" data-mdb-ripple-init><i class="fas fa-minus" style="font-size: .75rem;"></i></button>
+                                            <input type="number" class="form-control" style="width: 80px; flex: none;" value="0" input-cantidad="" oninput="manCantidad('press')">
+                                            <button type="button" onclick="manCantidad('plus')" class="btn btn-primary px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
+                                        </div>
                                         <button type="button" class="btn btn-primary px-2" id="createMaterial" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
                                     </div>
                                 </div>
@@ -590,7 +502,18 @@
                                 </div>
 
                                 <div class="col-lg-4 text-center">
-                                    <img class="border rounded-1" id="" alt="" height="130" width="160">
+                                    <div class="text-center content-image">
+                                        <div class="overlay">
+                                            <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma" type="button" button-reset><i class="fas fa-xmark"></i></button>
+                                            <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma" type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
+                                            <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i class="fas fa-pencil"></i></button>
+                                            <button class="btn-img expandImgButton" type="button" onclick="PreviImagenes(PreviFirma.src);"><i class="fas fa-expand"></i></button>
+                                        </div>
+                                        <input type="file" class="d-none" id="firma_digital">
+                                        <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
+                                        <img id="PreviFirma" height="130" width="160">
+                                    </div>
+                                    <!-- <img class="border rounded-1" id="" alt="" > -->
                                     <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma Cliente</p>
                                     <p>COESTI S.A.</p>
                                     <p id="doc_clienteFirma" class="doc-fsearch"></p>
@@ -610,6 +533,7 @@
 @endsection
 
 @section('scripts')
+<script src="{{asset('front/vendor/signature/signature_pad.min.js')}}"></script>
 <script>
     let cod_incidencia = '<?= $dataInd['cod_inc'] ?>';
     const sucursales = <?php echo json_encode($dataInd['sucursales']); ?>;

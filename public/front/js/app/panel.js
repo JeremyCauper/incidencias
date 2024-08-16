@@ -36,20 +36,20 @@ $(document).ready(function () {
         $('#hora_f').val(_time).attr('disabled', true);
     }, 1000);
 
+    $('#selector-material').on('change', function () {
+        manCantidad($(this).val(), true);
+    })
+
+    $('#createMaterial').on('click', function () {
+        manCantidad($(this).val(), true);
+    })
 
     $('#createMaterial').ctableAdmin({
         thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
         tbody: [
             { data: 'id' },
             { data: 'producto' },
-            { data: 'cantidad', render: function (data) {
-                    return `<div class="input-group input-group-sm mb-3">
-                                <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-minus" style="font-size: .75rem;"></i></button>
-                                <input type="number" class="form-control form-control-sm" style="width: 60px;" aria-label="Amount (to the nearest dollar)">
-                                <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
-                            </div>`;
-                } 
-            }
+            { data: 'cantidad' }
         ]
     });
 });
@@ -270,7 +270,7 @@ async function createAssign() {
         }),
         success: function (data) {
             console.log(data);
-            
+
             $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
@@ -278,7 +278,7 @@ async function createAssign() {
                 updateTable();
                 return true;
             }
-            boxAlert.box({ i : 'error', t : '¡Ocurrio un error!', h : data.message });
+            boxAlert.box({ i: 'error', t: '¡Ocurrio un error!', h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
@@ -317,10 +317,155 @@ async function createOrden(e, cod) {
 }
 
 
+const fileInputFirma = document.getElementById('firma_digital');
+const PreviFirma = document.getElementById('PreviFirma');
+const removeImgFirma = document.getElementById('removeImgFirma');
+const textFirmaDigital = document.getElementById('textFirmaDigital');
+
+document.getElementById('uploadImgFirma').addEventListener('click', () => {
+    fileInputFirma.click();
+});
+
+fileInputFirma.addEventListener('change', function (event) {
+    const file = event.target.files[0];
+    const maxFileSize = 10 * 1024 * 1024; // 10MB
+    if (file) {
+        if (file.size > maxFileSize) {
+            alert('El archivo debe ser menor a 10MB');
+            return;
+        }
+        const reader = new FileReader();
+        reader.onload = function (e) {
+            PreviFirma.src = e.target.result;
+            PreviFirma.alt = file.name;
+            removeImgFirma.style.display = 'block';
+            textFirmaDigital.value = btoa(e.target.result);
+        };
+        reader.readAsDataURL(file);
+    }
+});
+
+document.getElementById('createFirma').addEventListener('click', async () => {
+    const bodyChildren = Array.from(document.body.children);
+    bodyChildren.forEach(child => {
+        if (!child.classList.contains('swal2-container')) {
+            child.setAttribute('inert', '');
+        }
+    });
+
+    Swal.fire({
+        title: '<h6 class="text-primary">CREAR FIRMA DIGITAL</h6>',
+        html: `
+            <div>
+                <div class="content-signature-pad">
+                    <canvas id="signature-pad" height="180" width="260" style="border: 2px dashed #ccc;"></canvas>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary btn-sm" id="save">Guardar</button>
+                    <button class="btn btn-danger btn-sm" id="clear">Limpiar</button>
+                    <button class="btn btn-info btn-sm" onclick="Swal.close()">Cerrar</button>
+                </div>
+            </div>`,
+        willClose: () => {
+            bodyChildren.forEach(child => {
+                if (!child.classList.contains('swal2-container')) child.removeAttribute('inert');
+            });
+        },
+        showConfirmButton: false
+    });
+
+    var canvas = document.getElementById('signature-pad');
+    var signaturePad = new SignaturePad(canvas);
+
+    document.getElementById('clear').addEventListener('click', function () {
+        signaturePad.clear();
+    });
+
+    document.getElementById('save').addEventListener('click', function () {
+        if (signaturePad.isEmpty()) {
+            alert("Por favor, dibuja una firma primero.");
+        } else {
+            var dataURL = signaturePad.toDataURL();
+            document.getElementById('textFirmaDigital').value = btoa(dataURL.toString());
+            document.getElementById('PreviFirma').src = dataURL.toString();
+            document.getElementById('PreviFirma').classList.remove('visually-hidden');
+            removeImgFirma.style.display = 'block';
+            Swal.close();
+        }
+    });
+});
 
 
+removeImgFirma.addEventListener('click', () => {
+    PreviFirma.src = "";
+    PreviFirma.classList.add('visually-hidden');
+    textFirmaDigital.value = '';
+    removeImgFirma.style.display = 'none';
+    fileInputFirma.value = '';
+});
 
+function PreviImagenes(data) {
+    const bodyChildren = Array.from(document.body.children);
+    bodyChildren.forEach(child => {
+        if (!child.classList.contains('swal2-container')) {
+            child.setAttribute('inert', '');
+        }
+    });
 
+    Swal.fire({
+        title: '<h5 class="card-title text-linkedin">PREVISUALIZACIÓN DE LA IMAGEN CARGADA</h5>',
+        html: `<div>
+                <img src="${data}" />
+            </div>`,
+        willClose: () => {
+            bodyChildren.forEach(child => {
+                if (!child.classList.contains('swal2-container')) child.removeAttribute('inert');
+            });
+        }
+    });
+}
+
+function manCantidad(params, clear = false) {
+    const selector = $('#selector-material');
+    const cantidad = $('input[input-cantidad=""]');
+    const content_cantidad = $('#content-cantidad');
+    if (clear) {
+        cantidad.val(0);
+        content_cantidad.addClass('disabled');
+        if (!params) return false;
+        cantidad.val(1);
+        content_cantidad.removeClass('disabled');
+        manCantidad('');
+        return false;
+    }
+    let number = cantidad.val();
+    switch (params) {
+        case 'plus':
+            number++;
+            cantidad.val(number);
+            break;
+
+        case 'minus':
+            if (number > 1) {
+                number--;
+                cantidad.val(number);
+            }
+            break;
+
+        case 'press':
+            if (number < 1 || !number) {
+                cantidad.val(1);
+            }
+            else {
+                cantidad.val(parseInt(number));
+            }
+            break;
+    }
+    let option = selector.children(`option[value="${selector.val()}"]`);
+    let obj = JSON.parse(atob(option.attr('data-value')));
+    obj.cantidad = number;
+    option.attr('data-value', btoa(JSON.stringify(obj)));
+}
 
 function changeCodInc(val) {
     $('#cod_inc').val(val);
