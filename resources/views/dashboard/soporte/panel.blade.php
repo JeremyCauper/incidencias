@@ -93,7 +93,7 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal_incidencias" aria-labelledby="modal_incidencias" aria-hidden="true">
+<div class="modal fade" id="modal_incidencias" aria-labelledby="modal_incidencias" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content" style="position: relative;">
             <form id="form-incidencias" frm-accion="0" idu="">
@@ -349,185 +349,186 @@
     </div>
 </div>
 
-<div class="modal fade" id="modal_ordens" aria-labelledby="modal_ordens" aria-hidden="true">
+<div class="modal fade" id="modal_ordens" aria-labelledby="modal_ordens"  tabindex="-1"  aria-hidden="true">
     <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header bg-primary text-white">
-                <h6 class="modal-title">Registrar orden de servicio</h6>
-            </div>
-            <div class="modal-body">
-                <div class="col-md-12 col-lg-12 col-xs-12">
-                    <form id="fupForm" method="post" enctype="multipart/form-data">
-
-                        <!-- INICIO CABECERA -->
-                        <div class="d-flex justify-content-between mb-2">
-                            <input type="hidden" name="n_orden" id="n_orden" value="ST24-00000001">
-                            <h6><strong>N° Orden: </strong><span><input class="form-control form-control-sm" type="text" name="" id="" value="ST24-00000001"></span></h6>
-                            <h6><strong>Fecha Inicio: </strong><span aria-item="registrado"></span></h6>
-                        </div>
-
-                        <!-- TER CABECERA -->
-                        <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                            <h6 class="tittle text-primary"> TECNICOS</h6>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                            <div class="list-group list-group-light" aria-item="tecnicos">
-                                <!-- <div class="list-group-item">
-                                    <span class="">JORGE LUIS HONORES OCAMPO</span>
-                                </div> -->
+        <form id="form-ordenes">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h6 class="modal-title">Registrar orden de servicio</h6>
+                </div>
+                <div class="modal-body">
+                    <div class="col-md-12 col-lg-12 col-xs-12">
+                            <!-- INICIO CABECERA -->
+                            <div class="d-flex justify-content-between mb-2">
+                                <input type="hidden" name="codInc" id="codInc">
+                                <h6><strong>N° Orden *: </strong><span><input class="form-control form-control-sm" style="display: inline; width:auto" type="text" name="n_orden" id="n_orden" value="ST24-00000001" require="N° Orden"></span></h6>
+                                <h6><strong>Fecha Inicio: </strong><span aria-item="registrado"></span></h6>
                             </div>
-                        </div>
 
+                            <!-- TER CABECERA -->
+                            <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
+                                <h6 class="tittle text-primary"> TECNICOS</h6>
+                            </div>
 
-                        <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                            <h6 class="tittle text-primary"> DATOS DEL CLIENTE </h6>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                            <div class="list-group list-group-light">
-                                <div class="list-group-item">
-                                    <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
-                                </div>
-                                <div class="list-group-item">
-                                    <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                                </div>
-                                <div class="list-group-item">
-                                    <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                            <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                                <div class="list-group list-group-light" aria-item="tecnicos">
+                                    <!-- <div class="list-group-item">
+                                        <span class="">JORGE LUIS HONORES OCAMPO</span>
+                                    </div> -->
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                            <h6 class="tittle text-primary"> TRABAJO REALIZADO </h6>
-                        </div>
 
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                            <div class="col-md-12">
-                                <label class="form-label me-2">Clasificacion Error:</label><span style="font-size: .75rem;" aria-item="error">PROBLEMA DE LECTURA / VALIDACION DE JACKTOOL</span>
+                            <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
+                                <h6 class="tittle text-primary"> DATOS DEL CLIENTE </h6>
                             </div>
-                            <div class="row justify-content-md-center">
-                                <div class="col-md-6">
-                                    <div class="form-group pt-2">
-                                        <label class="form-label" for="exampleInputEmail1">Observaciones</label>
-                                        <textarea class="form-control" id="obs" name="obs" style="height: 80px;resize: none;"></textarea>
+
+                            <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                                <div class="list-group list-group-light">
+                                    <div class="list-group-item">
+                                        <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
                                     </div>
-                                </div>
-                                <div class="col-md-6">
-                                    <div class="form-group pt-2">
-                                        <label class="form-label" for="exampleInputEmail1">Recomendaciones</label>
-                                        <textarea class="form-control" id="rec" name="rec" style="height: 80px;resize: none;"></textarea>
+                                    <div class="list-group-item">
+                                        <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                                     </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group pt-2">
-                                        <label class="form-label" for="exampleInputEmail1">Fecha Fin </label>
-                                        <input type="text" class="form-control form-control-sm" id="fecha_f" name="fecha_f">
-                                    </div>
-                                </div>
-                                <div class="col-md-3">
-                                    <div class="form-group pt-2">
-                                        <label class="form-label" for="exampleInputEmail1">Hora Fin </label>
-                                        <input type="text" class="form-control form-control-sm" id="hora_f" name="hora_f">
+                                    <div class="list-group-item">
+                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                        
-                        <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                            <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
-                        </div>
 
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2 pb-2">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="input-group mt-2 mb-3">
-                                        <span class="input-group-text border-0"><i class="fas fa-diagram-successor"></i></span>
-                                        <select class="select-clear" id="selector-material">
-                                            <option value=""></option>
-                                            @foreach ($dataInd['materiales'] as $m)
-                                            <option value="{{$m->id}}" data-value="{{base64_encode(json_encode(['id'=>$m->id, 'producto'=>$m->producto, 'cantidad'=>0]))}}">{{$m->producto}}</option>
-                                            @endforeach
-                                        </select>
-                                        <div class="input-group mx-2 disabled" id="content-cantidad" style="width: auto;">
-                                            <button type="button" onclick="manCantidad('minus')" class="btn btn-primary px-2" data-mdb-ripple-init><i class="fas fa-minus" style="font-size: .75rem;"></i></button>
-                                            <input type="number" class="form-control" style="width: 80px; flex: none;" value="0" input-cantidad="" oninput="manCantidad('press')">
-                                            <button type="button" onclick="manCantidad('plus')" class="btn btn-primary px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
+                            <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
+                                <h6 class="tittle text-primary"> TRABAJO REALIZADO </h6>
+                            </div>
+
+                            <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                                <div class="col-md-12">
+                                    <label class="form-label me-2">Clasificacion Error:</label><span style="font-size: .75rem;" aria-item="error">PROBLEMA DE LECTURA / VALIDACION DE JACKTOOL</span>
+                                </div>
+                                <div class="row justify-content-md-center">
+                                    <div class="col-md-6">
+                                        <div class="form-group pt-2">
+                                            <label class="form-label" for="exampleInputEmail1">Observaciones *</label>
+                                            <textarea class="form-control" id="obs" name="obs" style="height: 80px;resize: none;" require="Observaciones"></textarea>
                                         </div>
-                                        <button type="button" class="btn btn-primary px-2" id="createMaterial" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
                                     </div>
-                                </div>
-                                <!-- <div class="col-12" style="overflow: auto;">
-                                     <table id="tabla1" class="table  table-striped table-bordered" width="100%">
-                                        <thead>
-                                            <tr>
-                                                <th>#</th>
-                                                <th>PRODUCTO / MATERIAL</th>
-                                                <th>CANTIDAD</th>
-                                                <th>MARCA</th>
-                                                <th>MODELO</th>
-                                                <th>ACCION</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            <tr>
-                                                <td>1</td>
-                                                <td>JACKTOOL DE LA CARA 10 SULFATADO</td>
-                                                <td>
-                                                    <div class="input-group input-group-sm mb-3">
-                                                        <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-minus" style="font-size: .75rem;"></i></button>
-                                                        <input type="number" class="form-control form-control-sm" style="width: 60px;" aria-label="Amount (to the nearest dollar)">
-                                                        <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
-                                                    </div>
-                                                </td>
-                                                <td></td>
-                                                <td></td>
-                                                <td>
-                                                    <button type="button" class="btn btn-danger btn-sm px-2" onclick="this.parentNode.parentNode.remove()"><i class="far fa-trash-can"></i></button>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table> 
-                                </div> -->
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
-                            <div class="row justify-content-between firmas-orden">
-                                <div class="col-lg-4 text-center">
-                                    <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '' : ''}} id="" alt="" height="130" width="160">
-                                    <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma Tecnico</p>
-                                    <p>RICARDO CALDERON INGENIEROS SAC</p>
-                                    <p>{{Auth::user()->nombres . ' ' . Auth::user()->apellidos}}</p>
-                                </div>
-
-                                <div class="col-lg-4 text-center">
-                                    <div class="text-center content-image">
-                                        <div class="overlay">
-                                            <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma" type="button" button-reset><i class="fas fa-xmark"></i></button>
-                                            <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma" type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
-                                            <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i class="fas fa-pencil"></i></button>
-                                            <button class="btn-img expandImgButton" type="button" onclick="PreviImagenes(PreviFirma.src);"><i class="fas fa-expand"></i></button>
+                                    <div class="col-md-6">
+                                        <div class="form-group pt-2">
+                                            <label class="form-label" for="exampleInputEmail1">Recomendaciones *</label>
+                                            <textarea class="form-control" id="rec" name="rec" style="height: 80px;resize: none;" require="Recomendaciones"></textarea>
                                         </div>
-                                        <input type="file" class="d-none" id="firma_digital">
-                                        <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
-                                        <img id="PreviFirma" height="130" width="160">
                                     </div>
-                                    <!-- <img class="border rounded-1" id="" alt="" > -->
-                                    <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma Cliente</p>
-                                    <p>COESTI S.A.</p>
-                                    <p id="doc_clienteFirma" class="doc-fsearch"></p>
+                                    <div class="col-md-3">
+                                        <div class="form-group pt-2">
+                                            <label class="form-label" for="exampleInputEmail1">Fecha Fin </label>
+                                            <input type="text" class="form-control form-control-sm" id="fecha_f" name="fecha_f">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group pt-2">
+                                            <label class="form-label" for="exampleInputEmail1">Hora Fin </label>
+                                            <input type="text" class="form-control form-control-sm" id="hora_f" name="hora_f">
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                            
+                            <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
+                                <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
+                            </div>
+
+                            <div class="col-md-12 col-sm-12 col-xs-12 my-2 pb-2">
+                                <div class="row" id="content-material">
+                                    <div class="col-lg-12">
+                                        <div class="input-group mt-2 mb-3">
+                                            <span class="input-group-text border-0"><i class="fas fa-diagram-successor"></i></span>
+                                            <select class="select-clear" id="selector-material">
+                                                <option value=""></option>
+                                                @foreach ($dataInd['materiales'] as $m)
+                                                <option value="{{$m->id}}" data-value="{{base64_encode(json_encode(['id'=>$m->id, 'producto'=>$m->producto, 'cantidad'=>0]))}}">{{$m->producto}}</option>
+                                                @endforeach
+                                            </select>
+                                            <div class="input-group mx-2 disabled" id="content-cantidad" style="width: auto;">
+                                                <button type="button" onclick="manCantidad('minus')" class="btn btn-primary px-2" data-mdb-ripple-init><i class="fas fa-minus" style="font-size: .75rem;"></i></button>
+                                                <input type="number" class="form-control" style="width: 80px; flex: none;" value="0" input-cantidad="" oninput="manCantidad('press')">
+                                                <button type="button" onclick="manCantidad('plus')" class="btn btn-primary px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
+                                            </div>
+                                            <button type="button" class="btn btn-primary px-2" id="createMaterial" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-12" style="overflow: auto;">
+                                        <table id="tabla1" class="table  table-striped table-bordered" width="100%">
+                                            <thead>
+                                                <tr>
+                                                    <th>#</th>
+                                                    <th>PRODUCTO / MATERIAL</th>
+                                                    <th>CANTIDAD</th>
+                                                    <th>MARCA</th>
+                                                    <th>MODELO</th>
+                                                    <th>ACCION</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <td>1</td>
+                                                    <td>JACKTOOL DE LA CARA 10 SULFATADO</td>
+                                                    <td>
+                                                        <div class="input-group input-group-sm mb-3">
+                                                            <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-minus" style="font-size: .75rem;"></i></button>
+                                                            <input type="number" class="form-control form-control-sm" style="width: 60px;" aria-label="Amount (to the nearest dollar)">
+                                                            <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
+                                                        </div>
+                                                    </td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        <button type="button" class="btn btn-danger btn-sm px-2" onclick="this.parentNode.parentNode.remove()"><i class="far fa-trash-can"></i></button>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table> 
+                                    </div> -->
+                                </div>
+                            </div>
+
+                            <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
+                                <div class="row justify-content-between firmas-orden">
+                                    <div class="col-lg-4 text-center">
+                                        <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '' : ''}} id="" alt="" height="130" width="160">
+                                        <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma Tecnico</p>
+                                        <p>RICARDO CALDERON INGENIEROS SAC</p>
+                                        <p>{{Auth::user()->nombres . ' ' . Auth::user()->apellidos}}</p>
+                                    </div>
+
+                                    <div class="col-lg-4 text-center">
+                                        <div class="text-center content-image">
+                                            <div class="overlay">
+                                                <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma" type="button" button-reset><i class="fas fa-xmark"></i></button>
+                                                <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma" type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
+                                                <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i class="fas fa-pencil"></i></button>
+                                                <button class="btn-img expandImgButton" type="button" onclick="PreviImagenes(PreviFirma.src);"><i class="fas fa-expand"></i></button>
+                                            </div>
+                                            <input type="file" class="d-none" id="firma_digital">
+                                            <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
+                                            <img id="PreviFirma" class="visually-hidden" height="130" width="160">
+                                        </div>
+                                        <!-- <img class="border rounded-1" id="" alt="" > -->
+                                        <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma Cliente</p>
+                                        <p>COESTI S.A.</p>
+                                        <p id="doc_clienteFirma" class="doc-fsearch"></p>
+                                        <input type="hidden" name="n_doc" id="n_doc">
+                                        <input type="hidden" name="nom_cliente" id="nom_cliente">
+                                    </div>
+                                </div>
+                            </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+                    <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init onclick="">Registrar</button>
                 </div>
             </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init onclick="">Registrar</button>
-            </div>
-        </div>
+        </form>
     </div>
 </div>
 @endsection
@@ -598,6 +599,70 @@
                 });
                 console.log(obj_error);
                 $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+            }
+        });
+    });
+
+    document.getElementById('form-ordenes').addEventListener('submit', function(event) {
+        event.preventDefault();
+        $('#modal_ordens .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+
+        var elementos = this.querySelectorAll('[name]');
+        var materiales = $('#content-material table tbody tr');
+        var dataForm = {
+            materiales: []
+        };
+        let cad_require = "";
+
+        elementos.forEach(function(elemento) {
+            if (elemento.getAttribute("require") && elemento.value == "") {
+                cad_require += `<b>${elemento.getAttribute("require")}</b>, `;
+            }
+            dataForm[elemento.name] = elemento.value;
+        });
+
+        materiales.each(function(i, e) {
+            var idm = e.getAttribute('aria-table').replace('row', '');
+            var cant = e.querySelectorAll('td:nth-child(3)')[0].innerHTML;
+            var n_orden = $('#n_orden').val();
+            dataForm.materiales.push({ n_orden: n_orden, id: idm, cantidad: cant });
+        });
+
+        if (cad_require) {
+            $('#modal_ordens .modal-dialog .modal-content .loader-of-modal').remove();
+            return boxAlert.box({ i: 'info', t: 'Faltan datos', h: `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>` });
+        }
+        
+        $.ajax({
+            type: 'POST',
+            url: __url + '/ordens/create',
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': __token,
+            },
+            data: JSON.stringify(dataForm),
+            success: function(data) {
+                $('#modal_ordens .modal-dialog .modal-content .loader-of-modal').remove();
+                console.log(data);
+                // if (data.success) {
+                //     $('#modal_ordens').modal('hide');
+                //     boxAlert.minbox({
+                //         h: data.message
+                //     });
+                //     updateTable();
+                //     return true;
+                // }
+                // boxAlert.box('error', '¡Ocurrio un error!', data.message);
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                const obj_error = jqXHR.responseJSON;
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Ocurrio un error en el processo',
+                    h: obj_error.message
+                });
+                console.log(obj_error);
+                $('#modal_ordens .modal-dialog .modal-content .loader-of-modal').remove();
             }
         });
     });
@@ -674,6 +739,8 @@
                     const docNumber = result.value.docNumber;
                     const clientName = result.value.clientName;
                     this.innerHTML = `${docNumber} - ${clientName}`;
+                    $('#n_doc').val(docNumber);
+                    $('#nom_cliente').val(clientName);
                     
                     this.classList.remove("doc-fsearch");
                     this.classList.add("doc-fclear");

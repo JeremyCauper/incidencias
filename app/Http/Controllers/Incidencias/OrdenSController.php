@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Incidencias;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 
 class OrdenSController extends Controller
@@ -22,14 +24,41 @@ class OrdenSController extends Controller
     public function create(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'cod_inc' => 'required|string',
-            'id_empresa' => 'required|integer',
-            'id_sucursal' => 'required|integer',
-            'tip_estacion' => 'required|integer',
+            'n_orden' => 'required|string',
+            'obs' => 'required|string',
+            'rec' => 'required|string',
+            'fecha_f' => 'required|date',
+            'hora_f' => 'required|date_format:H:i:s',
+            'materiales' => 'required|array',
+            'firma_digital' => 'required|string',
+            'n_doc' => 'required|integer',
+            'nom_cliente' => 'required|string',
         ]);
 
         if ($validator->fails())
             return response()->json(['errors' => $validator->errors()], 400);
+
+        $materiales = $request->materiales;
+        $materiales[0]['updated_at'] = now();
+        $materiales[0]['created_at'] = now();
+        $estado_info = count($materiales) ? 1 : 0;
+
+        DB::beginTransaction();
+        DB::table('tb_order_servicio')->insert([
+            'cod_ordens' => $request->n_orden,
+            'cod_incidencia' => $request->codInc,
+            'observaciones' => $request->obs,
+            'recomendaciones' => $request->rec,
+            'fecha_f' => $request->fecha_f,
+            'hora_f' => $request->hora_f,
+            'created_at' => now(),
+            'updated_at' => now()
+        ]);
+
+        if (count($materiales))
+        DB::table('tb_inc_asignadas')->insert($materiales);
+
+        return $request;
     }
 
     /**

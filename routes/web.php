@@ -6,6 +6,7 @@ use App\Http\Controllers\Mantenimientos\AreasController;
 use App\Http\Controllers\Mantenimientos\TipoAccesoController;
 use App\Http\Controllers\Mantenimientos\MenuController;
 use App\Http\Controllers\Incidencias\IncidenciaController;
+use App\Http\Controllers\Incidencias\OrdenSController;
 use App\Http\Controllers\ConsultasController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -45,6 +46,11 @@ Route::post('/soporte/initInc/{cod}', [IncidenciaController::class, 'initInc']);
 Route::get('/soporte/detail/{cod}', [IncidenciaController::class, 'detail']);
 Route::get('/soporte/detailOrden/{cod}', [IncidenciaController::class, 'detailOrden']);
 
+Route::post('/ordens/create', [OrdenSController::class, 'create']);
+
+
+
+
 Route::get('/viewListMenu', [MenuController::class, 'viewListMenu']);
 Route::get('/extractPermisos', [MenuController::class, 'extractPermisos']);
 
@@ -52,7 +58,6 @@ Route::get('/extractPermisos', [MenuController::class, 'extractPermisos']);
 
 // Gestion de Usuarios
 Route::get('/control-de-usuario/usuarios', [UserController::class, 'view'])->middleware('auth');
-
 Route::get('/usuarios/datatable', [UserController::class, 'datatable']);
 Route::post('/usuarios/create', [UserController::class, 'create']);
 Route::get('/usuarios/show/{id}', [UserController::class, 'show']);

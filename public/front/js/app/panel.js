@@ -292,7 +292,7 @@ async function createAssign() {
 async function createOrden(e, cod) {
     const tr = e.parentNode.parentNode.parentNode.parentNode;
     const tds = tr.querySelectorAll('td');
-    $('#modal_ordens [aria-item="cod"]').html(tds[0].innerHTML);
+    $('#codInc').val(tds[0].innerHTML);
     $('#modal_ordens [aria-item="empresa"]').html(tds[1].innerHTML);
     $('#modal_ordens [aria-item="direccion"]').html(tds[3].innerHTML);
     $('#modal_ordens [aria-item="sucursal"]').html(tds[2].innerHTML);
