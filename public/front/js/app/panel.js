@@ -297,6 +297,7 @@ async function createOrden(e, cod) {
     $('#modal_ordens [aria-item="direccion"]').html(tds[3].innerHTML);
     $('#modal_ordens [aria-item="sucursal"]').html(tds[2].innerHTML);
     $('#modal_ordens [aria-item="registrado"]').html(tds[4].innerHTML);
+    $('#modal_ordens [aria-item="atencion"]').html(tds[6].innerHTML);
 
     $('#modal_ordens').modal('show');
     $('#modal_ordens .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);

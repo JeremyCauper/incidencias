@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Incidencias;
 
+use App\Helpers\GlobalHelper;
 use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -23,42 +25,75 @@ class OrdenSController extends Controller
      */
     public function create(Request $request)
     {
-        $validator = Validator::make($request->all(), [
-            'n_orden' => 'required|string',
-            'obs' => 'required|string',
-            'rec' => 'required|string',
-            'fecha_f' => 'required|date',
-            'hora_f' => 'required|date_format:H:i:s',
-            'materiales' => 'required|array',
-            'firma_digital' => 'required|string',
-            'n_doc' => 'required|integer',
-            'nom_cliente' => 'required|string',
-        ]);
+        try {
+            $validator = Validator::make($request->all(), [
+                'n_orden' => 'required|string',
+                'obs' => 'required|string',
+                'rec' => 'required|string',
+                'fecha_f' => 'required|date',
+                'hora_f' => 'required|date_format:H:i:s',
+                'materiales' => 'required|array',
+                'firma_digital' => 'nullable|string',
+                'n_doc' => 'nullable|integer',
+                'nom_cliente' => 'nullable|string',
+            ]);
 
-        if ($validator->fails())
-            return response()->json(['errors' => $validator->errors()], 400);
+            if ($validator->fails())
+                return response()->json(['errors' => $validator->errors()], 400);
 
-        $materiales = $request->materiales;
-        $materiales[0]['updated_at'] = now();
-        $materiales[0]['created_at'] = now();
-        $estado_info = count($materiales) ? 1 : 0;
+            $materiales = $request->materiales;
+            foreach ($materiales as $k => $val) {
+                $materiales[$k]['updated_at'] = now();
+                $materiales[$k]['created_at'] = now();
+            }
+            DB::beginTransaction();
+            DB::table('tb_order_servicio')->insert([
+                'cod_ordens' => $request->n_orden,
+                'cod_incidencia' => $request->codInc,
+                'observaciones' => $request->obs,
+                'recomendaciones' => $request->rec,
+                'fecha_f' => $request->fecha_f,
+                'hora_f' => $request->hora_f,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
 
-        DB::beginTransaction();
-        DB::table('tb_order_servicio')->insert([
-            'cod_ordens' => $request->n_orden,
-            'cod_incidencia' => $request->codInc,
-            'observaciones' => $request->obs,
-            'recomendaciones' => $request->rec,
-            'fecha_f' => $request->fecha_f,
-            'hora_f' => $request->hora_f,
-            'created_at' => now(),
-            'updated_at' => now()
-        ]);
+            if (count($materiales))
+                DB::table('tb_materiales_usados')->insert($materiales);
 
-        if (count($materiales))
-        DB::table('tb_inc_asignadas')->insert($materiales);
+            if ($request->n_doc || $request->nom_cliente) {
+                $dataContact = [
+                    'nro_doc' => $request->n_doc,
+                    'nombre_cliente' => $request->nom_cliente,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ];
+                if ($request->firma_digital) {
+                    $result = GlobalHelper::parseCreateFile("fdc_{$request->n_doc}", 'client', $request->firma_digital); //$this->parseFile('fp_' . $request->usuario, 'auth', $request->foto_perfil);
+                    if (!$result['success']) {
+                        return response()->json(['success' => false, 'message' => 'Error al intentar crear la imagen del perfil'], 500);
+                    }
+                    $dataContact['firma_digital'] = $result['filename'];
+                }
+                DB::table('tb_contac_ordens')->insert($dataContact);
+            }
 
-        return $request;
+            DB::table('tb_incidencias')->where('cod_incidencia', $request->codInc)->update(['estado_informe' => 3]);
+
+            DB::commit();
+            GlobalHelper::getIncDataTable(true);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Orden de servicio generado'
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un error al generar el orden de servio: ' . $e->getMessage()
+            ], 500);
+        }
     }
 
     /**
@@ -99,5 +134,14 @@ class OrdenSController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function generarPDF()
+    {
+        $data = [
+            'title' => 'Ejemplo de PDF con Laravel'
+        ];
+        $pdf = Pdf::loadView('pdf.orden_servicio', $data);
+        return $pdf->stream('archivo.pdf');
     }
 }

@@ -130,4 +130,21 @@ class GlobalHelper
         }
         return date($date);
     }
+
+    public static function parseCreateFile($name, $dir, $data)
+    {
+        $foto_b64 = explode(',', base64_decode($data));
+        $imgInfo = base64_decode($foto_b64[1]);
+        $imgFormat = getimagesizefromstring($imgInfo);
+        $formato = '.' . explode('/', $imgFormat['mime'])[1];
+        $filename = $name . $formato;
+
+        $path = public_path("front/images/$dir");
+        $filePath = "$path/$filename";
+
+        if (file_put_contents($filePath, $imgInfo)) {
+            return ['success' => true, 'filename' => $filename];
+        }
+        return ['success' => false];
+    }
 }

@@ -392,7 +392,14 @@
                                         <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                                     </div>
                                     <div class="list-group-item">
-                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                        <div class="row col-12">
+                                            <div class="col-sm-6">
+                                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                            </div>
+                                            <div class="col-sm-6 text-end">
+                                                <label class="form-label me-2">Atencion: </label><span style="font-size: .75rem;" aria-item="atencion">Remoto</span>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -606,6 +613,7 @@
     document.getElementById('form-ordenes').addEventListener('submit', function(event) {
         event.preventDefault();
         $('#modal_ordens .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+        const atencion = $('#modal_ordens [aria-item="atencion"]').html();
 
         var elementos = this.querySelectorAll('[name]');
         var materiales = $('#content-material table tbody tr');
@@ -625,7 +633,7 @@
             var idm = e.getAttribute('aria-table').replace('row', '');
             var cant = e.querySelectorAll('td:nth-child(3)')[0].innerHTML;
             var n_orden = $('#n_orden').val();
-            dataForm.materiales.push({ n_orden: n_orden, id: idm, cantidad: cant });
+            dataForm.materiales.push({ cod_ordens: n_orden, id_material: idm, cantidad: cant });
         });
 
         if (cad_require) {
@@ -644,15 +652,19 @@
             success: function(data) {
                 $('#modal_ordens .modal-dialog .modal-content .loader-of-modal').remove();
                 console.log(data);
-                // if (data.success) {
-                //     $('#modal_ordens').modal('hide');
-                //     boxAlert.minbox({
-                //         h: data.message
-                //     });
-                //     updateTable();
-                //     return true;
-                // }
-                // boxAlert.box('error', '¡Ocurrio un error!', data.message);
+                if (data.success) {
+                    $('#modal_ordens').modal('hide');
+                    boxAlert.minbox({
+                        h: data.message
+                    });
+                    updateTable();
+                    return true;
+                }
+                boxAlert.box({
+                    i: 'error',
+                    t: '¡Ocurrio un error!',
+                    h: data.message
+                });
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 const obj_error = jqXHR.responseJSON;

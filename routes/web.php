@@ -47,7 +47,7 @@ Route::get('/soporte/detail/{cod}', [IncidenciaController::class, 'detail']);
 Route::get('/soporte/detailOrden/{cod}', [IncidenciaController::class, 'detailOrden']);
 
 Route::post('/ordens/create', [OrdenSController::class, 'create']);
-
+Route::get('/generar-pdf', [OrdenSController::class, 'generarPDF']);
 
 
 
