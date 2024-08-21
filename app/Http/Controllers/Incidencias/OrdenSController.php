@@ -139,7 +139,8 @@ class OrdenSController extends Controller
     public function generarPDF()
     {
         $data = [
-            'title' => 'Ejemplo de PDF con Laravel'
+            'title' => 'ST24-00000001',
+            'cod_orden' => 'ST24-00000001',
         ];
         $pdf = Pdf::loadView('pdf.orden_servicio', $data);
         return $pdf->stream('archivo.pdf');
