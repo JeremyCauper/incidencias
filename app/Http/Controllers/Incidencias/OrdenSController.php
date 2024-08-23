@@ -47,19 +47,6 @@ class OrdenSController extends Controller
                 $materiales[$k]['created_at'] = now();
             }
             DB::beginTransaction();
-            DB::table('tb_order_servicio')->insert([
-                'cod_ordens' => $request->n_orden,
-                'cod_incidencia' => $request->codInc,
-                'observaciones' => $request->obs,
-                'recomendaciones' => $request->rec,
-                'fecha_f' => $request->fecha_f,
-                'hora_f' => $request->hora_f,
-                'created_at' => now(),
-                'updated_at' => now()
-            ]);
-
-            if (count($materiales))
-                DB::table('tb_materiales_usados')->insert($materiales);
 
             if ($request->n_doc || $request->nom_cliente) {
                 $dataContact = [
@@ -75,8 +62,23 @@ class OrdenSController extends Controller
                     }
                     $dataContact['firma_digital'] = $result['filename'];
                 }
-                DB::table('tb_contac_ordens')->insert($dataContact);
+                $idContacto = DB::table('tb_contac_ordens')->insertGetId($dataContact);
             }
+            
+            DB::table('tb_order_servicio')->insert([
+                'cod_ordens' => $request->n_orden,
+                'cod_incidencia' => $request->codInc,
+                'observaciones' => $request->obs,
+                'recomendaciones' => $request->rec,
+                'id_contacto' => $idContacto,
+                'fecha_f' => $request->fecha_f,
+                'hora_f' => $request->hora_f,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+
+            if (count($materiales))
+                DB::table('tb_materiales_usados')->insert($materiales);
 
             DB::table('tb_incidencias')->where('cod_incidencia', $request->codInc)->update(['estado_informe' => 3]);
 
@@ -136,13 +138,80 @@ class OrdenSController extends Controller
         //
     }
 
-    public function generarPDF()
+    public function generarPDF(string $cod)
     {
-        $data = [
-            'title' => 'ST24-00000001',
-            'cod_orden' => 'ST24-00000001',
+        $datos = [
+            'titulo' => "{$cod}.pdf",
+            'cod_ordens' => $cod,
+            'asignados' => [],
+            'materiales' => [],
+            'contacto' => '',
+            'telefono' => '',
+            'cantidad' => ''
         ];
-        $pdf = Pdf::loadView('pdf.orden_servicio', $data);
-        return $pdf->stream('archivo.pdf');
+
+        $usuarios = [];
+        $users = GlobalHelper::getUsuarios();
+        foreach ($users as $val) {
+            $usuarios[$val->id_usuario] = "{$val->ndoc_usuario} - {$val->nombres} {$val->apellidos}";
+        }
+
+        $materiales = [];
+        $material = GlobalHelper::getMateriales();
+        foreach ($material as $val) {
+            $materiales[$val->id] = $val->producto;
+        }
+
+        $orden = DB::table('tb_order_servicio')->where('cod_ordens', $cod)->first();
+        $inc = DB::table('tb_incidencias')->where('cod_incidencia', $orden->cod_incidencia)->first();
+        $contactos = DB::table('contactos_empresas')->where(['id_empresa' => $inc->id_empresa, 'id_sucursal' => $inc->id_sucursal])->first();
+        $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $orden->cod_incidencia)->get();
+
+        if ($contactos) {
+            $datos['contacto'] = "{$contactos->nro_doc} {$contactos->nombres}";
+            $datos['telefono'] = $contactos->telefono;
+            $datos['correo'] = $contactos->correo;
+        }
+
+        foreach ($asignados as $val) {
+            $datos['asignados'][] = ['personal' => $usuarios[$val->id_usuario]];
+        }
+
+        $empresas = GlobalHelper::getCompany();
+        foreach ($empresas as $val) {
+            if ($val->id == $inc->id_empresa) {
+                $datos['empresa'] = "{$val->Ruc} - {$val->RazonSocial}";
+                break;
+            }
+        }
+
+        $sucursales = GlobalHelper::getBranchOffice();
+        foreach ($sucursales as $val) {
+            if ($val->id == $inc->id_sucursal) {
+                $datos['sucursal'] = ['sucursal' => $val->Nombre, 'direccion' => $val->Direccion];
+                break;
+            }
+        }
+
+        $problem = GlobalHelper::getProblema();
+        foreach ($problem as $val) {
+            if ($val->id == $inc->id_problema) {
+                $datos['problema'] = $val->text;
+                break;
+            }
+        }
+
+        $datos['observacion'] = $orden->observaciones;
+        $datos['recomendacion'] = $orden->recomendaciones;
+        $datos['fecha'] = $inc->created_at;
+
+        $materialesu = DB::table('tb_materiales_usados')->where('cod_ordens', $cod)->get();
+        foreach ($materialesu as $key => $val) {
+            $datos['materiales'][] = ['i' => $key + 1, 'p' => $materiales[$val->id], 'c' => $val->cantidad];
+        }
+
+        $pdf = Pdf::loadView('pdf.orden_servicio', $datos);
+        return $pdf->stream("{$cod}.pdf");
+        // return $datos;
     }
 }

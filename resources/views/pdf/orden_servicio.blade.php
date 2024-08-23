@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <title>{{ $title }}</title>
+    <title>{{ $titulo }}</title>
     <style>
         * {
             font-family: Arial, Helvetica, sans-serif;
@@ -157,16 +157,23 @@
                 <div class="card t-center">
                     <h3 class="mb-5 fs-1p6rem">ORDEN DE SERVICIO</h3>
                     <p class="mb-5 fs-1p3rem">ELECTRÓNICA</p>
-                    <p class="mb-4 fs-1p3rem">N° : {{$cod_orden}}</p>
+                    <p class="mb-4 fs-1p3rem">N° : {{$cod_ordens}}</p>
                 </div>
             </td>
         </tr>
         <tr>
             <td colspan="2">
                 <div class="mb-2">
-                    <h5>Tecnico(s) :</h5>
+                    <table>
+                        <tbody>
+                            <td><h5>Tecnico(s) :</h5></td>
+                            <td style="text-align: center;"><h5>Fecha Incidencia : {{$fecha}}</h5></td>
+                        </tbody>
+                    </table>
                     <ul>
-                        <li>Jeremy Patrick Cauper Silvano</li>
+                        @foreach ($asignados as $asig)
+                            <li>{{$asig['personal']}}</li>
+                        @endforeach
                     </ul>
                 </div>
             </td>
@@ -182,21 +189,21 @@
         </tr>
         <tr>
             <td class="w-80px fw-bold">Razón Social :</td>
-            <td colspan="4"></td>
+            <td colspan="4">{{$empresa}}</td>
             <td class="w-60px fw-bold">Sucursal :</td>
-            <td colspan="2"></td>
+            <td colspan="2">{{$sucursal['sucursal']}}</td>
         </tr>
         <tr>
             <td class="w-80px fw-bold">Dirección :</td>
-            <td colspan="7"></td>
+            <td colspan="7">{{$sucursal['direccion']}}</td>
         </tr>
         <tr>
             <td class="w-80px fw-bold">Contacto :</td>
-            <td colspan="2"></td>
+            <td colspan="2">{{$contacto}}</td>
             <td class="w-60px fw-bold">Telefono :</td>
-            <td></td>
+            <td>{{$telefono}}</td>
             <td class="w-60px fw-bold">Correo :</td>
-            <td colspan="2"></td>
+            <td colspan="2">{{$correo}}</td>
         </tr>
         <tr>
             <td colspan="8">
@@ -207,20 +214,20 @@
         </tr>
         <tr>
             <td colspan="8">
-                <span class="fw-bold">Clasificacion del Error :</span> L-PRE_01 PRESENCIAL
+                <span class="fw-bold">Clasificacion del Error :</span> {{$problema}}
             </td>
         </tr>
         <tr>
             <td colspan="4" class="w-35px">
                 <span class="fw-bold">Observaciones</span>
                 <div class="card h-08rem">
-                    <!-- observaciones -->
+                    {{$observacion}}
                 </div>
             </td>
             <td colspan="4" class="w-35px">
                 <span class="fw-bold">Recomendaciones</span>
                 <div class="card h-08rem">
-                    <!-- recomendaciones -->
+                    {{$recomendacion}}
                 </div>
             </td>
         </tr>
@@ -249,13 +256,17 @@
                     </table>
                 </div>
                 <!-- 8 tr se pueden añadir -->
-                <table class="tb-material">
-                    <tr>
-                        <td>1</td>
-                        <td>Protector de Manguera Data (05 Mtrs)</td>
-                        <td>1.00</td>
-                    </tr>
-                </table>
+                @if (count($materiales))
+                    <table class="tb-material">
+                        @foreach ($materiales as $mat)
+                            <tr>
+                                <td>{{$mat['i']}}</td>
+                                <td>{{$mat['p']}}</td>
+                                <td>{{$mat['c']}}</td>
+                            </tr>
+                        @endforeach
+                    </table>
+                @endif
             </td>
         </tr>
     </table>
@@ -273,7 +284,7 @@
             <td class="t-center">
                 <div class="content-firmas">
                     <img class="firmas">
-                     <!-- src="{{public_path() . '/front/images/client/fdc_61505130.png'}}"> -->
+                    <!-- src="{{public_path() . '/front/images/client/fdc_61505130.png'}}"> -->
                 </div>
                 <h6 class="mb-2 mt-2">Firma Cliente</h6>
                 <h5 class="mb-2">COESTI S.A.</h5>
