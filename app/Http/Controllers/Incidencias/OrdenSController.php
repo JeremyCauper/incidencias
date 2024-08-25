@@ -43,6 +43,7 @@ class OrdenSController extends Controller
 
             $materiales = $request->materiales;
             foreach ($materiales as $k => $val) {
+                $materiales[$k]['cod_ordens'] = $request->n_orden;
                 $materiales[$k]['updated_at'] = now();
                 $materiales[$k]['created_at'] = now();
             }
@@ -147,13 +148,15 @@ class OrdenSController extends Controller
             'materiales' => [],
             'contacto' => '',
             'telefono' => '',
-            'cantidad' => ''
+            'cantidad' => '',
+            'contacOrden' => '',
+            'firmaC' => ''
         ];
 
         $usuarios = [];
         $users = GlobalHelper::getUsuarios();
         foreach ($users as $val) {
-            $usuarios[$val->id_usuario] = "{$val->ndoc_usuario} - {$val->nombres} {$val->apellidos}";
+            $usuarios[$val->id_usuario] = [ 'nombre' => "{$val->ndoc_usuario} - {$val->nombres} {$val->apellidos}", 'firma' => $val->firma_digital];
         }
 
         $materiales = [];
@@ -163,9 +166,13 @@ class OrdenSController extends Controller
         }
 
         $orden = DB::table('tb_order_servicio')->where('cod_ordens', $cod)->first();
+        if (!$orden) {
+            return redirect('/generar-pdf');
+        }
         $inc = DB::table('tb_incidencias')->where('cod_incidencia', $orden->cod_incidencia)->first();
         $contactos = DB::table('contactos_empresas')->where(['id_empresa' => $inc->id_empresa, 'id_sucursal' => $inc->id_sucursal])->first();
         $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $orden->cod_incidencia)->get();
+        $contacOrden = DB::table('tb_contac_ordens')->where('id', $orden->id_contacto)->first();
 
         if ($contactos) {
             $datos['contacto'] = "{$contactos->nro_doc} {$contactos->nombres}";
@@ -173,10 +180,16 @@ class OrdenSController extends Controller
             $datos['correo'] = $contactos->correo;
         }
 
-        foreach ($asignados as $val) {
-            $datos['asignados'][] = ['personal' => $usuarios[$val->id_usuario]];
+        if ($contacOrden) {
+            $datos['contacOrden'] = "{$contacOrden->nro_doc} - {$contacOrden->nombre_cliente}";
+            $datos['firmaC'] = $contacOrden->firma_digital ? public_path() . "/front/images/client/{$contacOrden->firma_digital}" : false;
         }
 
+        foreach ($asignados as $key => $val) {
+            if ($key == 0) $datos['firmaA'] = $usuarios[$val->id_usuario]['firma'] ? public_path() . "/front/images/firms/{$usuarios[$val->id_usuario]['firma']}" : false;
+            $datos['asignados'][] = ['personal' => $usuarios[$val->id_usuario]['nombre']];
+        }
+        
         $empresas = GlobalHelper::getCompany();
         foreach ($empresas as $val) {
             if ($val->id == $inc->id_empresa) {
@@ -211,7 +224,7 @@ class OrdenSController extends Controller
         }
 
         $pdf = Pdf::loadView('pdf.orden_servicio', $datos);
-        return $pdf->stream("{$cod}.pdf");
+        return $pdf->stream("ORDEN - {$cod}.pdf");
         // return $datos;
     }
 }

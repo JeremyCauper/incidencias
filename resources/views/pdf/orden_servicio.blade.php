@@ -27,7 +27,7 @@
         }
 
         .logo {
-            width: 100%;
+            width: 60px;
             height: auto;
         }
 
@@ -137,6 +137,10 @@
             height: inherit;
             /* border: 1px solid #466497; */
         }
+
+        .hidden {
+            visibility: hidden;
+        }
     </style>
 </head>
 
@@ -145,7 +149,8 @@
         <tr>
             <td class="w-50">
                 <div>
-                    <img src="{{public_path() . '/front/images/app/logo_pdf.png'}}" alt="Logo" class="logo">
+                    <img src="{{public_path() . '/front/images/app/LogoRC.png'}}" alt="Logo" width="60">
+                    <img src="{{public_path() . '/front/images/app/tittle_login.png'}}" alt="Logo" width="210">
                 </div>
                 <div class="card">
                     <p><b>Direccion :</b> Av. Augusto B. Leguia 307 - Coop. Policial Lima - Lima - SMP</p>
@@ -274,7 +279,7 @@
         <tr>
             <td class="t-center">
                 <div class="content-firmas">
-                    <img class="firmas" src="{{public_path() . '/front/images/firms/fd_jcauper.png'}}">
+                    <img class="firmas {{$firmaA ? '' : 'hidden'}}" src="{{$firmaA}}">
                 </div>
                 <h6 class="mb-2 mt-2">Firma Tecnico</h6>
                 <h5 class="mb-2">RICARDO CALDERON INGENIEROS</h5>
@@ -283,12 +288,12 @@
             <td style="width: 120;"></td>
             <td class="t-center">
                 <div class="content-firmas">
-                    <img class="firmas">
+                    <img class="firmas {{$firmaC ? '' : 'hidden'}}" src="{{$firmaC}}">
                     <!-- src="{{public_path() . '/front/images/client/fdc_61505130.png'}}"> -->
                 </div>
                 <h6 class="mb-2 mt-2">Firma Cliente</h6>
                 <h5 class="mb-2">COESTI S.A.</h5>
-                <p class="mb-2">Admin</p>
+                <p class="mb-2">{{$contacOrden}}</p>
             </td>
         </tr>
     </table>

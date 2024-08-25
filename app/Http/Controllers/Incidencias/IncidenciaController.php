@@ -28,9 +28,19 @@ class IncidenciaController extends Controller
             }
 
             $data['usuarios'] = GlobalHelper::getUsuarios()->map(function ($u) {
+                $nombre = ucwords(strtolower("{$u->nombres} {$u->apellidos}"));
                 return [
-                    'value' => "{$u->id_usuario}|{$u->ndoc_usuario}|{$u->nombres} {$u->apellidos}",
-                    'text' => "{$u->ndoc_usuario} - {$u->nombres} {$u->apellidos}"
+                    'value' => $u->id_usuario,
+                    'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
+                    'text' => "{$u->ndoc_usuario} - {$nombre}"
+                ];
+            });
+
+            $data['materiales'] = GlobalHelper::getMateriales()->map(function ($m) {
+                return [
+                    'value' => $m->id,
+                    'dValue' => base64_encode(json_encode(['id_material' => $m->id, 'producto' => $m->producto, 'cantidad' => 0])),
+                    'text' => $m->producto
                 ];
             });
 
@@ -60,7 +70,6 @@ class IncidenciaController extends Controller
             $data['tipo_incidencia'] = GlobalHelper::getTipIncidencia();
             $data['problema'] = GlobalHelper::getProblema();
             $data['subproblema'] = GlobalHelper::getSubProblema();
-            $data['materiales'] = GlobalHelper::getMateriales();
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
 
             return $data;
@@ -184,166 +193,7 @@ class IncidenciaController extends Controller
     public function create(Request $request)
     {
         try {
-            $validator = Validator::make($request->all(), [
-                'cod_inc' => 'required|string',
-                'id_empresa' => 'required|integer',
-                'id_sucursal' => 'required|integer',
-                'tip_estacion' => 'required|integer',
-                'priori_inc' => 'required|string',
-                'tip_soport' => 'required|integer',
-                'tip_incidencia' => 'required|integer',
-                'inc_problem' => 'required|integer',
-                'inc_subproblem' => 'required|integer',
-                'observasion' => 'nullable|string',
-                'fecha_imforme' => 'required|date',
-                'hora_informe' => 'required|date_format:H:i',
-                'tel_contac' => 'nullable|string',
-                'nro_doc' => 'nullable|integer',
-                'nom_contac' => 'nullable|string',
-                'car_contac' => 'nullable|string',
-                'cor_contac' => 'nullable|string'
-            ]);
-
-            if ($validator->fails())
-                return response()->json(['errors' => $validator->errors()], 400);
-
-            $personal_asig = $request->personal_asig;
-            $personal_asig[0]['creador'] = Auth::user()->id_usuario;
-            $personal_asig[0]['updated_at'] = now();
-            $personal_asig[0]['created_at'] = now();
-            $estado_info = count($personal_asig) ? 1 : 0;
-
-            DB::beginTransaction();
-            DB::table('tb_incidencias')->insert([
-                'cod_incidencia' => $request->cod_inc,
-                'id_empresa' => $request->id_empresa,
-                'id_sucursal' => $request->id_sucursal,
-                'id_tipo_estacion' => $request->tip_estacion,
-                'prioridad' => $request->priori_inc,
-                'id_tipo_soporte' => $request->tip_soport,
-                'id_tipo_incidencia' => $request->tip_incidencia,
-                'id_problema' => $request->inc_problem,
-                'id_subproblema' => $request->inc_subproblem,
-                'observasion' => $request->observasion,
-                'fecha_informe' => $request->fecha_imforme,
-                'hora_informe' => $request->hora_informe . GlobalHelper::gDate(':s'),
-                'estado_informe' => $estado_info,
-                'id_usuario' => Auth::user()->id_usuario,
-                'created_at' => GlobalHelper::gDate(),
-                'updated_at' => GlobalHelper::gDate()
-            ]);
-
-            if (
-                $request->tel_contac ||
-                $request->nro_doc ||
-                $request->nom_contac ||
-                $request->car_contac
-            ) {
-                DB::table('contactos_empresas')->insert([
-                    'telefono' => $request->tel_contac,
-                    'nro_doc' => $request->nro_doc,
-                    'nombres' => $request->nom_contac,
-                    'cargo' => $request->car_contac,
-                    'correo' => $request->cor_contac,
-                    'id_empresa' => $request->id_empresa,
-                    'id_sucursal' => $request->id_sucursal,
-                    'created_at' => GlobalHelper::gDate(),
-                    'updated_at' => GlobalHelper::gDate()
-                ]);
-            }
-
-            if (count($personal_asig))
-                DB::table('tb_inc_asignadas')->insert($personal_asig);
-
-            DB::commit();
-            GlobalHelper::getIncDataTable(true);
-
-            $data = [];
-            $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
-            return response()->json([
-                'success' => true,
-                'message' => 'Insidencia registrada exitosamente.',
-                'data' => $data
-            ], 200);
-        } catch (\Exception $e) {
-            DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Hubo un error al registrar incidencia: ' . $e->getMessage(),
-                'data' => []
-            ], 500);
-        }
-    }
-
-    /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        try {
-            $incidencias = DB::table('tb_incidencias')->where('id_incidencia', $id)->first();
-
-            if (!$incidencias) {
-                return response()->json(['success' => false, 'message' => 'Incidencia no encontrada']);
-            }
-
-            $empresas = GlobalHelper::getCompany();
-            $company = [];
-            foreach ($empresas as $val) {
-                $company[$val->id] = "{$val->Ruc} - {$val->RazonSocial}";
-            }
-
-            $sucursales = GlobalHelper::getBranchOffice();
-            $subcompany = [];
-            foreach ($sucursales as $val) {
-                $subcompany[$val->id] = ['sucursal' => $val->Nombre, 'direccion' => $val->Direccion];
-            }
-
-            $contactos = DB::table('contactos_empresas')
-                ->where([
-                    ['id_empresa', $incidencias->id_empresa],
-                    ['id_sucursal', $incidencias->id_sucursal]
-                ])
-                ->first();
-
-            $incidencias->telefono = isset($contactos->telefono) ? $contactos->telefono : null;
-            $incidencias->nro_doc = isset($contactos->nro_doc) ? $contactos->nro_doc : null;
-            $incidencias->nombres = isset($contactos->nombres) ? $contactos->nombres : null;
-            $incidencias->cargo = isset($contactos->cargo) ? $contactos->cargo : null;
-            $incidencias->correo = isset($contactos->correo) ? $contactos->correo : null;
-
-            $asignados = DB::table('tb_inc_asignadas')
-                ->where('cod_incidencia', $incidencias->cod_incidencia)
-                ->pluck('id_usuario')
-                ->toArray();
-
-            $usuarios = GlobalHelper::getUsuarios()->map(function ($usuario) {
-                return [
-                    'id' => $usuario->id_usuario,
-                    'value' => "{$usuario->id_usuario}|{$usuario->ndoc_usuario}|{$usuario->nombres} {$usuario->apellidos}",
-                    'text' => "{$usuario->ndoc_usuario} - {$usuario->nombres} {$usuario->apellidos}"
-                ];
-            });
-
-
-            $incidencias->empresa = $company[$incidencias->id_empresa];
-            $incidencias->sucursal = $subcompany[$incidencias->id_sucursal]['sucursal'];
-            $incidencias->direccion = $subcompany[$incidencias->id_sucursal]['direccion'];
-            $incidencias->personal_asig = $usuarios->whereIn('id', $asignados)->values();
-
-            return $incidencias;
-        } catch (\Exception $e) {
-            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
-        }
-    }
-
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Request $request, string $id)
-    {
-        try {
+            $idContact = 0;
             $validator = Validator::make($request->all(), [
                 'cod_inc' => 'required|string',
                 'id_empresa' => 'required|integer',
@@ -370,6 +220,149 @@ class IncidenciaController extends Controller
             $personal_asig = $request->personal_asig;
             $estado_info = count($personal_asig) ? 1 : 0;
 
+            DB::beginTransaction();
+            if ($request->tel_contac || $request->nom_contac || $request->car_contac) {
+                $idContact = DB::table('contactos_empresas')->insertGetId([
+                    'telefono' => $request->tel_contac,
+                    'nro_doc' => $request->nro_doc ?: null,
+                    'nombres' => $request->nom_contac,
+                    'cargo' => $request->car_contac,
+                    'correo' => $request->cor_contac ?: null,
+                    'created_at' => now(),
+                    'updated_at' => now()
+                ]);
+            }
+
+            if ($estado_info) {
+                $personal = [];
+                foreach ($personal_asig as $k => $val) {
+                    $personal[$k]['cod_incidencia'] = $request->cod_inc;
+                    $personal[$k]['id_usuario'] = $val['id'];
+                    $personal[$k]['creador'] = Auth::user()->id_usuario;
+                    $personal[$k]['updated_at'] = now();
+                    $personal[$k]['created_at'] = now();
+                }
+                DB::table('tb_inc_asignadas')->insert($personal);
+            }
+
+            DB::table('tb_incidencias')->insert([
+                'cod_incidencia' => $request->cod_inc,
+                'id_empresa' => $request->id_empresa,
+                'id_sucursal' => $request->id_sucursal,
+                'id_tipo_estacion' => $request->tip_estacion,
+                'prioridad' => $request->priori_inc,
+                'id_tipo_soporte' => $request->tip_soport,
+                'id_tipo_incidencia' => $request->tip_incidencia,
+                'id_problema' => $request->inc_problem,
+                'id_subproblema' => $request->inc_subproblem,
+                'id_contacto' => $idContact ?: null,
+                'observasion' => $request->observasion,
+                'fecha_informe' => $request->fecha_imforme,
+                'hora_informe' => $request->hora_informe,
+                'estado_informe' => $estado_info,
+                'id_usuario' => Auth::user()->id_usuario,
+                'created_at' => now(),
+                'updated_at' => now()
+            ]);
+            DB::commit();
+            GlobalHelper::getIncDataTable(true);
+
+            $data = [];
+            $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
+            return response()->json([
+                'success' => true,
+                'message' => 'Insidencia registrada exitosamente.',
+                'data' => $data
+            ], 200);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un error al registrar incidencia: ' . $e->getMessage(),
+                'data' => []
+            ], 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        try {
+            $inc = DB::table('tb_incidencias')->where('id_incidencia', $id)->first();
+
+            if (!$inc)
+                return response()->json(['success' => false, 'message' => 'Incidencia no encontrada']);
+
+            $empresas = GlobalHelper::getCompany();
+            foreach ($empresas as $val) {
+                if ($val->id == $inc->id_empresa) {
+                    $inc->empresa = "{$val->Ruc} - {$val->RazonSocial}";
+                    break;
+                }
+            }
+
+            $sucursales = GlobalHelper::getBranchOffice();
+            foreach ($sucursales as $val) {
+                if ($val->id == $inc->id_sucursal) {
+                    $inc->sucursal = $val->Nombre;
+                    $inc->direccion = $val->Direccion;
+                    break;
+                }
+            }
+
+            $contactos = DB::table('contactos_empresas')->where('id_contact', $inc->id_contacto)->first();
+            if ($contactos) {
+                foreach ($contactos as $key => $value) {
+                    $inc->$key = $value;
+                }
+            }
+
+            $inc->personal_asig = DB::table('tb_inc_asignadas')
+                ->where('cod_incidencia', $inc->cod_incidencia)
+                ->pluck('id_usuario')
+                ->toArray();
+
+            return $inc;
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+        }
+    }
+
+    /**
+     * Show the form for editing the specified resource.
+     */
+    public function edit(Request $request, string $id)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'cod_inc' => 'required|string',
+                'id_empresa' => 'required|integer',
+                'id_sucursal' => 'required|integer',
+                'tip_estacion' => 'required|integer',
+                'priori_inc' => 'required|string',
+                'tip_soport' => 'required|integer',
+                'tip_incidencia' => 'required|integer',
+                'inc_problem' => 'required|integer',
+                'inc_subproblem' => 'required|integer',
+                'observasion' => 'nullable|string',
+                'fecha_imforme' => 'required|date',
+                'hora_informe' => 'required|date_format:H:i:s',
+                'cod_contact' => 'nullable|integer',
+                'tel_contac' => 'nullable|string',
+                'nro_doc' => 'nullable|integer',
+                'nom_contac' => 'nullable|string',
+                'car_contac' => 'nullable|string',
+                'cor_contac' => 'nullable|string'
+            ]);
+
+            if ($validator->fails())
+                return response()->json(['errors' => $validator->errors()], 400);
+
+            // $personal_asig = $request->personal_asig;
+            // $estado_info = count($personal_asig) ? 1 : 0;
+
             $update = [
                 'cod_incidencia' => $request->cod_inc,
                 'id_empresa' => $request->id_empresa,
@@ -380,46 +373,38 @@ class IncidenciaController extends Controller
                 'id_tipo_incidencia' => $request->tip_incidencia,
                 'id_problema' => $request->inc_problem,
                 'id_subproblema' => $request->inc_subproblem,
+                'id_contacto' => $request->cod_contact,
                 'observasion' => $request->observasion,
                 'fecha_informe' => $request->fecha_imforme,
                 'hora_informe' => $request->hora_informe,
-                'estado_informe' => $estado_info,
+                // 'estado_informe' => $estado_info,
                 'id_usuario' => Auth::user()->id_usuario,
-                'updated_at' => GlobalHelper::gDate()
+                'updated_at' => now()
             ];
 
-            $updateContact = [
+            $updateC = [
                 'telefono' => $request->tel_contac,
                 'nro_doc' => $request->nro_doc,
                 'nombres' => $request->nom_contac,
                 'cargo' => $request->car_contac,
                 'correo' => $request->cor_contac,
-                'id_empresa' => $request->id_empresa,
-                'id_sucursal' => $request->id_sucursal,
-                'updated_at' => GlobalHelper::gDate()
+                'updated_at' => now()
             ];
 
             DB::beginTransaction();
-            DB::table('tb_incidencias')
-                ->where('id_incidencia', $id)
-                ->update($update);
 
-            if (
-                $updateContact['telefono'] ||
-                $updateContact['nro_doc'] ||
-                $updateContact['nombres'] ||
-                $updateContact['cargo']
-            ) {
-                DB::table('contactos_empresas')->where([
-                    ['id_empresa' => $request->id_empresa],
-                    ['id_sucursal' => $request->id_sucursal]
-                ])->update($updateContact);
-            }
+            if ($updateC['telefono'] || $updateC['nombres'] || $updateC['cargo'] && $request->cod_contact)
+                DB::table('contactos_empresas')->where('id_contact', $request->cod_contact)->update($updateC);
 
-            if (count($personal_asig)) {
-                DB::table('tb_inc_asignadas')->where('cod_incidencia', $update['cod_incidencia'])->delete();
-                DB::table('tb_inc_asignadas')->insert($personal_asig);
-            }
+            DB::table('tb_incidencias')->where('id_incidencia', $id)->update($update);
+
+            // if (count($personal_asig)) {
+            //     foreach ($personal_asig as $k => $val) {
+            //         $personal_asig[$k]['creador'] = Auth::user()->id_usuario;
+            //     }
+            //     DB::table('tb_inc_asignadas')->where('cod_incidencia', $update['cod_incidencia'])->delete();
+            //     DB::table('tb_inc_asignadas')->insert($personal_asig);
+            // }
 
             DB::commit();
             GlobalHelper::getIncDataTable(true);
@@ -531,21 +516,23 @@ class IncidenciaController extends Controller
                 return response()->json(['errors' => $validator->errors()], 400);
 
             $personal_asig = $request->personal_asig;
-            $personal_asig[0]['creador'] = Auth::user()->id_usuario;
-            $personal_asig[0]['updated_at'] = now();
-            $personal_asig[0]['created_at'] = now();
             $estado_info = count($personal_asig) ? 1 : 0;
 
             DB::beginTransaction();
 
             if (count($personal_asig)) {
-                DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->cod_inc)->delete();
-                DB::table('tb_inc_asignadas')->insert($personal_asig);
+                $personal = [];
+                foreach ($personal_asig as $k => $val) {
+                    $personal[$k]['cod_incidencia'] = $request->cod_inc;
+                    $personal[$k]['id_usuario'] = $val->id;
+                    $personal[$k]['creador'] = Auth::user()->id_usuario;
+                    $personal[$k]['updated_at'] = now();
+                    $personal[$k]['created_at'] = now();
+                }
+                DB::table('tb_inc_asignadas')->insert($personal);
+                // DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->cod_inc)->delete();
             }
 
-            DB::table('tb_incidencias')
-                ->where('cod_incidencia', $request->cod_inc)
-                ->update(['estado_informe' => 1]);
             DB::commit();
             GlobalHelper::getIncDataTable(true);
 
@@ -580,7 +567,7 @@ class IncidenciaController extends Controller
             [
                 'img' => asset("front/images/auth/{$usuarios[$inc->id_usuario]->foto_perfil}"),
                 'nombre' => "{$usuarios[$inc->id_usuario]->nombres} {$usuarios[$inc->id_usuario]->apellidos}",
-                'text' => "Registro la incidencia el {$inc->created_at}",
+                'text' => "Registró la incidencia el {$inc->created_at}",
                 'data' => '<i class="fab fa-whatsapp"></i> ' . $usuarios[$inc->id_usuario]->email_corporativo . ' / <i class="far fa-envelope"></i> ' . $usuarios[$inc->id_usuario]->email_corporativo
             ]
         ];
@@ -589,7 +576,7 @@ class IncidenciaController extends Controller
             array_push($data, [
                 'img' => asset("front/images/auth/{$usuarios[$v->creador]->foto_perfil}"),
                 'nombre' => "{$usuarios[$v->creador]->nombres} {$usuarios[$v->creador]->apellidos}",
-                'text' => "Asigno la Incidencia a {$usuarios[$v->id_usuario]->nombres} {$usuarios[$v->id_usuario]->apellidos}",
+                'text' => "Asignó la Incidencia a {$usuarios[$v->id_usuario]->nombres} {$usuarios[$v->id_usuario]->apellidos}",
                 'data' => '<i class="fab fa-whatsapp"></i> ' . $usuarios[$v->id_usuario]->email_corporativo . ' / <i class="far fa-envelope"></i> ' . $usuarios[$v->id_usuario]->email_corporativo
             ]);
         }
@@ -598,7 +585,7 @@ class IncidenciaController extends Controller
             array_push($data, [
                 'img' => asset("front/images/auth/{$usuarios[$v->id_usuario]->foto_perfil}"),
                 'nombre' => "{$usuarios[$v->id_usuario]->nombres} {$usuarios[$v->id_usuario]->apellidos}",
-                'text' => $v->estado ? "Finalizó la incidencia" : "Dio inicio a la incidencia",
+                'text' => ($v->estado ? "Finalizó la incidencia" : "Inició la incidencia") . " el {$v->created_at}",
                 'data' => '<i class="fab fa-whatsapp"></i> ' . $usuarios[$v->id_usuario]->email_corporativo . ' / <i class="far fa-envelope"></i> ' . $usuarios[$v->id_usuario]->email_corporativo
             ]);
         }
@@ -625,12 +612,13 @@ class IncidenciaController extends Controller
         return $html;
     }
 
-    public function detailOrden(string $cod) {
+    public function detailOrden(string $cod)
+    {
         $data = [
             'tecnicos' => ""
         ];
         $inc_asig = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get();
-        
+
         foreach (GlobalHelper::getUsuarios() as $val) {
             $usuarios[$val->id_usuario] = $val;
         }

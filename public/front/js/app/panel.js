@@ -16,24 +16,27 @@ $(document).ready(function () {
         fillSubProblem($(this).val());
     });
 
+    $('.modal').on('shown.bs.modal', function () {
+        $('#fecha_imforme').val(date('Y-m-d'));
+        $('#hora_informe').val(date('H:i:s'));
+    });
+
     $('.modal').on('hidden.bs.modal', function () {
         changeCodInc(cod_incidencia);
-        $(`#content_asig_personal table`).remove();
-        $(`#content_asig_personalAssign table`).remove();
-        $('#form-incidencias').attr('idu', '').attr('frm-accion', '0');
+
         fillEmpresa("");
         fillProblem("");
         fillSubProblem("");
+        
+        cTable.deleteTable('#createPersonal');
+        cTable.deleteTable('#createPersonal1');
+
         $('#content-seguimiento').html('');
     });
 
     setInterval(() => {
-        let t = new Date();
-        const formatD = (t) => { return t.toString().padStart(2, "0") }
-        let _time = `${formatD(t.getHours())}:${formatD(t.getMinutes())}:${formatD(t.getSeconds())}`;
-        let _date = `${formatD(t.getFullYear())}-${formatD(t.getMonth() + 1)}-${formatD(t.getDate())}`
-        $('#fecha_f').val(_date).attr('disabled', true);
-        $('#hora_f').val(_time).attr('disabled', true);
+        $('#fecha_f').val(date('Y-m-d')).attr('disabled', true);
+        $('#hora_f').val(date('H:i:s')).attr('disabled', true);
     }, 1000);
 
     $('#selector-material').on('change', function () {
@@ -42,15 +45,6 @@ $(document).ready(function () {
 
     $('#createMaterial').on('click', function () {
         manCantidad($(this).val(), true);
-    })
-
-    $('#createMaterial').ctableAdmin({
-        thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
-        tbody: [
-            { data: 'id' },
-            { data: 'producto' },
-            { data: 'cantidad' }
-        ]
     });
 });
 
@@ -99,19 +93,21 @@ function updateTable() {
 
 function showEdit(id) {
     $('#modal_incidencias').modal('show');
-    $('#modal_incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+    fMananger.formModalLoding('modal_incidencias', 'show');
 
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/show/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
-            $('#form-incidencias').attr('idu', id).attr('frm-accion', '1');
+            $('#contenedor-personal').addClass('d-none');
+            fMananger.formModalLoding('modal_incidencias', 'hide');
+            $('#id_inc').val(id);
             changeCodInc(data.cod_incidencia);
             $('#id_empresa').val(data.id_empresa).trigger('change.select2');
             fillEmpresa(data.id_empresa);
             $('#id_sucursal').val(data.id_sucursal).trigger('change.select2');
+            $('#cod_contact').val(data.id_contacto);
             $('#tel_contac').val(data.telefono).trigger('change.select2');
             $('#nro_doc').val(data.nro_doc);
             $('#nom_contac').val(data.nombres);
@@ -128,14 +124,9 @@ function showEdit(id) {
             $('#fecha_imforme').val(data.fecha_informe);
             $('#hora_informe').val(data.hora_informe);
             $('#observasion').val(data.observasion);
-
-            (data.personal_asig).forEach(element => {
-                $('#selectPersonal').val(element.value).trigger('change.select2');
-                tecnicoAsigManenger('create', 'selectPersonal', 'content_asig_personal');
-            });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: 'Error al registrar el usuario' });
+            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: 'Error al intentar extraer los datos de la incidencia' });
             console.log(jqXHR.responseJSON);
         }
     });
@@ -204,17 +195,18 @@ function showDetail(e, cod) {
     $('#modal_viewdetalle [aria-item="direccion"]').html(tds[3].innerHTML);
     $('#modal_viewdetalle [aria-item="sucursal"]').html(tds[2].innerHTML);
     $('#modal_viewdetalle').modal('show');
-    $('#modal_viewdetalle .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+    fMananger.formModalLoding('modal_viewdetalle', 'show');
 
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/detail/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            $('#modal_viewdetalle .modal-dialog .modal-content .loader-of-modal').remove();
+            fMananger.formModalLoding('modal_viewdetalle', 'hide');
             $('#content-seguimiento').html(data);
         },
         error: function (jqXHR, textStatus, errorThrown) {
+            fMananger.formModalLoding('modal_viewdetalle', 'hide');
             alert('Error al registrar el usuario');
             console.log(jqXHR.responseJSON);
         }
@@ -230,19 +222,18 @@ function assign(e, id) {
     $('#modal_assign [aria-item="sucursal"]').html(tds[2].innerHTML);
 
     $('#modal_assign').modal('show');
-    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+    fMananger.formModalLoding('modal_assign', 'show');
 
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/show/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
+            fMananger.formModalLoding('modal_assign', 'hide');
             (data.personal_asig).forEach(element => {
-                $('#selectPersonalAssign').val(element.value).trigger('change.select2');
-                tecnicoAsigManenger('create', 'selectPersonalAssign', 'content_asig_personalAssign');
+                const accion = data.estado_informe == 2 ? false : true;
+                cTable.fillTable('#createPersonal1', element, accion);
             });
-            $('#selectPersonalAssign').val('').trigger('change.select2');
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
@@ -254,7 +245,7 @@ function assign(e, id) {
 
 async function createAssign() {
     if (!await boxAlert.confirm('¿Esta seguro de realizar esta accion?')) return true;
-    $('#modal_assign .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+    fMananger.formModalLoding('modal_assign', 'show');
 
     const cod = $('#modal_assign [aria-item="cod"]').html();
     $.ajax({
@@ -266,12 +257,12 @@ async function createAssign() {
         },
         data: JSON.stringify({
             cod_inc: cod,
-            personal_asig: tecnicoAsigManenger('extract', cod, 'content_asig_personalAssign')
+            personal_asig: cPersonal1.extract()
         }),
         success: function (data) {
             console.log(data);
 
-            $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
+            fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
                 boxAlert.minbox({ h: data.message });
@@ -282,9 +273,9 @@ async function createAssign() {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
+            fMananger.formModalLoding('modal_assign', 'hide');
             boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
             console.log(obj_error);
-            $('#modal_assign .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
 }
@@ -300,14 +291,14 @@ async function createOrden(e, cod) {
     $('#modal_ordens [aria-item="atencion"]').html(tds[6].innerHTML);
 
     $('#modal_ordens').modal('show');
-    $('#modal_ordens .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+    fMananger.formModalLoding('modal_ordens', 'show');
 
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/detailOrden/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            $('#modal_ordens .modal-dialog .modal-content .loader-of-modal').remove();
+            fMananger.formModalLoding('modal_ordens', 'hide');
             $('#modal_ordens [aria-item="tecnicos"]').html(data.tecnicos);
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -501,43 +492,4 @@ function fillSubProblem(val) {
             $('#inc_subproblem').append($('<option>').val(e.id).text(e.text));
     });
     $('#inc_subproblem').attr('disabled', false);
-}
-
-function tecnicoAsigManenger(accion, select, content, row) {
-    switch (accion) {
-        case 'create':
-            const personal = $(`#${select}`).val();
-            if (!personal)
-                return false;
-            if (!$(`#${content} table`).length) {
-                const tabla = $('<table>', { class: 'table w-100 text-nowrap' });
-                const thead = $('<thead>').html($('<tr>').html('<th>#</th><th>Nro. Documento</th><th>Nombres y Apellidos</th><th>Acciones</th>'));
-                $(`#${content}`).html(tabla.append(thead).append($('<tbody>')));
-            }
-            const obj = personal.split('|');
-            const tr = $('<tr>', { 'aria-row': `reg${obj[0]}`, 'tr-personal': obj[0] }).html(`<td>${obj[0]}</td><td>${obj[1]}</td><td>${obj[2]}</td><td><button type="button" class="btn btn-danger btn-sm px-2"  onclick="tecnicoAsigManenger('delete', '${select}', '${content}', 'reg${obj[0]}')"><i class="far fa-trash-can"></i></button></td>`);
-
-            if ($(`#${content} table tbody tr[aria-row="reg${obj[0]}"]`).length)
-                return boxAlert.minbox('info', '<h6 class="mb-0" style="font-size:.75rem">NO PUEDO INGRESAR EL MISMO PERSONAL DOS VECES</h6>', { background: "#628acc", color: "#ffffff" }, "top");
-            $(`#${content} table tbody`).append(tr);
-            $(`#${select}`).val('').trigger('change.select2');
-            break;
-
-        case 'delete':
-            $(`#${content} table tbody tr[aria-row="${row}"]`).remove();
-            if (!$(`#${content} table tbody tr`).length) {
-                $(`#${content} table`).remove();
-            }
-            break;
-
-        case 'extract':
-            let c_ind = select;
-            const dataPer = [];
-            Array.from($(`#${content} table tbody tr`)).some(function (elemento) {
-                const trattr = elemento.getAttribute("tr-personal");
-                dataPer.push({ 'cod_incidencia': c_ind, 'id_usuario': trattr });
-            });
-            return dataPer;
-            break;
-    }
 }

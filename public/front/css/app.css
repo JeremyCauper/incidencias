@@ -3416,7 +3416,8 @@ body {
 .swal2-container .form-label,
 .modal-dialog .form-label {
     font-size: .75rem;
-    font-weight: 600;
+    font-weight: bold;
+    font-family: 'Roboto';
     color: #9FA6B2;
     margin-bottom: .2rem;
 }

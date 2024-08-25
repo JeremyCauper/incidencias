@@ -58,17 +58,6 @@
                     <i class="fas fa-rotate-right"></i>
                 </button>
             </div>
-            <!-- <div style="height: 200px;">
-                <div class="gear">
-                    <div>
-                        <label></label>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-            </div> -->
             <div class="row">
                 <div class="col-12">
                     <table id="tb_incidencia" class="table table-hover text-nowrap w-100">
@@ -96,7 +85,8 @@
 <div class="modal fade" id="modal_incidencias" aria-labelledby="modal_incidencias" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-xl">
         <div class="modal-content" style="position: relative;">
-            <form id="form-incidencias" frm-accion="0" idu="">
+            <form id="form-incidencias">
+                <input type="hidden" name="id_inc" id="id_inc">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title"><b>CREAR NUEVA INCIDENCIA: </b><b id="cod_inc_text">{{$dataInd['cod_inc']}}</b><b class="ms-3 badge badge-success" id="contrato"></b></h6>
                 </div>
@@ -109,7 +99,7 @@
                         <h6 class="legend text-primary">Datos Empresa</h6>
                         <div class="row">
                             <div class="col-lg-8 mb-3">
-                                <label class="form-label mb-0" for="id_empresa"><b>Empresa <span class="text-danger">*</span></b></label>
+                                <label class="form-label mb-0" for="id_empresa">Empresa <span class="text-danger">*</span></label>
                                 <select id="id_empresa" class="select-clear" name="id_empresa" require="Empresa">
                                     <option value="">-- Seleccione --</option>
                                     @foreach ($dataInd['empresas'] as $e)
@@ -118,7 +108,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-4 mb-3">
-                                <label class="form-label mb-0" for="id_sucursal"><b>Sucursal <span class="text-danger">*</span></b></label>
+                                <label class="form-label mb-0" for="id_sucursal">Sucursal <span class="text-danger">*</span></label>
                                 <select id="id_sucursal" class="select" name="id_sucursal" require="Sucursal" disabled="true">
                                     <option value="">-- Seleccione --</option>
                                 </select>
@@ -127,21 +117,22 @@
                     </div>
                     <div class="mt-4 p-3 pb-0 fieldset mb-3">
                         <h6 class="legend text-primary">Datos Contacto</h6>
+                        <input type="hidden" name="cod_contact" id="cod_contact">
                         <div class="row">
                             <div class="col-lg-4 col-6 mb-3">
-                                <label class="form-label mb-0" for="tel_contac"><b>Telefono</b></label>
-                                <select id="tel_contac" class="select-tags" name="tel_contac"></select>
+                                <label class="form-label mb-0" for="tel_contac">Telefono</label>
+                                <input type="text" class="form-control" id="tel_contac" name="tel_contac">
                             </div>
                             <div class="col-lg-4 col-6 mb-3">
-                                <label class="form-label mb-0" for="nro_doc"><b>Dni</b></label>
+                                <label class="form-label mb-0" for="nro_doc">Dni</label>
                                 <input type="text" class="form-control" id="nro_doc" name="nro_doc">
                             </div>
                             <div class="col-lg-4 col-12 mb-3">
-                                <label class="form-label mb-0" for="nom_contac"><b>Nombre</b></label>
+                                <label class="form-label mb-0" for="nom_contac">Nombre</label>
                                 <input type="text" class="form-control" id="nom_contac" name="nom_contac">
                             </div>
                             <div class="col-lg-6 col-5 mb-3">
-                                <label class="form-label mb-0" for="car_contac"><b>Cargo</b></label>
+                                <label class="form-label mb-0" for="car_contac">Cargo</label>
                                 <select id="car_contac" class="select-clear" name="car_contac">
                                     <option value="">-- Seleccione --</option>
                                     @foreach ($dataInd['cargo_contaco'] as $cc)
@@ -150,7 +141,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-6 col-7 mb-3">
-                                <label class="form-label mb-0" for="cor_contac"><b>Correo</b></label>
+                                <label class="form-label mb-0" for="cor_contac">Correo</label>
                                 <input type="text" class="form-control" id="cor_contac" name="cor_contac">
                             </div>
                         </div>
@@ -160,7 +151,7 @@
                         <h6 class="legend text-primary">Datos Incidencia</h6>
                         <div class="row">
                             <div class="col-lg-4 col-7 mb-3">
-                                <label class="form-label mb-0" for="tip_estacion"><b>Tipo Estación <span class="text-danger">*</span></b></label>
+                                <label class="form-label mb-0" for="tip_estacion">Tipo Estación <span class="text-danger">*</span></label>
                                 <select class="select-clear" id="tip_estacion" name="tip_estacion" require="Tipo Estación">
                                     <option value="">-- Seleccione --</option>
                                     @foreach ($dataInd['tipo_estacion'] as $v)
@@ -169,7 +160,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-5 mb-3">
-                                <label class="form-label mb-0" for="priori_inc"><b>Prioridad <span class="text-danger">*</span></b></label>
+                                <label class="form-label mb-0" for="priori_inc">Prioridad <span class="text-danger">*</span></label>
                                 <select class="select" id="priori_inc" name="priori_inc" require="Prioridad">
                                     <option value="Alta">Alta</option>
                                     <option value="Media">Media</option>
@@ -178,7 +169,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-4 col-7 mb-3">
-                                <label class="form-label mb-0" for="tip_soport"><b>Tipo Soporte <span class="text-danger">*</span></b></label>
+                                <label class="form-label mb-0" for="tip_soport">Tipo Soporte <span class="text-danger">*</span></label>
                                 <select class="select" id="tip_soport" name="tip_soport" require="Tipo Soporte">
                                     <option value="">-- Seleccione --</option>
                                     @foreach ($dataInd['tipo_soporte'] as $v)
@@ -187,7 +178,7 @@
                                 </select>
                             </div>
                             <div class="col-lg-2 col-5 mb-3">
-                                <label class="form-label mb-0" for="tip_incidencia"><b>Tipo Incidencia <span class="text-danger">*</span></b></label>
+                                <label class="form-label mb-0" for="tip_incidencia">Tipo Incidencia <span class="text-danger">*</span></label>
                                 <select class="select" id="tip_incidencia" name="tip_incidencia" require="Tipo Incidencia">
                                     <option value="">-- Seleccione --</option>
                                     @foreach ($dataInd['tipo_incidencia'] as $v)
@@ -197,12 +188,12 @@
                             </div>
 
                             <div class="col-md-6 mb-3">
-                                <label class="form-label mb-0" for="inc_problem"><b>Problema <span class="text-danger">*</span></b></label>
+                                <label class="form-label mb-0" for="inc_problem">Problema <span class="text-danger">*</span></label>
                                 <select class="select-clear" id="inc_problem" name="inc_problem" require="Problema" disabled>
                                 </select>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label class="form-label mb-0" for="inc_subproblem"><b>Sub Problema <span class="text-danger">*</span></b></label>
+                                <label class="form-label mb-0" for="inc_subproblem">Sub Problema <span class="text-danger">*</span></label>
                                 <select class="select-clear" id="inc_subproblem" name="inc_subproblem" require="Sub Problema" disabled>
                                 </select>
                             </div>
@@ -210,37 +201,35 @@
                         <div class="row">
                             <div class="col-sm-4">
                                 <div class="col-sm-12 mb-3">
-                                    <label class="form-label mb-0" for="fecha_imforme"><b>Fecha de Informe <span class="text-danger">*</span></b></label>
-                                    <input type="date" class="form-control input-date" id="fecha_imforme" name="fecha_imforme" require="Fecha de Informe">
+                                    <label class="form-label mb-0" for="fecha_imforme">Fecha de Informe <span class="text-danger">*</span></label>
+                                    <input type="date" class="form-control" id="fecha_imforme" name="fecha_imforme" require="Fecha de Informe">
                                 </div>
                                 <div class="col-sm-12 mb-3">
-                                    <label class="form-label mb-0" for="hora_informe"><b>Hora de Informe <span class="text-danger">*</span></b></label>
-                                    <input type="time" class="form-control input-time" id="hora_informe" name="hora_informe" require="Hora de Informe">
+                                    <label class="form-label mb-0" for="hora_informe">Hora de Informe <span class="text-danger">*</span></label>
+                                    <input type="time" class="form-control" id="hora_informe" name="hora_informe" min="00:00" max="23:59" step="1">
                                 </div>
                             </div>
                             <div class="col-sm-8 mb-3">
-                                <label class="form-label mb-0" for="tipo_acceso"><b>Observacion</b></label>
+                                <label class="form-label mb-0" for="tipo_acceso">Observacion</label>
                                 <textarea class="form-control" id="observasion" name="observasion" style="height: 106px;resize: none;"></textarea>
                             </div>
                         </div>
                     </div>
 
-                    <div class="mt-4 p-3 pb-0 fieldset mb-3">
+                    <div class="mt-4 p-3 pb-0 fieldset mb-3" id="contenedor-personal">
                         <h6 class="legend text-primary">Asignar Personal</h6>
                         <div class="row">
                             <div class="col-md-6">
                                 <div class="input-group mt-2 mb-3">
                                     <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
-                                    <select class="select-clear" id="selectPersonal">
+                                    <select class="select-clear">
                                         <option value=""></option>
                                         @foreach ($dataInd['usuarios'] as $u)
-                                        <option value="{{$u['value']}}">{{$u['text']}}</option>
+                                        <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}</option>
                                         @endforeach
                                     </select>
-                                    <button type="button" class="btn btn-primary px-2" onclick="tecnicoAsigManenger('create', 'selectPersonal', 'content_asig_personal')" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
+                                    <button type="button" class="btn btn-primary px-2" id="createPersonal" data-mdb-ripple-init><i class="fas fa-plus" style="pointer-events: none;"></i></button>
                                 </div>
-                            </div>
-                            <div class="col-12" id="content_asig_personal" style="overflow: auto;">
                             </div>
                         </div>
                     </div>
@@ -324,19 +313,17 @@
                 <div class="mt-4 p-3 pb-0 fieldset mb-3">
                     <h6 class="legend text-primary">Asignar Personal</h6>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <div class="input-group mt-2 mb-3">
                                 <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
-                                <select class="select-clear" id="selectPersonalAssign">
+                                <select class="select-clear">
                                     <option value=""></option>
                                     @foreach ($dataInd['usuarios'] as $u)
-                                    <option value="{{$u['value']}}">{{$u['text']}}</option>
+                                    <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}</option>
                                     @endforeach
                                 </select>
-                                <button type="button" class="btn btn-primary px-2" onclick="tecnicoAsigManenger('create', 'selectPersonalAssign', 'content_asig_personalAssign')" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
+                                <button type="button" class="btn btn-primary px-2" id="createPersonal1" data-mdb-ripple-init><i class="fas fa-plus" style="pointer-events: none;"></i></button>
                             </div>
-                        </div>
-                        <div class="col-12" id="content_asig_personalAssign" style="overflow: auto;">
                         </div>
                     </div>
                 </div>
@@ -452,7 +439,7 @@
                                             <select class="select-clear" id="selector-material">
                                                 <option value=""></option>
                                                 @foreach ($dataInd['materiales'] as $m)
-                                                <option value="{{$m->id}}" data-value="{{base64_encode(json_encode(['id'=>$m->id, 'producto'=>$m->producto, 'cantidad'=>0]))}}">{{$m->producto}}</option>
+                                                <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}</option>
                                                 @endforeach
                                             </select>
                                             <div class="input-group mx-2 disabled" id="content-cantidad" style="width: auto;">
@@ -460,41 +447,9 @@
                                                 <input type="number" class="form-control" style="width: 80px; flex: none;" value="0" input-cantidad="" oninput="manCantidad('press')">
                                                 <button type="button" onclick="manCantidad('plus')" class="btn btn-primary px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
                                             </div>
-                                            <button type="button" class="btn btn-primary px-2" id="createMaterial" data-mdb-ripple-init><i class="fas fa-plus"></i></button>
+                                            <button type="button" class="btn btn-primary px-2" id="createMaterial" data-mdb-ripple-init><i class="fas fa-plus" style="pointer-events: none;"></i></button>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-12" style="overflow: auto;">
-                                        <table id="tabla1" class="table  table-striped table-bordered" width="100%">
-                                            <thead>
-                                                <tr>
-                                                    <th>#</th>
-                                                    <th>PRODUCTO / MATERIAL</th>
-                                                    <th>CANTIDAD</th>
-                                                    <th>MARCA</th>
-                                                    <th>MODELO</th>
-                                                    <th>ACCION</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <td>1</td>
-                                                    <td>JACKTOOL DE LA CARA 10 SULFATADO</td>
-                                                    <td>
-                                                        <div class="input-group input-group-sm mb-3">
-                                                            <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-minus" style="font-size: .75rem;"></i></button>
-                                                            <input type="number" class="form-control form-control-sm" style="width: 60px;" aria-label="Amount (to the nearest dollar)">
-                                                            <button type="button" class="btn btn-primary btn-sm px-2" data-mdb-ripple-init><i class="fas fa-plus" style="font-size: .75rem;"></i></button>
-                                                        </div>
-                                                    </td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>
-                                                        <button type="button" class="btn btn-danger btn-sm px-2" onclick="this.parentNode.parentNode.remove()"><i class="far fa-trash-can"></i></button>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table> 
-                                    </div> -->
                                 </div>
                             </div>
 
@@ -542,60 +497,78 @@
 
 @section('scripts')
 <script src="{{asset('front/vendor/signature/signature_pad.min.js')}}"></script>
+<script src="{{asset('front/js/FormMananger.js')}}"></script>
 <script>
     let cod_incidencia = '<?= $dataInd['cod_inc'] ?>';
     const sucursales = <?php echo json_encode($dataInd['sucursales']); ?>;
     const obj_problem = <?php echo json_encode($dataInd['problema']); ?>;
     const obj_subproblem = <?php echo json_encode($dataInd['subproblema']); ?>;
 
+    const cMaterial = new CTable('#createMaterial', {
+        thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
+        tbody: [
+            { data: 'id_material' },
+            { data: 'producto' },
+            { data: 'cantidad' }
+        ],
+        extract: ['id_material', 'cantidad']
+    });
+
+    const cPersonal = new CTable('#createPersonal', {
+        thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
+        tbody: [
+            { data: 'id' },
+            { data: 'doc' },
+            { data: 'nombre' }
+        ],
+        extract: ['id']
+    });
+
+    const cPersonal1 = new CTable('#createPersonal1', {
+        thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
+        tbody: [
+            { data: 'id' },
+            { data: 'doc' },
+            { data: 'nombre' }
+        ],
+        extract: ['id']
+    });
+
     document.getElementById('form-incidencias').addEventListener('submit', function(event) {
         event.preventDefault();
-        $('#modal_incidencias .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+        fMananger.formModalLoding('modal_incidencias', 'show');
+        const accion = $('#id_inc').val();
+        const url = accion ? `edit/${accion}` : `create`;
 
         var elementos = this.querySelectorAll('[name]');
-        var dataForm = {};
+        var valid = fMananger.validFrom(elementos);
+        if (!valid.success) 
+            return fMananger.formModalLoding('modal_incidencias', 'hide');
+        valid.data.data['personal_asig'] = cPersonal.extract();
 
-        let cad_require = "";
-        elementos.forEach(function(elemento) {
-            if (elemento.getAttribute("require") && elemento.value == "") {
-                cad_require += `<b>${elemento.getAttribute("require")}</b>, `;
-            }
-            dataForm[elemento.name] = elemento.value;
-        });
-        dataForm['personal_asig'] = tecnicoAsigManenger('extract', $('[name="cod_inc"]').val(), 'content_asig_personal');
-        console.log(dataForm);
-        if (cad_require) {
-            $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
-            return boxAlert.box({
-                i: 'info',
-                t: 'Faltan datos',
-                h: `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>`
-            });
-        }
-
-        url = [
-            `/soporte/create`, `/soporte/edit/${$('#form-incidencias').attr('idu')}`
-        ];
         $.ajax({
             type: 'POST',
-            url: __url + url[$('#form-incidencias').attr('frm-accion')],
+            url: __url + `/soporte/${url}`,
             contentType: 'application/json',
             headers: {
                 'X-CSRF-TOKEN': __token,
             },
-            data: JSON.stringify(dataForm),
+            data: JSON.stringify(valid.data.data),
             success: function(data) {
-                $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+                fMananger.formModalLoding('modal_incidencias', 'hide');
                 if (data.success) {
                     cod_incidencia = data.data.cod_inc;
                     $('#modal_incidencias').modal('hide');
                     boxAlert.minbox({
                         h: data.message
                     });
-                    updateTable();
-                    return true;
+                    return updateTable();
                 }
-                boxAlert.box('error', '¡Ocurrio un error!', data.message);
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Ocurrio un error en el processo',
+                    h: data.message
+                });
             },
             error: function(jqXHR, textStatus, errorThrown) {
                 const obj_error = jqXHR.responseJSON;
@@ -605,41 +578,22 @@
                     h: obj_error.message
                 });
                 console.log(obj_error);
-                $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
+                fMananger.formModalLoding('modal_incidencias', 'hide');
             }
         });
     });
 
     document.getElementById('form-ordenes').addEventListener('submit', function(event) {
         event.preventDefault();
-        $('#modal_ordens .modal-dialog .modal-content').append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+        fMananger.formModalLoding('modal_ordens', 'show');
         const atencion = $('#modal_ordens [aria-item="atencion"]').html();
 
         var elementos = this.querySelectorAll('[name]');
-        var materiales = $('#content-material table tbody tr');
-        var dataForm = {
-            materiales: []
-        };
-        let cad_require = "";
+        var valid = fMananger.validFrom(elementos);
+        valid.data.data.materiales = cMaterial.extract();
 
-        elementos.forEach(function(elemento) {
-            if (elemento.getAttribute("require") && elemento.value == "") {
-                cad_require += `<b>${elemento.getAttribute("require")}</b>, `;
-            }
-            dataForm[elemento.name] = elemento.value;
-        });
-
-        materiales.each(function(i, e) {
-            var idm = e.getAttribute('aria-table').replace('row', '');
-            var cant = e.querySelectorAll('td:nth-child(3)')[0].innerHTML;
-            var n_orden = $('#n_orden').val();
-            dataForm.materiales.push({ cod_ordens: n_orden, id_material: idm, cantidad: cant });
-        });
-
-        if (cad_require) {
-            $('#modal_ordens .modal-dialog .modal-content .loader-of-modal').remove();
-            return boxAlert.box({ i: 'info', t: 'Faltan datos', h: `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>` });
-        }
+        if (!valid.success) 
+            return fMananger.formModalLoding('modal_ordens', 'hide');
         
         $.ajax({
             type: 'POST',
@@ -650,7 +604,7 @@
             },
             data: JSON.stringify(dataForm),
             success: function(data) {
-                $('#modal_ordens .modal-dialog .modal-content .loader-of-modal').remove();
+                fMananger.formModalLoding('modal_ordens', 'hide');
                 console.log(data);
                 if (data.success) {
                     $('#modal_ordens').modal('hide');
@@ -674,7 +628,7 @@
                     h: obj_error.message
                 });
                 console.log(obj_error);
-                $('#modal_ordens .modal-dialog .modal-content .loader-of-modal').remove();
+                fMananger.formModalLoding('modal_ordens', 'hide');
             }
         });
     });
