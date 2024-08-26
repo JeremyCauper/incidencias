@@ -17,7 +17,7 @@
   <link href="{{ asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
 
   <link rel="stylesheet" href="{{asset('front/vendor/flatpickr/flatpickr.min.css')}}">
-  
+
   <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/animate.min.css')}}">
   <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/default.css')}}">
   <!-- Google Fonts -->
@@ -124,6 +124,12 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" data-mdb-ripple-init href="{{url('/incidencias-resueltas')}}">
+              <i class="fas fa-list-check"></i>
+              <span class="menu-title">Incidencias Resueltas</span>
+            </a>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlEmpresas" role="button" aria-expanded="false" aria-controls="ControlEmpresas">
               <i class="far fa-building menu-icon"></i>
               <span class="menu-title">Empresas</span>
@@ -186,7 +192,9 @@
 
 
   <script>
-    setTimeout(function () {location.reload();}, 7205000);
+    setTimeout(function() {
+      location.reload();
+    }, 7205000);
     const __url = "{{url('')}}";
     const __asset = "{{asset('/front')}}";
     const __token = "{{ csrf_token() }}";

@@ -6,6 +6,7 @@ use App\Http\Controllers\Mantenimientos\AreasController;
 use App\Http\Controllers\Mantenimientos\TipoAccesoController;
 use App\Http\Controllers\Mantenimientos\MenuController;
 use App\Http\Controllers\Incidencias\IncidenciaController;
+use App\Http\Controllers\Incidencias\IncidenciasResueltas;
 use App\Http\Controllers\Incidencias\OrdenSController;
 use App\Http\Controllers\ConsultasController;
 use Illuminate\Support\Facades\Auth;
@@ -48,6 +49,11 @@ Route::get('/soporte/detailOrden/{cod}', [IncidenciaController::class, 'detailOr
 
 Route::post('/ordens/create', [OrdenSController::class, 'create']);
 Route::get('/generar-pdf/{cod}', [OrdenSController::class, 'generarPDF']);
+
+
+// Gestion de incidencias resueltas
+Route::get('/incidencias-resueltas', [IncidenciasResueltas::class, 'view'])->middleware('auth');
+Route::get('/incidencias-resueltas/datatable', [IncidenciasResueltas::class, 'datatable']);
 
 
 
