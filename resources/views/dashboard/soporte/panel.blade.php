@@ -346,10 +346,19 @@
                 <div class="modal-body">
                     <div class="col-md-12 col-lg-12 col-xs-12">
                             <!-- INICIO CABECERA -->
-                            <div class="d-flex justify-content-between mb-2">
+                            <div class="text-end mb-2 cabecera-orden">
+                                <h6><label>Fecha Inicio: </label><span aria-item="registrado"></span></h6>
+                            </div>
+                            <div class="mb-2 cabecera-orden">
                                 <input type="hidden" name="codInc" id="codInc">
-                                <h6><strong>N° Orden *: </strong><span><input class="form-control form-control-sm" style="display: inline; width:auto" type="text" name="n_orden" id="n_orden" value="ST24-00000001" require="N° Orden"></span></h6>
-                                <h6><strong>Fecha Inicio: </strong><span aria-item="registrado"></span></h6>
+                                <h6>
+                                    <label>N° Orden *: </label>
+                                    <span><input class="form-control form-control-sm" style="display: inline; width:auto; max-width: 130px;" type="text" name="n_orden" id="n_orden" require="N° Orden"></span>
+                                    <span>
+                                        <input type="checkbox" name="check_cod" id="check_cod" style="display: inline; width:auto" onchange="setChangeCodOrden(this)">
+                                        <label for="check_cod">Cod. del Sistema</label>
+                                    </span>
+                                </h6>
                             </div>
 
                             <!-- TER CABECERA -->
@@ -500,256 +509,10 @@
 <script src="{{asset('front/js/FormMananger.js')}}"></script>
 <script>
     let cod_incidencia = '<?= $dataInd['cod_inc'] ?>';
+    let cod_ordenSer = '<?= $dataInd['cod_ordenS'] ?>';
     const sucursales = <?php echo json_encode($dataInd['sucursales']); ?>;
     const obj_problem = <?php echo json_encode($dataInd['problema']); ?>;
     const obj_subproblem = <?php echo json_encode($dataInd['subproblema']); ?>;
-
-    const cMaterial = new CTable('#createMaterial', {
-        thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
-        tbody: [
-            { data: 'id_material' },
-            { data: 'producto' },
-            { data: 'cantidad' }
-        ],
-        extract: ['id_material', 'cantidad']
-    });
-
-    const cPersonal = new CTable('#createPersonal', {
-        thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-        tbody: [
-            { data: 'id' },
-            { data: 'doc' },
-            { data: 'nombre' }
-        ],
-        extract: ['id']
-    });
-
-    const cPersonal1 = new CTable('#createPersonal1', {
-        thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-        tbody: [
-            { data: 'id' },
-            { data: 'doc' },
-            { data: 'nombre' }
-        ],
-        extract: ['id']
-    });
-
-    document.getElementById('form-incidencias').addEventListener('submit', function(event) {
-        event.preventDefault();
-        fMananger.formModalLoding('modal_incidencias', 'show');
-        const accion = $('#id_inc').val();
-        const url = accion ? `edit/${accion}` : `create`;
-
-        var elementos = this.querySelectorAll('[name]');
-        var valid = fMananger.validFrom(elementos);
-        if (!valid.success) 
-            return fMananger.formModalLoding('modal_incidencias', 'hide');
-        valid.data.data['personal_asig'] = cPersonal.extract();
-
-        $.ajax({
-            type: 'POST',
-            url: __url + `/soporte/${url}`,
-            contentType: 'application/json',
-            headers: {
-                'X-CSRF-TOKEN': __token,
-            },
-            data: JSON.stringify(valid.data.data),
-            success: function(data) {
-                fMananger.formModalLoding('modal_incidencias', 'hide');
-                if (data.success) {
-                    cod_incidencia = data.data.cod_inc;
-                    $('#modal_incidencias').modal('hide');
-                    boxAlert.minbox({
-                        h: data.message
-                    });
-                    return updateTable();
-                }
-                boxAlert.box({
-                    i: 'error',
-                    t: 'Ocurrio un error en el processo',
-                    h: data.message
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                const obj_error = jqXHR.responseJSON;
-                boxAlert.box({
-                    i: 'error',
-                    t: 'Ocurrio un error en el processo',
-                    h: obj_error.message
-                });
-                console.log(obj_error);
-                fMananger.formModalLoding('modal_incidencias', 'hide');
-            }
-        });
-    });
-
-    document.getElementById('form-ordenes').addEventListener('submit', function(event) {
-        event.preventDefault();
-        fMananger.formModalLoding('modal_ordens', 'show');
-        const atencion = $('#modal_ordens [aria-item="atencion"]').html();
-
-        var elementos = this.querySelectorAll('[name]');
-        var valid = fMananger.validFrom(elementos);
-        valid.data.data.materiales = cMaterial.extract();
-
-        if (!valid.success) 
-            return fMananger.formModalLoding('modal_ordens', 'hide');
-        
-        $.ajax({
-            type: 'POST',
-            url: __url + '/ordens/create',
-            contentType: 'application/json',
-            headers: {
-                'X-CSRF-TOKEN': __token,
-            },
-            data: JSON.stringify(dataForm),
-            success: function(data) {
-                fMananger.formModalLoding('modal_ordens', 'hide');
-                console.log(data);
-                if (data.success) {
-                    $('#modal_ordens').modal('hide');
-                    boxAlert.minbox({
-                        h: data.message
-                    });
-                    updateTable();
-                    return true;
-                }
-                boxAlert.box({
-                    i: 'error',
-                    t: '¡Ocurrio un error!',
-                    h: data.message
-                });
-            },
-            error: function(jqXHR, textStatus, errorThrown) {
-                const obj_error = jqXHR.responseJSON;
-                boxAlert.box({
-                    i: 'error',
-                    t: 'Ocurrio un error en el processo',
-                    h: obj_error.message
-                });
-                console.log(obj_error);
-                fMananger.formModalLoding('modal_ordens', 'hide');
-            }
-        });
-    });
-
-    document.getElementById('doc_clienteFirma').addEventListener('click', async function(event) {
-        var rect = this.getBoundingClientRect();
-        var beforeWidth = 14;
-        var beforeHeight = 14;
-        var beforeElementRightOffset = 0.65 * parseFloat(getComputedStyle(document.documentElement).fontSize);
-        var beforeElementTopOffset = rect.top + (rect.height / 2) - (beforeHeight / 2);
-
-        if (event.clientX >= rect.right - beforeElementRightOffset - beforeWidth &&
-            event.clientX <= rect.right - beforeElementRightOffset &&
-            event.clientY >= beforeElementTopOffset &&
-            event.clientY <= beforeElementTopOffset + beforeHeight) {
-            this.innerHTML = "";
-            this.classList.add("doc-fsearch");
-            this.classList.remove("doc-fclear");
-        } else {
-            const bodyChildren = Array.from(document.body.children);
-            bodyChildren.forEach(child => {
-                if (!child.classList.contains('swal2-container')) {
-                    child.setAttribute('inert', '');
-                }
-            });
-
-            Swal.fire({
-                title: '<h5 class="text-primary">Buscar cliente</h5>',
-                html: `
-                    <div class="form-group text-start mb-3">
-                        <label class="form-label">Nro. de Documento</label>
-                        <div class="input-group">
-                            <input type="text" id="docNumber" class="form-control" placeholder="Número de Documento" onchange="search_doc()">
-                            <button type="button" class="btn btn-primary px-2" id="btn-conDoc" data-mdb-ripple-init>
-                                <span class="spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
-                                <i class="fas fa-magnifying-glass"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="form-group text-start">
-                        <label class="form-label">Nom del Cliente</label>
-                        <input type="text" id="clientName" class="form-control" placeholder="Nombre del Cliente">
-                    </div>
-                `,
-                showCancelButton: true,
-                confirmButtonText: 'Confirmar',
-                confirmButtonColor: "#3085d6",
-                cancelButtonText: 'Cancelar',
-                focusConfirm: false,
-                didOpen: () => {
-                    const docNumberInput = Swal.getPopup().querySelector('#docNumber');
-                    if (docNumberInput) docNumberInput.focus();
-                },
-                willClose: () => {
-                    bodyChildren.forEach(child => {
-                        if (!child.classList.contains('swal2-container')) child.removeAttribute('inert');
-                    });
-                },
-                preConfirm: () => {
-                    const docNumber = Swal.getPopup().querySelector('#docNumber');
-                    const clientName = Swal.getPopup().querySelector('#clientName');
-
-                    if (!docNumber.value || !clientName.value) {
-                        Swal.showValidationMessage(`Por favor ingresa ambos campos`);
-                    }
-                    const hideValid = () => { Swal.getPopup().querySelector('.swal2-validation-message').style.display = "none"; }
-                    docNumber.addEventListener("focus", hideValid);
-                    clientName.addEventListener("focus", hideValid);
-
-                    return { docNumber: docNumber.value, clientName: clientName.value };
-                }
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    const docNumber = result.value.docNumber;
-                    const clientName = result.value.clientName;
-                    this.innerHTML = `${docNumber} - ${clientName}`;
-                    $('#n_doc').val(docNumber);
-                    $('#nom_cliente').val(clientName);
-                    
-                    this.classList.remove("doc-fsearch");
-                    this.classList.add("doc-fclear");
-                }
-            });
-        }
-    });
-    
-
-    function search_doc() {
-        const docNumberI = Swal.getPopup().querySelector('#docNumber');
-        const clientNameI = Swal.getPopup().querySelector('#clientName');
-        const conDocB = Swal.getPopup().querySelector('#btn-conDoc');
-
-        $.ajax({
-            type: 'GET',
-            url: `${__url}/ConsultaDni/${docNumberI.value}`,
-            contentType: 'application/json',
-            headers: {
-                'X-CSRF-TOKEN': __token,
-            },
-            beforeSend: function () {
-                conDocB.querySelector('span').classList.remove('visually-hidden');
-                conDocB.querySelector('i').classList.add('visually-hidden');
-            },
-            success: function (data) {
-                if (data.success) {
-                    clientNameI.value = data.data.complet;
-                }
-                else {
-                    Swal.showValidationMessage(data.message);
-                }
-                conDocB.querySelector('span').classList.add('visually-hidden');
-                conDocB.querySelector('i').classList.remove('visually-hidden');
-            },
-            error: function (jqXHR, textStatus, errorThrown) {
-                const obj_error = jqXHR.responseJSON;
-                Swal.showValidationMessage(obj_error.message);
-                //boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
-                console.log(obj_error);
-            }
-        });
-    }
 </script>
 <script src="{{asset('front/js/app/panel.js')}}"></script>
 @endsection

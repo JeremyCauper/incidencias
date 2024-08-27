@@ -98,12 +98,9 @@ class GlobalHelper
 
     public static function getIncDataTable($vaciar = false)
     {
-        $inc_datatable = self::fechTable($vaciar, 'inc_datatable', 'tb_incidencias', ['cod_incidencia', 'id_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as acciones', 'estatus']);
+        $inc_datatable = self::fechTableInc($vaciar, 'inc_datatable', 'tb_incidencias', ['cod_incidencia', 'id_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as acciones', 'estatus']);
         return $inc_datatable;
     }
-
-
-
 
 
     public static function fechTable($reset, $Ncache, $Ntable, $columns) {
@@ -111,6 +108,16 @@ class GlobalHelper
 
         if ($reset || $data === null) {
             $data = DB::table($Ntable)->select($columns)->where('estatus', 1)->get();
+            Cache::forever($Ncache, $data);
+        }
+        return $data;
+    }
+
+    public static function fechTableInc($reset, $Ncache, $Ntable, $columns) {
+        $data = Cache::get($Ncache);
+
+        if ($reset || $data === null) {
+            $data = DB::table($Ntable)->select($columns)->where('estatus', 1)->whereNot('estado_informe', 3)->get();
             Cache::forever($Ncache, $data);
         }
         return $data;
@@ -129,6 +136,14 @@ class GlobalHelper
                 break;
         }
         return date($date);
+    }
+
+    public static function getparsedata($data)
+    {
+        foreach ($data as $val) {
+            $data[$val->id] = $val->descripcion;
+        }
+        return $data;
     }
 
     public static function parseCreateFile($name, $dir, $data)

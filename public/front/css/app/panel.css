@@ -39,6 +39,14 @@
     font-size: .9rem;
 }
 
+.cabecera-orden h6 {
+    font-size: .9rem;
+}
+
+.cabecera-orden h6 label:nth-child(1) {
+    font-weight: bold;
+}
+
 .firmas-orden div p {
     font-size: .7rem;
     padding: .4rem;
@@ -188,6 +196,10 @@
 
     .expandImgButton {
         display: block;
+    }
+
+    .cabecera-orden h6 {
+        font-size: .7rem;
     }
 }
 

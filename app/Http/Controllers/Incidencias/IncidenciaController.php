@@ -71,6 +71,7 @@ class IncidenciaController extends Controller
             $data['problema'] = GlobalHelper::getProblema();
             $data['subproblema'] = GlobalHelper::getSubProblema();
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
+            $data['cod_ordenS'] = DB::select("CALL GetCodeOrds(24)")[0]->num_orden;
 
             return $data;
         } catch (\Throwable $th) {
@@ -103,13 +104,13 @@ class IncidenciaController extends Controller
         }
 
         $tipo_estacion = GlobalHelper::getTipEstacion();
-        $__estacion = $this->getparsedata($tipo_estacion);
+        $__estacion = GlobalHelper::getparsedata($tipo_estacion);
         $tipo_incidencia = GlobalHelper::getTipIncidencia();
-        $__incidencia = $this->getparsedata($tipo_incidencia);
+        $__incidencia = GlobalHelper::getparsedata($tipo_incidencia);
         $problema = GlobalHelper::getProblema();
-        $__problema = $this->getparsedata($problema);
+        $__problema = GlobalHelper::getparsedata($problema);
         $subproblema = GlobalHelper::getSubProblema();
-        $__subproblema = $this->getparsedata($subproblema);
+        $__subproblema = GlobalHelper::getparsedata($subproblema);
 
         $incidencias = GlobalHelper::getIncDataTable(true);
         foreach ($incidencias as $val) {
@@ -139,7 +140,7 @@ class IncidenciaController extends Controller
                     <button class="dropdown-item py-2" onclick="showEdit(' . $val->acciones . ')"><i class="fas fa-pen text-info me-2"></i> Editar</button>
                     <button class="dropdown-item py-2" onclick="assign(this, ' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>'
                 . ($val->estado_informe == 1 ? '<button class="dropdown-item py-2" onclick="reloadInd(' . ("'{$val->cod_incidencia}'") . ', ' . $val->estado_informe . ')"><i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia</button>' : '')
-                . ($val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="createOrden(this, ' . ("'{$val->cod_incidencia}'") . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>' : '') .
+                . ($val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="detailOrden(this, ' . ("'{$val->cod_incidencia}'") . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>' : '') .
                 '<button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
                 </div>
             </div>';
@@ -360,9 +361,6 @@ class IncidenciaController extends Controller
             if ($validator->fails())
                 return response()->json(['errors' => $validator->errors()], 400);
 
-            // $personal_asig = $request->personal_asig;
-            // $estado_info = count($personal_asig) ? 1 : 0;
-
             $update = [
                 'cod_incidencia' => $request->cod_inc,
                 'id_empresa' => $request->id_empresa,
@@ -377,7 +375,6 @@ class IncidenciaController extends Controller
                 'observasion' => $request->observasion,
                 'fecha_informe' => $request->fecha_imforme,
                 'hora_informe' => $request->hora_informe,
-                // 'estado_informe' => $estado_info,
                 'id_usuario' => Auth::user()->id_usuario,
                 'updated_at' => now()
             ];
@@ -392,19 +389,11 @@ class IncidenciaController extends Controller
             ];
 
             DB::beginTransaction();
-
             if ($updateC['telefono'] || $updateC['nombres'] || $updateC['cargo'] && $request->cod_contact)
                 DB::table('contactos_empresas')->where('id_contact', $request->cod_contact)->update($updateC);
 
             DB::table('tb_incidencias')->where('id_incidencia', $id)->update($update);
-
-            // if (count($personal_asig)) {
-            //     foreach ($personal_asig as $k => $val) {
-            //         $personal_asig[$k]['creador'] = Auth::user()->id_usuario;
-            //     }
-            //     DB::table('tb_inc_asignadas')->where('cod_incidencia', $update['cod_incidencia'])->delete();
-            //     DB::table('tb_inc_asignadas')->insert($personal_asig);
-            // }
+            $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
 
             DB::commit();
             GlobalHelper::getIncDataTable(true);
@@ -414,7 +403,7 @@ class IncidenciaController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Incidencia editada con éxito',
-                'data' => $data
+                'data' => ['cod_inc' => $cod_inc]
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -483,6 +472,8 @@ class IncidenciaController extends Controller
                 DB::table('tb_inc_seguimiento')->insert([
                     'id_usuario' => Auth::user()->id_usuario,
                     'cod_incidencia' => $cod,
+                    'fecha' => GlobalHelper::gDate('Y-m-d'),
+                    'hora' => GlobalHelper::gDate('H:i:s'),
                     'updated_at' => now(),
                     'created_at' => now()
                 ]);
@@ -511,37 +502,31 @@ class IncidenciaController extends Controller
             $validator = Validator::make($request->all(), [
                 'cod_inc' => 'required|string'
             ]);
-
             if ($validator->fails())
                 return response()->json(['errors' => $validator->errors()], 400);
 
-            $personal_asig = $request->personal_asig;
-            $estado_info = count($personal_asig) ? 1 : 0;
-
             DB::beginTransaction();
-
-            if (count($personal_asig)) {
+            if (count($request->personal_asig)) {
                 $personal = [];
-                foreach ($personal_asig as $k => $val) {
+                foreach ($request->personal_asig as $k => $val) {
                     $personal[$k]['cod_incidencia'] = $request->cod_inc;
                     $personal[$k]['id_usuario'] = $val->id;
                     $personal[$k]['creador'] = Auth::user()->id_usuario;
+                    $personal[$k]['fecha'] = GlobalHelper::gDate('Y-m-d');
+                    $personal[$k]['hora'] = GlobalHelper::gDate('H:i:s');
                     $personal[$k]['updated_at'] = now();
                     $personal[$k]['created_at'] = now();
                 }
                 DB::table('tb_inc_asignadas')->insert($personal);
-                // DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->cod_inc)->delete();
             }
-
+            $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
             DB::commit();
             GlobalHelper::getIncDataTable(true);
 
-            $data = [];
-            $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
             return response()->json([
                 'success' => true,
                 'message' => 'Incidencia editada con éxito',
-                'data' => $data
+                'data' => ['cod_inc' => $cod_inc]
             ], 200);
         } catch (\Exception $e) {
             DB::rollBack();
@@ -628,14 +613,6 @@ class IncidenciaController extends Controller
             $data['tecnicos'] .= '<div class="list-group-item"><span class="">' . $tecnico . '</span></div>';
         }
 
-        return $data;
-    }
-
-    function getparsedata($data)
-    {
-        foreach ($data as $val) {
-            $data[$val->id] = $val->descripcion;
-        }
         return $data;
     }
 }

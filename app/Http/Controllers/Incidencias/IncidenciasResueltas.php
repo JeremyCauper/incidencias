@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Incidencias;
 
+use App\Helpers\GlobalHelper;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -11,7 +12,60 @@ class IncidenciasResueltas extends Controller
 {
     public function datatable()
     {
-        $incidencias = DB::table('tb_order_servicio')->select([])->where('estatus', 1)->get();
+        $empresas = GlobalHelper::getCompany();
+        $company = [];
+        foreach ($empresas as $val) {
+            $company[$val->id] = "{$val->Ruc} - {$val->RazonSocial}";
+        }
+
+        $sucursales = GlobalHelper::getBranchOffice();
+        $subcompany = [];
+        foreach ($sucursales as $val) {
+            $subcompany[$val->id] = [$val->Nombre, $val->Direccion];
+        }
+
+        $tipInc = GlobalHelper::getparsedata(GlobalHelper::getTipIncidencia());
+        $problema = GlobalHelper::getparsedata(GlobalHelper::getProblema());
+        $subproblema = GlobalHelper::getparsedata(GlobalHelper::getSubProblema());
+
+        $orden = DB::table('tb_orden_servicio')->select(['cod_ordens', 'cod_incidencia', 'fecha_f', 'hora_f'])->where('estatus', 1)->get();
+        $inc = DB::table('tb_incidencias')->select(['cod_incidencia', 'id_empresa', 'id_sucursal', 'id_tipo_incidencia', 'id_problema', 'id_subproblema'])->where(['estatus' => 1, 'estado_informe' => 3])->get();
+        $inc_seguimiento = DB::table('tb_inc_seguimiento')->select(['cod_incidencia', 'fecha', 'hora', 'estado'])->get();
+
+        $seguimiento = [];
+        if ($inc_seguimiento) {
+            foreach ($inc_seguimiento as $key => $val) {
+                $date = "{$val->fecha} {$val->hora}";
+                if ($val->estado) {
+                    $seguimiento[$val->cod_incidencia]['incio'] = $date;
+                } else {
+                    $seguimiento[$val->cod_incidencia]['final'] = $date;
+                }
+            }
+        }
+
+        $incidencias = [];
+        if ($inc) {
+            foreach ($inc as $key => $val) {
+                $incidencias[$val->cod_incidencia] = [
+                    'empresa' => $company[$val->id_empresa],
+                    'sucursal' => $subcompany[$val->id_sucursal][1],
+                    'tipo_estacion' => $tipInc[$val->id_tipo_incidencia],
+                    'problema' => "{$problema[$val->id_problema]} => {$subproblema[$val->id_subproblema]}"
+                ];
+            }
+        }
+
+        if ($orden) {
+            foreach ($orden as $key => $val) {
+                $val->empresa = $incidencias[$val->cod_incidencia]['empresa'];
+                $val->sucursal = $incidencias[$val->cod_incidencia]['sucursal'];
+                $val->tipo_estacion = $incidencias[$val->cod_incidencia]['tipo_estacion'];
+                $val->problema = $incidencias[$val->cod_incidencia]['problema'];
+            }
+        }
+
+        return $orden;
         /*foreach ($incidencias as $val) {
             $val->id_empresa = $company[$val->id_empresa];
             $val->direccion = $subcompany[$val->id_sucursal][1];

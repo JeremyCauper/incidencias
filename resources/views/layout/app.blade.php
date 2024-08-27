@@ -118,14 +118,14 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" data-mdb-ripple-init href="{{url('/soporte')}}">
+            <a class="nav-link" data-mdb-ripple-init href="{{url('/soporte/incidencias-registradas')}}">
               <i class="fas fa-house menu-icon"></i>
-              <span class="menu-title">Panel Inicio</span>
+              <span class="menu-title">Incidencias</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-mdb-ripple-init href="{{url('/incidencias-resueltas')}}">
-              <i class="fas fa-list-check"></i>
+            <a class="nav-link" data-mdb-ripple-init href="{{url('/soporte/incidencias-resueltas')}}">
+              <i class="fas fa-list-check menu-icon"></i>
               <span class="menu-title">Incidencias Resueltas</span>
             </a>
           </li>

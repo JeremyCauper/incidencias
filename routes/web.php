@@ -35,26 +35,26 @@ Route::get('/logout', [LoginController::class, 'logout']);
 
 
 // Gestion de incidencias
-Route::get('/soporte', [IncidenciaController::class, 'view'])->middleware('auth');
-Route::get('/soporte/dataInd', [IncidenciaController::class, 'dataInd']);
-Route::get('/soporte/datatable', [IncidenciaController::class, 'datatable']);
-Route::post('/soporte/create', [IncidenciaController::class, 'create']);
-Route::get('/soporte/show/{id}', [IncidenciaController::class, 'show']);
-Route::post('/soporte/edit/{id}', [IncidenciaController::class, 'edit']);
-Route::post('/soporte/editAssign', [IncidenciaController::class, 'editAssign']);
-Route::post('/soporte/destroy/{id}', [IncidenciaController::class, 'destroy']);
-Route::post('/soporte/initInc/{cod}', [IncidenciaController::class, 'initInc']);
-Route::get('/soporte/detail/{cod}', [IncidenciaController::class, 'detail']);
-Route::get('/soporte/detailOrden/{cod}', [IncidenciaController::class, 'detailOrden']);
-
-Route::post('/ordens/create', [OrdenSController::class, 'create']);
-Route::get('/generar-pdf/{cod}', [OrdenSController::class, 'generarPDF']);
+Route::get('/soporte/incidencias-registradas', [IncidenciaController::class, 'view'])->middleware('auth');
+Route::get('/soporte/incidencias-registradas/dataInd', [IncidenciaController::class, 'dataInd']);
+Route::get('/soporte/incidencias-registradas/datatable', [IncidenciaController::class, 'datatable']);
+Route::post('/soporte/incidencias-registradas/create', [IncidenciaController::class, 'create']);
+Route::get('/soporte/incidencias-registradas/show/{id}', [IncidenciaController::class, 'show']);
+Route::post('/soporte/incidencias-registradas/edit/{id}', [IncidenciaController::class, 'edit']);
+Route::post('/soporte/incidencias-registradas/editAssign', [IncidenciaController::class, 'editAssign']);
+Route::post('/soporte/incidencias-registradas/destroy/{id}', [IncidenciaController::class, 'destroy']);
+Route::post('/soporte/incidencias-registradas/initInc/{cod}', [IncidenciaController::class, 'initInc']);
+Route::get('/soporte/incidencias-registradas/detail/{cod}', [IncidenciaController::class, 'detail']);
+Route::get('/soporte/incidencias-registradas/detailOrden/{cod}', [IncidenciaController::class, 'detailOrden']);
 
 
 // Gestion de incidencias resueltas
-Route::get('/incidencias-resueltas', [IncidenciasResueltas::class, 'view'])->middleware('auth');
-Route::get('/incidencias-resueltas/datatable', [IncidenciasResueltas::class, 'datatable']);
+Route::get('/soporte/incidencias-resueltas', [IncidenciasResueltas::class, 'view'])->middleware('auth');
+Route::get('/soporte/incidencias-resueltas/datatable', [IncidenciasResueltas::class, 'datatable']);
 
+
+Route::post('/ordens/create', [OrdenSController::class, 'create']);
+Route::get('/documentoPdf/{cod}', [OrdenSController::class, 'generarPDF']);
 
 
 Route::get('/viewListMenu', [MenuController::class, 'viewListMenu']);

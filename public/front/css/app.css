@@ -3869,6 +3869,10 @@ body {
     border: 1px solid transparent;
 }
 
+.dataTables_empty {
+    text-align: center;
+}
+
 .fieldset {
     position: relative;
     border-top: .125rem solid #7095d3;
