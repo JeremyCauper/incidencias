@@ -505,14 +505,19 @@ class IncidenciaController extends Controller
     {
         try {
             $validator = Validator::make($request->all(), [
-                'cod_inc' => 'required|string'
+                'cod_inc' => 'required|string',
+                'estado' => 'required|string'
             ]);
             if ($validator->fails())
                 return response()->json(['errors' => $validator->errors()], 400);
-
+            $eInforme = count($request->personal_asig) ? 1 : 0;
+            $estado = $request->estado == 'true' ? 1 : 0;
+            $personal = [];
             DB::beginTransaction();
-            if (count($request->personal_asig)) {
-                $personal = [];
+            if ($eInforme) {
+                if ($estado) {
+                    DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->cod_inc)->delete();
+                }
                 foreach ($request->personal_asig as $k => $val) {
                     $personal[$k]['cod_incidencia'] = $request->cod_inc;
                     $personal[$k]['id_usuario'] = $val['id'];
@@ -524,13 +529,25 @@ class IncidenciaController extends Controller
                 }
                 DB::table('tb_inc_asignadas')->insert($personal);
             }
+            if ($estado) {
+                DB::table('tb_incidencias')->where('cod_incidencia', $request->cod_inc)->update(['estado_informe' => $eInforme]);
+            }
             $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
             DB::commit();
             GlobalHelper::getIncDataTable(true);
+            switch ($eInforme) {
+                case 0:
+                    $message = 'No se asignó ningun personal a la incidencia';
+                    break;
+                
+                default:
+                    $message = 'Se asignó al personal con exito';
+                    break;
+            }
 
             return response()->json([
                 'success' => true,
-                'message' => 'Incidencia editada con éxito',
+                'message' => $message,
                 'data' => ['cod_inc' => $cod_inc]
             ], 200);
         } catch (\Exception $e) {

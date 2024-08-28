@@ -486,6 +486,7 @@ function assign(e, id) {
             fMananger.formModalLoding('modal_assign', 'hide');
             (data.personal_asig).forEach(element => {
                 const accion = data.estado_informe == 2 ? false : true;
+                $('#modal_assign input[aria-item="estado"]').val(accion);
                 cTable.fillTable('#createPersonal1', element, accion);
             });
         },
@@ -502,6 +503,7 @@ async function createAssign() {
     fMananger.formModalLoding('modal_assign', 'show');
 
     const cod = $('#modal_assign [aria-item="cod"]').html();
+    const estado = $('#modal_assign input[aria-item="estado"]').val();;
     $.ajax({
         type: 'POST',
         url: `${__url}/soporte/incidencias-registradas/editAssign`,
@@ -511,15 +513,22 @@ async function createAssign() {
         },
         data: JSON.stringify({
             cod_inc: cod,
+            estado: estado,
             personal_asig: cPersonal1.extract()
         }),
         success: function (data) {
-            console.log(data);
-
             fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
                 boxAlert.minbox({ h: data.message });
+                let personalId = [];
+                $('table[aria-table-table="createPersonal1"] tbody tr td[aria-item="id"]').each(function () {
+                    personalId.push($(this).html());
+                });
+                cTable.deleteTable('#createPersonal1');
+                personalId.forEach(element => {
+                    cTable.fillTable('#createPersonal1', element, eval(estado));
+                });
                 updateTable();
                 return true;
             }

@@ -296,6 +296,7 @@
                 <h6 class="modal-title">Asignar Personal</h6>
             </div>
             <div class="modal-body">
+                <input type="hidden" aria-item="estado">
                 <div class="list-group list-group-light">
                     <div class="text-end" style="font-size: 1.4rem;">
                         <span class="badge badge-secondary badge-lg" aria-item="cod"></span>
