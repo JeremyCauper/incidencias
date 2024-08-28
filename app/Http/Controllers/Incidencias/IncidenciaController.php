@@ -85,44 +85,45 @@ class IncidenciaController extends Controller
      */
     public function datatable()
     {
-        $e_informe = [
-            ['c' => 'warning', 't' => 'Sin Asignar'],
-            ['c' => 'info', 't' => 'Asignada'],
-            ['c' => 'primary', 't' => 'En Proceso']
-        ];
+        try {
+            $e_informe = [
+                ['c' => 'warning', 't' => 'Sin Asignar'],
+                ['c' => 'info', 't' => 'Asignada'],
+                ['c' => 'primary', 't' => 'En Proceso']
+            ];
 
-        $empresas = GlobalHelper::getCompany();
-        $company = [];
-        foreach ($empresas as $val) {
-            $company[$val->id] = "{$val->Ruc} - {$val->RazonSocial}";
-        }
+            $empresas = GlobalHelper::getCompany();
+            $company = [];
+            foreach ($empresas as $val) {
+                $company[$val->id] = "{$val->Ruc} - {$val->RazonSocial}";
+            }
 
-        $sucursales = GlobalHelper::getBranchOffice();
-        $subcompany = [];
-        foreach ($sucursales as $val) {
-            $subcompany[$val->id] = [$val->Nombre, $val->Direccion];
-        }
+            $sucursales = GlobalHelper::getBranchOffice();
+            $subcompany = [];
+            foreach ($sucursales as $val) {
+                $subcompany[$val->id] = [$val->Nombre, $val->Direccion];
+            }
 
-        $tipo_estacion = GlobalHelper::getTipEstacion();
-        $__estacion = GlobalHelper::getparsedata($tipo_estacion);
-        $tipo_incidencia = GlobalHelper::getTipIncidencia();
-        $__incidencia = GlobalHelper::getparsedata($tipo_incidencia);
-        $problema = GlobalHelper::getProblema();
-        $__problema = GlobalHelper::getparsedata($problema);
-        $subproblema = GlobalHelper::getSubProblema();
-        $__subproblema = GlobalHelper::getparsedata($subproblema);
+            $tipo_estacion = GlobalHelper::getTipEstacion();
+            $__estacion = GlobalHelper::getparsedata($tipo_estacion);
+            $tipo_incidencia = GlobalHelper::getTipIncidencia();
+            $__incidencia = GlobalHelper::getparsedata($tipo_incidencia);
+            $problema = GlobalHelper::getProblema();
+            $__problema = GlobalHelper::getparsedata($problema);
+            $subproblema = GlobalHelper::getSubProblema();
+            $__subproblema = GlobalHelper::getparsedata($subproblema);
 
-        $incidencias = GlobalHelper::getIncDataTable(true);
-        foreach ($incidencias as $val) {
-            $val->id_empresa = $company[$val->id_empresa];
-            $val->direccion = $subcompany[$val->id_sucursal][1];
-            $val->id_sucursal = $subcompany[$val->id_sucursal][0];
-            $val->id_tipo_estacion = $__estacion[$val->id_tipo_estacion];
-            $val->id_tipo_incidencia = $__incidencia[$val->id_tipo_incidencia];
-            $val->id_problema = $__problema[$val->id_problema];
-            $val->id_subproblema = $__subproblema[$val->id_subproblema];
-            $text_e_informe = '<label class="badge badge-' . $e_informe[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $e_informe[$val->estado_informe]['t'] . '</label>';
-            $val->acciones = '
+            $incidencias = GlobalHelper::getIncDataTable(true);
+            foreach ($incidencias as $val) {
+                $val->id_empresa = $company[$val->id_empresa];
+                $val->direccion = $subcompany[$val->id_sucursal][1];
+                $val->id_sucursal = $subcompany[$val->id_sucursal][0];
+                $val->id_tipo_estacion = $__estacion[$val->id_tipo_estacion];
+                $val->id_tipo_incidencia = $__incidencia[$val->id_tipo_incidencia];
+                $val->id_problema = $__problema[$val->id_problema];
+                $val->id_subproblema = $__subproblema[$val->id_subproblema];
+                $text_e_informe = '<label class="badge badge-' . $e_informe[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $e_informe[$val->estado_informe]['t'] . '</label>';
+                $val->acciones = '
             <div class="btn-group dropstart shadow-0">
                 <button
                     type="button"
@@ -139,35 +140,39 @@ class IncidenciaController extends Controller
                     <button class="dropdown-item py-2" onclick="showDetail(this, ' . ("'{$val->cod_incidencia}'") . ')"><i class="fas fa-eye text-success me-2"></i> Ver Detalle</button>
                     <button class="dropdown-item py-2" onclick="showEdit(' . $val->acciones . ')"><i class="fas fa-pen text-info me-2"></i> Editar</button>
                     <button class="dropdown-item py-2" onclick="assign(this, ' . $val->acciones . ')"><i class="fas fa-user-plus me-2"></i> Asignar</button>'
-                . ($val->estado_informe == 1 ? '<button class="dropdown-item py-2" onclick="reloadInd(' . ("'{$val->cod_incidencia}'") . ', ' . $val->estado_informe . ')"><i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia</button>' : '')
-                . ($val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="detailOrden(this, ' . ("'{$val->cod_incidencia}'") . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>' : '') .
-                '<button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
+                    . ($val->estado_informe == 1 ? '<button class="dropdown-item py-2" onclick="reloadInd(' . ("'{$val->cod_incidencia}'") . ', ' . $val->estado_informe . ')"><i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia</button>' : '')
+                    . ($val->estado_informe == 2 ? '<button class="dropdown-item py-2" onclick="detailOrden(this, ' . ("'{$val->cod_incidencia}'") . ')"><i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio</button>' : '') .
+                    '<button class="dropdown-item py-2" onclick="idelete(' . $val->acciones . ')"><i class="far fa-trash-can text-danger me-2"></i> Eliminar</button>
                 </div>
             </div>';
-            $val->estado_informe = $text_e_informe;
-        }
-
-        $_count = [
-            "count" => count(GlobalHelper::getIncDataTable()),
-            "inc_a" => 0,
-            "inc_p" => 0,
-            "inc_s" => 0,
-        ];
-        foreach (GlobalHelper::getIncDataTable() as $val) {
-            switch ($val->estado_informe) {
-                case 0:
-                    $_count['inc_s']++;
-                    break;
-                case 1:
-                    $_count['inc_a']++;
-                    break;
-                case 2:
-                    $_count['inc_p']++;
-                    break;
+                $val->estado_informe = $text_e_informe;
             }
-        }
 
-        return ['data' => $incidencias, 'count' => $_count];
+            $_count = [
+                "count" => count(GlobalHelper::getIncDataTable()),
+                "inc_a" => 0,
+                "inc_p" => 0,
+                "inc_s" => 0,
+            ];
+            foreach (GlobalHelper::getIncDataTable() as $val) {
+                switch ($val->estado_informe) {
+                    case 0:
+                        $_count['inc_s']++;
+                        break;
+                    case 1:
+                        $_count['inc_a']++;
+                        break;
+                    case 2:
+                        $_count['inc_p']++;
+                        break;
+                }
+            }
+
+            return ['data' => $incidencias, 'count' => $_count];
+        } catch (\Exception $e) {
+            Log::error('An unexpected error occurred: ' . $e->getMessage());
+            return response()->json(['error' => 'Terrible lo que pasará, ocurrio un error inesperado: ' . $e->getMessage()], 500);
+        }
     }
 
     /**
@@ -510,7 +515,7 @@ class IncidenciaController extends Controller
                 $personal = [];
                 foreach ($request->personal_asig as $k => $val) {
                     $personal[$k]['cod_incidencia'] = $request->cod_inc;
-                    $personal[$k]['id_usuario'] = $val->id;
+                    $personal[$k]['id_usuario'] = $val['id'];
                     $personal[$k]['creador'] = Auth::user()->id_usuario;
                     $personal[$k]['fecha'] = GlobalHelper::gDate('Y-m-d');
                     $personal[$k]['hora'] = GlobalHelper::gDate('H:i:s');
