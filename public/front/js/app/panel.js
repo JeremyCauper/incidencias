@@ -61,7 +61,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
             return json.data;
         },
         error: function (xhr, error, thrown) {
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: xhr.responseJSON });
+            boxAlert.table();
             console.log('Respuesta del servidor:', xhr);
         }
     },

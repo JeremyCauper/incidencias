@@ -13,7 +13,7 @@
                 <div class="card">
                     <div class="card-body text-success" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-user-check"></i> Incidencias Resueltas</h6>
-                        <h4 class="subtitle-count"><b data-panel="_inc_a">0</b></h4>
+                        <h4 class="subtitle-count"><b data-panel="0">0</b></h4>
                     </div>
                 </div>
             </div>
@@ -21,7 +21,7 @@
                 <div class="card">
                     <div class="card-body text-success" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="far fa-clock"></i> Incidencias Registradas</h6>
-                        <h4 class="subtitle-count"><b data-panel="_count">0</b></h4>
+                        <h4 class="subtitle-count"><b data-panel="1">0</b></h4>
                     </div>
                 </div>
             </div>
@@ -29,7 +29,7 @@
                 <div class="card">
                     <div class="card-body text-warning" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Incidencias Sin Asignar</h6>
-                        <h4 class="subtitle-count"><b data-panel="_inc_s">0</b></h4>
+                        <h4 class="subtitle-count"><b data-panel="2">0</b></h4>
                     </div>
                 </div>
             </div>
@@ -37,7 +37,7 @@
                 <div class="card">
                     <div class="card-body text-primary" data-mdb-ripple-init>
                         <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En Proceso</h6>
-                        <h4 class="subtitle-count"><b data-panel="_inc_p">0</b></h4>
+                        <h4 class="subtitle-count"><b data-panel="3">0</b></h4>
                     </div>
                 </div>
             </div>
@@ -65,7 +65,7 @@
                                 <th>Fecha Servicio</th>
                                 <th>Empresa</th>
                                 <th>Sucursal</th>
-                                <th>Informe</th>
+                                <th>Problemas</th>
                                 <th>Iniciada</th>
                                 <th>Terminada</th>
                                 <th class="bg-white px-2 th-acciones">Acciones</th>

@@ -171,13 +171,17 @@
                 <div class="mb-2">
                     <table>
                         <tbody>
-                            <td><h5>Tecnico(s) :</h5></td>
-                            <td style="text-align: center;"><h5>Fecha Incidencia : {{$fecha}}</h5></td>
+                            <td>
+                                <h5>Tecnico(s) :</h5>
+                            </td>
+                            <td style="text-align: center;">
+                                <h5>Fecha Incidencia : {{$fecha}}</h5>
+                            </td>
                         </tbody>
                     </table>
                     <ul>
                         @foreach ($asignados as $asig)
-                            <li>{{$asig['personal']}}</li>
+                        <li>{{$asig['personal']}}</li>
                         @endforeach
                     </ul>
                 </div>
@@ -260,18 +264,18 @@
                         </tr>
                     </table>
                 </div>
-                <!-- 8 tr se pueden añadir -->
-                @if (count($materiales))
-                    <table class="tb-material">
+                <table class="tb-material">
+                    <!-- 8 tr se pueden añadir -->
+                    @if (count($materiales))
                         @foreach ($materiales as $mat)
-                            <tr>
-                                <td>{{$mat['i']}}</td>
-                                <td>{{$mat['p']}}</td>
-                                <td>{{$mat['c']}}</td>
-                            </tr>
+                        <tr>
+                            <td>{{$mat['i']}}</td>
+                            <td>{{$mat['p']}}</td>
+                            <td>{{$mat['c']}}</td>
+                        </tr>
                         @endforeach
-                    </table>
-                @endif
+                    @endif
+                </table>
             </td>
         </tr>
     </table>
@@ -283,7 +287,7 @@
                 </div>
                 <h6 class="mb-2 mt-2">Firma Tecnico</h6>
                 <h5 class="mb-2">RICARDO CALDERON INGENIEROS</h5>
-                <p class="mb-2">Jeremy Patrick Cauper Silvano</p>
+                <p class="mb-2">{{$NomFirma}}</p>
             </td>
             <td style="width: 120;"></td>
             <td class="t-center">

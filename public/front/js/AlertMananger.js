@@ -85,7 +85,7 @@ class AlertMananger {
         });
     }
 
-    minbox(op={}) {
+    minbox(op = {}) {
         const icono = op.i || 'success';
         const thtml = op.h || false;
         const bground = op.b || "#5e87ca";
@@ -128,6 +128,39 @@ class AlertMananger {
             background: bground,
             color: color,
             ...op
+        });
+    }
+
+    table() {
+        Swal.fire({
+            icon: 'error',
+            title: `<h6 class="card-title text-secondary"><b>Error al intentar extraer datos de la tabla</b></h6>`,
+            html: `<div class="text-center" style="font-size:small;">
+                    <p class="mb-0">intente recargar la tabla o comuniquese con su administrador</p>
+                   </div>`,
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: '<i class="fas fa-rotate-right"></i>',
+            cancelButtonText: "Cerrar",
+            showClass: {
+                popup: `
+                  animate__animated
+                  animate__fadeIn
+                  animate__faster
+                `
+            },
+            hideClass: {
+                popup: `
+                  animate__animated
+                  animate__fadeOut
+                  animate__faster
+                `
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                updateTable();
+            }
         });
     }
 }

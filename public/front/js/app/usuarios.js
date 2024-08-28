@@ -11,7 +11,7 @@ const tb_usuario = new DataTable('#tb_usuario', {
         url: `${__url}/usuarios/datatable`,
         dataSrc: "",
         error: function (xhr, error, thrown) {
-            console.log('Error en la solicitud Ajax:', error);
+            boxAlert.table();
             console.log('Respuesta del servidor:', xhr);
         }
     },

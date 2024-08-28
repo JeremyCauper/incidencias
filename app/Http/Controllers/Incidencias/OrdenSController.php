@@ -34,7 +34,7 @@ class OrdenSController extends Controller
                 'rec' => 'required|string',
                 'fecha_f' => 'required|date',
                 'hora_f' => 'required|date_format:H:i:s',
-                'materiales' => 'required|array',
+                'materiales' => 'nullable|array',
                 'firma_digital' => 'nullable|string',
                 'n_doc' => 'nullable|integer',
                 'nom_cliente' => 'nullable|string',
@@ -50,11 +50,9 @@ class OrdenSController extends Controller
                 $materiales[$k]['created_at'] = now();
             }
             DB::beginTransaction();
-
             if ($request->check_cod) {
-                DB::table('tb_orden_correlativo')->insert(['num_orden' => $request->n_orden]);
+                DB::table('tb_orden_correlativo')->insert(['num_orden' => $request->n_orden, 'updated_at' => now()]);
             }
-
             $idContacto = null;
             if ($request->n_doc || $request->nom_cliente) {
                 $dataContact = [
@@ -166,9 +164,11 @@ class OrdenSController extends Controller
                 'materiales' => [],
                 'contacto' => '',
                 'telefono' => '',
+                'correo' => '',
                 'cantidad' => '',
                 'contacOrden' => '',
-                'firmaC' => ''
+                'firmaC' => false,
+                'NomFirma' => ''
             ];
 
             $usuarios = [];
@@ -194,18 +194,20 @@ class OrdenSController extends Controller
 
             if ($contactos) {
                 $datos['contacto'] = "{$contactos->nro_doc} {$contactos->nombres}";
-                $datos['telefono'] = $contactos->telefono;
-                $datos['correo'] = $contactos->correo;
+                $datos['telefono'] = $contactos->telefono ?: '';
+                $datos['correo'] = $contactos->correo ?: '';
             }
 
             if ($contacOrden) {
                 $datos['contacOrden'] = "{$contacOrden->nro_doc} - {$contacOrden->nombre_cliente}";
                 $datos['firmaC'] = $contacOrden->firma_digital ? public_path() . "/front/images/client/{$contacOrden->firma_digital}" : false;
             }
-
+            
             foreach ($asignados as $key => $val) {
-                if ($key == 0)
+                if ($key == 0) {
                     $datos['firmaA'] = $usuarios[$val->id_usuario]['firma'] ? public_path() . "/front/images/firms/{$usuarios[$val->id_usuario]['firma']}" : false;
+                    $datos['NomFirma'] = $usuarios[$val->id_usuario]['nombre'];
+                }
                 $datos['asignados'][] = ['personal' => $usuarios[$val->id_usuario]['nombre']];
             }
 

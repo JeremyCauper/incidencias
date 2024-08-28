@@ -24,7 +24,7 @@ document.getElementById('form-login').addEventListener('submit', function (event
         data: JSON.stringify(dataForm),
         success: function (response) {
             if (response.success) {
-                window.location.href = `${__url}/soporte`;
+                window.location.href = `${__url}/soporte/incidencias-registradas`;
             } else {
                 alertLogin(response.message);
                 console.log(response.message);
