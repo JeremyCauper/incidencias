@@ -33,7 +33,7 @@
 
 </style>
 
-<body class="with-welcome-text">
+<body class="with-welcome-text sidebar-icon-only">
   <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
@@ -44,13 +44,13 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="{{url('/soporte')}}">
+          <a class="navbar-brand brand-logo" href="{{url('/inicio')}}">
             <div class="d-flex align-items-center">
               <img class="img-xs rounded-circle" src="{{asset('front/images/app/LogoRC.png')}}" style="height: 26px; width: 27px;" alt="logo" />
               <h6 class="ms-1 mb-0" style="font-family: 'Roboto', sans-serif;"><b>RC Ingenieros</b></h6>
             </div>
           </a>
-          <a class="navbar-brand brand-logo-mini" href="{{url('/soporte')}}">
+          <a class="navbar-brand brand-logo-mini" href="{{url('/inicio')}}">
             <img class="rounded-circle" src="{{asset('front/images/app/LogoRC.png')}}" style="height: 38px; width: 39px;" alt="logo" />
           </a>
         </div>
@@ -118,13 +118,13 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item">
-            <a class="nav-link" data-mdb-ripple-init href="{{url('/soporte/incidencias-registradas')}}">
+            <a class="nav-link" data-mdb-ripple-init href="{{url('/incidencias/registradas')}}">
               <i class="fas fa-house menu-icon"></i>
               <span class="menu-title">Incidencias</span>
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" data-mdb-ripple-init href="{{url('/soporte/incidencias-resueltas')}}">
+            <a class="nav-link" data-mdb-ripple-init href="{{url('/incidencias/resueltas')}}">
               <i class="fas fa-list-check menu-icon"></i>
               <span class="menu-title">Incidencias Resueltas</span>
             </a>
@@ -138,13 +138,13 @@
             <div class="collapse" id="ControlEmpresas">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/soport-empresa/empresas')}}"><b>Empresas</b></a>
+                  <a class="nav-link" href="{{url('/empresas/empresas')}}"><b>Empresas</b></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/soport-empresa/grupos')}}"><b>Grupos Empresas</b></a>
+                  <a class="nav-link" href="{{url('/empresas/grupos')}}"><b>Grupos Empresas</b></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/soport-empresa/sucursales')}}"><b>Sucursales Empresas</b></a>
+                  <a class="nav-link" href="{{url('/empresas/sucursales')}}"><b>Sucursales Empresas</b></a>
                 </li>
               </ul>
             </div>
@@ -162,6 +162,23 @@
                 </li>
                 <li class="nav-item d-none">
                   <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil</b></a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlMantenimientos" role="button" aria-expanded="false" aria-controls="ControlMantenimientos">
+              <i class="fas fa-gears menu-icon"></i>
+              <span class="menu-title">Mantenimientos</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ControlMantenimientos">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/mantenimiento/problemas/problemas')}}"><b>Problemas</b></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/mantenimiento/problemas/subproblemas')}}"><b>Sub Problemas</b></a>
                 </li>
               </ul>
             </div>
@@ -210,6 +227,7 @@
   <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
   <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
   <script src="{{asset('front/js/TableManeger.js')}}"></script>
+  <script src="{{asset('front/js/FormMananger.js')}}"></script>
   <!-- plugins:js -->
   @yield('scripts')
 </body>

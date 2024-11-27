@@ -3405,12 +3405,13 @@ body {
     margin-bottom: 1.5rem;
 }
 
-
-
-.table tr td {
-    padding-top: 10px;
-    padding-bottom: 10px;
-    /* line-height: 2.5; */
+.table tbody tr td {
+    padding-top: 7px;
+    padding-bottom: 7px;
+    vertical-align: middle;
+    font-size: 11px;
+    font-family: 'Roboto';
+    border-bottom: 1px solid #e0e0e0;
 }
 
 .swal2-container .form-label,
@@ -3546,46 +3547,6 @@ body {
     }
 }
 
-
-/* HTML: <div class="loader"></div> */
-.loader {
-    width: 6rem;
-    aspect-ratio: 1;
-    margin: auto;
-    display: grid;
-    -webkit-mask: conic-gradient(from 15deg, #0000, #000);
-    animation: l26 1s infinite steps(12);
-}
-
-.loader,
-.loader:before,
-.loader:after {
-    background:
-        radial-gradient(closest-side at 50% 12.5%,
-            #3b71ca 96%, #0000) 50% 0/20% 80% repeat-y,
-        radial-gradient(closest-side at 12.5% 50%,
-            #3b71ca 96%, #0000) 0 50%/80% 20% repeat-x;
-}
-
-.loader:before,
-.loader:after {
-    content: "";
-    grid-area: 1/1;
-    transform: rotate(30deg);
-}
-
-.loader:after {
-    transform: rotate(60deg);
-}
-
-@keyframes l26 {
-    100% {
-        transform: rotate(1turn)
-    }
-}
-
-
-
 /* HTML: <div class="dt_processing"></div> */
 .dt_processing {
     width: 100px;
@@ -3615,42 +3576,6 @@ body {
     }
 }
 
-
-
-/* HTML: <div class="loader-rc"></div> */
-.loader-rc {
-    width: 70px;
-    aspect-ratio: 1;
-    display: grid;
-    margin: auto;
-    color: #3b71ca;
-    background: radial-gradient(farthest-side, currentColor calc(100% - 6px), #0000 calc(100% - 5px) 0);
-    -webkit-mask: radial-gradient(farthest-side, #0000 calc(100% - 13px), #000 calc(100% - 12px));
-    border-radius: 50%;
-    animation: l19 2s infinite linear;
-}
-
-.loader-rc::before,
-.loader-rc::after {
-    content: "";
-    grid-area: 1/1;
-    background:
-        linear-gradient(currentColor 0 0) center,
-        linear-gradient(currentColor 0 0) center;
-    background-size: 100% 15px, 15px 100%;
-    background-repeat: no-repeat;
-}
-
-.loader-rc::after {
-    transform: rotate(45deg);
-}
-
-@keyframes l19 {
-    100% {
-        transform: rotate(1turn)
-    }
-}
-
 .loader-of-modal {
     position: absolute;
     height: 100%;
@@ -3661,81 +3586,45 @@ body {
     align-content: center;
 }
 
-/* HTML: <div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div> */
-.gear {
-    width: 25px;
-    margin: auto;
-    padding: 0px;
-    animation: l19 2s infinite linear;
-}
-
-.gear div {
-    width: 25px;
+/* HTML: <div class="loader"></div> */
+.loader {
+    width: 45px;
     aspect-ratio: 1;
     display: grid;
-    padding: 0px;
-    outline: 1.5rem solid #3b71ca;
+    border: 5px solid #0000;
     border-radius: 50%;
-    position: relative;
+    border-right-color: #3b71ca;
+    animation: l15 1s infinite linear;
 }
 
-.gear div label {
-    position: absolute;
-    top: -18px;
-    left: -18px;
-    width: 60px;
-    padding: 0px;
-    aspect-ratio: 1;
-    border: .65rem dotted #ffffff;
-    border-radius: 50%;
-    transform: rotate(22.5deg);
-}
-
-.gear div span {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 25px;
-    aspect-ratio: 1;
-    border-radius: 50%;
-    /* background: #1bc946; */
-}
-
-.gear div span::after,
-.gear div span::before {
+.loader::before,
+.loader::after {
     content: "";
-    position: absolute;
-    width: 20px;
-    height: 0px;
-    left: 2px;
-    border-top: solid 0px;
-    border-bottom: solid 12px #3b71ca;
-    border-right: solid 5px transparent;
-    border-left: solid 5px transparent;
+    grid-area: 1/1;
+    margin: 2px;
+    border: inherit;
+    border-radius: 50%;
+    animation: l15 2s infinite;
 }
 
-.gear div span::after {
-    top: -34px;
+.loader::after {
+    margin: 8px;
+    animation-duration: 3s;
 }
 
-.gear div span::before {
-    bottom: -34px;
-    transform: rotate(180deg);
+.loader-lg {
+    width: 75px;
 }
 
-.gear div span:nth-child(2) {
-    transform: rotate(45deg);
+.loader-lg::before {
+    margin: 4px;
 }
 
-.gear div span:nth-child(3) {
-    transform: rotate(90deg);
+.loader-lg::after {
+    margin: 14px;
 }
 
-.gear div span:nth-child(4) {
-    transform: rotate(135deg);
-}
-
-@keyframes l19 {
+@keyframes l15 {
     100% {
         transform: rotate(1turn)
     }
@@ -3744,8 +3633,13 @@ body {
 
 
 .dataTables_scrollHead {
-    height: 49px !important;
+    height: 36px !important;
 }
+
+/* .dataTables_scrollHead .dataTables_scrollHeadInner, .dataTables_scrollHead .dataTables_scrollHeadInner table {
+    width: 100% !important;
+    table-layout: fixed;
+} */
 
 .dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting {
     cursor: pointer;
@@ -3778,11 +3672,9 @@ body {
 
 .dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting_asc:after,
 .dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting_desc:before {
-    color: #3b71ca;
+    color: white;
     opacity: 1;
 }
-
-
 
 
 @media (max-width: 525px) {
@@ -3873,6 +3765,14 @@ body {
     text-align: center;
 }
 
+.td-acciones .dropdown-menu .dropdown-item i {
+    font-size: 14px;
+}
+
+.td-acciones .dropdown-menu .dropdown-item {
+    font-size: 12px;
+}
+
 .fieldset {
     position: relative;
     border-top: .125rem solid #7095d3;
@@ -3889,4 +3789,77 @@ body {
 
 .font-weight-semibold {
     font-weight: 550;
+}
+
+@media (max-width: 600px) {
+    .modal-title {
+        font-size: .8rem;
+    }
+}
+
+.tittle {
+    font-size: .85rem;
+    font-weight: bold;
+}
+
+.title-count {
+    font-weight: bold;
+    font-size: .8rem;
+}
+
+.subtitle-count {
+    margin-bottom: 0px;
+}
+
+.th-acciones {
+    right: 0px;
+    position: sticky !important;
+    width: 85px !important;
+}
+
+.td-acciones {
+    position: sticky;
+    right: 0;
+    text-align: center !important;
+    background-color: #fff !important;
+    width: 85px !important;
+}
+
+.disabled {
+    opacity: .5;
+    pointer-events: none;
+}
+
+
+/* Estilos para motores Webkit y blink (Chrome, Safari, Opera... )*/
+.dataTables_scrollBody::-webkit-scrollbar {
+    -webkit-appearance: none;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar:vertical {
+    width: 11px;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar-button:increment,
+.dataTables_scrollBody::-webkit-scrollbar-button {
+    display: none;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar:horizontal {
+    height: 11px;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar-thumb {
+    background-color: #979797;
+    border-radius: 20px;
+    border: 2px solid #f1f2f3;
+}
+
+.dataTables_scrollBody::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+.list-group .list-group-item {
+    font-size: .9rem;
+    padding: .5rem 0;
 }

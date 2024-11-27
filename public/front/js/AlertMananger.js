@@ -5,8 +5,9 @@ class AlertMananger {
 
     loading() {
         Swal.fire({
-            title: '<div class="my-5"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>',
-            text: 'Realizando los cambios, por favor espere',
+            title: '<div class="my-3"><div style="display:flex; justify-content:center;"><div class="loader loader-lg"></div></div></div>',
+            html: '<span class="text-primary"><b>Por favor espere...</b></span>',
+            width: 250,
             allowOutsideClick: false,
             showConfirmButton: false,
             showClass: {
@@ -166,7 +167,3 @@ class AlertMananger {
 }
 
 var boxAlert = new AlertMananger();
-
-
-// alertMananger.loading();
-// alertMananger.setLoading('2018', 'Enero', '', '');

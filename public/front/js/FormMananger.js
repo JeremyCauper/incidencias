@@ -7,7 +7,7 @@ class FormMananger {
         const modalf = $(`#${id} .modal-dialog .modal-content`);
         switch (accion) {
             case 'show':
-                modalf.append(`<div class="loader-of-modal"><div class="gear"><div><label></label><span></span><span></span><span></span><span></span></div></div></div>`);
+                modalf.append(`<div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>`);
                 break;
 
             case 'hide':
@@ -38,6 +38,19 @@ class FormMananger {
             });
         }
         return dataF;
+    }
+
+    extractDataRow($this) {
+        const ths = document.querySelectorAll('.dataTables_scrollHeadInner table thead tr th');
+        const tr = $this.parentNode.parentNode.parentNode.parentNode;
+        const tds = tr.querySelectorAll('td');
+        var obj_return = {};
+    
+        ths.forEach(function (e, i) {
+            if (i != 9) obj_return[(e.innerHTML).toLowerCase()] = tds[i].innerHTML;
+        });
+    
+        return obj_return;
     }
 }
 

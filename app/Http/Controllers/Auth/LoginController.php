@@ -4,16 +4,21 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
 class LoginController extends Controller
 {
-    public function viewLogin()
+    public function view()
     {
-        return view('auth.login');
+        try {
+            return view('auth.login');
+        } catch (Exception $e) {
+            return $this->mesageError(exception: $e, codigo: 500);
+        }
     }
-
+    
     public function login(Request $request)
     {
         $request->validate([
@@ -37,7 +42,6 @@ class LoginController extends Controller
         // Autenticación exitosa
         return response()->json(['success' => true, 'message' => ''], 200);
     }
-
 
     public function logout(Request $request)
     {

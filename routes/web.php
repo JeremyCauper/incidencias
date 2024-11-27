@@ -1,15 +1,14 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\User\UserController;
-use App\Http\Controllers\Mantenimientos\AreasController;
-use App\Http\Controllers\Mantenimientos\TipoAccesoController;
-use App\Http\Controllers\Mantenimientos\MenuController;
-use App\Http\Controllers\Incidencias\IncidenciaController;
-use App\Http\Controllers\Incidencias\IncidenciasResueltas;
-use App\Http\Controllers\Incidencias\OrdenSController;
-use App\Http\Controllers\ConsultasController;
-use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Consultas\ConsultasController;
+use App\Http\Controllers\Empresas\EmpresasController;
+use App\Http\Controllers\Empresas\GruposController;
+use App\Http\Controllers\Empresas\SucursalesController;
+use App\Http\Controllers\Incidencias\RegistradasController;
+use App\Http\Controllers\Incidencias\ResueltasController;
+use App\Http\Controllers\Mantenimientos\Problema\ProblemaController;
+use App\Http\Controllers\Orden\OrdenController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -26,74 +25,59 @@ use Illuminate\Support\Facades\Route;
 // Consulta Dni
 Route::get('/ConsultaDni/{dni}', [ConsultasController::class, 'ConsultaDni']);
 
-// Gestion del login
 Route::redirect('/', url('/inicio'));
-Route::get('/inicio', [LoginController::class, 'viewLogin'])->name('login')->middleware('guest');
+Route::get('/inicio', [LoginController::class, 'view'])->name('login')->middleware('guest');
 Route::post('/iniciar', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
 
 
+Route::get('/incidencias/registradas', [RegistradasController::class, 'view'])->middleware('auth');
+Route::get('/incidencias/registradas/index', [RegistradasController::class, 'index']);
+Route::get('/incidencias/registradas/detail/{cod}', [RegistradasController::class, 'detail']);
+Route::post('/incidencias/registradas/create', [RegistradasController::class, 'create']);
+Route::get('/incidencias/registradas/show/{id}', [RegistradasController::class, 'show']);
+Route::post('/incidencias/registradas/edit/{id}', [RegistradasController::class, 'edit']);
+Route::post('/incidencias/registradas/assignPer', [RegistradasController::class, 'assignPer']);
+Route::post('/incidencias/registradas/destroy/{id}', [RegistradasController::class, 'destroy']);
+Route::post('/incidencias/registradas/startInc', [RegistradasController::class, 'startInc']);
+Route::get('/incidencias/registradas/searchCliente/{dni}', [RegistradasController::class, 'searchCliente']);
 
-// Gestion de incidencias
-Route::get('/soporte/incidencias-registradas', [IncidenciaController::class, 'view'])->middleware('auth');
-Route::get('/soporte/incidencias-registradas/dataInd', [IncidenciaController::class, 'dataInd']);
-Route::get('/soporte/incidencias-registradas/datatable', [IncidenciaController::class, 'datatable']);
-Route::post('/soporte/incidencias-registradas/create', [IncidenciaController::class, 'create']);
-Route::get('/soporte/incidencias-registradas/show/{id}', [IncidenciaController::class, 'show']);
-Route::post('/soporte/incidencias-registradas/edit/{id}', [IncidenciaController::class, 'edit']);
-Route::post('/soporte/incidencias-registradas/editAssign', [IncidenciaController::class, 'editAssign']);
-Route::post('/soporte/incidencias-registradas/destroy/{id}', [IncidenciaController::class, 'destroy']);
-Route::post('/soporte/incidencias-registradas/initInc/{cod}', [IncidenciaController::class, 'initInc']);
-Route::get('/soporte/incidencias-registradas/detail/{cod}', [IncidenciaController::class, 'detail']);
-Route::get('/soporte/incidencias-registradas/detailOrden/{cod}', [IncidenciaController::class, 'detailOrden']);
+Route::get('/incidencias/resueltas', [ResueltasController::class, 'view'])->middleware('auth');
+Route::get('/incidencias/resueltas/index', [ResueltasController::class, 'index']);
+Route::get('/incidencias/resueltas/detail/{cod}', [ResueltasController::class, 'detail']);
 
-
-// Gestion de incidencias resueltas
-Route::get('/soporte/incidencias-resueltas', [IncidenciasResueltas::class, 'view'])->middleware('auth');
-Route::get('/soporte/incidencias-resueltas/datatable', [IncidenciasResueltas::class, 'datatable']);
-
-
-Route::post('/ordens/create', [OrdenSController::class, 'create']);
-Route::get('/documentoPdf/{cod}', [OrdenSController::class, 'generarPDF']);
+Route::post('/orden/create', [OrdenController::class, 'create']);
+Route::get('/orden/documentopdf/{cod}', [OrdenController::class, 'CreatePdf']);
+Route::get('/orden/documentoticket/{cod}', [OrdenController::class, 'CreateTicket']);
 
 
-Route::get('/viewListMenu', [MenuController::class, 'viewListMenu']);
-Route::get('/extractPermisos', [MenuController::class, 'extractPermisos']);
+Route::get('/empresas/grupos', [GruposController::class, 'view'])->middleware('auth');
+Route::get('/empresas/grupos/index', [GruposController::class, 'index']);
+Route::get('/empresas/grupos/{id}', [GruposController::class, 'show']);
+Route::post('/empresas/grupos/registrar', [GruposController::class, 'create']);
+Route::post('/empresas/grupos/actualizar', [GruposController::class, 'update']);
+Route::post('/empresas/grupos/cambiarEstado', [GruposController::class, 'changeStatus']);
 
+Route::get('/empresas/empresas', [EmpresasController::class, 'view'])->middleware('auth');
+Route::get('/empresas/empresas/index', [EmpresasController::class, 'index']);
+Route::get('/empresas/empresas/{id}', [EmpresasController::class, 'show']);
+Route::post('/empresas/empresas/registrar', [EmpresasController::class, 'create']);
+Route::post('/empresas/empresas/actualizar', [EmpresasController::class, 'update']);
+Route::post('/empresas/empresas/cambiarEstado', [EmpresasController::class, 'changeStatus']);
 
-
-// Gestion de Usuarios
-Route::get('/control-de-usuario/usuarios', [UserController::class, 'view'])->middleware('auth');
-Route::get('/usuarios/datatable', [UserController::class, 'datatable']);
-Route::post('/usuarios/create', [UserController::class, 'create']);
-Route::get('/usuarios/show/{id}', [UserController::class, 'show']);
-Route::post('/usuarios/edit/{id}', [UserController::class, 'edit']);
-Route::post('/usuarios/editstatus/{id}', [UserController::class, 'editstatus']);
-Route::get('/consultaDni/{dni}', [UserController::class, 'consultaDni']);
-
-
-
-Route::get('/control-de-usuario/mi-perfil', function () {
-    return view('dashboard.users.miperfil');
-})->middleware('auth');
+Route::get('/empresas/sucursales', [SucursalesController::class, 'view'])->middleware('auth');
+Route::get('/empresas/sucursales/index', [SucursalesController::class, 'index']);
+Route::get('/empresas/sucursales/{id}', [SucursalesController::class, 'show']);
+Route::post('/empresas/sucursales/registrar', [SucursalesController::class, 'create']);
+Route::post('/empresas/sucursales/actualizar', [SucursalesController::class, 'update']);
+Route::post('/empresas/sucursales/cambiarEstado', [SucursalesController::class, 'changeStatus']);
 
 
 
-// Gestion de Empresas
-Route::get('/soport-empresa/empresas', function () {    
-    return view('dashboard.company.empresas');
-})->middleware('auth');
-
-Route::get('/soport-empresa/grupos', function () {    
-    return view('dashboard.company.grupos');
-})->middleware('auth');
-
-Route::get('/soport-empresa/sucursales', function () {    
-    return view('dashboard.company.sucursales');
-})->middleware('auth');
-
-
-
-Route::get('/datepicker', function () {    
-    return view('pruebas.datepicker');
-});
+// Manenimiento Problemas
+Route::get('/mantenimiento/problemas/problemas', [ProblemaController::class, 'view'])->middleware('auth');
+Route::get('/mantenimiento/problemas/problemas/index', [ProblemaController::class, 'index']);
+Route::post('/mantenimiento/problemas/problemas/create', [ProblemaController::class, 'create']);
+Route::get('/mantenimiento/problemas/problemas/show/{id}', [ProblemaController::class, 'show']);
+Route::post('/mantenimiento/problemas/problemas/edit/{id}', [ProblemaController::class, 'edit']);
+Route::post('/mantenimiento/problemas/problemas/destroy/{id}', [ProblemaController::class, 'destroy']);

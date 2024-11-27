@@ -10,6 +10,7 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}">
     <link rel="stylesheet" href="{{asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}">
+    <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/default.css')}}">
     <link rel="stylesheet" href="{{asset('front/css/app/auth.css')}}">
 </head>
 
@@ -18,7 +19,8 @@
     <nav class="navbar bg-dark-subtle fixed-top">
         <div class="container-fluid py-1 mx-2">
             <a class="navbar-brand" href="{{url('/inicio')}}">
-                <img src="{{asset('front/images/app/logo_tittle_rc.png')}}" height="34" alt="RC Logo" loading="lazy" style="margin-top: -1px;">
+                <img src="{{asset('front/images/app/logo_tittle_rc.png')}}" height="34" alt="RC Logo" loading="lazy"
+                    style="margin-top: -1px;">
             </a>
             <span class="navbar-brand text-white me-0" style="font-size: smaller;">
                 INCIDENCIAS - RICARDO CALDERON INGENIEROS SAC
@@ -48,22 +50,25 @@
 
             <!-- Submit button -->
             <div class="text-end">
-                <button type="submit" id="btn-ingresar" data-mdb-ripple-init class="btn btn-primary mb-4">Ingresar</button>
+                <button type="submit" id="btn-ingresar" data-mdb-ripple-init
+                    class="btn btn-primary mb-4">Ingresar</button>
             </div>
         </form>
         <div class="text-center border-top mt-2 pt-2">
-            <p class="text-secondary" style="font-size: small;">©{{date("Y")}} Derechos Reservados. Ricardo Calderon Ingenieros!</p>
+            <p class="text-secondary" style="font-size: small;">©{{date("Y")}} Derechos Reservados. Ricardo Calderon
+                Ingenieros!</p>
         </div>
     </div>
-    
+
     <script src="{{asset('front/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
     <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
+    <script src="{{asset('front/js/AlertMananger.js')}}"></script>
     <script>
         const __url = "{{url('')}}";
         const __token = "{{ csrf_token() }}";
     </script>
-    <script src="{{asset('front/js/app/auth.js')}}"></script>
+    <script src="{{asset('front/js/app/auth/auth.js')}}"></script>
 </body>
 
 </html>

@@ -1,83 +1,15 @@
-.cabecera-orden h6 {
-    font-size: .9rem;
+.grid-margin .card .card-body {
+    cursor: pointer !important;
 }
 
-.cabecera-orden h6 label:nth-child(1) {
-    font-weight: bold;
+#tb_incidencia thead,
+#tb_incidencia tbody {
+    font-size: 12px !important;
 }
 
-.firmas-orden div p {
-    font-size: .7rem;
-    padding: .4rem;
-    margin-bottom: .1rem;
-    border-radius: .5rem;
-}
-
-#doc_clienteFirma {
-    cursor: pointer;
-    position: relative;
-}
-
-.doc-fsearch {
-    height: 26.78px;
-    border: 0.1rem solid #cdcdcd;
-}
-
-.doc-fsearch:hover {
-    background-color: #f3f3f3;
-}
-
-.doc-fsearch::before,
-.doc-fsearch::after {
-    position: absolute;
-    color: inherit;
-    display: block;
-    top: 55%;
-    font-size: .75rem;
-    margin-top: -.4375rem;
-    line-height: 1;
-    opacity: .6;
-    -webkit-font-smoothing: antialiased;
-}
-
-.doc-fsearch::before {
-    content: "\f002";
-    font-family: "Font Awesome 6 Free";
-    left: 2.25rem;
-}
-
-.doc-fsearch::after {
-    content: "Buscar cliente";
-    font-family: "Roboto";
-    left: 3.65rem;
-    font-weight: 500;
-}
-
-.doc-fclear {
-    padding-right: 1.7rem !important;
-}
-
-.doc-fclear::before {
-    content: "\f00d";
-    font-family: "Font Awesome 6 Free";
-    position: absolute;
-    right: .65rem;
-    top: 50%;
-    font-size: .9rem;
-    margin-top: -.4375rem;
-    line-height: 1;
-    opacity: .6;
-    -webkit-font-smoothing: antialiased;
-}
-
-.disabled {
-    opacity: .5;
-    pointer-events: none;
-}
-
-
-
-
+/*////////////////////////////////////////
+/        SCRIPT CSS FIRMA DIGITAL        /
+////////////////////////////////////////*/
 
 .content-image {
     margin: auto;
@@ -172,7 +104,72 @@
     top: 60%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 50%;
+    width: 35%;
     height: 2px;
     background: #000000;
+}
+
+/*////////////////////////////////////////
+/          SCRIPT CSS Doc Firma          /
+////////////////////////////////////////*/
+
+#doc_clienteFirma {
+    cursor: pointer;
+    position: relative;
+}
+
+.doc-fsearch {
+    height: 26.78px;
+    border: 0.1rem solid #cdcdcd;
+}
+
+.doc-fsearch:hover {
+    background-color: #f3f3f3;
+}
+
+.doc-fsearch::before,
+.doc-fsearch::after {
+    position: absolute;
+    color: inherit;
+    display: block;
+    top: 55%;
+    font-size: .75rem;
+    margin-top: -.4375rem;
+    line-height: 1;
+    opacity: .6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.doc-fsearch::before {
+    content: "\f002";
+    font-family: "Font Awesome 6 Free";
+    left: 2.25rem;
+}
+
+.doc-fsearch::after {
+    content: "Buscar cliente";
+    font-family: "Roboto";
+    left: 3.65rem;
+    font-weight: 500;
+}
+
+.doc-fclear {
+    padding-right: 1.7rem !important;
+}
+
+.doc-fclear::before {
+    content: "\f00d";
+    font-family: "Font Awesome 6 Free";
+    position: absolute;
+    right: .65rem;
+    top: 50%;
+    font-size: .9rem;
+    margin-top: -.4375rem;
+    line-height: 1;
+    opacity: .6;
+    -webkit-font-smoothing: antialiased;
+}
+
+.text-normal {
+    white-space: pre-line;
 }
