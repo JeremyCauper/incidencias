@@ -130,6 +130,26 @@
             </a>
           </li>
           <li class="nav-item">
+            <a class="nav-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlVisitas" role="button" aria-expanded="false" aria-controls="ControlVisitas">
+              <i class="fas fa-person-biking menu-icon"></i>
+              <span class="menu-title">Visitas</span>
+              <i class="menu-arrow"></i>
+            </a>
+            <div class="collapse" id="ControlVisitas">
+              <ul class="nav flex-column sub-menu">
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/visitas/terminadas')}}"><b>Terminadas</b></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/visitas/sucursales')}}"><b>Sucursales</b></a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/visitas/programadas')}}"><b>Programadas</b></a>
+                </li>
+              </ul>
+            </div>
+          </li>
+          <li class="nav-item">
             <a class="nav-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlEmpresas" role="button" aria-expanded="false" aria-controls="ControlEmpresas">
               <i class="far fa-building menu-icon"></i>
               <span class="menu-title">Empresas</span>
@@ -218,6 +238,7 @@
   </script>
   <!-- MDB -->
   <script type="text/javascript" src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
+  <script src="{{asset('front/js/app.js')}}"></script>
   <script src="{{asset('front/js/AlertMananger.js')}}"></script>
   <script src="{{asset('front/js/template.js') }}"></script>
   <script src="{{asset('front/js/hoverable-collapse.js') }}"></script>

@@ -3415,11 +3415,12 @@ body {
 }
 
 .swal2-container .form-label,
-.modal-dialog .form-label {
+.modal-dialog .form-label,
+.accordion-collapse .form-label {
     font-size: .75rem;
     font-weight: bold;
     font-family: 'Roboto';
-    color: #9FA6B2;
+    color: #888a8d;
     margin-bottom: .2rem;
 }
 
