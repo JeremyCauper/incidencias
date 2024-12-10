@@ -156,7 +156,9 @@
       }
     });
     form.find('select').each(function () {
-      $(this).val("").trigger('change.select2');
+      if (!$(this).is("[control-noclear]")) {
+        $(this).val("").trigger('change.select2');
+      }
     });
     form.find('button').each(function () {
       if ($(this).is('[button-reset]')) {

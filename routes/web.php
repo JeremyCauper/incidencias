@@ -10,6 +10,7 @@ use App\Http\Controllers\Incidencias\ResueltasController;
 use App\Http\Controllers\Mantenimientos\Problema\ProblemaController;
 use App\Http\Controllers\Orden\OrdenController;
 use App\Http\Controllers\Visitas\TerminadasController;
+use App\Http\Controllers\Visitas\VSucursalesController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -73,7 +74,11 @@ Route::post('/empresas/sucursales/registrar', [SucursalesController::class, 'cre
 Route::post('/empresas/sucursales/actualizar', [SucursalesController::class, 'update']);
 Route::post('/empresas/sucursales/cambiarEstado', [SucursalesController::class, 'changeStatus']);
 
+// Visitas Tecnicas
 Route::get('/visitas/terminadas', [TerminadasController::class, 'view'])->middleware('auth');
+
+Route::get('/visitas/sucursales', [VSucursalesController::class, 'view'])->middleware('auth');
+Route::get('/visitas/sucursales/index', [VSucursalesController::class, 'index'])->middleware('auth');
 
 
 

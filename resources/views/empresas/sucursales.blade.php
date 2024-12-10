@@ -101,16 +101,22 @@
                     </div>
 
                     <div class="col-lg-4 col-4 mb-2">
-                        <label class="form-label mb-0" for="vVisitas">Visitas</label>
-                        <input type="text" class="form-control" id="vVisitas" name="vVisitas">
+                        <label class="form-label mb-0" for="vVisitas">Tienes Visitas?</label>
+                        <select class="select" id="vVisitas" name="vVisitas" control-noclear>
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
                     </div>
                     <div class="col-lg-4 col-4 mb-2">
-                        <label class="form-label mb-0" for="vMantenimientos">Mantenimientos</label>
-                        <input type="text" class="form-control" id="vMantenimientos" name="vMantenimientos">
+                        <label class="form-label mb-0" for="vMantenimientos">Tiene Mantenimientos?</label>
+                        <select class="select" id="vMantenimientos" name="vMantenimientos" control-noclear>
+                            <option value="0">No</option>
+                            <option value="1">Si</option>
+                        </select>
                     </div>
                     <div class="col-lg-4 col-4 mb-2">
                         <label class="form-label mb-0" for="estado">Estado *</label>
-                        <select class="select" id="estado" name="estado" require="Estado">
+                        <select class="select" id="estado" name="estado" require="Estado" control-noclear>
                             <option value="1">Activo</option>
                             <option value="0">Inactivo</option>
                         </select>

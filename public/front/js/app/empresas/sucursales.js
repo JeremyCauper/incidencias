@@ -108,8 +108,8 @@ function Editar(id) {
                 $('#ubigeo').val(json.ubigeo).trigger('change');
                 $('#telefonoS').val(json.telefono);
                 $('#correoS').val(json.correo);
-                $('#vVisitas').val(json.v_visitas);
-                $('#vMantenimientos').val(json.v_mantenimientos);
+                $('#vVisitas').val(json.v_visitas).trigger('change');
+                $('#vMantenimientos').val(json.v_mantenimientos).trigger('change');
                 $('#urlMapa').val(json.url_mapa);
                 $('#estado').val(json.status).trigger('change');
                 fMananger.formModalLoding('modal_sucursales', 'hide');
