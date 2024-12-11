@@ -37,15 +37,16 @@
                 <i class="fas fa-triangle-exclamation"></i> Usuario incorrecto
             </div>
             <!-- Usuario input -->
-            <div data-mdb-input-init class="form-outline my-4" aria-cinput="usuario">
-                <input type="text" name="usuario" id="usuario" class="form-control" autofocus require="usuario">
-                <label class="form-label" for="usuario">Usuario</label>
+            <div class="input-group form-outline my-4" style="padding: .1152rem;" data-mdb-input-init aria-cinput="usuario">
+                <span class="input-group-text border-0 px-2" for="usuario"><i class="fas fa-circle-user"></i></span>
+                <input type="text" name="usuario" id="usuario" class="form-control border-start-0 ps-1" placeholder="Usuario" autofocus require="usuario">
             </div>
 
             <!-- Password input -->
-            <div data-mdb-input-init class="form-outline mb-4" aria-cinput="contraseña">
-                <input type="password" name="password" id="contrasena" class="form-control" require="contraseña">
-                <label class="form-label" for="contrasena">Contraseña</label>
+            <div class="input-group form-outline my-4" style="padding: .1152rem;" data-mdb-input-init aria-cinput="contraseña">
+                <span class="input-group-text border-0 px-2" for="contrasena"><i class="fas fa-key"></i></span>
+                <input type="password" name="password" id="contrasena" class="form-control border-start-0 ps-1" placeholder="Contraseña" autofocus require="contraseña">
+                <span class="input-group-text border-0 px-2" style="padding-top: 7px;"><i class="fas fa-eye-slash" id="icon-pass"></i></span>
             </div>
 
             <!-- Submit button -->

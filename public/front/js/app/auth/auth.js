@@ -27,6 +27,7 @@ document.getElementById('form-login').addEventListener('submit', function (event
         },
         success: function (response) {
             if (response.success) {
+                $('#btn-ingresar').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Ingresando...')
                 window.location.href = `${__url}/incidencias/registradas`;
             } else {
                 alertLogin(response.message);
@@ -80,6 +81,13 @@ function funKeyup() {
 }
 document.getElementById('usuario').addEventListener('keyup', funKeyup);
 document.getElementById('contrasena').addEventListener('keyup', funKeyup);
+
+document.getElementById('icon-pass').addEventListener('click', function () {
+    let contrasena = document.getElementById('contrasena');
+    const isPassword = contrasena.type === 'password';
+    this.className = isPassword ? 'fas fa-eye' : 'fas fa-eye-slash';
+    contrasena.type = isPassword ? 'text' : 'password';
+});
 
 
 function alertLogin(message) {

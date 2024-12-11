@@ -16,6 +16,24 @@ $(document).ready(function () {
         fillSelect(['#sproblema'], obj_subproblem, 'id_problema', $(this).val(), 'id', 'text');
     });
 
+    $('#tel_contac').on('change', function () {
+        if (!$(this).val()) {
+            $('#car_contac').val('').trigger('change.select2');
+            $('#nro_doc, #nom_contac, #cor_contac').val('');
+            return false;
+        }
+
+        const contacto = obj_eContactos[$(this).val()] || null;
+        if (contacto) {
+            $('#cod_contact').val(contacto.id_contact);
+            $('#tel_contac').val(contacto.telefono).trigger('change.select2');
+            $('#nro_doc').val(contacto.nro_doc);
+            $('#nom_contac').val(contacto.nombres);
+            $('#car_contac').val(contacto.cargo).trigger('change.select2');
+            $('#cor_contac').val(contacto.correo);
+        }
+    });
+
     $('.modal').on('shown.bs.modal', function () {
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
@@ -234,7 +252,7 @@ function ShowEdit(id) {
             $('#id_empresa').val(dt.id_empresa).trigger('change.select2');
             var option = $(`#id_empresa option[value="${dt.id_empresa}"]`).attr('select-ruc');
             console.log(option);
-            
+
             fillSelect(['#sucursal'], sucursales, 'ruc', option, 'id', 'nombre');
             $('#sucursal').val(dt.id_sucursal).trigger('change.select2');
             $('#cod_contact').val(dt.id_contacto);
@@ -412,13 +430,13 @@ async function OrdenDetail(e, cod) {
         url: `${__url}/incidencias/registradas/show/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);            
+            console.log(data);
             if (data.success) {
                 let personal = data.data.personal_asig;
                 $('[aria-item="observacion"]').html(data.data.observasion);
                 $('#codInc').val(data.data.cod_incidencia);
                 var tecnicos = personal.map(persona => persona.tecnicos);
-                
+
                 fMananger.formModalLoding('modal_orden', 'hide');
                 $('#modal_orden [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));
             }
@@ -428,6 +446,27 @@ async function OrdenDetail(e, cod) {
             console.log(jqXHR.responseJSON);
         }
     });
+}
+
+function validContac(_this) {
+    let tel_contac = $('#tel_contac');
+    let nom_contac = $('#nom_contac');
+    let car_contac = $('#car_contac');
+    let val = (tel_contac.val() || nom_contac.val() || car_contac.val()) ? true : false;
+
+    var validacion = (control, accion, requerido) => {
+        let contenedor = control.parent();
+        if (accion) {
+            contenedor.addClass('required');
+            control.attr('require', requerido);
+        } else {
+            contenedor.removeClass('required');
+            control.removeAttr('require');
+        }
+    }
+    validacion(tel_contac, val, 'Telefono Contacto');
+    validacion(nom_contac, val, 'Nombre Contacto');
+    validacion(car_contac, val, 'Cargo Contacto');
 }
 
 document.getElementById('form-orden').addEventListener('submit', function (event) {
@@ -760,7 +799,7 @@ function search_doc() {
         success: function (data) {
             if (data.success) {
                 clientNameI.value = data.data.nombre;
-                if(data.data.consulta) {
+                if (data.data.consulta) {
                     $('#id_firmador').val(data.data.id);
                     var firma = data.data.firma_digital;
                     $('#nomFirmaDigital').val(firma);

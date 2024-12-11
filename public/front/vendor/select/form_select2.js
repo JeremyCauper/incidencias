@@ -4,12 +4,17 @@ $(document).ready(function () {
             placeholder: '-- Seleccione --',
             minimumResultsForSearch: Infinity
         },
+        "multiple": {
+            minimumResultsForSearch: Infinity
+        },
         "search": {},
         "clear": {
             placeholder: '-- Seleccione --',
             allowClear: true
         },
         "tags": {
+            placeholder: 'Buscar',
+            allowClear: true,
             tags: true
         },
         "icons": {
@@ -46,6 +51,11 @@ $(document).ready(function () {
         initializeSelect2($(this), config.select);
     });
 
+    // Inicialización por defecto multiple
+    $('.select-multiple').each(function () {
+        initializeSelect2($(this), config.multiple);
+    });
+
     // Inicialización con búsqueda
     $('.select-search').each(function () {
         initializeSelect2($(this), config.search);
@@ -73,6 +83,9 @@ $(document).ready(function () {
             modal.find('select').each(function () {
                 if ($(this).hasClass('select')) {
                     initializeSelect2($(this), config.select, modal);
+                }
+                if ($(this).hasClass('select-multiple')) {
+                    initializeSelect2($(this), config.multiple, modal);
                 }
                 if ($(this).hasClass('select-search')) {
                     initializeSelect2($(this), config.search, modal);

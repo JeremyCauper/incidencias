@@ -9,6 +9,7 @@ use App\Http\Controllers\Incidencias\RegistradasController;
 use App\Http\Controllers\Incidencias\ResueltasController;
 use App\Http\Controllers\Mantenimientos\Problema\ProblemaController;
 use App\Http\Controllers\Orden\OrdenController;
+use App\Http\Controllers\Usuario\UsuarioController;
 use App\Http\Controllers\Visitas\TerminadasController;
 use App\Http\Controllers\Visitas\VSucursalesController;
 use Illuminate\Support\Facades\Route;
@@ -80,7 +81,8 @@ Route::get('/visitas/terminadas', [TerminadasController::class, 'view'])->middle
 Route::get('/visitas/sucursales', [VSucursalesController::class, 'view'])->middleware('auth');
 Route::get('/visitas/sucursales/index', [VSucursalesController::class, 'index'])->middleware('auth');
 
-
+Route::get('/control-de-usuario/usuarios', [UsuarioController::class, 'view'])->middleware('auth');
+Route::get('/control-de-usuario/usuarios/index', [UsuarioController::class, 'index']);
 
 // Manenimiento Problemas
 Route::get('/mantenimiento/problemas/problemas', [ProblemaController::class, 'view'])->middleware('auth');

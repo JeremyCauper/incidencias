@@ -57,8 +57,6 @@ function ShowDetail(e, id) {
         url: `${__url}/incidencias/registradas/detail/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
-
             if (data.success) {
                 var seguimiento = data.data.seguimiento;
                 var incidencia = data.data.incidencia;
@@ -144,5 +142,7 @@ function OrdenTicket(cod) {
 }
 
 function AddSignature(cod) {
+    $('#modal_firmas').modal('show');
+    fMananger.formModalLoding('modal_firmas', 'show');
     console.log(cod);
 }

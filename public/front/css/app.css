@@ -3864,3 +3864,14 @@ body {
     font-size: .9rem;
     padding: .5rem 0;
 }
+
+.required label {
+    position: relative;
+}
+.required label::before {
+    content: '*';
+    position: absolute;
+    color: #dc4c64;
+    right: -10px;
+    font-size: small;
+}

@@ -103,13 +103,12 @@
                 <input type="text" class="d-none" name="cod_inc" id="cod_inc" value="{{$data['cod_inc']}}">
                 <div class="col-12 mb-2">
                     <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios
-                        (*)</span>
+                        (<span class="text-danger">*</span>)</span>
                 </div>
                 <h6 class="tittle text-primary my-3">Datos Empresa</h6>
                 <div class="row">
-                    <div class="col-lg-8 mb-2">
-                        <label class="form-label mb-0" for="id_empresa">Empresa <span
-                                class="text-danger">*</span></label>
+                    <div class="col-lg-8 mb-2 required">
+                        <label class="form-label mb-0" for="id_empresa">Empresa</label>
                         <select id="id_empresa" class="select-clear" name="id_empresa" require="Empresa">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['company'] as $e)
@@ -118,9 +117,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-4 mb-2">
-                        <label class="form-label mb-0" for="sucursal">Sucursal <span
-                                class="text-danger">*</span></label>
+                    <div class="col-lg-4 mb-2 required">
+                        <label class="form-label mb-0" for="sucursal">Sucursal</label>
                         <select id="sucursal" class="select" name="sucursal" require="Sucursal" disabled="true">
                             <option value="">-- Seleccione --</option>
                         </select>
@@ -132,19 +130,25 @@
                     <input type="hidden" name="cod_contact" id="cod_contact">
                     <div class="col-lg-4 col-6 mb-2">
                         <label class="form-label mb-0" for="tel_contac">Telefono</label>
-                        <input type="text" class="form-control" id="tel_contac" name="tel_contac">
+                        <!-- <input type="text" class="form-control" id="tel_contac" name="tel_contac" onkeyup="validContac(this)"> -->
+                        <select id="tel_contac" name="tel_contac" class="select-tags" onchange="validContac(this)">
+                            <option value=""></option>
+                            @foreach ($data['eContactos'] as $ct)
+                                <option value="{{$ct->telefono}}">{{$ct->telefono}}</option>
+                            @endforeach
+                        </select>
                     </div>
                     <div class="col-lg-4 col-6 mb-2">
                         <label class="form-label mb-0" for="nro_doc">Dni</label>
-                        <input type="text" class="form-control" id="nro_doc" name="nro_doc">
+                        <input type="text" class="form-control" id="nro_doc" name="nro_doc" onkeyup="validContac(this)">
                     </div>
                     <div class="col-lg-4 col-12 mb-2">
                         <label class="form-label mb-0" for="nom_contac">Nombre</label>
-                        <input type="text" class="form-control" id="nom_contac" name="nom_contac">
+                        <input type="text" class="form-control" id="nom_contac" name="nom_contac" onkeyup="validContac(this)">
                     </div>
                     <div class="col-lg-6 col-5 mb-2">
                         <label class="form-label mb-0" for="car_contac">Cargo</label>
-                        <select id="car_contac" class="select-clear" name="car_contac">
+                        <select id="car_contac" class="select-clear" name="car_contac" onchange="validContac(this)">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['CargoContacto'] as $cc)
                                 <option value="{{$cc->id}}">{{$cc->descripcion}}</option>
@@ -153,15 +157,14 @@
                     </div>
                     <div class="col-lg-6 col-7 mb-2">
                         <label class="form-label mb-0" for="cor_contac">Correo</label>
-                        <input type="text" class="form-control" id="cor_contac" name="cor_contac">
+                        <input type="text" class="form-control" id="cor_contac" name="cor_contac" onkeyup="validContac(this)">
                     </div>
                 </div>
 
                 <h6 class="tittle text-primary my-3">Datos Incidencia</h6>
                 <div class="row">
-                    <div class="col-lg-4 col-7 mb-2">
-                        <label class="form-label mb-0" for="tEstacion">Tipo Estación <span
-                                class="text-danger">*</span></label>
+                    <div class="col-lg-4 col-7 mb-2 required">
+                        <label class="form-label mb-0" for="tEstacion">Tipo Estación</label>
                         <select class="select-clear" id="tEstacion" name="tEstacion" require="Tipo Estación">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tEstacion'] as $v)
@@ -169,9 +172,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-2 col-5 mb-2">
-                        <label class="form-label mb-0" for="prioridad">Prioridad <span
-                                class="text-danger">*</span></label>
+                    <div class="col-lg-2 col-5 mb-2 required">
+                        <label class="form-label mb-0" for="prioridad">Prioridad</label>
                         <select class="select" id="prioridad" name="prioridad" require="Prioridad">
                             <option value="Alta">Alta</option>
                             <option value="Media">Media</option>
@@ -179,9 +181,8 @@
                             <option value="Critica">Critica</option>
                         </select>
                     </div>
-                    <div class="col-lg-4 col-7 mb-2">
-                        <label class="form-label mb-0" for="tSoporte">Tipo Soporte <span
-                                class="text-danger">*</span></label>
+                    <div class="col-lg-4 col-7 mb-2 required">
+                        <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
                         <select class="select" id="tSoporte" name="tSoporte" require="Tipo Soporte">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tSoporte'] as $v)
@@ -189,9 +190,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-2 col-5 mb-2">
-                        <label class="form-label mb-0" for="tIncidencia">Tipo Incidencia <span
-                                class="text-danger">*</span></label>
+                    <div class="col-lg-2 col-5 mb-2 required">
+                        <label class="form-label mb-0" for="tIncidencia">Tipo Incidencia</label>
                         <select class="select" id="tIncidencia" name="tIncidencia" require="Tipo Incidencia">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tIncidencia'] as $v)
@@ -200,30 +200,26 @@
                         </select>
                     </div>
 
-                    <div class="col-md-6 mb-2">
-                        <label class="form-label mb-0" for="problema">Problema <span
-                                class="text-danger">*</span></label>
+                    <div class="col-md-6 mb-2 required">
+                        <label class="form-label mb-0" for="problema">Problema</label>
                         <select class="select-clear" id="problema" name="problema" require="Problema" disabled>
                         </select>
                     </div>
-                    <div class="col-md-6 mb-2">
-                        <label class="form-label mb-0" for="sproblema">Sub Problema <span
-                                class="text-danger">*</span></label>
+                    <div class="col-md-6 mb-2 required">
+                        <label class="form-label mb-0" for="sproblema">Sub Problema</label>
                         <select class="select-clear" id="sproblema" name="sproblema" require="Sub Problema" disabled>
                         </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <div class="col-sm-12 mb-2">
-                            <label class="form-label mb-0" for="fecha_imforme">Fecha de Informe <span
-                                    class="text-danger">*</span></label>
+                        <div class="col-sm-12 mb-2 required">
+                            <label class="form-label mb-0" for="fecha_imforme">Fecha de Informe</label>
                             <input type="date" class="form-control" id="fecha_imforme" name="fecha_imforme"
                                 require="Fecha de Informe">
                         </div>
-                        <div class="col-sm-12 mb-2">
-                            <label class="form-label mb-0" for="hora_informe">Hora de Informe <span
-                                    class="text-danger">*</span></label>
+                        <div class="col-sm-12 mb-2 required">
+                            <label class="form-label mb-0" for="hora_informe">Hora de Informe</label>
                             <input type="time" class="form-control" id="hora_informe" name="hora_informe" min="00:00"
                                 max="23:59" step="1">
                         </div>
@@ -312,17 +308,6 @@
                 <h6 class="font-weight-semibold col-form-label text-primary mt-2">Seguimiento Incidencia</h6>
                 <div class="">
                     <ul class="list-group list-group-light" id="content-seguimiento">
-                        <!-- <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="https://mdbootstrap.com/img/new/avatars/8.jpg" alt=""
-                                    style="width: 45px; height: 45px" class="rounded-circle" />
-                                <div class="ms-3">
-                                    <p class="fw-bold mb-1">John Doe</p>
-                                    <p class="text-muted mb-0">john.doe@gmail.com</p>
-                                </div>
-                            </div>
-                            <span class="badge rounded-pill badge-secondary">Active</span>
-                        </li> -->
                     </ul>
                 </div>
             </div>
@@ -611,6 +596,7 @@
     const sucursales = <?php echo json_encode($data['scompany']); ?>;
     const obj_problem = <?php echo json_encode($data['problema']); ?>;
     const obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
+    const obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
 </script>
 <script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>
 <script src="{{asset('front/js/app/incidencia/registradas.js')}}"></script>

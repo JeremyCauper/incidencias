@@ -77,3 +77,21 @@
 .hide {
     animation: bounceOut 0.5s forwards;
 }
+
+#icon-pass {
+    width: 24px;
+    height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+#icon-pass::before {
+    font-size: 12px;
+}
+
+#icon-pass:hover {
+    background-color: #ebebeb;
+}

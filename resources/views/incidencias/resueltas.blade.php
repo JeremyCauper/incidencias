@@ -270,9 +270,70 @@
                                 <!-- <img class="border rounded-1" id="" alt="" > -->
                                 <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma
                                     Cliente</p>
-                                <p class="mb-1" style="font-size: 13.4px;" aria-item="                                              ">COESTI S.A.</p>
+                                <p class="mb-1" style="font-size: 13.4px;" aria-item="">COESTI S.A.</p>
                                 <p style="font-size: 12.5px;" id="doc_clienteFirma" class="doc-fsearch mb-0"></p>
                             </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init onclick="">Registrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_firmas" aria-labelledby="modal_firmas" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg" style="display: flex;">
+        <form class="modal-content" id="form-orden">
+            <div class="modal-header bg-primary text-white">
+                <h6 class="modal-title">ASIGNAR FIRMAS <span class="badge badge-success badge-lg"
+                        aria-item="codigo"></span></h6>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- INICIO CABECERA -->
+                <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
+                    <div class="row justify-content-between firmas-orden">
+                        <div class="col-lg-5 text-center my-2">
+                            <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '' : ''}} height="130"
+                                width="160">
+                            <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
+                                Firma Tecnico
+                            </p>
+                            <p class="mb-1" style="font-size: 13.4px;">RICARDO CALDERON INGENIEROS SAC</p>
+                            <p class="mb-0" style="font-size: 12.5px;">{{Auth::user()->ndoc_usuario . ' - ' . Auth::user()->nombres . ' ' . Auth::user()->apellidos}}</p>
+                        </div>
+
+                        <div class="col-lg-5 text-center my-2">
+                            <div class="text-center content-image">
+                                <div class="overlay">
+                                    <button class="btn-img removeImgButton" style="display: none;"
+                                        id="removeImgFirma" type="button" button-reset><i
+                                            class="fas fa-xmark"></i></button>
+                                    <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma"
+                                        type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
+                                    <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i
+                                            class="fas fa-pencil"></i></button>
+                                    <button class="btn-img expandImgButton" type="button"
+                                        onclick="PreviImagenes(PreviFirma.src);"><i
+                                            class="fas fa-expand"></i></button>
+                                </div>
+                                <input type="file" class="d-none" id="firma_digital">
+                                <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
+                                <img id="PreviFirma" class="visually-hidden" height="130" width="160">
+                            </div>
+                            <!-- <img class="border rounded-1" id="" alt="" > -->
+                            <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma
+                                Cliente</p>
+                            <p class="mb-1" style="font-size: 13.4px;" aria-item="empresaFooter">COESTI S.A.</p>
+                            <p style="font-size: 12.5px;" id="doc_clienteFirma" class="doc-fsearch mb-0"></p>
+                            <input type="hidden" name="id_firmador" id="id_firmador">
+                            <input type="hidden" name="nomFirmaDigital" id="nomFirmaDigital">
+                            <input type="hidden" name="n_doc" id="n_doc">
+                            <input type="hidden" name="nom_cliente" id="nom_cliente">
                         </div>
                     </div>
                 </div>

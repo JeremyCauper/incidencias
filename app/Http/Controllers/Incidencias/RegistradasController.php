@@ -29,6 +29,7 @@ class RegistradasController extends Controller
             $data['tIncidencia'] = $this->fetchAndParseDbData('tb_tipo_incidencia', ["id_tipo_incidencia as id", 'descripcion', 'estatus']);
             $data['problema'] = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'tipo_incidencia', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
             $data['sproblema'] = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'id_problema', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
+            $data['eContactos'] = DB::table('contactos_empresas')->where('estatus', 1)->get()->keyBy('telefono');
 
             $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
                 return [
@@ -308,7 +309,29 @@ class RegistradasController extends Controller
             if ($validator->fails())
                 return response()->json(['errors' => $validator->errors()], 400);
 
-            $update = [
+            $rContact = [
+                'telefono' => $request->tel_contac,
+                'nro_doc' => $request->nro_doc,
+                'nombres' => $request->nom_contac,
+                'cargo' => $request->car_contac,
+                'correo' => $request->cor_contac
+            ];
+            $idContact = $request->cod_contact;
+
+            DB::beginTransaction();
+            if ($rContact['telefono'] || $rContact['nombres'] || $rContact['cargo']){
+                if ($idContact) {
+                    $rContact['updated_at'] = now()->format('Y-m-d H:i:s');
+                    DB::table('contactos_empresas')->where('id_contact', $idContact)->update($rContact);
+                } else {
+                    $rContact['created_at'] = now()->format('Y-m-d H:i:s');
+                    $idContact = DB::table('contactos_empresas')->insertGetId($rContact);
+                }
+            } else {
+                $idContact = null;
+            }
+
+            DB::table('tb_incidencias')->where('id_incidencia', $id)->update([
                 'cod_incidencia' => $request->cod_inc,
                 'id_empresa' => $request->id_empresa,
                 'id_sucursal' => $request->sucursal,
@@ -318,28 +341,13 @@ class RegistradasController extends Controller
                 'id_tipo_incidencia' => $request->tIncidencia,
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
-                'id_contacto' => $request->cod_contact,
+                'id_contacto' => $idContact,
                 'observasion' => $request->observasion,
                 'fecha_informe' => $request->fecha_imforme,
                 'hora_informe' => $request->hora_informe,
                 'id_usuario' => Auth::user()->id_usuario,
                 'updated_at' => now()->format('Y-m-d H:i:s')
-            ];
-
-            $updateC = [
-                'telefono' => $request->tel_contac,
-                'nro_doc' => $request->nro_doc,
-                'nombres' => $request->nom_contac,
-                'cargo' => $request->car_contac,
-                'correo' => $request->cor_contac,
-                'updated_at' => now()->format('Y-m-d H:i:s')
-            ];
-
-            DB::beginTransaction();
-            if ($updateC['telefono'] || $updateC['nombres'] || $updateC['cargo'] && $request->cod_contact)
-                DB::table('contactos_empresas')->where('id_contact', $request->cod_contact)->update($updateC);
-
-            DB::table('tb_incidencias')->where('id_incidencia', $id)->update($update);
+            ]);
             $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
 
             DB::commit();
