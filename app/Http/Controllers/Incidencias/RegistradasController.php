@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Incidencias;
 
 use App\Http\Controllers\Consultas\ConsultasController;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Mantenimientos\ContactoEmpresasController;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -29,7 +30,7 @@ class RegistradasController extends Controller
             $data['tIncidencia'] = $this->fetchAndParseDbData('tb_tipo_incidencia', ["id_tipo_incidencia as id", 'descripcion', 'estatus']);
             $data['problema'] = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'tipo_incidencia', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
             $data['sproblema'] = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'id_problema', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
-            $data['eContactos'] = DB::table('contactos_empresas')->where('estatus', 1)->get()->keyBy('telefono');
+            $data['eContactos'] = (new ContactoEmpresasController())->index();
 
             $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
                 return [
@@ -162,14 +163,14 @@ class RegistradasController extends Controller
                 'fecha_imforme' => 'required|date',
                 'hora_informe' => 'required|date_format:H:i:s',
                 'tel_contac' => 'nullable|string',
-                'nro_doc' => 'nullable|integer',
+                'nro_doc' => 'nullable|string',
                 'nom_contac' => 'nullable|string',
                 'car_contac' => 'nullable|string',
                 'cor_contac' => 'nullable|string'
             ]);
 
             if ($validator->fails())
-                return response()->json(['errors' => $validator->errors()], 400);
+                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
 
             $personal = $request->personal;
             $estado_info = count($personal) ? 1 : 0;
@@ -300,14 +301,14 @@ class RegistradasController extends Controller
                 'hora_informe' => 'required|date_format:H:i:s',
                 'cod_contact' => 'nullable|integer',
                 'tel_contac' => 'nullable|string',
-                'nro_doc' => 'nullable|integer',
+                'nro_doc' => 'nullable|string',
                 'nom_contac' => 'nullable|string',
                 'car_contac' => 'nullable|string',
                 'cor_contac' => 'nullable|string'
             ]);
 
             if ($validator->fails())
-                return response()->json(['errors' => $validator->errors()], 400);
+                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
 
             $rContact = [
                 'telefono' => $request->tel_contac,
@@ -369,7 +370,7 @@ class RegistradasController extends Controller
                 'cod_inc' => 'required|string'
             ]);
             if ($validator->fails())
-                return response()->json(['errors' => $validator->errors()], 400);
+                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
 
             DB::beginTransaction();
             if ($request->estado)
@@ -450,7 +451,7 @@ class RegistradasController extends Controller
             ]);
 
             if ($validator->fails())
-                return response()->json(['errors' => $validator->errors()], 400);
+                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
 
             $validacion = DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->codigo)->count();
             if (!$validacion) {

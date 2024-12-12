@@ -144,7 +144,7 @@
                     </div>
                     <div class="col-lg-4 col-12 mb-2">
                         <label class="form-label mb-0" for="nom_contac">Nombre</label>
-                        <input type="text" class="form-control" id="nom_contac" name="nom_contac" onkeyup="validContac(this)">
+                        <input type="text" class="form-control" id="nom_contac" name="nom_contac" maxlength="250" onkeyup="validContac(this)">
                     </div>
                     <div class="col-lg-6 col-5 mb-2">
                         <label class="form-label mb-0" for="car_contac">Cargo</label>
@@ -596,8 +596,9 @@
     const sucursales = <?php echo json_encode($data['scompany']); ?>;
     const obj_problem = <?php echo json_encode($data['problema']); ?>;
     const obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
-    const obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
+    let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
 </script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
 <script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>
 <script src="{{asset('front/js/app/incidencia/registradas.js')}}"></script>
 @endsection

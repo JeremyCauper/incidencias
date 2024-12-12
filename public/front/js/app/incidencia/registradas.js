@@ -60,6 +60,14 @@ $(document).ready(function () {
     $('#createMaterial').on('click', function () {
         manCantidad($(this).val(), true);
     });
+
+    // Aplicar la máscara
+    Inputmask("99999999999", {
+        placeholder: "-",
+        greedy: false,
+        casing: "upper",
+        jitMasking: true
+    }).mask('#nro_doc');
 });
 
 const cMaterial = new CTable('#createMaterial', {
@@ -138,6 +146,11 @@ function updateTable() {
 
 document.getElementById('form-incidencias').addEventListener('submit', function (event) {
     event.preventDefault();
+    const emailValue = $('#cor_contac').val();
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(emailValue) && emailValue) {
+        return boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: 'El correo electrónico ingresado no es válido.' });
+    }
     fMananger.formModalLoding('modal_incidencias', 'show');
     const accion = $('#id_inc').val();
     const url = accion ? `edit/${accion}` : `create`;
@@ -161,16 +174,20 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
                 $('#modal_incidencias').modal('hide');
+                fillSelectContac();
                 boxAlert.minbox({
                     h: data.message
                 });
                 return updateTable();
             }
-            boxAlert.box({
-                i: 'error',
-                t: 'Ocurrio un error en el processo',
-                h: data.message
-            });
+            var message = "";
+            if (data.hasOwnProperty('validacion')) {
+                for (const key in data.validacion) {
+                    message +=  `<li>${data.validacion[key][0]}</li>`;
+                }
+                message = `<ul>${message}</ul>`;
+            }
+            boxAlert.box({ i: 'error', t: 'Algo salió mal', h: message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
@@ -296,7 +313,7 @@ function ShowAssign(e, id) {
         contentType: 'application/json',
         success: function (data) {
             if (!data.success)
-                boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: data.message });
+                boxAlert.box({ i: 'error', t: 'Algo salió mal', h: data.message });
 
             const dt = data.data;
 
@@ -334,8 +351,6 @@ async function AssignPer() {
             personal_asig: cPersonal1.extract()
         }),
         success: function (data) {
-            console.log(data);
-
             fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
@@ -343,7 +358,14 @@ async function AssignPer() {
                 updateTable();
                 return true;
             }
-            boxAlert.box({ i: 'error', t: '¡Ocurrio un error!', h: data.message });
+            var message = "";
+            if (data.hasOwnProperty('validacion')) {
+                for (const key in data.validacion) {
+                    message +=  `<li>${data.validacion[key][0]}</li>`;
+                }
+                message = `<ul>${message}</ul>`;
+            }
+            boxAlert.box({ i: 'error', t: 'Algo salió mal', h: message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
@@ -401,7 +423,14 @@ async function StartInc(cod, estado) {
                 updateTable();
                 return true;
             }
-            boxAlert.box('error', '¡Ocurrio un error!', data.message);
+            var message = "";
+            if (data.hasOwnProperty('validacion')) {
+                for (const key in data.validacion) {
+                    message +=  `<li>${data.validacion[key][0]}</li>`;
+                }
+                message = `<ul>${message}</ul>`;
+            }
+            boxAlert.box({ i: 'error', t: 'Algo salió mal', h: message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
@@ -448,11 +477,32 @@ async function OrdenDetail(e, cod) {
     });
 }
 
+function fillSelectContac() {
+    $.ajax({
+        type: 'GET',
+        url: `${__url}/mantenimiento/contacto-empresas/index`,
+        contentType: 'application/json',
+        success: function (data) {
+            $('#tel_contac').html('<option value=""></option>');
+            Object.entries(data).forEach(([key, e]) => {
+                $('#tel_contac').append($('<option>').val(e.telefono).text(e.telefono));
+            });
+            obj_eContactos = data;
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            alert('Error al registrar el usuario');
+            console.log(jqXHR.responseJSON);
+        }
+    });
+}
+
 function validContac(_this) {
     let tel_contac = $('#tel_contac');
+    let nro_doc = $('#nro_doc');
     let nom_contac = $('#nom_contac');
+    let cor_contac = $('#cor_contac');
     let car_contac = $('#car_contac');
-    let val = (tel_contac.val() || nom_contac.val() || car_contac.val()) ? true : false;
+    let val = (tel_contac.val() || nro_doc.val() || nom_contac.val() || car_contac.val() || cor_contac.val()) ? true : false;
 
     var validacion = (control, accion, requerido) => {
         let contenedor = control.parent();

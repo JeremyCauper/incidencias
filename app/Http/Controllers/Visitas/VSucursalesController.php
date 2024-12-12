@@ -29,23 +29,25 @@ class VSucursalesController extends Controller
     {
         try {
             $sucursales = DB::table('tb_sucursales')->get();
-            $empresas = DB::table('tb_empresas')->get()->keyBy(keyBy: 'ruc');
-            // Procesar sucursales
-            $sucursales = $sucursales->map(function ($val) use ($empresas) {
+            $empresas = DB::table('tb_empresas')->where('contrato', 1)->get()->keyBy(keyBy: 'ruc');
+            $arr_sucursales = [];
+            // Procesar empresas
+            foreach ($sucursales as $key => $val) {
                 $estado = [
                     ['color' => 'danger', 'text' => 'Inactivo'],
                     ['color' => 'success', 'text' => 'Activo']
                 ];
-                $id_grupo = $empresas[$val->ruc]->id_grupo;
-                return [
-                    'id' => $val->id,
-                    'ruc' => $val->ruc,
-                    'sucursal' => $val->nombre,
-                    'visita' => $val->v_visitas
-                ];
-            });
+                if (isset($empresas[$val->ruc])) {
+                    $arr_sucursales[] = [
+                        'id' => $val->id,
+                        'ruc' => $val->ruc,
+                        'sucursal' => $val->nombre,
+                        'visita' => $val->v_visitas
+                    ];
+                }
+            }
 
-            return $sucursales;
+            return $arr_sucursales;
         } catch (Exception $e) {
             return $this->mesageError(exception: $e, codigo: 500);
         }

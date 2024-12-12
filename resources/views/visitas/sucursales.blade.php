@@ -67,7 +67,7 @@
                             <tr class="text-bg-primary">
                                 <th>Ruc</th>
                                 <th>Sucursal</th>
-                                <th>Visitas</th>
+                                <th class="text-center">Visitas Realizadas</th>
                                 <th class="text-center">Acciones</th>
                             </tr>
                         </thead>
@@ -137,14 +137,18 @@
         columns: [
             { data: 'ruc' },
             { data: 'sucursal' },
-            { data: 'visita' },
+            { data: 'visita', render: function(data, type, row) {
+                    let visita = data ? {'c': 'info', 't': data + ' Visita' + (data>1) ? 's' : ''} : {'c': 'warning', 't': 'Sin Visitas'};
+                    return `<label class="badge badge-${visita.c}" style="font-size: .7rem;">${visita.t}</label>`;
+                }
+            },
             { data: 'id', render: function(data, type, row) {
                     return '';
                 }
             }
         ],
         createdRow: function (row, data, dataIndex) {
-            $(row).find('td:eq(3)').addClass('text-center');
+            $(row).find('td:eq(2), td:eq(3)').addClass('text-center');
         },
         processing: true
     });

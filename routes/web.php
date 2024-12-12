@@ -7,6 +7,7 @@ use App\Http\Controllers\Empresas\GruposController;
 use App\Http\Controllers\Empresas\SucursalesController;
 use App\Http\Controllers\Incidencias\RegistradasController;
 use App\Http\Controllers\Incidencias\ResueltasController;
+use App\Http\Controllers\Mantenimientos\ContactoEmpresasController;
 use App\Http\Controllers\Mantenimientos\Problema\ProblemaController;
 use App\Http\Controllers\Orden\OrdenController;
 use App\Http\Controllers\Usuario\UsuarioController;
@@ -91,3 +92,5 @@ Route::post('/mantenimiento/problemas/problemas/create', [ProblemaController::cl
 Route::get('/mantenimiento/problemas/problemas/show/{id}', [ProblemaController::class, 'show']);
 Route::post('/mantenimiento/problemas/problemas/edit/{id}', [ProblemaController::class, 'edit']);
 Route::post('/mantenimiento/problemas/problemas/destroy/{id}', [ProblemaController::class, 'destroy']);
+
+Route::get('/mantenimiento/contacto-empresas/index', [ContactoEmpresasController::class, 'index']);
