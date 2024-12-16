@@ -137,12 +137,17 @@
         columns: [
             { data: 'ruc' },
             { data: 'sucursal' },
-            { data: 'visita', render: function(data, type, row) {
-                    let visita = data ? {'c': 'info', 't': data + ' Visita' + (data>1) ? 's' : ''} : {'c': 'warning', 't': 'Sin Visitas'};
-                    return `<label class="badge badge-${visita.c}" style="font-size: .7rem;">${visita.t}</label>`;
+            {
+                data: 'visita', render: function (data, type, row) {
+                    badgeOptions = data == 'completado'
+                        ? { t: 'Completado', c: 'primary' }
+                        : (data ? { 'c': 'info', 't': `${data} Visita${(data > 1) ? 's' : ''}` } : { 'c': 'warning', 't': 'Sin Visitas' });
+
+                    return `<label class="badge badge-${badgeOptions.c}" style="font-size: .7rem;">${badgeOptions.t}</label>`;
                 }
             },
-            { data: 'id', render: function(data, type, row) {
+            {
+                data: 'id', render: function (data, type, row) {
                     return '';
                 }
             }

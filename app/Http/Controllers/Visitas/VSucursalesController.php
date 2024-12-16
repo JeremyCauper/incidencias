@@ -28,26 +28,31 @@ class VSucursalesController extends Controller
     public function index()
     {
         try {
-            $sucursales = DB::table('tb_sucursales')->get();
-            $empresas = DB::table('tb_empresas')->where('contrato', 1)->get()->keyBy(keyBy: 'ruc');
-            $arr_sucursales = [];
-            // Procesar empresas
-            foreach ($sucursales as $key => $val) {
-                $estado = [
-                    ['color' => 'danger', 'text' => 'Inactivo'],
-                    ['color' => 'success', 'text' => 'Activo']
-                ];
-                if (isset($empresas[$val->ruc])) {
-                    $arr_sucursales[] = [
+            $empresas = DB::table('tb_empresas')->where('contrato', 1)->get()->keyBy('ruc');
+            $visitas = DB::table('tb_visitas')->whereMonth('fecha', now()->format('m'))->get()->groupBy('id_sucursal')
+                ->map(function ($items) {
+                    return $items->mapWithKeys(function ($item) {
+                        return [
+                            $item->id => $item
+                        ];
+                    });
+                });
+
+            $sucursales = DB::table('tb_sucursales')->where('v_visitas', 1)->get()->filter(fn($val) => isset($empresas[$val->ruc])) // Filtra solo las sucursales con empresas activas
+                ->map(function ($val) use ($empresas, $visitas) {
+                    $vRealizadas = count($visitas[$val->id] ?? []);
+                    $totalVisitas = $empresas[$val->ruc]->visitas;
+                    $badgeKey = $vRealizadas ? ($vRealizadas == $totalVisitas ? 'completado' : $vRealizadas) : 0;
+            
+                    return [
                         'id' => $val->id,
                         'ruc' => $val->ruc,
                         'sucursal' => $val->nombre,
-                        'visita' => $val->v_visitas
+                        'visita' => $badgeKey
                     ];
-                }
-            }
+                })->values(); // Resetea las claves (opcional si no necesitas una colección indexada por ID)
 
-            return $arr_sucursales;
+            return $sucursales;
         } catch (Exception $e) {
             return $this->mesageError(exception: $e, codigo: 500);
         }
