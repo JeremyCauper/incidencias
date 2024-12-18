@@ -54,7 +54,7 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Visitas Registrados</h4>
+            <h4 class="card-title">Visitas a Programar</h4>
             <div>
                 <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
                     <i class="fas fa-rotate-right"></i>
@@ -79,32 +79,69 @@
 </div>
 
 <!-- Modal -->
+<button class="d-none" data-mdb-modal-init data-mdb-target="#modal_visitas"></button>
 <div class="modal fade" id="modal_visitas" tabindex="-1" aria-labelledby="modal_visitasLabel" aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <form class="modal-content" id="form-visita">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_visitasLabel">REGISTRAR VISITA</h5>
+            <div class="modal-header bg-primary text-white">
+                <h6 class="modal-title" id="modal_visitasLabel">Asignar Personal Visita <span
+                        class="badge badge-success" aria-item="contrato">En Contrato</span></h6>
                 <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="row">
-                    <input type="hidden" name="id" id="id">
-                    <div class="col-lg-8 col-sm-12 mb-2">
-                        <label class="form-label mb-0" for="visita">Visita *</label>
-                        <input type="text" class="form-control" id="visita" name="visita" require="Visita">
+                <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                    <div class="list-group list-group-light">
+                        <div class="list-group-item">
+                            <span aria-item="empresa"></span>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
+                                aria-item="direccion"></span>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="row col-12">
+                                <div class="col-sm-6">
+                                    <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                        aria-item="sucursal"></span>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col-lg-4 col-sm-12 mb-2">
-                        <label class="form-label mb-0" for="estado">Estado *</label>
-                        <select class="select" id="estado" name="estado" require="Estado">
-                            <option value="1">Activo</option>
-                            <option value="0">Inactivo</option>
-                        </select>
+                </div>
+                <div class="mt-4 p-3 pb-0 fieldset mb-3">
+                    <input type="hidden" id="idSucursal" name="idSucursal">
+                    <div class="col-md-9">
+                        <label class="form-label mb-0" for="fecha_visita">Fecha Visita</label>
+                        <div class="input-group mb-3">
+                            <span class="input-group-text border-0"><i class="far fa-calendar-plus"></i></span>
+                            <input type="date" class="form-control rounded" id="fecha_visita" name="fecha_visita">
+                        </div>
+                    </div>
+                    <div>
+                        <label class="form-label mb-0">Asignar Personal</label>
+                        <div class="row">
+                            <div class="col-md-9">
+                                <div class="input-group mb-3">
+                                    <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
+                                    <select class="select-clear">
+                                        <option value=""></option>
+                                        @foreach ($data['usuarios'] as $u)
+                                            <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                    <button type="button" class="btn btn-primary px-2" id="createPersonal"
+                                        data-mdb-ripple-init><i class="fas fa-plus"
+                                            style="pointer-events: none;"></i></button>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-mdb-ripple-init
+                <button type="button" class="btn btn-link" data-mdb-ripple-init
                     data-mdb-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
             </div>
@@ -112,10 +149,93 @@
     </div>
 </div>
 
+<div class="modal fade" id="modal_detalle_visitas" tabindex="-1" aria-labelledby="modal_detalle_visitasLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h6 class="modal-title" id="modal_detalle_visitasLabel">Asignar Personal Visita <span
+                        class="badge badge-success" aria-item="contrato">En Contrato</span></h6>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                    <div class="list-group list-group-light">
+                        <div class="list-group-item">
+                            <span aria-item="empresa"></span>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
+                                aria-item="direccion"></span>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                aria-item="sucursal"></span>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="row col-12">
+                                <div class="col-md-3 col-6">
+                                    <label class="form-label me-2">Limitacion: </label><span
+                                        style="font-size: .75rem;" aria-item="rDias">0</span>
+                                </div>
+                                <div class="col-md-3 col-6">
+                                    <label class="form-label me-2">Visitas Totales: </label><span
+                                        style="font-size: .75rem;" aria-item="vTotal">0</span>
+                                </div>
+                                <div class="col-md-3 col-6 text-center">
+                                    <label class="form-label me-2">Visitas Realizadas: </label><span
+                                        style="font-size: .75rem;" aria-item="vRealizada">0</span>
+                                </div>
+                                <div class="col-md-3 col-6 text-end">
+                                    <label class="form-label me-2">Visitas Pendientes: </label><span
+                                        style="font-size: .75rem;" aria-item="vPendiente">0</span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="list-group-item">
+                            <table class="table">
+                                <thead></thead>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-mdb-ripple-init
+                    data-mdb-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 @endsection
 
 @section('scripts')
 <script>
+    $(document).ready(function () {
+        formatSelect('modal_visitas');
+
+        $('.modal').on('shown.bs.modal', function () {
+           $('#fecha_visita').val(date('Y-m-d'));
+        });
+
+        $('.modal').on('hidden.bs.modal', function () {
+            // $('#contenedor-personal').addClass('d-none');
+            cTable.deleteTable('#createPersonal');
+        });
+    });
+
+    const cPersonal = new CTable('#createPersonal', {
+        thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
+        tbody: [
+            { data: 'id' },
+            { data: 'doc' },
+            { data: 'nombre' }
+        ],
+        extract: ['id']
+    });
+
     const tb_vsucursales = new DataTable('#tb_vsucursales', {
         autoWidth: true,
         scrollX: true,
@@ -146,11 +266,7 @@
                     return `<label class="badge badge-${badgeOptions.c}" style="font-size: .7rem;">${badgeOptions.t}</label>`;
                 }
             },
-            {
-                data: 'id', render: function (data, type, row) {
-                    return '';
-                }
-            }
+            { data: 'acciones' }
         ],
         createdRow: function (row, data, dataIndex) {
             $(row).find('td:eq(2), td:eq(3)').addClass('text-center');
@@ -161,5 +277,110 @@
     function updateTable() {
         tb_vsucursales.ajax.reload();
     }
+
+    function DetalleVisita(id) {
+        $('#modal_detalle_visitas').modal('show');
+        fMananger.formModalLoding('modal_detalle_visitas', 'show');
+
+        $.ajax({
+            type: 'GET',
+            url: `${__url}/visitas/sucursales/${id}`,
+            contentType: 'application/json',
+            success: function (data) {
+                if (!data.success)
+                    boxAlert.box({ i: 'error', t: 'Algo salió mal', h: data.message });
+
+                const dt = data.data;
+                $('#idSucursal').val(dt.id);
+                $('#modal_detalle_visitas [aria-item="contrato"]').html(dt.contrato ? 'En Contrato' : 'Sin Contrato');
+                $('#modal_detalle_visitas [aria-item="empresa"]').html(`${dt.ruc} - ${dt.razonSocial}`);
+                $('#modal_detalle_visitas [aria-item="direccion"]').html(dt.direccion);
+                $('#modal_detalle_visitas [aria-item="sucursal"]').html(dt.sucursal);
+                $('#modal_detalle_visitas [aria-item="vTotal"]').html(dt.totalVisitas);
+                $('#modal_detalle_visitas [aria-item="rDias"]').html(dt.diasVisitas);
+                fMananger.formModalLoding('modal_detalle_visitas', 'hide');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                const obj_error = jqXHR.responseJSON;
+                boxAlert.box({ i: 'error', t: 'Error al extraer datos de la incidencia', h: obj_error.message });
+                console.log(jqXHR.responseJSON);
+            }
+        });
+    }
+
+    function AsignarVisita(id) {
+        $('#modal_visitas').modal('show');
+        fMananger.formModalLoding('modal_visitas', 'show');
+
+        $.ajax({
+            type: 'GET',
+            url: `${__url}/visitas/sucursales/${id}`,
+            contentType: 'application/json',
+            success: function (data) {
+                if (!data.success)
+                    boxAlert.box({ i: 'error', t: 'Algo salió mal', h: data.message });
+
+                const dt = data.data;
+                $('#idSucursal').val(dt.id);
+                $('#modal_visitas [aria-item="contrato"]').html(dt.contrato ? 'En Contrato' : 'Sin Contrato');
+                $('#modal_visitas [aria-item="empresa"]').html(`${dt.ruc} - ${dt.razonSocial}`);
+                $('#modal_visitas [aria-item="direccion"]').html(dt.direccion);
+                $('#modal_visitas [aria-item="sucursal"]').html(dt.sucursal);
+                fMananger.formModalLoding('modal_visitas', 'hide');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                const obj_error = jqXHR.responseJSON;
+                boxAlert.box({ i: 'error', t: 'Error al extraer datos de la incidencia', h: obj_error.message });
+                console.log(jqXHR.responseJSON);
+            }
+        });
+    }
+
+    document.getElementById('form-visita').addEventListener('submit', function (event) {
+        event.preventDefault();
+        fMananger.formModalLoding('modal_visitas', 'show');
+
+        var elementos = this.querySelectorAll('[name]');
+        var valid = validFrom(elementos);
+        if (!valid.success)
+            return fMananger.formModalLoding('modal_visitas', 'hide');
+        valid.data.data['personal'] = cPersonal.extract();
+
+        $.ajax({
+            type: 'POST',
+            url: __url + `/visitas/sucursales/create`,
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': __token,
+            },
+            data: JSON.stringify(valid.data.data),
+            success: function (data) {
+                fMananger.formModalLoding('modal_visitas', 'hide');
+                if (data.success) {
+                    $('#modal_visitas').modal('hide');
+                    boxAlert.minbox({ h: data.message });
+                    return updateTable();
+                }
+                var message = "";
+                if (data.hasOwnProperty('validacion')) {
+                    for (const key in data.validacion) {
+                        message +=  `<li>${data.validacion[key][0]}</li>`;
+                    }
+                    message = `<ul>${message}</ul>`;
+                }
+                boxAlert.box({ i: 'error', t: 'Algo salió mal', h: message });
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                const obj_error = jqXHR.responseJSON;
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Ocurrio un error en el processo',
+                    h: obj_error.message
+                });
+                console.log(obj_error);
+                fMananger.formModalLoding('modal_visitas', 'hide');
+            }
+        });
+    });
 </script>
 @endsection

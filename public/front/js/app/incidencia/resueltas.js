@@ -94,9 +94,10 @@ function OrdenDisplay(e, cod) {
     $.each(obj, function (panel, count) {
         $(`#modal_orden [aria-item="${panel}"]`).html(count);
     });
+    $(`#modal_orden [aria-item="empresaFooter"]`).html(obj.empresa);
 
-    $('#PreviFirma').addClass('visually-hidden');
-    $('#doc_clienteFirma').html('');
+    $('#PreviFirma, #firmaCreador').addClass('visually-hidden');
+    $('#doc_clienteFirma, #nomCreador').html('');
     $('#modal_orden').modal('show');
     fMananger.formModalLoding('modal_orden', 'show');
     $('#content-seguimiento').html('');
@@ -107,6 +108,7 @@ function OrdenDisplay(e, cod) {
         success: function (data) {
             if (data.success) {
                 var datos = data.data;
+                
                 let personal = datos.personal;
                 $('#modal_orden [aria-item="observacion"]').html(datos.observasion);
                 var tecnicos = personal.map(persona => persona.tecnicos);
@@ -117,10 +119,17 @@ function OrdenDisplay(e, cod) {
                 $('#fecha_f').val(datos.fecha_f);
                 $('#hora_f').val(datos.hora_f);
                 var contacto = datos.contacto;
+                var creador = datos.creador;
                 if (contacto) {
                     if (contacto.firma_digital)
                         $('#PreviFirma').attr('src', `${__asset}/images/client/${contacto.firma_digital}`).removeClass('visually-hidden');
                     $('#doc_clienteFirma').html(`${contacto.nro_doc} - ${contacto.nombre_cliente}`);
+                }
+
+                if (creador) {
+                    if (creador.firma_digital)
+                        $('#firmaCreador').attr('src', `${__asset}/images/firms/${creador.firma_digital}`).removeClass('visually-hidden');
+                    $('#nomCreador').html(`${creador.ndoc_usuario} - ${creador.nombres} ${creador.apellidos}`);
                 }
                 fMananger.formModalLoding('modal_orden', 'hide');
             }

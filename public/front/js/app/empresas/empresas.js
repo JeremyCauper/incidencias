@@ -9,6 +9,11 @@ $(document).ready(function () {
     ubigeo.forEach(e => {
         $('#ubigeo').append($('<option>').val(e.codigo).text(e.nombre));
     });
+
+    configControls(['#ruc', '#idNube', '#visitas', '#diasVisita', '#mantenimientos'], { mxl: 11, mask: { reg: "99999999999" } });
+    configControls('#razonSocial', { mxl: 400 });
+    configControls('#direccion', { mxl: 500 });
+    configControls('#telefono', { mxl: 11, mask: { reg: "999999999" } });
 });
 
 const tb_empresas = new DataTable('#tb_empresas', {
@@ -45,12 +50,20 @@ function updateTable() {
 
 document.getElementById('form-empresa').addEventListener('submit', function (event) {
     event.preventDefault();
+    if ($('#ruc').val().length < 11) {
+        return boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: 'El correo electrónico ingresado no es válido.' });
+    }
+    const emailValue = $('#cor_contac').val();
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+    if (!emailRegex.test(emailValue) && emailValue) {
+        return boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: 'El correo electrónico ingresado no es válido.' });
+    }
     fMananger.formModalLoding('modal_empresas', 'show');
     const accion = $('#id').val();
     const url = accion ? `actualizar` : `registrar`;
 
     var elementos = this.querySelectorAll('[name]');
-    var valid = fMananger.validFrom(elementos);
+    var valid = validFrom(elementos);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_empresas', 'hide');

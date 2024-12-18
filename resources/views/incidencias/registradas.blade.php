@@ -404,9 +404,9 @@
                     <div class="mb-1 cabecera-orden">
                         <input type="hidden" name="codInc" id="codInc">
                         <div class="form-group pt-2">
-                            <label class="form-label" for="exampleInputEmail1">N° de Orden *: </label>
+                            <label class="form-label" for="n_orden">N° de Orden *: </label>
                             <div class="input-group mb-3" style="width: 250px;">
-                                <input type="text" class="form-control form-control-sm" name="n_orden" id="n_orden"
+                                <input type="text" class="form-control form-control-sm rounded" name="n_orden" id="n_orden"
                                     require="N° Orden" />
                                 <span class="input-group-text border-0">
                                     <input type="checkbox" class="me-1" name="check_cod" id="check_cod"

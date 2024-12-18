@@ -301,7 +301,7 @@
                     <!-- src="{{public_path() . '/front/images/client/fdc_61505130.png'}}"> -->
                 </div>
                 <h6 class="mb-2 mt-2">Firma Cliente</h6>
-                <h5 class="mb-2">COESTI S.A.</h5>
+                <h5 class="mb-2">{{$empresa}}</h5>
                 <p class="mb-2">{{$contacOrden}}</p>
             </td>
         </tr>

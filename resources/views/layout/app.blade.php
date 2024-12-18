@@ -141,7 +141,7 @@
                   <a class="nav-link" href="{{url('/visitas/terminadas')}}"><b>Terminadas</b></a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/visitas/sucursales')}}"><b>Sucursales</b></a>
+                  <a class="nav-link" href="{{url('/visitas/sucursales')}}"><b>Programar</b></a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="{{url('/visitas/programadas')}}"><b>Programadas</b></a>

@@ -215,7 +215,7 @@ class OrdenController extends Controller
             $incidencia = DB::table('tb_incidencias')->where('cod_incidencia', $orden->cod_incidencia)->first();
             $contactoEmpresa = DB::table('contactos_empresas')->where('id_contact', $incidencia->id_contacto)->first();
             $contactoOrden = DB::table('tb_contac_ordens')->where('id', $orden->id_contacto)->first();
-            $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $orden->cod_incidencia)->get();
+            $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $orden->cod_incidencia)->orderBy('created_at', 'asc')->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $orden->cod_incidencia)->get();
             $materialesUsados = DB::table('tb_materiales_usados')->where('cod_ordens', $cod)->get();
 

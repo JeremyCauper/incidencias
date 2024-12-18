@@ -55,7 +55,7 @@ document.getElementById('form-sucursal').addEventListener('submit', function (ev
     const url = accion ? `actualizar` : `registrar`;
 
     var elementos = this.querySelectorAll('[name]');
-    var valid = fMananger.validFrom(elementos);
+    var valid = validFrom(elementos);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_sucursales', 'hide');

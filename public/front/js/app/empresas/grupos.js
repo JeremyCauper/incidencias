@@ -43,7 +43,7 @@ document.getElementById('form-grupo').addEventListener('submit', function (event
     const url = accion ? `actualizar` : `registrar`;
 
     var elementos = this.querySelectorAll('[name]');
-    var valid = fMananger.validFrom(elementos);
+    var valid = validFrom(elementos);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_grupos', 'hide');

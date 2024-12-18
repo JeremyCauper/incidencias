@@ -156,7 +156,7 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
     const url = accion ? `edit/${accion}` : `create`;
 
     var elementos = this.querySelectorAll('[name]');
-    var valid = fMananger.validFrom(elementos);
+    var valid = validFrom(elementos);
     if (!valid.success)
         return fMananger.formModalLoding('modal_incidencias', 'hide');
     valid.data.data['personal'] = cPersonal.extract();
@@ -459,7 +459,6 @@ async function OrdenDetail(e, cod) {
         url: `${__url}/incidencias/registradas/show/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
             if (data.success) {
                 let personal = data.data.personal_asig;
                 $('[aria-item="observacion"]').html(data.data.observasion);
@@ -525,7 +524,7 @@ document.getElementById('form-orden').addEventListener('submit', function (event
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
 
     var elementos = this.querySelectorAll('[name]');
-    var valid = fMananger.validFrom(elementos);
+    var valid = validFrom(elementos);
     valid.data.data.materiales = cMaterial.extract();
 
     if (!valid.success)

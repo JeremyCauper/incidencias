@@ -81,6 +81,8 @@ Route::get('/visitas/terminadas', [TerminadasController::class, 'view'])->middle
 
 Route::get('/visitas/sucursales', [VSucursalesController::class, 'view'])->middleware('auth');
 Route::get('/visitas/sucursales/index', [VSucursalesController::class, 'index'])->middleware('auth');
+Route::get('/visitas/sucursales/{id}', [VSucursalesController::class, 'show']);
+Route::post('/visitas/sucursales/create', [VSucursalesController::class, 'create']);
 
 Route::get('/control-de-usuario/usuarios', [UsuarioController::class, 'view'])->middleware('auth');
 Route::get('/control-de-usuario/usuarios/index', [UsuarioController::class, 'index']);

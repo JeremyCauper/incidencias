@@ -88,7 +88,7 @@ class ResueltasController extends Controller
                     ['funcion' => "OrdenDisplay(this, '$ord->cod_ordens')", 'texto' => '<i class="far fa-file-lines text-primary me-2"></i> Ver Orden'],
                     ['funcion' => "OrdenPdf('$ord->cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
                     ['funcion' => "OrdenTicket('$ord->cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket'],
-                    ['funcion' => "AddSignature(this, '$ord->cod_ordens')", 'texto' => '<i class="fas fa-signature me-2"></i> Agregar Firma']
+                    //['funcion' => "AddSignature(this, '$ord->cod_ordens')", 'texto' => '<i class="fas fa-signature me-2"></i> Agregar Firma']
                 ]
             ]);
         });

@@ -47,8 +47,8 @@
 <div id="modal_empresas" class="modal fade" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-xl">
         <form class="modal-content" id="form-empresa">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_empresasLabel">REGISTRAR EMPRESA</h5>
+            <div class="modal-header bg-primary text-white">
+                <h6 class="modal-title" id="modal_empresasLabel">REGISTRAR EMPRESA</h6>
                 <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -163,21 +163,21 @@
                     </div>
                     <div class="col-lg-3 mb-2">
                         <label class="form-label mb-0" for="encargado">Encargado</label>
-                        <input type="text" class="form-control" id="encargado" name="encargado">
+                        <input type="text" class="form-control" id="encargado" name="encargado" maxlength="100">
                     </div>
                     <div class="col-lg-2 col-4 mb-2">
                         <label class="form-label mb-0" for="telefono">Telefono</label>
-                        <input type="text" class="form-control" id="telefono" name="telefono">
+                        <input type="text" class="form-control" id="telefono" name="telefono" maxlength="9">
                     </div>
                     <div class="col-lg-4 col-8">
                         <label class="form-label mb-0" for="correo">Correo</label>
-                        <input type="text" class="form-control" id="correo" name="correo">
+                        <input type="text" class="form-control" id="correo" name="correo" maxlength="250">
                     </div>
 
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-mdb-ripple-init
+                <button type="button" class="btn btn-link" data-mdb-ripple-init
                     data-mdb-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
             </div>
@@ -190,7 +190,7 @@
 
 @section('scripts')
 <!-- jQuery Mask Plugin CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.14.16/jquery.mask.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
 <script src="{{asset('front/vendor/ubigeos-peru/ubigeo.js')}}"></script>
 <script src="{{asset('front/js/app/empresas/empresas.js')}}"></script>
 @endsection

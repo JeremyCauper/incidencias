@@ -252,26 +252,21 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
                         <div class="row justify-content-between firmas-orden">
                             <div class="col-lg-5 text-center my-2">
-                                <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '' : ''}} height="130"
-                                    width="160">
-                                <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
-                                    Firma Tecnico
-                                </p>
+                                <div class="text-center content-image">
+                                    <img id="firmaCreador" class="visually-hidden" height="130" width="160">
+                                </div>
+                                <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma Tecnico</p>
                                 <p class="mb-1" style="font-size: 13.4px;">RICARDO CALDERON INGENIEROS SAC</p>
-                                <p class="mb-0" style="font-size: 12.5px;">
-                                    {{Auth::user()->ndoc_usuario . ' - ' . Auth::user()->nombres . ' ' . Auth::user()->apellidos}}
-                                </p>
+                                <p class="mb-0" style="font-size: 12px;" id="nomCreador"></p>
                             </div>
 
                             <div class="col-lg-5 text-center my-2">
                                 <div class="text-center content-image">
                                     <img id="PreviFirma" class="visually-hidden" height="130" width="160">
                                 </div>
-                                <!-- <img class="border rounded-1" id="" alt="" > -->
-                                <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma
-                                    Cliente</p>
-                                <p class="mb-1" style="font-size: 13.4px;" aria-item="">COESTI S.A.</p>
-                                <p style="font-size: 12.5px;" id="doc_clienteFirma" class="doc-fsearch mb-0"></p>
+                                <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma Cliente</p>
+                                <p class="mb-1" style="font-size: 13.4px;" aria-item="empresaFooter">COESTI S.A.</p>
+                                <p class="mb-0" style="font-size: 12px;" id="doc_clienteFirma"></p>
                             </div>
                         </div>
                     </div>
