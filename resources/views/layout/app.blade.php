@@ -186,7 +186,7 @@
               </ul>
             </div>
           </li>
-          <li class="nav-item">
+          <li class="nav-item d-none">
             <a class="nav-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlMantenimientos" role="button" aria-expanded="false" aria-controls="ControlMantenimientos">
               <i class="fas fa-gears menu-icon"></i>
               <span class="menu-title">Mantenimientos</span>

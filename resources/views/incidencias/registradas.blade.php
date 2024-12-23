@@ -3,6 +3,20 @@
 
 @section('style')
 <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}">
+<style>
+    .row-bg-warning {
+        background-color:rgb(255, 246, 230);
+    }
+    .row-bg-info {
+        background-color:rgb(239, 252, 255);
+    }
+    .row-bg-primary {
+        background-color:rgb(236, 244, 255);
+    }
+    .row-bg-danger {
+        background-color: #fae4e8;
+    }
+</style>
 @endsection
 @section('content')
 
@@ -11,7 +25,7 @@
         <div class="row">
             <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
-                    <div class="card-body text-success" data-mdb-ripple-init>
+                    <div class="card-body text-success" data-mdb-ripple-init onclick="searchTable(0)">
                         <h6 class="card-title title-count mb-2"><i class="far fa-clock"></i> Incidencias Registradas
                         </h6>
                         <h4 class="subtitle-count"><b data-panel="totales">0</b></h4>
@@ -20,7 +34,7 @@
             </div>
             <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
-                    <div class="card-body text-info" data-mdb-ripple-init>
+                    <div class="card-body text-info" data-mdb-ripple-init onclick="searchTable(1)">
                         <h6 class="card-title title-count mb-2"><i class="fas fa-user-check"></i> Incidencias Asignadas
                         </h6>
                         <h4 class="subtitle-count"><b data-panel="tAsignadas">0</b></h4>
@@ -29,7 +43,7 @@
             </div>
             <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
-                    <div class="card-body text-warning" data-mdb-ripple-init>
+                    <div class="card-body text-warning" data-mdb-ripple-init onclick="searchTable(2)">
                         <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Incidencias Sin
                             Asignar</h6>
                         <h4 class="subtitle-count"><b data-panel="tSinAsignar">0</b></h4>
@@ -38,7 +52,7 @@
             </div>
             <div class="col-xxl-3 col-6 grid-margin">
                 <div class="card">
-                    <div class="card-body text-primary" data-mdb-ripple-init>
+                    <div class="card-body text-primary" data-mdb-ripple-init onclick="searchTable(3)">
                         <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En
                             Proceso</h6>
                         <h4 class="subtitle-count"><b data-panel="tEnProceso">0</b></h4>
@@ -69,13 +83,13 @@
                         <thead>
                             <tr class="text-bg-primary">
                                 <th>Codigo</th>
+                                <th class="text-center">Estado</th>
                                 <th>Empresa</th>
                                 <th>Sucursal</th>
                                 <th>Registrado</th>
                                 <th>Estacion</th>
                                 <th>Atencion</th>
                                 <th>Problema / Sub Problema</th>
-                                <th class="text-center">Estado</th>
                                 <th class="text-bg-primary px-2 th-acciones">Acciones</th>
                             </tr>
                         </thead>
@@ -505,7 +519,7 @@
 
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="row" id="content-material">
-                            <div class="col-lg-9 my-1">
+                            <div class="col-lg-7 my-1">
                                 <select class="select-clear" id="selector-material">
                                     <option value=""></option>
                                     @foreach ($data['materiales'] as $m)
@@ -514,19 +528,20 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-lg-3 col-6 d-flex ps-lg-0 my-1 disabled" id="content-cantidad">
+                            <div class="col-lg-5 col-9 d-flex ps-lg-0 my-1 disabled" id="content-cantidad">
                                 <div class="input-group">
                                     <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
                                         onclick="manCantidad('minus')">
                                         <i class="fas fa-minus" style="font-size: .75rem;"></i>
                                     </button>
                                     <input type="number" class="form-control" input-cantidad=""
-                                        oninput="manCantidad('press')" />
+                                        oninput="manCantidad('press')" style="min-width: 65px;"/>
                                     <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
                                         onclick="manCantidad('plus')">
                                         <i class="fas fa-plus" style="font-size: .75rem;"></i>
                                     </button>
                                 </div>
+                                <input type="text" class="form-control ms-2" placeholder="Cod. Aviso">
                                 <button type="button" class="btn btn-primary px-2 ms-2" data-mdb-ripple-init
                                     id="createMaterial">
                                     <i class="fas fa-plus" style="pointer-events: none;"></i>

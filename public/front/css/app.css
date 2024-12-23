@@ -3822,7 +3822,7 @@ body {
     position: sticky;
     right: 0;
     text-align: center !important;
-    background-color: #fff !important;
+    background-color: #fff;
     width: 85px !important;
 }
 

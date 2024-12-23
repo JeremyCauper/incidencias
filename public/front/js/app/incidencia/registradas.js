@@ -42,7 +42,8 @@ $(document).ready(function () {
     $('.modal').on('hidden.bs.modal', function () {
         changeCodInc(cod_incidencia);
         fillSelect(['#sucursal', '#problema', '#sproblema']);
-        $('#contenedor-personal').addClass('d-none');
+        $('#contenedor-personal').removeClass('d-none');
+        $('#observasion').val('');
 
         cTable.deleteTable('#createPersonal');
         cTable.deleteTable('#createPersonal1');
@@ -120,6 +121,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     },
     columns: [
         { data: 'cod_incidencia' },
+        { data: 'badge_informe' },
         { data: 'empresa' },
         { data: 'sucursal' },
         { data: 'created_at' },
@@ -130,18 +132,25 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
                 return `${data} / ${row.subproblema}`;
             }
         },
-        { data: 'estado_informe' },
         { data: 'acciones' }
     ],
+    order: [[4, 'desc']],
     createdRow: function (row, data, dataIndex) {
+        const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', 'row-bg-danger'];
         $(row).find('td:eq(7)').addClass('text-center');
-        $(row).find('td:eq(8)').addClass('td-acciones');
+        $(row).find('td:eq(8)').addClass(`td-acciones ${row_bg[data.estado_informe]}`);
+        $(row).addClass(row_bg[data.estado_informe]);
     },
     processing: true
 });
 
 function updateTable() {
     tb_incidencia.ajax.reload();
+}
+
+function searchTable(search) {
+    const biblio = ['', 'asignada', 'sin asignar', 'en proceso'];
+    tb_incidencia.column([1]).search(biblio[search]).draw();
 }
 
 document.getElementById('form-incidencias').addEventListener('submit', function (event) {
@@ -203,7 +212,7 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
 });
 
 function ShowDetail(e, id) {
-    let obj = fMananger.extractDataRow(e);
+    let obj = extractDataRow(e);
     obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
 
     $.each(obj, function (panel, count) {
@@ -298,7 +307,7 @@ function ShowEdit(id) {
 }
 
 function ShowAssign(e, id) {
-    const obj = fMananger.extractDataRow(e);
+    const obj = extractDataRow(e);
     obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
 
     $.each(obj, function (panel, count) {
@@ -442,7 +451,7 @@ async function StartInc(cod, estado) {
 }
 
 async function OrdenDetail(e, cod) {
-    const obj = fMananger.extractDataRow(e);
+    const obj = extractDataRow(e);
     obj.estado = (obj.estado).replaceAll('.7rem;', '1rem;');
     console.log(obj);
 

@@ -51,9 +51,9 @@ function updateTable() {
 document.getElementById('form-empresa').addEventListener('submit', function (event) {
     event.preventDefault();
     if ($('#ruc').val().length < 11) {
-        return boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: 'El correo electrónico ingresado no es válido.' });
+        return boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: 'El ruc ingresado no es válido, deben ser 11 digitos.' });
     }
-    const emailValue = $('#cor_contac').val();
+    const emailValue = $('#correo').val();
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
     if (!emailRegex.test(emailValue) && emailValue) {
         return boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: 'El correo electrónico ingresado no es válido.' });

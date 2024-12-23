@@ -52,7 +52,7 @@ class CTable {
         if (!this.$s.thead.length) return alert('no se puede seguir thead no está configurado');
         if (!this.$s.tbody.length) return alert('no se puede seguir tbody no está configurado');
         if (!$table.length) {
-            const tabla = $('<table>', { class: 'table w-100 text-nowrap', 'aria-table-table': $id }).append($('<thead>').html($('<tr>').html(`<th>${(this.$s.thead).join('</th><th>')}</th><th>Acciones</th>`))).append($('<tbody>'));
+            const tabla = $('<table>', { class: 'table w-100 text-nowrap', 'aria-table-table': $id }).append($('<thead>').html($('<tr>').html(`<th>${(this.$s.thead).join('</th><th>')}</th><th class="text-center">Acciones</th>`))).append($('<tbody>'));
             $contentT.html(tabla);
             $table = $contentT.children('table');
         }
@@ -67,8 +67,8 @@ class CTable {
             }
             $tr.append($td);
         });
-        const actionDelete = $('<td>').append($('<button>', { class: 'btn btn-danger btn-sm px-2', 'type': 'button', 'onclick': 'cTable.delete(this)' }).html('<i class="far fa-trash-can" style="pointer-events: none;"></i>'));
-        const dontDelete = $('<td>').append($('<button>', { class: 'btn btn-primary btn-sm px-2', 'type': 'button' }).html('<i class="fas fa-ban"></i>'));
+        const actionDelete = $('<td>', { class: 'text-center'}).append($('<i>', { class: 'far fa-trash-can text-danger', 'type': 'button', 'onclick': 'cTable.delete(this)' }));
+        const dontDelete = $('<td>', { class: 'text-center'}).append($('<i>', { class: 'fas fa-ban text-primary' }));
 
         if (this.acciones)
             $tr.append(actionDelete);

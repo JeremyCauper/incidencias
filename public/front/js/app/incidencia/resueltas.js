@@ -44,7 +44,7 @@ function updateTable() {
 
 
 function ShowDetail(e, id) {
-    let obj = fMananger.extractDataRow(e);
+    let obj = extractDataRow(e);
     $.each(obj, function (panel, count) {
         $(`#modal_detalle [aria-item="${panel}"]`).html(count);
     });
@@ -90,7 +90,7 @@ function ShowDetail(e, id) {
 }
 
 function OrdenDisplay(e, cod) {
-    let obj = fMananger.extractDataRow(e);
+    let obj = extractDataRow(e);
     $.each(obj, function (panel, count) {
         $(`#modal_orden [aria-item="${panel}"]`).html(count);
     });

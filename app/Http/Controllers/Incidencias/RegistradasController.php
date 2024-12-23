@@ -132,7 +132,7 @@ class RegistradasController extends Controller
                         ['funcion' => "DeleteInc($val->acciones)", 'texto' => '<i class="far fa-trash-can text-danger me-2"></i> Eliminar'],
                     ],
                 ]);
-                $val->estado_informe = $badge_informe;
+                $val->badge_informe = $badge_informe;
                 return $val;
             });
 
