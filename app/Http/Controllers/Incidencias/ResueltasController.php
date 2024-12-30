@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Incidencias;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Empresas\EmpresasController;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -16,7 +17,10 @@ class ResueltasController extends Controller
     public function view()
     {
         try {
-            return view('incidencias.resueltas');
+            $data = [];
+            $data['empresas'] = (new EmpresasController())->index();
+            $data['sucursales'] = DB::table('tb_sucursales')->where('status', 1)->get()->keyBy('id');
+            return view('incidencias.resueltas', ['data' => $data]);
         } catch (Exception $e) {
             Log::error('An unexpected error occurred: ' . $e->getMessage());
             return response()->json(['error' => 'Terrible lo que pasará, ocurrió un error inesperado: ' . $e->getMessage()], 500);
@@ -26,74 +30,81 @@ class ResueltasController extends Controller
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        // Obtener información externa y de la base de datos
-        $company = DB::table('tb_empresas')->get()->keyBy('id'); //$this->fetchAndParseApiData('empresas');
-        $subcompany = DB::table('tb_sucursales')->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
-
-        $tIncidencia = $this->fetchAndParseDbData('tb_tipo_incidencia', ["id_tipo_incidencia as id", 'descripcion', 'estatus']);
-        $problema = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'descripcion', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
-        $subproblema = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'descripcion', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
-
+        $ruc = $request->query('ruc');
+        $sucursal = $request->query('sucursal');
+        $fechaIni = $request->query('fechaIni');
+        $fechaFin = $request->query('fechaFin');
+    
+        $whereInc = ['estatus' => 1, 'estado_informe' => 3];
+        if (intval($ruc)) {
+            $whereInc['id_empresa'] = intval($ruc);
+        }
+        if (intval($sucursal)) {
+            $whereInc['id_sucursal'] = intval($sucursal);
+        }
+        $incidencias = DB::table('tb_incidencias')->where($whereInc)->get();
+        $ordenes = DB::table('tb_orden_servicio')
+            ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
+            ->get()
+            ->groupBy('cod_incidencia'); // Agrupa las órdenes por `cod_incidencia`
+    
+        $tipos_incidencia = DB::table('tb_tipo_incidencia')->get();
+        $problemas = DB::table('tb_problema')->get();
+        $subproblemas = DB::table('tb_subproblema')->get();
+        $empresas = DB::table('tb_empresas')->get();
+        $sucursales = DB::table('tb_sucursales')->get();
+    
+        $inc_seguimiento = DB::table('tb_inc_seguimiento')->get()->groupBy('cod_incidencia');
+        $inc_asig = DB::table('tb_inc_asignadas')->get()->groupBy('cod_incidencia');
         $usuarios = DB::table('usuarios')->where('estatus', 1)->get()->keyBy('id_usuario')->map(function ($user) {
             $nombre = ucwords(strtolower("{$user->nombres} {$user->apellidos}"));
             return [
                 'id' => $user->id_usuario,
                 'nombre' => $nombre,
-                'documento' => $user->ndoc_usuario,
-                'dValue' => base64_encode(json_encode([
-                    'id' => $user->id_usuario,
-                    'doc' => $user->ndoc_usuario,
-                    'nombre' => $nombre
-                ])),
-                'text' => "{$user->ndoc_usuario} - {$nombre}"
             ];
         });
-
-        $orden = DB::table('tb_orden_servicio')->where('estatus', 1)->get();
-        $inc = DB::table('tb_incidencias')->where(['estatus' => 1, 'estado_informe' => 3])->get();
-        $inc_seguimiento = DB::table('tb_inc_seguimiento')->get()->groupBy('cod_incidencia');
-        $inc_asig = DB::table('tb_inc_asignadas')->get()->groupBy('cod_incidencia');
-
-        // Procesar incidencias
-        $incidencias = $inc->mapWithKeys(function ($incidencia) use ($company, $subcompany, $tIncidencia, $problema, $subproblema) {
-            return [
-                $incidencia->cod_incidencia => [
-                    'empresa' => optional($company[$incidencia->id_empresa])->ruc . ' - ' . optional($company[$incidencia->id_empresa])->razon_social,
-                    'sucursal' => optional($subcompany[$incidencia->id_sucursal])->nombre,
-                    'tipo_orden' => optional($tIncidencia[$incidencia->id_tipo_incidencia])->descripcion,
-                    'problema' => (optional($problema[$incidencia->id_problema])->descripcion) . ' / ' . (optional($subproblema[$incidencia->id_subproblema])->descripcion)
-                ]
-            ];
-        });
-
-        // Procesar órdenes
-        $orden->each(function ($ord) use ($incidencias, $inc_seguimiento, $inc_asig, $usuarios) {
-            $codIncidencia = $ord->cod_incidencia;
-            $seguimiento = $inc_seguimiento[$codIncidencia] ?? collect();
-            $asignados = $inc_asig[$codIncidencia]->map(fn($asig) => $usuarios[$asig->id_usuario]['nombre'] ?? 'N/A')->implode(', ');
-
-            $ord->empresa = $incidencias[$codIncidencia]['empresa'] ?? 'Desconocido';
-            $ord->sucursal = $incidencias[$codIncidencia]['sucursal'] ?? 'Desconocido';
-            $ord->tipo_orden = $incidencias[$codIncidencia]['tipo_orden'] ?? 'Desconocido';
-            $ord->problema = $incidencias[$codIncidencia]['problema'] ?? 'Sin especificar';
-            $ord->f_inicio = $seguimiento->where('estado', 0)->first()?->created_at ?? 'N/A';
-            $ord->f_final = $seguimiento->where('estado', 1)->first()?->created_at ?? 'N/A';
-            $ord->asignados = $asignados;
-            $ord->acciones = $this->DropdownAcciones([
-                'tittle' => 'Acciones',
-                'button' => [
-                    ['funcion' => "ShowDetail(this, '$codIncidencia')", 'texto' => '<i class="fas fa-info text-info me-2"></i> Detalle Incidencia'],
-                    ['funcion' => "OrdenDisplay(this, '$ord->cod_ordens')", 'texto' => '<i class="far fa-file-lines text-primary me-2"></i> Ver Orden'],
-                    ['funcion' => "OrdenPdf('$ord->cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
-                    ['funcion' => "OrdenTicket('$ord->cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket'],
-                    //['funcion' => "AddSignature(this, '$ord->cod_ordens')", 'texto' => '<i class="fas fa-signature me-2"></i> Agregar Firma']
-                ]
-            ]);
-        });
-
-        return ['data' => $orden];
+    
+        $resultado = $incidencias->filter(function ($inc) use ($ordenes) {
+                return $ordenes->has($inc->cod_incidencia); // Verifica si hay una orden para esta incidencia
+            })
+            ->map(function ($incidencia) use ($ordenes, $tipos_incidencia, $problemas, $subproblemas, $empresas, $sucursales, $inc_seguimiento, $inc_asig, $usuarios) {
+                $orden = $ordenes->get($incidencia->cod_incidencia)?->first(); // Obtén la primera orden correspondiente
+                $tipo_incidencia = $tipos_incidencia->firstWhere('id_tipo_incidencia', $incidencia->id_tipo_incidencia);
+                $problema = $problemas->firstWhere('id_problema', $incidencia->id_problema);
+                $subproblema = $subproblemas->firstWhere('id_subproblema', $incidencia->id_subproblema);
+                $empresa = $empresas->firstWhere('id', $incidencia->id_empresa);
+                $sucursal = $sucursales->firstWhere('id', $incidencia->id_sucursal);
+    
+                $seguimiento = $inc_seguimiento[$incidencia->cod_incidencia] ?? collect();
+                $asignados = $inc_asig[$incidencia->cod_incidencia]->map(fn($asig) => $usuarios[$asig->id_usuario]['nombre'] ?? 'N/A')->implode(', ');
+    
+                return [
+                    'id_orden' => $orden->id_ordens ?? null,
+                    'cod_orden' => $orden->cod_ordens ?? null,
+                    'cod_incidencia' => $incidencia->cod_incidencia,
+                    'tipo_incidencia' => $tipo_incidencia->descripcion ?? null,
+                    'asignados' => $asignados,
+                    'fecha_servicio' => $orden->created_at ?? null,
+                    'empresa' => $empresa->razon_social ?? null,
+                    'nombre_sucursal' => $sucursal->nombre ?? null,
+                    'problema' => ($problema->descripcion ?? null) . ' / ' . ($subproblema->descripcion ?? null),
+                    'iniciado' => $seguimiento->where('estado', 0)->first()?->created_at ?? 'N/A',
+                    'finalizado' => $seguimiento->where('estado', 1)->first()?->created_at ?? 'N/A',
+                    'acciones' => $this->DropdownAcciones([
+                        'tittle' => 'Acciones',
+                        'button' => [
+                            ['funcion' => "ShowDetail(this, '$incidencia->cod_incidencia')", 'texto' => '<i class="fas fa-info text-info me-2"></i> Detalle Incidencia'],
+                            ['funcion' => "OrdenDisplay(this, '$orden->cod_ordens')", 'texto' => '<i class="far fa-file-lines text-primary me-2"></i> Ver Orden'],
+                            ['funcion' => "OrdenPdf('$orden->cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
+                            ['funcion' => "OrdenTicket('$orden->cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket'],
+                        ]
+                    ])
+                ];
+            })->values();
+    
+        return ['data' => $resultado];
     }
 
 

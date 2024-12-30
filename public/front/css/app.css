@@ -3414,6 +3414,7 @@ body {
     border-bottom: 1px solid #e0e0e0;
 }
 
+.form-container .form-label,
 .swal2-container .form-label,
 .modal-dialog .form-label,
 .accordion-collapse .form-label {

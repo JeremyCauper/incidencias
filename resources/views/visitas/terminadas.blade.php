@@ -7,49 +7,39 @@
 @section('content')
 
 <div class="col-12 mb-4">
-    <div class="accordion" id="accordionExampleY">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOneY">
-                <button data-mdb-collapse-init class="accordion-button" type="button" data-mdb-target="#collapseOneY"
-                    aria-expanded="true" aria-controls="collapseOneY" style="font-weight: bold; font-size: small;">
-                    <i class="fas fa-filter"></i> Filtro Avanzado
-                </button>
-            </h2>
-            <div id="collapseOneY" class="accordion-collapse collapse show" aria-labelledby="headingOneY"
-                data-mdb-parent="#accordionExampleY">
-                <div class="accordion-body">
-                    <div class="row">
-                        <div class="col-xl-5 col-md-8 my-1">
-                            <label class="form-label mb-0" for="empresa">Empresa</label>
-                            <select id="empresa" name="empresa" class="select-clear">
-                                <option value=""></option>
-                                @foreach ($data['empresas'] as $key => $val)
-                                    @if ($val['status'])
-                                        <option value="{{$val['ruc']}}">{{$val['ruc'] . ' - ' . $val['razonSocial']}}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-xl-3 col-md-4 my-1">
-                            <label class="form-label mb-0" for="idGrupo">Sucursal</label>
-                            <select id="sucursal" name="sucursal" class="select" disabled="true">
-                                <option value="">-- Seleccione --</option>
-                            </select>
-                        </div>
-                        <div class="col-xl-2 col-6 my-1">
-                            <label class="form-label mb-0" for="razonSocial1">Fecha Inicio</label>
-                            <input type="date" class="form-control" id="razonSocial1" name="razonSocial1">
-                        </div>
-                        <div class="col-xl-2 col-6 my-1">
-                            <label class="form-label mb-0" for="razonSocial">Fecha Final</label>
-                            <input type="date" class="form-control" id="razonSocial" name="razonSocial">
-                        </div>
-                        <div class="col-12 my-1 text-end">
-                            <button type="button" class="btn btn-primary" data-mdb-ripple-init>
-                                <i class="fas fa-magnifying-glass"></i> Buscar
-                            </button>
-                        </div>
-                    </div>
+    <div class="card">
+        <div class="card-body">
+            <h6 class="text-primary"><i class="fas fa-filter"></i> Filtro Avanzado</h6>
+            <div class="row">
+                <div class="col-xl-5 col-md-8 my-1">
+                    <label class="form-label mb-0" for="empresa">Empresa</label>
+                    <select id="empresa" name="empresa" class="select-clear">
+                        <option value=""></option>
+                        @foreach ($data['empresas'] as $key => $val)
+                            @if ($val['status'])
+                                <option value="{{$val['ruc']}}">{{$val['ruc'] . ' - ' . $val['razonSocial']}}</option>
+                            @endif
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-xl-3 col-md-4 my-1">
+                    <label class="form-label mb-0" for="idGrupo">Sucursal</label>
+                    <select id="sucursal" name="sucursal" class="select" disabled="true">
+                        <option value="">-- Seleccione --</option>
+                    </select>
+                </div>
+                <div class="col-xl-2 col-6 my-1">
+                    <label class="form-label mb-0" for="razonSocial1">Fecha Inicio</label>
+                    <input type="date" class="form-control" id="razonSocial1" name="razonSocial1">
+                </div>
+                <div class="col-xl-2 col-6 my-1">
+                    <label class="form-label mb-0" for="razonSocial">Fecha Final</label>
+                    <input type="date" class="form-control" id="razonSocial" name="razonSocial">
+                </div>
+                <div class="col-12 my-1 text-end">
+                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>
+                        <i class="fas fa-magnifying-glass"></i> Buscar
+                    </button>
                 </div>
             </div>
         </div>

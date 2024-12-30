@@ -1,14 +1,36 @@
+$(document).ready(function () {
+    $('#empresa').on('change', function () {
+        fillSelect(['#sucursal'], sucursales, 'ruc', $(this).val(), 'id', 'nombre');
+    });
+
+    $('#dateRango').daterangepicker({
+        showDropdowns: true,
+        startDate: date('Y-m-01'),
+        endDate: date('Y-m-d'),
+        maxDate: date('Y-m-d'),
+        opens: "center",
+        cancelClass: "btn-link",
+        locale: {
+            format: 'YYYY-MM-DD',
+            separator: '  al  ',
+            applyLabel: 'Aplicar',
+            cancelLabel: 'Cerrar',
+            fromLabel: 'Desde',
+            toLabel: 'Hasta',
+            customRangeLabel: 'Rango personalizado',
+            daysOfWeek: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+            firstDay: 1 // Comienza la semana en lunes
+        }
+    });
+});
 
 const tb_orden = new DataTable('#tb_orden', {
     scrollX: true,
     scrollY: 400,
     ajax: {
-        url: `${__url}/incidencias/resueltas/index`,
+        url: `${__url}/incidencias/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
         dataSrc: function (json) {
-            // $('b[data-panel="_count"]').html(json.count.count);
-            // $('b[data-panel="_inc_a"]').html(json.count.inc_a);
-            // $('b[data-panel="_inc_s"]').html(json.count.inc_s);
-            // $('b[data-panel="_inc_p"]').html(json.count.inc_p);
             return json.data;
         },
         error: function (xhr, error, thrown) {
@@ -17,19 +39,15 @@ const tb_orden = new DataTable('#tb_orden', {
         }
     },
     columns: [
-        { data: 'cod_ordens' },
-        { data: 'tipo_orden' },
+        { data: 'cod_orden' },
+        { data: 'tipo_incidencia' },
         { data: 'asignados' },
-        {
-            data: 'fecha_f', render: function (data, type, row) {
-                return `${data} ${row.hora_f}`;
-            }
-        },
+        { data: 'fecha_servicio' },
         { data: 'empresa' },
-        { data: 'sucursal' },
+        { data: 'nombre_sucursal' },
         { data: 'problema' },
-        { data: 'f_inicio' },
-        { data: 'f_final' },
+        { data: 'iniciado' },
+        { data: 'finalizado' },
         { data: 'acciones' }
     ],
     createdRow: function (row, data, dataIndex) {
@@ -40,6 +58,15 @@ const tb_orden = new DataTable('#tb_orden', {
 
 function updateTable() {
     tb_orden.ajax.reload();
+}
+
+function filtroBusqueda() {
+    var empresa = $(`#empresa option[value="${$('#empresa').val()}"]`).attr('id-empresa');
+    var sucursal = $('#sucursal').val();
+    var fechas = $('#dateRango').val().split('  al  ');
+    var nuevoUrl = `${__url}/incidencias/resueltas/index?ruc=${empresa}&sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
+    
+    tb_orden.ajax.url(nuevoUrl).load();
 }
 
 
@@ -108,7 +135,7 @@ function OrdenDisplay(e, cod) {
         success: function (data) {
             if (data.success) {
                 var datos = data.data;
-                
+
                 let personal = datos.personal;
                 $('#modal_orden [aria-item="observacion"]').html(datos.observasion);
                 var tecnicos = personal.map(persona => persona.tecnicos);

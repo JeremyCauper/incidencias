@@ -77,3 +77,24 @@ function extractDataRow($this) {
 
     return obj_return;
 }
+
+function date(format) {
+    const now = new Date();
+  
+    const map = {
+      'Y': now.getFullYear(),                // Año completo (2024)
+      'm': String(now.getMonth() + 1).padStart(2, '0'),  // Mes (01-12)
+      'd': String(now.getDate()).padStart(2, '0'),       // Día del mes (01-31)
+      'H': String(now.getHours()).padStart(2, '0'),      // Horas (00-23)
+      'i': String(now.getMinutes()).padStart(2, '0'),    // Minutos (00-59)
+      's': String(now.getSeconds()).padStart(2, '0'),    // Segundos (00-59)
+      'j': now.getDate(),                                // Día del mes sin ceros iniciales (1-31)
+      'n': now.getMonth() + 1,                           // Mes sin ceros iniciales (1-12)
+      'w': now.getDay(),                                 // Día de la semana (0 = domingo, 6 = sábado)
+      'G': now.getHours(),                               // Horas sin ceros iniciales (0-23)
+      'a': now.getHours() >= 12 ? 'pm' : 'am',           // am o pm
+      'A': now.getHours() >= 12 ? 'PM' : 'AM'            // AM o PM en mayúsculas
+    };
+  
+    return format.replace(/[YmdHisjwnGaA]/g, (match) => map[match]);
+  }
