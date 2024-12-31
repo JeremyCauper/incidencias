@@ -103,6 +103,8 @@ function Editar(id) {
             url: `${__url}/empresas/empresas/${id}`,
             contentType: 'application/json',
             success: function (data) {
+                console.log(data);
+                
                 if (!data.success) {
                     console.log(data.error);
                     return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
@@ -127,6 +129,7 @@ function Editar(id) {
                 $('#mantenimientos').val(json.mantenimientos);
                 $('#diasVisita').val(json.dias_visita);
                 $('#estado').val(json.status).trigger('change');
+                $('#codVisita').val(json.codigo_aviso).trigger('change');
                 fMananger.formModalLoding('modal_empresas', 'hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
