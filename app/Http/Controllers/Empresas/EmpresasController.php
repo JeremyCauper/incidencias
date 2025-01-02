@@ -86,6 +86,7 @@ class EmpresasController extends Controller
                 'visitas' => 'nullable|integer',
                 'mantenimientos' => 'nullable|integer',
                 'diasVisita' => 'nullable|integer',
+                'codVisita' => 'nullable|string',
                 'estado' => 'required|integer',
                 'cargo' => 'nullable|string',
                 'encargado' => 'nullable|string',
@@ -115,6 +116,7 @@ class EmpresasController extends Controller
                 'visitas' => $request->visitas,
                 'mantenimientos' => $request->mantenimientos,
                 'dias_visita' => $request->diasVisita,
+                'codigo_aviso' => $request->codVisita,
                 'status' => $request->estado,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
@@ -161,6 +163,7 @@ class EmpresasController extends Controller
                 'visitas' => 'nullable|integer',
                 'mantenimientos' => 'nullable|integer',
                 'diasVisita' => 'nullable|integer',
+                'codVisita' => 'nullable|string',
                 'estado' => 'required|integer',
                 'cargo' => 'nullable|string',
                 'encargado' => 'nullable|string',
@@ -190,6 +193,7 @@ class EmpresasController extends Controller
                 'visitas' => $request->visitas,
                 'mantenimientos' => $request->mantenimientos,
                 'dias_visita' => $request->diasVisita,
+                'codigo_aviso' => $request->codVisita,
                 'status' => $request->estado,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ]);

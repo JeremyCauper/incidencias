@@ -417,8 +417,8 @@
                     </div>
                     <div class="mb-1 cabecera-orden">
                         <input type="hidden" name="codInc" id="codInc">
-                        <div class="form-group pt-2">
-                            <label class="form-label" for="n_orden">N° de Orden *: </label>
+                        <div class="form-group pt-2 required">
+                            <label class="form-label" for="n_orden">N° de Orden </label>
                             <div class="input-group mb-3" style="width: 250px;">
                                 <input type="text" class="form-control form-control-sm rounded" name="n_orden" id="n_orden"
                                     require="N° Orden" />
@@ -485,15 +485,15 @@
                         </div>
                         <div class="row justify-content-md-center">
                             <div class="col-md-6">
-                                <div class="form-group pt-2">
-                                    <label class="form-label" for="exampleInputEmail1">Observaciones *</label>
+                                <div class="form-group pt-2 required">
+                                    <label class="form-label" for="exampleInputEmail1">Observaciones</label>
                                     <textarea class="form-control" id="observacion" name="observacion"
                                         style="height: 80px;resize: none;" require="Observaciones"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group pt-2">
-                                    <label class="form-label" for="exampleInputEmail1">Recomendaciones *</label>
+                                <div class="form-group pt-2 required">
+                                    <label class="form-label" for="exampleInputEmail1">Recomendaciones</label>
                                     <textarea class="form-control" id="recomendacion" name="recomendacion"
                                         style="height: 80px;resize: none;" require="Recomendaciones"></textarea>
                                 </div>
@@ -519,7 +519,7 @@
 
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="row" id="content-material">
-                            <div class="col-lg-7 my-1">
+                            <div class="col-lg-8 my-1">
                                 <select class="select-clear" id="selector-material">
                                     <option value=""></option>
                                     @foreach ($data['materiales'] as $m)
@@ -528,7 +528,7 @@
                                     @endforeach
                                 </select>
                             </div>
-                            <div class="col-lg-5 col-9 d-flex ps-lg-0 my-1 disabled" id="content-cantidad">
+                            <div class="col-lg-4 col-9 d-flex ps-lg-0 my-1 disabled" id="content-cantidad">
                                 <div class="input-group">
                                     <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
                                         onclick="manCantidad('minus')">
@@ -541,7 +541,7 @@
                                         <i class="fas fa-plus" style="font-size: .75rem;"></i>
                                     </button>
                                 </div>
-                                <input type="text" class="form-control ms-2" placeholder="Cod. Aviso">
+                                <input type="text" class="form-control ms-2 d-none" id="codAviso" placeholder="Cod. Aviso">
                                 <button type="button" class="btn btn-primary px-2 ms-2" data-mdb-ripple-init
                                     id="createMaterial">
                                     <i class="fas fa-plus" style="pointer-events: none;"></i>

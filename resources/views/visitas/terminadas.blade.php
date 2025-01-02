@@ -2,44 +2,45 @@
 @section('title', 'Visitas')
 
 @section('style')
+<script type="text/javascript" src="{{asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{asset('front/vendor/daterangepicker/daterangepicker.css')}}">
 <!-- <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}"> -->
 @endsection
 @section('content')
 
 <div class="col-12 mb-4">
     <div class="card">
-        <div class="card-body">
-            <h6 class="text-primary"><i class="fas fa-filter"></i> Filtro Avanzado</h6>
+        <div class="card-body form-container">
+            <h6 class="text-primary"><i class="fas fa-filter"></i> Filtros de Busqueda</h6>
             <div class="row">
-                <div class="col-xl-5 col-md-8 my-1">
+                <div class="col-xxl-5 my-1">
                     <label class="form-label mb-0" for="empresa">Empresa</label>
                     <select id="empresa" name="empresa" class="select-clear">
                         <option value=""></option>
                         @foreach ($data['empresas'] as $key => $val)
                             @if ($val['status'])
-                                <option value="{{$val['ruc']}}">{{$val['ruc'] . ' - ' . $val['razonSocial']}}</option>
+                                <option value="{{$val['ruc']}}" id-empresa="{{$val['id']}}">{{$val['ruc'] . ' - ' . $val['razonSocial']}}</option>
                             @endif
                         @endforeach
                     </select>
                 </div>
-                <div class="col-xl-3 col-md-4 my-1">
+                <div class="col-xxl-3 col-md-8 my-1">
                     <label class="form-label mb-0" for="idGrupo">Sucursal</label>
                     <select id="sucursal" name="sucursal" class="select" disabled="true">
                         <option value="">-- Seleccione --</option>
                     </select>
                 </div>
-                <div class="col-xl-2 col-6 my-1">
-                    <label class="form-label mb-0" for="razonSocial1">Fecha Inicio</label>
-                    <input type="date" class="form-control" id="razonSocial1" name="razonSocial1">
-                </div>
-                <div class="col-xl-2 col-6 my-1">
-                    <label class="form-label mb-0" for="razonSocial">Fecha Final</label>
-                    <input type="date" class="form-control" id="razonSocial" name="razonSocial">
-                </div>
-                <div class="col-12 my-1 text-end">
-                    <button type="button" class="btn btn-primary" data-mdb-ripple-init>
-                        <i class="fas fa-magnifying-glass"></i> Buscar
-                    </button>
+                <div class="col-xxl-2 col-md-4 my-1">
+                    <label class="form-label mb-0" for="dateRango">Rango</label>
+                    <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
+                </div> 
+                <div class="align-items-end col-xxl-2 d-flex my-1 justify-content-end">
+                    <div>
+                        <button type="button" class="btn btn-primary" data-mdb-ripple-init onclick="filtroBusqueda()">
+                            <i class="fas fa-magnifying-glass"></i> Buscar
+                        </button>
+                    </div>
                 </div>
             </div>
         </div>

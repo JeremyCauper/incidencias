@@ -37,6 +37,7 @@ class OrdenController extends Controller
                 'fecha_f' => 'required|date',
                 'hora_f' => 'required|date_format:H:i:s',
                 'materiales' => 'nullable|array',
+                'codAviso' => 'nullable|string',
                 'firma_digital' => 'nullable|string',
                 'n_doc' => 'nullable|integer',
                 'nom_cliente' => 'nullable|string',
@@ -75,6 +76,7 @@ class OrdenController extends Controller
                 'observaciones' => $request->observacion,
                 'recomendaciones' => $request->recomendacion,
                 'id_contacto' => $idContacto,
+                'codigo_aviso' => $request->codAviso,
                 'fecha_f' => $request->fecha_f,
                 'hora_f' => $request->hora_f,
                 'created_at' => now()->format('Y-m-d H:i:s')

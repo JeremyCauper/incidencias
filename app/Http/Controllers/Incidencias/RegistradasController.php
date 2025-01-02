@@ -254,6 +254,9 @@ class RegistradasController extends Controller
                 return response()->json(['success' => false, 'message' => 'Incidencia no encontrada']);
             $cod = $incidencia->cod_incidencia;
 
+            $empresa = DB::table('tb_empresas')->where('id', $incidencia->id_empresa)->first();
+            $incidencia->codigo_aviso = $empresa->codigo_aviso;
+            
             // Consultamos los contactos asociados a la incidencia y los añadimos como propiedades del objeto incidencia
             $contacto = DB::table('contactos_empresas')->where('id_contact', $incidencia->id_contacto)->first();
             if ($contacto) {
@@ -400,7 +403,7 @@ class RegistradasController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Asignado con éxito',
-                'data' => ['cod_inc' => $cod_inc]
+                'data' => ['cod_inc' => $cod_inc, 'estado' => $request->estado ? $estado_info : 2]
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();

@@ -277,7 +277,6 @@ function ShowEdit(id) {
             changeCodInc(dt.cod_incidencia);
             $('#id_empresa').val(dt.id_empresa).trigger('change.select2');
             var option = $(`#id_empresa option[value="${dt.id_empresa}"]`).attr('select-ruc');
-            console.log(option);
 
             fillSelect(['#sucursal'], sucursales, 'ruc', option, 'id', 'nombre');
             $('#sucursal').val(dt.id_sucursal).trigger('change.select2');
@@ -305,6 +304,23 @@ function ShowEdit(id) {
         }
     });
 }
+
+function habilitarCodAviso(accion) {
+    var selector_material = $('#selector-material').parent();
+    var content_cantidad = $('#content-cantidad');
+    var codAviso = $('#codAviso');
+    if (accion) {
+        selector_material.addClass('col-lg-7').removeClass('col-lg-8');
+        content_cantidad.addClass('col-lg-5').removeClass('col-lg-4');
+        codAviso.attr('name', 'codAviso');
+        return codAviso.removeClass('d-none');
+    }
+    selector_material.addClass('col-lg-8').removeClass('col-lg-7');
+    content_cantidad.addClass('col-lg-4').removeClass('col-lg-5');
+    codAviso.addClass('d-none');
+    codAviso.removeAttr('name');
+}
+
 
 function ShowAssign(e, id) {
     const obj = extractDataRow(e);
@@ -360,9 +376,15 @@ async function AssignPer() {
             personal_asig: cPersonal1.extract()
         }),
         success: function (data) {
+            var estadoInfo = [
+                {'c': 'warning', 't': 'Sin Asignar'},
+                {'c': 'info', 't': 'Asignada'},
+                {'c': 'primary', 't': 'En Proceso'}
+            ];
             fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
+                $(`#modal_assign [aria-item="estado"]`).html(`<label class="badge badge-${estadoInfo[data.data.estado]['c']}" style="font-size: .8rem;">${estadoInfo[data.data.estado]['t']}</label>`);
                 boxAlert.minbox({ h: data.message });
                 updateTable();
                 return true;
@@ -453,7 +475,6 @@ async function StartInc(cod, estado) {
 async function OrdenDetail(e, cod) {
     const obj = extractDataRow(e);
     obj.estado = (obj.estado).replaceAll('.7rem;', '1rem;');
-    console.log(obj);
 
     $.each(obj, function (panel, count) {
         $(`#modal_orden [aria-item="${panel}"]`).html(count);
@@ -469,10 +490,12 @@ async function OrdenDetail(e, cod) {
         contentType: 'application/json',
         success: function (data) {
             if (data.success) {
-                let personal = data.data.personal_asig;
-                $('[aria-item="observacion"]').html(data.data.observasion);
-                $('#codInc').val(data.data.cod_incidencia);
+                let dt = data.data;
+                let personal = dt.personal_asig;
+                $('[aria-item="observacion"]').html(dt.observasion);
+                $('#codInc').val(dt.cod_incidencia);
                 var tecnicos = personal.map(persona => persona.tecnicos);
+                habilitarCodAviso(dt.codigo_aviso);
 
                 fMananger.formModalLoding('modal_orden', 'hide');
                 $('#modal_orden [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));

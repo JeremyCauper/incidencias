@@ -33,7 +33,7 @@
                 </div>
                 <div class="col-xxl-2 col-md-4 my-1">
                     <label class="form-label mb-0" for="dateRango">Rango</label>
-                    <input type="text" class="form-control" id="dateRango" name="dateRango">
+                    <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
                 </div> 
                 <div class="align-items-end col-xxl-2 d-flex my-1 justify-content-end">
                     <div>
