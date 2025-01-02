@@ -137,7 +137,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     order: [[4, 'desc']],
     createdRow: function (row, data, dataIndex) {
         const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', 'row-bg-danger'];
-        $(row).find('td:eq(7)').addClass('text-center');
+        $(row).find('td:eq(1)').addClass('text-center');
         $(row).find('td:eq(8)').addClass(`td-acciones ${row_bg[data.estado_informe]}`);
         $(row).addClass(row_bg[data.estado_informe]);
     },

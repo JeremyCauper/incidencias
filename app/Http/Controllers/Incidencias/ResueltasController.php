@@ -34,8 +34,8 @@ class ResueltasController extends Controller
     {
         $ruc = $request->query('ruc');
         $sucursal = $request->query('sucursal');
-        $fechaIni = $request->query('fechaIni');
-        $fechaFin = $request->query('fechaFin');
+        $fechaIni = $request->query('fechaIni') ?: now()->format('Y-m-01');
+        $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
     
         $whereInc = ['estatus' => 1, 'estado_informe' => 3];
         if (intval($ruc)) {
