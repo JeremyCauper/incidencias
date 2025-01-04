@@ -60,8 +60,8 @@
                 <div class="row">
                     <h6 class="tittle text-primary my-3">Datos Sucursal</h6>
                     <input type="hidden" name="id" id="id">
-                    <div class="col-lg-4 col-7 mb-2">
-                        <label class="form-label mb-0" for="empresa">Empresa *</label>
+                    <div class="col-lg-4 col-7 mb-2 required">
+                        <label class="form-label mb-0" for="empresa">Empresa</label>
                         <select id="empresa" name="empresa" require="Empresa" class="select-clear">
                             <option value=""></option>
                             @foreach ($data['empresas'] as $key => $val)
@@ -71,8 +71,8 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-5 col-5 mb-2">
-                        <label class="form-label mb-0" for="sucursal">Sucursal *</label>
+                    <div class="col-lg-5 col-5 mb-2 required">
+                        <label class="form-label mb-0" for="sucursal">Sucursal</label>
                         <input type="text" class="form-control" id="sucursal" name="sucursal" require="Sucursal">
                     </div>
                     <div class="col-lg-3 col-12 mb-2">
@@ -80,12 +80,12 @@
                         <input type="text" class="form-control" id="codCofide" name="codCofide">
                     </div>
 
-                    <div class="col-lg-7 mb-2">
-                        <label class="form-label mb-0" for="direccion">Dirección *</label>
+                    <div class="col-lg-7 mb-2 required">
+                        <label class="form-label mb-0" for="direccion">Dirección</label>
                         <input type="text" class="form-control" id="direccion" name="direccion" require="Dirección">
                     </div>
-                    <div class="col-lg-5 mb-2">
-                        <label class="form-label mb-0" for="ubigeo">Ubigeo *</label>
+                    <div class="col-lg-5 mb-2 required">
+                        <label class="form-label mb-0" for="ubigeo">Ubigeo</label>
                         <select id="ubigeo" name="ubigeo" require="Ubigeo" class="select-clear">
                             <option value=""></option>
                         </select>
@@ -114,8 +114,8 @@
                             <option value="1">Si</option>
                         </select>
                     </div>
-                    <div class="col-lg-4 col-4 mb-2">
-                        <label class="form-label mb-0" for="estado">Estado *</label>
+                    <div class="col-lg-4 col-4 mb-2 required">
+                        <label class="form-label mb-0" for="estado">Estado</label>
                         <select class="select" id="estado" name="estado" require="Estado" control-noclear>
                             <option value="1">Activo</option>
                             <option value="0">Inactivo</option>

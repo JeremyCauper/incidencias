@@ -3866,10 +3866,10 @@ body {
     padding: .5rem 0;
 }
 
-.required label {
+.required {
     position: relative;
 }
-.required label::before {
+.required::before {
     content: '*';
     position: absolute;
     color: #dc4c64;

@@ -32,7 +32,7 @@ class SucursalesController extends Controller
     {
         try {
             $sucursales = DB::table('tb_sucursales')->get();
-            $empresas = DB::table('tb_empresas')->get()->keyBy(keyBy: 'ruc');
+            $empresas = DB::table('tb_empresas')->get()->keyBy('ruc');
             $grupos = DB::table('tb_grupos')->get()->keyBy('id');
             // Procesar sucursales
             $sucursales = $sucursales->map(function ($val) use ($grupos, $empresas) {

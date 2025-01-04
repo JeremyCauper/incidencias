@@ -10,7 +10,16 @@ $(document).ready(function () {
         $('#ubigeo').append($('<option>').val(e.codigo).text(e.nombre));
     });
 
-    configControls(['#ruc', '#idNube', '#visitas', '#diasVisita', '#mantenimientos'], { mxl: 11, mask: { reg: "99999999999" } });
+    defineControllerAttributes('#ruc', {
+        type: "text",
+        require: true,
+        mnl: 11,
+        mxl: 11,
+        errorMessage: "El numero de ruc es invalido.",
+        mask: { reg: "99999999999" }
+    });
+
+    configControls(['#idNube', '#visitas', '#diasVisita', '#mantenimientos'], { mxl: 11, mask: { reg: "99999999999" } });
     configControls('#razonSocial', { mxl: 400 });
     configControls('#direccion', { mxl: 500 });
     configControls('#telefono', { mxl: 11, mask: { reg: "999999999" } });
@@ -23,7 +32,7 @@ const tb_empresas = new DataTable('#tb_empresas', {
         url: __url + '/empresas/empresas/index',
         dataSrc: "",
         error: function (xhr, error, thrown) {
-            console.log('Error en la solicitud Ajax:', error);
+            boxAlert.table();
             console.log('Respuesta del servidor:', xhr);
         }
     },
