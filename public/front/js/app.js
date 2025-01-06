@@ -56,19 +56,46 @@ function defineControllerAttributes(selector, config) {
             return;
         }
 
-        let controllerRegistry = {
+        let settings = {
             name: config.name || idString,
-            type: config.type || false,
-            "con-type": config.name || false,
+            type: config.type || "text",
+            "control-type": config["control-type"] || "string",
             require: config.require || false,
             minLength: config.mnl || false,
             maxLength: config.mxl || false,
             placeholder: config.pholder || "",
-            errorMessage: config.errorMessage || "Error en el controlador.",
             lengthMessage: config.lengthMessage || `El campo '${label.html()}' debe tener entre ${config.mnl || 0} y ${config.mxl || 0} dígitos.`,
+            errorMessage: config.errorMessage || false,
         };
 
-        for (let [key, value] of Object.entries(controllerRegistry)) {
+        for (let [key, value] of Object.entries(settings)) {
+            if(key == 'errorMessage' && !value) {
+                switch (settings['control-type']) {
+                    case 'ruc':
+                        value = "El numero de RUC es invalido.";
+                        break;
+
+                    case 'int':
+                        value = "El dato ingresado debe ser un numero.";
+                        break;
+
+                    case 'float':
+                        value = "El dato ingresado debe ser un numero decimal.";
+                        break;
+
+                    case 'date':
+                        value = "El dato ingresado debe ser un numero.";
+                        break;
+
+                    case 'email':
+                        value = "El correo electrónico ingresado no es válido.";
+                        break;
+                    
+                    default:
+                        value = "";
+                        break;
+                }
+            }
             if (value) {
                 if (key == 'require') {
                     value = label.html();
@@ -93,43 +120,54 @@ function defineControllerAttributes(selector, config) {
     });
 }
 
-
-/*if (!controllerRegistry[controllerId]) {
-    // Crear un controlador vacío con los atributos definidos
-    controllerRegistry[controllerId] = {
-        name: config.name || null,
-        required: config.required || false,
-        minLength: config.minLength || 0,
-        maxLength: config.maxLength || Infinity,
-        errorMessage: config.errorMessage || "Error en el controlador.",
-        lengthMessage:
-            config.lengthMessage || "La longitud debe estar en el rango permitido.",
-    };
-    console.log(`Controlador '${controllerId}' configurado con éxito.`);
-} else {
-    console.warn(`El controlador '${controllerId}' ya está configurado.`);
-}*/
-
 function validFrom(dat) {
-    var dataF = { success: true, data: { data: {}, require: "" } };
+    var dataF = { success: true, data: { data: {}, require: [] } };
 
-    dat.forEach(function (e) {
-        if (e.getAttribute("require") && e.value == "") {
-            dataF.data['require'] += `<li><b>${e.getAttribute("require")}</b></li>`;
+    for (let i = 0; i < dat.length; i++) {
+        const e = dat[i];
+        switch (e.getAttribute("control-type")) {
+            case 'ruc':
+                var validRuc = /^(10|20)/.test(e.value);
+                if (!validRuc) {
+                    dataF.success = false;
+                    boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: e.getAttribute("errorMessage") });
+                    return dataF;
+                }
+                break;
+
+            case 'email':
+                const emailValue = e.value;
+                const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
+                if (emailValue && !emailRegex.test(emailValue)) {
+                    dataF.success = false;
+                    boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: e.getAttribute("errorMessage") });
+                    return dataF;
+                }
+                break;
+        
+            default:
+                break;
+        }
+
+        if (e.getAttribute("require") && e.value === "") {
+            dataF.data.require.push(`<li><b>${e.getAttribute("require")}</b></li>`);
         }
         dataF.data.data[e.name] = e.value;
-    });
-    if (dataF.data['require']) {
+    }
+
+    if (dataF.data.require.length > 0) {
         dataF.success = false;
         boxAlert.box({
             i: 'info',
             t: 'Faltan datos',
             h: `<h6 class="text-secondary">Los siguientes campos son requeridos</h6>
-                <ul style="font-size:.75rem;">${dataF.data['require']}</ul>`
+                <ul style="font-size:.75rem;">${dataF.data.require.join('')}</ul>`
         });
     }
+
     return dataF;
 }
+
 
 function extractDataRow($this) {
     const ths = document.querySelectorAll('.dataTables_scrollHeadInner table thead tr th');

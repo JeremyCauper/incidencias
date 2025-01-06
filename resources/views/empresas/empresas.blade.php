@@ -60,8 +60,8 @@
                     <h6 class="tittle text-primary my-3">Datos Empresa</h6>
                     <input type="hidden" name="id" id="id">
                     <div class="col-lg-4 col-7 mb-2">
-                        <label class="form-label mb-0 required" for="idGrupo">Grupo</label>
-                        <select id="idGrupo" name="idGrupo" require="Grupo" class="select-clear">
+                        <label class="form-label mb-0" for="idGrupo">Grupo</label>
+                        <select id="idGrupo" class="select-clear">
                             <option value=""></option>
                             @foreach ($data['grupos'] as $key => $val)
                                 @if ($val->status)
@@ -75,49 +75,48 @@
                         <input class="form-control" id="ruc">
                     </div>
                     <div class="col-lg-5 col-12 mb-2">
-                        <label class="form-label mb-0 required" for="razonSocial">Razon Social</label>
-                        <input type="text" class="form-control" id="razonSocial" name="razonSocial"
-                            require="Razon Social">
+                        <label class="form-label mb-0" for="razonSocial">Razon Social</label>
+                        <input class="form-control" id="razonSocial">
                     </div>
 
                     <div class="col-lg-7 mb-2">
-                        <label class="form-label mb-0 required" for="direccion">Dirección</label>
-                        <input type="text" class="form-control" id="direccion" name="direccion" require="Dirección">
+                        <label class="form-label mb-0" for="direccion">Dirección</label>
+                        <input class="form-control" id="direccion">
                     </div>
                     <div class="col-lg-5 mb-2">
-                        <label class="form-label mb-0 required" for="ubigeo">Ubigeo</label>
-                        <select id="ubigeo" name="ubigeo" require="Ubigeo" class="select-clear">
+                        <label class="form-label mb-0" for="ubigeo">Ubigeo</label>
+                        <select id="ubigeo" class="select-clear">
                             <option value=""></option>
                         </select>
                     </div>
 
                     <div class="col-lg-3 col-6 mb-2">
-                        <label class="form-label mb-0 required" for="contrato">Contrato</label>
-                        <select id="contrato" name="contrato" require="Contrato" class="select">
+                        <label class="form-label mb-0" for="contrato">Contrato</label>
+                        <select id="contrato" class="select">
                             <option value=""></option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-6 mb-2">
-                        <label class="form-label mb-0 required" for="facturacion">Facturacion</label>
-                        <select id="facturacion" name="facturacion" require="Facturacion" class="select">
+                        <label class="form-label mb-0" for="facturacion">Facturacion</label>
+                        <select id="facturacion" class="select">
                             <option value=""></option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-6 mb-2">
-                        <label class="form-label mb-0 required" for="prico">Prico</label>
-                        <select id="prico" name="prico" require="Prico" class="select">
+                        <label class="form-label mb-0" for="prico">Prico</label>
+                        <select id="prico" class="select">
                             <option value=""></option>
                             <option value="1">Ose</option>
                             <option value="0">Sunat</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-6 mb-2">
-                        <label class="form-label mb-0 required" for="eds">Eds</label>
-                        <select id="eds" name="eds" require="Eds" class="select">
+                        <label class="form-label mb-0" for="eds">Eds</label>
+                        <select id="eds" class="select">
                             <option value=""></option>
                             <option value="1">Si</option>
                             <option value="0">No</option>
@@ -126,31 +125,31 @@
 
                     <div class="col-lg-2 col-4 mb-2">
                         <label class="form-label mb-0" for="idNube">Id Nube</label>
-                        <input type="text" class="form-control" id="idNube" name="idNube">
+                        <input class="form-control" id="idNube" name="idNube">
                     </div>
 
                     <div class="col-lg-2 col-4 mb-2">
                         <label class="form-label mb-0" for="visitas">Visitas</label>
-                        <input type="text" class="form-control" id="visitas" name="visitas">
+                        <input class="form-control" id="visitas" name="visitas">
                     </div>
                     <div class="col-lg-2 col-4 mb-2">
                         <label class="form-label mb-0" for="diasVisita">Dias Visita</label>
-                        <input type="text" class="form-control" id="diasVisita" name="diasVisita">
+                        <input class="form-control" id="diasVisita" name="diasVisita">
                     </div>
                     <div class="col-lg-2 col-4 mb-2">
                         <label class="form-label mb-0" for="mantenimientos">Mantenimientos</label>
-                        <input type="text" class="form-control" id="mantenimientos" name="mantenimientos">
+                        <input class="form-control" id="mantenimientos" name="mantenimientos">
                     </div>
                     <div class="col-lg-2 col-4 mb-2">
-                        <label class="form-label mb-0 required" for="estado">Estado</label>
-                        <select class="select" id="estado" name="estado" require="Estado">
+                        <label class="form-label mb-0" for="estado">Estado</label>
+                        <select class="select" id="estado">
                             <option value="1">Activo</option>
                             <option value="0">Inactivo</option>
                         </select>
                     </div>
                     <div class="col-lg-2 col-4 mb-2">
-                        <label class="form-label mb-0 required" for="codVisita">Cod. Visita</label>
-                        <select class="select" id="codVisita" name="codVisita" require="Estado">
+                        <label class="form-label mb-0" for="codVisita">Cod. Visita</label>
+                        <select class="select" id="codVisita">
                             <option value="0">No</option>
                             <option value="1">Si</option>
                         </select>
@@ -160,7 +159,7 @@
 
                     <div class="col-lg-3 mb-2">
                         <label class="form-label mb-0" for="cargo">Cargo</label>
-                        <select class="select-clear" id="cargo" name="cargo">
+                        <select class="select-clear" id="cargo">
                             <option value=""></option>
                             @foreach ($data['cargos'] as $key => $val)
                                 @if ($val->estatus)
@@ -171,15 +170,15 @@
                     </div>
                     <div class="col-lg-3 mb-2">
                         <label class="form-label mb-0" for="encargado">Encargado</label>
-                        <input type="text" class="form-control" id="encargado" name="encargado" maxlength="100">
+                        <input class="form-control" id="encargado">
                     </div>
                     <div class="col-lg-2 col-4 mb-2">
                         <label class="form-label mb-0" for="telefono">Telefono</label>
-                        <input type="text" class="form-control" id="telefono" name="telefono" maxlength="9">
+                        <input class="form-control" id="telefono">
                     </div>
                     <div class="col-lg-4 col-8">
                         <label class="form-label mb-0" for="correo">Correo</label>
-                        <input type="text" class="form-control" id="correo" name="correo" maxlength="250">
+                        <input class="form-control" id="correo">
                     </div>
 
                 </div>

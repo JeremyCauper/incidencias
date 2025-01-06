@@ -10,19 +10,94 @@ $(document).ready(function () {
         $('#ubigeo').append($('<option>').val(e.codigo).text(e.nombre));
     });
 
-    defineControllerAttributes('#ruc', {
-        type: "text",
-        require: true,
-        mnl: 11,
-        mxl: 11,
-        errorMessage: "El numero de ruc es invalido.",
-        mask: { reg: "99999999999" }
-    });
+    const controles = [
+        // Formulario empresas datos de la empresas
+        {
+            control: '#idGrupo',
+            config: {
+                require: true
+            }
+        },
+        {
+            control: '#ruc',
+            config: {
+                require: true,
+                "control-type": "ruc",
+                mnl: 11,
+                mxl: 11,
+                errorMessage: "El numero de ruc es invalido.",
+                mask: { reg: "99999999999" }
+            }
+        },
+        {
+            control: '#razonSocial',
+            config: {
+                require: true,
+                "control-type": "string",
+                mxl: 400
+            }
+        },
+        {
+            control: '#direccion',
+            config: {
+                require: true,
+                "control-type": "string",
+                mxl: 500
+            }
+        },
+        {
+            control: ['#ubigeo', '#contrato', '#facturacion', '#prico', '#eds'],
+            config: {
+                require: true
+            }
+        },
+        {
+            control: ['#idNube', '#visitas', '#diasVisita', '#mantenimientos'],
+            config: {
+                mxl: 11,
+                type: "number",
+                "control-type": "int",
+                mask: { reg: "99999999999" }
+            }
+        },
+        {
+            control: ['#estado', '#codVisita'],
+            config: {
+                require: true
+            }
+        },
+        // Formulario empresas datos del contacto de la empresa
+        {
+            control: '#cargo',
+            config: {}
+        },
+        {
+            control: '#encargado',
+            config: {
+                "control-type": "string",
+                mxl: 100
+            }
+        },
+        {
+            control: '#telefono',
+            config: {
+                "control-type": "int",
+                mxl: 9,
+                mask: { reg: "999999999" }
+            }
+        },
+        {
+            control: '#correo',
+            config: {
+                "control-type": "email",
+                mxl: 250
+            }
+        }
+    ];
 
-    configControls(['#idNube', '#visitas', '#diasVisita', '#mantenimientos'], { mxl: 11, mask: { reg: "99999999999" } });
-    configControls('#razonSocial', { mxl: 400 });
-    configControls('#direccion', { mxl: 500 });
-    configControls('#telefono', { mxl: 11, mask: { reg: "999999999" } });
+    controles.forEach(control => {
+        defineControllerAttributes(control.control, control.config);
+    });
 });
 
 const tb_empresas = new DataTable('#tb_empresas', {
@@ -59,14 +134,6 @@ function updateTable() {
 
 document.getElementById('form-empresa').addEventListener('submit', function (event) {
     event.preventDefault();
-    if ($('#ruc').val().length < 11) {
-        return boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: 'El ruc ingresado no es válido, deben ser 11 digitos.' });
-    }
-    const emailValue = $('#correo').val();
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailRegex.test(emailValue) && emailValue) {
-        return boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: 'El correo electrónico ingresado no es válido.' });
-    }
     fMananger.formModalLoding('modal_empresas', 'show');
     const accion = $('#id').val();
     const url = accion ? `actualizar` : `registrar`;
@@ -112,7 +179,6 @@ function Editar(id) {
             url: `${__url}/empresas/empresas/${id}`,
             contentType: 'application/json',
             success: function (data) {
-                console.log(data);
                 
                 if (!data.success) {
                     console.log(data.error);
