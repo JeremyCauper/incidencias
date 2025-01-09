@@ -59,10 +59,12 @@ function defineControllerAttributes(selector, config) {
         let settings = {
             name: config.name || idString,
             type: config.type || "text",
+            value: config.val || false,
             "control-type": config["control-type"] || "string",
             require: config.require || false,
             minLength: config.mnl || false,
             maxLength: config.mxl || false,
+            disabled: config.disabled || false,
             placeholder: config.pholder || "",
             lengthMessage: config.lengthMessage || `El campo '${label.html()}' debe tener entre ${config.mnl || 0} y ${config.mxl || 0} dígitos.`,
             errorMessage: config.errorMessage || false,
@@ -125,6 +127,9 @@ function validFrom(dat) {
 
     for (let i = 0; i < dat.length; i++) {
         const e = dat[i];
+        if (e.value != "" && e.getAttribute("control-type")) {
+            
+        }
         switch (e.getAttribute("control-type")) {
             case 'ruc':
                 var validRuc = /^(10|20)/.test(e.value);

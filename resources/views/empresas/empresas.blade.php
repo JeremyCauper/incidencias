@@ -95,7 +95,7 @@
                         <select id="contrato" class="select">
                             <option value=""></option>
                             <option value="1">Si</option>
-                            <option value="0">No</option>
+                            <option selected value="0">No</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-6 mb-2">
@@ -103,7 +103,7 @@
                         <select id="facturacion" class="select">
                             <option value=""></option>
                             <option value="1">Si</option>
-                            <option value="0">No</option>
+                            <option selected value="0">No</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-6 mb-2">
@@ -111,14 +111,14 @@
                         <select id="prico" class="select">
                             <option value=""></option>
                             <option value="1">Ose</option>
-                            <option value="0">Sunat</option>
+                            <option selected value="0">Sunat</option>
                         </select>
                     </div>
                     <div class="col-lg-3 col-6 mb-2">
                         <label class="form-label mb-0" for="eds">Eds</label>
                         <select id="eds" class="select">
                             <option value=""></option>
-                            <option value="1">Si</option>
+                            <option selected value="1">Si</option>
                             <option value="0">No</option>
                         </select>
                     </div>
@@ -143,14 +143,14 @@
                     <div class="col-lg-2 col-4 mb-2">
                         <label class="form-label mb-0" for="estado">Estado</label>
                         <select class="select" id="estado">
-                            <option value="1">Activo</option>
+                            <option selected value="1">Activo</option>
                             <option value="0">Inactivo</option>
                         </select>
                     </div>
                     <div class="col-lg-2 col-4 mb-2">
                         <label class="form-label mb-0" for="codVisita">Cod. Visita</label>
                         <select class="select" id="codVisita">
-                            <option value="0">No</option>
+                            <option selected value="0">No</option>
                             <option value="1">Si</option>
                         </select>
                     </div>
@@ -197,7 +197,6 @@
 
 @section('scripts')
 <!-- jQuery Mask Plugin CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
 <script src="{{asset('front/vendor/ubigeos-peru/ubigeo.js')}}"></script>
 <script src="{{asset('front/js/app/empresas/empresas.js')}}"></script>
 @endsection

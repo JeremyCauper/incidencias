@@ -54,14 +54,14 @@
             <div class="modal-body">
                 <div class="row">
                     <input type="hidden" name="id" id="id">
-                    <div class="col-lg-8 col-sm-12 mb-2 required">
+                    <div class="col-lg-8 col-sm-12 mb-2">
                         <label class="form-label mb-0" for="grupo">Grupo</label>
-                        <input type="text" class="form-control" id="grupo" name="grupo" require="Grupo">
+                        <input class="form-control" id="grupo">
                     </div>
-                    <div class="col-lg-4 col-sm-12 mb-2 required">
+                    <div class="col-lg-4 col-sm-12 mb-2">
                         <label class="form-label mb-0" for="estado">Estado</label>
-                        <select class="select" id="estado" name="estado" require="Estado">
-                            <option value="1">Activo</option>
+                        <select class="select" id="estado">
+                            <option selected value="1">Activo</option>
                             <option value="0">Inactivo</option>
                         </select>
                     </div>

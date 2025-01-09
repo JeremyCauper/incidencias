@@ -1,4 +1,106 @@
 $(document).ready(function () {
+    const controles = [
+        // Formulario incidencias datos de la empresas
+        {
+            control: '#id_empresa',
+            config: {
+                require: true
+            }
+        },
+        {
+            control: '#sucursal',
+            config: {
+                require: true,
+                disabled: true
+            }
+        },
+        {
+            control: '#tel_contac',
+            config: {}
+        },
+        {
+            control: '#nro_doc',
+            config: {
+                "control-type": "int",
+                mnl: 8,
+                mxl: 11,
+                errorMessage: "El numero de DNI es invalido.",
+                mask: { reg: "99999999999" }
+            }
+        },
+        {
+            control: '#nom_contac',
+            config: {
+                mxl: 250,
+            }
+        },
+        {
+            control: '#car_contac',
+            config: {}
+        },
+        {
+            control: '#cor_contac',
+            config: {
+                "control-type": "email",
+                mxl: 250
+            }
+        },
+        // Datos Incidencia
+        {
+            control: ['#tEstacion', '#prioridad', '#tSoporte', '#tIncidencia'],
+            config: {
+                require: true
+            }
+        },
+        {
+            control: ['#problema', '#sproblema'],
+            config: {
+                require: true,
+                disabled: true
+            }
+        },
+        {
+            control: '#fecha_imforme',
+            config: {
+                type: "date",
+                require: true
+            }
+        },
+        {
+            control: '#hora_informe',
+            config: {
+                type: "time",
+                require: true
+            }
+        },
+        {
+            control: '#observasion',
+            config: {}
+        },
+
+        //Formulario Orden
+        {
+            control: '#n_orden',
+            config: {
+                require: true
+            }
+        },
+        {
+            control: ['#observacion', '#recomendacion'],
+            config: {
+                require: true
+            }
+        },
+        {
+            control: ['#fecha_f', '#hora_f'],
+            config: {}
+        },
+    ];
+
+    controles.forEach(control => {
+        defineControllerAttributes(control.control, control.config);
+    });
+
     formatSelect('modal_incidencias');
     formatSelect('modal_assign');
     formatSelect('modal_orden');
@@ -45,8 +147,8 @@ $(document).ready(function () {
         $('#contenedor-personal').removeClass('d-none');
         $('#observasion').val('');
 
-        cTable.deleteTable('#createPersonal');
-        cTable.deleteTable('#createPersonal1');
+        cPersonal.deleteTable();
+        cPersonal1.deleteTable();
     });
 
     setInterval(() => {
@@ -54,21 +156,13 @@ $(document).ready(function () {
         $('#hora_f').val(date('H:i:s')).attr('disabled', true);
     }, 1000);
 
-    $('#selector-material').on('change', function () {
+    $('#createMaterial').on('change', function () {
         manCantidad($(this).val(), true);
     })
 
     $('#createMaterial').on('click', function () {
         manCantidad($(this).val(), true);
     });
-
-    // Aplicar la máscara
-    Inputmask("99999999999", {
-        placeholder: "-",
-        greedy: false,
-        casing: "upper",
-        jitMasking: true
-    }).mask('#nro_doc');
 });
 
 const cMaterial = new CTable('#createMaterial', {
@@ -306,7 +400,7 @@ function ShowEdit(id) {
 }
 
 function habilitarCodAviso(accion) {
-    var selector_material = $('#selector-material').parent();
+    var selector_material = $('#createMaterial').parent();
     var content_cantidad = $('#content-cantidad');
     var codAviso = $('#codAviso');
     if (accion) {
@@ -345,7 +439,7 @@ function ShowAssign(e, id) {
             fMananger.formModalLoding('modal_assign', 'hide');
             (dt.personal_asig).forEach(element => {
                 const accion = dt.estado_informe == 2 ? false : true;
-                cTable.fillTable('#createPersonal1', element.id, accion);
+                cPersonal1.fillTable(element.id, accion);
             });
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -735,7 +829,7 @@ removeImgFirma.addEventListener('click', removeSignature);
 
 
 function manCantidad(params, clear = false) {
-    const selector = $('#selector-material');
+    const selector = $('#createMaterial');
     const cantidad = $('input[input-cantidad=""]');
     const content_cantidad = $('#content-cantidad');
     if (clear) {

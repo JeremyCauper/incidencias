@@ -243,6 +243,7 @@
   <script src="{{asset('front/js/template.js') }}"></script>
   <script src="{{asset('front/js/hoverable-collapse.js') }}"></script>
   <script src="{{asset('front/js/off-canvas.js')}}"></script>
+  <script src="{{asset('front/vendor/inputmask/jquery.inputmask.bundle.min.js')}}"></script>
   <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>

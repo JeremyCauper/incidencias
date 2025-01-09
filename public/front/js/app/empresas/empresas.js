@@ -1,15 +1,4 @@
 $(document).ready(function () {
-    formatSelect('modal_empresas');
-
-    $('.modal').on('hidden.bs.modal', function () {
-        $('#modal_empresasLabel').html('REGISTRAR EMPRESA');
-        $('#id').val('');
-    });
-
-    ubigeo.forEach(e => {
-        $('#ubigeo').append($('<option>').val(e.codigo).text(e.nombre));
-    });
-
     const controles = [
         // Formulario empresas datos de la empresas
         {
@@ -56,6 +45,7 @@ $(document).ready(function () {
             config: {
                 mxl: 11,
                 type: "number",
+                val: "0",
                 "control-type": "int",
                 mask: { reg: "99999999999" }
             }
@@ -97,6 +87,17 @@ $(document).ready(function () {
 
     controles.forEach(control => {
         defineControllerAttributes(control.control, control.config);
+    });
+    
+    formatSelect('modal_empresas');
+
+    $('.modal').on('hidden.bs.modal', function () {
+        $('#modal_empresasLabel').html('REGISTRAR EMPRESA');
+        $('#id').val('');
+    });
+
+    ubigeo.forEach(e => {
+        $('#ubigeo').append($('<option>').val(e.codigo).text(e.nombre));
     });
 });
 

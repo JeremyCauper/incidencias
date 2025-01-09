@@ -1,4 +1,73 @@
 $(document).ready(function () {
+    const controles = [
+        // Formulario empresas datos de la empresas
+        {
+            control: '#empresa',
+            config: {
+                require: true
+            }
+        },
+        {
+            control: '#sucursal',
+            config: {
+                require: true,
+                mxl: 250
+            }
+        },
+        {
+            control: '#codCofide',
+            config: {
+                mxl: 100
+            }
+        },
+        {
+            control: '#direccion',
+            config: {
+                require: true,
+                mxl: 250
+            }
+        },
+        {
+            control: '#ubigeo',
+            config: {
+                require: true
+            }
+        },
+        {
+            control: '#telefonoS',
+            config: {
+                "control-type": "int",
+                mxl: 9,
+                mask: { reg: "999999999" }
+            }
+        },
+        {
+            control: '#correoS',
+            config: {
+                "control-type": "email",
+                mxl: 250
+            }
+        },
+        {
+            control: ['#vVisitas', '#vMantenimientos'],
+            config: {}
+        },
+        {
+            control: '#estado',
+            config: {
+                require: true
+            }
+        },
+        {
+            control: '#urlMapa',
+            config: {}
+        },
+    ];
+
+    controles.forEach(control => {
+        defineControllerAttributes(control.control, control.config);
+    });
+
     formatSelect('modal_sucursales');
 
     $('.modal').on('hidden.bs.modal', function () {

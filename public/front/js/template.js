@@ -149,15 +149,27 @@
     $('html').removeClass('overflow-hidden');
     const form = $('.modal form');
     form.find('input').each(function () {
-      if ($(this).attr('type') === 'checkbox') {
-        $(this).prop('checked', false);
-      } else {
-        $(this).val("");
+      switch ($(this).attr('type')) {
+        case "checkbox":
+          $(this).prop('checked', false);
+          break;
+
+        case "number":
+          $(this).val("0");
+          break;
+      
+        default:
+          $(this).val("");
+          break;
       }
     });
     form.find('select').each(function () {
-      if (!$(this).is("[control-noclear]")) {
-        $(this).val("").trigger('change.select2');
+      var val = "";
+      if ($(this).find('option[selected]').attr('value')) {
+        val = $(this).find('option[selected]').attr('value');
+        $(this).val(val).trigger('change.select2');
+      } else {
+        $(this).val(val).trigger('change.select2');
       }
     });
     form.find('button').each(function () {

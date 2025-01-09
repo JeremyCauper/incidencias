@@ -111,31 +111,23 @@
                 </div>
                 <div class="mt-4 p-3 pb-0 fieldset mb-3">
                     <input type="hidden" id="idSucursal" name="idSucursal">
-                    <div class="col-md-9">
-                        <label class="form-label mb-0" for="fecha_visita">Fecha Visita</label>
-                        <div class="input-group mb-3">
-                            <span class="input-group-text border-0"><i class="far fa-calendar-plus"></i></span>
-                            <input type="date" class="form-control rounded" id="fecha_visita" name="fecha_visita">
-                        </div>
-                    </div>
-                    <div>
-                        <label class="form-label mb-0">Asignar Personal</label>
-                        <div class="row">
-                            <div class="col-md-9">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
-                                    <select class="select-clear">
-                                        <option value=""></option>
-                                        @foreach ($data['usuarios'] as $u)
-                                            <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                    <button type="button" class="btn btn-primary px-2" id="createPersonal"
-                                        data-mdb-ripple-init><i class="fas fa-plus"
-                                            style="pointer-events: none;"></i></button>
-                                </div>
+                    <div class="row">
+                        <div class="col-md-8">
+                            <label class="form-label mb-0" for="createPersonal">Asignar Personal</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-chalkboard-user"></i></span>
+                                <select class="select-clear" id="createPersonal">
+                                    <option value=""></option>
+                                    @foreach ($data['usuarios'] as $u)
+                                        <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}
+                                        </option>
+                                    @endforeach
+                                </select>
                             </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label mb-0" for="fecha_visita">Fecha Visita</label>
+                            <input type="date" class="form-control rounded" id="fecha_visita" name="fecha_visita">
                         </div>
                     </div>
                 </div>
@@ -222,7 +214,7 @@
 
         $('.modal').on('hidden.bs.modal', function () {
             // $('#contenedor-personal').addClass('d-none');
-            cTable.deleteTable('#createPersonal');
+            cPersonal.deleteTable();
         });
     });
 

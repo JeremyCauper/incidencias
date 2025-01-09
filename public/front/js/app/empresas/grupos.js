@@ -1,4 +1,25 @@
 $(document).ready(function () {
+    const controles = [
+        // Formulario grupos
+        {
+            control: '#grupo',
+            config: {
+                mxl: 100,
+                require: true
+            }
+        },
+        {
+            control: '#estado',
+            config: {
+                require: true
+            }
+        },
+    ];
+
+    controles.forEach(control => {
+        defineControllerAttributes(control.control, control.config);
+    });
+
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_gruposLabel').html('REGISTRAR GRUPO');
         $('#id').val('');

@@ -121,9 +121,9 @@
                 </div>
                 <h6 class="tittle text-primary my-3">Datos Empresa</h6>
                 <div class="row">
-                    <div class="col-lg-8 mb-2 required">
+                    <div class="col-lg-8 mb-2">
                         <label class="form-label mb-0" for="id_empresa">Empresa</label>
-                        <select id="id_empresa" class="select-clear" name="id_empresa" require="Empresa">
+                        <select class="select-clear" id="id_empresa">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['company'] as $e)
                                 <option value="{{$e->id}}" select-ruc="{{$e->ruc}}">{{$e->ruc}} - {{$e->razon_social}}
@@ -131,9 +131,9 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-4 mb-2 required">
+                    <div class="col-lg-4 mb-2">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
-                        <select id="sucursal" class="select" name="sucursal" require="Sucursal" disabled="true">
+                        <select class="select" id="sucursal">
                             <option value="">-- Seleccione --</option>
                         </select>
                     </div>
@@ -144,8 +144,7 @@
                     <input type="hidden" name="cod_contact" id="cod_contact">
                     <div class="col-lg-4 col-6 mb-2">
                         <label class="form-label mb-0" for="tel_contac">Telefono</label>
-                        <!-- <input type="text" class="form-control" id="tel_contac" name="tel_contac" onkeyup="validContac(this)"> -->
-                        <select id="tel_contac" name="tel_contac" class="select-tags" onchange="validContac(this)">
+                        <select class="select-tags" id="tel_contac" onchange="validContac(this)">
                             <option value=""></option>
                             @foreach ($data['eContactos'] as $ct)
                                 <option value="{{$ct->telefono}}">{{$ct->telefono}}</option>
@@ -154,15 +153,15 @@
                     </div>
                     <div class="col-lg-4 col-6 mb-2">
                         <label class="form-label mb-0" for="nro_doc">Dni</label>
-                        <input type="text" class="form-control" id="nro_doc" name="nro_doc" onkeyup="validContac(this)">
+                        <input class="form-control" id="nro_doc" onkeyup="validContac(this)">
                     </div>
                     <div class="col-lg-4 col-12 mb-2">
                         <label class="form-label mb-0" for="nom_contac">Nombre</label>
-                        <input type="text" class="form-control" id="nom_contac" name="nom_contac" maxlength="250" onkeyup="validContac(this)">
+                        <input class="form-control" id="nom_contac" onkeyup="validContac(this)">
                     </div>
                     <div class="col-lg-6 col-5 mb-2">
                         <label class="form-label mb-0" for="car_contac">Cargo</label>
-                        <select id="car_contac" class="select-clear" name="car_contac" onchange="validContac(this)">
+                        <select class="select-clear" id="car_contac" onchange="validContac(this)">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['CargoContacto'] as $cc)
                                 <option value="{{$cc->id}}">{{$cc->descripcion}}</option>
@@ -177,36 +176,36 @@
 
                 <h6 class="tittle text-primary my-3">Datos Incidencia</h6>
                 <div class="row">
-                    <div class="col-lg-4 col-7 mb-2 required">
+                    <div class="col-lg-4 col-7 mb-2">
                         <label class="form-label mb-0" for="tEstacion">Tipo Estación</label>
-                        <select class="select-clear" id="tEstacion" name="tEstacion" require="Tipo Estación">
+                        <select class="select-clear" id="tEstacion">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tEstacion'] as $v)
                                 <option value="{{$v->id}}">{{$v->descripcion}}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-2 col-5 mb-2 required">
+                    <div class="col-lg-2 col-5 mb-2">
                         <label class="form-label mb-0" for="prioridad">Prioridad</label>
-                        <select class="select" id="prioridad" name="prioridad" require="Prioridad">
+                        <select class="select" id="prioridad">
                             <option value="Alta">Alta</option>
                             <option value="Media">Media</option>
                             <option value="Baja">Baja</option>
                             <option value="Critica">Critica</option>
                         </select>
                     </div>
-                    <div class="col-lg-4 col-7 mb-2 required">
+                    <div class="col-lg-4 col-7 mb-2">
                         <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
-                        <select class="select" id="tSoporte" name="tSoporte" require="Tipo Soporte">
+                        <select class="select" id="tSoporte">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tSoporte'] as $v)
                                 <option value="{{$v->id}}">{{$v->descripcion}}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-2 col-5 mb-2 required">
+                    <div class="col-lg-2 col-5 mb-2">
                         <label class="form-label mb-0" for="tIncidencia">Tipo Incidencia</label>
-                        <select class="select" id="tIncidencia" name="tIncidencia" require="Tipo Incidencia">
+                        <select class="select" id="tIncidencia">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tIncidencia'] as $v)
                                 <option value="{{$v->id}}">{{$v->descripcion}}</option>
@@ -214,33 +213,32 @@
                         </select>
                     </div>
 
-                    <div class="col-md-6 mb-2 required">
+                    <div class="col-md-6 mb-2">
                         <label class="form-label mb-0" for="problema">Problema</label>
-                        <select class="select-clear" id="problema" name="problema" require="Problema" disabled>
+                        <select class="select-clear" id="problema">
                         </select>
                     </div>
-                    <div class="col-md-6 mb-2 required">
+                    <div class="col-md-6 mb-2">
                         <label class="form-label mb-0" for="sproblema">Sub Problema</label>
-                        <select class="select-clear" id="sproblema" name="sproblema" require="Sub Problema" disabled>
+                        <select class="select-clear" id="sproblema">
                         </select>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-sm-4">
-                        <div class="col-sm-12 mb-2 required">
+                        <div class="col-sm-12 mb-2">
                             <label class="form-label mb-0" for="fecha_imforme">Fecha de Informe</label>
-                            <input type="date" class="form-control" id="fecha_imforme" name="fecha_imforme"
-                                require="Fecha de Informe">
+                            <input class="form-control" id="fecha_imforme">
                         </div>
-                        <div class="col-sm-12 mb-2 required">
+                        <div class="col-sm-12 mb-2">
                             <label class="form-label mb-0" for="hora_informe">Hora de Informe</label>
-                            <input type="time" class="form-control" id="hora_informe" name="hora_informe" min="00:00"
+                            <input class="form-control" id="hora_informe" min="00:00"
                                 max="23:59" step="1">
                         </div>
                     </div>
                     <div class="col-sm-8 mb-2">
-                        <label class="form-label mb-0" for="tipo_acceso">Observacion</label>
-                        <textarea class="form-control" id="observasion" name="observasion"
+                        <label class="form-label mb-0" for="observasion">Observacion</label>
+                        <textarea class="form-control" id="observasion"
                             style="height: 106px;resize: none;"></textarea>
                     </div>
                 </div>
@@ -252,16 +250,13 @@
                         <div class="col-md-6">
                             <div class="input-group mt-2 mb-2">
                                 <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
-                                <select class="select-clear">
+                                <select class="select-clear" id="createPersonal">
                                     <option value=""></option>
                                     @foreach ($data['usuarios'] as $u)
                                         <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}
                                         </option>
                                     @endforeach
                                 </select>
-                                <button type="button" class="btn btn-primary px-2" id="createPersonal"
-                                    data-mdb-ripple-init><i class="fas fa-plus"
-                                        style="pointer-events: none;"></i></button>
                             </div>
                         </div>
                     </div>
@@ -374,16 +369,13 @@
                         <div class="col-md-9">
                             <div class="input-group mt-2 mb-3">
                                 <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
-                                <select class="select-clear">
+                                <select class="select-clear" id="createPersonal1">
                                     <option value=""></option>
                                     @foreach ($data['usuarios'] as $u)
                                         <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}
                                         </option>
                                     @endforeach
                                 </select>
-                                <button type="button" class="btn btn-primary px-2" id="createPersonal1"
-                                    data-mdb-ripple-init><i class="fas fa-plus"
-                                        style="pointer-events: none;"></i></button>
                             </div>
                         </div>
                     </div>
@@ -417,11 +409,10 @@
                     </div>
                     <div class="mb-1 cabecera-orden">
                         <input type="hidden" name="codInc" id="codInc">
-                        <div class="form-group pt-2 required">
+                        <div class="form-group pt-2">
                             <label class="form-label" for="n_orden">N° de Orden </label>
                             <div class="input-group mb-3" style="width: 250px;">
-                                <input type="text" class="form-control form-control-sm rounded" name="n_orden" id="n_orden"
-                                    require="N° Orden" />
+                                <input class="form-control form-control-sm rounded" id="n_orden">
                                 <span class="input-group-text border-0">
                                     <input type="checkbox" class="me-1" name="check_cod" id="check_cod"
                                         onchange="setChangeCodOrden(this)">
@@ -486,28 +477,28 @@
                         <div class="row justify-content-md-center">
                             <div class="col-md-6">
                                 <div class="form-group pt-2 required">
-                                    <label class="form-label" for="exampleInputEmail1">Observaciones</label>
-                                    <textarea class="form-control" id="observacion" name="observacion"
-                                        style="height: 80px;resize: none;" require="Observaciones"></textarea>
+                                    <label class="form-label" for="observacion">Observaciones</label>
+                                    <textarea class="form-control" id="observacion"
+                                        style="height: 80px;resize: none;"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group pt-2 required">
-                                    <label class="form-label" for="exampleInputEmail1">Recomendaciones</label>
+                                    <label class="form-label" for="recomendacion">Recomendaciones</label>
                                     <textarea class="form-control" id="recomendacion" name="recomendacion"
                                         style="height: 80px;resize: none;" require="Recomendaciones"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-3 col-6">
                                 <div class="form-group pt-2">
-                                    <label class="form-label" for="exampleInputEmail1">Fecha Fin </label>
-                                    <input type="text" class="form-control form-control-sm" id="fecha_f" name="fecha_f">
+                                    <label class="form-label" for="fecha_f">Fecha Fin </label>
+                                    <input class="form-control form-control-sm" id="fecha_f">
                                 </div>
                             </div>
                             <div class="col-md-3 col-6">
                                 <div class="form-group pt-2">
-                                    <label class="form-label" for="exampleInputEmail1">Hora Fin </label>
-                                    <input type="text" class="form-control form-control-sm" id="hora_f" name="hora_f">
+                                    <label class="form-label" for="hora_f">Hora Fin </label>
+                                    <input class="form-control form-control-sm" id="hora_f">
                                 </div>
                             </div>
                         </div>
@@ -520,7 +511,7 @@
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="row" id="content-material">
                             <div class="col-lg-8 my-1">
-                                <select class="select-clear" id="selector-material">
+                                <select class="select-clear" id="createMaterial"> <!-- id="selector-material"> -->
                                     <option value=""></option>
                                     @foreach ($data['materiales'] as $m)
                                         <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}
@@ -542,10 +533,6 @@
                                     </button>
                                 </div>
                                 <input type="text" class="form-control ms-2 d-none" id="codAviso" placeholder="Cod. Aviso">
-                                <button type="button" class="btn btn-primary px-2 ms-2" data-mdb-ripple-init
-                                    id="createMaterial">
-                                    <i class="fas fa-plus" style="pointer-events: none;"></i>
-                                </button>
                             </div>
                         </div>
                     </div>
@@ -613,7 +600,6 @@
     const obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
     let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
 </script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
 <script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>
 <script src="{{asset('front/js/app/incidencia/registradas.js')}}"></script>
 @endsection
