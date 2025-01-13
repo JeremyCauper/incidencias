@@ -95,6 +95,13 @@ $(document).ready(function () {
             control: ['#fecha_f', '#hora_f'],
             config: {}
         },
+        {
+            control: '#codigo_aviso',
+            config: {
+                require: true,
+                mxl: 50,
+            }
+        },
     ];
 
     controles.forEach(control => {
@@ -156,12 +163,12 @@ $(document).ready(function () {
         $('#hora_f').val(date('H:i:s')).attr('disabled', true);
     }, 1000);
 
-    $('#createMaterial').on('change', function () {
-        manCantidad($(this).val(), true);
+    $('#createMaterial').on('change', function () {        
+        manCantidad();
     })
 
-    $('#createMaterial').on('click', function () {
-        manCantidad($(this).val(), true);
+    $('[ctable-create="#createMaterial"]').on('click', function () {
+        manCantidad();
     });
 });
 
@@ -230,7 +237,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     ],
     order: [[4, 'desc']],
     createdRow: function (row, data, dataIndex) {
-        const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', 'row-bg-danger'];
+        const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
         $(row).find('td:eq(1)').addClass('text-center');
         $(row).find('td:eq(8)').addClass(`td-acciones ${row_bg[data.estado_informe]}`);
         $(row).addClass(row_bg[data.estado_informe]);
@@ -400,18 +407,16 @@ function ShowEdit(id) {
 }
 
 function habilitarCodAviso(accion) {
-    var selector_material = $('#createMaterial').parent();
-    var content_cantidad = $('#content-cantidad');
+    var selector_material = $('#createMaterial').parent().parent();
+    var content_cantidad = $('#content-codAviso');
     var codAviso = $('#codAviso');
     if (accion) {
-        selector_material.addClass('col-lg-7').removeClass('col-lg-8');
-        content_cantidad.addClass('col-lg-5').removeClass('col-lg-4');
-        codAviso.attr('name', 'codAviso');
-        return codAviso.removeClass('d-none');
+        selector_material.addClass('col-lg-6').removeClass('col-lg-9');
+        content_cantidad.removeClass('d-none');
+        return codAviso.attr('name', 'codAviso');
     }
-    selector_material.addClass('col-lg-8').removeClass('col-lg-7');
-    content_cantidad.addClass('col-lg-4').removeClass('col-lg-5');
-    codAviso.addClass('d-none');
+    selector_material.addClass('col-lg-9').removeClass('col-lg-6');
+    content_cantidad.addClass('d-none');
     codAviso.removeAttr('name');
 }
 
@@ -644,8 +649,12 @@ function validContac(_this) {
     validacion(car_contac, val, 'Cargo Contacto');
 }
 
-document.getElementById('form-orden').addEventListener('submit', function (event) {
+document.getElementById('form-orden').addEventListener('submit', async function (event) {
     event.preventDefault();
+
+    if ($('[ctable-contable="#createMaterial"]').children().length && !$('#codAviso').val())
+        if (!await boxAlert.confirm(`El campo 'Código Aviso' está vacío. ¿Deseas continuar?`)) return $('#codAviso').focus();
+
     fMananger.formModalLoding('modal_orden', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
 
@@ -668,7 +677,6 @@ document.getElementById('form-orden').addEventListener('submit', function (event
         data: JSON.stringify(valid.data.data),
         success: function (data) {
             fMananger.formModalLoding('modal_orden', 'hide');
-            console.log(data);
             if (data.success) {
                 $('#modal_orden').modal('hide');
                 boxAlert.minbox({
@@ -695,6 +703,91 @@ document.getElementById('form-orden').addEventListener('submit', function (event
             });
             console.log(obj_error);
             fMananger.formModalLoding('modal_orden', 'hide');
+        }
+    });
+});
+
+function AddCodAviso(e, cod) {
+    const obj = extractDataRow(e);
+    obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
+
+    $.each(obj, function (panel, count) {
+        $(`#modal_addcod [aria-item="${panel}"]`).html(count);
+    });
+    $('#modal_addcod').modal('show');
+    fMananger.formModalLoding('modal_addcod', 'show');
+
+    $.ajax({
+        type: 'GET',
+        url: `${__url}/incidencias/registradas/detail/${cod}`,
+        contentType: 'application/json',
+        success: function (data) {
+            if (!data.success)
+                boxAlert.box({ i: 'error', t: 'Algo salió mal', h: data.message });
+            const dt = data.data;
+
+            $('#cod_incidencia').val(cod);
+            $('#cod_orden_ser').val(dt.incidencia.cod_orden);
+            fMananger.formModalLoding('modal_addcod', 'hide');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            const obj_error = jqXHR.responseJSON;
+            boxAlert.box({ i: 'error', t: 'Error al extraer datos de la incidencia', h: obj_error.message });
+            console.log(jqXHR.responseJSON);
+        }
+    });
+}
+
+document.getElementById('form-addcod').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    if (!await boxAlert.confirm(`¿Estas seguro que deseas continuar?, no se podrá revertir los cambios`)) return true;
+
+    fMananger.formModalLoding('modal_addcod', 'show');
+    const atencion = $('#modal_orden [aria-item="atencion"]').html();
+    var elementos = this.querySelectorAll('[name]');
+    var valid = validFrom(elementos);
+
+    if (!valid.success)
+        return fMananger.formModalLoding('modal_addcod', 'hide');
+
+    $.ajax({
+        type: 'POST',
+        url: __url + '/orden/editCodAviso',
+        contentType: 'application/json',
+        headers: {
+            'X-CSRF-TOKEN': __token,
+        },
+        data: JSON.stringify(valid.data.data),
+        success: function (data) {
+            console.log(data);
+            
+            fMananger.formModalLoding('modal_addcod', 'hide');
+            if (data.success) {
+                $('#modal_addcod').modal('hide');
+                boxAlert.minbox({
+                    h: data.message
+                });
+                if (atencion.toUpperCase() == 'PRESENCIAL')
+                    window.open(`${__url}/orden/documentopdf/${data.cod_orden}`, `Visualizar PDF ${data.cod_orden}`, "width=900, height=800");
+                updateTable();
+                return true;
+            }
+            boxAlert.box({
+                i: 'error',
+                t: '¡Ocurrio un error!',
+                h: data.message
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            const obj_error = jqXHR.responseJSON;
+            boxAlert.box({
+                i: 'error',
+                t: 'Ocurrio un error en el processo',
+                h: obj_error.message
+            });
+            console.log(obj_error);
+            fMananger.formModalLoding('modal_addcod', 'hide');
         }
     });
 });
@@ -827,28 +920,28 @@ fileInputFirma.addEventListener('change', handleFileInput);
 createFirmaBtn.addEventListener('click', createDigitalSignature);
 removeImgFirma.addEventListener('click', removeSignature);
 
-
-function manCantidad(params, clear = false) {
+function manCantidad(params = '') {
     const selector = $('#createMaterial');
     const cantidad = $('input[input-cantidad=""]');
     const content_cantidad = $('#content-cantidad');
-    if (clear) {
-        cantidad.val(0);
+
+    if (!selector.val()) {
         content_cantidad.addClass('disabled');
-        if (!params) return false;
+        return cantidad.val('');
+    }
+
+    if (!cantidad.val()) {
         cantidad.val(1);
         content_cantidad.removeClass('disabled');
-        manCantidad('');
-        return false;
     }
     let number = cantidad.val();
     switch (params) {
-        case 'plus':
+        case '+':
             number++;
             cantidad.val(number);
             break;
 
-        case 'minus':
+        case '-':
             if (number > 1) {
                 number--;
                 cantidad.val(number);

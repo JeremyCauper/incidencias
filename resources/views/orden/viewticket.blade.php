@@ -194,6 +194,12 @@
     <div class="ticket-content">
         <p class="tittle mb-2">MATERIALES UTILIZADOS</p>
 
+        @if ($eCodAviso)
+        <p class="mb-2">
+            <span class="fw-bold">Codigo Aviso :</span> {{$codigo_aviso}}
+        </p>
+        @endif
+
         <div style="border-radius: .4rem; border: 1px solid black; padding-top: 3px; padding-bottom: 3px;">
             <table class="tb-material">
                 <tr>

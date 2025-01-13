@@ -185,7 +185,7 @@
                             </div>
                         </div>
                         <div class="list-group-item">
-                            <table class="table">
+                            <table class="table" id="tb_visitas">
                                 <thead></thead>
                             </table>
                         </div>
@@ -290,6 +290,11 @@
                 $('#modal_detalle_visitas [aria-item="sucursal"]').html(dt.sucursal);
                 $('#modal_detalle_visitas [aria-item="vTotal"]').html(dt.totalVisitas);
                 $('#modal_detalle_visitas [aria-item="rDias"]').html(dt.diasVisitas);
+                if (dt.visitas.length) {
+                    dt.visitas.forEach(e => {
+                        console.log(e);
+                    });
+                }
                 fMananger.formModalLoding('modal_detalle_visitas', 'hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -318,6 +323,7 @@
                 $('#modal_visitas [aria-item="empresa"]').html(`${dt.ruc} - ${dt.razonSocial}`);
                 $('#modal_visitas [aria-item="direccion"]').html(dt.direccion);
                 $('#modal_visitas [aria-item="sucursal"]').html(dt.sucursal);
+                
                 fMananger.formModalLoding('modal_visitas', 'hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {

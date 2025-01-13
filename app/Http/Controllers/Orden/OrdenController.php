@@ -37,7 +37,8 @@ class OrdenController extends Controller
                 'fecha_f' => 'required|date',
                 'hora_f' => 'required|date_format:H:i:s',
                 'materiales' => 'nullable|array',
-                'codAviso' => 'nullable|string',
+                'id_firmador' => 'nullable|string',
+                'nomFirmaDigital' => 'nullable|string',
                 'firma_digital' => 'nullable|string',
                 'n_doc' => 'nullable|integer',
                 'nom_cliente' => 'nullable|string',
@@ -45,6 +46,8 @@ class OrdenController extends Controller
 
             if ($validator->fails())
                 return response()->json(['errors' => $validator->errors()], 400);
+
+            $codAviso = $request->has('codAviso') ? $request->codAviso : 3;
 
             // Preparar datos de materiales
             $materiales = $request->materiales ?? [];
@@ -76,7 +79,7 @@ class OrdenController extends Controller
                 'observaciones' => $request->observacion,
                 'recomendaciones' => $request->recomendacion,
                 'id_contacto' => $idContacto,
-                'codigo_aviso' => $request->codAviso,
+                'codigo_aviso' => $codAviso,
                 'fecha_f' => $request->fecha_f,
                 'hora_f' => $request->hora_f,
                 'created_at' => now()->format('Y-m-d H:i:s')
@@ -90,7 +93,7 @@ class OrdenController extends Controller
             // Actualizar estado de incidencia
             DB::table('tb_incidencias')
                 ->where('cod_incidencia', $request->codInc)
-                ->update(['estado_informe' => 3]);
+                ->update(['estado_informe' => ($codAviso == "" && !empty($materiales) ? 4 : 3)]);
 
             // Insertar seguimiento de incidencia
             DB::table('tb_inc_seguimiento')->insert([
@@ -133,21 +136,68 @@ class OrdenController extends Controller
         $dataContact = [
             'nro_doc' => $request->n_doc,
             'nombre_cliente' => $request->nom_cliente,
-            'created_at' => now()->format('Y-m-d H:i:s'),
-            'updated_at' => now()->format('Y-m-d H:i:s'),
+            'created_at' => now()->format('Y-m-d H:i:s')
         ];
 
-        // Guardar firma digital si existe
-        if ($request->firma_digital) {
-            $result = $this->parseCreateFile("fdc_{$request->n_doc}", 'client', $request->firma_digital);
-            if (!$result['success']) {
-                throw new Exception('Error al intentar crear la firma digital.');
+        if ($request->nomFirmaDigital) {
+            $dataContact['firma_digital'] = $request->nomFirmaDigital;
+        } else {
+            // Guardar firma digital si existe
+            if ($request->firma_digital) {
+                $result = $this->parseCreateFile("fdc_{$request->n_doc}", 'client', $request->firma_digital);
+                if (!$result['success']) {
+                    throw new Exception('Error al intentar crear la firma digital.');
+                }
+                $dataContact['firma_digital'] = $result['filename'];
             }
-            $dataContact['firma_digital'] = $result['filename'];
         }
 
+        $id = null;
+        if($request->id_firmador) {
+            $id = $request->id_firmador;
+            DB::table('tb_contac_ordens')->where(['id' => $id])->update($dataContact);
+        }
+        else {
+            $id = DB::table('tb_contac_ordens')->insertGetId($dataContact);
+        }
         // Insertar contacto y devolver su ID
-        return DB::table('tb_contac_ordens')->insertGetId($dataContact);
+        return $id;
+    }
+
+    /**
+     * Crear un contacto basado en los datos del cliente.
+     *
+     * @param Request $request
+     */
+    public function editCodAviso(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'cod_incidencia' => 'required|string',
+                'cod_orden_ser' => 'required|string',
+                'codigo_aviso' => 'required|string',
+            ]);
+
+            if ($validator->fails())
+                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
+
+            DB::beginTransaction();
+            DB::table('tb_orden_servicio')->where('cod_incidencia', $request->cod_incidencia)->update([
+                'codigo_aviso' => $request->codigo_aviso,
+                'updated_at' => now()->format('Y-m-d H:i:s')
+            ]);
+            DB::table('tb_incidencias')->where('cod_incidencia', $request->cod_incidencia)->update(['estado_informe' => 3]);
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Codigo añadido con éxito',
+                'cod_orden' => $request->cod_orden_ser
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->mesageError(exception: $e, codigo: 500);
+        }
     }
 
     /**
@@ -277,6 +327,7 @@ class OrdenController extends Controller
 
             $empresa = DB::table('tb_empresas')->where('id', $incidencia->id_empresa)->first();
             $datos['empresa'] = "{$empresa->ruc} - {$empresa->razon_social}";
+            $datos['eCodAviso'] = $empresa->codigo_aviso;
 
             // Procesar sucursales
             $sucursal = DB::table('tb_sucursales')->where('id', $incidencia->id_sucursal)->first();
@@ -300,6 +351,7 @@ class OrdenController extends Controller
             // Observaciones y recomendaciones
             $datos['observacion'] = $orden->observaciones;
             $datos['recomendacion'] = $orden->recomendaciones;
+            $datos['codigo_aviso'] = $orden->codigo_aviso;
             $datos['fecha'] = $incidencia->created_at;
 
             // Procesar materiales

@@ -258,6 +258,14 @@
                 </div>
             </td>
         </tr>
+        
+        @if ($eCodAviso)
+        <tr>
+            <td colspan="8">
+                <span class="fw-bold">Codigo Aviso :</span> {{$codigo_aviso}}
+            </td>
+        </tr>
+        @endif
         <tr>
             <td colspan="8">
                 <div style="border-radius: .4rem; border: 1px solid #466497;">

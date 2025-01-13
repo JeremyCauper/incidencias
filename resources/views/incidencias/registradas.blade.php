@@ -5,16 +5,19 @@
 <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}">
 <style>
     .row-bg-warning {
-        background-color:rgb(255, 246, 230);
+        background-color: rgb(255, 246, 230);
     }
+
     .row-bg-info {
-        background-color:rgb(239, 252, 255);
+        background-color: rgb(239, 252, 255);
     }
+
     .row-bg-primary {
-        background-color:rgb(236, 244, 255);
+        background-color: rgb(236, 244, 255);
     }
+
     .row-bg-danger {
-        background-color: #fae4e8;
+        background-color: #edcdd3;
     }
 </style>
 @endsection
@@ -170,7 +173,8 @@
                     </div>
                     <div class="col-lg-6 col-7 mb-2">
                         <label class="form-label mb-0" for="cor_contac">Correo</label>
-                        <input type="text" class="form-control" id="cor_contac" name="cor_contac" onkeyup="validContac(this)">
+                        <input type="text" class="form-control" id="cor_contac" name="cor_contac"
+                            onkeyup="validContac(this)">
                     </div>
                 </div>
 
@@ -232,14 +236,12 @@
                         </div>
                         <div class="col-sm-12 mb-2">
                             <label class="form-label mb-0" for="hora_informe">Hora de Informe</label>
-                            <input class="form-control" id="hora_informe" min="00:00"
-                                max="23:59" step="1">
+                            <input class="form-control" id="hora_informe" min="00:00" max="23:59" step="1">
                         </div>
                     </div>
                     <div class="col-sm-8 mb-2">
                         <label class="form-label mb-0" for="observasion">Observacion</label>
-                        <textarea class="form-control" id="observasion"
-                            style="height: 106px;resize: none;"></textarea>
+                        <textarea class="form-control" id="observasion" style="height: 106px;resize: none;"></textarea>
                     </div>
                 </div>
 
@@ -396,7 +398,8 @@
             <div class="modal-header bg-primary text-white">
                 <h6 class="modal-title">ORDEN DE SERVICIO <span class="badge badge-success badge-lg"
                         aria-item="codigo"></span></h6>
-                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                    aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <div class="col-md-12 col-lg-12 col-xs-12">
@@ -476,14 +479,14 @@
                         </div>
                         <div class="row justify-content-md-center">
                             <div class="col-md-6">
-                                <div class="form-group pt-2 required">
+                                <div class="form-group pt-2">
                                     <label class="form-label" for="observacion">Observaciones</label>
                                     <textarea class="form-control" id="observacion"
                                         style="height: 80px;resize: none;"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
-                                <div class="form-group pt-2 required">
+                                <div class="form-group pt-2">
                                     <label class="form-label" for="recomendacion">Recomendaciones</label>
                                     <textarea class="form-control" id="recomendacion" name="recomendacion"
                                         style="height: 80px;resize: none;" require="Recomendaciones"></textarea>
@@ -508,31 +511,35 @@
                         <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
                     </div>
 
-                    <div class="col-md-12 col-sm-12 col-xs-12">
+                    <div class="col-12">
                         <div class="row" id="content-material">
-                            <div class="col-lg-8 my-1">
-                                <select class="select-clear" id="createMaterial"> <!-- id="selector-material"> -->
-                                    <option value=""></option>
-                                    @foreach ($data['materiales'] as $m)
-                                        <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}
-                                        </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                            <div class="col-lg-4 col-9 d-flex ps-lg-0 my-1 disabled" id="content-cantidad">
+                            <div class="col-lg-9 my-1">
                                 <div class="input-group">
+                                    <select class="select-clear" id="createMaterial">
+                                        <option value=""></option>
+                                        @foreach ($data['materiales'] as $m)
+                                            <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}
+                                            </option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-6 my-1 ps-lg-0">
+                                <div class="input-group disabled" style="max-width: 300px;" id="content-cantidad">
                                     <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                        onclick="manCantidad('minus')">
+                                        onclick="manCantidad('-')">
                                         <i class="fas fa-minus" style="font-size: .75rem;"></i>
                                     </button>
                                     <input type="number" class="form-control" input-cantidad=""
-                                        oninput="manCantidad('press')" style="min-width: 65px;"/>
+                                        oninput="manCantidad('press')" />
                                     <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                        onclick="manCantidad('plus')">
+                                        onclick="manCantidad('+')">
                                         <i class="fas fa-plus" style="font-size: .75rem;"></i>
                                     </button>
                                 </div>
-                                <input type="text" class="form-control ms-2 d-none" id="codAviso" placeholder="Cod. Aviso">
+                            </div>
+                            <div class="col-lg-3 col-6 my-1 ps-0 d-none" id="content-codAviso">
+                                <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
                             </div>
                         </div>
                     </div>
@@ -546,7 +553,9 @@
                                     Firma Tecnico
                                 </p>
                                 <p class="mb-1" style="font-size: 13.4px;">RICARDO CALDERON INGENIEROS SAC</p>
-                                <p class="mb-0" style="font-size: 12.5px;">{{Auth::user()->ndoc_usuario . ' - ' . Auth::user()->nombres . ' ' . Auth::user()->apellidos}}</p>
+                                <p class="mb-0" style="font-size: 12.5px;">
+                                    {{Auth::user()->ndoc_usuario . ' - ' . Auth::user()->nombres . ' ' . Auth::user()->apellidos}}
+                                </p>
                             </div>
 
                             <div class="col-lg-5 text-center my-2">
@@ -584,6 +593,59 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init onclick="">Registrar</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_addcod" aria-labelledby="modal_addcod" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <form class="modal-content" id="form-addcod">
+            <div class="modal-header bg-primary text-white">
+                <h6 class="modal-title">Añadir Codigo Aviso -
+                    <span class="badge badge-success badge-lg" aria-item="codigo"></span>
+                </h6>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="text-end" aria-item="estado"></div>
+                <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                    <div class="list-group list-group-light">
+                        <div class="list-group-item">
+                            <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
+                                aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                        </div>
+                        <div class="list-group-item">
+                            <div class="row col-12">
+                                <div class="col-sm-6">
+                                    <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                        aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                </div>
+                                <div class="col-sm-6 text-end">
+                                    <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
+                                        aria-item="atencion">Remoto</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="mt-4 p-3 pb-0 fieldset mb-3">
+                    <input type="hidden" id="cod_incidencia" name="cod_incidencia">
+                    <input type="hidden" id="cod_orden_ser" name="cod_orden_ser">
+                    <!-- <h6 class="tittle text-primary">Asignar Personal</h6> -->
+                    <div class="col-md-6 mb-2">
+                        <label class="form-label mb-0" for="codigo_aviso">Codigo Aviso</label>
+                        <input class="form-control" id="codigo_aviso">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+                <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init>Guardar</button>
             </div>
         </form>
     </div>

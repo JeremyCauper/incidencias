@@ -51,6 +51,7 @@ Route::get('/incidencias/resueltas/index', [ResueltasController::class, 'index']
 Route::get('/incidencias/resueltas/detail/{cod}', [ResueltasController::class, 'detail']);
 
 Route::post('/orden/create', [OrdenController::class, 'create']);
+Route::post('/orden/editCodAviso', [OrdenController::class, 'editCodAviso']);
 Route::get('/orden/documentopdf/{cod}', [OrdenController::class, 'CreatePdf']);
 Route::get('/orden/documentoticket/{cod}', [OrdenController::class, 'CreateTicket']);
 

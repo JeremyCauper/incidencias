@@ -101,9 +101,10 @@ class RegistradasController extends Controller
 
                 // Configurar el estado del informe
                 $estadoInforme = [
-                    ['c' => 'warning', 't' => 'Sin Asignar'],
-                    ['c' => 'info', 't' => 'Asignada'],
-                    ['c' => 'primary', 't' => 'En Proceso']
+                    "0" => ['c' => 'warning', 't' => 'Sin Asignar'],
+                    "1" => ['c' => 'info', 't' => 'Asignada'],
+                    "2" => ['c' => 'primary', 't' => 'En Proceso'],
+                    "4" => ['c' => 'danger', 't' => 'Faltan Datos']
                 ];
                 $badge_informe = '<label class="badge badge-' . $estadoInforme[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
 
@@ -125,11 +126,12 @@ class RegistradasController extends Controller
                     'tittle' => $badge_informe,
                     'button' => [
                         ['funcion' => "ShowDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-success me-2"></i> Ver Detalle'],
-                        ['funcion' => "ShowEdit($val->acciones)", 'texto' => '<i class="fas fa-pen text-info me-2"></i> Editar'],
-                        ['funcion' => "ShowAssign(this, $val->acciones)", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'],
+                        $val->estado_informe != 4 ? ['funcion' => "ShowEdit($val->acciones)", 'texto' => '<i class="fas fa-pen text-info me-2"></i> Editar'] : null,
+                        $val->estado_informe != 4 ? ['funcion' => "ShowAssign(this, $val->acciones)", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'] : null,
                         $val->estado_informe == 1 ? ['funcion' => "StartInc('$val->cod_incidencia', $val->estado_informe)", 'texto' => '<i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia'] : null,
                         $val->estado_informe == 2 ? ['funcion' => "OrdenDetail(this, '$val->acciones')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio'] : null,
-                        ['funcion' => "DeleteInc($val->acciones)", 'texto' => '<i class="far fa-trash-can text-danger me-2"></i> Eliminar'],
+                        $val->estado_informe != 4 ? ['funcion' => "DeleteInc($val->acciones)", 'texto' => '<i class="far fa-trash-can text-danger me-2"></i> Eliminar'] : null,
+                        $val->estado_informe == 4 ? ['funcion' => "AddCodAviso(this, '$val->cod_incidencia')", 'texto' => '<i class="far fa-file-code text-warning me-2"></i> Añadir Cod. Aviso'] : null,
                     ],
                 ]);
                 $val->badge_informe = $badge_informe;
@@ -492,6 +494,7 @@ class RegistradasController extends Controller
         try {
             // Consultas iniciales para obtener datos de la incidencia, asignaciones y seguimiento
             $incidencia = DB::table('tb_incidencias')->where(['estatus' => 1, 'cod_incidencia' => $cod])->first();
+            $orden = DB::table('tb_orden_servicio')->where('cod_incidencia', $cod)->first();
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $cod)->get();
             // Obtenemos todos los usuarios activos y los almacenamos en un array asociativo por id
@@ -504,6 +507,8 @@ class RegistradasController extends Controller
                     "telefono" => $u->tel_corporativo
                 ];
             });
+
+            $incidencia->cod_orden = $orden ? $orden->cod_ordens : null;
 
             // Construcción del arreglo de datos
             $data = [

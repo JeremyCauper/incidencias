@@ -23,7 +23,7 @@ class CTable {
         $contentSelect.attr('ctable-conselect', selector).append(
             $('<button>', {
                 type: "button",
-                class: 'btn btn-primary px-2',
+                class: 'btn btn-primary px-2 ms-1 rounded',
                 "ctable-create": selector,
                 "data-mdb-ripple-init": ""
             }).html('<i class="fas fa-plus" style="pointer-events: none;"></i>')
