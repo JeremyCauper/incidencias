@@ -2,7 +2,16 @@
 @section('title', 'Visitas')
 
 @section('style')
+<script type="text/javascript" src="{{asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{asset('front/vendor/daterangepicker/daterangepicker.css')}}">
 <!-- <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}"> -->
+<style>
+    #tb_visitas thead tr * {
+        font-size: 12px;
+        /* padding-top: ; */
+    }
+</style>
 @endsection
 @section('content')
 
@@ -127,7 +136,10 @@
                         </div>
                         <div class="col-md-4">
                             <label class="form-label mb-0" for="fecha_visita">Fecha Visita</label>
-                            <input type="date" class="form-control rounded" id="fecha_visita" name="fecha_visita">
+                            <div class="input-group" role="button">
+                                <label class="input-group-text ps-0 pe-1 border-0"><i class="far fa-calendar"></i></label>
+                                <input type="text" class="form-control rounded" id="fecha_visita" name="fecha_visita" role="button" readonly>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -185,9 +197,21 @@
                             </div>
                         </div>
                         <div class="list-group-item">
-                            <table class="table" id="tb_visitas">
-                                <thead></thead>
+                            <table class="table mb-0 d-none" id="tb_visitas">
+                                <thead>
+                                    <tr class="text-bg-primary">
+                                        <th>Asignado Por</th>
+                                        <th class="text-center">Fecha Visita</th>
+                                        <th class="text-center">Registrado</th>
+                                        <th class="text-center">Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
                             </table>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Nota: </label><span style="font-size: .75rem;"
+                            aria-item="mensaje"></span>
                         </div>
                     </div>
                 </div>
@@ -215,6 +239,26 @@
         $('.modal').on('hidden.bs.modal', function () {
             // $('#contenedor-personal').addClass('d-none');
             cPersonal.deleteTable();
+        });
+
+        $('#fecha_visita').daterangepicker({
+            singleDatePicker: true,
+            startDate: date('Y-m-d'),
+            minDate: date('Y-m-d'),
+            opens: "center",
+            cancelClass: "btn-link",
+            locale: {
+                format: 'YYYY-MM-DD',
+                separator: '  al  ',
+                applyLabel: 'Aplicar',
+                cancelLabel: 'Cerrar',
+                fromLabel: 'Desde',
+                toLabel: 'Hasta',
+                customRangeLabel: 'Rango personalizado',
+                daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                firstDay: 1 // Comienza la semana en lunes
+            }
         });
     });
 
@@ -273,6 +317,9 @@
     function DetalleVisita(id) {
         $('#modal_detalle_visitas').modal('show');
         fMananger.formModalLoding('modal_detalle_visitas', 'show');
+        $('#tb_visitas').addClass('d-none');
+        $('#tb_visitas').find('tbody').html('');
+        $('#modal_detalle_visitas [aria-item="mensaje"]').html('');
 
         $.ajax({
             type: 'GET',
@@ -292,9 +339,21 @@
                 $('#modal_detalle_visitas [aria-item="rDias"]').html(dt.diasVisitas);
                 if (dt.visitas.length) {
                     dt.visitas.forEach(e => {
-                        console.log(e);
+                        const estado = {
+                            "0": ['warning', 'Pendiente'],
+                            "1": ['primary', 'En Proceso'],
+                            "2": ['success', 'Culminado'],
+                        };
+                        $('#tb_visitas').find('tbody').append(`<tr>
+                            <td>${e.creador}</td>
+                            <td class="text-center">${e.fecha}</td>
+                            <td class="text-center">${e.created_at}</td>
+                            <td class="text-center"><label class="badge badge-${estado[e.estado][0]}" style="font-size: .8rem;">${estado[e.estado][1]}</label></td>
+                        </tr>`);
                     });
+                    $('#tb_visitas').removeClass('d-none');
                 }
+                $('#modal_detalle_visitas [aria-item="mensaje"]').html(dt.message);
                 fMananger.formModalLoding('modal_detalle_visitas', 'hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -336,13 +395,18 @@
 
     document.getElementById('form-visita').addEventListener('submit', function (event) {
         event.preventDefault();
+        if (!cPersonal.extract().length)
+            return boxAlert.box({
+                    i: 'warning',
+                    t: 'Personal',
+                    h: 'Primero debe asignar un personal'
+                });
         fMananger.formModalLoding('modal_visitas', 'show');
-
         var elementos = this.querySelectorAll('[name]');
         var valid = validFrom(elementos);
         if (!valid.success)
             return fMananger.formModalLoding('modal_visitas', 'hide');
-        valid.data.data['personal'] = cPersonal.extract();
+        valid.data.data['personal'] = cPersonal.extract();        
 
         $.ajax({
             type: 'POST',

@@ -18,7 +18,7 @@ $(document).ready(function () {
             fromLabel: 'Desde',
             toLabel: 'Hasta',
             customRangeLabel: 'Rango personalizado',
-            daysOfWeek: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
             monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
             firstDay: 1 // Comienza la semana en lunes
         }

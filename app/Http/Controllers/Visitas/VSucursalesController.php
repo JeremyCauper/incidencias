@@ -140,12 +140,25 @@ class VSucursalesController extends Controller
         try {
             $sucursal = DB::table('tb_sucursales')->where('id', $id)->first();
             $empresa = DB::table('tb_empresas')->where('ruc', $sucursal->ruc)->first();
-            $visitas = DB::table('tb_visitas')->where('id_sucursal', $id)->whereMonth('fecha', now()->format('m'))->get();
+            $usuario = DB::table('usuarios')->select('nombres', 'apellidos', 'id_usuario')->get()->keyBy('id_usuario');
+            /*$vis_asignadas = DB::table('tb_vis_asignadas')->get()->groupBy('id_visitas');
+            return $vis_asignadas;*/
+
+            $visitas = DB::table('tb_visitas')->where('id_sucursal', $id)->whereMonth('fecha', now()->format('m'))->get()->map(function ($v) use ($usuario) {
+                $nombre = ucwords(strtolower("{$usuario[$v->id_creador]->nombres} {$usuario[$v->id_creador]->apellidos}"));
+                $v->creador = $nombre;
+                return $v;
+            });
             
             if ($sucursal) {
                 $vRealizadas = count($visitas ?? []);
                 $totalVisitas = $empresa->visitas;
                 $diasVisitas = $empresa->dias_visita;
+                $fechaSumada = null;
+                if (count($visitas)) {
+                    $ultimoElemento = $visitas[count($visitas) - 1];
+                    $fechaSumada = date('Y-m-d', strtotime($ultimoElemento->fecha . " +$diasVisitas days"));
+                }
                 $result = [
                     'id' => $sucursal->id,
                     'ruc' => $sucursal->ruc,
@@ -156,7 +169,8 @@ class VSucursalesController extends Controller
                     'totalVisitas' => $totalVisitas,
                     'vRealizadas' => $vRealizadas,
                     'diasVisitas' => $diasVisitas,
-                    'visitas' => $visitas
+                    'visitas' => $visitas,
+                    'message' => "Podrá asignar visitas después del $fechaSumada."
                 ];
             } else {
                 $result = null;
