@@ -7,6 +7,7 @@ use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class LoginController extends Controller
 {
@@ -25,6 +26,8 @@ class LoginController extends Controller
             'usuario' => 'required|string',
             'password' => 'required|string',
         ]);
+        DB::purge('dynamic');
+
 
         $credentials = [
             'usuario' => $request->input('usuario'),

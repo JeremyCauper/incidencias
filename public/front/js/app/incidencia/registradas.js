@@ -635,12 +635,13 @@ function validContac(_this) {
     let val = (tel_contac.val() || nro_doc.val() || nom_contac.val() || car_contac.val() || cor_contac.val()) ? true : false;
 
     var validacion = (control, accion, requerido) => {
-        let contenedor = control.parent();
+        let id = control.attr('id');
+        let label = $(`[for="${id}"]`);
         if (accion) {
-            contenedor.addClass('required');
+            label.addClass('required');
             control.attr('require', requerido);
         } else {
-            contenedor.removeClass('required');
+            label.removeClass('required');
             control.removeAttr('require');
         }
     }
