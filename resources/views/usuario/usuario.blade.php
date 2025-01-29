@@ -2,7 +2,7 @@
 @section('title', 'Panel de Control')
 
 @section('style')
-<!-- <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}"> -->
+<link rel="stylesheet" href="{{asset('front/css/app/usuario/usuarios.css')}}">
 @endsection
 @section('content')
 
@@ -12,7 +12,7 @@
             <h4 class="card-title">Listado de usuarios</h4>
             <div class="mb-3">
                 <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init
-                    data-mdb-target="#modal_frm_usuarios">
+                    data-mdb-target="#modal_usuarios">
                     <i class="fas fa-user-plus me-2"></i>
                     Nuevo Usuario
                 </button>
@@ -41,20 +41,25 @@
     </div>
 </div>
 
-<div id="modal_frm_usuarios" class="modal fade" tabindex="-1" aria-labelledby="modal_frm_usuarios" aria-hidden="true">
+<div id="modal_usuarios" class="modal fade" tabindex="-1" aria-labelledby="modal_usuarios" aria-hidden="true">
     <div class="modal-dialog modal-xxl">
-        <form class="modal-content" style="position: relative;" id="form-usuario" frm-accion="0" idu="">
+        <form class="modal-content" id="form-usuario">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal_usuariosLabel">REGISTRAR USUARIO</h5>
+                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                    aria-label="Close"></button>
+            </div>
             <div class="modal-body">
-                <h5 class="card-title mb-4 text-primary"><b>CREAR NUEVO USUARIO</b></h5>
                 <div class="col-12 mb-2">
                     <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios
                         (*)</span>
                 </div>
                 <div class="row">
+
                     <div class="col-xl-3 col-6 mb-3">
-                        <label class="form-label mb-0" for="id_area"><b>Area <span
-                                    class="text-danger">*</span></b></label>
-                        <select id="id_area" class="select" name="id_area" require="Area">
+                        <input type="hidden" name="id" id="id">
+                        <label class="form-label mb-0" for="id_area">Area</label>
+                        <select id="id_area" class="select">
                             <option value="">-- Seleccione --</option>
                             @foreach ($areas as $r)
                                 <option value="{{$r->id_area}}">{{$r->descripcion}}</option>
@@ -62,65 +67,48 @@
                         </select>
                     </div>
                     <div class="col-xl-3 col-6 mb-3">
-                        <label class="form-label mb-0" for="n_doc"><b>Dni/Carnet E.<span
-                                    class="text-danger">*</span></b></label>
-                        <div class="input-group">
-                            <input type="search" class="form-control" id="n_doc" name="n_doc" maxlength="20"
-                                require="Dni/Carnet E.">
-                            <span class="input-group-append">
-                                <button class="btn btn-primary px-2" type="button" id="conDoc" data-mdb-ripple-init
-                                    style="border-radius: 0 .25rem .25rem 0;">
-                                    <i class="fas fa-magnifying-glass"></i>
-                                </button>
-                            </span>
-                        </div>
+                        <label class="form-label mb-0" for="n_doc">Dni/Carnet E.</label>
+                        <input class="form-control" id="n_doc">
                     </div>
                     <div class="col-xl-3 col-sm-6 mb-3">
-                        <label class="form-label mb-0" for="nom_usu"><b>Nombres <span
-                                    class="text-danger">*</span></b></label>
-                        <input type="text" class="form-control" id="nom_usu" name="nom_usu" require="Nombres">
+                        <label class="form-label mb-0" for="nom_usu">Nombres</label>
+                        <input class="form-control" id="nom_usu">
                     </div>
                     <div class="col-xl-3 col-sm-6 mb-3">
-                        <label class="form-label mb-0" for="ape_usu"><b>Apellidos <span
-                                    class="text-danger">*</span></b></label>
-                        <input type="text" class="form-control" id="ape_usu" name="ape_usu" require="Apellidos">
+                        <label class="form-label mb-0" for="ape_usu">Apellidos</label>
+                        <input class="form-control" id="ape_usu">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-5 col-sm-4 mb-3">
-                        <label class="form-label mb-0" for="emailp_usu"><b>Correo Personal</b></label>
-                        <input type="text" class="form-control" id="emailp_usu" name="emailp_usu">
+                        <label class="form-label mb-0" for="emailp_usu">Correo Personal</label>
+                        <input class="form-control" id="emailp_usu">
                     </div>
                     <div class="col-lg-5 col-sm-4 mb-3">
-                        <label class="form-label mb-0" for="emailc_usu"><b>Correo Corporativo</b></label>
-                        <input type="text" class="form-control" id="emailc_usu" name="emailc_usu">
+                        <label class="form-label mb-0" for="emailc_usu">Correo Corporativo</label>
+                        <input class="form-control" id="emailc_usu">
                     </div>
                     <div class="col-lg-2 col-sm-4 mb-3 form-date">
-                        <label class="form-label mb-0" for="fechan_usu"><b>Fecha de Nacimiento <span
-                                    class="text-danger">*</span></b></label>
-                        <input type="text" class="form-control" id="fechan_usu" name="fechan_usu"
-                            require="Fecha de Nacimiento">
+                        <label class="form-label mb-0" for="fechan_usu">Fecha de Nacimiento</label>
+                        <input class="form-control" id="fechan_usu">
                     </div>
                 </div>
                 <div class="row">
                     <div class="col-lg-3 col-6 mb-3">
-                        <label class="form-label mb-0" for="telp_usu"><b>Tel. Personal</b></label>
-                        <input type="text" class="form-control" id="telp_usu" name="telp_usu">
+                        <label class="form-label mb-0" for="telp_usu">Tel. Personal</label>
+                        <input class="form-control" id="telp_usu">
                     </div>
                     <div class="col-lg-3 col-6 mb-3">
-                        <label class="form-label mb-0" for="telc_usu"><b>Tel. Corporativo</b></label>
-                        <input type="text" class="form-control" id="telc_usu" name="telc_usu">
+                        <label class="form-label mb-0" for="telc_usu">Tel. Corporativo</label>
+                        <input class="form-control" id="telc_usu">
                     </div>
                     <div class="col-lg-3 col-6 mb-3">
-                        <label class="form-label mb-0" for="usuario"><b>Usuario <span
-                                    class="text-danger">*</span></b></label>
-                        <input type="text" class="form-control" id="usuario" name="usuario" require="Usuario">
+                        <label class="form-label mb-0" for="usuario">Usuario</label>
+                        <input class="form-control" id="usuario">
                     </div>
                     <div class="col-lg-3 col-6 mb-3">
-                        <label class="form-label mb-0" for="contrasena"><b>Contraseña <span
-                                    class="text-danger">*</span></b></label>
-                        <input type="text" class="form-control" id="contrasena" name="contrasena"
-                            require="Contraseña">
+                        <label class="form-label mb-0" for="contrasena">Contraseña</label>
+                        <input class="form-control" id="contrasena">
                     </div>
                 </div>
                 <div class="col-12 text-center d-flex justify-content-center">
@@ -167,9 +155,8 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label mb-0" for="tipo_acceso"><b>Tipo Personal <span
-                                class="text-danger">*</span></b></label>
-                    <select id="tipo_acceso" name="tipo_acceso" class="select" require="Tipo Personal">
+                    <label class="form-label mb-0" for="tipo_acceso">Tipo Personal</label>
+                    <select class="select" id="tipo_acceso">
                         <option value="">-- Seleccione --</option>
                         @foreach ($tipoAcceso as $r)
                             <option value="{{$r->id_tipo_acceso}}">{{$r->descripcion}}</option>
@@ -224,8 +211,9 @@
 
 @section('scripts')
 <script>
-
+    const imgFirmDefault = "{{asset('front/images/firms/firm.png')}}";
+    const imgUserDefault= "{{asset('front/images/auth/user_auth.jpg')}}";
 </script>
 <script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>
-<!-- <script src="{{asset('front/js/app/incidencia/registradas.js')}}"></script> -->
+<script src="{{asset('front/js/app/usuario/usuarios.js')}}"></script>
 @endsection

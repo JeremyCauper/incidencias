@@ -207,3 +207,35 @@ function date(format) {
 
     return format.replace(/[YmdHisjwnGaA]/g, (match) => map[match]);
 }
+
+async function consultarDni(dni) {
+    const url = `${__url}/ConsultaDni/${dni}`;
+    
+    try {
+        const response = await $.ajax({
+            url: url,
+            method: "GET",
+            dataType: "json"
+        });
+        return response; // Retorna la respuesta obtenida
+    } catch (error) {
+        console.error("Error al consultar el DNI:", error);
+        throw error; // Lanza el error para que el manejador lo procese
+    }
+}
+
+async function consultarDniInput($this) {
+    if (!$this.val()) return false;
+    
+    const label = $(`[for="${$this.attr('id')}"`);
+    const labelHtml = label.html();
+    try {
+        label.addClass('d-flex justify-content-between').html(`${labelHtml} <span class="text-info"><span class="spinner-border" role="status" style="width: 1rem; height: 1rem;"></span> Consultando</span>`);
+        const datos = await consultarDni($this.val());
+        return datos;
+    } catch (error) {
+        console.error("No se pudo consultar el DNI.");
+    } finally {
+        label.removeClass('d-flex justify-content-between').html(labelHtml);
+    }
+}

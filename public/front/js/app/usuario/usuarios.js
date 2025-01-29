@@ -1,6 +1,85 @@
 $(document).ready(function () {
+    const controles = [
+        // Formulario grupos
+        {
+            control: '#id_area',
+            config: {
+                require: true
+            }
+        },
+        {
+            control: '#n_doc',
+            config: {
+                "control-type": "int",
+                mnl: 8,
+                mxl: 20,
+                require: true,
+                errorMessage: "El numero de DNI es invalido.",
+                mask: { reg: "99999999999" }
+            }
+        },
+        {
+            control: ['#nom_usu', '#ape_usu'],
+            config: {
+                mxl: 100,
+                require: true
+            }
+        },
+        {
+            control: ['#emailp_usu', '#emailc_usu'],
+            config: {
+                "control-type": "email",
+                mxl: 250
+            }
+        },
+        {
+            control: '#fechan_usu',
+            config: {
+                require: true
+            }
+        },
+        {
+            control: ['#telp_usu', '#telc_usu'],
+            config: {
+                "control-type": "int",
+                mxl: 9,
+                mask: { reg: "999999999" }
+            }
+        },
+        {
+            control: ['#usuario', '#contrasena'],
+            config: {
+                mxl: 50,
+                require: true
+            }
+        },
+        {
+            control: '#tipo_acceso',
+            config: {
+                require: true
+            }
+        }
+    ];
+
+    controles.forEach(control => {
+        defineControllerAttributes(control.control, control.config);
+    });
+
+    $('.modal').on('hidden.bs.modal', function () {
+        $('#modal_usuariosLabel').html('REGISTRAR USUARIO');
+        $('#id').val('');
+    });
+
     $("#fechan_usu").flatpickr({
-        maxDate: __fecha
+        maxDate: date('Y-m-d')
+    });
+
+    $('#n_doc').blur(async function () {
+        let datos = await consultarDniInput($(this));
+        if (datos.success) {
+            $('#nom_usu').val(datos.data.nombres);
+            $('#ape_usu').val(`${datos.data.apellidop} ${datos.data.apellidom}`);
+        }
     });
 });
 
@@ -8,7 +87,7 @@ const tb_usuario = new DataTable('#tb_usuario', {
     scrollX: true,
     scrollY: 300,
     ajax: {
-        url: `${__url}/usuarios/datatable`,
+        url: `${__url}/control-de-usuario/usuarios/index`,
         dataSrc: "",
         error: function (xhr, error, thrown) {
             boxAlert.table();
@@ -25,8 +104,8 @@ const tb_usuario = new DataTable('#tb_usuario', {
         { data: 'descripcion' },
         { data: 'usuario' },
         { data: 'pass_view' },
-        { data: 'estatus' },
-        { data: 'id_usuario' }
+        { data: 'estado' },
+        { data: 'acciones' }
     ],
     processing: true
 });
@@ -37,52 +116,124 @@ function updateTable() {
 
 document.getElementById('form-usuario').addEventListener('submit', function (event) {
     event.preventDefault();
-    $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
+    fMananger.formModalLoding('modal_usuarios', 'show');
+    const accion = $('#id').val();
+    const url = accion ? `actualizar` : `registrar`;
 
     var elementos = this.querySelectorAll('[name]');
-    var datosFormulario = {};
+    var valid = validFrom(elementos);
 
-    let cad_require = "";
-    elementos.forEach(function (elemento) {
-        if (elemento.getAttribute("require") && elemento.value == "") {
-            cad_require += `<b>${elemento.getAttribute("require")}</b>, `;
-        }
-        datosFormulario[elemento.name] = elemento.value;
-    });
-    if (cad_require) {
-        $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
-        return boxAlert.box('info', 'Faltan datos', `<h6 class="text-secondary">El campo ${cad_require} es requerido.</h6>`);
-    }
+    if (!valid.success)
+        return fMananger.formModalLoding('modal_usuarios', 'hide');
 
-    url = [
-        `/usuarios/create`, `/usuarios/edit/${$('#form-usuario').attr('idu')}`
-    ];
     $.ajax({
         type: 'POST',
-        url: __url + url[$('#form-usuario').attr('frm-accion')],
+        url: `${__url}/control-de-usuario/usuarios/${url}`,
         contentType: 'application/json',
         headers: {
             'X-CSRF-TOKEN': __token,
         },
-        data: JSON.stringify(datosFormulario),
-        success: function (response) {
-            boxAlert.minbox('success', response.message, { background: "#3b71ca", color: "#ffffff" }, "top");
+        data: JSON.stringify(valid.data.data),
+        success: function (data) {
+            fMananger.formModalLoding('modal_usuarios', 'hide');
+            if (!data.success) {
+                return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+            }
+            $('#modal_usuarios').modal('hide');
+            boxAlert.minbox({ h: data.message });
             updateTable();
-            $('[data-mdb-dismiss="modal"]').click();
-            console.log(response);
-            $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            boxAlert.box('error', '¡Ocurrio un error!', 'Error al registrar el usuario');
-            console.log(jqXHR.responseJSON);
-            $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
+            boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Parece que hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde. Si el problema persiste, contacta con el soporte.' });
+            console.log(jqXHR);
+            fMananger.formModalLoding('modal_usuarios', 'hide');
         }
     });
 });
 
-$('.modal').on('hidden.bs.modal', function () {
-    $('#form-usuario').attr('idu', '').attr('frm-accion', '0');
-});
+function Editar(id) {
+    try {
+        $('#modal_usuariosLabel').html('EDITAR GRUPO');
+        $('#modal_usuarios').modal('show');
+        fMananger.formModalLoding('modal_usuarios', 'show');
+        const urlImg = {
+            'perfil': `${__asset}/images/auth`,
+            'firma': `${__asset}/images/firms`
+        };
+        $.ajax({
+            type: 'GET',
+            url: `${__url}/control-de-usuario/usuarios/${id}`,
+            contentType: 'application/json',
+            success: function (data) {
+                if (!data.success) {
+                    console.log(data.error);
+                    return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+                }
+                var json = data.data;
+                $('#id').val(id);
+                $('#id_area').val(json.id_area).trigger('change.select2');
+                $('#n_doc').val(json.ndoc_usuario);
+                $('#nom_usu').val(json.nombres);
+                $('#ape_usu').val(json.apellidos);
+                $('#emailp_usu').val(json.email_personal);
+                $('#emailc_usu').val(json.email_corporativo);
+                $('#fechan_usu').val(json.fecha_nacimiento);
+                $('#telp_usu').val(json.tel_personal);
+                $('#telc_usu').val(json.tel_corporativo);
+                $('#usuario').val(json.usuario);
+                $('#contrasena').val(json.pass_view);
+                $('#PreviFPerfil').attr('src', json.foto_perfil ? `${urlImg['perfil']}/${json.foto_perfil}`: imgUserDefault);
+                $('#PreviFirma').attr('src', json.firma_digital ? `${urlImg['firma']}/${json.firma_digital}`: imgFirmDefault);
+                $('#tipo_acceso').val(json.tipo_acceso).trigger('change.select2');
+
+                fMananger.formModalLoding('modal_usuarios', 'hide');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Parece que hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde. Si el problema persiste, contacta con el soporte' });
+                console.log(jqXHR);
+            }
+        });
+    } catch (error) {
+        boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Parece que hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde. Si el problema persiste, contacta con el soporte' });
+        console.log('Error producido: ', error);
+    }
+}
+
+async function CambiarEstado(id, estado) {
+    try {
+        if (!await boxAlert.confirm('¿Esta seguro de esta accion?')) return true;
+
+        $.ajax({
+            type: 'POST',
+            url: `${__url}/control-de-usuario/usuarios/cambiarEstado`,
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': __token,
+            },
+            data: JSON.stringify({
+                "id": id,
+                "estatus": estado ? 0 : 1
+            }),
+            beforeSend: boxAlert.loading,
+            success: function (data) {
+                if (!data.success) {
+                    console.log(data.error);
+                    return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+                }
+                boxAlert.minbox({ h: data.message });
+                updateTable();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                const obj_error = jqXHR.responseJSON;
+                boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: obj_error.message });
+                console.log(jqXHR);
+            }
+        });
+    } catch (error) {
+        boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Parece que hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde. Si el problema persiste, contacta con el soporte' });
+        console.log('Error producido: ', error);
+    }
+}
 
 document.querySelectorAll('.inputMenu').forEach(toggle => {
     toggle.addEventListener('change', function () {
@@ -91,69 +242,6 @@ document.querySelectorAll('.inputMenu').forEach(toggle => {
             checkbox.disabled = !this.checked;
             checkbox.checked = false;
         });
-    });
-});
-
-function showUsuario(id) {
-    $('#modal_frm_usuarios').modal('show');
-    $('#form-usuario .modal-dialog .modal-content').append(`<div class="loader-of-modal" style="position: absolute;height: 100%;width: 100%;z-index: 999;background: #dadada60;border-radius: inherit;align-content: center;"><div class="loader"></div></div>`);
-    const urlImg = {
-        'perfil': `${__asset}/images/auth`,
-        'firma': `${__asset}/images/firms`
-    };
-    $.ajax({
-        type: 'GET',
-        url: `${__url}/usuarios/show/${id}`,
-        contentType: 'application/json',
-        success: function (response) {
-            console.log(response);
-            const data = response[0];
-            $('#form-usuario .modal-dialog .modal-content .loader-of-modal').remove();
-            $('#form-usuario').attr('idu', id).attr('frm-accion', '1');
-            $('#id_area').val(data.id_area).trigger('change.select2');
-            $('#n_doc').val(data.ndoc_usuario);
-            $('#nom_usu').val(data.nombres);
-            $('#ape_usu').val(data.apellidos);
-            $('#emailp_usu').val(data.email_personal);
-            $('#emailc_usu').val(data.email_corporativo);
-            $('#fechan_usu').val(data.fecha_nacimiento);
-            $('#telp_usu').val(data.tel_personal);
-            $('#telc_usu').val(data.tel_corporativo);
-            $('#usuario').val(data.usuario);
-            $('#contrasena').val(data.pass_view);
-            if (data.foto_perfil) $('#PreviFPerfil').attr('src', `${urlImg['perfil']}/${data.foto_perfil}`);
-            if (data.firma_digital) $('#PreviFirma').attr('src', `${urlImg['firma']}/${data.firma_digital}`);
-            $('#tipo_acceso').val(data.tipo_acceso).trigger('change.select2');
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error al registrar el usuario');
-            console.log(jqXHR.responseJSON);
-        }
-    });
-}
-
-
-document.getElementById('conDoc').addEventListener('click', function () {
-    const nDoc = document.getElementById('n_doc').value;
-    $.ajax({
-        type: 'GET',
-        url: `${__url}/consultaDni/${nDoc}`,
-        contentType: 'application/json',
-        success: function (response) {
-            if (!response.success) {
-                return Swal.fire({
-                    'title': 'Ocurrio un error',
-                    'icon': 'info',
-                    'text': response.message
-                });
-            }
-            $('#nom_usu').val(response.data.nombres);
-            $('#ape_usu').val(`${response.data.apellidop} ${response.data.apellidom}`);
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error al registrar el usuario');
-            console.log(jqXHR.responseJSON);
-        }
     });
 });
 

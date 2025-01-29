@@ -185,14 +185,14 @@
                         <select class="select-clear" id="tEstacion">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tEstacion'] as $v)
-                                <option value="{{$v->id}}">{{$v->descripcion}}</option>
+                                <option {{$v->id == 1 ? 'selected' : ''}} value="{{$v->id}}">{{$v->descripcion}}</option>
                             @endforeach
                         </select>
                     </div>
                     <div class="col-lg-2 col-5 mb-2">
                         <label class="form-label mb-0" for="prioridad">Prioridad</label>
                         <select class="select" id="prioridad">
-                            <option value="Alta">Alta</option>
+                            <option selected value="Alta">Alta</option>
                             <option value="Media">Media</option>
                             <option value="Baja">Baja</option>
                             <option value="Critica">Critica</option>

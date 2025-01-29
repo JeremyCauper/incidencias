@@ -143,7 +143,15 @@ $(document).ready(function () {
         }
     });
 
+    $('#nro_doc').blur(async function () {
+        let datos = await consultarDniInput($(this));
+        if (datos.success) {
+            $('#nom_contac').val(datos.data.completo);
+        }
+    });
+
     $('.modal').on('shown.bs.modal', function () {
+        $('#nom_contac').val('');
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
     });

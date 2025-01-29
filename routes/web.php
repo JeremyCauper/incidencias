@@ -87,13 +87,17 @@ Route::post('/visitas/sucursales/create', [VSucursalesController::class, 'create
 
 Route::get('/control-de-usuario/usuarios', [UsuarioController::class, 'view'])->middleware('auth');
 Route::get('/control-de-usuario/usuarios/index', [UsuarioController::class, 'index']);
+Route::get('/control-de-usuario/usuarios/{id}', [UsuarioController::class, 'show']);
+Route::post('/control-de-usuario/usuarios/registrar', [UsuarioController::class, 'create']);
+Route::post('/control-de-usuario/usuarios/actualizar', [UsuarioController::class, 'update']);
+Route::post('/control-de-usuario/usuarios/cambiarEstado', [UsuarioController::class, 'changeStatus']);
 
 // Manenimiento Problemas
 Route::get('/mantenimiento/problemas/problemas', [ProblemaController::class, 'view'])->middleware('auth');
 Route::get('/mantenimiento/problemas/problemas/index', [ProblemaController::class, 'index']);
-Route::post('/mantenimiento/problemas/problemas/create', [ProblemaController::class, 'create']);
+Route::post('/mantenimiento/problemas/problemas/registrar', [ProblemaController::class, 'create']);
 Route::get('/mantenimiento/problemas/problemas/show/{id}', [ProblemaController::class, 'show']);
-Route::post('/mantenimiento/problemas/problemas/edit/{id}', [ProblemaController::class, 'edit']);
+Route::post('/mantenimiento/problemas/problemas/actualizar/{id}', [ProblemaController::class, 'edit']);
 Route::post('/mantenimiento/problemas/problemas/destroy/{id}', [ProblemaController::class, 'destroy']);
 
 Route::get('/mantenimiento/contacto-empresas/index', [ContactoEmpresasController::class, 'index']);
