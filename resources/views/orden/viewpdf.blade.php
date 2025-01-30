@@ -120,14 +120,14 @@
             margin: auto;
         }
 
-        .content-firmas::after {
+        .content-firmas-line::after {
             content: "";
             position: absolute;
             width: 75%;
             top: 65%;
             left: 50%;
             transform: translate(-50%, -50%);
-            border: 1px solid black;
+            border: 0.01rem solid black;
         }
 
         .content-firmas .firmas {
@@ -295,7 +295,7 @@
     <table>
         <tr>
             <td class="t-center">
-                <div class="content-firmas">
+                <div class="content-firmas {{$firmaA ? '' : 'content-firmas-line'}}">
                     <img class="firmas {{$firmaA ? '' : 'hidden'}}" src="{{$firmaA}}">
                 </div>
                 <h6 class="mb-2 mt-2">Firma Tecnico</h6>
@@ -304,7 +304,7 @@
             </td>
             <td style="width: 120;"></td>
             <td class="t-center">
-                <div class="content-firmas">
+                <div class="content-firmas {{$firmaC ? '' : 'content-firmas-line'}}">
                     <img class="firmas {{$firmaC ? '' : 'hidden'}}" src="{{$firmaC}}">
                     <!-- src="{{public_path() . '/front/images/client/fdc_61505130.png'}}"> -->
                 </div>

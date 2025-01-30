@@ -60,27 +60,56 @@
     </div>
 </div>
 
-<div class="col-12">
-    <div class="card">
-        <div class="card-body">
-            <h4 class="card-title">Visitas a Programar</h4>
-            <div>
-                <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
-                    <i class="fas fa-rotate-right"></i>
-                </button>
+<div class="row">
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Visitas a Programar</h4>
+                <div>
+                    <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
+                        <i class="fas fa-rotate-right"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tb_visitas" class="table table-hover text-nowrap" style="width:100%">
+                            <thead>
+                                <tr class="text-bg-primary">
+                                    <th>Ruc</th>
+                                    <th>Sucursal</th>
+                                    <th class="text-center">Visitas Realizadas</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
             </div>
-            <div class="row">
-                <div class="col-12">
-                    <table id="tb_vsucursales" class="table table-hover text-nowrap" style="width:100%">
-                        <thead>
-                            <tr class="text-bg-primary">
-                                <th>Ruc</th>
-                                <th>Sucursal</th>
-                                <th class="text-center">Visitas Realizadas</th>
-                                <th class="text-center">Acciones</th>
-                            </tr>
-                        </thead>
-                    </table>
+        </div>
+    </div>
+
+    <div class="col-6">
+        <div class="card">
+            <div class="card-body">
+                <h4 class="card-title">Visitas Programadas</h4>
+                <div>
+                    <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
+                        <i class="fas fa-rotate-right"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tb_vprogramadas" class="table table-hover text-nowrap" style="width:100%">
+                            <thead>
+                                <tr class="text-bg-primary">
+                                    <th>Sucursal</th>
+                                    <th>Técnico</th>
+                                    <th class="text-center">Registrado</th>
+                                    <th class="text-center">Acciones</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
@@ -272,7 +301,7 @@
         extract: ['id']
     });
 
-    const tb_vsucursales = new DataTable('#tb_vsucursales', {
+    const tb_visitas = new DataTable('#tb_visitas', {
         autoWidth: true,
         scrollX: true,
         scrollY: 400,
@@ -311,7 +340,7 @@
     });
 
     function updateTable() {
-        tb_vsucursales.ajax.reload();
+        tb_visitas.ajax.reload();
     }
 
     function DetalleVisita(id) {
