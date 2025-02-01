@@ -69,14 +69,16 @@
 <div class="col-12">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Incidencias Registradas</h4>
+            <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <strong>Incidencias Registradas</strong>
+            </h6>
             <div>
-                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init
+                <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
                     data-mdb-target="#modal_incidencias">
                     <i class="fas fa-book-medical"></i>
                     Nueva Incidencia
                 </button>
-                <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
+                <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
                     <i class="fas fa-rotate-right"></i>
                 </button>
             </div>

@@ -58,7 +58,7 @@
       <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav ms-auto">
 
-          <li class="nav-item dropdown">
+          <!-- <li class="nav-item dropdown">
             <a class="nav-link count-indicator" id="notificationDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
               <i class="fas fa-bell text-secondary"></i>
               <span class="count"></span>
@@ -79,7 +79,7 @@
               <li><a class="dropdown-item" href="#">Another action</a></li>
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
-          </li>
+          </li> -->
 
           <li class="nav-item dropdown user-dropdown">
             <a class="nav-link" id="UserDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
@@ -88,10 +88,10 @@
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
               <div class="dropdown-header text-center">
                 <img class="img-md rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image">
-                <p class="mb-1 mt-3 fw-semibold">{{ Auth::user()->nombres . ' ' . Auth::user()->apellidos }}</p>
+                <p class="mb-1 mt-3 fw-semibold">{{ explode(' ', Auth::user()->nombres)[0] . ' ' . explode(' ', Auth::user()->apellidos)[0]  }}</p>
                 <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
               </div>
-              <a class="dropdown-item">
+              <!-- <a class="dropdown-item">
                 <i class="dropdown-item-icon far fa-circle-user text-primary me-2"></i>
                 Mi Perfil
                 <span class="badge badge-pill badge-danger">1</span>
@@ -99,8 +99,8 @@
               <a class="dropdown-item">
                 <i class="dropdown-item-icon far fa-calendar-check text-primary me-2"></i>
                 Actividad
-              </a>
-              <a class="dropdown-item" href="{{url('/logout')}}">
+              </a> -->
+              <a class="dropdown-item py-2" href="{{url('/logout')}}">
                 <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
                 Cerrar session
               </a>
@@ -138,13 +138,10 @@
             <div class="collapse" id="ControlVisitas">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/visitas/terminadas')}}"><b>Terminadas</b></a>
+                  <a class="nav-link" href="{{url('/visitas/sucursales')}}">Visitas</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/visitas/sucursales')}}"><b>Programar</b></a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/visitas/programadas')}}"><b>Programadas</b></a>
+                  <a class="nav-link" href="{{url('/visitas/terminadas')}}">Terminadas</a>
                 </li>
               </ul>
             </div>
@@ -158,13 +155,13 @@
             <div class="collapse" id="ControlEmpresas">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/empresas/empresas')}}"><b>Empresas</b></a>
+                  <a class="nav-link" href="{{url('/empresas/empresas')}}">Empresas</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/empresas/grupos')}}"><b>Grupos Empresas</b></a>
+                  <a class="nav-link" href="{{url('/empresas/grupos')}}">Grupos Empresas</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/empresas/sucursales')}}"><b>Sucursales Empresas</b></a>
+                  <a class="nav-link" href="{{url('/empresas/sucursales')}}">Sucursales Empresas</a>
                 </li>
               </ul>
             </div>
@@ -178,15 +175,15 @@
             <div class="collapse" id="ControlUsarios">
               <ul class="nav flex-column sub-menu">
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/control-de-usuario/usuarios')}}"><b>Usuarios</b></a>
+                  <a class="nav-link" href="{{url('/control-de-usuario/usuarios')}}">Usuarios</a>
                 </li>
                 <li class="nav-item d-none">
-                  <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil</b></a>
+                  <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}">Mi Perfil</a>
                 </li>
               </ul>
             </div>
           </li>
-          <li class="nav-item d-none">
+          <li class="nav-item">
             <a class="nav-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlMantenimientos" role="button" aria-expanded="false" aria-controls="ControlMantenimientos">
               <i class="fas fa-gears menu-icon"></i>
               <span class="menu-title">Mantenimientos</span>
@@ -194,11 +191,19 @@
             </a>
             <div class="collapse" id="ControlMantenimientos">
               <ul class="nav flex-column sub-menu">
+                <li class="nav-category-item">Incidentes</li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/mantenimiento/problemas/problemas')}}"><b>Problemas</b></a>
+                  <a class="nav-link" href="{{url('/mantenimiento/problemas/problemas')}}">Problemas</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="{{url('/mantenimiento/problemas/subproblemas')}}"><b>Sub Problemas</b></a>
+                  <a class="nav-link" href="{{url('/mantenimiento/problemas/subproblemas')}}">Sub Problemas</a>
+                </li>
+                <li class="nav-category-item">Config. Menu</li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/mantenimiento/menu/menu')}}">Menu</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="{{url('/mantenimiento/menu/submenu')}}">Sub Menu</a>
                 </li>
               </ul>
             </div>
@@ -213,12 +218,12 @@
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
-        <footer class="footer">
+        <!-- <footer class="footer">
           <div class="d-flex justify-content-end">
             <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © {{date('Y')}}. All rights
               reserved.</span>
           </div>
-        </footer>
+        </footer> -->
         <!-- partial -->
       </div>
       <!-- main-panel ends -->

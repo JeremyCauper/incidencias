@@ -50,10 +50,12 @@
 <div class="col-12 grid-margin">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Incidencias Resueltas</h4>
+            <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <strong>Incidencias Resueltas</strong>
+            </h6>
             <div>
                 <button type="button" class="d-none" data-mdb-modal-init data-mdb-target="#modal_detalle"></button>
-                <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
+                <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
                     <i class="fas fa-rotate-right"></i>
                 </button>
             </div>

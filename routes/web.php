@@ -7,8 +7,10 @@ use App\Http\Controllers\Empresas\GruposController;
 use App\Http\Controllers\Empresas\SucursalesController;
 use App\Http\Controllers\Incidencias\RegistradasController;
 use App\Http\Controllers\Incidencias\ResueltasController;
-use App\Http\Controllers\Mantenimientos\ContactoEmpresasController;
+use App\Http\Controllers\Mantenimientos\Menu\MenuController;
+use App\Http\Controllers\Mantenimientos\Menu\SubMenuController;
 use App\Http\Controllers\Mantenimientos\Problema\ProblemaController;
+use App\Http\Controllers\Mantenimientos\Problema\SubProblemaController;
 use App\Http\Controllers\Orden\OrdenController;
 use App\Http\Controllers\Usuario\UsuarioController;
 use App\Http\Controllers\Visitas\TerminadasController;
@@ -95,9 +97,28 @@ Route::post('/control-de-usuario/usuarios/cambiarEstado', [UsuarioController::cl
 // Manenimiento Problemas
 Route::get('/mantenimiento/problemas/problemas', [ProblemaController::class, 'view'])->middleware('auth');
 Route::get('/mantenimiento/problemas/problemas/index', [ProblemaController::class, 'index']);
+Route::get('/mantenimiento/problemas/problemas/{id}', [ProblemaController::class, 'show']);
 Route::post('/mantenimiento/problemas/problemas/registrar', [ProblemaController::class, 'create']);
-Route::get('/mantenimiento/problemas/problemas/show/{id}', [ProblemaController::class, 'show']);
-Route::post('/mantenimiento/problemas/problemas/actualizar/{id}', [ProblemaController::class, 'edit']);
-Route::post('/mantenimiento/problemas/problemas/destroy/{id}', [ProblemaController::class, 'destroy']);
+Route::post('/mantenimiento/problemas/problemas/actualizar', [ProblemaController::class, 'update']);
+Route::post('/mantenimiento/problemas/problemas/cambiarEstado', [ProblemaController::class, 'changeStatus']);
 
-Route::get('/mantenimiento/contacto-empresas/index', [ContactoEmpresasController::class, 'index']);
+Route::get('/mantenimiento/problemas/subproblemas', [SubProblemaController::class, 'view'])->middleware('auth');
+Route::get('/mantenimiento/problemas/subproblemas/index', [SubProblemaController::class, 'index']);
+Route::get('/mantenimiento/problemas/subproblemas/{id}', [SubProblemaController::class, 'show']);
+Route::post('/mantenimiento/problemas/subproblemas/registrar', [SubProblemaController::class, 'create']);
+Route::post('/mantenimiento/problemas/subproblemas/actualizar', [SubProblemaController::class, 'update']);
+Route::post('/mantenimiento/problemas/subproblemas/cambiarEstado', [SubProblemaController::class, 'changeStatus']);
+
+Route::get('/mantenimiento/menu/menu', [MenuController::class, 'view'])->middleware('auth');
+Route::get('/mantenimiento/menu/menu/index', [MenuController::class, 'index']);
+Route::get('/mantenimiento/menu/menu/{id}', [MenuController::class, 'show']);
+Route::post('/mantenimiento/menu/menu/registrar', [MenuController::class, 'create']);
+Route::post('/mantenimiento/menu/menu/actualizar', [MenuController::class, 'update']);
+Route::post('/mantenimiento/menu/menu/cambiarEstado', [MenuController::class, 'changeStatus']);
+
+Route::get('/mantenimiento/menu/submenu', [SubMenuController::class, 'view'])->middleware('auth');
+Route::get('/mantenimiento/menu/submenu/index', [SubMenuController::class, 'index']);
+Route::get('/mantenimiento/menu/submenu/{id}', [SubMenuController::class, 'show']);
+Route::post('/mantenimiento/menu/submenu/registrar', [SubMenuController::class, 'create']);
+Route::post('/mantenimiento/menu/submenu/actualizar', [SubMenuController::class, 'update']);
+Route::post('/mantenimiento/menu/submenu/cambiarEstado', [SubMenuController::class, 'changeStatus']);

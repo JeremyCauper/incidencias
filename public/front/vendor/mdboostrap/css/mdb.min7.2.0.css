@@ -17781,7 +17781,7 @@ input[type=file].form-control.is-invalid:focus-within~.form-file-label .form-fil
 }
 
 .table {
-    --mdb-table-font-size: 0.9rem;
+    --mdb-table-font-size: 0.75rem;
     --mdb-table-divider-color: currentcolor;
     font-size: var(--mdb-table-font-size)
 }

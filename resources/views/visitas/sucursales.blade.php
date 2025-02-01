@@ -64,7 +64,9 @@
     <div class="col-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Visitas a Programar</h4>
+                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                    <strong>Visitas a Programar</strong>
+                </h6>
                 <div>
                     <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
@@ -91,7 +93,9 @@
     <div class="col-6">
         <div class="card">
             <div class="card-body">
-                <h4 class="card-title">Visitas Programadas</h4>
+                <h6 class="card-title col-form-label-sm text-primary mb-4">
+                    <strong>Visitas Programadas</strong>
+                </h6>
                 <div>
                     <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>

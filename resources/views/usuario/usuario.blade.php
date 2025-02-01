@@ -9,14 +9,16 @@
 <div class="col-12 grid-margin">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Listado de usuarios</h4>
+            <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <strong>Listado de Usuarios</strong>
+            </h6>
             <div class="mb-3">
-                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init
+                <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
                     data-mdb-target="#modal_usuarios">
                     <i class="fas fa-user-plus me-2"></i>
                     Nuevo Usuario
                 </button>
-                <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
+                <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
                     <i class="fas fa-rotate-right"></i>
                 </button>
             </div>
@@ -42,10 +44,10 @@
 </div>
 
 <div id="modal_usuarios" class="modal fade" tabindex="-1" aria-labelledby="modal_usuarios" aria-hidden="true">
-    <div class="modal-dialog modal-xxl">
+    <div class="modal-dialog modal-xl">
         <form class="modal-content" id="form-usuario">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_usuariosLabel">REGISTRAR USUARIO</h5>
+            <div class="modal-header bg-primary text-white">
+                <h6 class="modal-title" id="modal_usuariosLabel">REGISTRAR USUARIO</h6>
                 <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -197,7 +199,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger btn-sm" data-mdb-ripple-init
+                <button type="button" class="btn btn-link btn-sm" data-mdb-ripple-init
                     data-mdb-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init>
                     Guardar

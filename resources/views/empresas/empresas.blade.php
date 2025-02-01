@@ -9,15 +9,17 @@
 <div class="col-12 grid-margin">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Listado de Empresas</h4>
+            <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <strong>Listado de Empresas</strong>
+            </h6>
             <div class="mb-3">
                 <!-- <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_frm_empresas"> -->
-                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init
+                <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
                     data-mdb-target="#modal_empresas">
                     <i class="fas fa-plus me-1"></i>
                     Nueva Empresa
                 </button>
-                <button class="btn btn-primary btn-sm px-2" onclick="updateTable()">
+                <button class="btn btn-primary px-2" onclick="updateTable()">
                     <i class="fas fa-rotate-right"></i>
                 </button>
             </div>

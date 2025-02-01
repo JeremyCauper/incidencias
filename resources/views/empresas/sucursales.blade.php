@@ -9,14 +9,16 @@
 <div class="col-12 grid-margin">
     <div class="card">
         <div class="card-body">
-            <h4 class="card-title">Listado de Sucursales</h4>
+            <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <strong>Listado de Sucursales</strong>
+            </h6>
             <div class="mb-3">
-                <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init
+                <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
                     data-mdb-target="#modal_sucursales">
                     <i class="fas fa-plus me-1"></i>
                     Nueva Sucursal
                 </button>
-                <button class="btn btn-primary btn-sm px-2" onclick="updateTable()">
+                <button class="btn btn-primary px-2" onclick="updateTable()">
                     <i class="fas fa-rotate-right"></i>
                 </button>
             </div>
@@ -48,8 +50,8 @@
 <div id="modal_sucursales" class="modal fade" aria-modal="true" role="dialog">
     <div class="modal-dialog modal-lg">
         <form class="modal-content" id="form-sucursal">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal_sucursalesLabel">REGISTRAR SUCURSAL</h5>
+            <div class="modal-header bg-primary text-white">
+                <h6 class="modal-title" id="modal_sucursalesLabel">REGISTRAR SUCURSAL</h6>
                 <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -129,7 +131,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-mdb-ripple-init
+                <button type="button" class="btn btn-link" data-mdb-ripple-init
                     data-mdb-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
             </div>

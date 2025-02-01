@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Mantenimientos\Problema;
+namespace App\Http\Controllers\Mantenimientos\Menu;
 
 use App\Http\Controllers\Controller;
 use Exception;
@@ -9,53 +9,49 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class SubProblemaController extends Controller
+class MenuController extends Controller
 {
     public function view()
     {
         try {
-            $data = [];
-            $data['problemas'] = DB::table('tb_problema')->select('id_problema', 'codigo', 'descripcion', 'eliminado')->get();
-            
-            return view('mantenimientos.problemas.subproblemas', ['data' => $data]);
+            return view('mantenimientos.menu.menu');
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
         }
     }
-
+    
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         try {
-            $problemas = DB::table('tb_problema')->select('id_problema', 'codigo', 'descripcion', 'eliminado')->get()->keyBy('id_problema');
-            $subproblemas = DB::table('tb_subproblema')->where('eliminado', 0)->get()->map(function ($val) use($problemas) {
+            $menus = DB::table('tb_menu')->where('eliminado', 0)->get()->map(function ($val) {
                 $estado = [
                     ['color' => 'danger', 'text' => 'Inactivo'],
                     ['color' => 'success', 'text' => 'Activo']
                 ];
-                $val->cod_problema = $problemas[$val->id_problema]->codigo;
+                $val->submenu = $val->submenu ? 'Sí' : 'No';
                 $val->estado = '<label class="badge badge-' . $estado[$val->estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$val->estatus]['text'] . '</label>';
                 // Generar acciones
                 $val->acciones = $this->DropdownAcciones([
                     'tittle' => 'Acciones',
                     'button' => [
-                        ['funcion' => "Editar({$val->id_subproblema})", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
-                        ['funcion' => "CambiarEstado({$val->id_subproblema}, {$val->estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado[$val->estatus]['color'] . '"></i>Cambiar Estado']
+                        ['funcion' => "Editar({$val->id_menu})", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
+                        ['funcion' => "CambiarEstado({$val->id_menu}, {$val->estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado[$val->estatus]['color'] . '"></i>Cambiar Estado']
                     ],
                 ]);
                 return $val;
             });
-            return $subproblemas;
+            return $menus;
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
         }
     }
 
-    /**
+        /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
@@ -63,9 +59,10 @@ class SubProblemaController extends Controller
         try {
             // Validación de los datos de entrada
             $validator = Validator::make($request->all(), [
-                'problema' => 'required|integer',
-                'codigo_sub' => 'required|string|max:50',
-                'descripcion' => 'required|string|max:255',
+                'descripcion' => 'required|string|max:50',
+                'icon' => 'required|string|max:255',
+                'ruta' => 'required|string|max:255',
+                'submenu' => 'required|integer',
                 'estado' => 'required|integer'
             ]);
     
@@ -77,16 +74,10 @@ class SubProblemaController extends Controller
                 ], 400);
             }
     
-            // Validar si ya existe un problema con el mismo código o descripción
-            $existeSubCodigo = DB::table('tb_subproblema')->where('codigo_sub', $request->codigo_sub)->exists();
-            $existeDescripcion = DB::table('tb_subproblema')->where('descripcion', $request->descripcion)->exists();
-    
-            if ($existeSubCodigo) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'El sub código ingresado ya está registrado. Por favor, usa otro.'
-                ], 409);
-            }
+            // Validar si ya existe un menu con el mismo código o descripción
+            $existeDescripcion = DB::table('tb_menu')->where('descripcion', $request->descripcion)->exists();
+            $existeIcon = DB::table('tb_menu')->where('icon', $request->icon)->exists();
+            $existeRuta = DB::table('tb_menu')->where('ruta', $request->ruta)->exists();
     
             if ($existeDescripcion) {
                 return response()->json([
@@ -95,12 +86,27 @@ class SubProblemaController extends Controller
                 ], 409);
             }
     
-            // Insertar el nuevo problema en la base de datos
+            if ($existeIcon) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El icono ingresado ya está registrado. Por favor, use otro.'
+                ], 409);
+            }
+    
+            if ($existeRuta) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.'
+                ], 409);
+            }
+    
+            // Insertar el nuevo menu en la base de datos
             DB::beginTransaction();
-            DB::table('tb_subproblema')->insert([
-                'id_problema' => $request->problema,
-                'codigo_sub' => $request->codigo_sub,
+            DB::table('tb_menu')->insert([
                 'descripcion' => $request->descripcion,
+                'icon' => $request->icon,
+                'ruta' => $request->ruta,
+                'submenu' => $request->submenu,
                 'estatus' => $request->estado,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
@@ -126,13 +132,13 @@ class SubProblemaController extends Controller
     public function show(string $id)
     {
         try {
-            $subproblema = DB::table('tb_subproblema')->where('id_subproblema', $id)->first();
+            $menu = DB::table('tb_menu')->where('id_menu', $id)->first();
     
-            if (!$subproblema) {
-                return response()->json(["success" => false, "message" => "No se encontró el problema solicitado. Verifica el código e intenta nuevamente."], 404);
+            if (!$menu) {
+                return response()->json(["success" => false, "message" => "No se encontró el menu solicitado. Verifica el código e intenta nuevamente."], 404);
             }
     
-            return response()->json(["success" => true, "message" => "", "data" => $subproblema], 200);
+            return response()->json(["success" => true, "message" => "", "data" => $menu], 200);
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
@@ -150,9 +156,10 @@ class SubProblemaController extends Controller
             // Validación de los datos de entrada
             $validator = Validator::make($request->all(), [
                 'id' => 'required|integer',
-                'problema' => 'required|integer',
-                'codigo_sub' => 'required|string|max:50',
-                'descripcion' => 'required|string|max:255',
+                'descripcion' => 'required|string|max:50',
+                'icon' => 'required|string|max:255',
+                'ruta' => 'required|string|max:255',
+                'submenu' => 'required|integer',
                 'estado' => 'required|integer'
             ]);
     
@@ -163,18 +170,11 @@ class SubProblemaController extends Controller
                     'errors' => $validator->errors()
                 ], 400);
             }
-    
-            // Validar si ya existe un problema con el mismo código o descripción
-            $existeCodigo = DB::table('tb_subproblema')->select('id_subproblema')->where('codigo_sub', $request->codigo_sub)->get()->first()->id_subproblema;
-            $existeDescripcion = DB::table('tb_subproblema')->select('id_subproblema')->where('descripcion', $request->descripcion)->get()->first()->id_subproblema;
-    
-            if ($existeCodigo != $request->id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'El código ingresado ya está registrado. Por favor, usa otro.',
-                    'data' => $existeCodigo
-                ], 409);
-            }
+
+            // Validar si ya existe un menu con el mismo código o descripción
+            $existeDescripcion = DB::table('tb_menu')->select('id_menu')->where('descripcion', $request->descripcion)->get()->first()->id_menu;
+            $existeIcon = DB::table('tb_menu')->select('id_menu')->where('icon', $request->icon)->get()->first()->id_menu;
+            $existeRuta = DB::table('tb_menu')->select('id_menu')->where('ruta', $request->ruta)->get()->first()->id_menu;
     
             if ($existeDescripcion != $request->id) {
                 return response()->json([
@@ -183,12 +183,27 @@ class SubProblemaController extends Controller
                 ], 409);
             }
     
+            if ($existeIcon != $request->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'El icono ingresado ya está registrado. Por favor, use otro.'
+                ], 409);
+            }
+    
+            if ($existeRuta != $request->id) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.'
+                ], 409);
+            }
+    
             // Insertar el nuevo problema en la base de datos
             DB::beginTransaction();
-            DB::table('tb_subproblema')->where('id_subproblema', $request->id)->update([
-                'id_problema' => $request->problema,
-                'codigo_sub' => $request->codigo_sub,
+            DB::table('tb_menu')->where('id_menu', $request->id)->update([
                 'descripcion' => $request->descripcion,
+                'icon' => $request->icon,
+                'ruta' => $request->ruta,
+                'submenu' => $request->submenu,
                 'estatus' => $request->estado,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ]);
@@ -225,7 +240,7 @@ class SubProblemaController extends Controller
             }
 
             DB::beginTransaction();
-            DB::table('tb_subproblema')->where('id_subproblema', $request->id)->update([
+            DB::table('tb_menu')->where('id_menu', $request->id)->update([
                 'estatus' => $request->estado,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ]);

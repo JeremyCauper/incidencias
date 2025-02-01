@@ -146,12 +146,4 @@ class GruposController extends Controller
             return $this->mesageError(exception: $e, codigo: 500);
         }
     }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
-    }
 }

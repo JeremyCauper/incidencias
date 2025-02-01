@@ -136,7 +136,7 @@
     var scroll = $(window).scrollTop();
 
     //>=, not <=
-    if (scroll >= 40) {
+    if (scroll >= 6) {
       //clearHeader, not clearheader - caps H
       $(".fixed-top").addClass("headerLight");
     }
