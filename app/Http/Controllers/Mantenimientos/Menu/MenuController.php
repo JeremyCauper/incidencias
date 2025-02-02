@@ -32,6 +32,7 @@ class MenuController extends Controller
                     ['color' => 'danger', 'text' => 'Inactivo'],
                     ['color' => 'success', 'text' => 'Activo']
                 ];
+                $val->icon = '<i class="' . $val->icon . '"></i> ' . $val->icon;
                 $val->submenu = $val->submenu ? 'Sí' : 'No';
                 $val->estado = '<label class="badge badge-' . $estado[$val->estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$val->estatus]['text'] . '</label>';
                 // Generar acciones
@@ -51,7 +52,7 @@ class MenuController extends Controller
         }
     }
 
-        /**
+    /**
      * Show the form for creating a new resource.
      */
     public function create(Request $request)
@@ -60,7 +61,7 @@ class MenuController extends Controller
             // Validación de los datos de entrada
             $validator = Validator::make($request->all(), [
                 'descripcion' => 'required|string|max:50',
-                'icon' => 'required|string|max:255',
+                'icono' => 'required|string|max:255',
                 'ruta' => 'required|string|max:255',
                 'submenu' => 'required|integer',
                 'estado' => 'required|integer'
@@ -76,7 +77,7 @@ class MenuController extends Controller
     
             // Validar si ya existe un menu con el mismo código o descripción
             $existeDescripcion = DB::table('tb_menu')->where('descripcion', $request->descripcion)->exists();
-            $existeIcon = DB::table('tb_menu')->where('icon', $request->icon)->exists();
+            $existeIcon = DB::table('tb_menu')->where('icon', $request->icono)->exists();
             $existeRuta = DB::table('tb_menu')->where('ruta', $request->ruta)->exists();
     
             if ($existeDescripcion) {
@@ -104,7 +105,7 @@ class MenuController extends Controller
             DB::beginTransaction();
             DB::table('tb_menu')->insert([
                 'descripcion' => $request->descripcion,
-                'icon' => $request->icon,
+                'icon' => $request->icono,
                 'ruta' => $request->ruta,
                 'submenu' => $request->submenu,
                 'estatus' => $request->estado,
@@ -157,7 +158,7 @@ class MenuController extends Controller
             $validator = Validator::make($request->all(), [
                 'id' => 'required|integer',
                 'descripcion' => 'required|string|max:50',
-                'icon' => 'required|string|max:255',
+                'icono' => 'required|string|max:255',
                 'ruta' => 'required|string|max:255',
                 'submenu' => 'required|integer',
                 'estado' => 'required|integer'
@@ -172,25 +173,25 @@ class MenuController extends Controller
             }
 
             // Validar si ya existe un menu con el mismo código o descripción
-            $existeDescripcion = DB::table('tb_menu')->select('id_menu')->where('descripcion', $request->descripcion)->get()->first()->id_menu;
-            $existeIcon = DB::table('tb_menu')->select('id_menu')->where('icon', $request->icon)->get()->first()->id_menu;
-            $existeRuta = DB::table('tb_menu')->select('id_menu')->where('ruta', $request->ruta)->get()->first()->id_menu;
+            $existeDescripcion = DB::table('tb_menu')->select('id_menu')->where('descripcion', $request->descripcion)->get()->first();
+            $existeIcon = DB::table('tb_menu')->select('id_menu')->where('icon', $request->icono)->get()->first();
+            $existeRuta = DB::table('tb_menu')->select('id_menu')->where('ruta', $request->ruta)->get()->first();
     
-            if ($existeDescripcion != $request->id) {
+            if ($existeDescripcion && $existeDescripcion->id_menu != $request->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.'
                 ], 409);
             }
     
-            if ($existeIcon != $request->id) {
+            if ($existeIcon && $existeIcon->id_menu != $request->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'El icono ingresado ya está registrado. Por favor, use otro.'
                 ], 409);
             }
     
-            if ($existeRuta != $request->id) {
+            if ($existeRuta && $existeRuta->id_menu != $request->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.'
@@ -201,7 +202,7 @@ class MenuController extends Controller
             DB::beginTransaction();
             DB::table('tb_menu')->where('id_menu', $request->id)->update([
                 'descripcion' => $request->descripcion,
-                'icon' => $request->icon,
+                'icon' => $request->icono,
                 'ruta' => $request->ruta,
                 'submenu' => $request->submenu,
                 'estatus' => $request->estado,

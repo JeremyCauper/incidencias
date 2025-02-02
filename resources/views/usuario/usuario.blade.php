@@ -165,7 +165,7 @@
                         @endforeach
                     </select>
                 </div>
-                <div class="col-12 d-none">
+                <div class="col-12">
                     <label class="form-label mb-0" for="ape_usu"><b>Administrar Permisos del Sistema <span
                                 class="text-danger">*</span></b></label>
                     <div class="border rounded p-2">

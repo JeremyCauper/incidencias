@@ -35,7 +35,7 @@ $(document).ready(function () {
     });
 
     $('.modal').on('hidden.bs.modal', function () {
-        $('#modal_menuLabel').html('REGISTRAR PROBLEMA');
+        $('#modal_menuLabel').html('REGISTRAR MENU');
         $('#id').val('');
     });
 });
@@ -65,7 +65,7 @@ const tb_menu = new DataTable('#tb_menu', {
     ],
     createdRow: function (row, data, dataIndex) {
         $(row).addClass('text-center');
-        $(row).find('td:eq(0), td:eq(1)').addClass('text-start');
+        $(row).find('td:eq(0), td:eq(1), td:eq(2)').addClass('text-start');
     },
     processing: true
 });
@@ -128,7 +128,6 @@ document.getElementById('form-menu').addEventListener('submit', function (event)
     });
 });
 
-
 function Editar(id) {
     try {
         $('#modal_menuLabel').html('Editar Menu');
@@ -161,7 +160,7 @@ function Editar(id) {
                 }
 
                 var json = data.data;
-                $('#id').val(json.id_problema);
+                $('#id').val(json.id_menu);
                 $('#descripcion').val(json.descripcion);
                 $('#icono').val(json.icon);
                 $('#ruta').val(json.ruta);

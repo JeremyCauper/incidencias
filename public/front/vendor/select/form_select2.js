@@ -18,8 +18,9 @@ $(document).ready(function () {
             tags: true
         },
         "icons": {
+            placeholder: '-- Seleccione --',
+            allowClear: true,
             templateResult: iconFormat,
-            minimumResultsForSearch: Infinity,
             templateSelection: iconFormat,
             escapeMarkup: function (m) { return m; }
         }
@@ -30,10 +31,7 @@ $(document).ready(function () {
         var originalOption = icon.element;
         if (!icon.id) { return icon.text; }
         var valor = icon.text.split('::');
-        var $icon = `<div class="d-flex justify-content-between">
-            <span>${valor[0]}</span>
-            <b>${atob(valor[1])}</b>
-        </div>`;// '<i class="icon-home8"></i>' + icon.text;
+        var $icon = `<i class="${valor[0]}"></i><span>${valor[1]}</span>`;// '<i class="icon-home8"></i>' + icon.text;
 
         return $icon;
     }

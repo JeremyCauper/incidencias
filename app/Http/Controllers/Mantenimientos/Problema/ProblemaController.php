@@ -163,18 +163,17 @@ class ProblemaController extends Controller
             }
     
             // Validar si ya existe un problema con el mismo código o descripción
-            $existeCodigo = DB::table('tb_problema')->select('id_problema')->where('codigo', $request->codigo)->get()->first()->id_problema;
-            $existeDescripcion = DB::table('tb_problema')->select('id_problema')->where('descripcion', $request->descripcion)->get()->first()->id_problema;
+            $existeCodigo = DB::table('tb_problema')->select('id_problema')->where('codigo', $request->codigo)->get()->first();
+            $existeDescripcion = DB::table('tb_problema')->select('id_problema')->where('descripcion', $request->descripcion)->get()->first();
     
-            if ($existeCodigo != $request->id) {
+            if ($existeCodigo && $existeCodigo->id_problema != $request->id) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'El código ingresado ya está registrado. Por favor, usa otro.',
-                    'data' => $existeCodigo
+                    'message' => 'El código ingresado ya está registrado. Por favor, usa otro.'
                 ], 409);
             }
     
-            if ($existeDescripcion != $request->id) {
+            if ($existeDescripcion && $existeDescripcion->id_problema != $request->id) {
                 return response()->json([
                     'success' => false,
                     'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.'

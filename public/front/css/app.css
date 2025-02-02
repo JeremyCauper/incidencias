@@ -1067,7 +1067,7 @@ body {
     margin-bottom: 0;
     margin-top: 0;
     list-style: none;
-    padding: 0.25rem 0 0 3.07rem;
+    padding: 0.25rem 0 0 2rem;
     background: #fff;
     padding-bottom: 12px;
     border-radius: 0px 0px 20px 0px;
@@ -1075,7 +1075,7 @@ body {
 
 .sidebar .nav.sub-menu .nav-item {
     position: relative;
-    padding: 0;
+    padding: 0 0 0 1.5rem;
 }
 
 .sidebar .nav.sub-menu .nav-item::before {
@@ -1090,7 +1090,7 @@ body {
 
 .sidebar .nav.sub-menu .nav-item .nav-link {
     color: #484848;
-    padding: 0.7rem 1rem;
+    padding: .7rem;
     position: relative;
     font-size: 11px;
     line-height: 1;
@@ -1105,6 +1105,7 @@ body {
 .sidebar .nav.sub-menu .nav-item .nav-link.active {
     color: #3b71ca;
     background: transparent;
+    font-weight: bold;
 }
 
 .purple .sidebar .nav.sub-menu .nav-item .nav-link.active {
@@ -1117,12 +1118,12 @@ body {
 }
 
 .sidebar .nav.sub-menu .nav-category-item {
-    color: #404040;
+    color: #919191;
     border-bottom: 1px solid rgba(255, 255, 255, 0.13);
     margin: 0;
-    font-size: 11px;
-    font-weight: 700;
-    padding: 15px 0px 2px 0px;
+    font-size: 10px;
+    font-weight: bold;
+    padding: 15px 0px 2px .8rem;
     text-transform: uppercase;
 }
 

@@ -30,7 +30,7 @@
                             <tr class="text-bg-primary text-center">
                                 <th class="text-start">Descripcion</th>
                                 <th class="text-start">Icono</th>
-                                <th>Ruta</th>
+                                <th class="text-start">Ruta</th>
                                 <th>Sub Menu</th>
                                 <th>Fecha Registro</th>
                                 <th>Actualizado</th>
@@ -58,26 +58,26 @@
             <div class="modal-body">
                 <div class="row">
                     <input type="hidden" name="id" id="id">
-                    <div class="col-lg-8 mb-2">
+                    <div class="col-lg-6 mb-2">
                         <label class="form-label mb-0" for="descripcion">Descripcion</label>
                         <input class="form-control" id="descripcion">
                     </div>
-                    <div class="col-lg-4 mb-2">
+                    <div class="col-lg-6 mb-2">
                         <label class="form-label mb-0" for="icono">Icono</label>
                         <input class="form-control" id="icono">
                     </div>
-                    <div class="col-lg-4 mb-2">
+                    <div class="col-lg-8 mb-2">
                         <label class="form-label mb-0" for="ruta">Ruta</label>
                         <input class="form-control" id="ruta">
                     </div>
-                    <div class="col-6 mb-2">
+                    <div class="col-lg-2 col-6 mb-2">
                         <label class="form-label mb-0" for="submenu">Sub Menu</label>
                         <select class="select" id="submenu">
-                            <option selected value="0">Sí</option>
-                            <option value="0">No</option>
+                            <option value="1">Sí</option>
+                            <option selected value="0">No</option>
                         </select>
                     </div>
-                    <div class="col-6 mb-2">
+                    <div class="col-lg-2 col-6 mb-2">
                         <label class="form-label mb-0" for="estado">Estado</label>
                         <select class="select" id="estado">
                             <option selected value="1">Activo</option>
