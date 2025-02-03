@@ -221,6 +221,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
             $.each(json.count, function (panel, count) {
                 $(`b[data-panel="${panel}"]`).html(count);
             });
+            fillSelectContac(json.contact);
             return json.data;
         },
         error: function (xhr, error, thrown) {
@@ -264,11 +265,6 @@ function searchTable(search) {
 
 document.getElementById('form-incidencias').addEventListener('submit', function (event) {
     event.preventDefault();
-    const emailValue = $('#cor_contac').val();
-    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/;
-    if (!emailRegex.test(emailValue) && emailValue) {
-        return boxAlert.box({ i: 'warning', t: 'Datos invalidos', h: 'El correo electrónico ingresado no es válido.' });
-    }
     fMananger.formModalLoding('modal_incidencias', 'show');
     const accion = $('#id_inc').val();
     const url = accion ? `edit/${accion}` : `create`;
@@ -277,7 +273,12 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
     var valid = validFrom(elementos);
     if (!valid.success)
         return fMananger.formModalLoding('modal_incidencias', 'hide');
-    valid.data.data['personal'] = cPersonal.extract();
+
+    const personal = cPersonal.extract();
+    if (!personal) {
+        return fMananger.formModalLoding('modal_incidencias', 'hide');
+    }
+    valid.data.data['personal'] = personal;
 
     $.ajax({
         type: 'POST',
@@ -292,7 +293,6 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
                 $('#modal_incidencias').modal('hide');
-                fillSelectContac();
                 boxAlert.minbox({
                     h: data.message
                 });
@@ -470,6 +470,12 @@ async function AssignPer() {
     const cod = $('#modal_assign [aria-item="codigo"]').html();
     const estado = $(`#modal_assign [aria-item="estado"]`).text().replaceAll(' ', '').toLowerCase();
 
+    const personal = cPersonal1.extract();
+    if (!personal) {
+        return fMananger.formModalLoding('modal_assign', 'hide');
+    }
+    valid.data.data['personal'] = personal;
+
     $.ajax({
         type: 'POST',
         url: `${__url}/incidencias/registradas/assignPer`,
@@ -480,7 +486,7 @@ async function AssignPer() {
         data: JSON.stringify({
             cod_inc: cod,
             estado: estado == 'enproceso' ? false : true,
-            personal_asig: cPersonal1.extract()
+            personal_asig: personal
         }),
         success: function (data) {
             var estadoInfo = [
@@ -615,23 +621,12 @@ async function OrdenDetail(e, cod) {
     });
 }
 
-function fillSelectContac() {
-    $.ajax({
-        type: 'GET',
-        url: `${__url}/mantenimiento/contacto-empresas/index`,
-        contentType: 'application/json',
-        success: function (data) {
-            $('#tel_contac').html('<option value=""></option>');
-            Object.entries(data).forEach(([key, e]) => {
-                $('#tel_contac').append($('<option>').val(e.telefono).text(e.telefono));
-            });
-            obj_eContactos = data;
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error al registrar el usuario');
-            console.log(jqXHR.responseJSON);
-        }
+function fillSelectContac(data) {
+    $('#tel_contac').html('<option value=""></option>');
+    Object.entries(data).forEach(([key, e]) => {
+        $('#tel_contac').append($('<option>').val(e.telefono).text(e.telefono));
     });
+    obj_eContactos = data;
 }
 
 function validContac(_this) {

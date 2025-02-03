@@ -3815,6 +3815,7 @@ body {
 .tittle {
     font-size: .85rem;
     font-weight: bold;
+    margin: 10px 0 2px 0;
 }
 
 .title-count {

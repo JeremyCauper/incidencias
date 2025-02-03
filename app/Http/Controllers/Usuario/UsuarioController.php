@@ -18,20 +18,15 @@ class UsuarioController extends Controller
             $data['areas'] = DB::table('tb_area')->where('estatus', 1)->get();
             $data['tipoAcceso'] = DB::table('tipo_usuario')->where('estatus', 1)->get();
 
-            $menus = DB::table('tb_menu')->where('estatus', 1)->get();
-            $submenus = DB::table('tb_submenu')->where('estatus', 1)->get();
-
-            // Transformar los submenús en un mapa por id_menu para facilitar la búsqueda
-            $submenusGrouped = $submenus->groupBy('id_menu');
-
+            $submenus = DB::table('tb_submenu')->where('estatus', 1)->get()->groupBy('id_menu');
             // Usar map para construir el resultado
-            $data['menu'] = $menus->map(function ($m) use ($submenusGrouped) {
+            $data['menu'] = DB::table('tb_menu')->where('estatus', 1)->get()->map(function ($m) use ($submenus) {
                 return [
                     "id_m" => $m->id_menu,
                     "text" => $m->descripcion,
                     "icon" => $m->icon,
                     "submenu" => $m->submenu 
-                        ? $submenusGrouped->get($m->id_menu, collect())->map(function ($sm) {
+                        ? $submenus->get($m->id_menu, collect())->map(function ($sm) {
                             return [
                                 "id_sm" => $sm->id_submenu,
                                 "text" => $sm->descripcion

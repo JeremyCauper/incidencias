@@ -137,16 +137,14 @@
                             <label class="form-label mb-0" for="firma_digital"><b>Firma Digital</b></label>
                             <div class="col-12 p-1 text-center content-image">
                                 <div class="overlay">
-                                    <button class="btn-img removeImgButton" style="display: none;"
-                                        id="removeImgFirma" type="button" button-reset><i
-                                            class="fas fa-xmark"></i></button>
-                                    <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma"
-                                        type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
+                                    <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma"
+                                        type="button" button-reset><i class="fas fa-xmark"></i></button>
+                                    <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma" type="button"><i
+                                            class="fas fa-arrow-up-from-bracket"></i></button>
                                     <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i
                                             class="fas fa-pencil"></i></button>
                                     <button class="btn-img expandImgButton" type="button"
-                                        onclick="PreviImagenes(PreviFirma.src);"><i
-                                            class="fas fa-expand"></i></button>
+                                        onclick="PreviImagenes(PreviFirma.src);"><i class="fas fa-expand"></i></button>
                                 </div>
                                 <input type="file" class="d-none" id="firma_digital">
                                 <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
@@ -169,7 +167,39 @@
                     <label class="form-label mb-0" for="ape_usu"><b>Administrar Permisos del Sistema <span
                                 class="text-danger">*</span></b></label>
                     <div class="border rounded p-2">
-                        <div class="row">
+                        <!-- <div class="row">
+                            <div class="col-xl-3 col-md-6 mb-2">
+                                <ul class="menu">
+                                    <li class="menu-tittle">
+                                        <input type="checkbox" class="" id="menu2" value="2">
+                                        <label for="menu2">
+                                            <i class="fas fa-list-check"></i> Incidencias Resueltas
+                                        </label>
+                                    </li>
+                                </ul>
+                            </div>
+                            <div class="col-xl-3 col-md-6 mb-2">
+                                <ul class="menu">
+                                    <li class="menu-tittle-collapsed">
+                                        <input type="checkbox" class="inputMenu" id="menu3" value="3">
+                                        <label for="menu3">
+                                            <i class="fas fa-person-biking"></i> Visitas
+                                        </label>
+                                    </li>
+                                    <li>
+                                        <ul class="menu-collapsed">
+                                            <li>
+                                                <input type="checkbox" class="inputSubMenu" id="submenu1" value="1">
+                                                <label for="submenu1">Visitas</label>
+                                            </li>
+                                            <li>
+                                                <input type="checkbox" class="inputSubMenu" id="submenu2" value="2">
+                                                <label for="submenu2">Terminadas</label>
+                                            </li>
+                                        </ul>
+                                    </li>
+                                </ul>
+                            </div> -->
                             @foreach ($menu as $m)
                                 <div class="col-xl-3 col-md-6 mb-2">
                                     <ul class="treeview">
@@ -214,7 +244,7 @@
 @section('scripts')
 <script>
     const imgFirmDefault = "{{asset('front/images/firms/firm.png')}}";
-    const imgUserDefault= "{{asset('front/images/auth/user_auth.jpg')}}";
+    const imgUserDefault = "{{asset('front/images/auth/user_auth.jpg')}}";
 </script>
 <script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>
 <script src="{{asset('front/js/app/usuario/usuarios.js')}}"></script>

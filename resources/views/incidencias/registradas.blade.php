@@ -124,7 +124,7 @@
                     <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios
                         (<span class="text-danger">*</span>)</span>
                 </div>
-                <h6 class="tittle text-primary my-3">Datos Empresa</h6>
+                <h6 class="tittle text-primary">Datos Empresa</h6>
                 <div class="row">
                     <div class="col-lg-8 mb-2">
                         <label class="form-label mb-0" for="id_empresa">Empresa</label>
@@ -144,7 +144,7 @@
                     </div>
                 </div>
 
-                <h6 class="tittle text-primary my-3">Datos Contacto</h6>
+                <h6 class="tittle text-primary">Datos Contacto</h6>
                 <div class="row">
                     <input type="hidden" name="cod_contact" id="cod_contact">
                     <div class="col-lg-4 col-6 mb-2">
@@ -180,7 +180,7 @@
                     </div>
                 </div>
 
-                <h6 class="tittle text-primary my-3">Datos Incidencia</h6>
+                <h6 class="tittle text-primary">Datos Incidencia</h6>
                 <div class="row">
                     <div class="col-lg-4 col-7 mb-2">
                         <label class="form-label mb-0" for="tEstacion">Tipo Estación</label>
@@ -248,7 +248,7 @@
                 </div>
 
                 <div id="contenedor-personal">
-                    <h6 class="tittle text-primary my-3">Asignar Personal
+                    <h6 class="tittle text-primary">Asignar Personal
                     </h6>
                     <div class="row">
                         <div class="col-md-6">

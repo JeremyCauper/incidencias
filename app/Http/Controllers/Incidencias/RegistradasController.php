@@ -74,6 +74,7 @@ class RegistradasController extends Controller
             $tipoIncidencia = $this->fetchAndParseDbData('tb_tipo_incidencia', ["id_tipo_incidencia as id", 'descripcion', 'estatus']);
             $problema = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'descripcion', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
             $subproblema = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'descripcion', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
+            $contactos_empresas = DB::table('contactos_empresas')->where('estatus', 1)->get()->keyBy('telefono');
 
             // Consultar incidencias
             $incidencias = DB::table('tb_incidencias')
@@ -138,7 +139,7 @@ class RegistradasController extends Controller
                 return $val;
             });
 
-            return ['data' => $incidencias, 'count' => $_count];
+            return ['data' => $incidencias, 'count' => $_count, 'contact' => $contactos_empresas];
         } catch (Exception $e) {
             return $this->mesageError(exception: $e, codigo: 500);
         }

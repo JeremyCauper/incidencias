@@ -122,8 +122,15 @@ class CTable {
     }
 
     extract() {
+        const $selector = this._selector;
+        var $select = $($selector);
+        if ($select.val()) {
+            boxAlert.box({ i: 'warning', t: 'Advertencia!', h: "El selector aun tiene un valor por añadir" });
+            return false;
+        }
+
         const arr = this.$s.extract;
-        const $trs = $(`table[ctable-table="${this._selector}"]`).children('tbody').children('tr');
+        const $trs = $(`table[ctable-table="${$selector}"]`).children('tbody').children('tr');
         const data = [];
         $trs.each(function (i, t) {
             if ($(t).attr('ctable-table-tr') === 'true') {
