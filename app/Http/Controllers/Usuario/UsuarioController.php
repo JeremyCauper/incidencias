@@ -18,23 +18,25 @@ class UsuarioController extends Controller
             $data['areas'] = DB::table('tb_area')->where('estatus', 1)->get();
             $data['tipoAcceso'] = DB::table('tipo_usuario')->where('estatus', 1)->get();
 
-            $submenus = DB::table('tb_submenu')->where('estatus', 1)->get()->groupBy('id_menu');
-            // Usar map para construir el resultado
-            $data['menu'] = DB::table('tb_menu')->where('estatus', 1)->get()->map(function ($m) use ($submenus) {
-                return [
-                    "id_m" => $m->id_menu,
-                    "text" => $m->descripcion,
-                    "icon" => $m->icon,
-                    "submenu" => $m->submenu 
-                        ? $submenus->get($m->id_menu, collect())->map(function ($sm) {
-                            return [
-                                "id_sm" => $sm->id_submenu,
-                                "text" => $sm->descripcion
-                            ];
-                        })->toArray()
-                        : []
-                ];
-            })->toArray();
+            $menu = DB::table('tb_menu')->select(['id_menu', 'descripcion', 'icon'])->where('estatus', 1)->get();
+            $submenus = DB::table('tb_submenu')->select(['id_submenu', 'id_menu', 'descripcion', 'categoria'])->where('estatus', 1)->get()->groupBy('id_menu');
+
+            $data['menus'] = $menu->map(function ($item) use ($submenus) {
+                $menuId = $item->id_menu;
+                if ($submenus->has($menuId)) {
+                    // Agrupar submenús por categoría
+                    $groupedByCategory = $submenus[$menuId]->groupBy('categoria');
+                    // Transformar cada categoría en una clave dentro de submenu
+                    $item->submenu = $groupedByCategory->mapWithKeys(function ($submenusList, $category) {
+                        return [$category ?: 'sin_categoria' => $submenusList->values()];
+                    });
+                } else {
+                    $item->submenu = [];
+                }
+
+                return $item;
+            });
+            // return $data['menus'];
 
             return view('usuario.usuario', $data);
         } catch (Exception $e) {
@@ -46,12 +48,12 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        
+
         $tipoAcceso = DB::table('tipo_usuario')->get()->keyBy('id_tipo_acceso');
         $usuarios = DB::table('usuarios')
             ->select('ndoc_usuario', 'id_usuario', 'nombres', 'apellidos', 'usuario', 'pass_view', 'estatus', 'tipo_acceso')
             ->where('eliminado', 0)
-            ->get()->map(function ($usu) use($tipoAcceso) {
+            ->get()->map(function ($usu) use ($tipoAcceso) {
                 $estado = [
                     ['color' => 'danger', 'text' => 'Inactivo'],
                     ['color' => 'success', 'text' => 'Activo']
@@ -95,13 +97,14 @@ class UsuarioController extends Controller
                 'foto_perfil' => 'nullable|string',
                 'firma_digital' => 'nullable|string',
                 'tipo_acceso' => 'required|integer',
+                'permisos' => 'required|string'
             ]);
 
             if ($validator->fails()) {
                 return response()->json(['errors' => $validator->errors()], 400);
             }
 
-            
+
             DB::beginTransaction();
             $filenameFP = "user_auth.jpg";
             if ($request->foto_perfil) {
@@ -121,7 +124,7 @@ class UsuarioController extends Controller
                 $filenameFD = $result['filename'];
             }
 
-            
+
             DB::table('usuarios')->insert([
                 'ndoc_usuario' => $request->n_doc,
                 'nombres' => $request->nom_usu,
@@ -138,7 +141,7 @@ class UsuarioController extends Controller
                 'firma_digital' => $filenameFD,
                 'tipo_acceso' => $request->tipo_acceso,
                 'id_area' => $request->id_area,
-                'menu_usuario' => '{}',
+                'menu_usuario' => $request->permisos,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
             DB::commit();
@@ -185,6 +188,7 @@ class UsuarioController extends Controller
                 'foto_perfil' => 'nullable|string',
                 'firma_digital' => 'nullable|string',
                 'tipo_acceso' => 'required|integer',
+                'permisos' => 'required|string'
             ]);
 
             if ($validator->fails()) {
@@ -205,7 +209,7 @@ class UsuarioController extends Controller
                 'pass_view' => $request->contrasena,
                 'tipo_acceso' => $request->tipo_acceso,
                 'id_area' => $request->id_area,
-                'menu_usuario' => '{}',
+                'menu_usuario' => $request->permisos,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ];
 

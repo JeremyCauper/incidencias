@@ -26,7 +26,6 @@ class LoginController extends Controller
             'usuario' => 'required|string',
             'password' => 'required|string',
         ]);
-        DB::purge('dynamic');
 
 
         $credentials = [
@@ -40,6 +39,8 @@ class LoginController extends Controller
         if (!Auth::attempt($credentials))
             return response()->json(['success' => false, 'message' => 'La contraseña es incorrecta'], 200);
 
+        // Auth::user()->customModulos = $this->obtenerModulos();
+        session(['customModulos' => $this->obtenerModulos(Auth::user()->menu_usuario)]);
         $request->session()->regenerate();
 
         // Autenticación exitosa
@@ -49,6 +50,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
+        session()->forget('customModulos');
         return redirect('/inicio');
     }
 }

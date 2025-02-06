@@ -13,6 +13,64 @@ class Controller extends BaseController
 {
     use AuthorizesRequests, ValidatesRequests;
 
+
+    public function obtenerModulos($jsonBase64)
+    {
+        // JSON en formato string con los IDs a filtrar
+        $jsonString = base64_decode($jsonBase64); //'{"1":[],"2":[],"3":["1","2"],"4":["3","5","4"],"5":["6"]}';
+
+        // Decodificar el JSON a un array asociativo
+        $filteredIds = json_decode($jsonString, true);
+
+        // Obtener solo los menús que aparecen en el JSON
+        $menu = DB::table('tb_menu')
+            ->select('id_menu', 'descripcion', 'icon', 'ruta')
+            ->where('estatus', 1)
+            ->whereIn('id_menu', array_keys($filteredIds)) // Filtra los menús permitidos
+            ->get();
+
+        // Obtener los submenús, pero solo los que aparecen en el JSON
+        $submenus = DB::table('tb_submenu')
+            ->select(['id_submenu', 'id_menu', 'descripcion', 'categoria', 'ruta'])
+            ->where('estatus', 1)
+            ->whereIn('id_menu', array_keys($filteredIds)) // Filtra los submenús de los menús permitidos
+            ->where(function ($query) use ($filteredIds) {
+                foreach ($filteredIds as $menuId => $submenuIds) {
+                    if (!empty($submenuIds)) {
+                        $query->orWhere(function ($q) use ($menuId, $submenuIds) {
+                            $q->where('id_menu', $menuId)->whereIn('id_submenu', $submenuIds);
+                        });
+                    }
+                }
+            })->get()->groupBy('id_menu');
+
+        // Combinar menús y submenús en la estructura deseada
+        $menus = $menu->map(function ($item) use ($submenus, $filteredIds) {
+            $menuId = $item->id_menu;
+
+            // Si el JSON dice que este menú no tiene submenús, se deja vacío
+            if (empty($filteredIds[$menuId])) {
+                $item->submenu = [];
+                return $item;
+            }
+
+            // Si hay submenús, agruparlos por categoría
+            if ($submenus->has($menuId)) {
+                $groupedByCategory = $submenus[$menuId]->groupBy('categoria');
+                $item->submenu = $groupedByCategory->mapWithKeys(function ($submenusList, $category) {
+                    return (object)[$category ?: 'sin_categoria' => $submenusList->values()];
+                });
+            } else {
+                $item->submenu = [];
+            }
+
+            return $item;
+        });
+
+        // Retornar el JSON filtrado
+        return $menus;
+    }
+
     public function DropdownAcciones($arr_acciones)
     {
         // Validaciones

@@ -85,68 +85,85 @@
     border-bottom-right-radius: 0px;
 }
 
-.treeview {
-    list-style-type: none;
-    padding: 0;
-}
-
-.treeview,
-.treeview ul {
+/* Estilos básicos del árbol */
+.tree,
+.tree ul,
+.tree .child,
+.tree .child-categoria {
     margin: 0;
-    padding: 0;
-    list-style: none;
-}
-
-.treeview ul {
     position: relative;
 }
 
-.treeview input,
-.treeview input~label {
+
+.tree,
+.tree ul {
+    list-style: none;
+    padding-left: 20px;
+}
+
+.tree .child {
+    padding: 5px 0 0 5px;
+}
+
+.tree * {
     cursor: pointer;
 }
 
-.treeview ul::before {
+/*Estilos para los textos del arbol*/
+.tree .parent .parent-label {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.tree .child .child-label {
+    font-size: 13px;
+}
+
+.tree .child-categoria {
+    color: #b5b5b5;
+    font-size: smaller;
+    font-weight: bold;
+    padding: 5px 0 0 5px;
+}
+
+.tree .child.active .child-label {
+    font-weight: 500;
+}
+
+/* Líneas del árbol (se dibujan con pseudo-elementos) */
+.tree .child::before,
+.tree .child::after,
+.tree .child-categoria::before {
     content: "";
-    display: block;
-    width: 2px;
-    background: #ccc;
     position: absolute;
+    left: -15px;
+}
+
+.tree .child::before,
+.tree .child-categoria::before {
+    z-index: 10;
     top: 0;
-    bottom: 0;
-    left: 5px;
-    transition: all .2s ease-in;
+    border-left: 2px solid #ccc;
+    height: 100%;
 }
 
-.treeview li {
-    margin: 0;
-    padding: 0 0 0 20px;
-    line-height: 25px;
-    color: #3b71ca;
-    font-weight: 700;
-    position: relative;
+.tree .child::after {
+    z-index: 0;
+    top: 50%;
+    border-bottom: 2px solid #ccc;
+    width: 15px;
 }
 
-.treeview .menu .submenu li input {
-    margin-left: 5px;
+.tree .child:last-child::before {
+    height: calc(100% - 50%);
 }
 
-.treeview .submenu li label::before {
-    content: "";
-    display: block;
-    width: 14.5px;
-    height: 2px;
-    background: #D3D3D3;
-    position: absolute;
-    top: 10px;
-    left: 5px;
-    transition: all .2s ease-in;
-}
-
-.treeview .menu input[type="checkbox"]:checked~.submenu::before,
-.treeview .menu .submenu li input[type="checkbox"]:checked~label::before {
-    transition: all .2s ease-in;
-    background: #007bff;
+/* Cuando el elemento está “activo” (checkbox marcado), la línea cambia de color */
+.tree .child.active::before,
+.tree .child.active::after,
+.tree .child:not(.active):has(~ .active)::before,
+.tree .child-categoria:not(.active):has(~ .active)::before {
+    border-color: #3b71ca;
 }
 
 .content-signature-pad {

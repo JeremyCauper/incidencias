@@ -164,59 +164,38 @@
                     </select>
                 </div>
                 <div class="col-12">
-                    <label class="form-label mb-0" for="ape_usu"><b>Administrar Permisos del Sistema <span
-                                class="text-danger">*</span></b></label>
-                    <div class="border rounded p-2">
-                        <!-- <div class="row">
-                            <div class="col-xl-3 col-md-6 mb-2">
-                                <ul class="menu">
-                                    <li class="menu-tittle">
-                                        <input type="checkbox" class="" id="menu2" value="2">
-                                        <label for="menu2">
-                                            <i class="fas fa-list-check"></i> Incidencias Resueltas
-                                        </label>
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="col-xl-3 col-md-6 mb-2">
-                                <ul class="menu">
-                                    <li class="menu-tittle-collapsed">
-                                        <input type="checkbox" class="inputMenu" id="menu3" value="3">
-                                        <label for="menu3">
-                                            <i class="fas fa-person-biking"></i> Visitas
-                                        </label>
-                                    </li>
-                                    <li>
-                                        <ul class="menu-collapsed">
-                                            <li>
-                                                <input type="checkbox" class="inputSubMenu" id="submenu1" value="1">
-                                                <label for="submenu1">Visitas</label>
-                                            </li>
-                                            <li>
-                                                <input type="checkbox" class="inputSubMenu" id="submenu2" value="2">
-                                                <label for="submenu2">Terminadas</label>
-                                            </li>
-                                        </ul>
-                                    </li>
-                                </ul>
-                            </div> -->
-                            @foreach ($menu as $m)
+                    <label class="form-label mb-0">Administrar Modulos del Sistema</label>
+                    <div class="border rounded p-2" id="content-permisos">
+                        <div class="row">
+                            @foreach ($menus as $menu)
                                 <div class="col-xl-3 col-md-6 mb-2">
-                                    <ul class="treeview">
-                                        <li class="{{'menu' . (count($m['submenu']) ? '' : '-only')}}">
-                                            <input type="checkbox" class="{{count($m['submenu']) ? 'inputMenu' : ''}}"
-                                                id="menu{{$m['id_m']}}" value="{{$m['id_m']}}" />
-                                            <label for="menu{{$m['id_m']}}"><i class="{{$m['icon']}}"></i>
-                                                {{$m['text']}}</label>
-                                            @if (count($m['submenu']))
-                                                <ul class="submenu">
-                                                    @foreach ($m['submenu'] as $sm)
-                                                        <li>
-                                                            <input type="checkbox" class="inputSubMenu"
-                                                                id="submenu{{$sm['id_sm']}}" value="{{$sm['id_sm']}}"
-                                                                disabled="true" />
-                                                            <label for="submenu{{$sm['id_sm']}}">{{$sm['text']}}</label>
-                                                        </li>
+                                    <ul class="tree">
+                                        <li class="parent">
+                                            <input type="checkbox" id="menu{{ $menu->id_menu }}"
+                                                value="{{ $menu->id_menu }}">
+                                            <label class="parent-label" for="menu{{ $menu->id_menu }}">
+                                                <i class="{{ $menu->icon }}"></i> {{ $menu->descripcion }}
+                                            </label>
+
+                                            @if (!empty($menu->submenu))
+                                                <ul>
+                                                    @foreach ($menu->submenu as $categoria => $submenus)
+                                                        @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
+                                                            <li class="child-categoria">
+                                                                {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
+                                                            </li>
+                                                        @endif
+                                                        @foreach ($submenus as $submenu)
+                                                            <li class="child">
+                                                                <input type="checkbox"
+                                                                    id="menu{{ $submenu->id_menu }}-item{{ $submenu->id_submenu }}"
+                                                                    value="{{ $submenu->id_submenu }}">
+                                                                <label class="child-label"
+                                                                    for="menu{{ $submenu->id_menu }}-item{{ $submenu->id_submenu }}">
+                                                                    {{ $submenu->descripcion }}
+                                                                </label>
+                                                            </li>
+                                                        @endforeach
                                                     @endforeach
                                                 </ul>
                                             @endif

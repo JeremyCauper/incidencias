@@ -27,7 +27,8 @@ class User extends Authenticatable
         'usuario',
         'contrasena',
         'foto_perfil',
-        'firma_digital'
+        'firma_digital',
+        'menu_usuario'
     ];
 
     /**

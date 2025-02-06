@@ -67,6 +67,7 @@ $(document).ready(function () {
 
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_usuariosLabel').html('REGISTRAR USUARIO');
+        setCheckedFromJson();
         $('#id').val('');
     });
 
@@ -122,9 +123,12 @@ document.getElementById('form-usuario').addEventListener('submit', function (eve
 
     var elementos = this.querySelectorAll('[name]');
     var valid = validFrom(elementos);
+    
+    let permisos = getCheckedValues();
 
-    if (!valid.success)
+    if (!valid.success || !permisos)
         return fMananger.formModalLoding('modal_usuarios', 'hide');
+    valid.data.data.permisos = permisos;
 
     $.ajax({
         type: 'POST',
@@ -156,17 +160,12 @@ function Editar(id) {
         $('#modal_usuariosLabel').html('EDITAR GRUPO');
         $('#modal_usuarios').modal('show');
         fMananger.formModalLoding('modal_usuarios', 'show');
-        const urlImg = {
-            'perfil': `${__asset}/images/auth`,
-            'firma': `${__asset}/images/firms`
-        };
         $.ajax({
             type: 'GET',
             url: `${__url}/control-de-usuario/usuarios/${id}`,
             contentType: 'application/json',
-            success: function (data) {
+            success: function (data) {                
                 if (!data.success) {
-                    console.log(data.error);
                     return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
                 }
                 var json = data.data;
@@ -182,9 +181,10 @@ function Editar(id) {
                 $('#telc_usu').val(json.tel_corporativo);
                 $('#usuario').val(json.usuario);
                 $('#contrasena').val(json.pass_view);
-                $('#PreviFPerfil').attr('src', json.foto_perfil ? `${urlImg['perfil']}/${json.foto_perfil}`: imgUserDefault);
-                $('#PreviFirma').attr('src', json.firma_digital ? `${urlImg['firma']}/${json.firma_digital}`: imgFirmDefault);
+                $('#PreviFPerfil').attr('src', json.foto_perfil ? `${__asset}/images/auth/${json.foto_perfil}` : imgUserDefault);
+                $('#PreviFirma').attr('src', json.firma_digital ? `${__asset}/images/firms/${json.firma_digital}` : imgFirmDefault);
                 $('#tipo_acceso').val(json.tipo_acceso).trigger('change.select2');
+                setCheckedFromJson(json.menu_usuario);
 
                 fMananger.formModalLoding('modal_usuarios', 'hide');
             },
@@ -235,17 +235,135 @@ async function CambiarEstado(id, estado) {
     }
 }
 
-document.querySelectorAll('.inputMenu').forEach(toggle => {
-    toggle.addEventListener('change', function () {
-        const checkboxes = this.closest('.treeview').querySelectorAll('.inputSubMenu');
-        checkboxes.forEach(checkbox => {
-            checkbox.disabled = !this.checked;
-            checkbox.checked = false;
+document.addEventListener("DOMContentLoaded", function () {
+    // Función para actualizar la “línea” (cambiando la clase del li)
+    function updateLine(li, isChecked) {
+        if (isChecked) {
+            li.classList.add('active');
+        } else {
+            li.classList.remove('active');
+        }
+    }
+
+    /* 
+      1. Si se marca un menú (checkbox con clase "parent"):
+         - Si tiene hijos (una lista interna), se marcan o desmarcan todos los ítems.
+         - Se actualiza la línea del li correspondiente.
+    */
+    document.querySelectorAll('.tree > .parent > input').forEach(function (parentCheckbox) {
+        parentCheckbox.addEventListener('change', function () {
+            const li = parentCheckbox.parentElement;
+            // Si el menú tiene hijos:
+            const children = li.querySelectorAll('ul li input[type="checkbox"]');
+            if (children.length > 0) {
+                children.forEach(function (childCheckbox) {
+                    childCheckbox.checked = parentCheckbox.checked;
+                    updateLine(childCheckbox.closest('li'), childCheckbox.checked);
+                });
+            }
+            updateLine(li, parentCheckbox.checked);
+        });
+    });
+
+    /* 
+      2. Al marcar o desmarcar un ítem (checkbox con clase "child"):
+         - Se actualiza la línea del li del ítem.
+         - Si se marca el ítem, se marca automáticamente el menú padre.
+         - Si se desmarca, se verifica si quedan otros ítems marcados para mantener o quitar el check del menú.
+    */
+    document.querySelectorAll('.tree li ul .child input').forEach(function (childCheckbox) {
+        childCheckbox.addEventListener('change', function () {
+            const li = childCheckbox.closest('li');
+
+            updateLine(li, childCheckbox.checked);
+            // Obtener el menú padre (checkbox del li que contiene la lista)
+            const parentLi = childCheckbox.closest('ul').parentElement;
+            const parentCheckbox = parentLi.querySelector('.parent input');
+
+            if (childCheckbox.checked) {
+                parentCheckbox.checked = true;
+            } else {
+                // Verificar si hay algún otro ítem marcado en el mismo grupo
+                const siblings = childCheckbox.closest('ul').querySelectorAll('input');
+                let anyChecked = false;
+                siblings.forEach(function (sibling) {
+                    if (sibling.checked) {
+                        anyChecked = true;
+                    }
+                });
+                if (!anyChecked) {
+                    parentCheckbox.checked = false;
+                }
+            }
         });
     });
 });
 
+function getCheckedValues() {
+    let result = {};
 
+    let contenedor = document.getElementById('content-permisos');
+    // Recorre cada menú padre
+    contenedor.querySelectorAll('.tree .parent > input[type="checkbox"]').forEach(parentCheckbox => {
+        let menuValue = parentCheckbox.value;
+        let parentLi = parentCheckbox.closest('li');
+        let children = parentLi.querySelectorAll('.child input[type="checkbox"]:checked');
+
+        if (children.length > 0) {
+            // Si hay hijos seleccionados, los agregamos al JSON
+            result[menuValue] = Array.from(children).map(child => child.value);
+        } else if (parentCheckbox.checked) {
+            // Si no hay hijos pero el padre está marcado, se agrega solo
+            result[menuValue] = [];
+        }
+    });
+    if (!Object.keys(result).length) {
+        boxAlert.box({ i: 'warning', t: 'Permiso Invalido', h: "Tiene que seleccionar aunque sea un modulo" });
+        return false;
+    }
+    return window.btoa(JSON.stringify(result));
+}
+
+function setCheckedFromJson(jsonString = 'e30=') {
+    let jsonData = JSON.parse(window.atob(jsonString));
+    let contenedor = document.getElementById('content-permisos');
+    // Primero, desmarcar todo
+    contenedor.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+        checkbox.checked = false;
+        checkbox.parentNode.classList.remove('active');
+    });
+    // Recorrer cada clave del JSON
+    for (let parentValue in jsonData) {
+        let parentCheckbox = contenedor.querySelector(`input[id="menu${parentValue}"]`);
+
+        if (parentCheckbox) {
+            let childValues = jsonData[parentValue];
+
+            if (childValues.length > 0) {
+                let lichild = parentCheckbox.closest('li');
+                
+                // Marcar solo los hijos especificados
+                childValues.forEach(childValue => {
+                    let childCheckbox = lichild.querySelector(`input[id="menu${parentValue}-item${childValue}"]`);
+                    if (childCheckbox) {
+                        childCheckbox.checked = true;
+                        childCheckbox.parentNode.classList.add('active');
+                    }
+                });
+                // Si al menos un hijo está marcado, marcar el padre
+                let hasCheckedChild = lichild.querySelector('.child input[type="checkbox"]:checked');
+                if (hasCheckedChild) {
+                    parentCheckbox.checked = true;
+                }
+            } else {
+                // Si el array está vacío, marcar solo el padre
+                parentCheckbox.checked = true;
+            }
+        }
+    }
+}
+
+// Script Basico para modificar, guardar y eliminar Foto de perfil y Firma del usuario
 const fileInput = document.getElementById('foto_perfil');
 const removeButton = document.getElementById('removeButton');
 const PreviFPerfil = document.getElementById('PreviFPerfil');
@@ -365,7 +483,6 @@ function resizeWindow() {
         canvas.height = 140;
     }
 }
-
 
 removeImgFirma.addEventListener('click', () => {
     PreviFirma.src = PreviFirma.getAttribute("imagedefault");
