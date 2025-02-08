@@ -76,17 +76,24 @@
       }
     }
 
-    
-    localStorage.sidebarIconOnly = true;
-    $('[data-bs-toggle="minimize"]').on("click", function () {
-      if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
-        body.toggleClass('sidebar-hidden');
-        localStorage.sidebarIconOnly = false;
-      } else {
-        body.toggleClass('sidebar-icon-only');
-        localStorage.sidebarIconOnly = true;
-      }
-    });
+
+    // console.log(eval(localStorage.sidebarIconOnly));
+    // if (eval(localStorage.sidebarIconOnly)) {
+    //   body.addClass('sidebar-icon-only');
+    // }
+    // $('[data-bs-toggle="minimize"]').on("click", function () {
+    //   localStorage.sidebarIconOnly = false;
+    //   if (window.innerWidth > 992) {
+    //     body.toggleClass('sidebar-icon-only');
+    //     localStorage.sidebarIconOnly = body.hasClass('sidebar-icon-only') ? true : false;
+    //   }
+    //   /*if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
+    //     body.toggleClass('sidebar-hidden');
+    //   } else {
+    //     body.toggleClass('sidebar-icon-only');
+    //     localStorage.sidebarIconOnly = true;
+    //   }*/
+    // });
 
     //checkbox and radios
     $(".form-check label,.form-radio label").append('<i class="input-helper"></i>');
@@ -123,6 +130,20 @@
       });
       $("#datepicker-popup").datepicker("setDate", "0");
     }
+
+    $(window).on('resize', function () {
+      var sidebarIconOnly = body.hasClass("sidebar-icon-only");
+      if (window.innerWidth <= 991) {
+        if (sidebarIconOnly) {
+          body.removeClass("sidebar-icon-only");
+        }
+      } else {
+        if (localStorage.sidebarIconOnly) {
+          body.addClass("sidebar-icon-only");
+        }
+        $('.sidebar, .sidebar-content').removeClass('active');
+      }
+    });
 
   });
 
@@ -185,19 +206,5 @@
 
   $('.modal').on('shown.bs.modal', function () {
     $('html').addClass('overflow-hidden');
-  });
-
-  $(window).on('resize', function() {
-    var body = $('body');
-    var sidebarIconOnly = body.hasClass("sidebar-icon-only");
-    if (window.innerWidth <= 991) {
-      if (sidebarIconOnly) {
-        body.removeClass("sidebar-icon-only");
-      }
-    } else {
-      if (localStorage.sidebarIconOnly) {
-        body.addClass("sidebar-icon-only");
-      }
-    }
   });
 })(jQuery);

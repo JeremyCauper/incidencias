@@ -149,7 +149,7 @@ function OrdenDisplay(e, cod) {
                 var creador = datos.creador;
                 if (contacto) {
                     if (contacto.firma_digital)
-                        $('#PreviFirma').attr('src', `${__asset}/images/client/${contacto.firma_digital}`).removeClass('visually-hidden');
+                        $('#PrevizualizarFirma').attr('src', `${__asset}/images/client/${contacto.firma_digital}`).removeClass('visually-hidden');
                     $('#doc_clienteFirma').html(`${contacto.nro_doc} - ${contacto.nombre_cliente}`);
                 }
 
@@ -179,6 +179,191 @@ function OrdenTicket(cod) {
 
 function AddSignature(cod) {
     $('#modal_firmas').modal('show');
-    fMananger.formModalLoding('modal_firmas', 'show');
+    // fMananger.formModalLoding('modal_firmas', 'show');
     console.log(cod);
+}
+
+/*////////////////////////////////////////
+/       SCRIPT CREAR FIRMA DIGITAL       /
+////////////////////////////////////////*/
+
+// Elementos del DOM
+const fileInputFirma = document.getElementById('firma_digital');
+const previFirma = document.getElementById('PreviFirma');
+const removeImgFirma = document.getElementById('removeImgFirma');
+const textFirmaDigital = document.getElementById('textFirmaDigital');
+const uploadImgFirmaBtn = document.getElementById('uploadImgFirma');
+const createFirmaBtn = document.getElementById('createFirma');
+
+// Configuración
+const MAX_FILE_SIZE = 10 * 1024 * 1024; // 10MB
+
+// Función para manejar la carga de imágenes
+function handleFileInput(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    if (file.size > MAX_FILE_SIZE) {
+        alert('El archivo debe ser menor a 10MB');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = (e) => {
+        const imageSrc = e.target.result;
+        previFirma.src = imageSrc;
+        previFirma.alt = file.name;
+        removeImgFirma.style.display = 'block';
+        textFirmaDigital.value = btoa(imageSrc);
+    };
+    reader.readAsDataURL(file);
+}
+
+// Función para crear la firma digital
+async function createDigitalSignature() {
+    setInertOnElements(true);
+
+    Swal.fire({
+        title: '<h6 class="text-primary">CREAR FIRMA DIGITAL</h6>',
+        html: `
+            <div>
+                <div class="content-signature-pad">
+                    <canvas id="signature-pad" height="180" width="260" style="border: 2px dashed #ccc;"></canvas>
+                </div>
+                <div class="mt-3">
+                    <button class="btn btn-primary btn-sm" id="save">Guardar</button>
+                    <button class="btn btn-danger btn-sm" id="clear">Limpiar</button>
+                    <button class="btn btn-info btn-sm" onclick="Swal.close()">Cerrar</button>
+                </div>
+            </div>`,
+        willClose: () => setInertOnElements(false),
+        showConfirmButton: false
+    });
+
+    const canvas = document.getElementById('signature-pad');
+    const signaturePad = new SignaturePad(canvas);
+
+    document.getElementById('clear').addEventListener('click', () => signaturePad.clear());
+
+    document.getElementById('save').addEventListener('click', () => {
+        if (signaturePad.isEmpty()) {
+            alert("Por favor, dibuja una firma primero.");
+            return;
+        }
+
+        const dataURL = signaturePad.toDataURL();
+        
+        updateSignaturePreview(dataURL);
+        Swal.close();
+    });
+}
+
+// Función para actualizar la vista previa de la firma
+function updateSignaturePreview(dataURL) {
+    previFirma.src = dataURL;
+    previFirma.classList.remove('visually-hidden');
+    removeImgFirma.style.display = 'block';
+    textFirmaDigital.value = btoa(dataURL);
+}
+
+// Función para eliminar la firma cargada
+function removeSignature() {
+    previFirma.src = '';
+    previFirma.classList.add('visually-hidden');
+    textFirmaDigital.value = '';
+    removeImgFirma.style.display = 'none';
+    fileInputFirma.value = '';
+}
+
+// Función para establecer o quitar el atributo "inert" en elementos del DOM
+function setInertOnElements(enable) {
+    const bodyChildren = Array.from(document.body.children);
+    bodyChildren.forEach(child => {
+        if (!child.classList.contains('swal2-container')) {
+            enable ? child.setAttribute('inert', '') : child.removeAttribute('inert');
+        }
+    });
+}
+
+// Función para previsualizar imágenes
+function previewImage(data) {
+    setInertOnElements(true);
+
+    Swal.fire({
+        title: '<h5 class="card-title text-linkedin">PREVISUALIZACIÓN DE LA IMAGEN CARGADA</h5>',
+        html: `<div><img src="${data}" /></div>`,
+        willClose: () => setInertOnElements(false)
+    });
+}
+
+// Eventos
+uploadImgFirmaBtn.addEventListener('click', () => fileInputFirma.click());
+fileInputFirma.addEventListener('change', handleFileInput);
+createFirmaBtn.addEventListener('click', createDigitalSignature);
+removeImgFirma.addEventListener('click', removeSignature);
+
+/*////////////////////////////////////////
+/     SCRIPT BUSCAR DOC DEL CLIENTE      /
+////////////////////////////////////////*/
+
+$('#search_signature').on('change', function () {
+    const regex = /^[0-9]{8}$/;
+    const dni = $(this);
+    const search_signature_text = $('.search_signature_text');
+    if (!regex.test(dni.val())) return false;
+    search_signature_text.html('<i class="fas fa-magnifying-glass"></i>').removeAttr('signature-clear');
+
+    $.ajax({
+        type: 'GET',
+        url: `${__url}/incidencias/registradas/searchCliente/${dni.val()}`,
+        contentType: 'application/json',
+        headers: {
+            'X-CSRF-TOKEN': __token,
+        },
+        beforeSend: function () {
+            search_signature_text.html('<div class="spinner-border text-primary" role="status" style="width: 19px;height: 19px;"></div>');
+        },
+        success: function (data) {
+            if (data.success) {
+                var datos = data.data;
+                dni.val(`${datos.documento} - ${datos.nombre}`);
+                $('#n_doc').val(datos.documento);
+                $('#nom_cliente').val(datos.nombre);
+                if (datos.consulta) {
+                    $('#id_firmador').val(datos.id);
+                    var firma = datos.firma_digital;
+                    $('#nomFirmaDigital').val(firma);
+                    if (firma) {
+                        updateSignaturePreview(`${__asset}/images/client/${firma}`);
+                    }
+                }
+                dni.attr({'disabled': ""});
+            } else {
+                if (dni.val() == "00000000") {
+                    dni.val(`00000000 - Clientes Varios`);
+                    $('#n_doc').val('00000000');
+                    $('#nom_cliente').val('Clientes Varios');
+                }
+            }
+            search_signature_text.html('<i class="fas fa-xmark"></i>').attr({ 'signature-clear': "" });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            const obj_error = jqXHR.responseJSON;
+            console.log(obj_error);
+        }
+    });
+})
+
+$(".search_signature_text").on("click", function () {
+    removeClienteDataFirm();
+});
+
+function removeClienteDataFirm() {
+    var search_signature_text = $(".search_signature_text");
+    if (search_signature_text.attr('signature-clear') !== undefined) {
+        $('#search_signature').val('').removeAttr('disabled');
+        search_signature_text.html('<i class="fas fa-magnifying-glass"></i>').removeAttr('signature-clear');
+        $('#n_doc, #nom_cliente, #id_firmador, #nomFirmaDigital').val('');
+        removeSignature();
+    }
 }

@@ -33,7 +33,7 @@
 
 </style>
 
-<body class="with-welcome-text sidebar-icon-only">
+<body class="with-welcome-text"> <!-- sidebar-icon-only -->
   <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
@@ -46,20 +46,16 @@
         <div>
           <a class="navbar-brand brand-logo" href="{{url('/inicio')}}">
             <div class="d-flex align-items-center">
-              <img class="img-xs rounded-circle" src="{{asset('front/images/app/LogoRC.png')}}"
-                style="height: 26px; width: 27px;" alt="logo" />
-              <h6 class="ms-1 mb-0" style="font-family: 'Roboto', sans-serif;"><b>RC Ingenieros</b></h6>
+              <img src="{{asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
             </div>
           </a>
-          <a class="navbar-brand brand-logo-mini" href="{{url('/inicio')}}">
-            <img class="rounded-circle" src="{{asset('front/images/app/LogoRC.png')}}"
-              style="height: 38px; width: 39px;" alt="logo" />
-          </a>
+          <!-- <a class="navbar-brand brand-logo" href="{{url('/inicio')}}">
+            <img src="{{asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
+          </a> -->
         </div>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav ms-auto">
-
           <!-- <li class="nav-item dropdown">
             <a class="nav-link count-indicator" id="notificationDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
               <i class="fas fa-bell text-secondary"></i>
@@ -82,8 +78,7 @@
               <li><a class="dropdown-item" href="#">Something else here</a></li>
             </ul>
           </li> -->
-
-          <li class="nav-item dropdown user-dropdown">
+          <!-- <li class="nav-item dropdown user-dropdown">
             <a class="nav-link" id="UserDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init
               aria-expanded="false">
               <img class="img-xs rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
@@ -94,10 +89,11 @@
                 <img class="img-md rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
                   alt="Profile image" style="width: 90px; height: 90px;">
                 <p class="mb-1 mt-3 fw-semibold">
-                  {{ explode(' ', Auth::user()->nombres)[0] . ' ' . explode(' ', Auth::user()->apellidos)[0]  }}</p>
+                  {{ explode(' ', Auth::user()->nombres)[0] . ' ' . explode(' ', Auth::user()->apellidos)[0]  }}
+                </p>
                 <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
               </div>
-              <!-- <a class="dropdown-item">
+              <a class="dropdown-item">
                 <i class="dropdown-item-icon far fa-circle-user text-primary me-2"></i>
                 Mi Perfil
                 <span class="badge badge-pill badge-danger">1</span>
@@ -105,147 +101,93 @@
               <a class="dropdown-item">
                 <i class="dropdown-item-icon far fa-calendar-check text-primary me-2"></i>
                 Actividad
-              </a> -->
-              <a class="dropdown-item py-2" href="{{url('/logout')}}">
+              </a>
+              <a class="dropdown-item" href="{{url('/logout')}}">
                 <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
                 Cerrar session
               </a>
             </div>
-          </li>
+          </li> -->
+          <!-- Avatar -->
+          <div class="dropdown">
+            <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow rounded-circle"
+              href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false" data-mdb-ripple-init>
+              <img class="img-xs rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
+                alt="Profile image">
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
+              <li>
+                <span class="dropdown-header text-center">
+                  <img class="img-md rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
+                    alt="Profile image" style="width: 90px; height: 90px;">
+                  <p class="mb-1 mt-3 fw-semibold">
+                    {{ explode(' ', Auth::user()->nombres)[0] . ' ' . explode(' ', Auth::user()->apellidos)[0]  }}
+                  </p>
+                  <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
+                </span>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{url('/logout')}}">
+                  <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
+                  Cerrar session
+                </a>
+              </li>
+            </ul>
+          </div>
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
           data-bs-toggle="offcanvas">
           <span class="fas fa-bars"></span>
         </button>
       </div>
+      <script>
+        var body = $('body');
+        if (eval(localStorage.sidebarIconOnly) && window.innerWidth > 992) {
+          body.addClass('sidebar-icon-only');
+        }
+        
+        $('[data-bs-toggle="minimize"]').on("click", function () {
+          localStorage.sidebarIconOnly = false;
+          if (window.innerWidth > 992) {
+            body.toggleClass('sidebar-icon-only');
+            localStorage.sidebarIconOnly = body.hasClass('sidebar-icon-only') ? true : false;
+          }
+        });
+      </script>
     </nav>
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-      <!-- partial:partials/_sidebar.html -->
+      <div class="sidebar-content"></div>
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           @foreach (session('customModulos') as $menu)
-            <li class="nav-item menu-item">
-              <a class="nav-link menu-link" {{!empty($menu->submenu) ? 'data-mdb-collapse-init role="button" aria-expanded="false" aria-controls="' . $menu->ruta . '"' : ""}} data-mdb-ripple-init href="{{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}">
-                <i class="{{ $menu->icon }} menu-icon"></i>
-                <span class="menu-title">{{ $menu->descripcion }}</span>
-                @if (!empty($menu->submenu)) <i class="menu-arrow"></i> @endif
-              </a>
-              @if (!empty($menu->submenu))
-                <div class="collapse" id="{{$menu->ruta}}">
-                  <ul class="nav flex-column sub-menu">
-                    @foreach ($menu->submenu as $categoria => $submenus)
-                      @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
-                        <li class="nav-category-item">
-                          {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
-                        </li>
-                      @endif
-                      @foreach ($submenus as $submenu)
-                        <li class="nav-item">
-                          <a class="nav-link" href="{{url($submenu->ruta)}}">{{ $submenu->descripcion }}</a>
-                        </li>
-                      @endforeach
-                    @endforeach
-                  </ul>
-                </div>
-              @endif
-            </li>
-          @endforeach
-          <!-- <li class="nav-item menu-item">
-            <a class="nav-link menu-link" data-mdb-ripple-init href="{{url('/incidencias/registradas')}}">
-              <i class="fas fa-house menu-icon"></i>
-              <span class="menu-title">Incidencias</span>
-            </a>
-          </li>
-          <li class="nav-item menu-item">
-            <a class="nav-link menu-link" data-mdb-ripple-init href="{{url('/incidencias/resueltas')}}">
-              <i class="fas fa-list-check menu-icon"></i>
-              <span class="menu-title">Incidencias Resueltas</span>
-            </a>
-          </li>
-          <li class="nav-item menu-item">
-            <a class="nav-link menu-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlVisitas" role="button"
-              aria-expanded="false" aria-controls="ControlVisitas">
-              <i class="fas fa-person-biking menu-icon"></i>
-              <span class="menu-title">Visitas</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ControlVisitas">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/visitas/sucursales')}}">Visitas</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/visitas/terminadas')}}">Terminadas</a>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item menu-item">
-            <a class="nav-link menu-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlEmpresas" role="button"
-              aria-expanded="false" aria-controls="ControlEmpresas">
-              <i class="far fa-building menu-icon"></i>
-              <span class="menu-title">Empresas</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ControlEmpresas">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/empresas/empresas')}}">Empresas</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/empresas/grupos')}}">Grupos Empresas</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/empresas/sucursales')}}">Sucursales Empresas</a>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item menu-item">
-            <a class="nav-link menu-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlUsarios" role="button"
-              aria-expanded="false" aria-controls="ControlUsarios">
-              <i class="fas fa-user-group menu-icon"></i>
-              <span class="menu-title">Control de Usuarios</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ControlUsarios">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/control-de-usuario/usuarios')}}">Usuarios</a>
-                </li>
-                <li class="nav-item d-none">
-                  <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}">Mi Perfil</a>
-                </li>
-              </ul>
-            </div>
-          </li>
-          <li class="nav-item menu-item">
-            <a class="nav-link menu-link" data-mdb-collapse-init data-mdb-ripple-init href="#ControlMantenimientos" role="button"
-              aria-expanded="false" aria-controls="ControlMantenimientos">
-              <i class="fas fa-gears menu-icon"></i>
-              <span class="menu-title">Mantenimientos</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ControlMantenimientos">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-category-item">Incidentes</li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/mantenimiento/problemas/problemas')}}">Problemas</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/mantenimiento/problemas/subproblemas')}}">Sub Problemas</a>
-                </li>
-                <li class="nav-category-item">Config. Menu</li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/mantenimiento/menu/menu')}}">Menu</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="{{url('/mantenimiento/menu/submenu')}}">Sub Menu</a>
-                </li>
-              </ul>
-            </div>
-          </li> -->
+        <li class="nav-item menu-item">
+        <a class="nav-link menu-link" {{!empty($menu->submenu) ? 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
+          href={{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}>
+          <i class="{{ $menu->icon }} menu-icon"></i>
+          <span class="menu-title">{{ $menu->descripcion }}</span>
+          @if (!empty($menu->submenu)) <i class="menu-arrow"></i> @endif
+        </a>
+        @if (!empty($menu->submenu))
+      <div class="collapse" id="{{$menu->ruta}}">
+        <ul class="nav flex-column sub-menu">
+        @foreach ($menu->submenu as $categoria => $submenus)
+      @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
+      <li class="nav-category-item">
+      {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
+      </li>
+    @endif
+      @foreach ($submenus as $submenu)
+      <li class="nav-item">
+      <a class="nav-link" href="{{url($submenu->ruta)}}">{{ $submenu->descripcion }}</a>
+      </li>
+    @endforeach
+    @endforeach
+        </ul>
+      </div>
+    @endif
+        </li>
+      @endforeach
         </ul>
       </nav>
 

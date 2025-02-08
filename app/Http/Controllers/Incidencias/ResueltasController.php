@@ -99,6 +99,7 @@ class ResueltasController extends Controller
                             ['funcion' => "OrdenDisplay(this, '$orden->cod_ordens')", 'texto' => '<i class="far fa-file-lines text-primary me-2"></i> Ver Orden'],
                             ['funcion' => "OrdenPdf('$orden->cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
                             ['funcion' => "OrdenTicket('$orden->cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket'],
+                            ['funcion' => "AddSignature('$orden->cod_ordens')", 'texto' => '<i class="fas fa-signature text-secondary me-2"></i> Añadir Firma'],
                         ]
                     ])
                 ];

@@ -113,61 +113,52 @@
 /          SCRIPT CSS Doc Firma          /
 ////////////////////////////////////////*/
 
-#doc_clienteFirma {
-    cursor: pointer;
+.search_signature_group {
+    flex-wrap: nowrap;
     position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    width: 100%;
 }
 
-.doc-fsearch {
-    height: 26.78px;
-    border: 0.1rem solid #cdcdcd;
+.search_signature_text {
+    display: flex;
+    align-items: center;
+    width: 27.56px;
+    height: auto;
+    cursor: pointer;
+    padding-left: 5px;
 }
 
-.doc-fsearch:hover {
-    background-color: #f3f3f3;
+.search_signature_text i,
+.search_signature_text i::before {
+    line-height: 1.3;
+    min-width: auto;
+    width: 19px;
+    height: 19px;
 }
 
-.doc-fsearch::before,
-.doc-fsearch::after {
-    position: absolute;
-    color: inherit;
+#search_signature {
     display: block;
-    top: 55%;
-    font-size: .75rem;
-    margin-top: -.4375rem;
-    line-height: 1;
-    opacity: .6;
-    -webkit-font-smoothing: antialiased;
+    width: calc(100% - 28px);
+    padding: .2rem .4rem;
+    font-size: .65rem;
+    height: auto;
+    font-weight: 400;
+    line-height: 1.6;
+    color: var(--mdb-surface-color);
+    appearance: none;
+    background-color: var(--mdb-body-bg);
+    border: var(--mdb-border-width) solid var(--mdb-border-color);
+    border-radius: var(--mdb-border-radius);
 }
 
-.doc-fsearch::before {
-    content: "\f002";
-    font-family: "Font Awesome 6 Free";
-    left: 2.25rem;
-}
-
-.doc-fsearch::after {
-    content: "Buscar cliente";
-    font-family: "Roboto";
-    left: 3.65rem;
-    font-weight: 500;
-}
-
-.doc-fclear {
-    padding-right: 1.7rem !important;
-}
-
-.doc-fclear::before {
-    content: "\f00d";
-    font-family: "Font Awesome 6 Free";
-    position: absolute;
-    right: .65rem;
-    top: 50%;
-    font-size: .9rem;
-    margin-top: -.4375rem;
-    line-height: 1;
-    opacity: .6;
-    -webkit-font-smoothing: antialiased;
+#search_signature:focus-visible {
+    outline: none;
+    transition: all .1s linear;
+    border-color: #3b71ca;
+    box-shadow: inset 0px 0px 0px 1px #3b71ca;
 }
 
 .text-normal {

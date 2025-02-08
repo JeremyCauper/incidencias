@@ -95,7 +95,7 @@
                                 <th>Estacion</th>
                                 <th>Atencion</th>
                                 <th>Problema / Sub Problema</th>
-                                <th class="text-bg-primary px-2 th-acciones">Acciones</th>
+                                <th class="th-acciones">Acciones</th>
                             </tr>
                         </thead>
                     </table>
@@ -229,16 +229,16 @@
                         <select class="select-clear" id="sproblema">
                         </select>
                     </div>
-                </div>
-                <div class="row">
                     <div class="col-sm-4">
-                        <div class="col-sm-12 mb-2">
-                            <label class="form-label mb-0" for="fecha_imforme">Fecha de Informe</label>
-                            <input class="form-control" id="fecha_imforme">
-                        </div>
-                        <div class="col-sm-12 mb-2">
-                            <label class="form-label mb-0" for="hora_informe">Hora de Informe</label>
-                            <input class="form-control" id="hora_informe" min="00:00" max="23:59" step="1">
+                        <div class="row">
+                            <div class="col-sm-12 col-6 mb-2">
+                                <label class="form-label mb-0" for="fecha_imforme">Fecha de Informe</label>
+                                <input class="form-control" id="fecha_imforme">
+                            </div>
+                            <div class="col-sm-12 col-6 mb-2">
+                                <label class="form-label mb-0" for="hora_informe">Hora de Informe</label>
+                                <input class="form-control" id="hora_informe" min="00:00" max="23:59" step="1">
+                            </div>
                         </div>
                     </div>
                     <div class="col-sm-8 mb-2">
@@ -582,7 +582,12 @@
                                 <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma
                                     Cliente</p>
                                 <p class="mb-1" style="font-size: 13.4px;" aria-item="empresaFooter">COESTI S.A.</p>
-                                <p style="font-size: 12.5px;" id="doc_clienteFirma" class="doc-fsearch mb-0"></p>
+                                <div class="search_signature_group">
+                                    <input type="text" id="search_signature" placeholder="Buscar cliente">
+                                    <span class="search_signature_text rounded" type="button" data-mdb-ripple-init>
+                                        <i class="fas fa-magnifying-glass"></i>
+                                    </span>
+                                </div>
                                 <input type="hidden" name="id_firmador" id="id_firmador">
                                 <input type="hidden" name="nomFirmaDigital" id="nomFirmaDigital">
                                 <input type="hidden" name="n_doc" id="n_doc">

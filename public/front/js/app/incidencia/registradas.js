@@ -164,6 +164,7 @@ $(document).ready(function () {
 
         cPersonal.deleteTable();
         cPersonal1.deleteTable();
+        removeClienteDataFirm();
     });
 
     setInterval(() => {
@@ -171,7 +172,7 @@ $(document).ready(function () {
         $('#hora_f').val(date('H:i:s')).attr('disabled', true);
     }, 1000);
 
-    $('#createMaterial').on('change', function () {        
+    $('#createMaterial').on('change', function () {
         manCantidad();
     })
 
@@ -248,7 +249,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     createdRow: function (row, data, dataIndex) {
         const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
         $(row).find('td:eq(1)').addClass('text-center');
-        $(row).find('td:eq(8)').addClass(`td-acciones ${row_bg[data.estado_informe]}`);
+        // $(row).find('td:eq(8)').addClass(`td-acciones ${row_bg[data.estado_informe]}`);
         $(row).addClass(row_bg[data.estado_informe]);
     },
     processing: true
@@ -301,7 +302,7 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
             var message = "";
             if (data.hasOwnProperty('validacion')) {
                 for (const key in data.validacion) {
-                    message +=  `<li>${data.validacion[key][0]}</li>`;
+                    message += `<li>${data.validacion[key][0]}</li>`;
                 }
                 message = `<ul>${message}</ul>`;
             }
@@ -490,9 +491,9 @@ async function AssignPer() {
         }),
         success: function (data) {
             var estadoInfo = [
-                {'c': 'warning', 't': 'Sin Asignar'},
-                {'c': 'info', 't': 'Asignada'},
-                {'c': 'primary', 't': 'En Proceso'}
+                { 'c': 'warning', 't': 'Sin Asignar' },
+                { 'c': 'info', 't': 'Asignada' },
+                { 'c': 'primary', 't': 'En Proceso' }
             ];
             fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
@@ -505,7 +506,7 @@ async function AssignPer() {
             var message = "";
             if (data.hasOwnProperty('validacion')) {
                 for (const key in data.validacion) {
-                    message +=  `<li>${data.validacion[key][0]}</li>`;
+                    message += `<li>${data.validacion[key][0]}</li>`;
                 }
                 message = `<ul>${message}</ul>`;
             }
@@ -570,7 +571,7 @@ async function StartInc(cod, estado) {
             var message = "";
             if (data.hasOwnProperty('validacion')) {
                 for (const key in data.validacion) {
-                    message +=  `<li>${data.validacion[key][0]}</li>`;
+                    message += `<li>${data.validacion[key][0]}</li>`;
                 }
                 message = `<ul>${message}</ul>`;
             }
@@ -765,7 +766,7 @@ document.getElementById('form-addcod').addEventListener('submit', async function
         data: JSON.stringify(valid.data.data),
         success: function (data) {
             console.log(data);
-            
+
             fMananger.formModalLoding('modal_addcod', 'hide');
             if (data.success) {
                 $('#modal_addcod').modal('hide');
@@ -967,129 +968,64 @@ function manCantidad(params = '') {
     option.attr('data-value', btoa(JSON.stringify(obj)));
 }
 
-document.getElementById('doc_clienteFirma').addEventListener('click', async function (event) {
-    var rect = this.getBoundingClientRect();
-    var beforeWidth = 14;
-    var beforeHeight = 14;
-    var beforeElementRightOffset = 0.65 * parseFloat(getComputedStyle(document.documentElement).fontSize);
-    var beforeElementTopOffset = rect.top + (rect.height / 2) - (beforeHeight / 2);
-
-    if (event.clientX >= rect.right - beforeElementRightOffset - beforeWidth &&
-        event.clientX <= rect.right - beforeElementRightOffset &&
-        event.clientY >= beforeElementTopOffset &&
-        event.clientY <= beforeElementTopOffset + beforeHeight) {
-        this.innerHTML = "";
-        this.classList.add("doc-fsearch");
-        this.classList.remove("doc-fclear");
-    } else {
-        const bodyChildren = Array.from(document.body.children);
-        bodyChildren.forEach(child => {
-            if (!child.classList.contains('swal2-container')) {
-                child.setAttribute('inert', '');
-            }
-        });
-
-        Swal.fire({
-            title: '<h5 class="text-primary">Buscar cliente</h5>',
-            html: `
-                <div class="form-group text-start mb-3">
-                    <label class="form-label">Nro. de Documento</label>
-                    <div class="input-group">
-                        <input type="text" id="docNumber" class="form-control" placeholder="Número de Documento">
-                        <button type="button" class="btn btn-primary px-2" id="btn-conDoc" data-mdb-ripple-init onclick="search_doc()">
-                            <span class="spinner-border spinner-border-sm visually-hidden" role="status" aria-hidden="true"></span>
-                            <i class="fas fa-magnifying-glass"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="form-group text-start">
-                    <label class="form-label">Nom del Cliente</label>
-                    <input type="text" id="clientName" class="form-control" placeholder="Nombre del Cliente">
-                </div>
-            `,
-            showCancelButton: true,
-            confirmButtonText: 'Confirmar',
-            confirmButtonColor: "#3085d6",
-            cancelButtonText: 'Cancelar',
-            focusConfirm: false,
-            didOpen: () => {
-                const docNumberInput = Swal.getPopup().querySelector('#docNumber');
-                if (docNumberInput) docNumberInput.focus();
-            },
-            willClose: () => {
-                bodyChildren.forEach(child => {
-                    if (!child.classList.contains('swal2-container')) child.removeAttribute('inert');
-                });
-            },
-            preConfirm: () => {
-                const docNumber = Swal.getPopup().querySelector('#docNumber');
-                const clientName = Swal.getPopup().querySelector('#clientName');
-
-                if (!docNumber.value || !clientName.value) {
-                    Swal.showValidationMessage(`Por favor ingresa ambos campos`);
-                }
-                const hideValid = () => { Swal.getPopup().querySelector('.swal2-validation-message').style.display = "none"; }
-                docNumber.addEventListener("focus", hideValid);
-                clientName.addEventListener("focus", hideValid);
-
-                return { docNumber: docNumber.value, clientName: clientName.value };
-            }
-        }).then((result) => {
-            if (result.isConfirmed) {
-                const docNumber = result.value.docNumber;
-                const clientName = result.value.clientName;
-                this.innerHTML = `${docNumber} - ${clientName}`;
-                $('#n_doc').val(docNumber);
-                $('#nom_cliente').val(clientName);
-
-                this.classList.remove("doc-fsearch");
-                this.classList.add("doc-fclear");
-            }
-            else {
-                removeSignature();
-            }
-        });
-    }
-});
-
-function search_doc() {
-    const docNumberI = Swal.getPopup().querySelector('#docNumber');
-    const clientNameI = Swal.getPopup().querySelector('#clientName');
-    const conDocB = Swal.getPopup().querySelector('#btn-conDoc');
+$('#search_signature').on('change', function () {
+    const regex = /^[0-9]{8}$/;
+    const dni = $(this);
+    const search_signature_text = $('.search_signature_text');
+    if (!regex.test(dni.val())) return false;
+    search_signature_text.html('<i class="fas fa-magnifying-glass"></i>').removeAttr('signature-clear');
 
     $.ajax({
         type: 'GET',
-        url: `${__url}/incidencias/registradas/searchCliente/${docNumberI.value}`,
+        url: `${__url}/incidencias/registradas/searchCliente/${dni.val()}`,
         contentType: 'application/json',
         headers: {
             'X-CSRF-TOKEN': __token,
         },
         beforeSend: function () {
-            conDocB.querySelector('span').classList.remove('visually-hidden');
-            conDocB.querySelector('i').classList.add('visually-hidden');
+            search_signature_text.html('<div class="spinner-border text-primary" role="status" style="width: 19px;height: 19px;"></div>');
         },
         success: function (data) {
             if (data.success) {
-                clientNameI.value = data.data.nombre;
-                if (data.data.consulta) {
-                    $('#id_firmador').val(data.data.id);
-                    var firma = data.data.firma_digital;
+                var datos = data.data;
+                dni.val(`${datos.documento} - ${datos.nombre}`);
+                $('#n_doc').val(datos.documento);
+                $('#nom_cliente').val(datos.nombre);
+                if (datos.consulta) {
+                    $('#id_firmador').val(datos.id);
+                    var firma = datos.firma_digital;
                     $('#nomFirmaDigital').val(firma);
                     if (firma) {
                         updateSignaturePreview(`${__asset}/images/client/${firma}`);
                     }
                 }
+                dni.attr({'disabled': ""});
+            } else {
+                if (dni.val() == "00000000") {
+                    dni.val(`00000000 - Clientes Varios`);
+                    $('#n_doc').val('00000000');
+                    $('#nom_cliente').val('Clientes Varios');
+                }
             }
-            else {
-                Swal.showValidationMessage(data.message);
-            }
-            conDocB.querySelector('span').classList.add('visually-hidden');
-            conDocB.querySelector('i').classList.remove('visually-hidden');
+            search_signature_text.html('<i class="fas fa-xmark"></i>').attr({ 'signature-clear': "" });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
-            Swal.showValidationMessage(obj_error.message);
             console.log(obj_error);
         }
     });
+})
+
+$(".search_signature_text").on("click", function () {
+    removeClienteDataFirm();
+});
+
+function removeClienteDataFirm() {
+    var search_signature_text = $(".search_signature_text");
+    if (search_signature_text.attr('signature-clear') !== undefined) {
+        $('#search_signature').val('').removeAttr('disabled');
+        search_signature_text.html('<i class="fas fa-magnifying-glass"></i>').removeAttr('signature-clear');
+        $('#n_doc, #nom_cliente, #id_firmador, #nomFirmaDigital').val('');
+        removeSignature();
+    }
 }
