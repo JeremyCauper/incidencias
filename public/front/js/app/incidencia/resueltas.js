@@ -177,11 +177,90 @@ function OrdenTicket(cod) {
     window.open(`${__url}/orden/documentoticket/${cod}`, `Visualizar TICKET ${cod}`, "width=650, height=800");
 }
 
-function AddSignature(cod) {
+function AddSignature(e, cod) {
     $('#modal_firmas').modal('show');
-    // fMananger.formModalLoding('modal_firmas', 'show');
-    console.log(cod);
+    fMananger.formModalLoding('modal_firmas', 'show');
+    let obj = extractDataRow(e);
+    $.each(obj, function (panel, count) {
+        $(`#modal_firmas [aria-item="${panel}"]`).html(count);
+    });
+    $('[name="cod_orden"]').val(cod);
+    $.ajax({
+        type: 'GET',
+        url: `${__url}/incidencias/resueltas/showSignature/${cod}`,
+        contentType: 'application/json',
+        success: function (data) {
+            console.log(data);
+            
+            if (data.success) {
+                var datos = data.data;
+                if (datos) {
+                    if (datos.firma_digital)
+                        $('#PrevizualizarFirma').attr('src', `${__asset}/images/client/${datos.firma_digital}`).removeClass('visually-hidden');
+                    $('#search_signature').val(`${datos.nro_doc} - ${datos.nombre_cliente}`).attr({'disabled': ''});
+                    $('#id_firmador').val(datos.id);
+                }
+            }
+            fMananger.formModalLoding('modal_firmas', 'hide');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            fMananger.formModalLoding('modal_firmas', 'hide');
+            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: 'No se pudo extraer los datos con exito.' });
+            console.log(jqXHR);
+        }
+    });
 }
+
+document.getElementById('form-firmas').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    if (!await boxAlert.confirm(`¿Estas seguro que deseas continuar?, no se podrá revertir los cambios`)) return true;
+
+    fMananger.formModalLoding('modal_firmas', 'show');
+    var elementos = this.querySelectorAll('[name]');
+    var valid = validFrom(elementos);
+
+    if (!valid.success)
+        return fMananger.formModalLoding('modal_firmas', 'hide');
+
+    $.ajax({
+        type: 'POST',
+        url: __url + '/orden/addSignature',
+        contentType: 'application/json',
+        headers: {
+            'X-CSRF-TOKEN': __token,
+        },
+        data: JSON.stringify(valid.data.data),
+        success: function (data) {
+            console.log(data);
+
+            fMananger.formModalLoding('modal_firmas', 'hide');
+            if (data) {
+                $('#modal_firmas').modal('hide');
+                boxAlert.minbox({
+                    h: "La firma se añadió con exito."
+                });
+                updateTable();
+                return true;
+            }
+            boxAlert.box({
+                i: 'error',
+                t: '¡Ocurrio un error!',
+                h: "ocurrio un error inesperado"
+            });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            const obj_error = jqXHR.responseJSON;
+            boxAlert.box({
+                i: 'error',
+                t: 'Ocurrio un error en el processo',
+                h: obj_error.message
+            });
+            console.log(obj_error);
+            fMananger.formModalLoding('modal_firmas', 'hide');
+        }
+    });
+});
 
 /*////////////////////////////////////////
 /       SCRIPT CREAR FIRMA DIGITAL       /

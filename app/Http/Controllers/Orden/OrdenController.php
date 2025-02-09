@@ -125,44 +125,86 @@ class OrdenController extends Controller
         }
     }
 
+    public function addSignature(Request $request)
+    {
+        try {
+            DB::beginTransaction();
+            $idContacto = $this->createContact($request);
+
+            // Actualizar estado de incidencia
+            DB::table('tb_orden_servicio')
+                ->where('cod_ordens', $request->cod_orden)
+                ->update(['id_contacto' => $idContacto]);
+            DB::commit();
+
+            return response()->json([
+                'success' => true,
+                'message' => 'La firma se añadió con exito.'
+            ], 200);
+
+        } catch (\Throwable $e) {
+            DB::rollBack();
+            return response()->json([
+                'success' => false,
+                'message' => 'Error al añadir la firma al orden de servicio: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Crear un contacto basado en los datos del cliente.
      *
      * @param Request $request
-     * @return int|null
+     * @return int|null|\Illuminate\Http\JsonResponse
      */
     private function createContact(Request $request)
     {
-        $dataContact = [
-            'nro_doc' => $request->n_doc,
-            'nombre_cliente' => $request->nom_cliente,
-            'created_at' => now()->format('Y-m-d H:i:s')
-        ];
-
-        if ($request->nomFirmaDigital) {
-            $dataContact['firma_digital'] = $request->nomFirmaDigital;
-        } else {
-            // Guardar firma digital si existe
-            if ($request->firma_digital) {
+        try {
+            DB::beginTransaction();
+            // Si existe una firma digital con nombre, la asignamos directamente
+            if (!empty($request->nomFirmaDigital) && empty($request->firma_digital)) {
+                $firma_digital = $request->nomFirmaDigital;
+            } else {
+                // Si hay una firma digital en archivo, intentamos guardarla
                 $result = $this->parseCreateFile("fdc_{$request->n_doc}", 'client', $request->firma_digital);
                 if (!$result['success']) {
-                    throw new Exception('Error al intentar crear la firma digital.');
+                    throw new Exception('No se pudo procesar la firma digital.');
                 }
-                $dataContact['firma_digital'] = $result['filename'];
+                $firma_digital = $result['filename'];
             }
+            // Si ya existe un firmador, actualizamos el registro, sino creamos uno nuevo
+            if (!empty($request->id_firmador)) {
+                $dataContact = [
+                    'firma_digital' => $firma_digital,
+                    'updated_at' => now()->format('Y-m-d H:i:s')
+                ];
+                if (!empty($request->n_doc)) {
+                    $dataContact['nro_doc'] = $request->n_doc;
+                }
+                if (!empty($request->nom_cliente)) {
+                    $dataContact['nombre_cliente'] = $request->nom_cliente;
+                }
+                DB::table('tb_contac_ordens')->where('id', $request->id_firmador)->update($dataContact);
+                $id = $request->id_firmador;
+            } else {
+                $id = DB::table('tb_contac_ordens')->insertGetId([
+                    'nro_doc' => $request->n_doc,
+                    'nombre_cliente' => $request->nom_cliente,
+                    'firma_digital' => $firma_digital,
+                    'created_at' => now()->format('Y-m-d H:i:s')
+                ]);
+            }
+            DB::commit();
+            return $id;
+        } catch (\Throwable $e) {
+            DB::rollBack(); // Revertir transacción en caso de error
+            return response()->json([
+                'success' => false,
+                'message' => 'Hubo un error al registrar el contacto: ' . $e->getMessage(),
+            ], 500);
         }
-
-        $id = null;
-        if($request->id_firmador) {
-            $id = $request->id_firmador;
-            DB::table('tb_contac_ordens')->where(['id' => $id])->update($dataContact);
-        }
-        else {
-            $id = DB::table('tb_contac_ordens')->insertGetId($dataContact);
-        }
-        // Insertar contacto y devolver su ID
-        return $id;
     }
+
 
     /**
      * Crear un contacto basado en los datos del cliente.
@@ -179,7 +221,7 @@ class OrdenController extends Controller
             ]);
 
             if ($validator->fails())
-                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
+                return response()->json(['success' => false, 'message' => '', 'validacion' => $validator->errors()]);
 
             DB::beginTransaction();
             DB::table('tb_orden_servicio')->where('cod_incidencia', $request->cod_incidencia)->update([
@@ -317,8 +359,7 @@ class OrdenController extends Controller
             foreach ($seguimiento as $key => $val) {
                 if ($val->estado) {
                     $datos['horaFin'] = $val->hora;
-                }
-                else {
+                } else {
                     $datos['horaIni'] = $val->hora;
                 }
             }

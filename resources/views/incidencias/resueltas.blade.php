@@ -144,7 +144,7 @@
 
 <div class="modal fade" id="modal_orden" aria-labelledby="modal_orden" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg" style="display: flex;">
-        <form class="modal-content" id="form-orden">
+        <div class="modal-content">
             <div class="modal-header bg-primary text-white">
                 <h6 class="modal-title">ORDEN DE SERVICIO <span class="badge badge-success badge-lg"
                         aria-item="codigo"></span></h6>
@@ -278,15 +278,14 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init onclick="">Registrar</button>
             </div>
-        </form>
+        </div>
     </div>
 </div>
 
 <div class="modal fade" id="modal_firmas" aria-labelledby="modal_firmas" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <form class="modal-content" id="form-firmas">
             <div class="modal-header bg-primary text-white">
                 <h6 class="modal-title">ASIGNAR FIRMA
                     <span class="badge badge-success badge-lg" aria-item="codigo"></span>
@@ -320,6 +319,13 @@
                     </div>
                 </div>
                 <div class="col-12 text-center">
+                    <input type="hidden" name="cod_orden">
+                    <div class="search_signature_group mb-2">
+                        <input type="text" id="search_signature" placeholder="Buscar cliente">
+                        <span class="search_signature_text rounded" type="button" data-mdb-ripple-init>
+                            <i class="fas fa-magnifying-glass"></i>
+                        </span>
+                    </div>
                     <div class="text-center content-image">
                         <div class="overlay">
                             <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma"
@@ -335,16 +341,9 @@
                         <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
                         <img id="PreviFirma" class="visually-hidden" height="130" width="160">
                     </div>
-                    <!-- <img class="border rounded-1" id="" alt="" > -->
                     <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma
                         Cliente</p>
                     <p class="mb-1" style="font-size: 13.4px;" aria-item="empresaFooter">COESTI S.A.</p>
-                    <div class="search_signature_group">
-                        <input type="text" id="search_signature" placeholder="Buscar cliente">
-                        <span class="search_signature_text rounded" type="button" data-mdb-ripple-init>
-                            <i class="fas fa-magnifying-glass"></i>
-                        </span>
-                    </div>
                     <input type="hidden" name="id_firmador" id="id_firmador">
                     <input type="hidden" name="nomFirmaDigital" id="nomFirmaDigital">
                     <input type="hidden" name="n_doc" id="n_doc">
@@ -353,10 +352,9 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
-                <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init
-                    onclick="AssignPer()">Guardar</button>
+                <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init>Guardar</button>
             </div>
-        </div>
+        </form>
     </div>
 </div>
 

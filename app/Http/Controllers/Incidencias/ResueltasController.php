@@ -65,11 +65,11 @@ class ResueltasController extends Controller
                 'nombre' => $nombre,
             ];
         });
-    
+        $contac_ordens = DB::table('tb_contac_ordens')->get();
+
         $resultado = $incidencias->filter(function ($inc) use ($ordenes) {
                 return $ordenes->has($inc->cod_incidencia); // Verifica si hay una orden para esta incidencia
-            })
-            ->map(function ($incidencia) use ($ordenes, $tipos_incidencia, $problemas, $subproblemas, $empresas, $sucursales, $inc_seguimiento, $inc_asig, $usuarios) {
+            })->map(function ($incidencia) use ($ordenes, $tipos_incidencia, $problemas, $subproblemas, $empresas, $sucursales, $inc_seguimiento, $inc_asig, $usuarios, $contac_ordens) {
                 $orden = $ordenes->get($incidencia->cod_incidencia)?->first(); // Obtén la primera orden correspondiente
                 $tipo_incidencia = $tipos_incidencia->firstWhere('id_tipo_incidencia', $incidencia->id_tipo_incidencia);
                 $problema = $problemas->firstWhere('id_problema', $incidencia->id_problema);
@@ -79,7 +79,13 @@ class ResueltasController extends Controller
     
                 $seguimiento = $inc_seguimiento[$incidencia->cod_incidencia] ?? collect();
                 $asignados = $inc_asig[$incidencia->cod_incidencia]->map(fn($asig) => $usuarios[$asig->id_usuario]['nombre'] ?? 'N/A')->implode(', ');
-    
+
+                $contac = false;
+                if (!empty($orden->id_contacto)) {
+                    $contac_ordens = $contac_ordens->firstWhere('id', $orden->id_contacto);
+                    $contac = !empty($contac_ordens->firma_digital) && !empty($contac_ordens->nro_doc) && !empty($contac_ordens->nombre_cliente);
+                }
+
                 return [
                     'id_orden' => $orden->id_ordens ?? null,
                     'cod_orden' => $orden->cod_ordens ?? null,
@@ -92,6 +98,7 @@ class ResueltasController extends Controller
                     'problema' => ($problema->descripcion ?? null) . ' / ' . ($subproblema->descripcion ?? null),
                     'iniciado' => $seguimiento->where('estado', 0)->first()?->created_at ?? 'N/A',
                     'finalizado' => $seguimiento->where('estado', 1)->first()?->created_at ?? 'N/A',
+                    'contacto' => $contac,
                     'acciones' => $this->DropdownAcciones([
                         'tittle' => 'Acciones',
                         'button' => [
@@ -99,30 +106,13 @@ class ResueltasController extends Controller
                             ['funcion' => "OrdenDisplay(this, '$orden->cod_ordens')", 'texto' => '<i class="far fa-file-lines text-primary me-2"></i> Ver Orden'],
                             ['funcion' => "OrdenPdf('$orden->cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
                             ['funcion' => "OrdenTicket('$orden->cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket'],
-                            ['funcion' => "AddSignature('$orden->cod_ordens')", 'texto' => '<i class="fas fa-signature text-secondary me-2"></i> Añadir Firma'],
+                            $contac ? null : ['funcion' => "AddSignature(this, '$orden->cod_ordens')", 'texto' => '<i class="fas fa-signature text-secondary me-2"></i> Añadir Firma'],
                         ]
                     ])
                 ];
             })->values();
     
         return ['data' => $resultado];
-    }
-
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -199,24 +189,17 @@ class ResueltasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function showSignature(string $cod)
     {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        try {
+            $orden = DB::table('tb_orden_servicio')->where('cod_ordens', $cod)->first();
+            $contacto = null;
+            if ($orden && !empty($orden->id_contacto)) {
+                $contacto = db::table('tb_contac_ordens')->select(['id', 'nro_doc', 'nombre_cliente', 'firma_digital'])->where(['id' => $orden->id_contacto])->first();
+            }
+            return response()->json(['success' => true, 'data' => $contacto]);
+        } catch (Exception $e) {
+            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
+        }
     }
 }
