@@ -15,44 +15,38 @@
 @endsection
 @section('content')
 
-<div class="col-12 mb-4">
-    <div class="accordion" id="accordionExampleY">
-        <div class="accordion-item">
-            <h2 class="accordion-header" id="headingOneY">
-                <button data-mdb-collapse-init class="accordion-button" type="button" data-mdb-target="#collapseOneY"
-                    aria-expanded="true" aria-controls="collapseOneY" style="font-weight: bold; font-size: small;">
-                    <i class="fas fa-filter"></i> Filtro
-                </button>
-            </h2>
-            <div id="collapseOneY" class="accordion-collapse collapse show" aria-labelledby="headingOneY"
-                data-mdb-parent="#accordionExampleY">
-                <div class="accordion-body">
-                    <div class="row">
-                        <div class="col-xl-6 col-md-8 my-1">
-                            <label class="form-label mb-0" for="empresa">Empresa</label>
-                            <select id="empresa" name="empresa" class="select-clear">
-                                <option value=""></option>
-                                @foreach ($data['empresas'] as $key => $val)
-                                    @if ($val['status'])
-                                        <option value="{{$val['ruc']}}">{{$val['ruc'] . ' - ' . $val['razonSocial']}}</option>
-                                    @endif
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-xl-4 col-md-4 my-1">
-                            <label class="form-label mb-0" for="idGrupo">Estado Visita</label>
-                            <select id="sucursal" name="sucursal" class="select">
-                                <option value="10">TODAS</option>
-                                <option value="0">SIN INICIAR</option>
-                                <option value="1">PARCIAL</option>
-                                <option value="2">COMPLETADAS</option>
-                            </select>
-                        </div>
-                        <div class="col-xl-2 my-1 mt-xl-3 text-end" style="padding-top: .3rem;">
-                            <button type="button" class="btn btn-primary" data-mdb-ripple-init>
-                                <i class="fas fa-magnifying-glass"></i> Buscar
-                            </button>
-                        </div>
+<div class="row panel-view">
+    <div class="col-12">
+        <div class="row">
+            <div class="col-xxl-3 col-6 grid-margin">
+                <div class="card">
+                    <div class="card-body text-danger" data-mdb-ripple-init>
+                        <h6 class="card-title title-count mb-2"><i class="fas fa-xmark"></i></i> Visitas Sin Programar</h6>
+                        <h4 class="subtitle-count"><b data-panel="tAsignadas">0</b></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-6 grid-margin">
+                <div class="card">
+                    <div class="card-body text-warning" data-mdb-ripple-init>
+                        <h6 class="card-title title-count mb-2"><i class="fas fa-clock"></i> Visitas Programadas</h6>
+                        <h4 class="subtitle-count"><b data-panel="tSinAsignar">0</b></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-6 grid-margin">
+                <div class="card">
+                    <div class="card-body text-info" data-mdb-ripple-init>
+                        <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Visitas En Proceso</h6>
+                        <h4 class="subtitle-count"><b data-panel="tEnProceso">0</b></h4>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-6 grid-margin">
+                <div class="card">
+                    <div class="card-body text-success" data-mdb-ripple-init>
+                        <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Visitas Realizadas</h6>
+                        <h4 class="subtitle-count"><b data-panel="tEnProceso">0</b></h4>
                     </div>
                 </div>
             </div>
@@ -68,7 +62,8 @@
                     <strong>Visitas a Programar</strong>
                 </h6>
                 <div>
-                    <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init
+                        role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -97,7 +92,8 @@
                     <strong>Visitas Programadas</strong>
                 </h6>
                 <div>
-                    <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init
+                        role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -157,7 +153,8 @@
                         <div class="col-md-8">
                             <label class="form-label mb-0" for="createPersonal">Asignar Personal</label>
                             <div class="input-group mb-3">
-                                <span class="input-group-text border-0 ps-0"><i class="fas fa-chalkboard-user"></i></span>
+                                <span class="input-group-text border-0 ps-0"><i
+                                        class="fas fa-chalkboard-user"></i></span>
                                 <select class="select-clear" id="createPersonal">
                                     <option value=""></option>
                                     @foreach ($data['usuarios'] as $u)
@@ -170,23 +167,25 @@
                         <div class="col-md-4">
                             <label class="form-label mb-0" for="fecha_visita">Fecha Visita</label>
                             <div class="input-group" role="button">
-                                <label class="input-group-text ps-0 pe-1 border-0"><i class="far fa-calendar"></i></label>
-                                <input type="text" class="form-control rounded" id="fecha_visita" name="fecha_visita" role="button" readonly>
+                                <label class="input-group-text ps-0 pe-1 border-0"><i
+                                        class="far fa-calendar"></i></label>
+                                <input type="text" class="form-control rounded" id="fecha_visita" name="fecha_visita"
+                                    role="button" readonly>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-mdb-ripple-init
-                    data-mdb-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
             </div>
         </form>
     </div>
 </div>
 
-<div class="modal fade" id="modal_detalle_visitas" tabindex="-1" aria-labelledby="modal_detalle_visitasLabel" aria-hidden="true">
+<div class="modal fade" id="modal_detalle_visitas" tabindex="-1" aria-labelledby="modal_detalle_visitasLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
@@ -212,8 +211,8 @@
                         <div class="list-group-item">
                             <div class="row col-12">
                                 <div class="col-md-3 col-6">
-                                    <label class="form-label me-2">Limitacion: </label><span
-                                        style="font-size: .75rem;" aria-item="rDias">0</span>
+                                    <label class="form-label me-2">Limitacion: </label><span style="font-size: .75rem;"
+                                        aria-item="rDias">0</span>
                                 </div>
                                 <div class="col-md-3 col-6">
                                     <label class="form-label me-2">Visitas Totales: </label><span
@@ -244,14 +243,13 @@
                         </div>
                         <div class="list-group-item">
                             <label class="form-label me-2">Nota: </label><span style="font-size: .75rem;"
-                            aria-item="mensaje"></span>
+                                aria-item="mensaje"></span>
                         </div>
                     </div>
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-link" data-mdb-ripple-init
-                    data-mdb-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
                 <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
             </div>
         </div>
@@ -266,7 +264,7 @@
         formatSelect('modal_visitas');
 
         $('.modal').on('shown.bs.modal', function () {
-           $('#fecha_visita').val(date('Y-m-d'));
+            $('#fecha_visita').val(date('Y-m-d'));
         });
 
         $('.modal').on('hidden.bs.modal', function () {
@@ -415,7 +413,7 @@
                 $('#modal_visitas [aria-item="empresa"]').html(`${dt.ruc} - ${dt.razonSocial}`);
                 $('#modal_visitas [aria-item="direccion"]').html(dt.direccion);
                 $('#modal_visitas [aria-item="sucursal"]').html(dt.sucursal);
-                
+
                 fMananger.formModalLoding('modal_visitas', 'hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -430,16 +428,16 @@
         event.preventDefault();
         if (!cPersonal.extract().length)
             return boxAlert.box({
-                    i: 'warning',
-                    t: 'Personal',
-                    h: 'Primero debe asignar un personal'
-                });
+                i: 'warning',
+                t: 'Personal',
+                h: 'Primero debe asignar un personal'
+            });
         fMananger.formModalLoding('modal_visitas', 'show');
         var elementos = this.querySelectorAll('[name]');
         var valid = validFrom(elementos);
         if (!valid.success)
             return fMananger.formModalLoding('modal_visitas', 'hide');
-        valid.data.data['personal'] = cPersonal.extract();        
+        valid.data.data['personal'] = cPersonal.extract();
 
         $.ajax({
             type: 'POST',
@@ -459,7 +457,7 @@
                 var message = "";
                 if (data.hasOwnProperty('validacion')) {
                     for (const key in data.validacion) {
-                        message +=  `<li>${data.validacion[key][0]}</li>`;
+                        message += `<li>${data.validacion[key][0]}</li>`;
                     }
                     message = `<ul>${message}</ul>`;
                 }
