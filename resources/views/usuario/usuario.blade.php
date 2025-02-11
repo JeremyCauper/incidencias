@@ -29,7 +29,7 @@
                             <tr class="text-bg-primary">
                                 <th>Nro. Documento</th>
                                 <th>Nombre Personal</th>
-                                <th>Tipo Usuario</th>
+                                <th class="text-center">Tipo Usuario</th>
                                 <th>Usuario</th>
                                 <th>Contraseña</th>
                                 <th>Estado</th>
@@ -72,25 +72,25 @@
                         <label class="form-label mb-0" for="n_doc">Dni/Carnet E.</label>
                         <input class="form-control" id="n_doc">
                     </div>
-                    <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="col-xl-3 col-6 mb-3">
                         <label class="form-label mb-0" for="nom_usu">Nombres</label>
                         <input class="form-control" id="nom_usu">
                     </div>
-                    <div class="col-xl-3 col-sm-6 mb-3">
+                    <div class="col-xl-3 col-6 mb-3">
                         <label class="form-label mb-0" for="ape_usu">Apellidos</label>
                         <input class="form-control" id="ape_usu">
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-lg-5 col-sm-4 mb-3">
+                    <div class="col-lg-5 col-6 mb-3">
                         <label class="form-label mb-0" for="emailp_usu">Correo Personal</label>
                         <input class="form-control" id="emailp_usu">
                     </div>
-                    <div class="col-lg-5 col-sm-4 mb-3">
+                    <div class="col-lg-5 col-6 mb-3">
                         <label class="form-label mb-0" for="emailc_usu">Correo Corporativo</label>
                         <input class="form-control" id="emailc_usu">
                     </div>
-                    <div class="col-lg-2 col-sm-4 mb-3 form-date">
+                    <div class="col-lg-2 mb-3 form-date">
                         <label class="form-label mb-0" for="fechan_usu">Fecha de Nacimiento</label>
                         <input class="form-control" id="fechan_usu">
                     </div>
@@ -159,13 +159,13 @@
                     <select class="select" id="tipo_acceso">
                         <option value="">-- Seleccione --</option>
                         @foreach ($tipoAcceso as $r)
-                            <option value="{{$r->id_tipo_acceso}}">{{$r->descripcion}}</option>
+                            <option {{$r->id_tipo_acceso == 3 ? 'selected' : ''}} value="{{$r->id_tipo_acceso}}">{{$r->descripcion}}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="col-12">
                     <label class="form-label mb-0">Administrar Modulos del Sistema</label>
-                    <div class="border rounded p-2" id="content-permisos">
+                    <div class="border rounded p-2" id="content-permisos" style="opacity: .4; pointer-events: none;">
                         <div class="row">
                             @foreach ($menus as $menu)
                                 <div class="col-xl-3 col-md-6 mb-2">

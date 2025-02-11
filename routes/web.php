@@ -14,6 +14,7 @@ use App\Http\Controllers\Mantenimientos\Problema\SubProblemaController;
 use App\Http\Controllers\Orden\OrdenController;
 use App\Http\Controllers\Usuario\UsuarioController;
 use App\Http\Controllers\Visitas\TerminadasController;
+use App\Http\Controllers\Visitas\VProgramadasController;
 use App\Http\Controllers\Visitas\VSucursalesController;
 use Illuminate\Support\Facades\Route;
 
@@ -88,6 +89,8 @@ Route::get('/visitas/sucursales', [VSucursalesController::class, 'view'])->middl
 Route::get('/visitas/sucursales/index', [VSucursalesController::class, 'index'])->middleware('auth');
 Route::get('/visitas/sucursales/{id}', [VSucursalesController::class, 'show']);
 Route::post('/visitas/sucursales/create', [VSucursalesController::class, 'create']);
+
+Route::get('/visitas/programadas/index', [VProgramadasController::class, 'index'])->middleware('auth');
 
 Route::get('/control-de-usuario/usuarios', [UsuarioController::class, 'view'])->middleware('auth');
 Route::get('/control-de-usuario/usuarios/index', [UsuarioController::class, 'index']);

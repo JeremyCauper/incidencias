@@ -58,7 +58,7 @@
             <div class="modal-body">
                 <div class="row">
                     <input type="hidden" name="id" id="id">
-                    <div class="col-lg-7 mb-2">
+                    <div class="col-lg-7 col-8 mb-2">
                         <label class="form-label mb-0" for="menu">Menu</label>
                         <select class="select-icons" id="menu">
                             <option value=""></option>
@@ -69,19 +69,19 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-5 mb-2">
+                    <div class="col-lg-5 col-4 mb-2">
                         <label class="form-label mb-0" for="categoria">Categoria</label>
                         <input class="form-control" id="categoria">
                     </div>
-                    <div class="col-lg-4 mb-2">
+                    <div class="col-lg-4 col-5 mb-2">
                         <label class="form-label mb-0" for="descripcion">Descripcion</label>
                         <input class="form-control" id="descripcion">
                     </div>
-                    <div class="col-lg-6 mb-2">
+                    <div class="col-lg-6 col-7 mb-2">
                         <label class="form-label mb-0" for="ruta">Ruta</label>
                         <input class="form-control" id="ruta">
                     </div>
-                    <div class="col-lg-2 col-6 mb-2">
+                    <div class="col-lg-2 mb-2">
                         <label class="form-label mb-0" for="estado">Estado</label>
                         <select class="select" id="estado">
                             <option selected value="1">Activo</option>

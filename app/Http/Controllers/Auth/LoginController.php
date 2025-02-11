@@ -39,12 +39,23 @@ class LoginController extends Controller
         if (!Auth::attempt($credentials))
             return response()->json(['success' => false, 'message' => 'La contraseña es incorrecta'], 200);
 
-        // Auth::user()->customModulos = $this->obtenerModulos();
-        session(['customModulos' => $this->obtenerModulos(Auth::user()->menu_usuario)]);
+        $modulos = $this->obtenerModulos(Auth::user()->menu_usuario);
+        $primerModulo = $modulos[0];
+
+        if (empty($primerModulo->submenu)) {
+            $ruta = $primerModulo->ruta;
+        } else {
+            $data = json_decode($primerModulo->submenu); // Decodificar JSON a objeto
+            $arrayDatos = get_object_vars($data); // Convertir objeto a array asociativo
+            $primerClave = array_key_first($arrayDatos); // Obtener la primera clave
+            $ruta = $arrayDatos[$primerClave][0]->ruta;
+        }
+
+        session(['customModulos' => $modulos, 'rutaRedirect' => $ruta]);
         $request->session()->regenerate();
 
         // Autenticación exitosa
-        return response()->json(['success' => true, 'message' => ''], 200);
+        return response()->json(['success' => true, 'message' => '', 'data' => $ruta], 200);
     }
 
     public function logout(Request $request)

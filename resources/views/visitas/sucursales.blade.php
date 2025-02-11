@@ -55,14 +55,14 @@
 </div>
 
 <div class="row">
-    <div class="col-6">
+    <div class="col-xl-6 mb-3">
         <div class="card">
             <div class="card-body">
                 <h6 class="card-title col-form-label-sm text-primary mb-3">
                     <strong>Visitas a Programar</strong>
                 </h6>
                 <div>
-                    <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init
+                    <button class="btn btn-primary btn-sm px-1" onclick="updateTableVisitas()" data-mdb-ripple-init
                         role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
@@ -85,14 +85,14 @@
         </div>
     </div>
 
-    <div class="col-6">
+    <div class="col-xl-6 mb-3">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-4">
+                <h6 class="card-title col-form-label-sm text-primary mb-3">
                     <strong>Visitas Programadas</strong>
                 </h6>
                 <div>
-                    <button class="btn btn-primary btn-sm px-1" onclick="updateTable()" data-mdb-ripple-init
+                    <button class="btn btn-primary btn-sm px-1" onclick="updateTableVProgramadas()" data-mdb-ripple-init
                         role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
@@ -104,7 +104,8 @@
                                 <tr class="text-bg-primary">
                                     <th>Sucursal</th>
                                     <th>Técnico</th>
-                                    <th class="text-center">Registrado</th>
+                                    <th class="text-center">Fecha Visita</th>
+                                    <th class="text-center">Estado</th>
                                     <th class="text-center">Acciones</th>
                                 </tr>
                             </thead>
@@ -341,7 +342,7 @@
         processing: true
     });
 
-    function updateTable() {
+    function updateTableVisitas() {
         tb_visitas.ajax.reload();
     }
 
@@ -452,7 +453,7 @@
                 if (data.success) {
                     $('#modal_visitas').modal('hide');
                     boxAlert.minbox({ h: data.message });
-                    return updateTable();
+                    return updateTableVisitas();
                 }
                 var message = "";
                 if (data.hasOwnProperty('validacion')) {
@@ -475,5 +476,41 @@
             }
         });
     });
+
+
+    const tb_vprogramadas = new DataTable('#tb_vprogramadas', {
+        autoWidth: true,
+        scrollX: true,
+        scrollY: 400,
+        fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
+        ajax: {
+            url: `${__url}/visitas/programadas/index`,
+            dataSrc: function (json) {
+                // $.each(json.count, function (panel, count) {
+                //     $(`b[data-panel="${panel}"]`).html(count);
+                // });
+                return json;
+            },
+            error: function (xhr, error, thrown) {
+                boxAlert.table();
+                console.log('Respuesta del servidor:', xhr);
+            }
+        },
+        columns: [
+            { data: 'sucursal' },
+            { data: 'tecnicos' },
+            { data: 'fecha' },
+            { data: 'estado' },
+            { data: 'acciones' }
+        ],
+        createdRow: function (row, data, dataIndex) {
+            $(row).find('td:eq(2), td:eq(3)').addClass('text-center');
+        },
+        processing: true
+    });
+
+    function updateTableVProgramadas() {
+        tb_vprogramadas.ajax.reload();
+    }
 </script>
 @endsection

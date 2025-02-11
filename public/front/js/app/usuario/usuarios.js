@@ -67,7 +67,9 @@ $(document).ready(function () {
 
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_usuariosLabel').html('REGISTRAR USUARIO');
-        setCheckedFromJson();
+        setCheckedFromJson('eyIxIjpbXSwiMiI6W119');
+        $('#tipo_acceso').val(3).trigger('change.select2');
+        $('#content-permisos').attr({'style': 'opacity: .55; pointer-events: none;'});
         $('#id').val('');
     });
 
@@ -82,6 +84,26 @@ $(document).ready(function () {
             $('#ape_usu').val(`${datos.data.apellidop} ${datos.data.apellidom}`);
         }
     });
+
+    $('#tipo_acceso').on('change', function () {
+        let permisos = 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXX0=';
+        $('#content-permisos').attr({'style': 'opacity: .55; pointer-events: none;'});
+        switch ($(this).val()) {
+            case "3":
+                permisos = 'eyIxIjpbXSwiMiI6W119';
+                break;
+
+            case "4":
+                permisos = null;
+                $('#content-permisos').removeAttr('style');
+                break;
+        
+            default:
+                break;
+        }
+        setCheckedFromJson(permisos);
+    });
+    setCheckedFromJson('eyIxIjpbXSwiMiI6W119');
 });
 
 const tb_usuario = new DataTable('#tb_usuario', {
@@ -97,17 +119,16 @@ const tb_usuario = new DataTable('#tb_usuario', {
     },
     columns: [
         { data: 'ndoc_usuario' },
-        {
-            data: 'nombres', render: function (data, type, row) {
-                return `${row.nombres} ${row.apellidos}`;
-            }
-        },
+        { data: 'personal' },
         { data: 'descripcion' },
         { data: 'usuario' },
         { data: 'pass_view' },
         { data: 'estado' },
         { data: 'acciones' }
     ],
+    createdRow: function (row, data, dataIndex) {
+        $(row).find('td:eq(2)').addClass('text-center');
+    },
     processing: true
 });
 
@@ -184,6 +205,7 @@ function Editar(id) {
                 $('#PreviFPerfil').attr('src', json.foto_perfil ? `${__asset}/images/auth/${json.foto_perfil}` : imgUserDefault);
                 $('#PreviFirma').attr('src', json.firma_digital ? `${__asset}/images/firms/${json.firma_digital}` : imgFirmDefault);
                 $('#tipo_acceso').val(json.tipo_acceso).trigger('change.select2');
+                if (json.tipo_acceso != 4) $('#content-permisos').attr({'style': 'opacity: .55; pointer-events: none;'}); else $('#content-permisos').removeAttr('style');
                 setCheckedFromJson(json.menu_usuario);
 
                 fMananger.formModalLoding('modal_usuarios', 'hide');
@@ -324,7 +346,10 @@ function getCheckedValues() {
     return window.btoa(JSON.stringify(result));
 }
 
-function setCheckedFromJson(jsonString = 'e30=') {
+function setCheckedFromJson(jsonString = null) {
+    if (!jsonString) {
+        jsonString = 'e30=';
+    }
     let jsonData = JSON.parse(window.atob(jsonString));
     let contenedor = document.getElementById('content-permisos');
     // Primero, desmarcar todo

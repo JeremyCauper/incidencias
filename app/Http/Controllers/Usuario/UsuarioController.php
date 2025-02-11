@@ -58,9 +58,12 @@ class UsuarioController extends Controller
                     ['color' => 'danger', 'text' => 'Inactivo'],
                     ['color' => 'success', 'text' => 'Activo']
                 ];
-                $usu->nombres = explode(' ', $usu->nombres)[0];
-                $usu->apellidos = explode(' ', $usu->apellidos)[0];
-                $usu->descripcion = $tipoAcceso[$usu->tipo_acceso]->descripcion;
+                $tipo_usu = [
+                    ['color' => 'danger', 'text' => 'Inactivo'],
+                    ['color' => 'success', 'text' => 'Activo']
+                ];
+                $usu->personal = $this->formatearNombre($usu->nombres, $usu->apellidos);
+                $usu->descripcion = '<label class="badge badge-' . $tipoAcceso[$usu->tipo_acceso]->color . '" style="font-size: .7rem;">' . $tipoAcceso[$usu->tipo_acceso]->descripcion . '</label>';
                 $usu->estado = '<label class="badge badge-' . $estado[$usu->estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$usu->estatus]['text'] . '</label>';
                 $usu->acciones = $this->DropdownAcciones([
                     'tittle' => 'Acciones',

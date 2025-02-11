@@ -71,6 +71,32 @@ class Controller extends BaseController
         return $menus;
     }
 
+    public function formatearNombre(...$args) {
+        if (count($args) == 1) {
+            // Si se pasa un solo argumento, separamos nombres y apellidos
+            $partes = explode(" ", trim($args[0]));
+            $cantidad = count($partes);
+    
+            if ($cantidad < 2) {
+                return ucfirst(strtolower($args[0])); // Si solo hay una palabra, la devuelve con formato
+            }
+    
+            $apellidos = array_slice($partes, -2); // Últimos dos elementos como apellidos
+            $nombres = array_slice($partes, 0, -2); // El resto como nombres
+        } else {
+            // Si se pasan nombres y apellidos por separado
+            $nombres = explode(" ", trim($args[0]));
+            $apellidos = explode(" ", trim($args[1]));
+        }
+    
+        $primerNombre = ucfirst(strtolower($nombres[0])); // Primer nombre con mayúscula inicial
+        $primerApellido = ucfirst(strtolower($apellidos[0])); // Primer apellido con mayúscula inicial
+        $inicialSegundoApellido = isset($apellidos[1]) ? strtoupper(substr($apellidos[1], 0, 1)) . '.' : ''; // Inicial del segundo apellido
+    
+        return trim("$primerNombre $primerApellido $inicialSegundoApellido");
+    }
+    
+
     public function DropdownAcciones($arr_acciones)
     {
         // Validaciones

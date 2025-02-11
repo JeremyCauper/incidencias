@@ -41,7 +41,7 @@ class RegistradasController extends Controller
             });
 
             $data['usuarios'] = db::table('usuarios')->where('estatus', 1)->get()->map(function ($u) {
-                $nombre = ucwords(strtolower("{$u->nombres} {$u->apellidos}"));
+                $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,
                     'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
@@ -269,7 +269,7 @@ class RegistradasController extends Controller
             }
 
             $incidencia->personal_asig = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get()->map(function ($u) use ($usuarios) {
-                $nombre = ucwords(strtolower("{$usuarios[$u->id_usuario]->nombres} {$usuarios[$u->id_usuario]->apellidos}"));
+                $nombre = $this->formatearNombre($usuarios[$u->id_usuario]->nombres, $usuarios[$u->id_usuario]->apellidos);
                 return [
                     'id' => $u->id_usuario,
                     'dni' => $usuarios[$u->id_usuario]->ndoc_usuario,
@@ -500,7 +500,7 @@ class RegistradasController extends Controller
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $cod)->get();
             // Obtenemos todos los usuarios activos y los almacenamos en un array asociativo por id
             $usuarios = DB::table('usuarios')->where('estatus', 1)->get()->keyBy('id_usuario')->map(function ($u) {
-                $nombre = ucwords(strtolower("{$u->nombres} {$u->apellidos}"));
+                $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return (object) [
                     "foto" => $u->foto_perfil,
                     "tecnico" => $nombre,

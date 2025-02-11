@@ -26,9 +26,22 @@ document.getElementById('form-login').addEventListener('submit', function (event
             $('#btn-ingresar').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Iniciando...').attr('disabled', true);
         },
         success: function (response) {
+            console.log(response);
+            
             if (response.success) {
                 $('#btn-ingresar').html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Ingresando...')
-                window.location.href = `${__url}/incidencias/registradas`;
+                let ruta = response.data;
+                // let ruta = "";
+
+                // if (!dt.submenu || (Array.isArray(dt.submenu) && dt.submenu.length === 0)) {
+                //     ruta =  dt.ruta;
+                // }
+            
+                // if (typeof dt.submenu === "object" && !Array.isArray(dt.submenu)) {
+                //     const primeraClave = Object.keys(dt.submenu)[0]; // Obtener la primera clave
+                //     ruta = dt.submenu[primeraClave][0].ruta; // Retornar los valores de la primera clave
+                // }
+                window.location.href = __url + ruta;
             } else {
                 alertLogin(response.message);
                 console.log(response.message);
@@ -36,6 +49,7 @@ document.getElementById('form-login').addEventListener('submit', function (event
             }
         },
         error: async function (xhr, status, error) {
+            console.log(xhr);
             const statusCode = xhr.status;
             let errorMessage = 'Ha ocurrido un error al intentar iniciar sesión.';
 
