@@ -18,7 +18,7 @@ class VSucursalesController extends Controller
         try {
             $data = [];
             $data['usuarios'] = DB::table('usuarios')->where('estatus', 1)->get()->map(function ($u) {
-                $nombre = ucwords(strtolower("{$u->nombres} {$u->apellidos}"));
+                $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,
                     'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
@@ -67,7 +67,7 @@ class VSucursalesController extends Controller
                                     </button>';
                     }
                     else {
-                        $acciones = '<button class="btn btn-warning btn-sm px-2" onclick="AsignarVisita(' . $val->id . ')" data-mdb-ripple-init>
+                        $acciones = '<button class="btn btn-secondary btn-sm px-2" onclick="AsignarVisita(' . $val->id . ')" data-mdb-ripple-init>
                                         <i class="fas fa-user-gear"></i> Asignar
                                     </button>';
                     }
@@ -146,7 +146,7 @@ class VSucursalesController extends Controller
             return $vis_asignadas;*/
 
             $visitas = DB::table('tb_visitas')->where('id_sucursal', $id)->whereMonth('fecha', now()->format('m'))->get()->map(function ($v) use ($usuario) {
-                $nombre = ucwords(strtolower("{$usuario[$v->id_creador]->nombres} {$usuario[$v->id_creador]->apellidos}"));
+                $nombre = $this->formatearNombre($usuario[$v->id_creador]->nombres, $usuario[$v->id_creador]->apellidos);
                 $v->creador = $nombre;
                 return $v;
             });
@@ -181,22 +181,6 @@ class VSucursalesController extends Controller
         } catch (Exception $e) {
             return $this->mesageError(exception: $e, codigo: 500);
         }
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(string $id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     /**

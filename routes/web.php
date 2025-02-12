@@ -67,6 +67,9 @@ Route::get('/visitas/sucursales/{id}', [VSucursalesController::class, 'show']);
 Route::post('/visitas/sucursales/create', [VSucursalesController::class, 'create']);
 
 Route::get('/visitas/programadas/index', [VProgramadasController::class, 'index'])->middleware('auth');
+Route::get('/visitas/programadas/detail/{id}', [VProgramadasController::class, 'detail']);
+Route::post('/visitas/programadas/startVisita', [VProgramadasController::class, 'startVisita']);
+Route::post('/visitas/programadas/destroy', [VProgramadasController::class, 'destroy']);
 
 Route::get('/visitas/terminadas', [TerminadasController::class, 'view'])->middleware('auth');
 

@@ -5656,7 +5656,7 @@ fieldset:disabled .btn {
     padding: var(--mdb-badge-padding-y) var(--mdb-badge-padding-x);
     font-size: var(--mdb-badge-font-size);
     font-weight: var(--mdb-badge-font-weight);
-    line-height: 1;
+    /* line-height: 1; */
     color: var(--mdb-badge-color);
     text-align: center;
     white-space: nowrap;

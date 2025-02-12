@@ -537,7 +537,7 @@ async function DeleteInc(id) {
                 updateTable();
                 return true;
             }
-            boxAlert.box('error', '¡Ocurrio un error!', data.message);
+            boxAlert.box({ i: 'error', t: '¡Ocurrio un inconveniente!', h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             const obj_error = jqXHR.responseJSON;
@@ -765,7 +765,6 @@ document.getElementById('form-addcod').addEventListener('submit', async function
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            console.log(data);
 
             fMananger.formModalLoding('modal_addcod', 'hide');
             if (data.success) {
@@ -886,7 +885,8 @@ function updateSignaturePreview(dataURL) {
     previFirma.src = dataURL;
     previFirma.classList.remove('visually-hidden');
     removeImgFirma.style.display = 'block';
-    textFirmaDigital.value = btoa(dataURL);
+    if (!$('#nomFirmaDigital').val())
+        textFirmaDigital.value = btoa(dataURL);
 }
 
 // Función para eliminar la firma cargada

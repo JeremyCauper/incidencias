@@ -40,8 +40,13 @@ class LoginController extends Controller
             return response()->json(['success' => false, 'message' => 'La contraseña es incorrecta'], 200);
 
         $modulos = $this->obtenerModulos(Auth::user()->menu_usuario);
+        $nomPerfil = $this->formatearNombre(Auth::user()->nombres, Auth::user()->apellidos);
 
-        session(['customModulos' => $modulos->menus, 'rutaRedirect' => $modulos->ruta]);
+        session([
+            'customModulos' => $modulos->menus,
+            'rutaRedirect' => $modulos->ruta,
+            'nomPerfil' => $nomPerfil
+        ]);
         $request->session()->regenerate();
 
         // Autenticación exitosa
@@ -51,7 +56,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        session()->forget(['customModulos', 'rutaRedirect']);
+        session()->forget(['customModulos', 'rutaRedirect', 'nomPerfil']);
         return redirect('/inicio');
     }
 }

@@ -30,7 +30,7 @@
 
         <div class="row">
             <div class="col-md-12 text-center float-md-none mx-auto">
-                <img src="{{asset('front/images/errors/404_mdb.webp')}}" alt="error 404" class="img-fluid wow fadeIn">
+                <img src="{{asset('front/images/errors/403_mdb.webp')}}" alt="error 403" class="img-fluid wow fadeIn">
             </div>
         </div>
 
@@ -40,7 +40,7 @@
             <div class="col-md-12 text-center mb-5">
                 <h2 class="h2-responsive wow fadeIn mb-4" data-wow-delay="0.2s" style="font-weight:500;">
                     <font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;">¡Ups! Está claro que esta no es la página que estabas buscando.</font>
+                        <font style="vertical-align: inherit;">No tienes permiso para acceder a esta página.</font>
                     </font>
                 </h2>
                 <p class="wow fadeIn" data-wow-delay="0.4s" style="font-size:1.25rem;">

@@ -830,8 +830,8 @@ body {
     overflow: auto;
     width: 100%;
     z-index: 9;
-    background: #ccc;
-    opacity: .6;
+    background: #000000;
+    opacity: .35;
     -webkit-transition: all 0.25s ease-out;
     -o-transition: all 0.25s ease-out;
     transition: all 0.25s ease-out;
@@ -3915,4 +3915,10 @@ body {
     color: #dc4c64;
     right: -10px;
     font-size: small;
+}
+
+@media (max-width: 572px) {
+    #modal_seguimiento_visitasp #content-seguimiento span.badge {
+        font-size: .525rem;
+    }
 }

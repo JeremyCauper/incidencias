@@ -127,8 +127,8 @@ class RegistradasController extends Controller
                 $val->acciones = $this->DropdownAcciones([
                     'tittle' => $badge_informe,
                     'button' => [
-                        ['funcion' => "ShowDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-success me-2"></i> Ver Detalle'],
-                        $val->estado_informe != 4 ? ['funcion' => "ShowEdit($val->acciones)", 'texto' => '<i class="fas fa-pen text-info me-2"></i> Editar'] : null,
+                        ['funcion' => "ShowDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
+                        $val->estado_informe != 4 ? ['funcion' => "ShowEdit($val->acciones)", 'texto' => '<i class="fas fa-pen text-secondary me-2"></i> Editar'] : null,
                         $val->estado_informe != 4 ? ['funcion' => "ShowAssign(this, $val->acciones)", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'] : null,
                         $val->estado_informe == 1 ? ['funcion' => "StartInc('$val->cod_incidencia', $val->estado_informe)", 'texto' => '<i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia'] : null,
                         $val->estado_informe == 2 ? ['funcion' => "OrdenDetail(this, '$val->acciones')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio'] : null,
@@ -423,32 +423,6 @@ class RegistradasController extends Controller
         //
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        try {
-            if (Auth::user()->tipo_acceso == 1) {
-                DB::beginTransaction();
-                DB::table('tb_incidencias')->where('id_incidencia', $id)->update(['estatus' => 0]);
-                DB::commit();
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'La incidencia se eliminó con exito'
-                ], 200);
-            }
-            return response()->json([
-                'success' => false,
-                'message' => 'No tiene los permisos requeridos'
-            ], 200);
-        } catch (Exception $e) {
-            DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
-        }
-    }
-
     public function startInc(Request $request)
     {
         try {
@@ -484,6 +458,32 @@ class RegistradasController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'La incidencia se ' . ($accion == 2 ? '' : 're') . 'inició con exito.'
+            ], 200);
+        } catch (Exception $e) {
+            DB::rollBack();
+            return $this->mesageError(exception: $e, codigo: 500);
+        }
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        try {
+            if (Auth::user()->tipo_acceso != 3) {
+                DB::beginTransaction();
+                DB::table('tb_incidencias')->where('id_incidencia', $id)->update(['estatus' => 0]);
+                DB::commit();
+
+                return response()->json([
+                    'success' => true,
+                    'message' => 'La incidencia se eliminó con exito'
+                ], 200);
+            }
+            return response()->json([
+                'success' => false,
+                'message' => 'No tiene los permisos requeridos'
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();

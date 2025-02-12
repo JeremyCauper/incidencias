@@ -128,6 +128,7 @@ class OrdenController extends Controller
     public function addSignature(Request $request)
     {
         try {
+            
             DB::beginTransaction();
             $idContacto = $this->createContact($request);
 
@@ -139,7 +140,8 @@ class OrdenController extends Controller
 
             return response()->json([
                 'success' => true,
-                'message' => 'La firma se añadió con exito.'
+                'message' => 'La firma se añadió con exito.',
+                'data' => $request->all()
             ], 200);
 
         } catch (\Throwable $e) {
@@ -160,6 +162,7 @@ class OrdenController extends Controller
     private function createContact(Request $request)
     {
         try {
+            $id = null;
             DB::beginTransaction();
             // Si existe una firma digital con nombre, la asignamos directamente
             if (!empty($request->nomFirmaDigital) && empty($request->firma_digital)) {
@@ -197,11 +200,8 @@ class OrdenController extends Controller
             DB::commit();
             return $id;
         } catch (\Throwable $e) {
-            DB::rollBack(); // Revertir transacción en caso de error
-            return response()->json([
-                'success' => false,
-                'message' => 'Hubo un error al registrar el contacto: ' . $e->getMessage(),
-            ], 500);
+            DB::rollBack();
+            throw $e;
         }
     }
 

@@ -89,15 +89,15 @@ class Controller extends BaseController
         $arrayString = base64_decode(Auth::user()->menu_usuario);
         $modulos = json_decode($arrayString);
     
-        if (!empty($modulos->$menu)) {
-            if (count($modulos->$menu)) {
-                if (!empty($modulos->$menu[$submenu])) {
-                    return; 
+        if (isset($modulos->$menu)) {
+            if (!empty($modulos->$menu)) {
+                if (isset($modulos->$menu[$submenu])) {
+                    return;
                 }
             }
             return;
         }
-        abort(403, 'No tienes permiso para acceder a esta página.');
+        abort(403);
     }
     
 

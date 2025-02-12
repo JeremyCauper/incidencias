@@ -132,7 +132,7 @@ class AlertMananger {
         });
     }
 
-    table() {
+    table(funcion = updateTable) {
         Swal.fire({
             icon: 'error',
             title: `<h6 class="card-title text-secondary"><b>Error al intentar extraer datos de la tabla</b></h6>`,
@@ -159,8 +159,8 @@ class AlertMananger {
                 `
             }
         }).then((result) => {
-            if (result.isConfirmed) {
-                updateTable();
+            if (result.isConfirmed && typeof funcion === "function") {
+                funcion();
             }
         });
     }

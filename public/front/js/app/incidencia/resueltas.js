@@ -53,6 +53,7 @@ const tb_orden = new DataTable('#tb_orden', {
     createdRow: function (row, data, dataIndex) {
         $(row).find('td:eq(9)').addClass('td-acciones');
     },
+    order: [[3, 'desc']],
     processing: true
 });
 
@@ -190,7 +191,6 @@ function AddSignature(e, cod) {
         url: `${__url}/incidencias/resueltas/showSignature/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
             
             if (data.success) {
                 var datos = data.data;
@@ -232,7 +232,6 @@ document.getElementById('form-firmas').addEventListener('submit', async function
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            console.log(data);
 
             fMananger.formModalLoding('modal_firmas', 'hide');
             if (data) {
@@ -342,7 +341,8 @@ function updateSignaturePreview(dataURL) {
     previFirma.src = dataURL;
     previFirma.classList.remove('visually-hidden');
     removeImgFirma.style.display = 'block';
-    textFirmaDigital.value = btoa(dataURL);
+    if (!$('#nomFirmaDigital').val())
+        textFirmaDigital.value = btoa(dataURL);
 }
 
 // Función para eliminar la firma cargada
@@ -403,6 +403,7 @@ $('#search_signature').on('change', function () {
             search_signature_text.html('<div class="spinner-border text-primary" role="status" style="width: 19px;height: 19px;"></div>');
         },
         success: function (data) {
+            
             if (data.success) {
                 var datos = data.data;
                 dni.val(`${datos.documento} - ${datos.nombre}`);
