@@ -48,7 +48,7 @@
                         <font style="vertical-align: inherit;">Por favor, háganos saber cómo llegó hasta aquí y utilice uno de los siguientes enlaces para regresar al puerto seguro.</font>
                     </font>
                 </p>
-                <a class="btn btn-primary btn-sm" href="{{url('/')}}">REGRESEMOS</a>
+                <a class="btn btn-primary btn-sm" href="javascript:void(0);" onclick="history.back();">REGRESEMOS</a>
             </div>
         </div>
 

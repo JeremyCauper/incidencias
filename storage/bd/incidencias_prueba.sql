@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mi MySql
+ Source Server         : Mysql_local
  Source Server Type    : MySQL
- Source Server Version : 100425
+ Source Server Version : 100432
  Source Host           : localhost:3306
  Source Schema         : incidencias_prueba
 
  Target Server Type    : MySQL
- Target Server Version : 100425
+ Target Server Version : 100432
  File Encoding         : 65001
 
- Date: 11/02/2025 10:49:39
+ Date: 12/02/2025 00:03:29
 */
 
 SET NAMES utf8mb4;
@@ -2173,7 +2173,7 @@ CREATE TABLE `usuarios`  (
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
-INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-02-10 16:39:51', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$g3rXIqIc03QRA12UIxy7j.Q3dGINNkz/A45UF.vO7zkhJx.fBkx9G', '123456', 'user_auth.jpg', 'fd_jcauper.png', 4, 1, 'eyI1IjpbIjYiXSwiNyI6WyI5IiwiMTAiXSwiOCI6W119', NULL, 0, 1, '2025-02-10 16:39:49', '2024-07-09 23:00:19');
+INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-02-11 19:00:27', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$93RF1aKaBhzZ36IYFAkQ4u0YoE3c8Mo6eYRFlnpnR117FFaG184AW', '123456', 'user_auth.jpg', 'fd_jcauper.png', 4, 1, 'eyIzIjpbIjEiLCIyIl0sIjUiOlsiNiJdLCI3IjpbIjkiLCIxMCJdLCI4IjpbXX0=', NULL, 0, 1, '2025-02-11 19:00:27', '2024-07-09 23:00:19');
 INSERT INTO `usuarios` VALUES (3, '12345678', 'Pedro', 'Suarez', 'psuarez@gmail.com', 'psuarez@email.com', '2025-02-10 16:31:20', '2003-01-14', '935423118', '952332137', 'psuarez', '$2y$12$3CmRGy97YD3R0M5j19rrRO.G6AbM6n26v8y3CPEJI8ca2.bsRSiLC', '123789', 'fp_psuarez.png', 'fd_psuarez.png', 3, 3, 'eyIxIjpbXSwiMiI6W119', NULL, 0, 1, '2025-02-10 16:31:18', '2024-07-13 02:41:10');
 INSERT INTO `usuarios` VALUES (4, '74716278', 'JOSTHEIN JOSEPH', 'MAYORCA BELLEZA', 'jmayorca@gmail.com', 'jmayorca@email.com', '2025-02-10 15:28:26', '1997-06-11', '978456123', '985267341', 'jmayorca', '$2y$12$CAclmFJJoM2plUl48iJsgeRbm8WrDbu8jynetkGuWVVBxGTONEm9C', '147852', 'user_auth.jpg', 'fd_jmayorca.png', 3, 1, 'eyIxIjpbXSwiMiI6W119', NULL, 0, 1, '2025-02-10 15:28:24', '2024-07-15 22:18:33');
 INSERT INTO `usuarios` VALUES (5, '70401296', 'BRYAN MARTIN', 'POLO GOMEZ', 'talvan@gmail.com', 'talvan@email.com', '2025-02-10 15:28:11', '2001-07-02', '987564123', '948741236', 'talvan', '$2y$12$6oyxU4QP06ERy7uIw4t6yeJuW1s6bmft/lUWc9SMosYlyZrHPbwN.', '987654', 'user_auth.jpg', 'fd_talvan.png', 3, 1, 'eyIxIjpbXSwiMiI6W119', NULL, 0, 1, '2025-02-10 15:28:09', '2024-07-22 02:16:27');

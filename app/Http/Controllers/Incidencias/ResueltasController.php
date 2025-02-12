@@ -16,6 +16,7 @@ class ResueltasController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(2);
         try {
             $data = [];
             $data['empresas'] = (new EmpresasController())->index();

@@ -14,6 +14,7 @@ class VSucursalesController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(3, 1);
         try {
             $data = [];
             $data['usuarios'] = DB::table('usuarios')->where('estatus', 1)->get()->map(function ($u) {

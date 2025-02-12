@@ -13,6 +13,7 @@ class SucursalesController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(4, 5);
         try {
             $data = [];
             $data['empresas'] = (new EmpresasController())->index();

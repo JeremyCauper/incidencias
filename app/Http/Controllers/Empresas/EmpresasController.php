@@ -13,6 +13,7 @@ class EmpresasController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(4, 3);
         try {
             $data = [];
             $data['grupos'] = (new GruposController())->index();

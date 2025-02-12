@@ -13,6 +13,7 @@ class UsuarioController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(5, 6);
         try {
             $data = [];
             $data['areas'] = DB::table('tb_area')->where('estatus', 1)->get();

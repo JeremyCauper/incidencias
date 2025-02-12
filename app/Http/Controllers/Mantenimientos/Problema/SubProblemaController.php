@@ -13,6 +13,7 @@ class SubProblemaController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(6, 8);
         try {
             $data = [];
             $data['problemas'] = DB::table('tb_problema')->select('id_problema', 'codigo', 'descripcion', 'eliminado')->get();

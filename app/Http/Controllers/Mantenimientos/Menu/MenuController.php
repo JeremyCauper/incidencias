@@ -13,6 +13,7 @@ class MenuController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(7, 9);
         try {
             return view('mantenimientos.menu.menu');
         } catch (Exception $e) {

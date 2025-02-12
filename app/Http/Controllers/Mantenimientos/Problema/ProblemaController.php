@@ -15,6 +15,7 @@ class ProblemaController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(6, 7);
         try {
             return view('mantenimientos.problemas.problemas');
         } catch (Exception $e) {

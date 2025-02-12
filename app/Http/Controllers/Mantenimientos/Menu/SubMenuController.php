@@ -13,6 +13,7 @@ class SubMenuController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(7, 9);
         try {
             $data = [];
             $data['menus'] = DB::table('tb_menu')->select('id_menu', 'descripcion', 'icon', 'eliminado')->get();

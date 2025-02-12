@@ -60,13 +60,16 @@ Route::post('/orden/addSignature', [OrdenController::class, 'addSignature']);
 Route::get('/orden/documentopdf/{cod}', [OrdenController::class, 'CreatePdf']);
 Route::get('/orden/documentoticket/{cod}', [OrdenController::class, 'CreateTicket']);
 
+// Visitas Tecnicas
+Route::get('/visitas/sucursales', [VSucursalesController::class, 'view'])->middleware('auth');
+Route::get('/visitas/sucursales/index', [VSucursalesController::class, 'index'])->middleware('auth');
+Route::get('/visitas/sucursales/{id}', [VSucursalesController::class, 'show']);
+Route::post('/visitas/sucursales/create', [VSucursalesController::class, 'create']);
 
-Route::get('/empresas/grupos', [GruposController::class, 'view'])->middleware('auth');
-Route::get('/empresas/grupos/index', [GruposController::class, 'index']);
-Route::get('/empresas/grupos/{id}', [GruposController::class, 'show']);
-Route::post('/empresas/grupos/registrar', [GruposController::class, 'create']);
-Route::post('/empresas/grupos/actualizar', [GruposController::class, 'update']);
-Route::post('/empresas/grupos/cambiarEstado', [GruposController::class, 'changeStatus']);
+Route::get('/visitas/programadas/index', [VProgramadasController::class, 'index'])->middleware('auth');
+
+Route::get('/visitas/terminadas', [TerminadasController::class, 'view'])->middleware('auth');
+
 
 Route::get('/empresas/empresas', [EmpresasController::class, 'view'])->middleware('auth');
 Route::get('/empresas/empresas/index', [EmpresasController::class, 'index']);
@@ -75,22 +78,19 @@ Route::post('/empresas/empresas/registrar', [EmpresasController::class, 'create'
 Route::post('/empresas/empresas/actualizar', [EmpresasController::class, 'update']);
 Route::post('/empresas/empresas/cambiarEstado', [EmpresasController::class, 'changeStatus']);
 
+Route::get('/empresas/grupos', [GruposController::class, 'view'])->middleware('auth');
+Route::get('/empresas/grupos/index', [GruposController::class, 'index']);
+Route::get('/empresas/grupos/{id}', [GruposController::class, 'show']);
+Route::post('/empresas/grupos/registrar', [GruposController::class, 'create']);
+Route::post('/empresas/grupos/actualizar', [GruposController::class, 'update']);
+Route::post('/empresas/grupos/cambiarEstado', [GruposController::class, 'changeStatus']);
+
 Route::get('/empresas/sucursales', [SucursalesController::class, 'view'])->middleware('auth');
 Route::get('/empresas/sucursales/index', [SucursalesController::class, 'index']);
 Route::get('/empresas/sucursales/{id}', [SucursalesController::class, 'show']);
 Route::post('/empresas/sucursales/registrar', [SucursalesController::class, 'create']);
 Route::post('/empresas/sucursales/actualizar', [SucursalesController::class, 'update']);
 Route::post('/empresas/sucursales/cambiarEstado', [SucursalesController::class, 'changeStatus']);
-
-// Visitas Tecnicas
-Route::get('/visitas/terminadas', [TerminadasController::class, 'view'])->middleware('auth');
-
-Route::get('/visitas/sucursales', [VSucursalesController::class, 'view'])->middleware('auth');
-Route::get('/visitas/sucursales/index', [VSucursalesController::class, 'index'])->middleware('auth');
-Route::get('/visitas/sucursales/{id}', [VSucursalesController::class, 'show']);
-Route::post('/visitas/sucursales/create', [VSucursalesController::class, 'create']);
-
-Route::get('/visitas/programadas/index', [VProgramadasController::class, 'index'])->middleware('auth');
 
 Route::get('/control-de-usuario/usuarios', [UsuarioController::class, 'view'])->middleware('auth');
 Route::get('/control-de-usuario/usuarios/index', [UsuarioController::class, 'index']);

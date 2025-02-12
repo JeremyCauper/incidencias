@@ -13,6 +13,7 @@ class GruposController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(4, 4);
         try {
             return view('empresas.grupos');
         } catch (Exception $e) {

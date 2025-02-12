@@ -16,6 +16,7 @@ class RegistradasController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(1);
         try {
             $data = [];
 

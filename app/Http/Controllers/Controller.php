@@ -6,6 +6,7 @@ use Exception as error;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
@@ -17,23 +18,23 @@ class Controller extends BaseController
     public function obtenerModulos($jsonBase64)
     {
         // JSON en formato string con los IDs a filtrar
-        $jsonString = base64_decode($jsonBase64); //'{"1":[],"2":[],"3":["1","2"],"4":["3","5","4"],"5":["6"]}';
-
+        $jsonString = base64_decode($jsonBase64);
+    
         // Decodificar el JSON a un array asociativo
         $filteredIds = json_decode($jsonString, true);
-
+    
         // Obtener solo los menús que aparecen en el JSON
         $menu = DB::table('tb_menu')
             ->select('id_menu', 'descripcion', 'icon', 'ruta')
             ->where('estatus', 1)
-            ->whereIn('id_menu', array_keys($filteredIds)) // Filtra los menús permitidos
+            ->whereIn('id_menu', array_keys($filteredIds))
             ->get();
-
+    
         // Obtener los submenús, pero solo los que aparecen en el JSON
         $submenus = DB::table('tb_submenu')
             ->select(['id_submenu', 'id_menu', 'descripcion', 'categoria', 'ruta'])
             ->where('estatus', 1)
-            ->whereIn('id_menu', array_keys($filteredIds)) // Filtra los submenús de los menús permitidos
+            ->whereIn('id_menu', array_keys($filteredIds))
             ->where(function ($query) use ($filteredIds) {
                 foreach ($filteredIds as $menuId => $submenuIds) {
                     if (!empty($submenuIds)) {
@@ -43,17 +44,29 @@ class Controller extends BaseController
                     }
                 }
             })->get()->groupBy('id_menu');
-
+    
+        // Determinar la ruta principal
+        $rutaPrincipal = null;
+        if ($menu->isNotEmpty()) {
+            $primerMenu = $menu->first();
+            if (!empty($filteredIds[$primerMenu->id_menu]) && $submenus->has($primerMenu->id_menu)) {
+                $primerSubmenu = $submenus[$primerMenu->id_menu]->first();
+                $rutaPrincipal = $primerSubmenu->ruta;
+            } else {
+                $rutaPrincipal = $primerMenu->ruta;
+            }
+        }
+    
         // Combinar menús y submenús en la estructura deseada
         $menus = $menu->map(function ($item) use ($submenus, $filteredIds) {
             $menuId = $item->id_menu;
-
+    
             // Si el JSON dice que este menú no tiene submenús, se deja vacío
             if (empty($filteredIds[$menuId])) {
                 $item->submenu = [];
                 return $item;
             }
-
+    
             // Si hay submenús, agruparlos por categoría
             if ($submenus->has($menuId)) {
                 $groupedByCategory = $submenus[$menuId]->groupBy('categoria');
@@ -63,13 +76,30 @@ class Controller extends BaseController
             } else {
                 $item->submenu = [];
             }
-
+    
             return $item;
         });
-
-        // Retornar el JSON filtrado
-        return $menus;
+    
+        // Retornar el JSON filtrado con la nueva ruta principal
+        return (object)["menus" => $menus, "ruta" => $rutaPrincipal];
     }
+
+    public function validarPermisos($menu, $submenu = "")
+    {
+        $arrayString = base64_decode(Auth::user()->menu_usuario);
+        $modulos = json_decode($arrayString);
+    
+        if (!empty($modulos->$menu)) {
+            if (count($modulos->$menu)) {
+                if (!empty($modulos->$menu[$submenu])) {
+                    return; 
+                }
+            }
+            return;
+        }
+        abort(403, 'No tienes permiso para acceder a esta página.');
+    }
+    
 
     public function formatearNombre(...$args) {
         if (count($args) == 1) {

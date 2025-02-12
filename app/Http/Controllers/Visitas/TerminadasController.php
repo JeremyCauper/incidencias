@@ -14,6 +14,7 @@ class TerminadasController extends Controller
 {
     public function view()
     {
+        $this->validarPermisos(3, 2);
         try {
             $data = [];
             $data['empresas'] = (new EmpresasController())->index();
