@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mysql_local
+ Source Server         : Mi MySql
  Source Server Type    : MySQL
- Source Server Version : 100432
+ Source Server Version : 100425
  Source Host           : localhost:3306
  Source Schema         : incidencias_prueba
 
  Target Server Type    : MySQL
- Target Server Version : 100432
+ Target Server Version : 100425
  File Encoding         : 65001
 
- Date: 12/02/2025 00:03:29
+ Date: 14/02/2025 13:06:41
 */
 
 SET NAMES utf8mb4;
@@ -587,8 +587,8 @@ CREATE TABLE `tb_contac_ordens`  (
 -- ----------------------------
 -- Records of tb_contac_ordens
 -- ----------------------------
-INSERT INTO `tb_contac_ordens` VALUES (3, '61505130', 'JEREMY PATRICK CAUPER SILVANO', 'fdc_61505130.png', 1, NULL, '2024-08-26 15:18:31');
-INSERT INTO `tb_contac_ordens` VALUES (4, '70401296', 'BRYAN MARTIN POLO GOMEZ', NULL, 1, NULL, '2024-08-28 11:23:42');
+INSERT INTO `tb_contac_ordens` VALUES (3, '61505130', 'JEREMY PATRICK CAUPER SILVANO', 'fdc_61505130.png', 1, '2025-02-12 11:20:17', '2024-08-26 15:18:31');
+INSERT INTO `tb_contac_ordens` VALUES (4, '70401296', 'BRYAN MARTIN POLO GOMEZ', 'fdc_70401296.png', 1, '2025-02-12 11:22:58', '2024-08-28 11:23:42');
 INSERT INTO `tb_contac_ordens` VALUES (7, '72192063', 'DANIEL EDUARDO MITTA FLORES', 'fdc_72192063.png', 1, NULL, '2025-01-12 22:48:47');
 INSERT INTO `tb_contac_ordens` VALUES (8, '10392834', 'MARLON RAUL RAMOS SAJAMI', 'fdc_10392834.png', 1, '2024-12-18 12:54:46', '2024-12-18 12:54:46');
 
@@ -1015,7 +1015,7 @@ CREATE TABLE `tb_inc_seguimiento`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_seguimiento`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_inc_seguimiento
@@ -1037,6 +1037,7 @@ INSERT INTO `tb_inc_seguimiento` VALUES (14, 1, 'INC-00000001', '2025-01-17', '1
 INSERT INTO `tb_inc_seguimiento` VALUES (15, 1, 'INC-00000007', '2025-01-17', '17:01:48', 0, NULL, '2025-01-17 17:01:48');
 INSERT INTO `tb_inc_seguimiento` VALUES (16, 1, 'INC-00000007', '2025-01-31', '17:21:20', 1, NULL, '2025-01-31 17:21:20');
 INSERT INTO `tb_inc_seguimiento` VALUES (17, 1, 'INC-00000009', '2025-02-01', '21:18:39', 0, NULL, '2025-02-01 21:18:39');
+INSERT INTO `tb_inc_seguimiento` VALUES (18, 1, 'INC-00000009', '2025-02-12', '11:22:55', 1, NULL, '2025-02-12 11:22:58');
 
 -- ----------------------------
 -- Table structure for tb_incidencias
@@ -1093,7 +1094,7 @@ INSERT INTO `tb_incidencias` VALUES (5, 'INC-00000005', 103, 18, 1, 'Alta', 1, 1
 INSERT INTO `tb_incidencias` VALUES (6, 'INC-00000006', 103, 21, 1, 'Alta', 1, 2, 2, 19, NULL, 'urgente', '2025-01-12', '17:51:57', 3, 1, 1, NULL, '2025-01-12 17:53:04');
 INSERT INTO `tb_incidencias` VALUES (7, 'INC-00000007', 5, 95, 2, 'Alta', 1, 2, 3, 37, NULL, 'urgente', '2025-01-12', '22:10:21', 3, 1, 1, NULL, '2025-01-12 22:10:41');
 INSERT INTO `tb_incidencias` VALUES (8, 'INC-00000008', 103, 19, 2, 'Media', 2, 2, 2, 21, 6, 'urgente', '2025-01-12', '22:10:45', 3, 1, 1, NULL, '2025-01-12 22:11:21');
-INSERT INTO `tb_incidencias` VALUES (9, 'INC-00000009', 2, 163, 1, 'Alta', 1, 2, 4, 48, NULL, 'urgente', '2025-01-17', '16:59:14', 2, 1, 1, NULL, '2025-01-17 16:59:57');
+INSERT INTO `tb_incidencias` VALUES (9, 'INC-00000009', 2, 163, 1, 'Alta', 1, 2, 4, 48, NULL, 'urgente', '2025-01-17', '16:59:14', 3, 1, 1, NULL, '2025-01-17 16:59:57');
 INSERT INTO `tb_incidencias` VALUES (10, 'INC-00000010', 2, 163, 1, 'Alta', 1, 2, 1, 1, 7, 'urgente', '2025-01-31', '17:14:03', 0, 1, 1, NULL, '2025-01-31 17:17:44');
 INSERT INTO `tb_incidencias` VALUES (11, 'INC-00000011', 103, 20, 1, 'Alta', 1, 2, 1, 2, NULL, NULL, '2025-02-02', '16:44:33', 0, 1, 1, NULL, '2025-02-02 16:45:06');
 INSERT INTO `tb_incidencias` VALUES (12, 'INC-00000012', 1, 132, 1, 'Alta', 1, 2, 9, 88, NULL, NULL, '2025-02-02', '17:14:07', 1, 1, 1, NULL, '2025-02-02 17:16:04');
@@ -1157,7 +1158,7 @@ CREATE TABLE `tb_materiales_usados`  (
   INDEX `cod_ordens`(`cod_ordens`) USING BTREE,
   INDEX `id_material`(`id_material`) USING BTREE,
   CONSTRAINT `tb_materiales_usados_ibfk_2` FOREIGN KEY (`id_material`) REFERENCES `tb_materiales` (`id_materiales`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_materiales_usados
@@ -1170,6 +1171,7 @@ INSERT INTO `tb_materiales_usados` VALUES (5, 'ST24-00000006', 4, 1, NULL, '2025
 INSERT INTO `tb_materiales_usados` VALUES (6, 'ST24-00000007', 2, 1, NULL, '2025-01-17 16:41:47');
 INSERT INTO `tb_materiales_usados` VALUES (7, 'ST24-00000008', 1, 1, NULL, '2025-01-31 17:21:20');
 INSERT INTO `tb_materiales_usados` VALUES (8, 'ST24-00000008', 4, 2, NULL, '2025-01-31 17:21:20');
+INSERT INTO `tb_materiales_usados` VALUES (9, 'ST24-00000009', 18, 1, NULL, '2025-02-12 11:22:56');
 
 -- ----------------------------
 -- Table structure for tb_menu
@@ -1210,7 +1212,7 @@ CREATE TABLE `tb_orden_correlativo`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_cor`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_correlativo
@@ -1222,6 +1224,7 @@ INSERT INTO `tb_orden_correlativo` VALUES (6, 'ST24-00000004', NULL, '2025-01-12
 INSERT INTO `tb_orden_correlativo` VALUES (7, 'ST24-00000006', NULL, '2025-01-12 22:48:47');
 INSERT INTO `tb_orden_correlativo` VALUES (8, 'ST24-00000007', NULL, '2025-01-17 16:41:47');
 INSERT INTO `tb_orden_correlativo` VALUES (9, 'ST24-00000008', NULL, '2025-01-31 17:21:20');
+INSERT INTO `tb_orden_correlativo` VALUES (13, 'ST24-00000009', NULL, '2025-02-12 11:22:58');
 
 -- ----------------------------
 -- Table structure for tb_orden_servicio
@@ -1242,18 +1245,19 @@ CREATE TABLE `tb_orden_servicio`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_ordens`) USING BTREE,
   INDEX `cod_ordens`(`cod_ordens`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_servicio
 -- ----------------------------
-INSERT INTO `tb_orden_servicio` VALUES (1, 'ST24-00000001', 'INC-00000003', 'disco quemado', 'cambiar', NULL, '2025-01-12', '16:15:15', 'gdfgdfgdfs', 1, '2025-01-12 21:25:16', '2025-01-12 16:15:16');
+INSERT INTO `tb_orden_servicio` VALUES (1, 'ST24-00000001', 'INC-00000003', 'disco quemado', 'cambiar', 3, '2025-01-12', '16:15:15', 'gdfgdfgdfs', 1, '2025-01-12 21:25:16', '2025-01-12 16:15:16');
 INSERT INTO `tb_orden_servicio` VALUES (2, 'ST24-00000002', 'INC-00000004', 'jacktool roto', 'cambiarlo', NULL, '2025-01-12', '21:47:09', '3', 1, NULL, '2025-01-12 21:47:10');
 INSERT INTO `tb_orden_servicio` VALUES (3, 'ST24-00000003', 'INC-00000005', 'TERMINAL TOUCH sucio', 'Limpiar', NULL, '2025-01-12', '22:05:35', NULL, 1, NULL, '2025-01-12 22:05:35');
 INSERT INTO `tb_orden_servicio` VALUES (5, 'ST24-00000004', 'INC-00000006', 'TERMINAL TOUCH sucio', 'Limpiar', 9, '2025-01-12', '22:08:33', 'sdfsdfasdfasd', 1, '2025-01-12 22:09:14', '2025-01-12 22:08:34');
 INSERT INTO `tb_orden_servicio` VALUES (6, 'ST24-00000006', 'INC-00000008', 'impresora sin tinta', 'llenar la tinta', 7, '2025-01-12', '22:48:46', 'dsfsdf', 1, NULL, '2025-01-12 22:48:47');
 INSERT INTO `tb_orden_servicio` VALUES (7, 'ST24-00000007', 'INC-00000001', 'prueba', 'prue2', NULL, '2025-01-17', '16:41:46', 'qwerty', 1, '2025-01-17 16:42:45', '2025-01-17 16:41:47');
 INSERT INTO `tb_orden_servicio` VALUES (8, 'ST24-00000008', 'INC-00000007', 'touch', 'cambiar', NULL, '2025-01-31', '17:21:20', '3', 1, NULL, '2025-01-31 17:21:20');
+INSERT INTO `tb_orden_servicio` VALUES (9, 'ST24-00000009', 'INC-00000009', 'no comunicaba', 'debe comunicar', 4, '2025-02-12', '11:22:55', '3', 1, NULL, '2025-02-12 11:22:58');
 
 -- ----------------------------
 -- Table structure for tb_problema
@@ -2105,8 +2109,8 @@ CREATE TABLE `tb_visitas`  (
 -- ----------------------------
 INSERT INTO `tb_visitas` VALUES (3, 121, 1, '2025-01-07', '14:21:40', 0, 0, 0, '2025-01-07 14:21:40');
 INSERT INTO `tb_visitas` VALUES (4, 284, 1, '2025-01-21', '22:56:16', 0, 0, 0, '2025-01-12 22:56:16');
-INSERT INTO `tb_visitas` VALUES (5, 17, 1, '2025-01-21', '16:50:53', 0, 0, 0, '2025-01-17 16:50:53');
-INSERT INTO `tb_visitas` VALUES (6, 121, 1, '2025-02-19', '12:18:00', 0, 0, 0, '2025-02-10 12:18:00');
+INSERT INTO `tb_visitas` VALUES (5, 17, 1, '2025-01-21', '16:50:53', 0, 0, 0, '2025-02-12 17:22:23');
+INSERT INTO `tb_visitas` VALUES (6, 121, 1, '2025-02-19', '12:18:00', 1, 0, 0, '2025-02-09 17:00:46');
 
 -- ----------------------------
 -- Table structure for tipo_usuario
@@ -2173,7 +2177,7 @@ CREATE TABLE `usuarios`  (
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
-INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-02-11 19:00:27', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$93RF1aKaBhzZ36IYFAkQ4u0YoE3c8Mo6eYRFlnpnR117FFaG184AW', '123456', 'user_auth.jpg', 'fd_jcauper.png', 4, 1, 'eyIzIjpbIjEiLCIyIl0sIjUiOlsiNiJdLCI3IjpbIjkiLCIxMCJdLCI4IjpbXX0=', NULL, 0, 1, '2025-02-11 19:00:27', '2024-07-09 23:00:19');
+INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-02-12 10:31:37', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$iihOLOize1QNOmNYCJ6ifet.dRSLzgrdxYUFtWJsf/w0xdN0CDdRO', '123456', 'user_auth.jpg', 'fd_jcauper.png', 4, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiNyI6WyI5IiwiMTAiXSwiOCI6W119', NULL, 0, 1, '2025-02-12 10:31:35', '2024-07-09 23:00:19');
 INSERT INTO `usuarios` VALUES (3, '12345678', 'Pedro', 'Suarez', 'psuarez@gmail.com', 'psuarez@email.com', '2025-02-10 16:31:20', '2003-01-14', '935423118', '952332137', 'psuarez', '$2y$12$3CmRGy97YD3R0M5j19rrRO.G6AbM6n26v8y3CPEJI8ca2.bsRSiLC', '123789', 'fp_psuarez.png', 'fd_psuarez.png', 3, 3, 'eyIxIjpbXSwiMiI6W119', NULL, 0, 1, '2025-02-10 16:31:18', '2024-07-13 02:41:10');
 INSERT INTO `usuarios` VALUES (4, '74716278', 'JOSTHEIN JOSEPH', 'MAYORCA BELLEZA', 'jmayorca@gmail.com', 'jmayorca@email.com', '2025-02-10 15:28:26', '1997-06-11', '978456123', '985267341', 'jmayorca', '$2y$12$CAclmFJJoM2plUl48iJsgeRbm8WrDbu8jynetkGuWVVBxGTONEm9C', '147852', 'user_auth.jpg', 'fd_jmayorca.png', 3, 1, 'eyIxIjpbXSwiMiI6W119', NULL, 0, 1, '2025-02-10 15:28:24', '2024-07-15 22:18:33');
 INSERT INTO `usuarios` VALUES (5, '70401296', 'BRYAN MARTIN', 'POLO GOMEZ', 'talvan@gmail.com', 'talvan@email.com', '2025-02-10 15:28:11', '2001-07-02', '987564123', '948741236', 'talvan', '$2y$12$6oyxU4QP06ERy7uIw4t6yeJuW1s6bmft/lUWc9SMosYlyZrHPbwN.', '987654', 'user_auth.jpg', 'fd_talvan.png', 3, 1, 'eyIxIjpbXSwiMiI6W119', NULL, 0, 1, '2025-02-10 15:28:09', '2024-07-22 02:16:27');
