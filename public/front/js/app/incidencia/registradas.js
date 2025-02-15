@@ -475,7 +475,6 @@ async function AssignPer() {
     if (!personal) {
         return fMananger.formModalLoding('modal_assign', 'hide');
     }
-    valid.data.data['personal'] = personal;
 
     $.ajax({
         type: 'POST',
@@ -499,6 +498,7 @@ async function AssignPer() {
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
                 $(`#modal_assign [aria-item="estado"]`).html(`<label class="badge badge-${estadoInfo[data.data.estado]['c']}" style="font-size: .8rem;">${estadoInfo[data.data.estado]['t']}</label>`);
+                cPersonal1.data = data.data.personal;
                 boxAlert.minbox({ h: data.message });
                 updateTable();
                 return true;

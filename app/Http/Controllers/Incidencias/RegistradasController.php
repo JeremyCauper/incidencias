@@ -194,10 +194,15 @@ class RegistradasController extends Controller
             if ($estado_info) {
                 $arr_personal = [];
                 foreach ($personal as $k => $val) {
-                    $arr_personal[$k]['cod_incidencia'] = $request->cod_inc;
-                    $arr_personal[$k]['id_usuario'] = $val['id'];
-                    $arr_personal[$k]['creador'] = Auth::user()->id_usuario;
-                    $arr_personal[$k]['created_at'] = now()->format('Y-m-d H:i:s');
+                    if ($val['registro']) {
+                        $arr_personal[$k]['cod_incidencia'] = $request->cod_inc;
+                        $arr_personal[$k]['id_usuario'] = $val['id'];
+                        $arr_personal[$k]['creador'] = Auth::user()->id_usuario;
+                        $arr_personal[$k]['fecha'] = now()->format('Y-m-d');
+                        $arr_personal[$k]['hora'] = now()->format('H:i:s');
+                        $arr_personal[$k]['created_at'] = now()->format('Y-m-d H:i:s');
+                        $personal[$val['id']]['registro'] = 0;
+                    }
                 }
                 DB::table('tb_inc_asignadas')->insert($arr_personal);
             }
@@ -379,25 +384,40 @@ class RegistradasController extends Controller
             if ($validator->fails())
                 return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
 
-            DB::beginTransaction();
-            if ($request->estado)
-                DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->cod_inc)->delete();
-
-            $estado_info = count($request->personal_asig) ? 1 : 0;
-            if ($estado_info) {
-                $personal = [];
-                foreach ($request->personal_asig as $k => $val) {
-                    $personal[$k]['cod_incidencia'] = $request->cod_inc;
-                    $personal[$k]['id_usuario'] = $val['id'];
-                    $personal[$k]['creador'] = Auth::user()->id_usuario;
-                    $personal[$k]['fecha'] = now()->format('Y-m-d');
-                    $personal[$k]['hora'] = now()->format('H:i:s');
-                    $personal[$k]['updated_at'] = now()->format('Y-m-d H:i:s');
-                    $personal[$k]['created_at'] = now()->format('Y-m-d H:i:s');
+            $personal = $request->personal_asig;
+            
+            if (count($request->personal_asig)) {
+                $arr_personal_new = [];
+                $indice_new = 0;
+                $arr_personal_del = [];
+                foreach ($personal as $k => $val) {
+                    if (!$val['eliminado'] && $val['registro']) {
+                        $arr_personal_new[$indice_new]['cod_incidencia'] = $request->cod_inc;
+                        $arr_personal_new[$indice_new]['id_usuario'] = $val['id'];
+                        $arr_personal_new[$indice_new]['creador'] = Auth::user()->id_usuario;
+                        $arr_personal_new[$indice_new]['fecha'] = now()->format('Y-m-d');
+                        $arr_personal_new[$indice_new]['hora'] = now()->format('H:i:s');
+                        $arr_personal_new[$indice_new]['created_at'] = now()->format('Y-m-d H:i:s');
+                        $personal[$val['id']]['registro'] = 0;
+                        $indice_new++;
+                    }
+                    if ($val['eliminado'] && !$val['registro']) {
+                        array_push($arr_personal_del, $val['id']);
+                        unset($personal[$val['id']]);
+                    }
                 }
-                DB::table('tb_inc_asignadas')->insert($personal);
             }
 
+            DB::beginTransaction();
+            if (!empty($arr_personal_new)) {
+                DB::table('tb_inc_asignadas')->insert($arr_personal_new);
+            }
+
+            if (!empty($arr_personal_del) && $request->estado) {
+                DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->cod_inc)->where('id_usuario', $arr_personal_del)->delete();
+            }
+
+            $estado_info = count($personal) ? 1 : 0;
             if ($request->estado)
                 DB::table('tb_incidencias')->where('cod_incidencia', $request->cod_inc)->update(['estado_informe' => $estado_info]);
 
@@ -407,7 +427,7 @@ class RegistradasController extends Controller
             return response()->json([
                 'success' => true,
                 'message' => 'Asignado con éxito',
-                'data' => ['cod_inc' => $cod_inc, 'estado' => $request->estado ? $estado_info : 2]
+                'data' => ['cod_inc' => $cod_inc, 'estado' => $request->estado ? $estado_info : 2, 'personal' => $personal]
             ], 200);
         } catch (Exception $e) {
             DB::rollBack();

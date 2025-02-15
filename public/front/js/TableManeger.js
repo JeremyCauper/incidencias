@@ -8,6 +8,8 @@ class CTable {
         extract: []
     };
     static _accion = true;
+    static _newRow = 1;
+    static _data = {};
 
     constructor(selector, options = {}) {
         this._this = $(selector);
@@ -51,6 +53,22 @@ class CTable {
         CTable._accion = bol;
     }
 
+    get newRow() {
+        return CTable._newRow;
+    }
+
+    set newRow(nw) {
+        CTable._newRow = nw;
+    }
+
+    get data() {
+        return CTable._data;
+    }
+
+    set data(dt) {
+        CTable._data = dt;
+    }
+
     create() {
         const $selector = this._selector;
         var $select = $($selector);
@@ -77,8 +95,22 @@ class CTable {
             $contentT.html(tabla);
             $table = $contentT.children('table');
         }
+        const extract = this.$s.extract;
+        const $id = obj[extract[0]];
 
-        const $tr = $('<tr>', { 'ctable-table-tr': this.acciones, 'ctable-repit': obj[this.$s.tbody[0].data] });
+        if ($id in this.data) {
+            this.data[$id].eliminado = 0;
+        } else {
+            var obj_td = {};
+            extract.forEach(e => {
+                obj_td[e] = obj[e];
+            });
+            obj_td['eliminado'] = 0;
+            obj_td['registro'] = this.newRow;
+            this.data[$id] = obj_td;
+        }
+
+        const $tr = $('<tr>', { 'ctable-table-tr-id': $id, 'ctable-table-tr': this.acciones, 'ctable-table-rnew': this.newRow, 'ctable-repit': obj[this.$s.tbody[0].data] });
         this.$s.tbody.forEach(col => {
             const $td = $('<td>', { 'ctable-table-col': col.data });
             if (col.render && typeof col.render === 'function') {
@@ -99,11 +131,18 @@ class CTable {
         $table.children('tbody').append($tr);
         $select.val('').trigger('change.select2');
         this.acciones = true;
+        this.newRow = 1;
     }
 
     delete($this) {
         const $tr = $($this).parent().parent();
         const $table = $tr.parent().parent();
+        const $id = $tr.attr('ctable-table-tr-id');
+        if (this.data[$id].registro) {
+            delete this.data[$id];
+        } else {
+            this.data[$id].eliminado = 1;
+        }
         $tr.remove();
         if (!$table.children('tbody').children('tr').length) {
             $table.remove();
@@ -112,11 +151,13 @@ class CTable {
 
     deleteTable() {
         const $table = $(`table[ctable-table="${this._selector}"]`);
+        this.data = {};
         $table.remove();
     }
 
     fillTable(val, Adel = true) {
         this.acciones = Adel;
+        this.newRow = 0;
         $(this._selector).val(val).trigger('change.select2');
         this.create();
     }
@@ -128,26 +169,7 @@ class CTable {
             boxAlert.box({ i: 'warning', t: 'Advertencia!', h: "El selector aun tiene un valor por añadir" });
             return false;
         }
-
-        const arr = this.$s.extract;
-        const $trs = $(`table[ctable-table="${$selector}"]`).children('tbody').children('tr');
-        const data = [];
-        $trs.each(function (i, t) {
-            if ($(t).attr('ctable-table-tr') === 'true') {
-                const tds = $(t).children('td');
-                var obj_td = {};
-
-                arr.forEach(e => {
-                    tds.each(function (i, td) {
-                        if ($(td).attr('ctable-table-col') == e) {
-                            obj_td[e] = $(td).text();
-                        }
-                    });
-                });
-                data.push(obj_td);
-            }
-        });
-        return data;
+        return this.data;
     }
 }
 const cTable = new CTable();

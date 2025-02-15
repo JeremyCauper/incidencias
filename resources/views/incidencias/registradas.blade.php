@@ -10,6 +10,7 @@
 
     .row-bg-info {
         background-color: rgb(239, 252, 255);
+        position: relative;
     }
 
     .row-bg-primary {
