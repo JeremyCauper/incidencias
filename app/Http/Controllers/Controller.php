@@ -215,28 +215,74 @@ class Controller extends BaseController
 
     public function parseCreateFile($name, $dir, $data)
     {
-        $foto_b64 = explode(',', base64_decode($data));
-        $imgInfo = base64_decode($foto_b64[1]);
-        $imgFormat = getimagesizefromstring($imgInfo);
-        $formato = '.' . explode('/', $imgFormat['mime'])[1];
-        $filename = $name . $formato;
-
-        $path = public_path("front/images/$dir");
-        $filePath = "$path/$filename";
-
-        if (file_put_contents($filePath, $imgInfo)) {
-            return ['success' => true, 'filename' => $filename];
+        try {
+            $foto_b64 = explode(',', base64_decode($data));
+            $imgInfo = base64_decode($foto_b64[1]);
+            $imgFormat = getimagesizefromstring($imgInfo);
+            $formato = '.' . explode('/', $imgFormat['mime'])[1];
+            $filename = $name . $formato;
+    
+            $path = public_path("front/images/$dir");
+            $filePath = "$path/$filename";
+    
+            if (file_put_contents($filePath, $imgInfo)) {
+                return ['success' => true, 'filename' => $filename];
+            }
+        } catch (\Throwable $th) {
+            return ['success' => false, 'error' => $th->getMessage()];
         }
-        return ['success' => false];
     }
 
-    public function mesageError(
-        error $exception,
-        $message = "Hubo un problema en el servidor. Estamos trabajando para solucionarlo. Por favor, inténtalo más tarde o contacta con soporte si persiste.",
-        $codigo = 200
-    ) {
-        $error = "Error inesperado - linea {$exception->getLine()}: {$exception->getMessage()}";
-        Log::error($error);
-        return response()->json(["success" => false, "message" => $message, "error" => $error], $codigo);
+    public function message($title = "", $message = "", $valide = null, $error = null, $validd = null, $data = null, $status = 200, $e = null)
+    {
+        $response = ["success" => ($status >= 200 && $status < 300) ? true : false, "title" => $title, "message" => $message];
+        $statuses = [
+            "success" => ["title" => "Éxito", "range" => range(200, 299)],
+            "warning" => ["title" => "Redireccionando", "range" => range(300, 399)],
+            "error"   => ["title" => "Proceso Fallido", "range" => range(400, 499)],
+            "danger"  => ["title" => "Error interno del Servidor", "range" => range(500, 599)],
+        ];
+        if ($valide) {
+            $response[$valide] = $error;
+        }
+        if ($validd) {
+            $response[$validd] = $data;
+        }
+        foreach ($statuses as $icon => $info) {
+            if (in_array($status, $info["range"])) {
+                $response["icon"] = $icon;
+                if (empty($title) ) {
+                    $response["title"] = $info["title"];
+                }
+                break;
+            }
+        }
+        if (empty($message)) {
+            switch ($status) {
+                case 500:
+                    $response["message"] = "Ha ocurrido un error inesperado en el servidor.";
+                    break;
+                
+                case 503:
+                    $response["message"] = "El servidor está en mantenimiento o sobrecargado.";
+                    break;
+                
+                case 422:
+                    $response["title"] = "Datos inválidos (errores de validación).";
+                    break;
+            }
+        }
+        return response()->json($response, $status);
+    }
+
+    public function validatorUnique($errorMessage, $data)
+    {
+        $datos = [];
+        foreach ($data as $key => $value) {
+            if (str_contains($errorMessage, "key '$key'")) {
+                $datos[] = $value;
+            }
+        }
+        return $datos;
     }
 }

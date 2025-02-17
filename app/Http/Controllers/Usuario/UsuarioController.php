@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Usuario;
 
 use App\Http\Controllers\Controller;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -11,6 +12,16 @@ use Illuminate\Support\Facades\Validator;
 
 class UsuarioController extends Controller
 {
+    private $validator = [
+        "u_ndoc_usuario" => "n_doc",
+        "u_usuario" => "usuario",
+        "u_contrasena" => "contrasena",
+        "u_email_personal" => "emailp_usu",
+        "u_email_corporativo" => "emailc_usu",
+        "u_tel_personal" => "telp_usu",
+        "u_tel_corporativo" => "telc_usu"
+    ];
+
     public function view()
     {
         $this->validarPermisos(5, 6);
@@ -41,7 +52,7 @@ class UsuarioController extends Controller
 
             return view('usuario.usuario', $data);
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
         }
     }
     /**
@@ -49,7 +60,6 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-
         $tipoAcceso = DB::table('tipo_usuario')->get()->keyBy('id_tipo_acceso');
         $usuarios = DB::table('usuarios')
             ->select('ndoc_usuario', 'id_usuario', 'nombres', 'apellidos', 'usuario', 'pass_view', 'estatus', 'tipo_acceso')
@@ -105,7 +115,7 @@ class UsuarioController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                return $this->message(valide: 'required', error: $validator->errors(), status: 422);
             }
 
 
@@ -114,7 +124,7 @@ class UsuarioController extends Controller
             if ($request->foto_perfil) {
                 $result = $this->parseFile('fp_' . $request->usuario, 'auth', $request->foto_perfil);
                 if (!$result['success']) {
-                    throw new Exception("Error al intentar crear la imagen del perfil");
+                    return $this->message(message: "Error al intentar crear la imagen del perfil", valide: 'error', error: $result['error'], status: 400);
                 }
                 $filenameFP = $result['filename'];
             }
@@ -123,7 +133,7 @@ class UsuarioController extends Controller
             if ($request->firma_digital) {
                 $result = $this->parseFile('fd_' . $request->usuario, 'firms', $request->firma_digital);
                 if (!$result['success']) {
-                    throw new Exception("Error al intentar crear la firma digital");
+                    return $this->message(message: "Error al intentar crear la firma digital", valide: 'error', error: $result['error'], status: 400);
                 }
                 $filenameFD = $result['filename'];
             }
@@ -150,10 +160,17 @@ class UsuarioController extends Controller
             ]);
             DB::commit();
 
-            return response()->json(['success' => true, 'message' => 'Registro Exitoso.']);
+            return $this->message(message: "Registro creado exitosamente.");
+        } catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                $response = $this->validatorUnique($e->getMessage(), $this->validator);
+                return $this->message(valide: 'unique', error: $response, status: 422);
+            }
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", valide: 'error', error: $e->getMessage(), status: 400);
         } catch (Exception $e) {
+            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
+        } finally {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
         }
     }
 
@@ -164,9 +181,9 @@ class UsuarioController extends Controller
     {
         try {
             $usuario = DB::table('usuarios')->where('id_usuario', $id)->first();
-            return response()->json(["success" => true, "message" => "", "data" => $usuario]);
+            return $this->message(validd: 'data', data: $usuario);
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
         }
     }
 
@@ -180,7 +197,7 @@ class UsuarioController extends Controller
                 'id' => 'required|integer',
                 'id_area' => 'required|integer',
                 'n_doc' => 'required|integer',
-                'nom_usu' => 'required|string',
+                'nom_usu' => 'required|string|max:250',
                 'ape_usu' => 'required|string',
                 'emailp_usu' => 'nullable|email',
                 'emailc_usu' => 'nullable|email',
@@ -196,7 +213,7 @@ class UsuarioController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return response()->json(['errors' => $validator->errors()], 400);
+                return $this->message(valide: 'required', error: $validator->errors(), status: 422);
             }
 
             $update = [
@@ -221,7 +238,7 @@ class UsuarioController extends Controller
             if ($request->foto_perfil) {
                 $result = $this->parseFile('fp_' . $request->usuario, 'auth', $request->foto_perfil);
                 if (!$result['success']) {
-                    throw new Exception("Error al intentar crear la imagen del perfil");
+                    return $this->message(message: "Error al intentar crear la imagen del perfil", valide: 'error', error: $result['error'], status: 400);
                 }
                 $update['foto_perfil'] = $result['filename'];
             }
@@ -229,7 +246,7 @@ class UsuarioController extends Controller
             if ($request->firma_digital) {
                 $result = $this->parseFile('fd_' . $request->usuario, 'firms', $request->firma_digital);
                 if (!$result['success']) {
-                    throw new Exception("Error al intentar crear la firma digital");
+                    return $this->message(message: "Error al intentar crear la firma digital", valide: 'error', error: $result['error'], status: 400);
                 }
                 $update['firma_digital'] = $result['filename'];
             }
@@ -237,10 +254,17 @@ class UsuarioController extends Controller
             DB::table('usuarios')->where('id_usuario', $request->id)->update($update);
             DB::commit();
 
-            return response()->json(['success' => true, 'message' => 'Registro Exitoso.']);
+            return $this->message(message: "Registro actualizado exitosamente.");
+        } catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                $response = $this->validatorUnique($e->getMessage(), $this->validator);
+                return $this->message(valide: 'unique', error: $response, status: 422);
+            }
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", valide: 'error', error: $e->getMessage(), status: 400);
         } catch (Exception $e) {
+            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
+        } finally {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
         }
     }
 
@@ -253,7 +277,7 @@ class UsuarioController extends Controller
             ]);
 
             if ($validator->fails())
-                return response()->json(['errors' => $validator->errors()], 400);
+                return $this->message(valide: 'required', error: $validator->errors(), status: 422);
 
             DB::beginTransaction();
             DB::table('usuarios')->where('id_usuario', $request->id)->update([
@@ -262,10 +286,11 @@ class UsuarioController extends Controller
             ]);
             DB::commit();
 
-            return response()->json(['success' => true, 'message' => 'Cambio de estado exitoso.']);
+            return $this->message(message: "Cambio de estado exitoso.");
         } catch (Exception $e) {
+            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
+        } finally {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
         }
     }
 

@@ -160,17 +160,28 @@ document.getElementById('form-usuario').addEventListener('submit', function (eve
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            fMananger.formModalLoding('modal_usuarios', 'hide');
             if (!data.success) {
-                return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
             $('#modal_usuarios').modal('hide');
-            boxAlert.minbox({ h: data.message });
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message })
             updateTable();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Parece que hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde. Si el problema persiste, contacta con el soporte.' });
             console.log(jqXHR);
+            datae = jqXHR.responseJSON;
+            let mensaje = "";
+            if (jqXHR.status == 422) {
+                if (datae.hasOwnProperty('required')) {
+                    mensaje = formatRequired(datae.required);
+                }
+                if (datae.hasOwnProperty('unique')) {
+                    mensaje = formatUnique(datae.unique);
+                }
+            }
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+        },
+        complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_usuarios', 'hide');
         }
     });
@@ -187,7 +198,7 @@ function Editar(id) {
             contentType: 'application/json',
             success: function (data) {                
                 if (!data.success) {
-                    return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+                    return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
                 }
                 var json = data.data;
                 $('#id').val(id);
@@ -211,12 +222,13 @@ function Editar(id) {
                 fMananger.formModalLoding('modal_usuarios', 'hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Parece que hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde. Si el problema persiste, contacta con el soporte' });
                 console.log(jqXHR);
+                datae = jqXHR.responseJSON;
+                boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
             }
         });
     } catch (error) {
-        boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Parece que hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde. Si el problema persiste, contacta con el soporte' });
+        boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde.' });
         console.log('Error producido: ', error);
     }
 }
@@ -240,19 +252,19 @@ async function CambiarEstado(id, estado) {
             success: function (data) {
                 if (!data.success) {
                     console.log(data.error);
-                    return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+                    return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
                 }
-                boxAlert.minbox({ h: data.message });
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
                 updateTable();
             },
             error: function (jqXHR, textStatus, errorThrown) {
-                const obj_error = jqXHR.responseJSON;
-                boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: obj_error.message });
                 console.log(jqXHR);
+                datae = jqXHR.responseJSON;
+                boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
             }
         });
     } catch (error) {
-        boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Parece que hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde. Si el problema persiste, contacta con el soporte' });
+        boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde.' });
         console.log('Error producido: ', error);
     }
 }
