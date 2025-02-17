@@ -173,8 +173,8 @@ function validFrom(dat) {
     return dataF;
 }
 
-function extractDataRow($this) {
-    const ths = document.querySelectorAll('.dataTables_scrollHeadInner table thead tr th');
+function extractDataRow($this, $table = null) {
+    const ths = document.querySelectorAll(`${$table ?  `#${$table}_wrapper` : ""} .dataTables_scrollHeadInner table thead tr th`);
     const tr = $this.parentNode.parentNode.parentNode.parentNode;
     const tds = tr.querySelectorAll('td');
     var obj_return = {};

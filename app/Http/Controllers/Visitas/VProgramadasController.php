@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Visitas;
 
 use App\Http\Controllers\Controller;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -46,8 +47,8 @@ class VProgramadasController extends Controller
                         'button' => [
                             ['funcion' => "ShowDetail(this, $val->id)", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
                             $val->estado == 0 ? ['funcion' => "StartVisita($val->id, $val->estado)", 'texto' => '<i class="' . ($val->estado != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado != 2 ? 'Iniciar' : 'Reiniciar') . ' Visita'] : null,
-                            $val->estado != 1 ? ['funcion' => "ShowAssign(this, $val->id)", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'] : null,
-                            $val->estado == 1 ? ['funcion' => "OrdenDetail(this, '$val->id')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de Visita'] : null,
+                            ['funcion' => "ShowAssign(this, $val->id)", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'],
+                            $val->estado == 1 ? ['funcion' => "OrdenVisita(this, '$val->id')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de Visita'] : null,
                             ['funcion' => "DeleteVisita($val->id)", 'texto' => '<i class="far fa-trash-can text-danger me-2"></i> Eliminar'],
                         ],
                     ])
@@ -55,8 +56,39 @@ class VProgramadasController extends Controller
             });
 
             return $visitas;
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        }
+    }
+
+    /**
+     * Display the specified resource.
+     */
+    public function show(string $id)
+    {
+        try {
+            // Verificamos si se encontró la visita por ID
+            $visita = DB::table('tb_visitas')->where(['id' => $id])->first();
+            if (!$visita) {
+                return $this->message(message: 'La vista que buscas no existe', status: 404);
+            }
+
+            $sucursal = DB::table('tb_sucursales')->where('id', $visita->id_sucursal)->first();
+            $empresa = DB::table('tb_empresas')->where('ruc', $sucursal->ruc)->first();
+
+            $visita->sucursal = $sucursal->nombre;
+            $visita->direccion = $sucursal->direccion;
+            $visita->empresa = "{$empresa->ruc} - {$empresa->razon_social}";
+
+            $visita->personal_asig = DB::table('tb_vis_asignadas')->select(['id_visitas', 'id_usuario'])->where('id_visitas', $id)->get();
+
+            return $this->message(data: ['data' => $visita]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+        } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -66,7 +98,7 @@ class VProgramadasController extends Controller
             // Consultas iniciales para obtener datos de la visita, asignaciones y seguimiento
             $visita = DB::table('tb_visitas')->where(['id' => $id])->first();
             if (!$visita) {
-                throw new Exception('La vista que buscas no existe', 404);
+                return $this->message(message: 'La vista que buscas no existe', status: 404);
             }
             $asignados = DB::table('tb_vis_asignadas')->where('id_visitas', $id)->get();
             $seguimiento = DB::table('tb_vis_seguimiento')->where('id_visitas', $id)->get();
@@ -103,9 +135,11 @@ class VProgramadasController extends Controller
                 $estadoTexto = $s->estado ? "Finalizó la visita" : "Inició la visita";
                 $data[] = $this->formatInfoData($usuarios, $s->id_usuario, $s->id_usuario, $s->created_at, $estadoTexto);
             }
-            return response()->json(['success' => true, 'message' => '', 'data' => ['visita' => $visita, 'seguimiento' => $data]]);
+            return $this->message(data: ['data' => ['visita' => $visita, 'seguimiento' => $data]]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return response()->json(["success" => false, "message" => $e->getMessage()]);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -132,11 +166,11 @@ class VProgramadasController extends Controller
             ]);
 
             if ($validator->fails())
-                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
 
             $validacion = DB::table('tb_vis_asignadas')->where('id_visitas', $request->id)->count();
             if (!$validacion) {
-                return response()->json(['success' => true, 'message' => 'No se puede iniciar la visita, ya que no tienen un tecnico asignado.'], 500);
+                return $this->message(message: "No se puede iniciar la visita, ya que no tienen un tecnico asignado.", status: 204);
             }
             DB::beginTransaction();
             $accion = $request->estado == 0 ? 1 : 0;
@@ -155,13 +189,69 @@ class VProgramadasController extends Controller
             DB::table('tb_visitas')->where('id', $id)->update(['estado' => $accion]);
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'La visita se ' . ($accion == 1 ? '' : 're') . 'inició con exito.'
-            ], 200);
+            return $this->message(message: 'La visita se ' . ($accion == 1 ? '' : 're') . 'inició con exito.');
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
             DB::rollBack();
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        }
+    }
+
+    public function assignPer(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required|integer'
+            ]);
+            if ($validator->fails())
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
+
+            $personal = $request->personal_asig;
+            
+            if (count($request->personal_asig)) {
+                $arr_personal_new = [];
+                $indice_new = 0;
+                $arr_personal_del = [];
+                foreach ($personal as $k => $val) {
+                    if (!$val['eliminado'] && $val['registro']) {
+                        $arr_personal_new[$indice_new]['id_visitas'] = $request->id;
+                        $arr_personal_new[$indice_new]['id_usuario'] = $val['id'];
+                        $arr_personal_new[$indice_new]['creador'] = Auth::user()->id_usuario;
+                        $arr_personal_new[$indice_new]['fecha'] = now()->format('Y-m-d');
+                        $arr_personal_new[$indice_new]['hora'] = now()->format('H:i:s');
+                        $arr_personal_new[$indice_new]['created_at'] = now()->format('Y-m-d H:i:s');
+                        $personal[$val['id']]['registro'] = 0;
+                        $indice_new++;
+                    }
+                    if ($val['eliminado'] && !$val['registro']) {
+                        array_push($arr_personal_del, $val['id']);
+                        unset($personal[$val['id']]);
+                    }
+                }
+            }
+
+            if (!count($personal)) {
+                return $this->message(message: 'Tiene que tener almenos un personal asignado', status: 500);
+            }
+
+            DB::beginTransaction();
+            if (!empty($arr_personal_new)) {
+                DB::table('tb_vis_asignadas')->insert($arr_personal_new);
+            }
+
+            if (!empty($arr_personal_del) && $request->estado) {
+                DB::table('tb_vis_asignadas')->where('id_visitas', $request->id)->where('id_usuario', $arr_personal_del)->delete();
+            }
+
+            DB::commit();
+            return $this->message(message: 'Personal asignado con éxito', data: ['data' => ['personal' => $personal]]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+        } catch (Exception $e) {
             return $this->mesageError(exception: $e, codigo: 500);
+        } finally {
+            DB::rollBack();
         }
     }
 
@@ -177,24 +267,20 @@ class VProgramadasController extends Controller
                 ]);
     
                 if ($validator->fails())
-                    return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
+                    return $this->message(data: ['required' => $validator->errors()], status: 422);
 
                 DB::beginTransaction();
                 DB::table('tb_visitas')->where('id', $request->id)->update(['eliminado' => 1]);
                 DB::commit();
 
-                return response()->json([
-                    'success' => true,
-                    'message' => 'La visita se eliminó con exito'
-                ], 200);
+                return $this->message(message: "La visita se eliminó con exito");
             }
-            return response()->json([
-                'success' => false,
-                'message' => 'No tiene los permisos requeridos'
-            ], 200);
+            return $this->message(message: "No tiene los permisos requeridos", status: 401);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 }

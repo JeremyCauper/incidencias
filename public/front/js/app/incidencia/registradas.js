@@ -290,32 +290,29 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            fMananger.formModalLoding('modal_incidencias', 'hide');
-            if (data.success) {
-                cod_incidencia = data.data.cod_inc;
-                $('#modal_incidencias').modal('hide');
-                boxAlert.minbox({
-                    h: data.message
-                });
-                return updateTable();
+            if (!data.success) {
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
-            var message = "";
-            if (data.hasOwnProperty('validacion')) {
-                for (const key in data.validacion) {
-                    message += `<li>${data.validacion[key][0]}</li>`;
-                }
-                message = `<ul>${message}</ul>`;
-            }
-            boxAlert.box({ i: 'error', t: 'Algo salió mal', h: message });
+            $('#modal_incidencias').modal('hide');
+            cod_incidencia = data.data.cod_inc;
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message })
+            updateTable();
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            const obj_error = jqXHR.responseJSON;
-            boxAlert.box({
-                i: 'error',
-                t: 'Ocurrio un error en el processo',
-                h: obj_error.message
-            });
-            console.log(obj_error);
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            let mensaje = "";
+            if (jqXHR.status == 422) {
+                if (datae.hasOwnProperty('required')) {
+                    mensaje = formatRequired(datae.required);
+                }
+                if (datae.hasOwnProperty('unique')) {
+                    mensaje = formatUnique(datae.unique);
+                }
+            }
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+        },
+        complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_incidencias', 'hide');
         }
     });
@@ -336,34 +333,36 @@ function ShowDetail(e, id) {
         url: `${__url}/incidencias/registradas/detail/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            if (data.success) {
-                var seguimiento = data.data.seguimiento;
-                var incidencia = data.data.incidencia;
-
-                $(`#modal_detalle [aria-item="observasion"]`).html(incidencia.observasion);
-
-                fMananger.formModalLoding('modal_detalle', 'hide');
-                seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
-                seguimiento.forEach(function (element) {
-                    $('#content-seguimiento').append(`
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="${element.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                                <div class="ms-3">
-                                    <p class="fw-bold mb-1">${element.nombre}</p>
-                                    <p class="text-muted" style="font-size: .73rem;font-family: Roboto; margin-bottom: .2rem;">${element.text}</p>
-                                    <p class="text-muted mb-0" style="font-size: .73rem;font-family: Roboto;">${element.contacto}</p>
-                                </div>
-                            </div>
-                            <span class="badge rounded-pill badge-primary">${element.date}</span>
-                        </li>`);
-                });
+            if (!data.success) {
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
+            var seguimiento = data.data.seguimiento;
+            var incidencia = data.data.incidencia;
+
+            $(`#modal_detalle [aria-item="observasion"]`).html(incidencia.observasion);
+
+            fMananger.formModalLoding('modal_detalle', 'hide');
+            seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
+            seguimiento.forEach(function (element) {
+                $('#content-seguimiento').append(`
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="${element.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">${element.nombre}</p>
+                                <p class="text-muted" style="font-size: .73rem;font-family: Roboto; margin-bottom: .2rem;">${element.text}</p>
+                                <p class="text-muted mb-0" style="font-size: .73rem;font-family: Roboto;">${element.contacto}</p>
+                            </div>
+                        </div>
+                        <span class="badge rounded-pill badge-primary">${element.date}</span>
+                    </li>`);
+            });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_detalle', 'hide');
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: 'No se pudo extraer los datos con exito.' });
             console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
         }
     });
 }
@@ -378,8 +377,9 @@ function ShowEdit(id) {
         url: `${__url}/incidencias/registradas/show/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            if (!data.success)
-                boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: data.message });
+            if (!data.success) {
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
+            }
 
             const dt = data.data;
             fMananger.formModalLoding('modal_incidencias', 'hide');
@@ -409,8 +409,9 @@ function ShowEdit(id) {
             $('#observasion').val(dt.observasion);
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: 'Error al intentar extraer los datos de la incidencia' });
-            console.log(jqXHR.responseJSON);
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
         }
     });
 }
@@ -445,8 +446,9 @@ function ShowAssign(e, id) {
         url: `${__url}/incidencias/registradas/show/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            if (!data.success)
-                boxAlert.box({ i: 'error', t: 'Algo salió mal', h: data.message });
+            if (!data.success) {
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
+            }
 
             const dt = data.data;
 
@@ -457,9 +459,9 @@ function ShowAssign(e, id) {
             });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            const obj_error = jqXHR.responseJSON;
-            boxAlert.box({ i: 'error', t: 'Error al extraer datos de la incidencia', h: obj_error.message });
-            console.log(jqXHR.responseJSON);
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
         }
     });
 }
@@ -497,26 +499,28 @@ async function AssignPer() {
             fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
-                $(`#modal_assign [aria-item="estado"]`).html(`<label class="badge badge-${estadoInfo[data.data.estado]['c']}" style="font-size: .8rem;">${estadoInfo[data.data.estado]['t']}</label>`);
+                $(`#modal_assign [aria-item="estado"]`).find('label').attr("class", `badge badge-${estadoInfo[data.data.estado]['c']}`).html(estadoInfo[data.data.estado]['t']); //.html(`<label class="badge badge-${estadoInfo[data.data.estado]['c']}" style="font-size: .8rem;">${estadoInfo[data.data.estado]['t']}</label>`);
                 cPersonal1.data = data.data.personal;
-                boxAlert.minbox({ h: data.message });
                 updateTable();
-                return true;
             }
-            var message = "";
-            if (data.hasOwnProperty('validacion')) {
-                for (const key in data.validacion) {
-                    message += `<li>${data.validacion[key][0]}</li>`;
-                }
-                message = `<ul>${message}</ul>`;
-            }
-            boxAlert.box({ i: 'error', t: 'Algo salió mal', h: message });
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            const obj_error = jqXHR.responseJSON;
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            let mensaje = "";
+            if (jqXHR.status == 422) {
+                if (datae.hasOwnProperty('required')) {
+                    mensaje = formatRequired(datae.required);
+                }
+                if (datae.hasOwnProperty('unique')) {
+                    mensaje = formatUnique(datae.unique);
+                }
+            }
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+        },
+        complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_assign', 'hide');
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
-            console.log(obj_error);
         }
     });
 }
@@ -533,16 +537,14 @@ async function DeleteInc(id) {
         beforeSend: boxAlert.loading,
         success: function (data) {
             if (data.success) {
-                boxAlert.minbox({ h: data.message });
-                updateTable();
-                return true;
+                updateTable()
             }
-            boxAlert.box({ i: 'error', t: '¡Ocurrio un inconveniente!', h: data.message });
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            const obj_error = jqXHR.responseJSON;
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
-            console.log(obj_error);
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
@@ -564,23 +566,20 @@ async function StartInc(cod, estado) {
         beforeSend: boxAlert.loading,
         success: function (data) {
             if (data.success) {
-                boxAlert.minbox({ h: data.message });
-                updateTable();
-                return true;
+                updateTable()
             }
-            var message = "";
-            if (data.hasOwnProperty('validacion')) {
-                for (const key in data.validacion) {
-                    message += `<li>${data.validacion[key][0]}</li>`;
-                }
-                message = `<ul>${message}</ul>`;
-            }
-            boxAlert.box({ i: 'error', t: 'Algo salió mal', h: message });
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            const obj_error = jqXHR.responseJSON;
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: obj_error.message });
-            console.log(obj_error);
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            let mensaje = "";
+            if (jqXHR.status == 422) {
+                if (datae.hasOwnProperty('required')) {
+                    mensaje = formatRequired(datae.required);
+                }
+            }
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
@@ -603,6 +602,7 @@ async function OrdenDetail(e, cod) {
         url: `${__url}/incidencias/registradas/show/${cod}`,
         contentType: 'application/json',
         success: function (data) {
+            console.log(data);
             if (data.success) {
                 let dt = data.data;
                 let personal = dt.personal_asig;
@@ -611,13 +611,16 @@ async function OrdenDetail(e, cod) {
                 var tecnicos = personal.map(persona => persona.tecnicos);
                 habilitarCodAviso(dt.codigo_aviso);
 
-                fMananger.formModalLoding('modal_orden', 'hide');
                 $('#modal_orden [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            alert('Error al registrar el usuario');
-            console.log(jqXHR.responseJSON);
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+        },
+        complete: function (jqXHR, textStatus, errorThrown) {
+            fMananger.formModalLoding('modal_orden', 'hide');
         }
     });
 }
@@ -681,32 +684,30 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            fMananger.formModalLoding('modal_orden', 'hide');
+            console.log(data);
+            
             if (data.success) {
                 $('#modal_orden').modal('hide');
-                boxAlert.minbox({
-                    h: data.message
-                });
                 cod_ordenSer = data.data.num_orden;
                 if (atencion.toUpperCase() == 'PRESENCIAL')
                     window.open(`${__url}/orden/documentopdf/${n_orden}`, `Visualizar PDF ${n_orden}`, "width=900, height=800");
                 updateTable();
                 return true;
             }
-            boxAlert.box({
-                i: 'error',
-                t: '¡Ocurrio un error!',
-                h: data.message
-            });
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            const obj_error = jqXHR.responseJSON;
-            boxAlert.box({
-                i: 'error',
-                t: 'Ocurrio un error en el processo',
-                h: obj_error.message
-            });
-            console.log(obj_error);
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            let mensaje = "";
+            if (jqXHR.status == 422) {
+                if (datae.hasOwnProperty('required')) {
+                    mensaje = formatRequired(datae.required);
+                }
+            }
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+        },
+        complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_orden', 'hide');
         }
     });
@@ -727,18 +728,19 @@ function AddCodAviso(e, cod) {
         url: `${__url}/incidencias/registradas/detail/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            if (!data.success)
-                boxAlert.box({ i: 'error', t: 'Algo salió mal', h: data.message });
-            const dt = data.data;
+            if (!data.success) {
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
+            }
 
+            const dt = data.data;
             $('#cod_incidencia').val(cod);
             $('#cod_orden_ser').val(dt.incidencia.cod_orden);
             fMananger.formModalLoding('modal_addcod', 'hide');
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            const obj_error = jqXHR.responseJSON;
-            boxAlert.box({ i: 'error', t: 'Error al extraer datos de la incidencia', h: obj_error.message });
-            console.log(jqXHR.responseJSON);
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
         }
     });
 }
@@ -765,33 +767,21 @@ document.getElementById('form-addcod').addEventListener('submit', async function
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-
             fMananger.formModalLoding('modal_addcod', 'hide');
             if (data.success) {
                 $('#modal_addcod').modal('hide');
-                boxAlert.minbox({
-                    h: data.message
-                });
                 if (atencion.toUpperCase() == 'PRESENCIAL')
                     window.open(`${__url}/orden/documentopdf/${data.cod_orden}`, `Visualizar PDF ${data.cod_orden}`, "width=900, height=800");
                 updateTable();
                 return true;
             }
-            boxAlert.box({
-                i: 'error',
-                t: '¡Ocurrio un error!',
-                h: data.message
-            });
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            const obj_error = jqXHR.responseJSON;
-            boxAlert.box({
-                i: 'error',
-                t: 'Ocurrio un error en el processo',
-                h: obj_error.message
-            });
-            console.log(obj_error);
             fMananger.formModalLoding('modal_addcod', 'hide');
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
         }
     });
 });
@@ -1010,8 +1000,9 @@ $('#search_signature').on('change', function () {
             search_signature_text.html('<i class="fas fa-xmark"></i>').attr({ 'signature-clear': "" });
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            const obj_error = jqXHR.responseJSON;
-            console.log(obj_error);
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
         }
     });
 })

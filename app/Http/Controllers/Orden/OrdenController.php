@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Orden;
 use App\Http\Controllers\Controller;
 use Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -45,19 +46,11 @@ class OrdenController extends Controller
             ]);
 
             if ($validator->fails())
-                return response()->json(['errors' => $validator->errors()], 400);
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
 
             $codAviso = $request->has('codAviso') ? $request->codAviso : 3;
 
-            // Preparar datos de materiales
-            $materiales = $request->materiales ?? [];
-            foreach ($materiales as &$material) {
-                $material['cod_ordens'] = $request->n_orden;
-                $material['created_at'] = now()->format('Y-m-d H:i:s');
-            }
-
             DB::beginTransaction();
-
             // Insertar correlativo si se seleccionó
             if ($request->check_cod) {
                 DB::table('tb_orden_correlativo')->insert([
@@ -65,7 +58,6 @@ class OrdenController extends Controller
                     'created_at' => now()->format('Y-m-d H:i:s')
                 ]);
             }
-
             // Crear contacto (si aplica)
             $idContacto = null;
             if ($request->n_doc || $request->nom_cliente) {
@@ -85,9 +77,21 @@ class OrdenController extends Controller
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
 
+
+            // Preparar datos de materiales
+            $materiales = $request->materiales;
             // Insertar materiales (si hay)
             if (!empty($materiales)) {
-                DB::table('tb_materiales_usados')->insert($materiales);
+                $arr_materiales = [];
+                foreach ($materiales as $k => $val) {
+                    if ($val['registro']) {
+                        $arr_materiales[$k]['cod_ordens'] = $request->n_orden;
+                        $arr_materiales[$k]['id_material'] = $val['id_material'];
+                        $arr_materiales[$k]['cantidad'] = $val['cantidad'];
+                        $arr_materiales[$k]['created_at'] = now()->format('Y-m-d H:i:s');
+                    }
+                }
+                DB::table('tb_materiales_usados')->insert($arr_materiales);
             }
 
             // Actualizar estado de incidencia
@@ -110,18 +114,13 @@ class OrdenController extends Controller
 
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Orden de servicio generada exitosamente.',
-                'data' => ['num_orden' => $codOrdenS]
-            ], 200);
-
+            return $this->message(message: 'Orden de servicio generada exitosamente.', data: ['num_orden' => $codOrdenS]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } finally {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al generar la orden de servicio: ' . $e->getMessage()
-            ], 500);
         }
     }
 
@@ -138,18 +137,13 @@ class OrdenController extends Controller
                 ->update(['id_contacto' => $idContacto]);
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'La firma se añadió con exito.',
-                'data' => $request->all()
-            ], 200);
-
-        } catch (\Throwable $e) {
+            return $this->message(message: "La firma se añadió con exito.", data: ['data' => $request->all()]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+        } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } finally {
             DB::rollBack();
-            return response()->json([
-                'success' => false,
-                'message' => 'Error al añadir la firma al orden de servicio: ' . $e->getMessage()
-            ], 500);
         }
     }
 
@@ -231,14 +225,13 @@ class OrdenController extends Controller
             DB::table('tb_incidencias')->where('cod_incidencia', $request->cod_incidencia)->update(['estado_informe' => 3]);
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Codigo añadido con éxito',
-                'cod_orden' => $request->cod_orden_ser
-            ], 200);
+            return $this->message(message: 'Codigo añadido con éxito', data: ['data' => ['cod_orden' => $request->cod_orden_ser]]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } finally {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
         }
     }
 

@@ -29,7 +29,7 @@ class VSucursalesController extends Controller
             
             return view('visitas.sucursales', ['data' => $data]);
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -85,7 +85,7 @@ class VSucursalesController extends Controller
 
             return $sucursales;
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -101,7 +101,7 @@ class VSucursalesController extends Controller
             ]);
 
             if ($validator->fails())
-                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
 
             $personal = $request->personal;
             DB::beginTransaction();
@@ -126,10 +126,10 @@ class VSucursalesController extends Controller
                 DB::table('tb_vis_asignadas')->insert($arr_personal);
             }
             DB::commit();
-            return response()->json([ 'success' => true, 'message' => 'Exito al asignar visita' ]);
+            return $this->message(message: "Exito al asignar visita");
         } catch (Exception $e) {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -140,46 +140,43 @@ class VSucursalesController extends Controller
     {
         try {
             $sucursal = DB::table('tb_sucursales')->where('id', $id)->first();
+            if (empty($sucursal)) {
+                return $this->message(message: "No sé encontró el registro buscado.", status: 204);
+            }
             $empresa = DB::table('tb_empresas')->where('ruc', $sucursal->ruc)->first();
             $usuario = DB::table('usuarios')->select('nombres', 'apellidos', 'id_usuario')->get()->keyBy('id_usuario');
-            /*$vis_asignadas = DB::table('tb_vis_asignadas')->get()->groupBy('id_visitas');
-            return $vis_asignadas;*/
 
             $visitas = DB::table('tb_visitas')->where('id_sucursal', $id)->whereMonth('fecha', now()->format('m'))->get()->map(function ($v) use ($usuario) {
                 $nombre = $this->formatearNombre($usuario[$v->id_creador]->nombres, $usuario[$v->id_creador]->apellidos);
                 $v->creador = $nombre;
                 return $v;
             });
-            
-            if ($sucursal) {
-                $vRealizadas = count($visitas ?? []);
-                $totalVisitas = $empresa->visitas;
-                $diasVisitas = $empresa->dias_visita;
-                $fechaSumada = null;
-                if (count($visitas)) {
-                    $ultimoElemento = $visitas[count($visitas) - 1];
-                    $fechaSumada = date('Y-m-d', strtotime($ultimoElemento->fecha . " +$diasVisitas days"));
-                }
-                $result = [
-                    'id' => $sucursal->id,
-                    'ruc' => $sucursal->ruc,
-                    'razonSocial' => $empresa->razon_social,
-                    'sucursal' => $sucursal->nombre,
-                    'direccion' => $sucursal->direccion,
-                    'contrato' => $empresa->contrato,
-                    'totalVisitas' => $totalVisitas,
-                    'vRealizadas' => $vRealizadas,
-                    'diasVisitas' => $diasVisitas,
-                    'visitas' => $visitas,
-                    'message' => "Podrá asignar visitas después del $fechaSumada."
-                ];
-            } else {
-                $result = null;
+
+            $vRealizadas = count($visitas ?? []);
+            $totalVisitas = $empresa->visitas;
+            $diasVisitas = $empresa->dias_visita;
+            $fechaSumada = null;
+            if (count($visitas)) {
+                $ultimoElemento = $visitas[count($visitas) - 1];
+                $fechaSumada = date('Y-m-d', strtotime($ultimoElemento->fecha . " +$diasVisitas days"));
             }
+            $result = [
+                'id' => $sucursal->id,
+                'ruc' => $sucursal->ruc,
+                'razonSocial' => $empresa->razon_social,
+                'sucursal' => $sucursal->nombre,
+                'direccion' => $sucursal->direccion,
+                'contrato' => $empresa->contrato,
+                'totalVisitas' => $totalVisitas,
+                'vRealizadas' => $vRealizadas,
+                'diasVisitas' => $diasVisitas,
+                'visitas' => $visitas,
+                'message' => "Podrá asignar visitas después del $fechaSumada."
+            ];
             
-            return response()->json(['success' => true, 'message' => '', 'data' => $result]);
+            return $this->message(data: ['data' => $result]);
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Consultas\ConsultasController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Mantenimientos\ContactoEmpresasController;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +15,10 @@ use Illuminate\Support\Facades\Validator;
 
 class RegistradasController extends Controller
 {
+    private $validator = [
+        "cod_incidencia" => "cod_inc",
+    ];
+
     public function view()
     {
         $this->validarPermisos(1);
@@ -56,7 +61,7 @@ class RegistradasController extends Controller
             // Cargar vista de las incidencias, junto a la variable data
             return view('incidencias.registradas', ['data' => $data]);
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -142,7 +147,7 @@ class RegistradasController extends Controller
 
             return ['data' => $incidencias, 'count' => $_count, 'contact' => $contactos_empresas];
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -173,8 +178,9 @@ class RegistradasController extends Controller
                 'cor_contac' => 'nullable|string'
             ]);
 
-            if ($validator->fails())
-                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
+            if ($validator->fails()) {
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
+            }
 
             $personal = $request->personal;
             $estado_info = count($personal) ? 1 : 0;
@@ -229,14 +235,18 @@ class RegistradasController extends Controller
 
             $data = [];
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
-            return response()->json([
-                'success' => true,
-                'message' => 'Registro exito.',
-                'data' => $data
-            ], 200);
+
+            return $this->message(message: "Registro creado exitosamente.", data: ['data' => $data]);
+        } catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                $response = $this->validatorUnique($e->getMessage(), $this->validator);
+                return $this->message(data: ['unique' => $response], status: 422);
+            }
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } finally {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
         }
     }
 
@@ -284,10 +294,11 @@ class RegistradasController extends Controller
             });
 
             // Retornamos la incidencia con la información de contacto y personal asignado
-            return response()->json(['success' => true, 'message' => '', 'data' => $incidencia]);
+            return $this->message(data: ['data' => $incidencia]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            // Manejamos errores y retornamos un mensaje de error claro
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -319,8 +330,9 @@ class RegistradasController extends Controller
                 'cor_contac' => 'nullable|string'
             ]);
 
-            if ($validator->fails())
-                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
+            if ($validator->fails()) {
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
+            }
 
             $rContact = [
                 'telefono' => $request->tel_contac,
@@ -364,14 +376,17 @@ class RegistradasController extends Controller
             $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
 
             DB::commit();
-            return response()->json([
-                'success' => true,
-                'message' => 'Edicion con éxito',
-                'data' => ['cod_inc' => $cod_inc]
-            ], 200);
+            return $this->message(message: "Registro actualizado exitosamente.", data: ['data' => ['cod_inc' => $cod_inc]]);
+        } catch (QueryException $e) {
+            if ($e->getCode() == 23000) {
+                $response = $this->validatorUnique($e->getMessage(), $this->validator);
+                return $this->message(data: ['unique' => $response], status: 422);
+            }
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } finally {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
         }
     }
 
@@ -381,11 +396,12 @@ class RegistradasController extends Controller
             $validator = Validator::make($request->all(), [
                 'cod_inc' => 'required|string'
             ]);
-            if ($validator->fails())
-                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
+
+            if ($validator->fails()) {
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
+            }
 
             $personal = $request->personal_asig;
-            
             if (count($request->personal_asig)) {
                 $arr_personal_new = [];
                 $indice_new = 0;
@@ -423,24 +439,15 @@ class RegistradasController extends Controller
 
             $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
             DB::commit();
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Asignado con éxito',
-                'data' => ['cod_inc' => $cod_inc, 'estado' => $request->estado ? $estado_info : 2, 'personal' => $personal]
-            ], 200);
+            
+            return $this->message(message: "Personal asignado con éxito", data: ['data' => ['cod_inc' => $cod_inc, 'estado' => $request->estado ? $estado_info : 2, 'personal' => $personal]]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } finally {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
         }
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
-    {
-        //
     }
 
     public function startInc(Request $request)
@@ -451,12 +458,13 @@ class RegistradasController extends Controller
                 'estado' => 'required|integer'
             ]);
 
-            if ($validator->fails())
-                return response()->json([ 'success' => false, 'message' => '', 'validacion' => $validator->errors() ]);
+            if ($validator->fails()) {
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
+            }
 
             $validacion = DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->codigo)->count();
-            if (!$validacion) {
-                return response()->json(['success' => true, 'message' => 'No se puede iniciar la incidencia, ya que no tienen un tecnico asignado.'], 500);
+            if (!$validacion) {                
+                return $this->message(message: "No se puede iniciar la incidencia, ya que no tienen un tecnico asignado.", status: 500);
             }
             DB::beginTransaction();
             $accion = $request->estado == 1 ? 2 : 1;
@@ -475,13 +483,13 @@ class RegistradasController extends Controller
             DB::table('tb_incidencias')->where('cod_incidencia', $cod)->update(['estado_informe' => $accion]);
             DB::commit();
 
-            return response()->json([
-                'success' => true,
-                'message' => 'La incidencia se ' . ($accion == 2 ? '' : 're') . 'inició con exito.'
-            ], 200);
+            return $this->message(message: 'La incidencia se ' . ($accion == 2 ? '' : 're') . 'inició con exito.');
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } finally {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
         }
     }
 
@@ -495,19 +503,15 @@ class RegistradasController extends Controller
                 DB::beginTransaction();
                 DB::table('tb_incidencias')->where('id_incidencia', $id)->update(['estatus' => 0]);
                 DB::commit();
-
-                return response()->json([
-                    'success' => true,
-                    'message' => 'La incidencia se eliminó con exito'
-                ], 200);
+                return $this->message(message: "La incidencia se eliminó con exito.");
             }
-            return response()->json([
-                'success' => false,
-                'message' => 'No tiene los permisos requeridos'
-            ], 200);
+            return $this->message(message: "No tiene los permisos requeridos.", status: 204);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } finally {
             DB::rollBack();
-            return $this->mesageError(exception: $e, codigo: 500);
         }
     }
 
@@ -547,9 +551,13 @@ class RegistradasController extends Controller
                 $estadoTexto = $v->estado ? "Finalizó la incidencia" : "Inició la incidencia";
                 $data[] = $this->formatInfoData($usuarios, $v->id_usuario, $v->id_usuario, $v->created_at, $estadoTexto);
             }
-            return response()->json(['success' => true, 'message' => '', 'data' => ['incidencia' => $incidencia, 'seguimiento' => $data]]);
+            return $this->message(data: ['data' => ['incidencia' => $incidencia, 'seguimiento' => $data]]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } finally {
+            DB::rollBack();
         }
     }
 

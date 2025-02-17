@@ -233,20 +233,23 @@ class Controller extends BaseController
         }
     }
 
-    public function message($title = "", $message = "", $valide = null, $error = null, $validd = null, $data = null, $status = 200, $e = null)
+    public function message($title = "", $message = "", $data = null, $status = 200, $e = null)
     {
-        $response = ["success" => ($status >= 200 && $status < 300) ? true : false, "title" => $title, "message" => $message];
+        $response = ["success" => $status == 200 ? true : false, "title" => $title, "message" => $message, "status" => $status];
         $statuses = [
-            "success" => ["title" => "Éxito", "range" => range(200, 299)],
-            "warning" => ["title" => "Redireccionando", "range" => range(300, 399)],
-            "error"   => ["title" => "Proceso Fallido", "range" => range(400, 499)],
-            "danger"  => ["title" => "Error interno del Servidor", "range" => range(500, 599)],
+            "success" => ["title" => "Éxito", "range" => range(200, 201)],
+            "info" => ["title" => "Algo salio mal", "range" => range(202, 399)],
+            "warning"   => ["title" => "Proceso Fallido", "range" => range(400, 599)],
+            "error"  => ["title" => "Error interno del Servidor", "range" => range(500, 599)],
         ];
-        if ($valide) {
-            $response[$valide] = $error;
-        }
-        if ($validd) {
-            $response[$validd] = $data;
+        if (!empty($data)) {
+            foreach ($data as $clave => $value) {
+                $response[$clave] = $value;
+                if (empty($message) && $clave == 'error') {
+                    $response["success"] = false;
+                    $response["message"] = "Hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde.";
+                }
+            }
         }
         foreach ($statuses as $icon => $info) {
             if (in_array($status, $info["range"])) {
@@ -272,7 +275,7 @@ class Controller extends BaseController
                     break;
             }
         }
-        return response()->json($response, $status);
+        return response()->json($response, (int)$status);
     }
 
     public function validatorUnique($errorMessage, $data)

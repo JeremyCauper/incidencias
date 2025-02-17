@@ -52,7 +52,7 @@ class UsuarioController extends Controller
 
             return view('usuario.usuario', $data);
         } catch (Exception $e) {
-            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
     /**
@@ -60,34 +60,38 @@ class UsuarioController extends Controller
      */
     public function index()
     {
-        $tipoAcceso = DB::table('tipo_usuario')->get()->keyBy('id_tipo_acceso');
-        $usuarios = DB::table('usuarios')
-            ->select('ndoc_usuario', 'id_usuario', 'nombres', 'apellidos', 'usuario', 'pass_view', 'estatus', 'tipo_acceso')
-            ->where('eliminado', 0)
-            ->get()->map(function ($usu) use ($tipoAcceso) {
-                $estado = [
-                    ['color' => 'danger', 'text' => 'Inactivo'],
-                    ['color' => 'success', 'text' => 'Activo']
-                ];
-                $tipo_usu = [
-                    ['color' => 'danger', 'text' => 'Inactivo'],
-                    ['color' => 'success', 'text' => 'Activo']
-                ];
-                $usu->personal = $this->formatearNombre($usu->nombres, $usu->apellidos);
-                $usu->descripcion = '<label class="badge badge-' . $tipoAcceso[$usu->tipo_acceso]->color . '" style="font-size: .7rem;">' . $tipoAcceso[$usu->tipo_acceso]->descripcion . '</label>';
-                $usu->estado = '<label class="badge badge-' . $estado[$usu->estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$usu->estatus]['text'] . '</label>';
-                $usu->acciones = $this->DropdownAcciones([
-                    'tittle' => 'Acciones',
-                    'button' => [
-                        ['funcion' => "Editar($usu->id_usuario)", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
-                        ['funcion' => "CambiarEstado($usu->id_usuario, $usu->estatus)", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado[$usu->estatus]['color'] . '"></i>Cambiar Estado'],
-                        // ['funcion' => "ShowAssign(this, $usu->acciones)", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'],
-                    ],
-                ]);
-                return $usu;
-            });
+        try {
+            $tipoAcceso = DB::table('tipo_usuario')->get()->keyBy('id_tipo_acceso');
+            $usuarios = DB::table('usuarios')
+                ->select('ndoc_usuario', 'id_usuario', 'nombres', 'apellidos', 'usuario', 'pass_view', 'estatus', 'tipo_acceso')
+                ->where('eliminado', 0)
+                ->get()->map(function ($usu) use ($tipoAcceso) {
+                    $estado = [
+                        ['color' => 'danger', 'text' => 'Inactivo'],
+                        ['color' => 'success', 'text' => 'Activo']
+                    ];
+                    $tipo_usu = [
+                        ['color' => 'danger', 'text' => 'Inactivo'],
+                        ['color' => 'success', 'text' => 'Activo']
+                    ];
+                    $usu->personal = $this->formatearNombre($usu->nombres, $usu->apellidos);
+                    $usu->descripcion = '<label class="badge badge-' . $tipoAcceso[$usu->tipo_acceso]->color . '" style="font-size: .7rem;">' . $tipoAcceso[$usu->tipo_acceso]->descripcion . '</label>';
+                    $usu->estado = '<label class="badge badge-' . $estado[$usu->estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$usu->estatus]['text'] . '</label>';
+                    $usu->acciones = $this->DropdownAcciones([
+                        'tittle' => 'Acciones',
+                        'button' => [
+                            ['funcion' => "Editar($usu->id_usuario)", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
+                            ['funcion' => "CambiarEstado($usu->id_usuario, $usu->estatus)", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado[$usu->estatus]['color'] . '"></i>Cambiar Estado'],
+                            // ['funcion' => "ShowAssign(this, $usu->acciones)", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'],
+                        ],
+                    ]);
+                    return $usu;
+                });
 
-        return $usuarios;
+            return $usuarios;
+        } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        }
     }
 
     /**
@@ -115,7 +119,7 @@ class UsuarioController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return $this->message(valide: 'required', error: $validator->errors(), status: 422);
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
             }
 
 
@@ -124,7 +128,7 @@ class UsuarioController extends Controller
             if ($request->foto_perfil) {
                 $result = $this->parseFile('fp_' . $request->usuario, 'auth', $request->foto_perfil);
                 if (!$result['success']) {
-                    return $this->message(message: "Error al intentar crear la imagen del perfil", valide: 'error', error: $result['error'], status: 400);
+                    return $this->message(message: "Error al intentar crear la imagen del perfil", data: ['error' => $result['error']], status: 400);
                 }
                 $filenameFP = $result['filename'];
             }
@@ -133,7 +137,7 @@ class UsuarioController extends Controller
             if ($request->firma_digital) {
                 $result = $this->parseFile('fd_' . $request->usuario, 'firms', $request->firma_digital);
                 if (!$result['success']) {
-                    return $this->message(message: "Error al intentar crear la firma digital", valide: 'error', error: $result['error'], status: 400);
+                    return $this->message(message: "Error al intentar crear la firma digital", data: ['error' => $result['error']], status: 400);
                 }
                 $filenameFD = $result['filename'];
             }
@@ -164,11 +168,11 @@ class UsuarioController extends Controller
         } catch (QueryException $e) {
             if ($e->getCode() == 23000) {
                 $response = $this->validatorUnique($e->getMessage(), $this->validator);
-                return $this->message(valide: 'unique', error: $response, status: 422);
+                return $this->message(data: ['unique' => $response], status: 422);
             }
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", valide: 'error', error: $e->getMessage(), status: 400);
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         } finally {
             DB::rollBack();
         }
@@ -181,9 +185,11 @@ class UsuarioController extends Controller
     {
         try {
             $usuario = DB::table('usuarios')->where('id_usuario', $id)->first();
-            return $this->message(validd: 'data', data: $usuario);
+            return $this->message(data: ['data' => $usuario]);
+        } catch (QueryException $e) {
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -213,7 +219,7 @@ class UsuarioController extends Controller
             ]);
 
             if ($validator->fails()) {
-                return $this->message(valide: 'required', error: $validator->errors(), status: 422);
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
             }
 
             $update = [
@@ -238,7 +244,7 @@ class UsuarioController extends Controller
             if ($request->foto_perfil) {
                 $result = $this->parseFile('fp_' . $request->usuario, 'auth', $request->foto_perfil);
                 if (!$result['success']) {
-                    return $this->message(message: "Error al intentar crear la imagen del perfil", valide: 'error', error: $result['error'], status: 400);
+                    return $this->message(message: "Error al intentar crear la imagen del perfil", data: ['error' => $result['error']], status: 400);
                 }
                 $update['foto_perfil'] = $result['filename'];
             }
@@ -246,7 +252,7 @@ class UsuarioController extends Controller
             if ($request->firma_digital) {
                 $result = $this->parseFile('fd_' . $request->usuario, 'firms', $request->firma_digital);
                 if (!$result['success']) {
-                    return $this->message(message: "Error al intentar crear la firma digital", valide: 'error', error: $result['error'], status: 400);
+                    return $this->message(message: "Error al intentar crear la firma digital", data: ['error' => $result['error']], status: 400);
                 }
                 $update['firma_digital'] = $result['filename'];
             }
@@ -258,11 +264,11 @@ class UsuarioController extends Controller
         } catch (QueryException $e) {
             if ($e->getCode() == 23000) {
                 $response = $this->validatorUnique($e->getMessage(), $this->validator);
-                return $this->message(valide: 'unique', error: $response, status: 422);
+                return $this->message(data: ['unique' => $response], status: 422);
             }
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", valide: 'error', error: $e->getMessage(), status: 400);
+            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         } finally {
             DB::rollBack();
         }
@@ -277,7 +283,7 @@ class UsuarioController extends Controller
             ]);
 
             if ($validator->fails())
-                return $this->message(valide: 'required', error: $validator->errors(), status: 422);
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
 
             DB::beginTransaction();
             DB::table('usuarios')->where('id_usuario', $request->id)->update([
@@ -288,7 +294,7 @@ class UsuarioController extends Controller
 
             return $this->message(message: "Cambio de estado exitoso.");
         } catch (Exception $e) {
-            return $this->message(valide: 'error', error: $e->getMessage(), status: $e->getCode());
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         } finally {
             DB::rollBack();
         }

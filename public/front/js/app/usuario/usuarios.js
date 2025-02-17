@@ -169,7 +169,7 @@ document.getElementById('form-usuario').addEventListener('submit', function (eve
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
-            datae = jqXHR.responseJSON;
+            const datae = jqXHR.responseJSON;
             let mensaje = "";
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
@@ -223,12 +223,12 @@ function Editar(id) {
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 console.log(jqXHR);
-                datae = jqXHR.responseJSON;
+                const datae = jqXHR.responseJSON;
                 boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
             }
         });
     } catch (error) {
-        boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Hubo un problema en el servidor. Estamos trabajando para solucionarlo lo antes posible. Por favor, intenta de nuevo más tarde.' });
+        boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Ocurrio un inconveniente en el proceso de busqueda, intentelo nuevamente.' });
         console.log('Error producido: ', error);
     }
 }
