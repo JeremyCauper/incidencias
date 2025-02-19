@@ -38,7 +38,7 @@ class VProgramadasController extends Controller
 
                 return [
                     'id' => $val->id,
-                    'sucursal' => $sucursales[$val->id]->nombre,
+                    'sucursal' => $sucursales[$val->id_sucursal]->nombre,
                     'tecnicos' => join(", ", $asignadas[$val->id]),
                     'fecha' => $val->fecha,
                     'estado' => $badge_visitas,
@@ -82,7 +82,16 @@ class VProgramadasController extends Controller
             $visita->direccion = $sucursal->direccion;
             $visita->empresa = "{$empresa->ruc} - {$empresa->razon_social}";
 
-            $visita->personal_asig = DB::table('tb_vis_asignadas')->select(['id_visitas', 'id_usuario'])->where('id_visitas', $id)->get();
+            $usuarios = db::table('usuarios')->select(['id_usuario', 'ndoc_usuario', 'nombres', 'apellidos'])->where('estatus', 1)->get()->keyBy('id_usuario');
+            $visita->personal_asig = DB::table('tb_vis_asignadas')->select(['id_visitas', 'id_usuario'])->where('id_visitas', $id)->get()->map(function ($u) use ($usuarios) {
+                $nombre = $this->formatearNombre($usuarios[$u->id_usuario]->nombres, $usuarios[$u->id_usuario]->apellidos);
+                return [
+                    'id' => $u->id_usuario,
+                    'dni' => $usuarios[$u->id_usuario]->ndoc_usuario,
+                    'tecnicos' => $nombre
+                ];
+            });
+            $visita->seguimiento = DB::table('tb_vis_seguimiento')->where('id_visitas', $id)->get()->keyBy('estado');
 
             return $this->message(data: ['data' => $visita]);
         } catch (QueryException $e) {
@@ -162,7 +171,7 @@ class VProgramadasController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'id' => 'required|integer',
-                'estado' => 'required|integer'
+                // 'estado' => 'required|integer'
             ]);
 
             if ($validator->fails())

@@ -40,7 +40,7 @@ class VSucursalesController extends Controller
     {
         try {
             $empresas = DB::table('tb_empresas')->where('contrato', 1)->get()->keyBy('ruc');
-            $visitas = DB::table('tb_visitas')->whereMonth('fecha', now()->format('m'))->get()->groupBy('id_sucursal')
+            $visitas = DB::table('tb_visitas')->where('eliminado', 0)->whereMonth('fecha', now()->format('m'))->get()->groupBy('id_sucursal')
                 ->map(function ($items) {
                     return $items->mapWithKeys(function ($item) {
                         return [
@@ -146,7 +146,7 @@ class VSucursalesController extends Controller
             $empresa = DB::table('tb_empresas')->where('ruc', $sucursal->ruc)->first();
             $usuario = DB::table('usuarios')->select('nombres', 'apellidos', 'id_usuario')->get()->keyBy('id_usuario');
 
-            $visitas = DB::table('tb_visitas')->where('id_sucursal', $id)->whereMonth('fecha', now()->format('m'))->get()->map(function ($v) use ($usuario) {
+            $visitas = DB::table('tb_visitas')->where(['id_sucursal' => $id, 'eliminado' => 0])->whereMonth('fecha', now()->format('m'))->get()->map(function ($v) use ($usuario) {
                 $nombre = $this->formatearNombre($usuario[$v->id_creador]->nombres, $usuario[$v->id_creador]->apellidos);
                 $v->creador = $nombre;
                 return $v;

@@ -326,12 +326,13 @@
                     </div>
                 </div>
                 <div class="mt-4 p-3 pb-0 fieldset mb-3">
-                    <h6 class="tittle text-primary">Asignar Personal</h6>
                     <input type="hidden" id="id_visitas_asign">
                     <div class="row">
-                        <div class="col-md-9">
-                            <div class="input-group mt-2 mb-3">
-                                <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
+                        <div class="col-md-8">
+                            <label class="form-label mb-0" for="createPersonal1">Asignar Personal</label>
+                            <div class="input-group mb-3">
+                                <span class="input-group-text border-0 ps-0"><i
+                                        class="fas fa-chalkboard-user"></i></span>
                                 <select class="select-clear" id="createPersonal1">
                                     <option value=""></option>
                                     @foreach ($data['usuarios'] as $u)
@@ -339,6 +340,15 @@
                                         </option>
                                     @endforeach
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label mb-0" for="fecha_visita_asign">Fecha Visita</label>
+                            <div class="input-group" role="button">
+                                <label class="input-group-text ps-0 pe-1 border-0"><i
+                                        class="far fa-calendar"></i></label>
+                                <input type="text" class="form-control rounded" id="fecha_visita_asign" name="fecha_visita_asign"
+                                    role="button" readonly>
                             </div>
                         </div>
                     </div>
@@ -363,7 +373,7 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="col-md-12 col-lg-12 col-xs-12">
+                <div class="col-12">
                     <!-- INICIO CABECERA -->
                     <div class="text-end cabecera-orden">
                         <div>
@@ -371,155 +381,213 @@
                             <span style="font-size: small;" aria-item="registrado"></span>
                         </div>
                     </div>
-                    <div class="mb-1 cabecera-orden">
-                        <input type="hidden" name="codInc" id="codInc">
-                        <div class="form-group pt-2">
-                            <label class="form-label" for="n_orden">N° de Orden </label>
-                            <div class="input-group mb-3" style="width: 250px;">
-                                <input class="form-control form-control-sm rounded" id="n_orden">
-                                <span class="input-group-text border-0">
-                                    <input type="checkbox" class="me-1" name="check_cod" id="check_cod"
-                                        onchange="setChangeCodOrden(this)">
-                                    <label for="check_cod" style="font-size: .75rem;">Cod. Sistema</label>
-                                </span>
-                            </div>
-                        </div>
-                    </div>
 
                     <!-- TER CABECERA -->
-                    <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
+                    <div class="col-12 mt-2">
                         <h6 class="tittle text-primary"> TECNICOS</h6>
                     </div>
 
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                    <div class="col-12 mt-1 mb-3">
                         <span aria-item="tecnicos"></span>
                     </div>
 
 
-                    <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
+                    <div class="col-12 mt-2">
                         <h6 class="tittle text-primary"> DATOS DEL CLIENTE </h6>
                     </div>
 
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                    <div class="col-12 mt-1 mb-3">
                         <div class="list-group list-group-light">
                             <div class="list-group-item">
                                 <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
                             </div>
                             <div class="list-group-item">
+                                <label class="form-label me-2">Sucursal: </label><span
+                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                            </div>
+                            <div class="list-group-item">
                                 <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
                                     aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                             </div>
-                            <div class="list-group-item">
-                                <div class="row col-12">
-                                    <div class="col-sm-6">
-                                        <label class="form-label me-2">Sucursal: </label><span
-                                            style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                    </div>
-                                    <div class="col-sm-6 text-end">
-                                        <label class="form-label me-2">Atencion: </label><span
-                                            style="font-size: .75rem;" aria-item="atencion">Remoto</span>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     </div>
 
-                    <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                        <h6 class="tittle text-primary"> TRABAJO REALIZADO </h6>
+                    <div class="col-12 mt-2">
+                        <h6 class="tittle text-primary"> REVISION DEL GABINETE </h6>
                     </div>
 
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                        <div class="col-md-12">
-                            <label class="form-label me-2">Clasificacion Error:</label><span style="font-size: .75rem;"
-                                aria-item="problema / sub problema">PROBLEMA DE LECTURA / VALIDACION DE
-                                JACKTOOL</span>
-                        </div>
-                        <div class="col-md-12">
-                            <label class="form-label me-2">Obersevaciones Incidencia:</label>
-                            <span style="font-size: .75rem;" aria-item="observacion"></span>
-                        </div>
-                        <div class="row justify-content-md-center">
-                            <div class="col-md-6">
-                                <div class="form-group pt-2">
-                                    <label class="form-label" for="observacion">Observaciones</label>
-                                    <textarea class="form-control" id="observacion"
-                                        style="height: 80px;resize: none;"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <div class="form-group pt-2">
-                                    <label class="form-label" for="recomendacion">Recomendaciones</label>
-                                    <textarea class="form-control" id="recomendacion" name="recomendacion"
-                                        style="height: 80px;resize: none;" require="Recomendaciones"></textarea>
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-6">
-                                <div class="form-group pt-2">
-                                    <label class="form-label" for="fecha_f">Fecha Fin </label>
-                                    <input class="form-control form-control-sm" id="fecha_f">
-                                </div>
-                            </div>
-                            <div class="col-md-3 col-6">
-                                <div class="form-group pt-2">
-                                    <label class="form-label" for="hora_f">Hora Fin </label>
-                                    <input class="form-control form-control-sm" id="hora_f">
-                                </div>
-                            </div>
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>UPS</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des1" class="form-control">
                         </div>
                     </div>
-
-                    <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                        <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
-                    </div>
-
                     
+                    <div class="row mb-2">
+                        <div class="col-lg-3" style="font-size: 11px;"><label>• BATERIAS UPS</label></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des2" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des3" class="form-control">
+                        </div>
+                    </div>
 
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
-                        <div class="row justify-content-between firmas-orden">
-                            <div class="col-lg-5 text-center my-2">
-                                <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '' : ''}} height="130"
-                                    width="160">
-                                <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
-                                    Firma Tecnico
-                                </p>
-                                <p class="mb-1" style="font-size: 13.4px;">RICARDO CALDERON INGENIEROS SAC</p>
-                                <p class="mb-0" style="font-size: 12.5px;">
-                                    {{Auth::user()->ndoc_usuario . ' - ' . Auth::user()->nombres . ' ' . Auth::user()->apellidos}}
-                                </p>
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>ESTABILIZADOR</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des4" class="form-control">
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-2">
+                        <div class="col-lg-3" style="font-size: 11px;"><label>• INGRESO DE ENERGIA</label></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des5" class="form-control">
+                        </div>
+                    </div>
+                    <div class="row mb-2">
+                        <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des6" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>INTERFACE</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des7" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MONITOR</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des8" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>TARJETA MULTIPUERTOS</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des9" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>SWITCH</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des10" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-3">
+                        <h6 class="tittle text-primary"> REVISION DEL SERVIDOR</h6>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>SISTEMA OPERATIVO</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des11" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>VENCIMIENTO DE ANTIVIRUS</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des12" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>DISCO DURO</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des13" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="row my-2">
+                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>REALIZAR BACKUP</strong></div>
+                        <div class="col-lg-9">
+                            <input type="text" name="des14" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-12 mt-3 d-flex align-items-center justify-content-between">
+                        <h6 class="tittle text-primary"> REVISION DEL POS, LECTORES, JACK TOOLS IMPRESORAS Y CONEXIONES </h6>
+                        <button type="button" class="btn btn-secondary px-2"><i class="far fa-square-plus"></i></button>
+                    </div>
+
+                    <div id="content-islas" class="mt-3">
+                        <div class="isla-item-1">
+                            <div class="row my-2">
+                                <div class="col-md-3 col-5">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text border-0 ps-0" style="font-size: small;">ISLA</span>
+                                        <input type="text" class="form-control rounded"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-5">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text border-0 ps-0" style="font-size: small;">POS</span>
+                                        <input type="text" class="form-control rounded"/>
+                                    </div>
+                                </div>
+                                <div class="col-md-6 col-2 text-end">
+                                    <button type="button" class="btn btn-danger px-2"><i class="far fa-trash-can"></i></button>
+                                </div>
                             </div>
 
-                            <div class="col-lg-5 text-center my-2">
-                                <div class="text-center content-image">
-                                    <div class="overlay">
-                                        <button class="btn-img removeImgButton" style="display: none;"
-                                            id="removeImgFirma" type="button" button-reset><i
-                                                class="fas fa-xmark"></i></button>
-                                        <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma"
-                                            type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
-                                        <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i
-                                                class="fas fa-pencil"></i></button>
-                                        <button class="btn-img expandImgButton" type="button"
-                                            onclick="PreviImagenes(PreviFirma.src);"><i
-                                                class="fas fa-expand"></i></button>
-                                    </div>
-                                    <input type="file" class="d-none" id="firma_digital">
-                                    <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
-                                    <img id="PreviFirma" class="visually-hidden" height="130" width="160">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>IMPRESORAS</strong></div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="des7" class="form-control">
                                 </div>
-                                <!-- <img class="border rounded-1" id="" alt="" > -->
-                                <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma
-                                    Cliente</p>
-                                <p class="mb-1" style="font-size: 13.4px;" aria-item="empresaFooter">COESTI S.A.</p>
-                                <div class="search_signature_group">
-                                    <input type="text" id="search_signature" placeholder="Buscar cliente">
-                                    <span class="search_signature_text rounded" type="button" data-mdb-ripple-init>
-                                        <i class="fas fa-magnifying-glass"></i>
-                                    </span>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>RED DE LECTORES</strong></div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="des8" class="form-control">
                                 </div>
-                                <input type="hidden" name="id_firmador" id="id_firmador">
-                                <input type="hidden" name="nomFirmaDigital" id="nomFirmaDigital">
-                                <input type="hidden" name="n_doc" id="n_doc">
-                                <input type="hidden" name="nom_cliente" id="nom_cliente">
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>JACK TOOLS</strong></div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="des7" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row mb-2">
+                                <div class="col-lg-3" style="font-size: 11px;"><label>• VOLTAJE DE MANGUERAS</label></div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="des2" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>CAUCHO PROTECTOR DE LECTORES</strong></div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="des8" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MUEBLE DE POS</strong></div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="des9" class="form-control">
+                                </div>
+                            </div>
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MR 350 / DTI / TERMINAL</strong></div>
+                                <div class="col-lg-9">
+                                    <input type="text" name="des10" class="form-control">
+                                </div>
                             </div>
                         </div>
                     </div>

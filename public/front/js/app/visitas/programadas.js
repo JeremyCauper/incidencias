@@ -103,13 +103,14 @@ async function StartVisita(id, estado) {
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let mensaje = datae.message;
             if (jqXHR.status == 422) {
+                console.log("jqXHR");
                 if (datae.hasOwnProperty('required')) {
                     mensaje = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: mensaje });
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
@@ -129,7 +130,10 @@ function ShowAssign(e, id) {
         success: function (data) {
             if (data.success) {
                 var visita = data.data;
+                console.log(visita.fecha);
+                
                 $('#id_visitas_asign').val(visita.id);
+                $('#fecha_visita_asign').val(visita.fecha);
                 $(`#modal_assign [aria-item="estado"]`).html(obj.estado);
                 $(`#modal_assign [aria-item="empresa"]`).html(visita.empresa);
                 $(`#modal_assign [aria-item="direccion"]`).html(visita.direccion);
@@ -141,7 +145,7 @@ function ShowAssign(e, id) {
                 const dt = data.data;
                 (dt.personal_asig).forEach(element => {
                     const accion = dt.estado == 1 ? false : true;
-                    cPersonal1.fillTable(element.id_usuario, accion);
+                    cPersonal1.fillTable(element.id, accion);
                 });
             }
         },
@@ -176,19 +180,17 @@ async function AssignPer() {
         data: JSON.stringify({
             id: id,
             estado: estado == 'enproceso' ? false : true,
-            personal_asig: personal
+            personal_asig: personal,
+            fecha: $('#fecha_visita_asign').val()
         }),
         success: function (data) {
             if (data.success) {
                 cPersonal1.data = data.data.personal;
                 updateTableVProgramadas();
-                return true;
             }
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
-            fMananger.formModalLoding('modal_assign', 'hide');
         },
         error: function (jqXHR, textStatus, errorThrown) {
-            fMananger.formModalLoding('modal_assign', 'hide');
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
             let mensaje = "";
@@ -198,6 +200,9 @@ async function AssignPer() {
                 }
             }
             boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+        },
+        complete: function (jqXHR, textStatus, errorThrown) {
+            fMananger.formModalLoding('modal_assign', 'hide');
         }
     });
 }
@@ -216,6 +221,7 @@ async function DeleteVisita(id) {
         success: function (data) { 
             if (data.success) {
                 updateTableVProgramadas()
+                updateTableVisitas()
             }
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
@@ -228,6 +234,35 @@ async function DeleteVisita(id) {
     });
 }
 
-function OrdenVisita() {
+function OrdenVisita(e, id) {
     $('#modal_orden').modal('show');
+    fMananger.formModalLoding('modal_orden', 'show');
+    console.log(id);
+    $.ajax({
+        type: 'GET',
+        url: `${__url}/visitas/programadas/show/${id}`,
+        contentType: 'application/json',
+        success: function (data) {
+            if (data.success) {
+                var visita = data.data;
+                $(`#modal_orden [aria-item="registrado"]`).html(visita.seguimiento[0].created_at);
+                $(`#modal_orden [aria-item="empresa"]`).html(visita.empresa);
+                $(`#modal_orden [aria-item="direccion"]`).html(visita.direccion);
+                $(`#modal_orden [aria-item="sucursal"]`).html(visita.sucursal);
+                var tecnicos = visita.personal_asig.map(persona => persona.tecnicos);
+                $('#modal_orden [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));
+                fMananger.formModalLoding('modal_orden', 'hide');
+            }
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            if (jqXHR.status == 404) {
+                setTimeout(() => { $('#modal_orden').modal('hide'); }, 500);
+                return false;
+            }
+            fMananger.formModalLoding('modal_orden', 'hide');
+        }
+    });
 }

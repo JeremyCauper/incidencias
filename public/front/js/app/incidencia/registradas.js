@@ -113,8 +113,14 @@ $(document).ready(function () {
     formatSelect('modal_orden');
 
     $('#id_empresa').on('change', function () {
-        var option = $(`#id_empresa option[value="${$(this).val()}"]`).attr('select-ruc');
-        fillSelect(['#sucursal'], sucursales, 'ruc', option, 'id', 'nombre');
+        const empresa = empresas[$(this).val()] ?? "";
+        if ($(this).val()) {    
+            const contrato = [['danger', 'Sin Contrato'], ['success', 'En Contrato']];
+            $('#modal_incidencias [aria-item="contrato"]').attr('class', `ms-3 badge badge-${contrato[empresa.contrato][0]} badge-lg`).html(contrato[empresa.contrato][1]);
+        } else {
+            $('#modal_incidencias [aria-item="contrato"]').attr('class', 'd-none');
+        }
+        fillSelect(['#sucursal'], sucursales, 'ruc', empresa.ruc, 'id', 'nombre');
     });
 
     $('#tIncidencia').on('change', function () {
@@ -157,6 +163,7 @@ $(document).ready(function () {
     });
 
     $('.modal').on('hidden.bs.modal', function () {
+        $('#modal_incidencias [aria-item="codigo"]').attr('class', 'd-none');
         changeCodInc(cod_incidencia);
         fillSelect(['#sucursal', '#problema', '#sproblema']);
         $('#contenedor-personal').removeClass('d-none');
@@ -179,6 +186,12 @@ $(document).ready(function () {
     $('[ctable-create="#createMaterial"]').on('click', function () {
         manCantidad();
     });
+
+    $('#button-cod-orden').on('click', function () {
+        const check = eval($(this).attr('check-cod')) ? false : true;
+        $(this).attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
+        $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
+    })
 });
 
 const cMaterial = new CTable('#createMaterial', {
@@ -685,7 +698,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         data: JSON.stringify(valid.data.data),
         success: function (data) {
             console.log(data);
-            
+
             if (data.success) {
                 $('#modal_orden').modal('hide');
                 cod_ordenSer = data.data.num_orden;
@@ -789,11 +802,6 @@ document.getElementById('form-addcod').addEventListener('submit', async function
 function changeCodInc(val) {
     $('#cod_inc').val(val);
     $('#cod_inc_text').html(val);
-}
-
-function setChangeCodOrden($this) {
-    const check = $this.checked;
-    $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
 }
 
 /*////////////////////////////////////////
@@ -989,7 +997,7 @@ $('#search_signature').on('change', function () {
                         updateSignaturePreview(`${__asset}/images/client/${firma}`);
                     }
                 }
-                dni.attr({'disabled': ""});
+                dni.attr({ 'disabled': "" });
             } else {
                 if (dni.val() == "00000000") {
                     dni.val(`00000000 - Clientes Varios`);

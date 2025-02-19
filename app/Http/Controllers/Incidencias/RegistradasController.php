@@ -26,8 +26,8 @@ class RegistradasController extends Controller
             $data = [];
 
             // Obtener información externa de la API
-            $data['company'] = DB::table('tb_empresas')->where('status', 1)->get()->keyBy('id'); //$this->fetchAndParseApiData('empresas');
-            $data['scompany'] = DB::table('tb_sucursales')->where('status', 1)->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
+            $data['company'] = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('empresas');
+            $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
 
             // Obtener información de base de datos local
             $data['CargoContacto'] = $this->fetchAndParseDbData('cargo_contacto', ['id_cargo as id', 'descripcion', 'estatus']);

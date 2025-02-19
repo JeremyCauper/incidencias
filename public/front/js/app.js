@@ -190,7 +190,7 @@ function formatRequired(data) {
     const $mensaje = "EL campo :atributo es requerido.";
     var result = "";
     for (const key in data) {
-        const text = $(`[for="${key}"]`).html();
+        const text = $(`[for="${key}"]`).html() ?? key.toUpperCase();
         result = `<li><b>${$mensaje.replace(':atributo', text)}</b></li>`;
     }
     return `<ul style="font-size:.75rem;">${result}</ul>`;
@@ -200,7 +200,7 @@ function formatUnique(data) {
     const $mensaje = "El dato ingresado en el campo :atributo, ya está en uso.";
     var result = "";
     data.forEach(function(e) {
-        const text = $(`[for="${e}"]`).html();
+        const text = $(`[for="${e}"]`).html()  ?? e.toUpperCase();
         result = `<li><b>${$mensaje.replace(':atributo', text)}</b></li>`;
     });
     return `<ul style="font-size:.75rem;">${result}</ul>`;

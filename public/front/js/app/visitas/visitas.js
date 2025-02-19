@@ -11,7 +11,7 @@ $(document).ready(function () {
         cPersonal1.deleteTable();
     });
 
-    $('#fecha_visita').daterangepicker({
+    $('#fecha_visita, #fecha_visita_asign').daterangepicker({
         singleDatePicker: true,
         startDate: date('Y-m-d'),
         minDate: date('Y-m-d'),
@@ -177,7 +177,7 @@ function AsignarVisita(id) {
 
 document.getElementById('form-visita').addEventListener('submit', function (event) {
     event.preventDefault();
-    if (!cPersonal.extract().length)
+    if (!Object.keys(cPersonal.extract()).length)
         return boxAlert.box({
             i: 'warning',
             t: 'Personal',
@@ -204,6 +204,7 @@ document.getElementById('form-visita').addEventListener('submit', function (even
             }
             $('#modal_visitas').modal('hide');
             boxAlert.box({ i: data.icon, t: data.title, h: data.message })
+            updateTableVProgramadas();
             return updateTableVisitas();
         },
         error: function (jqXHR, textStatus, errorThrown) {

@@ -114,7 +114,7 @@
                 <h6 class="modal-title">
                     <b>NUEVA INCIDENCIA: </b>
                     <b id="cod_inc_text">{{$data['cod_inc']}}</b>
-                    <b class="ms-3 badge badge-success" id="contrato"></b>
+                    <span class="d-none" aria-item="contrato"></span>
                 </h6>
                 <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                     aria-label="Close"></button>
@@ -132,7 +132,7 @@
                         <select class="select-clear" id="id_empresa">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['company'] as $e)
-                                <option value="{{$e->id}}" select-ruc="{{$e->ruc}}">{{$e->ruc}} - {{$e->razon_social}}
+                                <option value="{{$e->id}}">{{$e->ruc}} - {{$e->razon_social}}
                                 </option>
                             @endforeach
                         </select>
@@ -280,8 +280,8 @@
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header bg-primary text-white">
-                <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia -
-                    <span class="badge badge-success badge-lg" aria-item="codigo"></span>
+                <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia
+                    <span class="ms-2 badge badge-success badge-lg" aria-item="codigo"></span>
                 </h6>
                 <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                     aria-label="Close"></button>
@@ -415,15 +415,13 @@
                     </div>
                     <div class="mb-1 cabecera-orden">
                         <input type="hidden" name="codInc" id="codInc">
-                        <div class="form-group pt-2">
+                        <div class="col-lg-5 col-10">
                             <label class="form-label" for="n_orden">N° de Orden </label>
-                            <div class="input-group mb-3" style="width: 250px;">
-                                <input class="form-control form-control-sm rounded" id="n_orden">
-                                <span class="input-group-text border-0">
-                                    <input type="checkbox" class="me-1" name="check_cod" id="check_cod"
-                                        onchange="setChangeCodOrden(this)">
-                                    <label for="check_cod" style="font-size: .75rem;">Cod. Sistema</label>
-                                </span>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="n_orden"/>
+                                <button class="btn btn-secondary" type="button" id="button-cod-orden" check-cod="false" data-mdb-ripple-init data-mdb-ripple-color="dark">
+                                    Cod. Tecnito
+                                </button>
                             </div>
                         </div>
                     </div>
@@ -665,6 +663,7 @@
 <script>
     let cod_incidencia = '<?= $data['cod_inc'] ?>';
     let cod_orden = '<?= $data['cod_orden'] ?>';
+    const empresas = <?php echo json_encode($data['company']); ?>;
     const sucursales = <?php echo json_encode($data['scompany']); ?>;
     const obj_problem = <?php echo json_encode($data['problema']); ?>;
     const obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;

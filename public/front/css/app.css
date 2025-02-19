@@ -3836,7 +3836,7 @@ body {
 .tittle {
     font-size: .85rem;
     font-weight: bold;
-    margin: 10px 0 2px 0;
+    margin: 10px 0 0px 0;
 }
 
 .title-count {
@@ -3921,4 +3921,8 @@ body {
     #modal_seguimiento_visitasp #content-seguimiento span.badge {
         font-size: .525rem;
     }
+}
+
+.modal {
+    padding-right: 0px !important;
 }
