@@ -26,6 +26,7 @@ class VSucursalesController extends Controller
                 ];
             });
             $data['empresas'] = (new EmpresasController())->index();
+            $data['cod_ordenv'] = DB::select("CALL GetCodeOrdVis(25)")[0]->cod_orden;
             
             return view('visitas.sucursales', ['data' => $data]);
         } catch (Exception $e) {

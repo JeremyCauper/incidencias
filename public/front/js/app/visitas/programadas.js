@@ -245,6 +245,7 @@ function OrdenVisita(e, id) {
         success: function (data) {
             if (data.success) {
                 var visita = data.data;
+                $('[name="id_visita_orden"]').val(id);
                 $(`#modal_orden [aria-item="registrado"]`).html(visita.seguimiento[0].created_at);
                 $(`#modal_orden [aria-item="empresa"]`).html(visita.empresa);
                 $(`#modal_orden [aria-item="direccion"]`).html(visita.direccion);
@@ -265,4 +266,69 @@ function OrdenVisita(e, id) {
             fMananger.formModalLoding('modal_orden', 'hide');
         }
     });
+}
+
+document.getElementById('form-orden').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    fMananger.formModalLoding('modal_orden', 'show');
+
+    var elementos = this.querySelectorAll('[name]');
+    var valid = validFrom(elementos);
+    valid.data.data.islas = MRevision.extract();
+
+    if (!valid.success)
+        return fMananger.formModalLoding('modal_orden', 'hide');
+    $.ajax({
+        type: 'POST',
+        url: __url + '/orden-visita/create',
+        contentType: 'application/json',
+        headers: {
+            'X-CSRF-TOKEN': __token,
+        },
+        data: JSON.stringify(valid.data.data),
+        success: function (data) {
+            console.log(data);
+
+            /*if (data.success) {
+                $('#modal_orden').modal('hide');
+                cod_ordenSer = data.data.num_orden;
+                if (atencion.toUpperCase() == 'PRESENCIAL')
+                    window.open(`${__url}/orden/documentopdf/${n_orden}`, `Visualizar PDF ${n_orden}`, "width=900, height=800");
+                updateTable();
+                return true;
+            }
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message });*/
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            let mensaje = "";
+            if (jqXHR.status == 422) {
+                if (datae.hasOwnProperty('required')) {
+                    mensaje = formatRequired(datae.required);
+                }
+            }
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+        },
+        complete: function (jqXHR, textStatus, errorThrown) {
+            fMananger.formModalLoding('modal_orden', 'hide');
+        }
+    });
+});
+
+function changeCheck($this) {
+    let contentInput = $($this).parent();
+    let icon = contentInput.find('span').find('i');
+    if ($($this).val()) {
+        icon.addClass('text-success');
+    } else {
+        icon.removeClass('text-success');
+    }
+}
+
+function changeCodOrdenV(val) {
+    $('[name="cod_ordenv"]').val(val);
+    $('#modal_orden [aria-item="codigo"]').text(val);
+    cod_ordenv = val;
 }

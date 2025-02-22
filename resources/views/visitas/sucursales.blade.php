@@ -368,7 +368,7 @@
         <form class="modal-content" id="form-orden">
             <div class="modal-header bg-primary text-white">
                 <h6 class="modal-title">ORDEN DE SERVICIO <span class="badge badge-success badge-lg"
-                        aria-item="codigo"></span></h6>
+                        aria-item="codigo">{{$data['cod_ordenv']}}</span></h6>
                 <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                     aria-label="Close"></button>
             </div>
@@ -416,71 +416,104 @@
                         <h6 class="tittle text-primary"> REVISION DEL GABINETE </h6>
                     </div>
 
+                    <input type="hidden" name="cod_ordenv" value="{{$data['cod_ordenv']}}">
+                    <input type="hidden" name="id_visita_orden">
+
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>UPS</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des1" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des1" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
                     
                     <div class="row mb-2">
                         <div class="col-lg-3" style="font-size: 11px;"><label>• BATERIAS UPS</label></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des2" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des2" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des3" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des3" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>ESTABILIZADOR</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des4" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des4" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
                     
                     <div class="row mb-2">
                         <div class="col-lg-3" style="font-size: 11px;"><label>• INGRESO DE ENERGIA</label></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des5" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des5" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
                     <div class="row mb-2">
                         <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des6" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des6" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>INTERFACE</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des7" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des7" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MONITOR</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des8" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des8" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>TARJETA MULTIPUERTOS</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des9" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des9" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>SWITCH</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des10" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des10" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
@@ -491,52 +524,69 @@
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>SISTEMA OPERATIVO</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des11" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des11" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>VENCIMIENTO DE ANTIVIRUS</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des12" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des12" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>DISCO DURO</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des13" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des13" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
                     <div class="row my-2">
                         <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>REALIZAR BACKUP</strong></div>
                         <div class="col-lg-9">
-                            <input type="text" name="des14" class="form-control">
+                            <div class="input-group">
+                                <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                <input type="text" name="des14" class="form-control rounded" onchange="changeCheck(this)">
+                            </div>
                         </div>
                     </div>
 
-                    <div class="col-12 mt-3 d-flex align-items-center justify-content-between">
-                        <h6 class="tittle text-primary"> REVISION DEL POS, LECTORES, JACK TOOLS IMPRESORAS Y CONEXIONES </h6>
-                        <button type="button" class="btn btn-secondary px-2"><i class="far fa-square-plus"></i></button>
+                    <div class="row mt-3">
+                        <div class="col-lg-10 my-1">
+                            <h6 class="tittle text-primary"> REVISION DEL POS, LECTORES, JACK TOOLS IMPRESORAS Y CONEXIONES </h6>
+                        </div>
+                        <div class="col-lg-2 my-1 d-flex align-items-center justify-content-end">
+                            <strong class="me-2" style="white-space: nowrap;" id="conteo-islas">Cant. 1</strong>
+                            <button type="button" class="btn btn-secondary px-2" onclick="MRevision.create()"><i class="far fa-square-plus"></i></button>
+                        </div>
                     </div>
 
                     <div id="content-islas" class="mt-3">
-                        <div class="isla-item-1">
+                        <!--<div class="islas-item py-2">
                             <div class="row my-2">
-                                <div class="col-md-3 col-5">
-                                    <div class="input-group mb-3">
+                                <div class="col-lg-3 col-sm-4 col-5">
+                                    <div class="input-group">
                                         <span class="input-group-text border-0 ps-0" style="font-size: small;">ISLA</span>
                                         <input type="text" class="form-control rounded"/>
                                     </div>
                                 </div>
-                                <div class="col-md-3 col-5">
-                                    <div class="input-group mb-3">
+                                <div class="col-lg-3 col-sm-4 col-5">
+                                    <div class="input-group">
                                         <span class="input-group-text border-0 ps-0" style="font-size: small;">POS</span>
                                         <input type="text" class="form-control rounded"/>
                                     </div>
                                 </div>
-                                <div class="col-md-6 col-2 text-end">
+                                <div class="col-lg-6 col-sm-4 col-2 text-end">
                                     <button type="button" class="btn btn-danger px-2"><i class="far fa-trash-can"></i></button>
                                 </div>
                             </div>
@@ -589,7 +639,11 @@
                                     <input type="text" name="des10" class="form-control">
                                 </div>
                             </div>
-                        </div>
+                        </div>-->
+                    </div>
+
+                    <div class="text-end">
+                        <button type="button" class="btn btn-secondary px-2" onclick="MRevision.create()"><i class="far fa-square-plus"></i></button>
                     </div>
                 </div>
             </div>
@@ -604,6 +658,10 @@
 @endsection
 
 @section('scripts')
+<script>
+    let cod_ordenv = "{{$data['cod_ordenv']}}";
+</script>
+<script src="{{asset('front/js/RevisionMananger,js')}}"></script>
 <script src="{{asset('front/js/app/visitas/visitas.js')}}"></script>
 <script src="{{asset('front/js/app/visitas/programadas.js')}}"></script>
 @endsection

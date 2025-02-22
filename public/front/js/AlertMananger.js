@@ -57,7 +57,7 @@ class AlertMananger {
 
     box(op = {}) {
         const icono = op.i || 'success';
-        const titulo = op.t || 'Titulo de prueba';
+        const titulo = op.t || '';
         const thtml = op.h || false;
         delete op.i;
         delete op.t;

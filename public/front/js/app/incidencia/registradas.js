@@ -686,7 +686,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
     var n_orden = valid.data.data.n_orden;
-    valid.data.data.check_cod = $('#check_cod').prop('checked');
+    valid.data.data.check_cod = eval($('#button-cod-orden').attr('check-cod')) ? false : true;
 
     $.ajax({
         type: 'POST',

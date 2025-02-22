@@ -12,6 +12,7 @@ use App\Http\Controllers\Mantenimientos\Menu\SubMenuController;
 use App\Http\Controllers\Mantenimientos\Problema\ProblemaController;
 use App\Http\Controllers\Mantenimientos\Problema\SubProblemaController;
 use App\Http\Controllers\Orden\OrdenController;
+use App\Http\Controllers\Orden\OrdenVisitaController;
 use App\Http\Controllers\Usuario\UsuarioController;
 use App\Http\Controllers\Visitas\TerminadasController;
 use App\Http\Controllers\Visitas\VProgramadasController;
@@ -59,6 +60,8 @@ Route::post('/orden/editCodAviso', [OrdenController::class, 'editCodAviso']);
 Route::post('/orden/addSignature', [OrdenController::class, 'addSignature']);
 Route::get('/orden/documentopdf/{cod}', [OrdenController::class, 'CreatePdf']);
 Route::get('/orden/documentoticket/{cod}', [OrdenController::class, 'CreateTicket']);
+
+Route::post('/orden-visita/create', [OrdenVisitaController::class, 'create']);
 
 // Visitas Tecnicas
 Route::get('/visitas/sucursales', [VSucursalesController::class, 'view'])->middleware('auth');
