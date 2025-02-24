@@ -237,7 +237,6 @@ async function DeleteVisita(id) {
 function OrdenVisita(e, id) {
     $('#modal_orden').modal('show');
     fMananger.formModalLoding('modal_orden', 'show');
-    console.log(id);
     $.ajax({
         type: 'GET',
         url: `${__url}/visitas/programadas/show/${id}`,
@@ -289,16 +288,16 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         data: JSON.stringify(valid.data.data),
         success: function (data) {
             console.log(data);
-
-            /*if (data.success) {
+            if (data.success) {
                 $('#modal_orden').modal('hide');
-                cod_ordenSer = data.data.num_orden;
-                if (atencion.toUpperCase() == 'PRESENCIAL')
-                    window.open(`${__url}/orden/documentopdf/${n_orden}`, `Visualizar PDF ${n_orden}`, "width=900, height=800");
-                updateTable();
+                changeCodOrdenV(data.data.cod_ordenv);
+                // if (atencion.toUpperCase() == 'PRESENCIAL')
+                //     window.open(`${__url}/orden/documentopdf/${data.data.cod_ordenv}`, `Visualizar PDF ${data.data.cod_ordenv}`, "width=900, height=800");
+                updateTableVProgramadas()
+                updateTableVisitas()
                 return true;
             }
-            boxAlert.box({ i: data.icon, t: data.title, h: data.message });*/
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);

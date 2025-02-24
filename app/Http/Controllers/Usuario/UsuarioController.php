@@ -166,15 +166,15 @@ class UsuarioController extends Controller
 
             return $this->message(message: "Registro creado exitosamente.");
         } catch (QueryException $e) {
+            DB::rollBack();
             if ($e->getCode() == 23000) {
                 $response = $this->validatorUnique($e->getMessage(), $this->validator);
                 return $this->message(data: ['unique' => $response], status: 422);
             }
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
-        } finally {
             DB::rollBack();
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -262,15 +262,15 @@ class UsuarioController extends Controller
 
             return $this->message(message: "Registro actualizado exitosamente.");
         } catch (QueryException $e) {
+            DB::rollBack();
             if ($e->getCode() == 23000) {
                 $response = $this->validatorUnique($e->getMessage(), $this->validator);
                 return $this->message(data: ['unique' => $response], status: 422);
             }
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
-        } finally {
             DB::rollBack();
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -294,9 +294,8 @@ class UsuarioController extends Controller
 
             return $this->message(message: "Cambio de estado exitoso.");
         } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
-        } finally {
             DB::rollBack();
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 

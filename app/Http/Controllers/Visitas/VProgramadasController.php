@@ -256,11 +256,11 @@ class VProgramadasController extends Controller
             DB::commit();
             return $this->message(message: 'Personal asignado con éxito', data: ['data' => ['personal' => $personal]]);
         } catch (QueryException $e) {
+            DB::rollBack();
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->mesageError(exception: $e, codigo: 500);
-        } finally {
             DB::rollBack();
+            return $this->mesageError(exception: $e, codigo: 500);
         }
     }
 

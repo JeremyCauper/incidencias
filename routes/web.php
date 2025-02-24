@@ -62,6 +62,7 @@ Route::get('/orden/documentopdf/{cod}', [OrdenController::class, 'CreatePdf']);
 Route::get('/orden/documentoticket/{cod}', [OrdenController::class, 'CreateTicket']);
 
 Route::post('/orden-visita/create', [OrdenVisitaController::class, 'create']);
+Route::get('/orden-visita/documentopdf/{cod}', [OrdenVisitaController::class, 'CreatePdf']);
 
 // Visitas Tecnicas
 Route::get('/visitas/sucursales', [VSucursalesController::class, 'view'])->middleware('auth');

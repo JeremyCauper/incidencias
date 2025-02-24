@@ -108,11 +108,11 @@ class OrdenController extends Controller
 
             return $this->message(message: 'Orden de servicio generada exitosamente.', data: ['num_orden' => $codOrdenS]);
         } catch (QueryException $e) {
+            DB::rollBack();
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
-        } finally {
             DB::rollBack();
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -131,11 +131,11 @@ class OrdenController extends Controller
 
             return $this->message(message: "La firma se añadió con exito.", data: ['data' => $request->all()]);
         } catch (QueryException $e) {
+            DB::rollBack();
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
-        } finally {
             DB::rollBack();
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -219,11 +219,11 @@ class OrdenController extends Controller
 
             return $this->message(message: 'Codigo añadido con éxito', data: ['data' => ['cod_orden' => $request->cod_orden_ser]]);
         } catch (QueryException $e) {
+            DB::rollBack();
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
-        } finally {
             DB::rollBack();
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -279,9 +279,10 @@ class OrdenController extends Controller
                 ->where('estatus', 1)
                 ->get()
                 ->mapWithKeys(function ($usuario) {
+                    $nombre = $this->formatearNombre($usuario->nombres, $usuario->apellidos);
                     return [
                         $usuario->id_usuario => [
-                            'nombre' => "{$usuario->ndoc_usuario} - {$usuario->nombres} {$usuario->apellidos}",
+                            'nombre' => "{$usuario->ndoc_usuario} - {$nombre}",
                             'firma' => $usuario->firma_digital,
                         ]
                     ];

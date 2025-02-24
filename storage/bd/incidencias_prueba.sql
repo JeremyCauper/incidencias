@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mi MySql
+ Source Server         : Mysql_local
  Source Server Type    : MySQL
- Source Server Version : 100425
+ Source Server Version : 100432
  Source Host           : localhost:3306
  Source Schema         : incidencias_prueba
 
  Target Server Type    : MySQL
- Target Server Version : 100425
+ Target Server Version : 100432
  File Encoding         : 65001
 
- Date: 22/02/2025 09:33:46
+ Date: 24/02/2025 00:54:53
 */
 
 SET NAMES utf8mb4;
@@ -1292,11 +1292,12 @@ CREATE TABLE `tb_orden_visita`  (
   `eliminado` tinyint(1) NULL DEFAULT 0,
   `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_visita
 -- ----------------------------
+INSERT INTO `tb_orden_visita` VALUES (4, 'VT25-00000001', 9, '2025-02-23', '21:35:28', '21:35:28', 0, '2025-02-23 21:35:28');
 
 -- ----------------------------
 -- Table structure for tb_orden_visita_correlativo
@@ -1307,11 +1308,12 @@ CREATE TABLE `tb_orden_visita_correlativo`  (
   `cod_orden_visita` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_visita_correlativo
 -- ----------------------------
+INSERT INTO `tb_orden_visita_correlativo` VALUES (3, 'VT25-00000001', '2025-02-23 21:35:28');
 
 -- ----------------------------
 -- Table structure for tb_orden_visita_filas
@@ -1325,11 +1327,25 @@ CREATE TABLE `tb_orden_visita_filas`  (
   `descripcion` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 57 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_visita_filas
 -- ----------------------------
+INSERT INTO `tb_orden_visita_filas` VALUES (43, 'VT25-00000001', 1, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (44, 'VT25-00000001', 2, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (45, 'VT25-00000001', 3, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (46, 'VT25-00000001', 4, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (47, 'VT25-00000001', 5, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (48, 'VT25-00000001', 6, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (49, 'VT25-00000001', 7, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (50, 'VT25-00000001', 8, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (51, 'VT25-00000001', 9, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (52, 'VT25-00000001', 10, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (53, 'VT25-00000001', 11, 1, '16617', '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (54, 'VT25-00000001', 12, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (55, 'VT25-00000001', 13, 0, NULL, '2025-02-23 21:35:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (56, 'VT25-00000001', 14, 0, NULL, '2025-02-23 21:35:28');
 
 -- ----------------------------
 -- Table structure for tb_orden_visita_islas
@@ -1356,12 +1372,14 @@ CREATE TABLE `tb_orden_visita_islas`  (
   `des_mr350` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `switch` int(11) NULL DEFAULT NULL,
   `des_switch` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
+  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_visita_islas
 -- ----------------------------
+INSERT INTO `tb_orden_visita_islas` VALUES (1, 'VT25-00000001', NULL, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, NULL, '2025-02-23 21:35:28');
 
 -- ----------------------------
 -- Table structure for tb_problema
@@ -2180,12 +2198,13 @@ CREATE TABLE `tb_vis_seguimiento`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_visitas`(`id_visitas`) USING BTREE,
   CONSTRAINT `tb_vis_seguimiento_ibfk_1` FOREIGN KEY (`id_visitas`) REFERENCES `tb_visitas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_vis_seguimiento
 -- ----------------------------
 INSERT INTO `tb_vis_seguimiento` VALUES (4, 9, 1, '2025-02-18', '20:40:46', 0, '2025-02-18 20:40:46');
+INSERT INTO `tb_vis_seguimiento` VALUES (5, 9, 1, '2025-02-23', '23:47:55', 1, '2025-02-23 23:47:55');
 
 -- ----------------------------
 -- Table structure for tb_visitas
@@ -2212,7 +2231,7 @@ CREATE TABLE `tb_visitas`  (
 -- Records of tb_visitas
 -- ----------------------------
 INSERT INTO `tb_visitas` VALUES (8, 121, 1, '2025-02-20', '18:38:22', 0, 0, 1, '2025-02-18 19:45:16');
-INSERT INTO `tb_visitas` VALUES (9, 121, 1, '2025-02-20', '19:49:26', 1, 0, 0, '2025-02-18 19:49:26');
+INSERT INTO `tb_visitas` VALUES (9, 121, 1, '2025-02-20', '19:49:26', 2, 0, 0, '2025-02-18 19:49:26');
 INSERT INTO `tb_visitas` VALUES (10, 284, 1, '2025-02-21', '20:21:18', 0, 0, 0, '2025-02-18 20:21:18');
 
 -- ----------------------------

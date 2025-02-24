@@ -41,7 +41,7 @@ class VSucursalesController extends Controller
     {
         try {
             $empresas = DB::table('tb_empresas')->where('contrato', 1)->get()->keyBy('ruc');
-            $visitas = DB::table('tb_visitas')->where('eliminado', 0)->whereMonth('fecha', now()->format('m'))->get()->groupBy('id_sucursal')
+            $visitas = DB::table('tb_visitas')->whereNot('estado', 2)->where('eliminado', 0)->whereMonth('fecha', now()->format('m'))->get()->groupBy('id_sucursal')
                 ->map(function ($items) {
                     return $items->mapWithKeys(function ($item) {
                         return [
