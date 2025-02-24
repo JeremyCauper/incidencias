@@ -174,16 +174,14 @@
                             <td>
                                 <h5>Tecnico(s) :</h5>
                             </td>
-                            <td style="text-align: center;">
+                            <td style="text-align: right;">
                                 <h5>Fecha Incidencia : {{$fecha}}</h5>
                             </td>
                         </tbody>
                     </table>
-                    <ul>
-                        @foreach ($asignados as $asig)
-                            <li>{{$asig['personal']}}</li>
-                        @endforeach
-                    </ul>
+                    <div>
+                        {{ implode(", ", $asignados) }}
+                    </div>
                 </div>
             </td>
         </tr>

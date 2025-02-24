@@ -25,3 +25,35 @@ $(document).ready(function () {
     });
 });
 
+const tb_vterminadas = new DataTable('#tb_vterminadas', {
+    autoWidth: true,
+    scrollX: true,
+    scrollY: 400,
+    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
+    ajax: {
+        url: `${__url}/visitas/terminadas/index`,
+        dataSrc: function (json) {
+            return json;
+        },
+        error: function (xhr, error, thrown) {
+            boxAlert.table();
+            console.log('Respuesta del servidor:', xhr);
+        }
+    },
+    columns: [
+        { data: 'id' },
+        { data: 'estado' },
+        { data: 'sucursal' },
+        { data: 'tecnicos' },
+        { data: 'fecha' },
+        { data: 'acciones' }
+    ],
+    createdRow: function (row, data, dataIndex) {
+        $(row).find('td:eq(0), td:eq(2)').addClass('text-center');
+    },
+    processing: true
+});
+
+function updateTable() {
+    tb_vterminadas.ajax.reload();
+}

@@ -78,6 +78,8 @@ Route::post('/visitas/programadas/destroy', [VProgramadasController::class, 'des
 Route::post('/visitas/programadas/assignPer', [VProgramadasController::class, 'assignPer']);
 
 Route::get('/visitas/terminadas', [TerminadasController::class, 'view'])->middleware('auth');
+Route::get('/visitas/terminadas/index', [TerminadasController::class, 'index']);
+Route::get('/visitas/terminadas/{id}', [TerminadasController::class, 'show']);
 
 
 Route::get('/empresas/empresas', [EmpresasController::class, 'view'])->middleware('auth');

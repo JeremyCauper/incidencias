@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class OrdenController extends Controller
 {
@@ -248,7 +249,7 @@ class OrdenController extends Controller
             // Validación de orden
             $orden = DB::table('tb_orden_servicio')->where('cod_ordens', $cod)->first();
             if (!$orden) {
-                return response()->json(['success' => false, 'message' => 'No se encontró el documento solicitado', 'data' => []]);
+                throw new Exception("No se encontró el documento solicitado", 404);
             }
 
             $incidencia = DB::table('tb_incidencias')->where('cod_incidencia', $orden->cod_incidencia)->first();
@@ -298,7 +299,7 @@ class OrdenController extends Controller
                 }
 
                 if ($usuario) {
-                    $datos['asignados'][] = ['personal' => $usuario['nombre']];
+                    $datos['asignados'][] = $usuario['nombre'];
                 }
             }
 
@@ -356,9 +357,8 @@ class OrdenController extends Controller
 
             return $datos;
 
-        } catch (Exception $e) {
-            Log::error('Error al generar el PDF: ' . $e->getMessage());
-            return response()->json(['error' => 'Ocurrió un error inesperado: ' . $e->getMessage()], 500);
+        } catch (Throwable $th) {
+            return throw new Exception($th->getMessage(), $th->getCode());
         }
     }
 
@@ -367,7 +367,7 @@ class OrdenController extends Controller
         $data = $this->DataForFile($cod);
 
         // Renderizar la vista HTML
-        $pdf = PDF::loadView('orden.viewticket', $data);
+        $pdf = PDF::loadView('orden.incidencia.viewticket', $data);
 
         // Definir el tamaño de la hoja en mm (80mm de ancho)
         $pdf->setPaper([0, 0, 226.77, 800], 'portrait'); // 80mm ancho y 600 de alto (se puede ajustar)
@@ -381,12 +381,16 @@ class OrdenController extends Controller
             $data = $this->DataForFile($cod);
 
             // Generar PDF
-            $pdf = Pdf::loadView('orden.viewpdf', $data);
+            $pdf = Pdf::loadView('orden.incidencia.viewpdf', $data);
             return $pdf->stream("ORDEN - {$cod}.pdf");
 
+        } catch (QueryException $e) {
+            return $this->message(message: "Error al generar el PDF de la orden de incidencia $cod", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            Log::error('Error al generar el PDF: ' . $e->getMessage());
-            return response()->json(['error' => 'Ocurrió un error inesperado: ' . $e->getMessage()], 500);
+            if ($e->getCode() == 404) {
+                return $this->message(message: $e->getMessage(), status: $e->getCode());
+            }
+            return $this->message(data: ['error' => $e->getMessage()], status: $e->getCode());
         }
     }
 }

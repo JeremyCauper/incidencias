@@ -3,12 +3,14 @@
 namespace App\Http\Controllers\Orden;
 
 use App\Http\Controllers\Controller;
+use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
+use Throwable;
 
 class OrdenVisitaController extends Controller
 {
@@ -142,34 +144,56 @@ class OrdenVisitaController extends Controller
             // Datos iniciales
             $datos = [
                 'titulo' => "{$cod}.pdf",
-                'cod_ordens' => $cod,
-                'asignados' => []
+                'cod_ordenv' => $cod,
+                'asignados' => [],
+                'fecha_visita' => '',
+            ];
+
+            $config_filas = [
+                1 => (object)[ "text" => "UPS", "child" => false],
+                2 => (object)[ "text" => "BATERIAS UPS", "child" => true],
+                3 => (object)[ "text" => "SALIDA DE ENERGIA", "child" => true],
+                4 => (object)[ "text" => "ESTABILIZADOR", "child" => false],
+                5 => (object)[ "text" => "INGRESO DE ENERGIA", "child" => true],
+                6 => (object)[ "text" => "SALIDA DE ENERGIA", "child" => true],
+                7 => (object)[ "text" => "INTERFACE", "child" => false],
+                8 => (object)[ "text" => "MONITOR", "child" => false],
+                9 => (object)[ "text" => "TARJETA MULTIPUERTOS", "child" => false],
+                10 => (object)[ "text" => "SWITCH", "child" => false],
+                11 => (object)[ "text" => "SISTEMA OPERATIVO", "child" => false],
+                12 => (object)[ "text" => "VENCIMIENTO DE ANTIVIRUS", "child" => false],
+                13 => (object)[ "text" => "DISCO DURO", "child" => false],
+                14 => (object)[ "text" => "REALIZAR BACKUP", "child" => false],
+            ];
+
+            $config_islas = [
+                (object)[ "text" => "IMPRESORAS", "checked" => "impresoras", "descripcion" => "des_impresoras", "child" => false],
+                (object)[ "text" => "RED DE LECTORES", "checked" => "lectores", "descripcion" => "des_lector", "child" => false],
+                (object)[ "text" => "JACK TOOLS", "checked" => "jack", "descripcion" => "des_jack", "child" => false],
+                (object)[ "text" => "VOLTAJE DE MANGUERAS", "checked" => "voltaje", "descripcion" => "des_voltaje", "child" => true],
+                (object)[ "text" => "CAUCHO PROTECTOR DE", "checked" => "caucho", "descripcion" => "des_caucho", "child" => false],
+                (object)[ "text" => "LECTORES", "checked" => "mueblepos", "descripcion" => "des_mueblepos", "child" => false],
+                (object)[ "text" => "MUEBLE DE POS", "checked" => "mr350", "descripcion" => "des_mr350", "child" => false],
+                (object)[ "text" => "MR 350 / DTI / TERMINAL", "checked" => "switch", "descripcion" => "des_switch", "child" => false],
             ];
 
             // Validación de orden
             $orden = DB::table('tb_orden_visita')->where('cod_orden_visita', $cod)->first();
             if (!$orden) {
-                return $this->message(message: 'EL orden de vista que buscas no existe', status: 404);
+                throw new Exception("EL orden de vista que buscas no existe", 404);
             }
+            $datos['fecha_visita'] = $orden->created_at;
 
             $visita = DB::table('tb_visitas')->where('id', $orden->id_visita)->first();
             $asignados = DB::table('tb_vis_asignadas')->where('id_visitas', $orden->id_visita)->orderBy('created_at', 'asc')->get();
             $seguimiento = DB::table('tb_vis_seguimiento')->where('id_visitas', $orden->id_visita)->get();
-            $datos['ordenv_filas'] = DB::table('tb_orden_visita_filas')->where('cod_orden_visita', $cod)->orderBy('posicion', 'asc')->get();
-            $datos['ordenv_islas'] = DB::table('tb_orden_visita_islas')->where('cod_orden_visita', $cod)->get();
-
-            // Procesar usuarios asignados
-            $usuarios = DB::table('usuarios')
-            ->where('estatus', 1)
-            ->get()
-            ->mapWithKeys(function ($usuario) {
-                return [
-                    $usuario->id_usuario => [
-                        'nombre' => "{$usuario->ndoc_usuario} - {$usuario->nombres} {$usuario->apellidos}",
-                        'firma' => $usuario->firma_digital,
-                    ]
-                ];
+            $datos['ordenv_filas'] = DB::table('tb_orden_visita_filas')->select('posicion', 'checked', 'descripcion')->where('cod_orden_visita', $cod)->orderBy('posicion', 'asc')->get()->map(function ($fila) use($config_filas) {
+                $fila->config = $config_filas[$fila->posicion];
+                return $fila;
             });
+
+            $datos['ordenv_islas'] = DB::table('tb_orden_visita_islas')->where('cod_orden_visita', $cod)->get();
+            $datos['config_islas'] = $config_islas;
 
             $sucursal = DB::table('tb_sucursales')->where('id', $visita->id_sucursal)->first();
             $datos['sucursal'] = [
@@ -209,12 +233,13 @@ class OrdenVisitaController extends Controller
             $empresa = DB::table('tb_empresas')->where('ruc', $sucursal->ruc)->first();
             $datos['empresa'] = "{$empresa->ruc} - {$empresa->razon_social}";
             $datos['eCodAviso'] = $empresa->codigo_aviso;
+            $datos['contacto'] = $empresa->encargado;
+            $datos['telefono'] = $empresa->telefono;
+            $datos['correo'] = $empresa->correo;
 
             return $datos;
-        } catch (QueryException $e) {
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
-        } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        } catch (Throwable $th) {
+            return throw new Exception($th->getMessage(), $th->getCode());
         }
     }
 
@@ -225,13 +250,15 @@ class OrdenVisitaController extends Controller
             $data = $this->DataForFile($cod);
 
             // Generar PDF
-            // $pdf = Pdf::loadView('orden.viewpdf', $data);
-            // return $pdf->stream("ORDEN - {$cod}.pdf");
-            return $data;
+            $pdf = Pdf::loadView('orden.visita.viewpdf', $data);
+            return $pdf->stream("ORDEN VISITA - {$cod}.pdf");
         } catch (QueryException $e) {
             return $this->message(message: "Error al generar el PDF de la orden de visita $cod", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+            if ($e->getCode() == 404) {
+                return $this->message(message: $e->getMessage(), status: $e->getCode());
+            }
+            return $this->message(data: ['error' => $e->getMessage()], status: $e->getCode());
         }
     }
 }

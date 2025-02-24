@@ -275,6 +275,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
     var elementos = this.querySelectorAll('[name]');
     var valid = validFrom(elementos);
     valid.data.data.islas = MRevision.extract();
+    const old_cod_ordenv = valid.data.data.cod_ordenv;
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
@@ -287,12 +288,10 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            console.log(data);
             if (data.success) {
                 $('#modal_orden').modal('hide');
                 changeCodOrdenV(data.data.cod_ordenv);
-                // if (atencion.toUpperCase() == 'PRESENCIAL')
-                //     window.open(`${__url}/orden/documentopdf/${data.data.cod_ordenv}`, `Visualizar PDF ${data.data.cod_ordenv}`, "width=900, height=800");
+                window.open(`${__url}/orden-visita/documentopdf/${old_cod_ordenv}`, `Visualizar PDF ${old_cod_ordenv}`, "width=900, height=800");
                 updateTableVProgramadas()
                 updateTableVisitas()
                 return true;
