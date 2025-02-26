@@ -239,7 +239,7 @@ class OrdenVisitaController extends Controller
 
             return $datos;
         } catch (Throwable $th) {
-            return throw new Exception($th->getMessage(), $th->getCode());
+            throw new Exception($th->getMessage(), $th->getCode());
         }
     }
 

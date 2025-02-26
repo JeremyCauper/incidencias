@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mi MySql
+ Source Server         : Mysql_local
  Source Server Type    : MySQL
- Source Server Version : 100425
+ Source Server Version : 100432
  Source Host           : localhost:3306
  Source Schema         : incidencias_prueba
 
  Target Server Type    : MySQL
- Target Server Version : 100425
+ Target Server Version : 100432
  File Encoding         : 65001
 
- Date: 24/02/2025 18:10:03
+ Date: 26/02/2025 00:52:45
 */
 
 SET NAMES utf8mb4;
@@ -1046,8 +1046,8 @@ INSERT INTO `tb_inc_seguimiento` VALUES (18, 1, 'INC-00000009', '2025-02-12', '1
 INSERT INTO `tb_inc_seguimiento` VALUES (19, 1, 'INC-00000011', '2025-02-17', '14:48:39', 0, NULL, '2025-02-17 14:48:39');
 INSERT INTO `tb_inc_seguimiento` VALUES (20, 1, 'INC-00000016', '2025-02-17', '15:03:32', 0, NULL, '2025-02-17 15:03:32');
 INSERT INTO `tb_inc_seguimiento` VALUES (21, 1, 'INC-00000011', '2025-02-17', '17:54:48', 1, NULL, '2025-02-17 17:54:51');
-INSERT INTO `tb_inc_seguimiento` VALUES (22, 1, 'INC-00000012', '2025-02-17', '18:07:30', 0, NULL, '2025-02-17 18:07:30');
-INSERT INTO `tb_inc_seguimiento` VALUES (23, 1, 'INC-00000012', '2025-02-17', '18:08:17', 1, NULL, '2025-02-17 18:08:20');
+INSERT INTO `tb_inc_seguimiento` VALUES (22, 3, 'INC-00000012', '2025-02-17', '18:07:30', 0, NULL, '2025-02-17 18:07:30');
+INSERT INTO `tb_inc_seguimiento` VALUES (23, 3, 'INC-00000012', '2025-02-17', '18:08:17', 1, NULL, '2025-02-17 18:08:20');
 
 -- ----------------------------
 -- Table structure for tb_incidencias
@@ -1481,7 +1481,7 @@ CREATE TABLE `tb_submenu`  (
   PRIMARY KEY (`id_submenu`) USING BTREE,
   INDEX `Fk_Menu`(`id_menu`) USING BTREE,
   CONSTRAINT `Fk_Menu` FOREIGN KEY (`id_menu`) REFERENCES `tb_menu` (`id_menu`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_submenu
@@ -1496,6 +1496,8 @@ INSERT INTO `tb_submenu` VALUES (7, 6, 'Problemas', 'Incidentes', '/mantenimient
 INSERT INTO `tb_submenu` VALUES (8, 6, 'Sub Problemas', 'Incidentes', '/mantenimiento/problemas/subproblemas', 0, 1, NULL, '2025-02-01 20:17:36');
 INSERT INTO `tb_submenu` VALUES (9, 7, 'Menu', 'Config. Menu', '/mantenimiento/menu/menu', 0, 1, '2025-02-10 15:15:29', '2025-02-01 20:18:53');
 INSERT INTO `tb_submenu` VALUES (10, 7, 'Sub Menu', 'Config. Menu', '/mantenimiento/menu/submenu', 0, 1, '2025-02-10 15:15:44', '2025-02-01 20:19:18');
+INSERT INTO `tb_submenu` VALUES (11, 8, 'Soporte Asignadas', NULL, '/buzon-personal/asignadas', 0, 1, NULL, '2025-02-25 08:51:24');
+INSERT INTO `tb_submenu` VALUES (12, 8, 'Soporte Resueltas', NULL, '/buzon-personal/resueltas', 0, 1, NULL, '2025-02-25 08:52:00');
 
 -- ----------------------------
 -- Table structure for tb_subproblema
@@ -2340,10 +2342,10 @@ CREATE TABLE `usuarios`  (
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
-INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-02-12 10:31:37', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$iihOLOize1QNOmNYCJ6ifet.dRSLzgrdxYUFtWJsf/w0xdN0CDdRO', '123456', 'user_auth.jpg', 'fd_jcauper.png', 4, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiNyI6WyI5IiwiMTAiXSwiOCI6W119', NULL, 0, 1, '2025-02-12 10:31:35', '2024-07-09 23:00:19');
-INSERT INTO `usuarios` VALUES (3, '12345678', 'Pedro', 'Suarez', 'psuarez@gmail.com', 'psuarez@email.com', '2025-02-10 16:31:20', '2003-01-14', '935423118', '952332137', 'psuarez', '$2y$12$3CmRGy97YD3R0M5j19rrRO.G6AbM6n26v8y3CPEJI8ca2.bsRSiLC', '123789', 'fp_psuarez.png', 'fd_psuarez.png', 3, 3, 'eyIxIjpbXSwiMiI6W119', NULL, 0, 1, '2025-02-10 16:31:18', '2024-07-13 02:41:10');
-INSERT INTO `usuarios` VALUES (4, '74716278', 'JOSTHEIN JOSEPH', 'MAYORCA BELLEZA', 'jmayorca@gmail.com', 'jmayorca@email.com', '2025-02-10 15:28:26', '1997-06-11', '978456123', '985267341', 'jmayorca', '$2y$12$CAclmFJJoM2plUl48iJsgeRbm8WrDbu8jynetkGuWVVBxGTONEm9C', '147852', 'user_auth.jpg', 'fd_jmayorca.png', 3, 1, 'eyIxIjpbXSwiMiI6W119', NULL, 0, 1, '2025-02-10 15:28:24', '2024-07-15 22:18:33');
-INSERT INTO `usuarios` VALUES (5, '70401296', 'BRYAN MARTIN', 'POLO GOMEZ', 'talvan@gmail.com', 'talvan@email.com', '2025-02-10 15:28:11', '2001-07-02', '987564123', '948741236', 'talvan', '$2y$12$6oyxU4QP06ERy7uIw4t6yeJuW1s6bmft/lUWc9SMosYlyZrHPbwN.', '987654', 'user_auth.jpg', 'fd_talvan.png', 3, 1, 'eyIxIjpbXSwiMiI6W119', NULL, 0, 1, '2025-02-10 15:28:09', '2024-07-22 02:16:27');
+INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-02-25 08:52:42', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$Cqb.U5Z70oVD05Zdrq6a4uqS6CQIdWYHZf.cSvbk3QmYbfAsuCfG.', '123456', 'user_auth.jpg', 'fd_jcauper.png', 4, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiNyI6WyI5IiwiMTAiXSwiOCI6WyIxMSIsIjEyIl19', NULL, 0, 1, '2025-02-25 08:52:42', '2024-07-09 23:00:19');
+INSERT INTO `usuarios` VALUES (3, '12345678', 'Pedro', 'Suarez', 'psuarez@gmail.com', 'psuarez@email.com', '2025-02-25 08:54:29', '2003-01-14', '935423118', '952332137', 'psuarez', '$2y$12$3CmRGy97YD3R0M5j19rrRO.G6AbM6n26v8y3CPEJI8ca2.bsRSiLC', '123789', 'fp_psuarez.png', 'fd_psuarez.png', 3, 3, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 16:31:18', '2024-07-13 02:41:10');
+INSERT INTO `usuarios` VALUES (4, '74716278', 'JOSTHEIN JOSEPH', 'MAYORCA BELLEZA', 'jmayorca@gmail.com', 'jmayorca@email.com', '2025-02-25 08:54:29', '1997-06-11', '978456123', '985267341', 'jmayorca', '$2y$12$CAclmFJJoM2plUl48iJsgeRbm8WrDbu8jynetkGuWVVBxGTONEm9C', '147852', 'user_auth.jpg', 'fd_jmayorca.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 15:28:24', '2024-07-15 22:18:33');
+INSERT INTO `usuarios` VALUES (5, '70401296', 'BRYAN MARTIN', 'POLO GOMEZ', 'talvan@gmail.com', 'talvan@email.com', '2025-02-25 08:54:29', '2001-07-02', '987564123', '948741236', 'talvan', '$2y$12$6oyxU4QP06ERy7uIw4t6yeJuW1s6bmft/lUWc9SMosYlyZrHPbwN.', '987654', 'user_auth.jpg', 'fd_talvan.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 15:28:09', '2024-07-22 02:16:27');
 
 -- ----------------------------
 -- Procedure structure for GetCodeInc

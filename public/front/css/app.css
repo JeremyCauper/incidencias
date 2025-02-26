@@ -3926,3 +3926,15 @@ body {
 .modal {
     padding-right: 0px !important;
 }
+
+.nav-tabs .nav-link.active {
+    background-color: transparent;
+    color: #3b71ca;
+    border-bottom: 2px solid #3b71ca;
+    font-weight: bold;
+}
+
+
+.nav-tabs .nav-link:hover {
+    background-color: transparent;
+}

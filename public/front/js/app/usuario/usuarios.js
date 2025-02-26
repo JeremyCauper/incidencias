@@ -67,7 +67,7 @@ $(document).ready(function () {
 
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_usuariosLabel').html('REGISTRAR USUARIO');
-        setCheckedFromJson('eyIxIjpbXSwiMiI6W119');
+        setCheckedFromJson('eyI4IjpbIjExIiwiMTIiXX0=');
         $('#tipo_acceso').val(3).trigger('change.select2');
         $('#content-permisos').attr({'style': 'opacity: .55; pointer-events: none;'});
         $('#id').val('');
@@ -90,7 +90,7 @@ $(document).ready(function () {
         $('#content-permisos').attr({'style': 'opacity: .55; pointer-events: none;'});
         switch ($(this).val()) {
             case "3":
-                permisos = 'eyIxIjpbXSwiMiI6W119';
+                permisos = 'eyI4IjpbIjExIiwiMTIiXX0=';
                 break;
 
             case "4":
@@ -103,7 +103,7 @@ $(document).ready(function () {
         }
         setCheckedFromJson(permisos);
     });
-    setCheckedFromJson('eyIxIjpbXSwiMiI6W119');
+    setCheckedFromJson('eyI4IjpbIjExIiwiMTIiXX0=');
 });
 
 const tb_usuario = new DataTable('#tb_usuario', {

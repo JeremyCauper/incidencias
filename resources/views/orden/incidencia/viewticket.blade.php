@@ -145,11 +145,9 @@
     <div class="linea"></div>
     <div class="ticket-content">
         <p class="tittle">TECNICO(s)</p>
-        <ul style="margin: 0px; padding: 0px 0px 0px 10px;">
-            @foreach ($asignados as $asig)
-                <li>{{$asig['personal']}}</li>
-            @endforeach
-        </ul>
+        <div>
+            {{ implode(", ", $asignados) }}
+        </div>
     </div>
     <div class="linea"></div>
     <div class="ticket-content">

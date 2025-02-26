@@ -45,7 +45,8 @@ class LoginController extends Controller
         session([
             'customModulos' => $modulos->menus,
             'rutaRedirect' => $modulos->ruta,
-            'nomPerfil' => $nomPerfil
+            'nomPerfil' => $nomPerfil,
+            'id_usuario' => Auth::user()->id_usuario
         ]);
         $request->session()->regenerate();
 
@@ -56,7 +57,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        session()->forget(['customModulos', 'rutaRedirect', 'nomPerfil']);
+        session()->forget(['customModulos', 'rutaRedirect', 'nomPerfil', 'id_usuario']);
         return redirect('/inicio');
     }
 }

@@ -1,6 +1,10 @@
 <?php
 
 use App\Http\Controllers\Auth\LoginController;
+use App\Http\Controllers\Buzon\BAsignadasController;
+use App\Http\Controllers\Buzon\BResueltasController;
+use App\Http\Controllers\Buzon\Resueltas\IncidenciaController;
+use App\Http\Controllers\Buzon\Resueltas\VisitaController;
 use App\Http\Controllers\Consultas\ConsultasController;
 use App\Http\Controllers\Empresas\EmpresasController;
 use App\Http\Controllers\Empresas\GruposController;
@@ -138,3 +142,11 @@ Route::get('/mantenimiento/menu/submenu/{id}', [SubMenuController::class, 'show'
 Route::post('/mantenimiento/menu/submenu/registrar', [SubMenuController::class, 'create']);
 Route::post('/mantenimiento/menu/submenu/actualizar', [SubMenuController::class, 'update']);
 Route::post('/mantenimiento/menu/submenu/cambiarEstado', [SubMenuController::class, 'changeStatus']);
+
+// Buzon Soporte
+Route::get('/buzon-personal/asignadas', [BAsignadasController::class, 'view'])->middleware('auth');
+
+
+Route::get('/buzon-personal/resueltas', [BResueltasController::class, 'view'])->middleware('auth');
+Route::get('/buzon-personal/incidencias/resueltas/index', [IncidenciaController::class, 'index']);
+Route::get('/buzon-personal/visitas/resueltas/index', [VisitaController::class, 'index']);

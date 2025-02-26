@@ -358,20 +358,29 @@ class OrdenController extends Controller
             return $datos;
 
         } catch (Throwable $th) {
-            return throw new Exception($th->getMessage(), $th->getCode());
+            throw new Exception($th->getMessage(), $th->getCode());
         }
     }
 
     public function CreateTicket(string $cod)
     {
-        $data = $this->DataForFile($cod);
+        try {
+            $data = $this->DataForFile($cod);
 
-        // Renderizar la vista HTML
-        $pdf = PDF::loadView('orden.incidencia.viewticket', $data);
+            // Renderizar la vista HTML
+            $pdf = PDF::loadView('orden.incidencia.viewticket', $data);
 
-        // Definir el tamaño de la hoja en mm (80mm de ancho)
-        $pdf->setPaper([0, 0, 226.77, 800], 'portrait'); // 80mm ancho y 600 de alto (se puede ajustar)
-        return $pdf->stream("ORDEN - {$cod}.pdf");
+            // Definir el tamaño de la hoja en mm (80mm de ancho)
+            $pdf->setPaper([0, 0, 226.77, 800], 'portrait'); // 80mm ancho y 600 de alto (se puede ajustar)
+            return $pdf->stream("ORDEN - {$cod}.pdf");
+        } catch (QueryException $e) {
+            return $this->message(message: "Error al generar el PDF de la orden de incidencia $cod", data: ['error' => $e->getMessage()], status: 400);
+        } catch (Exception $e) {
+            if ($e->getCode() == 404) {
+                return $this->message(message: $e->getMessage(), status: 404);
+            }
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        }
     }
 
     public function CreatePdf(string $cod)
@@ -388,9 +397,9 @@ class OrdenController extends Controller
             return $this->message(message: "Error al generar el PDF de la orden de incidencia $cod", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
             if ($e->getCode() == 404) {
-                return $this->message(message: $e->getMessage(), status: $e->getCode());
+                return $this->message(message: $e->getMessage(), status: 404);
             }
-            return $this->message(data: ['error' => $e->getMessage()], status: $e->getCode());
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 }
