@@ -83,8 +83,9 @@
                                 <table id="tb_incidencias" class="table table-hover text-nowrap w-100">
                                     <thead>
                                         <tr class="text-bg-primary">
+                                            <th>Incidencia</th>
+                                            <th>Fecha Incidencia</th>
                                             <th>N° Orden</th>
-                                            <th>Fecha Servicio</th>
                                             <th>Empresa</th>
                                             <th>Sucursal</th>
                                             <!-- <th>Problema / Sub Problema</th> -->
@@ -110,7 +111,7 @@
                                     <thead>
                                         <tr class="text-bg-primary">
                                             <th>N° Orden</th>
-                                            <th>Fecha Servicio</th>
+                                            <th>Fecha Visita</th>
                                             <th>Empresa</th>
                                             <th>Sucursal</th>
                                             <th>Iniciada</th>

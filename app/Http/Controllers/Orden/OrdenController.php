@@ -107,7 +107,7 @@ class OrdenController extends Controller
 
             DB::commit();
 
-            return $this->message(message: 'Orden de servicio generada exitosamente.', data: ['num_orden' => $codOrdenS]);
+            return $this->message(message: 'Orden de servicio generada exitosamente.', data: ['data' => ['num_orden' => $codOrdenS]]);
         } catch (QueryException $e) {
             DB::rollBack();
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
@@ -186,7 +186,7 @@ class OrdenController extends Controller
             }
             DB::commit();
             return $id;
-        } catch (\Throwable $e) {
+        } catch (Throwable $e) {
             DB::rollBack();
             throw $e;
         }
@@ -208,7 +208,7 @@ class OrdenController extends Controller
             ]);
 
             if ($validator->fails())
-                return response()->json(['success' => false, 'message' => '', 'validacion' => $validator->errors()]);
+                return $this->message(data: ['required' => $validator->errors()], status: 422);
 
             DB::beginTransaction();
             DB::table('tb_orden_servicio')->where('cod_incidencia', $request->cod_incidencia)->update([

@@ -40,8 +40,9 @@ const tb_incidencias = new DataTable('#tb_incidencias', {
         }
     },
     columns: [
+        { data: 'cod_inc' },
+        { data: 'fecha_inc' },
         { data: 'cod_orden' },
-        { data: 'fecha_servicio' },
         {
             data: 'id_sucursal', render: function (data, type, row) {
                 var ruc = sucursales[data].ruc;
@@ -57,7 +58,7 @@ const tb_incidencias = new DataTable('#tb_incidencias', {
         { data: 'finalizado' },
         { data: 'acciones' }
     ],
-    order: [[1, 'desc']],
+    order: [[2, 'desc']],
     processing: true
 });
 
@@ -147,7 +148,7 @@ const tb_visitas = new DataTable('#tb_visitas', {
     },
     columns: [
         { data: 'cod_orden' },
-        { data: 'fecha_servicio' },
+        { data: 'fecha_vis' },
         {
             data: 'id_sucursal', render: function (data, type, row) {
                 var ruc = sucursales[data].ruc;
@@ -232,6 +233,8 @@ async function resetTable(val) {
 
     var nuevoUrl = `${__url}/buzon-personal/${val ? 'visitas' : 'incidencias'}/resueltas/index?sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`;
     valorChange = val;
+    $(`#tb_${val ? 'visitas' : 'incidencias'}_wrapper .dataTables_scrollHeadInner`).css('width', '100%')
+        .find('table').css('width', '100%');
     if (val) {
         tb_visitas.ajax.url(nuevoUrl).load();
     } else {

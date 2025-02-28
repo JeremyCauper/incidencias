@@ -28,30 +28,32 @@ class IncidenciaController extends Controller
             $cod_incidencias = DB::table('tb_inc_asignadas')->where('id_usuario', session('id_usuario'))->pluck('cod_incidencia')->toArray();
             $seguimientos = DB::table('tb_inc_seguimiento')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
             $ordenes = DB::table('tb_orden_servicio')
-                ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
                 ->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
 
-            $incidencia = DB::table('tb_incidencias')->where($whereInc)->get()->filter(function ($inc) use ($ordenes) {
-                return $ordenes->has($inc->cod_incidencia); // Verifica si hay una orden para esta incidencia
-            })->map(function ($incidencia) use ($ordenes, $seguimientos) {
-                $orden = $ordenes->get($incidencia->cod_incidencia)?->first();
-                $seguimiento = $seguimientos[$incidencia->cod_incidencia] ?? collect();
+            $incidencia = DB::table('tb_incidencias')
+                ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
+                ->where($whereInc)->get()->filter(function ($inc) use ($ordenes) {
+                    return $ordenes->has($inc->cod_incidencia); // Verifica si hay una orden para esta incidencia
+                })->map(function ($incidencia) use ($ordenes, $seguimientos) {
+                    $orden = $ordenes->get($incidencia->cod_incidencia)?->first();
+                    $seguimiento = $seguimientos[$incidencia->cod_incidencia] ?? collect();
 
-                return [
-                    'cod_orden' => $orden->cod_ordens ?? null,
-                    'id_sucursal' => $incidencia->id_sucursal,
-                    'fecha_servicio' => $orden->created_at ?? null,
-                    'iniciado' => $seguimiento->where('estado', 0)->first()?->created_at ?? 'N/A',
-                    'finalizado' => $seguimiento->where('estado', 1)->first()?->created_at ?? 'N/A',
-                    'acciones' => $this->DropdownAcciones([
-                        'tittle' => 'Acciones',
-                        'button' => [
-                            ['funcion' => "ShowDetailInc(this, '$incidencia->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
-                            ['funcion' => "OrdenPdfInc('$orden->cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
-                            ['funcion' => "OrdenTicketInc('$orden->cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket']
-                        ]
-                    ])
-                ];
+                    return [
+                        'cod_inc' => $incidencia->cod_incidencia ?? null,
+                        'cod_orden' => '<label class="badge badge-info" style="font-size: .7rem;">' . $orden->cod_ordens . '</label>' ?? null,
+                        'fecha_inc' => $incidencia->created_at ?? null,
+                        'id_sucursal' => $incidencia->id_sucursal,
+                        'iniciado' => $seguimiento->where('estado', 0)->first()?->created_at ?? 'N/A',
+                        'finalizado' => $seguimiento->where('estado', 1)->first()?->created_at ?? 'N/A',
+                        'acciones' => $this->DropdownAcciones([
+                            'tittle' => 'Acciones',
+                            'button' => [
+                                ['funcion' => "ShowDetailInc(this, '$incidencia->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
+                                ['funcion' => "OrdenPdfInc('$orden->cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
+                                ['funcion' => "OrdenTicketInc('$orden->cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket']
+                            ]
+                        ])
+                    ];
             })->values();
 
             return $incidencia;

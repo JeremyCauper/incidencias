@@ -3,24 +3,6 @@
 
 @section('style')
 <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}">
-<style>
-    .row-bg-warning {
-        background-color: rgb(255, 246, 230);
-    }
-
-    .row-bg-info {
-        background-color: rgb(239, 252, 255);
-        position: relative;
-    }
-
-    .row-bg-primary {
-        background-color: rgb(236, 244, 255);
-    }
-
-    .row-bg-danger {
-        background-color: #edcdd3;
-    }
-</style>
 @endsection
 @section('content')
 

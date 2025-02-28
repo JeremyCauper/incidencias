@@ -3,8 +3,10 @@
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Buzon\BAsignadasController;
 use App\Http\Controllers\Buzon\BResueltasController;
-use App\Http\Controllers\Buzon\Resueltas\IncidenciaController;
-use App\Http\Controllers\Buzon\Resueltas\VisitaController;
+use App\Http\Controllers\Buzon\Resueltas\IncidenciaController as RIncidenciaController;
+use App\Http\Controllers\Buzon\Resueltas\VisitaController as RVisitaController;
+use App\Http\Controllers\Buzon\Asignadas\IncidenciaController as AIncidenciaController;
+use App\Http\Controllers\Buzon\Asignadas\VisitaController as AVisitaController;
 use App\Http\Controllers\Consultas\ConsultasController;
 use App\Http\Controllers\Empresas\EmpresasController;
 use App\Http\Controllers\Empresas\GruposController;
@@ -145,8 +147,10 @@ Route::post('/mantenimiento/menu/submenu/cambiarEstado', [SubMenuController::cla
 
 // Buzon Soporte
 Route::get('/buzon-personal/asignadas', [BAsignadasController::class, 'view'])->middleware('auth');
+Route::get('/buzon-personal/incidencias/asignadas/index', [AIncidenciaController::class, 'index']);
+Route::get('/buzon-personal/visitas/asignadas/index', [AVisitaController::class, 'index']);
 
 
 Route::get('/buzon-personal/resueltas', [BResueltasController::class, 'view'])->middleware('auth');
-Route::get('/buzon-personal/incidencias/resueltas/index', [IncidenciaController::class, 'index']);
-Route::get('/buzon-personal/visitas/resueltas/index', [VisitaController::class, 'index']);
+Route::get('/buzon-personal/incidencias/resueltas/index', [RIncidenciaController::class, 'index']);
+Route::get('/buzon-personal/visitas/resueltas/index', [RVisitaController::class, 'index']);
