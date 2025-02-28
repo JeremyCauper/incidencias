@@ -1,5 +1,6 @@
 <?php
 
+use App\Helpers\TipoIncidenia;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Buzon\BAsignadasController;
 use App\Http\Controllers\Buzon\BResueltasController;
@@ -154,3 +155,7 @@ Route::get('/buzon-personal/visitas/asignadas/index', [AVisitaController::class,
 Route::get('/buzon-personal/resueltas', [BResueltasController::class, 'view'])->middleware('auth');
 Route::get('/buzon-personal/incidencias/resueltas/index', [RIncidenciaController::class, 'index']);
 Route::get('/buzon-personal/visitas/resueltas/index', [RVisitaController::class, 'index']);
+
+
+Route::get('/tipo_incidencia/index', [TipoIncidenia::class, 'all']);
+Route::get('/tipo_incidencia/{id}', [TipoIncidenia::class, 'show']);
