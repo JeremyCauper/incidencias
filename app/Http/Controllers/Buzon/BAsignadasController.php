@@ -27,8 +27,8 @@ class BAsignadasController extends Controller
                     'text' => $m->producto
                 ];
             });
-            $data['cod_orden'] = DB::select("CALL GetCodeOrds(25)")[0]->num_orden;
-            $data['cod_ordenv'] = DB::select("CALL GetCodeOrdVis(25)")[0]->cod_orden;
+            $data['cod_orden'] = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
+            $data['cod_ordenv'] = DB::select('CALL GetCodeOrdVis(?)', [date('y')])[0]->cod_orden;
             
             return view('buzon.asignadas', ['data' => $data]);
         } catch (Exception $e) {

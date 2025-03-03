@@ -18,8 +18,8 @@ class IncidenciaController extends Controller
         $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
         try {
             $whereInc = ['estatus' => 1, 'estado_informe' => 3];
-            if (intval($ruc)) {
-                $whereInc['id_empresa'] = intval($ruc);
+            if ($ruc) {
+                $whereInc['ruc_empresa'] = $ruc;
             }
             if (intval($sucursal)) {
                 $whereInc['id_sucursal'] = intval($sucursal);

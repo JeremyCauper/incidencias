@@ -2,7 +2,7 @@ $(document).ready(function () {
     const controles = [
         // Formulario incidencias datos de la empresas
         {
-            control: '#id_empresa',
+            control: '#empresa',
             config: {
                 require: true
             }
@@ -74,7 +74,7 @@ $(document).ready(function () {
             }
         },
         {
-            control: '#observasion',
+            control: '#observacion',
             config: {}
         },
 
@@ -112,9 +112,9 @@ $(document).ready(function () {
     formatSelect('modal_assign');
     formatSelect('modal_orden');
 
-    $('#id_empresa').on('change', function () {
+    $('#empresa').on('change', function () {
         const empresa = empresas[$(this).val()] ?? "";
-        if ($(this).val()) {    
+        if ($(this).val()) {
             const contrato = [['danger', 'Sin Contrato'], ['success', 'En Contrato']];
             $('#modal_incidencias [aria-item="contrato"]').attr('class', `ms-3 badge badge-${contrato[empresa.contrato][0]} badge-lg`).html(contrato[empresa.contrato][1]);
         } else {
@@ -167,7 +167,8 @@ $(document).ready(function () {
         changeCodInc(cod_incidencia);
         fillSelect(['#sucursal', '#problema', '#sproblema']);
         $('#contenedor-personal').removeClass('d-none');
-        $('#observasion').val('');
+        $('#observacion').val('');
+        $('#modal_incidencias [aria-item="contrato"]').attr('class', 'd-none');
 
         cPersonal.deleteTable();
         cPersonal1.deleteTable();
@@ -232,7 +233,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     ajax: {
         url: `${__url}/incidencias/registradas/index`,
         dataSrc: function (json) {
-            $.each(json.count, function (panel, count) {
+            $.each(json.conteo_data, function (panel, count) {
                 $(`b[data-panel="${panel}"]`).html(count);
             });
             fillSelectContac(json.contact);
@@ -244,16 +245,33 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
         }
     },
     columns: [
-        { data: 'cod_incidencia' },
-        { data: 'badge_informe' },
-        { data: 'empresa' },
-        { data: 'sucursal' },
-        { data: 'created_at' },
-        { data: 'tipo_estacion' },
-        { data: 'tipo_incidencia' },
+        { data: 'incidencia' },
+        { data: 'estado_informe' },
+        {
+            data: 'empresa', render: function (data, type, row) {
+                let empresa = empresas[data];
+                return `${empresa.ruc} - ${empresa.razon_social}`;
+            }
+        },
+        {
+            data: 'sucursal', render: function (data, type, row) {
+                return sucursales[data].nombre;
+            }
+        },
+        { data: 'registrado' },
+        {
+            data: 'tipo_estacion', render: function (data, type, row) {
+                return tipo_estacion[data].descripcion;
+            }
+        },
+        {
+            data: 'tipo_incidencia', render: function (data, type, row) {
+                return tipo_incidencia[data].descripcion;
+            }
+        },
         {
             data: 'problema', render: function (data, type, row) {
-                return `${data} / ${row.subproblema}`;
+                return `${obj_problem[data].text} / ${obj_subproblem[row.subproblema].text}`;
             }
         },
         { data: 'acciones' }
@@ -261,7 +279,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     order: [[4, 'desc']],
     createdRow: function (row, data, dataIndex) {
         const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
-        $(row).find('td:eq(1)').addClass('text-center');
+        $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(8)').addClass('text-center');
         // $(row).find('td:eq(8)').addClass(`td-acciones ${row_bg[data.estado_informe]}`);
         $(row).addClass(row_bg[data.estado_informe]);
     },
@@ -280,8 +298,7 @@ function searchTable(search) {
 document.getElementById('form-incidencias').addEventListener('submit', function (event) {
     event.preventDefault();
     fMananger.formModalLoding('modal_incidencias', 'show');
-    const accion = $('#id_inc').val();
-    const url = accion ? `edit/${accion}` : `create`;
+    const url = $('#id_inc').val() ? `actualizar` : `registrar`;
 
     var elementos = this.querySelectorAll('[name]');
     var valid = validFrom(elementos);
@@ -352,7 +369,7 @@ function ShowDetail(e, id) {
             var seguimiento = data.data.seguimiento;
             var incidencia = data.data.incidencia;
 
-            $(`#modal_detalle [aria-item="observasion"]`).html(incidencia.observasion);
+            $(`#modal_detalle [aria-item="observacion"]`).html(incidencia.observacion);
 
             fMananger.formModalLoding('modal_detalle', 'hide');
             seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -387,7 +404,7 @@ function ShowEdit(id) {
 
     $.ajax({
         type: 'GET',
-        url: `${__url}/incidencias/registradas/show/${id}`,
+        url: `${__url}/incidencias/registradas/${id}`,
         contentType: 'application/json',
         success: function (data) {
             if (!data.success) {
@@ -396,30 +413,29 @@ function ShowEdit(id) {
 
             const dt = data.data;
             fMananger.formModalLoding('modal_incidencias', 'hide');
-            $('#id_inc').val(id);
+            $('#id_inc').val(dt.id_incidencia);
             changeCodInc(dt.cod_incidencia);
-            $('#id_empresa').val(dt.id_empresa).trigger('change.select2');
-            var option = $(`#id_empresa option[value="${dt.id_empresa}"]`).attr('select-ruc');
+            $('#empresa').val(dt.ruc_empresa).trigger('change');
 
-            fillSelect(['#sucursal'], sucursales, 'ruc', option, 'id', 'nombre');
-            $('#sucursal').val(dt.id_sucursal).trigger('change.select2');
+            fillSelect(['#sucursal'], sucursales, 'ruc', dt.ruc_empresa, 'id', 'nombre');
+            $('#sucursal').val(dt.id_sucursal).trigger('change');
             $('#cod_contact').val(dt.id_contacto);
-            $('#tel_contac').val(dt.telefono).trigger('change.select2');
+            $('#tel_contac').val(dt.telefono).trigger('change');
             $('#nro_doc').val(dt.nro_doc);
             $('#nom_contac').val(dt.nombres);
-            $('#car_contac').val(dt.cargo).trigger('change.select2');
+            $('#car_contac').val(dt.cargo).trigger('change');
             $('#cor_contac').val(dt.correo);
-            $('#tEstacion').val(dt.id_tipo_estacion).trigger('change.select2');
-            $('#prioridad').val(dt.prioridad).trigger('change.select2');
-            $('#tSoporte').val(dt.id_tipo_soporte).trigger('change.select2');
-            $('#tIncidencia').val(dt.id_tipo_incidencia).trigger('change.select2');
+            $('#tEstacion').val(dt.id_tipo_estacion).trigger('change');
+            $('#prioridad').val(dt.prioridad).trigger('change');
+            $('#tSoporte').val(dt.id_tipo_soporte).trigger('change');
+            $('#tIncidencia').val(dt.id_tipo_incidencia).trigger('change');
             fillSelect(['#problema', '#sproblema'], obj_problem, 'tipo_incidencia', dt.id_tipo_incidencia, 'id', 'text');
-            $('#problema').val(dt.id_problema).trigger('change.select2');
+            $('#problema').val(dt.id_problema).trigger('change');
             fillSelect(['#sproblema'], obj_subproblem, 'id_problema', dt.id_problema, 'id', 'text');
-            $('#sproblema').val(dt.id_subproblema).trigger('change.select2');
+            $('#sproblema').val(dt.id_subproblema).trigger('change');
             $('#fecha_imforme').val(dt.fecha_informe);
             $('#hora_informe').val(dt.hora_informe);
-            $('#observasion').val(dt.observasion);
+            $('#observacion').val(dt.observacion);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
@@ -444,7 +460,7 @@ function habilitarCodAviso(accion) {
 }
 
 
-function ShowAssign(e, id) {
+function ShowAssign(e, cod) {
     const obj = extractDataRow(e);
     obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
 
@@ -456,15 +472,13 @@ function ShowAssign(e, id) {
 
     $.ajax({
         type: 'GET',
-        url: `${__url}/incidencias/registradas/show/${id}`,
+        url: `${__url}/incidencias/registradas/${cod}`,
         contentType: 'application/json',
         success: function (data) {
             if (!data.success) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
-
             const dt = data.data;
-
             fMananger.formModalLoding('modal_assign', 'hide');
             (dt.personal_asig).forEach(element => {
                 const accion = dt.estado_informe == 2 ? false : true;
@@ -612,14 +626,14 @@ async function OrdenDetail(e, cod) {
 
     $.ajax({
         type: 'GET',
-        url: `${__url}/incidencias/registradas/show/${cod}`,
+        url: `${__url}/incidencias/registradas/${cod}`,
         contentType: 'application/json',
         success: function (data) {
             console.log(data);
             if (data.success) {
                 let dt = data.data;
                 let personal = dt.personal_asig;
-                $('[aria-item="observacion"]').html(dt.observasion);
+                $('[aria-item="observacion"]').html(dt.observacion);
                 $('#codInc').val(dt.cod_incidencia);
                 var tecnicos = personal.map(persona => persona.tecnicos);
                 habilitarCodAviso(dt.codigo_aviso);

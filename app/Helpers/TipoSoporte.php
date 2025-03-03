@@ -5,17 +5,22 @@ use App\Http\Controllers\Controller;
 
 use Illuminate\Support\Facades\Storage;
 
-class TipoIncidenia extends Controller
+class TipoSoporte extends Controller
 {
-    protected $filePath = 'config/jsons/tipo_incidencia.json';
+    protected $filePath = 'config/jsons/tipo_soporte.json';
 
     /**
      * Obtiene todos los registros del JSON
      */
     public function all()
     {
-        return json_decode(Storage::get($this->filePath), true) ?? [];
+        if (!Storage::exists($this->filePath)) {
+            return [];
+        }
+
+        return json_decode(Storage::get($this->filePath), false);
     }
+    
 
     /**
      * Busca un registro por ID
@@ -24,7 +29,7 @@ class TipoIncidenia extends Controller
     {
         $registro = collect($this->all())->select('id', 'descripcion', 'estatus')->firstWhere('id', $id);
         if (empty($registro)) {
-            return $this->message(message: "El tipo de incidencia buscada no exite.", status: 404);
+            return $this->message(message: "El tipo de soporte buscada no exite.", status: 404);
         }
         return $registro;
     }

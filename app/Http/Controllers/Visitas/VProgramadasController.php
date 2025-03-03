@@ -19,7 +19,7 @@ class VProgramadasController extends Controller
     {
         try {
             $usuario = DB::table('usuarios')->select('id_usuario', 'nombres', 'apellidos')->get()->keyBy('id_usuario');
-            $asignadas = DB::table('tb_vis_asignadas')->get()->groupBy('id_visitas')->map(function ($items) use($usuario) {
+            $asignadas = DB::table('tb_vis_asignadas')->get()->groupBy('id_visitas')->map(function ($items) use ($usuario) {
                 $id_usu = [];
                 foreach ($items as $item) {
                     $id_usu[] = $this->formatearNombre($usuario[$item->id_usuario]->nombres, $usuario[$item->id_usuario]->apellidos);
@@ -27,13 +27,26 @@ class VProgramadasController extends Controller
                 return $id_usu;
             });
             $sucursales = DB::table('tb_sucursales')->select('id', 'nombre')->where('v_visitas', 1)->get()->keyBy('id');
+            $conteo = [
+                "vEnProceso" => 0,
+                "vSinIniciar" => 0
+            ];
 
-            $visitas = DB::table('tb_visitas')->where(['eliminado' => 0])->whereNot('estado', 2)->get()->map(function ($val) use($asignadas, $sucursales, $usuario) {
+            $visitas = DB::table('tb_visitas')->where(['eliminado' => 0])->whereNot('estado', 2)->get()->map(function ($val) use ($asignadas, $sucursales, &$conteo) {
                 // Configurar el estado del informe
                 $estadoVisita = [
                     "0" => ['c' => 'warning', 't' => 'Sin Iniciar'],
                     "1" => ['c' => 'primary', 't' => 'En Proceso'],
                 ];
+                switch ($val->estado) {
+                    case 0:
+                        $conteo['vSinIniciar']++;
+                        break;
+
+                    case 1:
+                        $conteo['vEnProceso']++;
+                        break;
+                }
                 $badge_visitas = '<label class="badge badge-' . $estadoVisita[$val->estado]['c'] . '" style="font-size: .7rem;">' . $estadoVisita[$val->estado]['t'] . '</label>';
 
                 return [
@@ -55,7 +68,7 @@ class VProgramadasController extends Controller
                 ];
             });
 
-            return $visitas;
+            return ["data" => $visitas, "conteo" => $conteo];
         } catch (QueryException $e) {
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
@@ -75,22 +88,18 @@ class VProgramadasController extends Controller
                 return $this->message(message: 'La vista que buscas no existe', status: 404);
             }
 
-            $sucursal = DB::table('tb_sucursales')->where('id', $visita->id_sucursal)->first();
-            $empresa = DB::table('tb_empresas')->where('ruc', $sucursal->ruc)->first();
-
-            $visita->sucursal = $sucursal->nombre;
-            $visita->direccion = $sucursal->direccion;
-            $visita->empresa = "{$empresa->ruc} - {$empresa->razon_social}";
-
-            $usuarios = db::table('usuarios')->select(['id_usuario', 'ndoc_usuario', 'nombres', 'apellidos'])->where('estatus', 1)->get()->keyBy('id_usuario');
-            $visita->personal_asig = DB::table('tb_vis_asignadas')->select(['id_visitas', 'id_usuario'])->where('id_visitas', $id)->get()->map(function ($u) use ($usuarios) {
-                $nombre = $this->formatearNombre($usuarios[$u->id_usuario]->nombres, $usuarios[$u->id_usuario]->apellidos);
-                return [
-                    'id' => $u->id_usuario,
-                    'dni' => $usuarios[$u->id_usuario]->ndoc_usuario,
-                    'tecnicos' => $nombre
-                ];
-            });
+            $id_asignados = DB::table('tb_vis_asignadas')->where('id_visitas', $id)->get()->pluck('id_usuario')->toArray();
+            $visita->personal_asig = DB::table('usuarios')->select(['id_usuario', 'ndoc_usuario', 'nombres', 'apellidos'])
+                ->whereIn('id_usuario', $id_asignados)
+                ->where('estatus', 1)->get()
+                ->map(function ($usu) {
+                    $nombre = $this->formatearNombre($usu->nombres, $usu->apellidos);
+                    return [
+                        'id' => $usu->id_usuario,
+                        'dni' => $usu->ndoc_usuario,
+                        'tecnicos' => $nombre
+                    ];
+                });
             $visita->seguimiento = DB::table('tb_vis_seguimiento')->where('id_visitas', $id)->get()->keyBy('estado');
 
             return $this->message(data: ['data' => $visita]);
@@ -121,13 +130,6 @@ class VProgramadasController extends Controller
                     "telefono" => $u->tel_corporativo
                 ];
             });
-
-            $sucursal = DB::table('tb_sucursales')->where('id', $visita->id_sucursal)->first();
-            $empresa = DB::table('tb_empresas')->where('ruc', $sucursal->ruc)->first();
-
-            $visita->sucursal = $sucursal->nombre;
-            $visita->direccion = $sucursal->direccion;
-            $visita->empresa = "{$empresa->ruc} - {$empresa->razon_social}";
 
             // Construcción del arreglo de datos
             $data = [
@@ -217,7 +219,7 @@ class VProgramadasController extends Controller
                 return $this->message(data: ['required' => $validator->errors()], status: 422);
 
             $personal = $request->personal_asig;
-            
+
             if (count($request->personal_asig)) {
                 $arr_personal_new = [];
                 $indice_new = 0;
@@ -274,7 +276,7 @@ class VProgramadasController extends Controller
                 $validator = Validator::make($request->all(), [
                     'id' => 'required|integer'
                 ]);
-    
+
                 if ($validator->fails())
                     return $this->message(data: ['required' => $validator->errors()], status: 422);
 

@@ -39,21 +39,39 @@ const tb_orden = new DataTable('#tb_orden', {
         }
     },
     columns: [
+        { data: 'cod_incidencia' },
+        { data: 'fecha_inc' },
         { data: 'cod_orden' },
-        { data: 'tipo_incidencia' },
         { data: 'asignados' },
-        { data: 'fecha_servicio' },
-        { data: 'empresa' },
-        { data: 'nombre_sucursal' },
-        { data: 'problema' },
+        {
+            data: 'empresa', render: function (data, type, row) {
+                let empresa = empresas[data];
+                return `${empresa.ruc} - ${empresa.razon_social}`;
+            }
+        },
+        {
+            data: 'sucursal', render: function (data, type, row) {
+                return sucursales[data].nombre;
+            }
+        },
+        {
+            data: 'tipo_incidencia', render: function (data, type, row) {
+                return tipo_incidencia[data].descripcion;
+            }
+        },
+        {
+            data: 'problema', render: function (data, type, row) {
+                return `${obj_problem[data].text} / ${obj_subproblem[row.subproblema].text}`;
+            }
+        },
         { data: 'iniciado' },
         { data: 'finalizado' },
         { data: 'acciones' }
     ],
     createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(9)').addClass('td-acciones');
+        $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(6), td:eq(8), td:eq(9), td:eq(10)').addClass('text-center');
     },
-    order: [[3, 'desc']],
+    order: [[1, 'desc']],
     processing: true
 });
 
@@ -62,7 +80,7 @@ function updateTable() {
 }
 
 function filtroBusqueda() {
-    var empresa = $(`#empresa option[value="${$('#empresa').val()}"]`).attr('id-empresa');
+    var empresa = $(`#empresa`).val();
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
     var nuevoUrl = `${__url}/incidencias/resueltas/index?ruc=${empresa}&sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
@@ -89,7 +107,7 @@ function ShowDetail(e, id) {
                 var seguimiento = data.data.seguimiento;
                 var incidencia = data.data.incidencia;
 
-                $(`#modal_detalle [aria-item="observasion"]`).html(incidencia.observasion);
+                $(`#modal_detalle [aria-item="observacion"]`).html(incidencia.observacion);
 
                 fMananger.formModalLoding('modal_detalle', 'hide');
                 seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -111,59 +129,6 @@ function ShowDetail(e, id) {
         },
         error: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_detalle', 'hide');
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: 'No se pudo extraer los datos con exito.' });
-            console.log(jqXHR);
-        }
-    });
-}
-
-function OrdenDisplay(e, cod) {
-    let obj = extractDataRow(e);
-    $.each(obj, function (panel, count) {
-        $(`#modal_orden [aria-item="${panel}"]`).html(count);
-    });
-    $(`#modal_orden [aria-item="empresaFooter"]`).html(obj.empresa);
-
-    $('#PreviFirma, #firmaCreador').addClass('visually-hidden');
-    $('#doc_clienteFirma, #nomCreador').html('');
-    $('#modal_orden').modal('show');
-    fMananger.formModalLoding('modal_orden', 'show');
-    $('#content-seguimiento').html('');
-    $.ajax({
-        type: 'GET',
-        url: `${__url}/incidencias/resueltas/detail/${cod}`,
-        contentType: 'application/json',
-        success: function (data) {
-            if (data.success) {
-                var datos = data.data;
-
-                let personal = datos.personal;
-                $('#modal_orden [aria-item="observacion"]').html(datos.observasion);
-                var tecnicos = personal.map(persona => persona.tecnicos);
-                $('#modal_orden [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));
-
-                $('#observaciones').val(datos.observaciones);
-                $('#recomendaciones').val(datos.recomendaciones);
-                $('#fecha_f').val(datos.fecha_f);
-                $('#hora_f').val(datos.hora_f);
-                var contacto = datos.contacto;
-                var creador = datos.creador;
-                if (contacto) {
-                    if (contacto.firma_digital)
-                        $('#PrevizualizarFirma').attr('src', `${__asset}/images/client/${contacto.firma_digital}`).removeClass('visually-hidden');
-                    $('#doc_clienteFirma').html(`${contacto.nro_doc} - ${contacto.nombre_cliente}`);
-                }
-
-                if (creador) {
-                    if (creador.firma_digital)
-                        $('#firmaCreador').attr('src', `${__asset}/images/firms/${creador.firma_digital}`).removeClass('visually-hidden');
-                    $('#nomCreador').html(`${creador.ndoc_usuario} - ${creador.nombres} ${creador.apellidos}`);
-                }
-                fMananger.formModalLoding('modal_orden', 'hide');
-            }
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            fMananger.formModalLoding('modal_orden', 'hide');
             boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: 'No se pudo extraer los datos con exito.' });
             console.log(jqXHR);
         }

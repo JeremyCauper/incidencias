@@ -103,8 +103,7 @@ class OrdenController extends Controller
             ]);
 
             // Obtener número de orden generado
-            $codOrdenS = DB::select("CALL GetCodeOrds(24)")[0]->num_orden;
-
+            $codOrdenS = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
             DB::commit();
 
             return $this->message(message: 'Orden de servicio generada exitosamente.', data: ['data' => ['num_orden' => $codOrdenS]]);
@@ -313,7 +312,7 @@ class OrdenController extends Controller
 
             // Procesar datos relacionados a la empresa
 
-            $empresa = DB::table('tb_empresas')->where('id', $incidencia->id_empresa)->first();
+            $empresa = DB::table('tb_empresas')->where('ruc', $incidencia->ruc_empresa)->first();
             $datos['empresa'] = "{$empresa->ruc} - {$empresa->razon_social}";
             $datos['eCodAviso'] = $empresa->codigo_aviso;
 
@@ -343,7 +342,7 @@ class OrdenController extends Controller
             $datos['fecha'] = $incidencia->created_at;
 
             // Procesar materiales
-            $materialesDisponibles = DB::table('tb_materiales')->where('estatus', 1)->pluck('producto', 'id_materiales')->toArray();
+            $materialesDisponibles = DB::table('tb_materiales')->pluck('producto', 'id_materiales')->toArray();
 
             // return $materialesUsados;
 

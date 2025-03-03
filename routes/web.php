@@ -1,6 +1,6 @@
 <?php
 
-use App\Helpers\TipoIncidenia;
+use App\Helpers\TipoIncidencia;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Buzon\BAsignadasController;
 use App\Http\Controllers\Buzon\BResueltasController;
@@ -49,9 +49,9 @@ Route::get('/logout', [LoginController::class, 'logout']);
 Route::get('/incidencias/registradas', [RegistradasController::class, 'view'])->middleware('auth');
 Route::get('/incidencias/registradas/index', [RegistradasController::class, 'index']);
 Route::get('/incidencias/registradas/detail/{cod}', [RegistradasController::class, 'detail']);
-Route::post('/incidencias/registradas/create', [RegistradasController::class, 'create']);
-Route::get('/incidencias/registradas/show/{id}', [RegistradasController::class, 'show']);
-Route::post('/incidencias/registradas/edit/{id}', [RegistradasController::class, 'edit']);
+Route::get('/incidencias/registradas/{id}', [RegistradasController::class, 'show']);
+Route::post('/incidencias/registradas/registrar', [RegistradasController::class, 'create']);
+Route::post('/incidencias/registradas/actualizar', [RegistradasController::class, 'update']);
 Route::post('/incidencias/registradas/assignPer', [RegistradasController::class, 'assignPer']);
 Route::post('/incidencias/registradas/destroy/{id}', [RegistradasController::class, 'destroy']);
 Route::post('/incidencias/registradas/startInc', [RegistradasController::class, 'startInc']);
@@ -157,5 +157,5 @@ Route::get('/buzon-personal/incidencias/resueltas/index', [RIncidenciaController
 Route::get('/buzon-personal/visitas/resueltas/index', [RVisitaController::class, 'index']);
 
 
-Route::get('/tipo_incidencia/index', [TipoIncidenia::class, 'all']);
-Route::get('/tipo_incidencia/{id}', [TipoIncidenia::class, 'show']);
+Route::get('/tipo_incidencia/index', [TipoIncidencia::class, 'all']);
+Route::get('/tipo_incidencia/{id}', [TipoIncidencia::class, 'show']);

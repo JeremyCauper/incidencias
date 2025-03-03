@@ -2,6 +2,10 @@
 
 namespace App\Http\Controllers\Incidencias;
 
+use App\Helpers\CargoEstacion;
+use App\Helpers\TipoEstacion;
+use App\Helpers\TipoIncidencia;
+use App\Helpers\TipoSoporte;
 use App\Http\Controllers\Consultas\ConsultasController;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Mantenimientos\ContactoEmpresasController;
@@ -26,14 +30,14 @@ class RegistradasController extends Controller
             $data = [];
 
             // Obtener información externa de la API
-            $data['company'] = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('empresas');
+            $data['company'] = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'codigo_aviso', 'status'])->get()->keyBy('ruc'); //$this->fetchAndParseApiData('empresas');
             $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
 
             // Obtener información de base de datos local
-            $data['CargoContacto'] = $this->fetchAndParseDbData('cargo_contacto', ['id_cargo as id', 'descripcion', 'estatus']);
-            $data['tEstacion'] = $this->fetchAndParseDbData('tb_tipo_estacion', ["id_tipo_estacion as id", 'descripcion', 'estatus']);
-            $data['tSoporte'] = $this->fetchAndParseDbData('tb_tipo_soporte', ["id_tipo_soporte as id", 'descripcion', 'estatus']);
-            $data['tIncidencia'] = $this->fetchAndParseDbData('tb_tipo_incidencia', ["id_tipo_incidencia as id", 'descripcion', 'estatus']);
+            $data['CargoEstacion'] = collect((new CargoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
+            $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
+            $data['tSoporte'] = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
+            $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['problema'] = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'tipo_incidencia', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
             $data['sproblema'] = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'id_problema', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
             $data['eContactos'] = DB::table('contactos_empresas')->where('estatus', 1)->get()->keyBy('telefono');
@@ -55,7 +59,7 @@ class RegistradasController extends Controller
                 ];
             });
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
-            $data['cod_orden'] = DB::select("CALL GetCodeOrds(24)")[0]->num_orden;
+            $data['cod_orden'] = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
 
 
             // Cargar vista de las incidencias, junto a la variable data
@@ -71,25 +75,8 @@ class RegistradasController extends Controller
     public function index()
     {
         try {
-            // Obtener información externa de la API
-            $company = DB::table('tb_empresas')->get()->keyBy('id'); //$this->fetchAndParseApiData('empresas');
-            $subcompany = DB::table('tb_sucursales')->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
-
-            // Obtener información de base de datos local
-            $tipoEstacion = $this->fetchAndParseDbData('tb_tipo_estacion', ["id_tipo_estacion as id", 'descripcion', 'estatus']);
-            $tipoIncidencia = $this->fetchAndParseDbData('tb_tipo_incidencia', ["id_tipo_incidencia as id", 'descripcion', 'estatus']);
-            $problema = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'descripcion', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
-            $subproblema = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'descripcion', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
             $contactos_empresas = DB::table('contactos_empresas')->where('estatus', 1)->get()->keyBy('telefono');
-
-            // Consultar incidencias
-            $incidencias = DB::table('tb_incidencias')
-                ->select(['cod_incidencia', 'id_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as acciones', 'estatus'])
-                ->where('estatus', 1)
-                ->whereNot('estado_informe', 3)
-                ->get();
-
-            $_count = [
+            $conteo_data = [
                 "totales" => 0,
                 "tAsignadas" => 0,
                 "tSinAsignar" => 0,
@@ -97,55 +84,60 @@ class RegistradasController extends Controller
             ];
 
             // Procesar incidencias
-            $incidencias = $incidencias->map(function ($val) use (&$_count, $company, $subcompany, $tipoEstacion, $tipoIncidencia, $problema, $subproblema) {
-                // Mapear datos
-                $val->empresa = optional($company[$val->id_empresa])->razon_social;
-                $val->sucursal = optional($subcompany[$val->id_sucursal])->nombre;
-                $val->tipo_estacion = optional($tipoEstacion[$val->id_tipo_estacion])->descripcion;
-                $val->tipo_incidencia = optional($tipoIncidencia[$val->id_tipo_incidencia])->descripcion;
-                $val->problema = optional($problema[$val->id_problema])->descripcion;
-                $val->subproblema = optional($subproblema[$val->id_subproblema])->descripcion;
+            $incidencias = DB::table('tb_incidencias')
+                ->select(['cod_incidencia', 'ruc_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as id', 'estatus'])
+                ->where('estatus', 1)
+                ->whereNot('estado_informe', 3)
+                ->get()->map(function ($val) use (&$conteo_data) {
 
-                // Configurar el estado del informe
-                $estadoInforme = [
-                    "0" => ['c' => 'warning', 't' => 'Sin Asignar'],
-                    "1" => ['c' => 'info', 't' => 'Asignada'],
-                    "2" => ['c' => 'primary', 't' => 'En Proceso'],
-                    "4" => ['c' => 'danger', 't' => 'Faltan Datos']
-                ];
-                $badge_informe = '<label class="badge badge-' . $estadoInforme[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
+                    // Configurar el estado del informe
+                    $estadoInforme = [
+                        "0" => ['c' => 'warning', 't' => 'Sin Asignar'],
+                        "1" => ['c' => 'info', 't' => 'Asignada'],
+                        "2" => ['c' => 'primary', 't' => 'En Proceso'],
+                        "4" => ['c' => 'danger', 't' => 'Faltan Datos']
+                    ];
+                    $badge_informe = '<label class="badge badge-' . $estadoInforme[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
 
-                switch ($val->estado_informe) {
-                    case 0:
-                        $_count['tSinAsignar']++;
-                        break;
-                    case 1:
-                        $_count['tAsignadas']++;
-                        break;
-                    case 2:
-                        $_count['tEnProceso']++;
-                        break;
-                }
-                $_count['totales']++;
+                    switch ($val->estado_informe) {
+                        case 0:
+                            $conteo_data['tSinAsignar']++;
+                            break;
+                        case 1:
+                            $conteo_data['tAsignadas']++;
+                            break;
+                        case 2:
+                            $conteo_data['tEnProceso']++;
+                            break;
+                    }
+                    $conteo_data['totales']++;
 
-                // Generar acciones
-                $val->acciones = $this->DropdownAcciones([
-                    'tittle' => $badge_informe,
-                    'button' => [
-                        ['funcion' => "ShowDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
-                        $val->estado_informe != 4 ? ['funcion' => "ShowEdit($val->acciones)", 'texto' => '<i class="fas fa-pen text-secondary me-2"></i> Editar'] : null,
-                        $val->estado_informe != 4 ? ['funcion' => "ShowAssign(this, $val->acciones)", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'] : null,
-                        $val->estado_informe == 1 ? ['funcion' => "StartInc('$val->cod_incidencia', $val->estado_informe)", 'texto' => '<i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia'] : null,
-                        $val->estado_informe == 2 ? ['funcion' => "OrdenDetail(this, '$val->acciones')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio'] : null,
-                        $val->estado_informe != 4 ? ['funcion' => "DeleteInc($val->acciones)", 'texto' => '<i class="far fa-trash-can text-danger me-2"></i> Eliminar'] : null,
-                        $val->estado_informe == 4 ? ['funcion' => "AddCodAviso(this, '$val->cod_incidencia')", 'texto' => '<i class="far fa-file-code text-warning me-2"></i> Añadir Cod. Aviso'] : null,
-                    ],
-                ]);
-                $val->badge_informe = $badge_informe;
-                return $val;
-            });
+                    return [
+                        'incidencia' => $val->cod_incidencia,
+                        'empresa' => $val->ruc_empresa,
+                        'sucursal' => $val->id_sucursal,
+                        'tipo_estacion' => $val->id_tipo_estacion,
+                        'tipo_incidencia' => $val->id_tipo_incidencia,
+                        'problema' => $val->id_problema,
+                        'subproblema' => $val->id_subproblema,
+                        'estado_informe' => $badge_informe,
+                        'registrado' => $val->created_at,
+                        'acciones' => $this->DropdownAcciones([
+                            'tittle' => $badge_informe,
+                            'button' => [
+                                ['funcion' => "ShowDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
+                                $val->estado_informe != 4 ? ['funcion' => "ShowEdit('$val->cod_incidencia')", 'texto' => '<i class="fas fa-pen text-secondary me-2"></i> Editar'] : null,
+                                $val->estado_informe != 4 ? ['funcion' => "ShowAssign(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'] : null,
+                                $val->estado_informe == 1 ? ['funcion' => "StartInc('$val->cod_incidencia', $val->estado_informe)", 'texto' => '<i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia'] : null,
+                                $val->estado_informe == 2 ? ['funcion' => "OrdenDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio'] : null,
+                                $val->estado_informe != 4 ? ['funcion' => "DeleteInc($val->id)", 'texto' => '<i class="far fa-trash-can text-danger me-2"></i> Eliminar'] : null,
+                                $val->estado_informe == 4 ? ['funcion' => "AddCodAviso(this, '$val->cod_incidencia')", 'texto' => '<i class="far fa-file-code text-warning me-2"></i> Añadir Cod. Aviso'] : null,
+                            ],
+                        ])
+                    ];
+                });
 
-            return ['data' => $incidencias, 'count' => $_count, 'contact' => $contactos_empresas];
+            return ['data' => $incidencias, 'conteo_data' => $conteo_data, 'contact' => $contactos_empresas];
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
@@ -160,7 +152,7 @@ class RegistradasController extends Controller
             $idContact = 0;
             $validator = Validator::make($request->all(), [
                 'cod_inc' => 'required|string',
-                'id_empresa' => 'required|integer',
+                'empresa' => 'required|string',
                 'sucursal' => 'required|integer',
                 'tEstacion' => 'required|integer',
                 'prioridad' => 'required|string',
@@ -168,7 +160,7 @@ class RegistradasController extends Controller
                 'tIncidencia' => 'required|integer',
                 'problema' => 'required|integer',
                 'sproblema' => 'required|integer',
-                'observasion' => 'nullable|string',
+                'observacion' => 'nullable|string',
                 'fecha_imforme' => 'required|date',
                 'hora_informe' => 'required|date_format:H:i:s',
                 'tel_contac' => 'nullable|string',
@@ -215,7 +207,7 @@ class RegistradasController extends Controller
 
             DB::table('tb_incidencias')->insert([
                 'cod_incidencia' => $request->cod_inc,
-                'id_empresa' => $request->id_empresa,
+                'ruc_empresa' => $request->empresa,
                 'id_sucursal' => $request->sucursal,
                 'id_tipo_estacion' => $request->tEstacion,
                 'prioridad' => $request->prioridad,
@@ -224,7 +216,7 @@ class RegistradasController extends Controller
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
                 'id_contacto' => $idContact ?: null,
-                'observasion' => $request->observasion,
+                'observacion' => $request->observacion,
                 'fecha_informe' => $request->fecha_imforme,
                 'hora_informe' => $request->hora_informe,
                 'estado_informe' => $estado_info,
@@ -261,21 +253,16 @@ class RegistradasController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(string $cod)
     {
         try {
             // Consultamos la incidencia por ID
-            $incidencia = DB::table('tb_incidencias')->where('id_incidencia', $id)->first();
-            $usuarios = db::table('usuarios')->select(['id_usuario', 'ndoc_usuario', 'nombres', 'apellidos'])->where('estatus', 1)->get()->keyBy('id_usuario');
+            $incidencia = DB::table('tb_incidencias')->where('cod_incidencia', $cod)->first();
 
             // Verificamos si se encontró la incidencia
             if (!$incidencia)
-                return response()->json(['success' => false, 'message' => 'Incidencia no encontrada']);
-            $cod = $incidencia->cod_incidencia;
+                return $this->message(message: "Incidencia no encontrada", status: 204);
 
-            $empresa = DB::table('tb_empresas')->where('id', $incidencia->id_empresa)->first();
-            $incidencia->codigo_aviso = $empresa->codigo_aviso;
-            
             // Consultamos los contactos asociados a la incidencia y los añadimos como propiedades del objeto incidencia
             $contacto = DB::table('contactos_empresas')->where('id_contact', $incidencia->id_contacto)->first();
             if ($contacto) {
@@ -284,14 +271,17 @@ class RegistradasController extends Controller
                 }
             }
 
-            $incidencia->personal_asig = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get()->map(function ($u) use ($usuarios) {
-                $nombre = $this->formatearNombre($usuarios[$u->id_usuario]->nombres, $usuarios[$u->id_usuario]->apellidos);
-                return [
-                    'id' => $u->id_usuario,
-                    'dni' => $usuarios[$u->id_usuario]->ndoc_usuario,
-                    'tecnicos' => $nombre
-                ];
-            });
+            $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->pluck('id_usuario')->toArray();
+            $incidencia->personal_asig = DB::table('usuarios')
+                ->whereIn('id_usuario', $asignados)
+                ->select(['id_usuario', 'ndoc_usuario', 'nombres', 'apellidos'])->get()->map(function ($usu) {
+                    $nombre = $this->formatearNombre($usu->nombres, $usu->apellidos);
+                    return [
+                        'id' => $usu->id_usuario,
+                        'dni' => $usu->ndoc_usuario,
+                        'tecnicos' => $nombre
+                    ];
+                });
 
             // Retornamos la incidencia con la información de contacto y personal asignado
             return $this->message(data: ['data' => $incidencia]);
@@ -306,12 +296,13 @@ class RegistradasController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Request $request, string $id)
+    public function update(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
+                'id_inc' => 'required|integer',
                 'cod_inc' => 'required|string',
-                'id_empresa' => 'required|integer',
+                'empresa' => 'required|integer',
                 'sucursal' => 'required|integer',
                 'tEstacion' => 'required|integer',
                 'prioridad' => 'required|string',
@@ -319,7 +310,7 @@ class RegistradasController extends Controller
                 'tIncidencia' => 'required|integer',
                 'problema' => 'required|integer',
                 'sproblema' => 'required|integer',
-                'observasion' => 'nullable|string',
+                'observacion' => 'nullable|string',
                 'fecha_imforme' => 'required|date',
                 'hora_informe' => 'required|date_format:H:i:s',
                 'cod_contact' => 'nullable|integer',
@@ -344,7 +335,7 @@ class RegistradasController extends Controller
             $idContact = $request->cod_contact;
 
             DB::beginTransaction();
-            if ($rContact['telefono'] || $rContact['nombres'] || $rContact['cargo']){
+            if ($rContact['telefono'] || $rContact['nombres'] || $rContact['cargo']) {
                 if ($idContact) {
                     $rContact['updated_at'] = now()->format('Y-m-d H:i:s');
                     DB::table('contactos_empresas')->where('id_contact', $idContact)->update($rContact);
@@ -356,9 +347,9 @@ class RegistradasController extends Controller
                 $idContact = null;
             }
 
-            DB::table('tb_incidencias')->where('id_incidencia', $id)->update([
+            DB::table('tb_incidencias')->where('id_incidencia', $request->id_inc)->update([
                 'cod_incidencia' => $request->cod_inc,
-                'id_empresa' => $request->id_empresa,
+                'ruc_empresa' => $request->empresa,
                 'id_sucursal' => $request->sucursal,
                 'id_tipo_estacion' => $request->tEstacion,
                 'prioridad' => $request->prioridad,
@@ -367,7 +358,7 @@ class RegistradasController extends Controller
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
                 'id_contacto' => $idContact,
-                'observasion' => $request->observasion,
+                'observacion' => $request->observacion,
                 'fecha_informe' => $request->fecha_imforme,
                 'hora_informe' => $request->hora_informe,
                 'id_usuario' => Auth::user()->id_usuario,
@@ -401,6 +392,8 @@ class RegistradasController extends Controller
                 return $this->message(data: ['required' => $validator->errors()], status: 422);
             }
 
+            $estado_save = false ;
+            $estado_dalete = false ;
             $personal = $request->personal_asig;
             if (count($request->personal_asig)) {
                 $arr_personal_new = [];
@@ -427,10 +420,12 @@ class RegistradasController extends Controller
             DB::beginTransaction();
             if (!empty($arr_personal_new)) {
                 DB::table('tb_inc_asignadas')->insert($arr_personal_new);
+                $estado_save = true;
             }
 
             if (!empty($arr_personal_del) && $request->estado) {
                 DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->cod_inc)->where('id_usuario', $arr_personal_del)->delete();
+                $estado_dalete = true;
             }
 
             $estado_info = count($personal) ? 1 : 0;
@@ -439,8 +434,16 @@ class RegistradasController extends Controller
 
             $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
             DB::commit();
-            
-            return $this->message(message: "Personal asignado con éxito", data: ['data' => ['cod_inc' => $cod_inc, 'estado' => $request->estado ? $estado_info : 2, 'personal' => $personal]]);
+
+            $message = "Cambios realizados con éxito";
+            if ($estado_save && !$estado_dalete) {
+                $message = "Personal asignado con éxito";
+            }
+            if (!$estado_save && $estado_dalete) {
+                $message = "Personal desasignado con éxito";
+            }
+
+            return $this->message(message: $message, data: ['data' => ['cod_inc' => $cod_inc, 'estado' => $request->estado ? $estado_info : 2, 'personal' => $personal]]);
         } catch (QueryException $e) {
             DB::rollBack();
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
@@ -463,7 +466,7 @@ class RegistradasController extends Controller
             }
 
             $validacion = DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->codigo)->count();
-            if (!$validacion) {                
+            if (!$validacion) {
                 return $this->message(message: "No se puede iniciar la incidencia, ya que no tienen un tecnico asignado.", status: 500);
             }
             DB::beginTransaction();
@@ -524,7 +527,7 @@ class RegistradasController extends Controller
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $cod)->get();
             // Obtenemos todos los usuarios activos y los almacenamos en un array asociativo por id
-            $usuarios = DB::table('usuarios')->where('estatus', 1)->get()->keyBy('id_usuario')->map(function ($u) {
+            $usuarios = DB::table('usuarios')->get()->keyBy('id_usuario')->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return (object) [
                     "foto" => $u->foto_perfil,
@@ -578,7 +581,7 @@ class RegistradasController extends Controller
     public function searchCliente(string $dni)
     {
         $data = ['success' => true, 'message' => '', 'data' => []];
-        $datos = [ 'id' => null, 'documento' => $dni, 'nombre' => null, 'firma_digital' => null, 'consulta' => true ];
+        $datos = ['id' => null, 'documento' => $dni, 'nombre' => null, 'firma_digital' => null, 'consulta' => true];
 
         $cliente = DB::table('tb_contac_ordens')->where('nro_doc', $dni)->first();
         if ($cliente) {
@@ -592,14 +595,14 @@ class RegistradasController extends Controller
             if ($response['status'] == 200) {
                 $datos['nombre'] = $response['data']['completo'];
                 $datos['consulta'] = false;
-            }
-            else {
+            } else {
                 $data['success'] = false;
                 $data['message'] = $response['message'];
             }
         }
 
-        if ($data['success']) $data['data'] = $datos;
+        if ($data['success'])
+            $data['data'] = $datos;
         return $data;
     }
 }

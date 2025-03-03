@@ -69,16 +69,16 @@
                 <div class="col-12">
                     <table id="tb_incidencia" class="table table-hover text-nowrap" style="width:100%">
                         <thead>
-                            <tr class="text-bg-primary">
+                            <tr class="text-bg-primary text-center">
                                 <th>Codigo</th>
-                                <th class="text-center">Estado</th>
+                                <th>Estado</th>
                                 <th>Empresa</th>
                                 <th>Sucursal</th>
                                 <th>Registrado</th>
                                 <th>Estacion</th>
                                 <th>Atencion</th>
                                 <th>Problema / Sub Problema</th>
-                                <th class="th-acciones">Acciones</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                     </table>
@@ -110,11 +110,11 @@
                 <h6 class="tittle text-primary">Datos Empresa</h6>
                 <div class="row">
                     <div class="col-lg-8 mb-2">
-                        <label class="form-label mb-0" for="id_empresa">Empresa</label>
-                        <select class="select-clear" id="id_empresa">
+                        <label class="form-label mb-0" for="empresa">Empresa</label>
+                        <select class="select-clear" id="empresa">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['company'] as $e)
-                                <option value="{{$e->id}}">{{$e->ruc}} - {{$e->razon_social}}
+                                <option value="{{$e->ruc}}">{{$e->ruc}} - {{$e->razon_social}}
                                 </option>
                             @endforeach
                         </select>
@@ -151,8 +151,8 @@
                         <label class="form-label mb-0" for="car_contac">Cargo</label>
                         <select class="select-clear" id="car_contac" onchange="validContac(this)">
                             <option value="">-- Seleccione --</option>
-                            @foreach ($data['CargoContacto'] as $cc)
-                                <option value="{{$cc->id}}">{{$cc->descripcion}}</option>
+                            @foreach ($data['CargoEstacion'] as $cc)
+                                <option value="{{$cc['id']}}">{{$cc['descripcion']}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -170,7 +170,7 @@
                         <select class="select-clear" id="tEstacion">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tEstacion'] as $v)
-                                <option {{$v->id == 1 ? 'selected' : ''}} value="{{$v->id}}">{{$v->descripcion}}</option>
+                                <option {{$v['id'] == 1 ? 'selected' : ''}} value="{{$v['id']}}">{{$v['descripcion']}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -188,7 +188,7 @@
                         <select class="select" id="tSoporte">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tSoporte'] as $v)
-                                <option value="{{$v->id}}">{{$v->descripcion}}</option>
+                                <option value="{{$v['id']}}">{{$v['descripcion']}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -197,7 +197,7 @@
                         <select class="select" id="tIncidencia">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tIncidencia'] as $v)
-                                <option value="{{$v->id}}">{{$v->descripcion}}</option>
+                                <option value="{{$v['id']}}">{{$v['descripcion']}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -225,8 +225,8 @@
                         </div>
                     </div>
                     <div class="col-sm-8 mb-2">
-                        <label class="form-label mb-0" for="observasion">Observacion</label>
-                        <textarea class="form-control" id="observasion" style="height: 106px;resize: none;"></textarea>
+                        <label class="form-label mb-0" for="observacion">Observacion</label>
+                        <textarea class="form-control" id="observacion" style="height: 106px;resize: none;"></textarea>
                     </div>
                 </div>
 
@@ -297,7 +297,7 @@
                         </div>
                         <div class="list-group-item">
                             <label class="form-label me-2">Observación:</label>
-                            <span style="font-size: .75rem;" aria-item="observasion"></span>
+                            <span style="font-size: .75rem;" aria-item="observacion"></span>
                         </div>
                     </div>
                 </div>
@@ -645,10 +645,14 @@
 <script>
     let cod_incidencia = '<?= $data['cod_inc'] ?>';
     let cod_orden = '<?= $data['cod_orden'] ?>';
-    const empresas = <?php echo json_encode($data['company']); ?>;
-    const sucursales = <?php echo json_encode($data['scompany']); ?>;
-    const obj_problem = <?php echo json_encode($data['problema']); ?>;
-    const obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
+    let empresas = <?php echo json_encode($data['company']); ?>;
+    let sucursales = <?php echo json_encode($data['scompany']); ?>;
+    let cargo_estacion = <?php echo json_encode($data['CargoEstacion']); ?>;
+    let tipo_estacion = <?php echo json_encode($data['tEstacion']); ?>;
+    let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
+    let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
+    let obj_problem = <?php echo json_encode($data['problema']); ?>;
+    let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
     let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
 </script>
 <script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>

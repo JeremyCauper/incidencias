@@ -17,6 +17,9 @@ class VSucursalesController extends Controller
         $this->validarPermisos(3, 1);
         try {
             $data = [];
+            // Obtener información externa de la API
+            $data['company'] = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'codigo_aviso', 'status'])->get()->keyBy('ruc'); //$this->fetchAndParseApiData('empresas');
+            $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
             $data['usuarios'] = DB::table('usuarios')->where('estatus', 1)->get()->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
@@ -25,9 +28,8 @@ class VSucursalesController extends Controller
                     'text' => "{$u->ndoc_usuario} - {$nombre}"
                 ];
             });
-            $data['empresas'] = (new EmpresasController())->index();
-            $data['cod_ordenv'] = DB::select("CALL GetCodeOrdVis(25)")[0]->cod_orden;
-            
+            $data['cod_ordenv'] = DB::select("CALL GetCodeOrdVis(?)", [date('y')])[0]->cod_orden;
+
             return view('visitas.sucursales', ['data' => $data]);
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -49,10 +51,14 @@ class VSucursalesController extends Controller
                         ];
                     });
                 });
+            $conteo = [
+                "vSinAsignar" => 0,
+                "vAsignadas" => 0
+            ];
 
             $sucursales = DB::table('tb_sucursales')->where('v_visitas', 1)->get()
                 ->filter(fn($val) => isset($empresas[$val->ruc])) // Filtra solo las sucursales con empresas activas
-                ->map(function ($val) use ($empresas, $visitas) {
+                ->map(function ($val) use ($empresas, $visitas, &$conteo) {
                     $vRealizadas = count($visitas[$val->id] ?? []);
                     $totalVisitas = $empresas[$val->ruc]->visitas;
                     $badgeKey = $vRealizadas ? ($vRealizadas == $totalVisitas ? 'completado' : $vRealizadas) : 0;
@@ -61,16 +67,16 @@ class VSucursalesController extends Controller
                         $acciones = '<button class="btn btn-primary btn-sm px-2" onclick="CompletadoVisita(' . $val->id . ')" data-mdb-ripple-init>
                                         <i class="fas fa-check-double"></i> Completada
                                     </button>';
-                    }
-                    else if ($badgeKey) {
+                    } else if ($badgeKey) {
                         $acciones = '<button class="btn btn-info btn-sm px-2" onclick="DetalleVisita(' . $val->id . ')" data-mdb-ripple-init>
                                         <i class="fas fa-user-check"></i> Asignada
                                     </button>';
-                    }
-                    else {
+                        $conteo['vAsignadas']++;
+                    } else {
                         $acciones = '<button class="btn btn-secondary btn-sm px-2" onclick="AsignarVisita(' . $val->id . ')" data-mdb-ripple-init>
                                         <i class="fas fa-user-gear"></i> Asignar
                                     </button>';
+                        $conteo['vSinAsignar']++;
                     }
 
                     return [
@@ -84,7 +90,7 @@ class VSucursalesController extends Controller
                     ];
                 })->values(); // Resetea las claves (opcional si no necesitas una colección indexada por ID)
 
-            return $sucursales;
+            return ["data" => $sucursales, "conteo" => $conteo];
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
@@ -174,7 +180,7 @@ class VSucursalesController extends Controller
                 'visitas' => $visitas,
                 'message' => "Podrá asignar visitas después del $fechaSumada."
             ];
-            
+
             return $this->message(data: ['data' => $result]);
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);

@@ -60,7 +60,10 @@ const tb_visitas = new DataTable('#tb_visitas', {
     ajax: {
         url: `${__url}/visitas/sucursales/index`,
         dataSrc: function (json) {
-            return json;
+            $.each(json.conteo, function (panel, count) {
+                $(`b[data-panel="${panel}"]`).html(count);
+            });
+            return json.data;
         },
         error: function (xhr, error, thrown) {
             boxAlert.table(updateTableVisitas);
@@ -82,7 +85,7 @@ const tb_visitas = new DataTable('#tb_visitas', {
         { data: 'acciones' }
     ],
     createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(2), td:eq(3)').addClass('text-center');
+        $(row).find('td:eq(0), td:eq(2), td:eq(3)').addClass('text-center');
     },
     processing: true
 });
@@ -97,15 +100,15 @@ function DetalleVisita(id) {
         fMananger.formModalLoding('modal_detalle_visitas', 'show');
         $('#tb_visitas_asignadas').addClass('d-none').find('tbody').html('');
         $('#modal_detalle_visitas [aria-item="mensaje"]').html('');
-    
+
         $.ajax({
             type: 'GET',
             url: `${__url}/visitas/sucursales/${id}`,
             contentType: 'application/json',
-            success: function (data) {    
+            success: function (data) {
                 if (data.status == 204)
                     return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
-    
+
                 const dt = data.data;
                 $('#idSucursal').val(dt.id);
                 $('#modal_detalle_visitas [aria-item="contrato"]').html(dt.contrato ? 'En Contrato' : 'Sin Contrato');
