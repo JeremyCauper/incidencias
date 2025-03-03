@@ -9,18 +9,22 @@ class TipoEstacion extends Controller
 {
     protected $filePath = 'config/jsons/tipo_estacion.json';
 
-    /**
+     /**
      * Obtiene todos los registros del JSON
      */
     public function all()
     {
-        if (!Storage::exists($this->filePath)) {
+        $file = storage_path($this->filePath);
+
+        if (!file_exists($file)) {
             return [];
         }
 
-        return json_decode(Storage::get($this->filePath), false); 
+        $content = file_get_contents($file);
+        return json_decode($content, false);
     }
-    
+
+
 
     /**
      * Busca un registro por ID
@@ -29,7 +33,7 @@ class TipoEstacion extends Controller
     {
         $registro = collect($this->all())->select('id', 'descripcion', 'estatus')->firstWhere('id', $id);
         if (empty($registro)) {
-            return $this->message(message: "El tipo de estacion buscada no exite.", status: 404);
+            return $this->message(message: "El tipo de estacion buscado no exite.", status: 404);
         }
         return $registro;
     }
@@ -40,13 +44,14 @@ class TipoEstacion extends Controller
     public function create(array $data)
     {
         $items = $this->all();
-        
+
         // Asignar un nuevo ID automático
         $data['id'] = count($items) > 0 ? max(array_column($items, 'id')) + 1 : 1;
         $data['created_at'] = now()->format('Y-m-d H:i:s');
 
         $items[] = $data;
-        Storage::put($this->filePath, json_encode($items, JSON_PRETTY_PRINT));
+
+        file_put_contents(storage_path($this->filePath), json_encode($items, JSON_PRETTY_PRINT));
     }
 
     /**
@@ -57,13 +62,15 @@ class TipoEstacion extends Controller
         $items = $this->all();
 
         foreach ($items as &$item) {
-            if ($item['id'] == $id) {
-                $item = array_merge($item, $newData);
-                $item['updated_at'] = now()->format('Y-m-d H:i:s');
+            if ($item->id == $id) { // Usamos -> en lugar de []
+                foreach ($newData as $key => $value) {
+                    $item->$key = $value; // Usamos -> para actualizar los valores
+                }
+                $item->updated_at = now()->format('Y-m-d H:i:s');
             }
         }
 
-        Storage::put($this->filePath, json_encode($items, JSON_PRETTY_PRINT));
+        file_put_contents(storage_path($this->filePath), json_encode($items, JSON_PRETTY_PRINT));
     }
 
     /**
@@ -71,7 +78,8 @@ class TipoEstacion extends Controller
      */
     public function delete($id)
     {
-        $items = array_filter($this->all(), fn($item) => $item['id'] != $id);
-        Storage::put($this->filePath, json_encode(array_values($items), JSON_PRETTY_PRINT));
+        $items = array_filter($this->all(), fn($item) => $item->id != $id); // Usamos -> en lugar de []
+
+        file_put_contents(storage_path($this->filePath), json_encode(array_values($items), JSON_PRETTY_PRINT));
     }
 }
