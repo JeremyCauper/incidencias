@@ -13,7 +13,6 @@
                 <strong>Listado de Empresas</strong>
             </h6>
             <div class="mb-3">
-                <!-- <button class="btn btn-primary btn-sm" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_frm_empresas"> -->
                 <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
                     data-mdb-target="#modal_empresas">
                     <i class="fas fa-plus me-1"></i>
@@ -27,16 +26,15 @@
                 <div class="col-12">
                     <table id="tb_empresas" class="table text-nowrap" style="width: 100%;">
                         <thead>
-                            <tr class="text-bg-primary">
-                                <th>#</th>
+                            <tr class="text-bg-primary text-center">
                                 <th>Grupo</th>
                                 <th>Ruc</th>
                                 <th>Empresa</th>
                                 <th>Contrato</th>
                                 <th>Fecha Registro</th>
                                 <th>Actualizado</th>
-                                <th class="text-center">Estado</th>
-                                <th class="text-center">Acciones</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                     </table>

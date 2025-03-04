@@ -57,6 +57,7 @@ const tb_problemas = new DataTable('#tb_problemas', {
     ],
     createdRow: function (row, data, dataIndex) {
         $(row).addClass('text-center');
+        $(row).find('td:eq(6)').addClass(`td-acciones`);
     },
     processing: true
 });
@@ -64,6 +65,7 @@ const tb_problemas = new DataTable('#tb_problemas', {
 function updateTable() {
     tb_problemas.ajax.reload();
 }
+mostrar_acciones('tb_problemas');
 
 document.getElementById('form-problema').addEventListener('submit', function (event) {
     event.preventDefault();

@@ -40,7 +40,6 @@ const tb_grupos = new DataTable('#tb_grupos', {
         }
     },
     columns: [
-        { data: 'id' },
         { data: 'nombre' },
         { data: 'created_at' },
         { data: 'updated_at' },
@@ -48,7 +47,8 @@ const tb_grupos = new DataTable('#tb_grupos', {
         { data: 'acciones' }
     ],
     createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(4), td:eq(5)').addClass('text-center');
+        $(row).find('td:eq(1), td:eq(2), td:eq(3), td:eq(4)').addClass('text-center');
+        $(row).find('td:eq(4)').addClass(`td-acciones`);
     },
     processing: true
 });
@@ -56,6 +56,7 @@ const tb_grupos = new DataTable('#tb_grupos', {
 function updateTable() {
     tb_grupos.ajax.reload();
 }
+mostrar_acciones('tb_grupos');
 
 document.getElementById('form-grupo').addEventListener('submit', function (event) {
     event.preventDefault();

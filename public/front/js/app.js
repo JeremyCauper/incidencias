@@ -71,7 +71,7 @@ function defineControllerAttributes(selector, config) {
         };
 
         for (let [key, value] of Object.entries(settings)) {
-            if(key == 'errorMessage' && !value) {
+            if (key == 'errorMessage' && !value) {
                 switch (settings['control-type']) {
                     case 'ruc':
                         value = "El numero de RUC es invalido.";
@@ -92,7 +92,7 @@ function defineControllerAttributes(selector, config) {
                     case 'email':
                         value = "El correo electrónico ingresado no es válido.";
                         break;
-                    
+
                     default:
                         value = "";
                         break;
@@ -128,7 +128,7 @@ function validFrom(dat) {
     for (let i = 0; i < dat.length; i++) {
         const e = dat[i];
         if (e.value != "" && e.getAttribute("control-type")) {
-            
+
         }
         switch (e.getAttribute("control-type")) {
             case 'ruc':
@@ -149,7 +149,7 @@ function validFrom(dat) {
                     return dataF;
                 }
                 break;
-        
+
             default:
                 break;
         }
@@ -174,7 +174,7 @@ function validFrom(dat) {
 }
 
 function extractDataRow($this, $table = null) {
-    const ths = document.querySelectorAll(`${$table ?  `#${$table}_wrapper` : ""} .dataTables_scrollHeadInner table thead tr th`);
+    const ths = document.querySelectorAll(`${$table ? `#${$table}_wrapper` : ""} .dataTables_scrollHeadInner table thead tr th`);
     const tr = $this.parentNode.parentNode.parentNode.parentNode;
     const tds = tr.querySelectorAll('td');
     var obj_return = {};
@@ -199,8 +199,8 @@ function formatRequired(data) {
 function formatUnique(data) {
     const $mensaje = "El dato ingresado en el campo :atributo, ya está en uso.";
     var result = "";
-    data.forEach(function(e) {
-        const text = $(`[for="${e}"]`).html()  ?? e.toUpperCase();
+    data.forEach(function (e) {
+        const text = $(`[for="${e}"]`).html() ?? e.toUpperCase();
         result = `<li><b>${$mensaje.replace(':atributo', text)}</b></li>`;
     });
     return `<ul style="font-size:.75rem;">${result}</ul>`;
@@ -229,7 +229,7 @@ function date(format) {
 
 async function consultarDni(dni) {
     const url = `${__url}/ConsultaDni/${dni}`;
-    
+
     try {
         const response = await $.ajax({
             url: url,
@@ -245,7 +245,7 @@ async function consultarDni(dni) {
 
 async function consultarDniInput($this) {
     if (!$this.val()) return false;
-    
+
     const label = $(`[for="${$this.attr('id')}"`);
     const labelHtml = label.html();
     try {
@@ -257,4 +257,87 @@ async function consultarDniInput($this) {
     } finally {
         label.removeClass('d-flex justify-content-between').html(labelHtml);
     }
+}
+
+function animateProperty(element, property, start, end, duration, fps, callback) {
+    let current = start;
+    const totalFrames = duration / (1000 / fps);
+    const delta = (end - start) / totalFrames;
+    const interval = setInterval(() => {
+        current += delta;
+        element.style[property] = `${current}px`;
+        // Condición de finalización según dirección de la animación
+        if ((delta > 0 && current >= end) || (delta < 0 && current <= end)) {
+            clearInterval(interval);
+            if (typeof callback === "function") callback();
+        }
+    }, 1000 / fps);
+}
+
+function mostrar_acciones(table = null) {
+    const tableSelector = table ? `#${table}` : '';
+    // Determina el contenedor en base a si se pasa o no un id de tabla
+    const wrapperSelector = table ? `#${table}_wrapper` : '.dataTables_wrapper';
+
+    // Cuando se dibuja la tabla (draw.dt) se asocian los eventos a cada fila
+    $(tableSelector).on('draw.dt', function () {
+        $("tr:has(.td-acciones)").each(function () {
+            const $fila = $(this);
+            const accionesTd = this.querySelector(".td-acciones");
+            if (!accionesTd) return;
+
+            // Evento mouseenter: inicia la animación de entrada
+            $fila.on("mouseenter", function () {
+                const $contenedorBody = $(`${wrapperSelector} .dataTables_scrollBody`);
+                const bgColor = $fila.css('background-color');
+                // Extraemos los valores RGB para eliminar cualquier opacidad
+                const valores = bgColor.match(/\d+/g);
+                const nuevoColor = `rgb(${valores[0]}, ${valores[1]}, ${valores[2]})`;
+
+                accionesTd.classList.add("active-acciones");
+                accionesTd.setAttribute("style", `background-color: ${nuevoColor};`);
+
+
+                // Animación: de -75 a -32 en 200ms a 60 fps
+                animateProperty(accionesTd, "right", -75, -25, 150, 60);
+            });
+
+            // Evento mouseleave: anima de regreso y limpia estilos
+            $fila.on("mouseleave", function () {
+                animateProperty(accionesTd, "right", -25, -75, 150, 60, () => {
+                    accionesTd.classList.remove("active-acciones");
+                    accionesTd.removeAttribute("style");
+                });
+            });
+        });
+    });
+
+    // Evento de scroll en el body de la tabla para detectar el final
+    /*$(`${wrapperSelector} .dataTables_scrollBody`).on("scroll", function () {
+        const $this = $(this);
+        const posicionActual = $this.scrollLeft();
+        const maxScroll = $this[0].scrollWidth - ($this.outerWidth() + 90);
+
+
+        const fila = document.querySelector('tr:has(.active-acciones)');
+        if (fila) {
+            const accionesTd = fila.querySelector('.active-acciones');
+            if (posicionActual >= maxScroll) {
+                console.log('maxscroll');
+                
+                animateProperty(accionesTd, "right", -32, -75, 200, 60, () => {
+                    accionesTd.removeAttribute("style");
+                });
+            }
+            else {
+                console.log('minscroll');
+                if (!$(accionesTd).attr('style')) {
+                    const valores = ($(fila).css('background-color')).match(/\d+/g);
+                    const nuevoColor = `rgb(${valores[0]}, ${valores[1]}, ${valores[2]})`;
+
+                    accionesTd.setAttribute("style", `background-color: ${nuevoColor}; padding-left: 0px !important;`);
+                }
+            }
+        }
+    });*/
 }

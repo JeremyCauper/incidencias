@@ -25,6 +25,7 @@ const tb_vprogramadas = new DataTable('#tb_vprogramadas', {
     ],
     createdRow: function (row, data, dataIndex) {
         $(row).find('td:eq(0), td:eq(3), td:eq(4)').addClass('text-center');
+        $(row).find('td:eq(4)').addClass(`td-acciones`);
     },
     processing: true
 });
@@ -32,6 +33,7 @@ const tb_vprogramadas = new DataTable('#tb_vprogramadas', {
 function updateTableVProgramadas() {
     tb_vprogramadas.ajax.reload();
 }
+mostrar_acciones('tb_vprogramadas');
 
 function ShowDetail(e, id) {
     $('#modal_seguimiento_visitasp').find('.modal-body').addClass('d-none');

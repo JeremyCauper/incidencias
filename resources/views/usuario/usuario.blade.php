@@ -26,10 +26,10 @@
                 <div class="col-12">
                     <table id="tb_usuario" class="table text-nowrap" style="width: 100%;">
                         <thead>
-                            <tr class="text-bg-primary">
+                            <tr class="text-bg-primary text-center">
                                 <th>Nro. Documento</th>
                                 <th>Nombre Personal</th>
-                                <th class="text-center">Tipo Usuario</th>
+                                <th>Tipo Usuario</th>
                                 <th>Usuario</th>
                                 <th>Contraseña</th>
                                 <th>Estado</th>

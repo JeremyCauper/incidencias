@@ -113,7 +113,6 @@ const tb_empresas = new DataTable('#tb_empresas', {
         }
     },
     columns: [
-        { data: 'id' },
         { data: 'grupo' },
         { data: 'ruc' },
         { data: 'razonSocial' },
@@ -124,7 +123,8 @@ const tb_empresas = new DataTable('#tb_empresas', {
         { data: 'acciones' }
     ],
     createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(5), td:eq(6)').addClass('text-center');
+        $(row).find('td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('text-center');
+        $(row).find('td:eq(7)').addClass(`td-acciones`);
     },
     processing: true
 });
@@ -132,6 +132,7 @@ const tb_empresas = new DataTable('#tb_empresas', {
 function updateTable() {
     tb_empresas.ajax.reload();
 }
+mostrar_acciones('tb_empresas');
 
 document.getElementById('form-empresa').addEventListener('submit', function (event) {
     event.preventDefault();

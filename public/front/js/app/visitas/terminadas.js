@@ -62,6 +62,7 @@ const tb_vterminadas = new DataTable('#tb_vterminadas', {
     ],
     createdRow: function (row, data, dataIndex) {
         $(row).find('td:eq(0), td:eq(2)').addClass('text-center');
+        $(row).find('td:eq(8)').addClass(`td-acciones`);
     },
     processing: true
 });
@@ -69,6 +70,7 @@ const tb_vterminadas = new DataTable('#tb_vterminadas', {
 function updateTable() {
     tb_vterminadas.ajax.reload();
 }
+mostrar_acciones('tb_vterminadas');
 
 function filtroBusqueda() {
     var sucursal = $('#sucursal').val();

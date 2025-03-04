@@ -120,7 +120,8 @@ class RegistradasController extends Controller
                         'tipo_incidencia' => $val->id_tipo_incidencia,
                         'problema' => $val->id_problema,
                         'subproblema' => $val->id_subproblema,
-                        'estado_informe' => $badge_informe,
+                        'estado_informe' => $val->estado_informe,
+                        'estado' => $badge_informe,
                         'registrado' => $val->created_at,
                         'acciones' => $this->DropdownAcciones([
                             'tittle' => $badge_informe,

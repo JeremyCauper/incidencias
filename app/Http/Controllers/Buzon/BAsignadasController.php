@@ -14,7 +14,7 @@ class BAsignadasController extends Controller
         $this->validarPermisos(8, 11);
         try {
             $data = [];
-            $data['empresas'] = DB::table('tb_empresas')->select('id', 'ruc', 'razon_social', 'contrato', 'direccion', 'status')->get()->keyBy('ruc');;
+            $data['empresas'] = DB::table('tb_empresas')->select('id', 'ruc', 'razon_social', 'contrato', 'direccion', 'codigo_aviso', 'status')->get()->keyBy('ruc');;
             $data['sucursales'] = DB::table('tb_sucursales')->select('id', 'ruc', 'nombre', 'direccion', 'status')->get()->keyBy('id');
             $data['tipo_estacion'] = DB::table('tb_tipo_estacion')->get()->keyBy('id_tipo_estacion');
             $data['problemas'] = DB::table('tb_problema')->get()->keyBy('id_problema');

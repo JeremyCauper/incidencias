@@ -26,8 +26,7 @@
                 <div class="col-12">
                     <table id="tb_sucursales" class="table text-nowrap" style="width: 100%;">
                         <thead>
-                            <tr class="text-bg-primary">
-                                <th>#</th>
+                            <tr class="text-bg-primary text-center">
                                 <th>Grupo</th>
                                 <th>Cofide</th>
                                 <th>Ruc</th>
@@ -36,8 +35,8 @@
                                 <th>Ubigeo</th>
                                 <th>Fecha Registro</th>
                                 <th>Actualizado</th>
-                                <th class="text-center">Estado</th>
-                                <th class="text-center">Acciones</th>
+                                <th>Estado</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                     </table>

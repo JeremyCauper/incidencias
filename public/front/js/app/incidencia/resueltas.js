@@ -70,6 +70,7 @@ const tb_orden = new DataTable('#tb_orden', {
     ],
     createdRow: function (row, data, dataIndex) {
         $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(6), td:eq(8), td:eq(9), td:eq(10)').addClass('text-center');
+        $(row).find('td:eq(10)').addClass(`td-acciones`);
     },
     order: [[1, 'desc']],
     processing: true
@@ -78,6 +79,7 @@ const tb_orden = new DataTable('#tb_orden', {
 function updateTable() {
     tb_orden.ajax.reload();
 }
+mostrar_acciones('tb_orden');
 
 function filtroBusqueda() {
     var empresa = $(`#empresa`).val();

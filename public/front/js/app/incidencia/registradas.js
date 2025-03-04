@@ -86,7 +86,7 @@ $(document).ready(function () {
             }
         },
         {
-            control: ['#observacion', '#recomendacion'],
+            control: ['#observaciones', '#recomendacion'],
             config: {
                 require: true
             }
@@ -246,7 +246,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     },
     columns: [
         { data: 'incidencia' },
-        { data: 'estado_informe' },
+        { data: 'estado' },
         {
             data: 'empresa', render: function (data, type, row) {
                 let empresa = empresas[data];
@@ -280,7 +280,7 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
     createdRow: function (row, data, dataIndex) {
         const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
         $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(8)').addClass('text-center');
-        // $(row).find('td:eq(8)').addClass(`td-acciones ${row_bg[data.estado_informe]}`);
+        $(row).find('td:eq(8)').addClass(`td-acciones`);
         $(row).addClass(row_bg[data.estado_informe]);
     },
     processing: true
@@ -289,6 +289,8 @@ const tb_incidencia = new DataTable('#tb_incidencia', {
 function updateTable() {
     tb_incidencia.ajax.reload();
 }
+mostrar_acciones('tb_incidencia');
+
 
 function searchTable(search) {
     const biblio = ['', 'asignada', 'sin asignar', 'en proceso'];
@@ -629,14 +631,14 @@ async function OrdenDetail(e, cod) {
         url: `${__url}/incidencias/registradas/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
             if (data.success) {
                 let dt = data.data;
                 let personal = dt.personal_asig;
+                let empresa = empresas[dt.ruc_empresa]
                 $('[aria-item="observacion"]').html(dt.observacion);
                 $('#codInc').val(dt.cod_incidencia);
                 var tecnicos = personal.map(persona => persona.tecnicos);
-                habilitarCodAviso(dt.codigo_aviso);
+                habilitarCodAviso(empresa.codigo_aviso);
 
                 $('#modal_orden [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));
             }

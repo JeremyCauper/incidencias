@@ -463,8 +463,8 @@
                         <div class="row justify-content-md-center">
                             <div class="col-md-6">
                                 <div class="form-group pt-2">
-                                    <label class="form-label" for="observacion">Observaciones</label>
-                                    <textarea class="form-control" id="observacion"
+                                    <label class="form-label" for="observaciones">Observaciones</label>
+                                    <textarea class="form-control" id="observaciones"
                                         style="height: 80px;resize: none;"></textarea>
                                 </div>
                             </div>

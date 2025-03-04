@@ -59,12 +59,16 @@ const tb_incidencias = new DataTable('#tb_incidencias', {
         { data: 'acciones' }
     ],
     order: [[2, 'desc']],
+    createdRow: function (row, data, dataIndex) {
+        $(row).find('td:eq(7)').addClass(`td-acciones`);
+    },
     processing: true
 });
 
 function updateTableInc() {
     tb_incidencias.ajax.reload();
 }
+mostrar_acciones('tb_incidencias');
 
 function OrdenPdfInc(cod) {
     window.open(`${__url}/orden/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");
@@ -165,12 +169,16 @@ const tb_visitas = new DataTable('#tb_visitas', {
         { data: 'acciones' }
     ],
     order: [[1, 'desc']],
+    createdRow: function (row, data, dataIndex) {
+        $(row).find('td:eq(6)').addClass(`td-acciones`);
+    },
     processing: true
 });
 
 function updateTableVis() {
     tb_visitas.ajax.reload();
 }
+mostrar_acciones('tb_visitas');
 
 function OrdenPdfVis(cod) {
     window.open(`${__url}/orden-visita/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");

@@ -92,7 +92,6 @@ const tb_sucursales = new DataTable('#tb_sucursales', {
         }
     },
     columns: [
-        { data: 'id' },
         { data: 'grupo' },
         { data: 'cofide' },
         { data: 'ruc' },
@@ -108,7 +107,8 @@ const tb_sucursales = new DataTable('#tb_sucursales', {
         { data: 'acciones' }
     ],
     createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(9), td:eq(10)').addClass('text-center');
+        $(row).find('td:eq(2), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('text-center');
+        $(row).find('td:eq(9)').addClass(`td-acciones`);
     },
     processing: true
 });
@@ -116,6 +116,7 @@ const tb_sucursales = new DataTable('#tb_sucursales', {
 function updateTable() {
     tb_sucursales.ajax.reload();
 }
+mostrar_acciones('tb_sucursales');
 
 document.getElementById('form-sucursal').addEventListener('submit', function (event) {
     event.preventDefault();

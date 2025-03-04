@@ -8,7 +8,7 @@ $(document).ready(function () {
             }
         },
         {
-            control: ['#observacion', '#recomendacion'],
+            control: ['#observaciones', '#recomendacion'],
             config: {
                 require: true
             }
@@ -122,15 +122,17 @@ const tb_incidencias = new DataTable('#tb_incidencias', {
     createdRow: function (row, data, dataIndex) {
         const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
         $(row).find('td:eq(1)').addClass('text-center');
+        $(row).find('td:eq(8)').addClass('td-acciones');
         $(row).addClass(row_bg[data.estado_informe]);
     },
     order: [[1, 'desc']],
-    processing: true
+    processing: true,
 });
 
 function updateTableInc() {
     tb_incidencias.ajax.reload();
 }
+mostrar_acciones('tb_incidencias');
 
 function ShowDetailInc(e, id) {
     let obj = extractDataRow(e, 'tb_incidencias');
@@ -211,7 +213,7 @@ async function OrdenDetail(e, cod) {
 
     $.ajax({
         type: 'GET',
-        url: `${__url}/incidencias/registradas/show/${cod}`,
+        url: `${__url}/incidencias/registradas/${cod}`,
         contentType: 'application/json',
         success: function (data) {
             console.log(data);
@@ -219,12 +221,13 @@ async function OrdenDetail(e, cod) {
                 let dt = data.data;
                 let personal = dt.personal_asig;
                 var sucursal = sucursales[dt.id_sucursal];
+                var empresa = empresas[dt.ruc_empresa];
 
                 $(`#modal_orden [aria-item="direccion"]`).html(sucursal.direccion);
                 $('#modal_orden [aria-item="observacion"]').html(dt.observasion);
                 $('#codInc').val(dt.cod_incidencia);
                 var tecnicos = personal.map(persona => persona.tecnicos);
-                habilitarCodAviso(dt.codigo_aviso);
+                habilitarCodAviso(empresa.codigo_aviso);
 
                 $('#modal_orden [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));
             }
@@ -297,7 +300,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 });
 
 function AddCodAviso(e, cod) {
-    const obj = extractDataRow(e);
+    const obj = extractDataRow(e, 'tb_incidencias');    
     obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
 
     $.each(obj, function (panel, count) {
@@ -674,12 +677,16 @@ const tb_visitas = new DataTable('#tb_visitas', {
         { data: 'acciones' }
     ],
     order: [[1, 'desc']],
+    createdRow: function (row, data, dataIndex) {
+        $(row).find('td:eq(6)').addClass(`td-acciones`);
+    },
     processing: true
 });
 
 function updateTableVis() {
     tb_visitas.ajax.reload();
 }
+mostrar_acciones('tb_visitas');
 
 function ShowDetailVis(e, id) {
     $('#modal_seguimiento_visitasp').find('.modal-body').addClass('d-none');

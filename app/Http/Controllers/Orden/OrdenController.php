@@ -26,7 +26,7 @@ class OrdenController extends Controller
                 'n_orden' => 'required|string',
                 'codInc' => 'required|string',
                 'check_cod' => 'required|boolean',
-                'observacion' => 'required|string',
+                'observaciones' => 'required|string',
                 'recomendacion' => 'required|string',
                 'fecha_f' => 'required|date',
                 'hora_f' => 'required|date_format:H:i:s',
@@ -45,12 +45,11 @@ class OrdenController extends Controller
 
             DB::beginTransaction();
             // Insertar correlativo si se seleccionó
-            if ($request->check_cod) {
-                DB::table('tb_orden_correlativo')->insert([
-                    'num_orden' => $request->n_orden,
-                    'created_at' => now()->format('Y-m-d H:i:s')
-                ]);
-            }
+            DB::table('tb_orden_correlativo')->insert([
+                'num_orden' => $request->n_orden,
+                'created_at' => now()->format('Y-m-d H:i:s')
+            ]);
+            
             // Crear contacto (si aplica)
             $idContacto = null;
             if ($request->n_doc || $request->nom_cliente) {
@@ -61,7 +60,7 @@ class OrdenController extends Controller
             DB::table('tb_orden_servicio')->insert([
                 'cod_ordens' => $request->n_orden,
                 'cod_incidencia' => $request->codInc,
-                'observaciones' => $request->observacion,
+                'observaciones' => $request->observaciones,
                 'recomendaciones' => $request->recomendacion,
                 'id_contacto' => $idContacto,
                 'codigo_aviso' => $codAviso,

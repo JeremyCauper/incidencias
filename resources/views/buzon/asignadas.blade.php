@@ -206,9 +206,9 @@
                             <div class="col-12">
                                 <table id="tb_incidencias" class="table table-hover text-nowrap" style="width:100%">
                                     <thead>
-                                        <tr class="text-bg-primary">
+                                        <tr class="text-bg-primary text-center">
                                             <th>Incidencia</th>
-                                            <th class="text-center">Estado</th>
+                                            <th>Estado</th>
                                             <th>Registrado</th>
                                             <th>Asignado</th>
                                             <th>Empresa</th>
@@ -233,14 +233,14 @@
                             <div class="col-12">
                                 <table id="tb_visitas" class="table table-hover text-nowrap" style="width:100%">
                                     <thead>
-                                        <tr class="text-bg-primary">
-                                            <th class="text-center">Estado</th>
+                                        <tr class="text-bg-primary text-center">
+                                            <th>Estado</th>
                                             <th>Registrado</th>
                                             <th>Empresa</th>
                                             <th>Sucursal</th>
                                             <th>Asignado</th>
                                             <th>Programado</th>
-                                            <th class="text-center">Acciones</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -259,7 +259,7 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia
-                        <span class="ms-2 badge badge-success badge-lg" aria-item="codigo"></span>
+                        <span class="ms-2 badge badge-success badge-lg" aria-item="incidencia"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
@@ -308,7 +308,7 @@
             <form class="modal-content" id="form-orden">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title">ORDEN DE SERVICIO <span class="badge badge-success badge-lg"
-                            aria-item="codigo"></span></h6>
+                            aria-item="incidencia"></span></h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -390,8 +390,8 @@
                             <div class="row justify-content-md-center">
                                 <div class="col-md-6">
                                     <div class="form-group pt-2">
-                                        <label class="form-label" for="observacion">Observaciones</label>
-                                        <textarea class="form-control" id="observacion"
+                                        <label class="form-label" for="observaciones">Observaciones</label>
+                                        <textarea class="form-control" id="observaciones"
                                             style="height: 80px;resize: none;"></textarea>
                                     </div>
                                 </div>
@@ -517,8 +517,8 @@
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-addcod">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Añadir Codigo Aviso -
-                        <span class="badge badge-success badge-lg" aria-item="codigo"></span>
+                    <h6 class="modal-title">Añadir Codigo Aviso 
+                        <span class="badge badge-success badge-lg" aria-item="incidencia"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>

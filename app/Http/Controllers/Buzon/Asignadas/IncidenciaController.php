@@ -34,6 +34,7 @@ class IncidenciaController extends Controller
 
                 return [
                     'cod_inc' => $inc->cod_incidencia ?? null,
+                    'estado_informe' => $inc->estado_informe,
                     'estado' => $badge_informe,
                     'registrado' => $inc->created_at ?? null,
                     'iniciado' => $asignada,
@@ -46,7 +47,7 @@ class IncidenciaController extends Controller
                         'button' => [
                             ['funcion' => "ShowDetailInc(this, '$inc->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
                             $inc->estado_informe == 1 ? ['funcion' => "StartInc('$inc->cod_incidencia', $inc->estado_informe)", 'texto' => '<i class="' . ($inc->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($inc->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia'] : null,
-                            $inc->estado_informe == 2 ? ['funcion' => "OrdenDetail(this, '$inc->id_incidencia')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio'] : null,
+                            $inc->estado_informe == 2 ? ['funcion' => "OrdenDetail(this, '$inc->cod_incidencia')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio'] : null,
                             $inc->estado_informe == 4 ? ['funcion' => "AddCodAviso(this, '$inc->cod_incidencia')", 'texto' => '<i class="far fa-file-code text-warning me-2"></i> Añadir Cod. Aviso'] : null,
                         ]
                     ])

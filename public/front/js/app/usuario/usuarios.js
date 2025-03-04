@@ -127,7 +127,8 @@ const tb_usuario = new DataTable('#tb_usuario', {
         { data: 'acciones' }
     ],
     createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(2)').addClass('text-center');
+        $(row).find('td:eq(0), td:eq(2), td:eq(5), td:eq(6)').addClass('text-center');
+        $(row).find('td:eq(6)').addClass(`td-acciones`);
     },
     processing: true
 });
@@ -135,6 +136,7 @@ const tb_usuario = new DataTable('#tb_usuario', {
 function updateTable() {
     tb_usuario.ajax.reload();
 }
+mostrar_acciones('tb_usuario');
 
 document.getElementById('form-usuario').addEventListener('submit', function (event) {
     event.preventDefault();
