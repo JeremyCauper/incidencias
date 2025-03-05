@@ -3981,13 +3981,12 @@ tr {
     background-color: rgb(255 255 255 / 100%);
 }
 
-tr:has(.td-acciones) {
+/* tr:has(.td-acciones) {
     position: relative;
-}
+} */
 
 .active-acciones {
     position: sticky;
     right: -75px;
-    width: 75px !important;
     z-index: 999;
 }

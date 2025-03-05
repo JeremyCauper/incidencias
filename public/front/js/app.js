@@ -274,7 +274,7 @@ function animateProperty(element, property, start, end, duration, fps, callback)
     }, 1000 / fps);
 }
 
-function mostrar_acciones(table = null) {
+async function mostrar_acciones(table = null) {
     const tableSelector = table ? `#${table}` : '';
     // Determina el contenedor en base a si se pasa o no un id de tabla
     const wrapperSelector = table ? `#${table}_wrapper` : '.dataTables_wrapper';
@@ -286,9 +286,29 @@ function mostrar_acciones(table = null) {
             const accionesTd = this.querySelector(".td-acciones");
             if (!accionesTd) return;
 
-            // Evento mouseenter: inicia la animación de entrada
-            $fila.on("mouseenter", function () {
-                const $contenedorBody = $(`${wrapperSelector} .dataTables_scrollBody`);
+            $fila.on("click", async function () {
+                $activo = $(accionesTd);
+                $td_activo = $("tr .td-acciones.active-acciones");
+
+                if (!$activo.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
+                    animateProperty($td_activo[0], "right", 0, -75, 150, 60, () => {
+                        $td_activo[0].classList.remove("active-acciones");
+                        $td_activo[0].removeAttribute("style");
+                    });
+                }
+
+                if ($activo.hasClass('active-acciones')) {
+                    $button = $activo.find('.btn-group button[type="button"]');
+                    if (!$button.hasClass('show')) {
+                        return animateProperty(accionesTd, "right", 0, -75, 150, 60, () => {
+                            accionesTd.classList.remove("active-acciones");
+                            accionesTd.removeAttribute("style");
+                        });
+                    } else {
+                        return false;
+                    }
+                }
+
                 const bgColor = $fila.css('background-color');
                 // Extraemos los valores RGB para eliminar cualquier opacidad
                 const valores = bgColor.match(/\d+/g);
@@ -297,47 +317,102 @@ function mostrar_acciones(table = null) {
                 accionesTd.classList.add("active-acciones");
                 accionesTd.setAttribute("style", `background-color: ${nuevoColor};`);
 
-
-                // Animación: de -75 a -32 en 200ms a 60 fps
-                animateProperty(accionesTd, "right", -75, -25, 150, 60);
+                // Animación: de -75 a 0 en 200ms a 60 fps
+                animateProperty(accionesTd, "right", -75, 0, 150, 60);
             });
+            /*if (esCelular()) {
+                // Evento mouseenter: inicia la animación de entrada
+                $fila.on("click", async function () {
+                    $activo = $(accionesTd);
+                    $td_activo = $("tr .td-acciones.active-acciones");
 
-            // Evento mouseleave: anima de regreso y limpia estilos
-            $fila.on("mouseleave", function () {
-                animateProperty(accionesTd, "right", -25, -75, 150, 60, () => {
-                    accionesTd.classList.remove("active-acciones");
-                    accionesTd.removeAttribute("style");
-                });
-            });
-        });
-    });
+                    if (!$activo.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
+                        animateProperty($td_activo[0], "right", 0, -75, 150, 60, () => {
+                            $td_activo[0].classList.remove("active-acciones");
+                            $td_activo[0].removeAttribute("style");
+                        });
+                    }
 
-    // Evento de scroll en el body de la tabla para detectar el final
-    /*$(`${wrapperSelector} .dataTables_scrollBody`).on("scroll", function () {
-        const $this = $(this);
-        const posicionActual = $this.scrollLeft();
-        const maxScroll = $this[0].scrollWidth - ($this.outerWidth() + 90);
-
-
-        const fila = document.querySelector('tr:has(.active-acciones)');
-        if (fila) {
-            const accionesTd = fila.querySelector('.active-acciones');
-            if (posicionActual >= maxScroll) {
-                console.log('maxscroll');
-                
-                animateProperty(accionesTd, "right", -32, -75, 200, 60, () => {
-                    accionesTd.removeAttribute("style");
-                });
-            }
-            else {
-                console.log('minscroll');
-                if (!$(accionesTd).attr('style')) {
-                    const valores = ($(fila).css('background-color')).match(/\d+/g);
+                    if ($activo.hasClass('active-acciones')) {
+                        $button = $activo.find('.btn-group button[type="button"]');
+                        if (!$button.hasClass('show')) {
+                            return animateProperty(accionesTd, "right", 0, -75, 150, 60, () => {
+                                accionesTd.classList.remove("active-acciones");
+                                accionesTd.removeAttribute("style");
+                            });
+                        } else {
+                            return false;
+                        }
+                    }
+                    
+                    const bgColor = $fila.css('background-color');
+                    // Extraemos los valores RGB para eliminar cualquier opacidad
+                    const valores = bgColor.match(/\d+/g);
                     const nuevoColor = `rgb(${valores[0]}, ${valores[1]}, ${valores[2]})`;
 
-                    accionesTd.setAttribute("style", `background-color: ${nuevoColor}; padding-left: 0px !important;`);
-                }
-            }
-        }
-    });*/
+                    accionesTd.classList.add("active-acciones");
+                    accionesTd.setAttribute("style", `background-color: ${nuevoColor};`);
+
+                    // Animación: de -75 a 0 en 200ms a 60 fps
+                    animateProperty(accionesTd, "right", -75, 0, 150, 60);
+                });
+            } else {
+                // Evento mouseenter: inicia la animación de entrada
+                $fila.on("mouseenter", function () {
+                    $activo = $(accionesTd);
+                    $td_activo = $("tr .td-acciones.active-acciones");
+
+                    if (!$activo.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
+                        animateProperty($td_activo[0], "right", 0, -75, 150, 60, () => {
+                            $td_activo[0].classList.remove("active-acciones");
+                            $td_activo[0].removeAttribute("style");
+                        });
+                    }
+
+                    if ($activo.hasClass('active-acciones')) {
+                        $button = $activo.find('.btn-group button[type="button"]');
+                        if (!$button.hasClass('show')) {
+                            return animateProperty(accionesTd, "right", 0, -75, 150, 60, () => {
+                                accionesTd.classList.remove("active-acciones");
+                                accionesTd.removeAttribute("style");
+                            });
+                        } else {
+                            return false;
+                        }
+                    }
+
+                    const bgColor = $fila.css('background-color');
+                    // Extraemos los valores RGB para eliminar cualquier opacidad
+                    const valores = bgColor.match(/\d+/g);
+                    const nuevoColor = `rgb(${valores[0]}, ${valores[1]}, ${valores[2]})`;
+
+                    accionesTd.classList.add("active-acciones");
+                    accionesTd.setAttribute("style", `background-color: ${nuevoColor};`);
+
+                    // Animación: de -75 a 0 en 200ms a 60 fps
+                    animateProperty(accionesTd, "right", -75, 0, 150, 60);
+                });
+
+                // Evento mouseleave: anima de regreso y limpia estilos
+                $fila.on("mouseleave", function () {
+                    $activo = $(accionesTd);
+                    if ($activo.hasClass('active-acciones')) {
+                        $button = $activo.find('.btn-group button[type="button"]');
+                        if (!$button.hasClass('show')) {
+                            return animateProperty(accionesTd, "right", 0, -75, 150, 60, () => {
+                                accionesTd.classList.remove("active-acciones");
+                                accionesTd.removeAttribute("style");
+                            });
+                        } else {
+                            return false;
+                        }
+                    }
+                });
+            }*/
+        });
+    });
+}
+
+function esCelular() {
+    return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
 }
