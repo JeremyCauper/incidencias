@@ -36,6 +36,7 @@ $(document).ready(function () {
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
         $('input[input-cantidad=""]').val('');
+        changeCodOrdenV()
     });
 
     $('.modal').on('hidden.bs.modal', function () {
@@ -157,7 +158,7 @@ function ShowDetailInc(e, id) {
             var sucursal = sucursales[incidencia.id_sucursal];
 
             $(`#modal_detalle [aria-item="direccion"]`).html(sucursal.direccion);
-            $(`#modal_detalle [aria-item="observasion"]`).html(incidencia.observasion);
+            $(`#modal_detalle [aria-item="observacion"]`).html(incidencia.observacion);
 
             fMananger.formModalLoding('modal_detalle', 'hide');
             seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -224,7 +225,7 @@ async function OrdenDetail(e, cod) {
                 var empresa = empresas[dt.ruc_empresa];
 
                 $(`#modal_orden [aria-item="direccion"]`).html(sucursal.direccion);
-                $('#modal_orden [aria-item="observacion"]').html(dt.observasion);
+                $('#modal_orden [aria-item="observacion"]').html(dt.observacion);
                 $('#codInc').val(dt.cod_incidencia);
                 var tecnicos = personal.map(persona => persona.tecnicos);
                 habilitarCodAviso(empresa.codigo_aviso);
@@ -861,7 +862,7 @@ function changeCheck($this) {
     }
 }
 
-function changeCodOrdenV(val) {
+function changeCodOrdenV(val = cod_ordenv) {
     $('[name="cod_ordenv"]').val(val);
     $('#modal_orden_visita [aria-item="codigo"]').text(val);
     cod_ordenv = val;

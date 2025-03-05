@@ -285,7 +285,7 @@
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>
-                                <span style="font-size: .75rem;" aria-item="observasion"></span>
+                                <span style="font-size: .75rem;" aria-item="observacion"></span>
                             </div>
                         </div>
                     </div>

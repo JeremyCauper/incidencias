@@ -3961,32 +3961,35 @@ body {
 
 
 .row-bg-warning:hover {
-    background-color: rgb(255 227 177 / 100%) !important;
+    --mdb-table-hover-bg: rgb(255 227 177 / 100%) !important;
 }
 
 .row-bg-info:hover {
-    background-color: rgb(187 242 255 / 100%) !important;
+    --mdb-table-hover-bg: rgb(187 242 255 / 100%) !important;
     position: relative;
 }
 
 .row-bg-primary:hover {
-    background-color: rgb(174 208 255 / 100%) !important;
+    --mdb-table-hover-bg: rgb(174 208 255 / 100%) !important;
 }
 
 .row-bg-danger:hover {
-    background-color: rgb(255 171 171 / 100%) !important;
+    --mdb-table-hover-bg: rgb(255 171 171 / 100%) !important;
 }
 
 tr {
-    background-color: rgb(255 255 255 / 100%);
+    cursor: default;
+    background-color: rgb(255 255 255 / 99%);
 }
-
-/* tr:has(.td-acciones) {
-    position: relative;
-} */
 
 .active-acciones {
     position: sticky;
     right: -75px;
-    z-index: 999;
+    z-index: 10;
+}
+
+.active-acciones.sticky-activo {
+    padding-left: .6rem !important;
+    padding-right: .6rem !important;
+    text-align: left !important;
 }

@@ -3,6 +3,7 @@ $(document).ready(function () {
 
     $('.modal').on('shown.bs.modal', function () {
         $('#fecha_visita').val(date('Y-m-d'));
+        changeCodOrdenV();
     });
 
     $('.modal').on('hidden.bs.modal', function () {

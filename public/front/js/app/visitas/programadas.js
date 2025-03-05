@@ -335,7 +335,7 @@ function changeCheck($this) {
     }
 }
 
-function changeCodOrdenV(val) {
+function changeCodOrdenV(val = cod_ordenv) {
     $('[name="cod_ordenv"]').val(val);
     $('#modal_orden [aria-item="codigo"]').text(val);
     cod_ordenv = val;

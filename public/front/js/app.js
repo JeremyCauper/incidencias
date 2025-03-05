@@ -274,34 +274,38 @@ function animateProperty(element, property, start, end, duration, fps, callback)
     }, 1000 / fps);
 }
 
-async function mostrar_acciones(table = null) {
+function mostrar_acciones(table = null) {
     const tableSelector = table ? `#${table}` : '';
     // Determina el contenedor en base a si se pasa o no un id de tabla
     const wrapperSelector = table ? `#${table}_wrapper` : '.dataTables_wrapper';
 
     // Cuando se dibuja la tabla (draw.dt) se asocian los eventos a cada fila
-    $(tableSelector).on('draw.dt', function () {
+    $(tableSelector).off("draw.dt").on('draw.dt', function () {
         $("tr:has(.td-acciones)").each(function () {
             const $fila = $(this);
+            $fila.find(".td-acciones").removeAttr("style").removeClass('active-acciones').removeClass('sticky-activo');
+            
             const accionesTd = this.querySelector(".td-acciones");
             if (!accionesTd) return;
 
-            $fila.on("click", async function () {
-                $activo = $(accionesTd);
+            $fila.off("click").on("click", function () {
+                $activoTd = $(accionesTd);
                 $td_activo = $("tr .td-acciones.active-acciones");
 
-                if (!$activo.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
-                    animateProperty($td_activo[0], "right", 0, -75, 150, 60, () => {
+                if (!$activoTd.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
+                    animateProperty($td_activo[0], "right", -40, -75, 150, 60, () => {
                         $td_activo[0].classList.remove("active-acciones");
+                        $td_activo[0].classList.remove("sticky-activo");
                         $td_activo[0].removeAttribute("style");
                     });
                 }
 
-                if ($activo.hasClass('active-acciones')) {
-                    $button = $activo.find('.btn-group button[type="button"]');
+                if ($activoTd.hasClass('active-acciones')) {
+                    $button = $activoTd.find('.btn-group button[type="button"]');
                     if (!$button.hasClass('show')) {
-                        return animateProperty(accionesTd, "right", 0, -75, 150, 60, () => {
+                        return animateProperty(accionesTd, "right", -40, -75, 150, 60, () => {
                             accionesTd.classList.remove("active-acciones");
+                            accionesTd.classList.remove("sticky-activo");
                             accionesTd.removeAttribute("style");
                         });
                     } else {
@@ -315,102 +319,31 @@ async function mostrar_acciones(table = null) {
                 const nuevoColor = `rgb(${valores[0]}, ${valores[1]}, ${valores[2]})`;
 
                 accionesTd.classList.add("active-acciones");
+                let rect = $activoTd[0].getBoundingClientRect();
+                if (rect.right >= $(window).width() - 40) {
+                    $activoTd.addClass("sticky-activo");
+                }
                 accionesTd.setAttribute("style", `background-color: ${nuevoColor};`);
 
-                // Animación: de -75 a 0 en 200ms a 60 fps
-                animateProperty(accionesTd, "right", -75, 0, 150, 60);
+                // Animación: de -75 a -40 en 200ms a 60 fps
+                animateProperty(accionesTd, "right", -75, -40, 150, 60);
             });
-            /*if (esCelular()) {
-                // Evento mouseenter: inicia la animación de entrada
-                $fila.on("click", async function () {
-                    $activo = $(accionesTd);
-                    $td_activo = $("tr .td-acciones.active-acciones");
-
-                    if (!$activo.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
-                        animateProperty($td_activo[0], "right", 0, -75, 150, 60, () => {
-                            $td_activo[0].classList.remove("active-acciones");
-                            $td_activo[0].removeAttribute("style");
-                        });
-                    }
-
-                    if ($activo.hasClass('active-acciones')) {
-                        $button = $activo.find('.btn-group button[type="button"]');
-                        if (!$button.hasClass('show')) {
-                            return animateProperty(accionesTd, "right", 0, -75, 150, 60, () => {
-                                accionesTd.classList.remove("active-acciones");
-                                accionesTd.removeAttribute("style");
-                            });
-                        } else {
-                            return false;
-                        }
-                    }
-                    
-                    const bgColor = $fila.css('background-color');
-                    // Extraemos los valores RGB para eliminar cualquier opacidad
-                    const valores = bgColor.match(/\d+/g);
-                    const nuevoColor = `rgb(${valores[0]}, ${valores[1]}, ${valores[2]})`;
-
-                    accionesTd.classList.add("active-acciones");
-                    accionesTd.setAttribute("style", `background-color: ${nuevoColor};`);
-
-                    // Animación: de -75 a 0 en 200ms a 60 fps
-                    animateProperty(accionesTd, "right", -75, 0, 150, 60);
-                });
-            } else {
-                // Evento mouseenter: inicia la animación de entrada
-                $fila.on("mouseenter", function () {
-                    $activo = $(accionesTd);
-                    $td_activo = $("tr .td-acciones.active-acciones");
-
-                    if (!$activo.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
-                        animateProperty($td_activo[0], "right", 0, -75, 150, 60, () => {
-                            $td_activo[0].classList.remove("active-acciones");
-                            $td_activo[0].removeAttribute("style");
-                        });
-                    }
-
-                    if ($activo.hasClass('active-acciones')) {
-                        $button = $activo.find('.btn-group button[type="button"]');
-                        if (!$button.hasClass('show')) {
-                            return animateProperty(accionesTd, "right", 0, -75, 150, 60, () => {
-                                accionesTd.classList.remove("active-acciones");
-                                accionesTd.removeAttribute("style");
-                            });
-                        } else {
-                            return false;
-                        }
-                    }
-
-                    const bgColor = $fila.css('background-color');
-                    // Extraemos los valores RGB para eliminar cualquier opacidad
-                    const valores = bgColor.match(/\d+/g);
-                    const nuevoColor = `rgb(${valores[0]}, ${valores[1]}, ${valores[2]})`;
-
-                    accionesTd.classList.add("active-acciones");
-                    accionesTd.setAttribute("style", `background-color: ${nuevoColor};`);
-
-                    // Animación: de -75 a 0 en 200ms a 60 fps
-                    animateProperty(accionesTd, "right", -75, 0, 150, 60);
-                });
-
-                // Evento mouseleave: anima de regreso y limpia estilos
-                $fila.on("mouseleave", function () {
-                    $activo = $(accionesTd);
-                    if ($activo.hasClass('active-acciones')) {
-                        $button = $activo.find('.btn-group button[type="button"]');
-                        if (!$button.hasClass('show')) {
-                            return animateProperty(accionesTd, "right", 0, -75, 150, 60, () => {
-                                accionesTd.classList.remove("active-acciones");
-                                accionesTd.removeAttribute("style");
-                            });
-                        } else {
-                            return false;
-                        }
-                    }
-                });
-            }*/
         });
     });
+
+    // Evento de scroll para actualizar la clase sticky-activo
+    $(`${wrapperSelector} .dataTables_scrollBody`).off("scroll").on("scroll", function () {
+        let $accionTd = $(this).find('tr .td-acciones.active-acciones');
+        if (!$accionTd.length) return;
+        let rect = $accionTd[0].getBoundingClientRect();
+
+        if (rect.right <= $(window).width() - 40) {
+            $accionTd.removeClass("sticky-activo");
+        } else if (!$accionTd.hasClass('sticky-activo')) {
+            $accionTd.addClass("sticky-activo");
+        }        
+    });
+
 }
 
 function esCelular() {

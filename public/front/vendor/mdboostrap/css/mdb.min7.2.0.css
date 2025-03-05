@@ -2384,7 +2384,7 @@ progress {
     --mdb-table-active-color: var(--mdb-body-color);
     --mdb-table-active-bg: rgba(var(--mdb-emphasis-color-rgb), 0.1);
     --mdb-table-hover-color: var(--mdb-body-color);
-    --mdb-table-hover-bg: rgba(0, 0, 0, 0.025);
+    --mdb-table-hover-bg: rgb(236 236 236 / 100%);
     width: 100%;
     margin-bottom: 1rem;
     vertical-align: top;

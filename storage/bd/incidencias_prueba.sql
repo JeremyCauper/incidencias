@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mysql_local
+ Source Server         : Mi MySql
  Source Server Type    : MySQL
- Source Server Version : 100432
+ Source Server Version : 100425
  Source Host           : localhost:3306
  Source Schema         : incidencias_prueba
 
  Target Server Type    : MySQL
- Target Server Version : 100432
+ Target Server Version : 100425
  File Encoding         : 65001
 
- Date: 03/03/2025 01:59:17
+ Date: 05/03/2025 18:06:02
 */
 
 SET NAMES utf8mb4;
@@ -986,7 +986,7 @@ CREATE TABLE `tb_inc_asignadas`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_asignadas`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_inc_asignadas
@@ -1009,6 +1009,9 @@ INSERT INTO `tb_inc_asignadas` VALUES (16, 'INC-00000016', 3, 1, '2025-02-17', '
 INSERT INTO `tb_inc_asignadas` VALUES (17, 'INC-00000017', 5, 1, '2025-02-26', '12:02:43', NULL, '2025-02-26 12:02:43');
 INSERT INTO `tb_inc_asignadas` VALUES (18, 'INC-00000015', 3, 1, '2025-02-26', '14:39:21', NULL, '2025-02-26 14:39:21');
 INSERT INTO `tb_inc_asignadas` VALUES (22, 'INC-00000018', 5, 1, '2025-03-01', '14:49:16', NULL, '2025-03-01 14:49:16');
+INSERT INTO `tb_inc_asignadas` VALUES (23, 'INC-00000019', 3, 1, '2025-03-03', '10:00:59', NULL, '2025-03-03 10:00:59');
+INSERT INTO `tb_inc_asignadas` VALUES (24, 'INC-00000020', 3, 1, '2025-03-05', '12:25:42', NULL, '2025-03-05 12:25:42');
+INSERT INTO `tb_inc_asignadas` VALUES (25, 'INC-00000027', 3, 1, '2025-03-05', '16:50:45', NULL, '2025-03-05 16:50:45');
 
 -- ----------------------------
 -- Table structure for tb_inc_seguimiento
@@ -1024,7 +1027,7 @@ CREATE TABLE `tb_inc_seguimiento`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_seguimiento`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 31 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_inc_seguimiento
@@ -1059,6 +1062,12 @@ INSERT INTO `tb_inc_seguimiento` VALUES (27, 5, 'INC-00000014', '2025-02-26', '1
 INSERT INTO `tb_inc_seguimiento` VALUES (28, 5, 'INC-00000014', '2025-02-26', '12:07:05', 1, NULL, '2025-02-26 12:07:07');
 INSERT INTO `tb_inc_seguimiento` VALUES (29, 5, 'INC-00000017', '2025-02-26', '12:20:26', 0, NULL, '2025-02-26 12:20:26');
 INSERT INTO `tb_inc_seguimiento` VALUES (30, 1, 'INC-00000018', '2025-03-01', '15:00:07', 0, NULL, '2025-03-01 15:00:07');
+INSERT INTO `tb_inc_seguimiento` VALUES (31, 1, 'INC-00000017', '2025-03-03', '09:35:14', 1, NULL, '2025-03-03 09:35:17');
+INSERT INTO `tb_inc_seguimiento` VALUES (32, 3, 'INC-00000015', '2025-03-03', '11:57:23', 0, NULL, '2025-03-03 11:57:23');
+INSERT INTO `tb_inc_seguimiento` VALUES (33, 3, 'INC-00000015', '2025-03-03', '12:14:01', 1, NULL, '2025-03-03 12:14:04');
+INSERT INTO `tb_inc_seguimiento` VALUES (34, 3, 'INC-00000019', '2025-03-05', '12:32:36', 0, NULL, '2025-03-05 12:32:36');
+INSERT INTO `tb_inc_seguimiento` VALUES (35, 3, 'INC-00000019', '2025-03-05', '12:34:48', 1, NULL, '2025-03-05 12:34:51');
+INSERT INTO `tb_inc_seguimiento` VALUES (36, 1, 'INC-00000027', '2025-03-05', '16:51:00', 0, NULL, '2025-03-05 16:51:00');
 
 -- ----------------------------
 -- Table structure for tb_incidencias
@@ -1099,7 +1108,7 @@ CREATE TABLE `tb_incidencias`  (
   CONSTRAINT `tb_incidencias_ibfk_2` FOREIGN KEY (`ruc_empresa`) REFERENCES `empresas` (`ruc_empresa`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_incidencias_ibfk_3` FOREIGN KEY (`id_problema`) REFERENCES `tb_problema` (`id_problema`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_incidencias_ibfk_4` FOREIGN KEY (`id_subproblema`) REFERENCES `tb_subproblema` (`id_subproblema`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_incidencias
@@ -1118,10 +1127,19 @@ INSERT INTO `tb_incidencias` VALUES (11, 'INC-00000011', '20127765279', 20, 1, '
 INSERT INTO `tb_incidencias` VALUES (12, 'INC-00000012', '20345774042', 132, 1, 'Alta', 1, 2, 9, 88, NULL, NULL, '2025-02-02', '17:14:07', 3, 1, 1, NULL, '2025-02-02 17:16:04');
 INSERT INTO `tb_incidencias` VALUES (13, 'INC-00000013', '20345774042', 132, 1, 'Alta', 1, 2, 2, 20, 8, NULL, '2025-02-02', '18:38:24', 3, 1, 1, '2025-02-02 18:39:06', '2025-02-02 17:39:02');
 INSERT INTO `tb_incidencias` VALUES (14, 'INC-00000014', '20517103633', 163, 1, 'Alta', 3, 2, 2, 20, 9, 'urgente', '2025-02-17', '14:35:21', 3, 1, 1, NULL, '2025-02-17 14:36:22');
-INSERT INTO `tb_incidencias` VALUES (15, 'INC-00000015', '20127765279', 23, 1, 'Alta', 2, 2, 2, 19, NULL, 'urgente', '2025-02-17', '14:50:14', 1, 1, 1, NULL, '2025-02-17 14:50:43');
+INSERT INTO `tb_incidencias` VALUES (15, 'INC-00000015', '20127765279', 23, 1, 'Alta', 2, 2, 2, 19, NULL, 'urgente', '2025-02-17', '14:50:14', 3, 1, 1, NULL, '2025-02-17 14:50:43');
 INSERT INTO `tb_incidencias` VALUES (16, 'INC-00000016', '20517103633', 163, 1, 'Alta', 3, 2, 2, 20, NULL, 'urgente', '2025-02-17', '14:59:57', 3, 1, 1, NULL, '2025-02-17 15:01:58');
-INSERT INTO `tb_incidencias` VALUES (17, 'INC-00000017', '20127765279', 20, 1, 'Alta', 1, 2, 1, 3, NULL, 'pruebaaa', '2025-02-26', '12:01:45', 2, 1, 1, NULL, '2025-02-26 12:02:43');
+INSERT INTO `tb_incidencias` VALUES (17, 'INC-00000017', '20127765279', 20, 1, 'Alta', 1, 2, 1, 3, NULL, 'pruebaaa', '2025-02-26', '12:01:45', 4, 1, 1, NULL, '2025-02-26 12:02:43');
 INSERT INTO `tb_incidencias` VALUES (18, 'INC-00000018', '20127765279', 18, 1, 'Alta', 1, 2, 1, 2, NULL, 'urgente ahora', '2025-03-01', '14:04:21', 2, 1, 1, '2025-03-01 14:04:24', '2025-03-01 13:23:19');
+INSERT INTO `tb_incidencias` VALUES (19, 'INC-00000019', '20127765279', 20, 1, 'Alta', 2, 2, 1, 1, NULL, 'urgentee', '2025-03-03', '10:00:21', 3, 1, 1, NULL, '2025-03-03 10:00:59');
+INSERT INTO `tb_incidencias` VALUES (20, 'INC-00000020', '20517103633', 163, 1, 'Alta', 1, 2, 1, 1, NULL, 'urgente', '2025-03-05', '12:24:38', 1, 1, 1, NULL, '2025-03-05 12:25:04');
+INSERT INTO `tb_incidencias` VALUES (21, 'INC-00000021', '20603906790', 210, 1, 'Alta', 1, 2, 1, 1, NULL, NULL, '2025-03-05', '15:17:47', 0, 1, 1, NULL, '2025-03-05 15:18:14');
+INSERT INTO `tb_incidencias` VALUES (22, 'INC-00000022', '20530743919', 174, 1, 'Alta', 1, 2, 1, 1, NULL, NULL, '2025-03-05', '15:18:19', 0, 1, 1, NULL, '2025-03-05 15:18:59');
+INSERT INTO `tb_incidencias` VALUES (23, 'INC-00000023', '20517103633', 163, 1, 'Alta', 2, 2, 2, 20, NULL, NULL, '2025-03-05', '15:51:15', 0, 1, 1, NULL, '2025-03-05 15:51:27');
+INSERT INTO `tb_incidencias` VALUES (24, 'INC-00000024', '20513567139', 94, 1, 'Alta', 1, 2, 1, 3, NULL, NULL, '2025-03-05', '15:51:39', 0, 1, 1, NULL, '2025-03-05 15:51:54');
+INSERT INTO `tb_incidencias` VALUES (25, 'INC-00000025', '20517103633', 163, 1, 'Alta', 1, 2, 1, 1, NULL, 'urgente', '2025-03-05', '15:56:50', 0, 1, 1, NULL, '2025-03-05 15:57:07');
+INSERT INTO `tb_incidencias` VALUES (26, 'INC-00000026', '20127765279', 17, 1, 'Alta', 1, 2, 2, 20, NULL, NULL, '2025-03-05', '15:57:53', 0, 1, 1, NULL, '2025-03-05 15:58:10');
+INSERT INTO `tb_incidencias` VALUES (27, 'INC-00000027', '20127765279', 19, 1, 'Alta', 1, 2, 2, 23, NULL, NULL, '2025-03-05', '16:08:57', 2, 1, 1, NULL, '2025-03-05 16:09:27');
 
 -- ----------------------------
 -- Table structure for tb_materiales
@@ -1181,7 +1199,7 @@ CREATE TABLE `tb_materiales_usados`  (
   INDEX `cod_ordens`(`cod_ordens`) USING BTREE,
   INDEX `id_material`(`id_material`) USING BTREE,
   CONSTRAINT `tb_materiales_usados_ibfk_2` FOREIGN KEY (`id_material`) REFERENCES `tb_materiales` (`id_materiales`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_materiales_usados
@@ -1198,6 +1216,11 @@ INSERT INTO `tb_materiales_usados` VALUES (9, 'ST24-00000009', 18, 1, NULL, '202
 INSERT INTO `tb_materiales_usados` VALUES (10, 'ST24-00000013', 2, 2, NULL, '2025-02-17 17:54:51');
 INSERT INTO `tb_materiales_usados` VALUES (11, 'ST24-00000020', 2, 1, NULL, '2025-02-17 18:08:20');
 INSERT INTO `tb_materiales_usados` VALUES (12, 'ST25-00000021', 3, 1, NULL, '2025-02-26 11:53:23');
+INSERT INTO `tb_materiales_usados` VALUES (13, 'ST25-00000023', 2, 1, NULL, '2025-03-03 09:35:17');
+INSERT INTO `tb_materiales_usados` VALUES (14, 'ST25-00000023', 4, 2, NULL, '2025-03-03 09:35:17');
+INSERT INTO `tb_materiales_usados` VALUES (15, 'ST25-00000024', 3, 1, NULL, '2025-03-03 12:14:04');
+INSERT INTO `tb_materiales_usados` VALUES (16, 'ST25-00000024', 6, 2, NULL, '2025-03-03 12:14:04');
+INSERT INTO `tb_materiales_usados` VALUES (17, 'ST25-00000025', 1, 1, NULL, '2025-03-05 12:34:51');
 
 -- ----------------------------
 -- Table structure for tb_menu
@@ -1238,7 +1261,7 @@ CREATE TABLE `tb_orden_correlativo`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_cor`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_correlativo
@@ -1255,6 +1278,9 @@ INSERT INTO `tb_orden_correlativo` VALUES (20, 'ST24-00000013', NULL, '2025-02-1
 INSERT INTO `tb_orden_correlativo` VALUES (21, 'ST24-00000020', NULL, '2025-02-17 18:08:20');
 INSERT INTO `tb_orden_correlativo` VALUES (22, 'ST24-00000021', NULL, '2025-02-17 18:08:20');
 INSERT INTO `tb_orden_correlativo` VALUES (23, 'ST24-00000022', NULL, '2025-02-26 14:02:19');
+INSERT INTO `tb_orden_correlativo` VALUES (24, 'ST25-00000023', NULL, NULL);
+INSERT INTO `tb_orden_correlativo` VALUES (25, 'ST25-00000024', NULL, '2025-03-03 12:14:04');
+INSERT INTO `tb_orden_correlativo` VALUES (26, 'ST25-00000025', NULL, '2025-03-05 12:34:51');
 
 -- ----------------------------
 -- Table structure for tb_orden_servicio
@@ -1275,7 +1301,7 @@ CREATE TABLE `tb_orden_servicio`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_ordens`) USING BTREE,
   INDEX `cod_ordens`(`cod_ordens`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_servicio
@@ -1293,6 +1319,9 @@ INSERT INTO `tb_orden_servicio` VALUES (17, 'ST24-00000020', 'INC-00000012', 'ob
 INSERT INTO `tb_orden_servicio` VALUES (18, 'ST25-00000021', 'INC-00000013', 'no imprime', 'tiene que imprimir', 4, '2025-02-26', '11:53:20', '3', 1, NULL, '2025-02-26 11:53:23');
 INSERT INTO `tb_orden_servicio` VALUES (19, 'ST25-00000021', 'INC-00000016', 'ok', 'ok', 4, '2025-02-26', '12:05:51', '3', 1, NULL, '2025-02-26 12:05:53');
 INSERT INTO `tb_orden_servicio` VALUES (20, 'ST25-00000022', 'INC-00000014', 'ee', 'ee', NULL, '2025-02-26', '12:07:05', '3', 1, NULL, '2025-02-26 12:07:07');
+INSERT INTO `tb_orden_servicio` VALUES (21, 'ST25-00000023', 'INC-00000017', 'no lee', 'tiene que leer', NULL, '2025-03-03', '09:35:14', NULL, 1, NULL, '2025-03-03 09:35:17');
+INSERT INTO `tb_orden_servicio` VALUES (22, 'ST25-00000024', 'INC-00000015', 'no imprime', 'que imprima', NULL, '2025-03-03', '12:14:01', 'qwerty', 1, '2025-03-03 12:20:36', '2025-03-03 12:14:04');
+INSERT INTO `tb_orden_servicio` VALUES (23, 'ST25-00000025', 'INC-00000019', 'no lee', 'debe leer', NULL, '2025-03-05', '12:34:48', 'qwerty', 1, '2025-03-05 12:35:25', '2025-03-05 12:34:51');
 
 -- ----------------------------
 -- Table structure for tb_orden_visita
@@ -1308,7 +1337,7 @@ CREATE TABLE `tb_orden_visita`  (
   `eliminado` tinyint(1) NULL DEFAULT 0,
   `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_visita
@@ -1317,6 +1346,8 @@ INSERT INTO `tb_orden_visita` VALUES (1, 'VT25-00000001', 9, '2025-02-24', '09:1
 INSERT INTO `tb_orden_visita` VALUES (2, 'VT25-00000002', 10, '2025-02-24', '12:18:24', '12:18:24', 0, '2025-02-24 12:18:24');
 INSERT INTO `tb_orden_visita` VALUES (5, 'VT25-00000003', 11, '2025-02-24', '15:40:41', '15:40:41', 0, '2025-02-24 15:40:41');
 INSERT INTO `tb_orden_visita` VALUES (6, 'VT25-00000004', 14, '2025-02-26', '15:28:18', '15:28:18', 0, '2025-02-26 15:28:18');
+INSERT INTO `tb_orden_visita` VALUES (7, 'VT25-00000005', 16, '2025-03-03', '12:30:30', '12:30:30', 0, '2025-03-03 12:30:30');
+INSERT INTO `tb_orden_visita` VALUES (8, 'VT25-00000006', 17, '2025-03-05', '12:49:18', '12:49:18', 0, '2025-03-05 12:49:18');
 
 -- ----------------------------
 -- Table structure for tb_orden_visita_correlativo
@@ -1327,7 +1358,7 @@ CREATE TABLE `tb_orden_visita_correlativo`  (
   `cod_orden_visita` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_visita_correlativo
@@ -1336,6 +1367,8 @@ INSERT INTO `tb_orden_visita_correlativo` VALUES (1, 'VT25-00000001', '2025-02-2
 INSERT INTO `tb_orden_visita_correlativo` VALUES (2, 'VT25-00000002', '2025-02-24 12:18:24');
 INSERT INTO `tb_orden_visita_correlativo` VALUES (5, 'VT25-00000003', '2025-02-24 15:40:41');
 INSERT INTO `tb_orden_visita_correlativo` VALUES (6, 'VT25-00000004', '2025-02-26 15:28:18');
+INSERT INTO `tb_orden_visita_correlativo` VALUES (7, 'VT25-00000005', '2025-03-03 12:30:30');
+INSERT INTO `tb_orden_visita_correlativo` VALUES (8, 'VT25-00000006', '2025-03-05 12:49:18');
 
 -- ----------------------------
 -- Table structure for tb_orden_visita_filas
@@ -1349,7 +1382,7 @@ CREATE TABLE `tb_orden_visita_filas`  (
   `descripcion` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 85 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 113 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_visita_filas
@@ -1410,6 +1443,34 @@ INSERT INTO `tb_orden_visita_filas` VALUES (81, 'VT25-00000004', 11, 0, NULL, '2
 INSERT INTO `tb_orden_visita_filas` VALUES (82, 'VT25-00000004', 12, 0, NULL, '2025-02-26 15:28:16');
 INSERT INTO `tb_orden_visita_filas` VALUES (83, 'VT25-00000004', 13, 0, NULL, '2025-02-26 15:28:16');
 INSERT INTO `tb_orden_visita_filas` VALUES (84, 'VT25-00000004', 14, 0, NULL, '2025-02-26 15:28:16');
+INSERT INTO `tb_orden_visita_filas` VALUES (85, 'VT25-00000005', 1, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (86, 'VT25-00000005', 2, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (87, 'VT25-00000005', 3, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (88, 'VT25-00000005', 4, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (89, 'VT25-00000005', 5, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (90, 'VT25-00000005', 6, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (91, 'VT25-00000005', 7, 1, '16676', '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (92, 'VT25-00000005', 8, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (93, 'VT25-00000005', 9, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (94, 'VT25-00000005', 10, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (95, 'VT25-00000005', 11, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (96, 'VT25-00000005', 12, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (97, 'VT25-00000005', 13, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (98, 'VT25-00000005', 14, 0, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_filas` VALUES (99, 'VT25-00000006', 1, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (100, 'VT25-00000006', 2, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (101, 'VT25-00000006', 3, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (102, 'VT25-00000006', 4, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (103, 'VT25-00000006', 5, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (104, 'VT25-00000006', 6, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (105, 'VT25-00000006', 7, 1, '16776', '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (106, 'VT25-00000006', 8, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (107, 'VT25-00000006', 9, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (108, 'VT25-00000006', 10, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (109, 'VT25-00000006', 11, 1, 'windown', '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (110, 'VT25-00000006', 12, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (111, 'VT25-00000006', 13, 0, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_filas` VALUES (112, 'VT25-00000006', 14, 0, NULL, '2025-03-05 12:49:15');
 
 -- ----------------------------
 -- Table structure for tb_orden_visita_islas
@@ -1438,7 +1499,7 @@ CREATE TABLE `tb_orden_visita_islas`  (
   `des_switch` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 13 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_visita_islas
@@ -1448,6 +1509,9 @@ INSERT INTO `tb_orden_visita_islas` VALUES (2, 'VT25-00000002', NULL, NULL, 0, N
 INSERT INTO `tb_orden_visita_islas` VALUES (3, 'VT25-00000003', '1', '2', 1, '3032324543', 0, NULL, 1, '2', 0, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, NULL, '2025-02-24 15:11:11');
 INSERT INTO `tb_orden_visita_islas` VALUES (4, 'VT25-00000003', '2', '3', 1, '32454345324', 0, NULL, 1, '45679', 0, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, NULL, '2025-02-24 15:11:11');
 INSERT INTO `tb_orden_visita_islas` VALUES (9, 'VT25-00000004', '1', '2', 1, '324324', 0, NULL, 1, '2', 0, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, NULL, '2025-02-26 15:28:16');
+INSERT INTO `tb_orden_visita_islas` VALUES (10, 'VT25-00000005', '1', '2', 1, '324543', 0, NULL, 1, '2', 0, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, NULL, '2025-03-03 12:30:28');
+INSERT INTO `tb_orden_visita_islas` VALUES (11, 'VT25-00000006', '1', '2', 1, '12434323', 0, NULL, 1, '2', 0, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, NULL, '2025-03-05 12:49:15');
+INSERT INTO `tb_orden_visita_islas` VALUES (12, 'VT25-00000006', '2', '3', 1, '4234234', 0, NULL, 1, '3', 0, NULL, 0, NULL, 0, NULL, 0, NULL, NULL, NULL, '2025-03-05 12:49:15');
 
 -- ----------------------------
 -- Table structure for tb_problema
@@ -2243,7 +2307,7 @@ CREATE TABLE `tb_vis_asignadas`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_visitas`(`id_visitas`) USING BTREE,
   CONSTRAINT `tb_vis_asignadas_ibfk_1` FOREIGN KEY (`id_visitas`) REFERENCES `tb_visitas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 23 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_vis_asignadas
@@ -2258,6 +2322,10 @@ INSERT INTO `tb_vis_asignadas` VALUES (19, 13, 5, 1, '2025-02-26', '12:03:45', '
 INSERT INTO `tb_vis_asignadas` VALUES (20, 14, 5, 1, '2025-02-26', '15:10:17', '2025-02-26 15:10:17');
 INSERT INTO `tb_vis_asignadas` VALUES (21, 15, 5, 1, '2025-02-26', '16:28:05', '2025-02-26 16:28:05');
 INSERT INTO `tb_vis_asignadas` VALUES (22, 16, 3, 1, '2025-03-03', '01:50:30', '2025-03-03 01:50:30');
+INSERT INTO `tb_vis_asignadas` VALUES (23, 17, 3, 1, '2025-03-05', '12:30:10', '2025-03-05 12:30:10');
+INSERT INTO `tb_vis_asignadas` VALUES (24, 18, 4, 1, '2025-03-05', '12:30:45', '2025-03-05 12:30:45');
+INSERT INTO `tb_vis_asignadas` VALUES (25, 19, 3, 1, '2025-03-05', '13:09:39', '2025-03-05 13:09:39');
+INSERT INTO `tb_vis_asignadas` VALUES (26, 20, 3, 1, '2025-03-05', '13:11:10', '2025-03-05 13:11:10');
 
 -- ----------------------------
 -- Table structure for tb_vis_seguimiento
@@ -2274,7 +2342,7 @@ CREATE TABLE `tb_vis_seguimiento`  (
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_visitas`(`id_visitas`) USING BTREE,
   CONSTRAINT `tb_vis_seguimiento_ibfk_1` FOREIGN KEY (`id_visitas`) REFERENCES `tb_visitas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 22 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_vis_seguimiento
@@ -2288,6 +2356,11 @@ INSERT INTO `tb_vis_seguimiento` VALUES (13, 11, 1, '2025-02-24', '15:40:41', 1,
 INSERT INTO `tb_vis_seguimiento` VALUES (14, 14, 5, '2025-02-26', '15:24:42', 0, '2025-02-26 15:24:42');
 INSERT INTO `tb_vis_seguimiento` VALUES (15, 14, 5, '2025-02-26', '15:28:18', 1, '2025-02-26 15:28:18');
 INSERT INTO `tb_vis_seguimiento` VALUES (16, 15, 5, '2025-02-26', '16:33:43', 0, '2025-02-26 16:33:43');
+INSERT INTO `tb_vis_seguimiento` VALUES (17, 16, 3, '2025-03-03', '12:21:02', 0, '2025-03-03 12:21:02');
+INSERT INTO `tb_vis_seguimiento` VALUES (18, 16, 3, '2025-03-03', '12:30:30', 1, '2025-03-03 12:30:30');
+INSERT INTO `tb_vis_seguimiento` VALUES (19, 17, 3, '2025-03-05', '12:40:48', 0, '2025-03-05 12:40:48');
+INSERT INTO `tb_vis_seguimiento` VALUES (20, 17, 3, '2025-03-05', '12:49:18', 1, '2025-03-05 12:49:18');
+INSERT INTO `tb_vis_seguimiento` VALUES (21, 20, 3, '2025-03-05', '13:13:07', 0, '2025-03-05 13:13:07');
 
 -- ----------------------------
 -- Table structure for tb_visitas
@@ -2308,7 +2381,7 @@ CREATE TABLE `tb_visitas`  (
   INDEX `id_creador`(`id_creador`) USING BTREE,
   CONSTRAINT `tb_visitas_ibfk_1` FOREIGN KEY (`id_sucursal`) REFERENCES `tb_sucursales` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_visitas_ibfk_2` FOREIGN KEY (`id_creador`) REFERENCES `usuarios` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 17 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 21 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_visitas
@@ -2318,10 +2391,14 @@ INSERT INTO `tb_visitas` VALUES (9, 121, 1, '2025-02-20', '19:49:26', 2, 0, 0, '
 INSERT INTO `tb_visitas` VALUES (10, 284, 1, '2025-02-21', '20:21:18', 2, 0, 0, '2025-02-18 20:21:18');
 INSERT INTO `tb_visitas` VALUES (11, 121, 1, '2025-02-27', '12:47:17', 2, 0, 0, '2025-02-24 12:47:17');
 INSERT INTO `tb_visitas` VALUES (12, 17, 1, '2025-02-26', '12:00:19', 0, 0, 1, '2025-02-26 12:00:19');
-INSERT INTO `tb_visitas` VALUES (13, 20, 1, '2025-02-26', '12:03:45', 0, 0, 0, '2025-02-26 12:03:45');
+INSERT INTO `tb_visitas` VALUES (13, 20, 1, '2025-02-26', '12:03:45', 0, 0, 1, '2025-02-26 12:03:45');
 INSERT INTO `tb_visitas` VALUES (14, 284, 1, '2025-02-27', '15:10:17', 2, 0, 0, '2025-02-26 15:10:17');
-INSERT INTO `tb_visitas` VALUES (15, 23, 1, '2025-02-26', '16:28:05', 1, 0, 0, '2025-02-26 16:28:05');
-INSERT INTO `tb_visitas` VALUES (16, 121, 1, '2025-03-05', '01:50:30', 0, 0, 0, '2025-03-03 01:50:30');
+INSERT INTO `tb_visitas` VALUES (15, 23, 1, '2025-02-26', '16:28:05', 1, 0, 1, '2025-02-26 16:28:05');
+INSERT INTO `tb_visitas` VALUES (16, 121, 1, '2025-03-05', '01:50:30', 2, 0, 0, '2025-03-03 01:50:30');
+INSERT INTO `tb_visitas` VALUES (17, 121, 1, '2025-03-05', '12:30:10', 2, 0, 0, '2025-03-05 12:30:10');
+INSERT INTO `tb_visitas` VALUES (18, 284, 1, '2025-03-05', '12:30:45', 0, 0, 0, '2025-03-05 12:30:45');
+INSERT INTO `tb_visitas` VALUES (19, 20, 1, '2025-03-05', '13:09:39', 0, 0, 0, '2025-03-05 13:09:39');
+INSERT INTO `tb_visitas` VALUES (20, 121, 1, '2025-03-05', '13:11:10', 1, 0, 0, '2025-03-05 13:11:10');
 
 -- ----------------------------
 -- Table structure for tipo_usuario
