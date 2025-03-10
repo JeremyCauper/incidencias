@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('title', 'Visitas')
 
-@section('style')
+@section('cabecera')
 <script type="text/javascript" src="{{asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
 <script type="text/javascript" src="{{asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
 <link rel="stylesheet" type="text/css" href="{{asset('front/vendor/daterangepicker/daterangepicker.css')}}">

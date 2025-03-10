@@ -30,7 +30,14 @@ class UsuarioController extends Controller
             $data['areas'] = DB::table('tb_area')->where('estatus', 1)->get();
             $data['tipoAcceso'] = DB::table('tipo_usuario')->where('estatus', 1)->get();
 
-            $menu = DB::table('tb_menu')->select(['id_menu', 'descripcion', 'icon'])->where('estatus', 1)->get();
+            $tipo_menu = [0];
+            if (session('tipo_acceso') == 5) {
+                array_push($tipo_menu, 1);
+            }
+
+            $menu = DB::table('tb_menu')->select(['id_menu', 'descripcion', 'icon'])
+                ->where('estatus', 1)
+                ->whereIn('sistema', $tipo_menu)->get();
             $submenus = DB::table('tb_submenu')->select(['id_submenu', 'id_menu', 'descripcion', 'categoria'])->where('estatus', 1)->get()->groupBy('id_menu');
 
             $data['menus'] = $menu->map(function ($item) use ($submenus) {
@@ -65,12 +72,11 @@ class UsuarioController extends Controller
             $usuarios = DB::table('usuarios')
                 ->select('ndoc_usuario', 'id_usuario', 'nombres', 'apellidos', 'usuario', 'pass_view', 'estatus', 'tipo_acceso')
                 ->where('eliminado', 0)
+                ->when(session('tipo_acceso') != 5, function ($query) {
+                    return $query->whereNot('tipo_acceso', 5);
+                })
                 ->get()->map(function ($usu) use ($tipoAcceso) {
                     $estado = [
-                        ['color' => 'danger', 'text' => 'Inactivo'],
-                        ['color' => 'success', 'text' => 'Activo']
-                    ];
-                    $tipo_usu = [
                         ['color' => 'danger', 'text' => 'Inactivo'],
                         ['color' => 'success', 'text' => 'Activo']
                     ];

@@ -3882,6 +3882,7 @@ body {
     background-color: #979797;
     border-radius: 20px;
     border: 2px solid #f1f2f3;
+    cursor: pointer;
 }
 
 .dataTables_scrollBody::-webkit-scrollbar-track {

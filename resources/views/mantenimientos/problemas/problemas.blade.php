@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('title', 'Problemas')
 
-@section('style')
+@section('cabecera')
 <!-- <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}"> -->
 @endsection
 @section('content')

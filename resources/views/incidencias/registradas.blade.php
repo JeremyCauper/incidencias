@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('title', 'Panel de Control')
 
-@section('style')
+@section('cabecera')
 <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}">
 @endsection
 @section('content')
@@ -78,7 +78,7 @@
                                 <th>Estacion</th>
                                 <th>Atencion</th>
                                 <th>Problema / Sub Problema</th>
-                                <th>Acciones</th>
+                                <th class="th-acciones">Acciones</th>
                             </tr>
                         </thead>
                     </table>

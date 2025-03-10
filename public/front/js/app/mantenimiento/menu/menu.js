@@ -23,7 +23,7 @@ $(document).ready(function () {
             }
         },
         {
-            control: ['#submenu', '#estado'],
+            control: ['#submenu', '#desarrollo', '#estado'],
             config: {
                 require: true
             }
@@ -38,6 +38,10 @@ $(document).ready(function () {
         $('#modal_menuLabel').html('REGISTRAR MENU');
         $('#id').val('');
     });
+
+    $('#tb_menu').off("draw.dt").on('draw.dt', function () {
+        iniciarTbOrden();
+    });
 });
 
 const tb_menu = new DataTable('#tb_menu', {
@@ -47,15 +51,26 @@ const tb_menu = new DataTable('#tb_menu', {
     fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
     ajax: {
         url: __url + '/mantenimiento/menu/menu/index',
-        dataSrc: "",
+        dataSrc: function (json) {
+            $("#tb_orden_menu tbody").html('');
+            $.each(json, function (i, e) {
+                $("#tb_orden_menu tbody").append($('<tr>', {
+                    "tr-id": e.id_menu,
+                    "tr-orden": e.orden,
+                    "draggable": "true"
+                }).html(`<td>${e.orden}</td><td><i class="${e.icon}"></i> ${e.descripcion}</td>`));
+            });
+            return json;
+        },
         error: function (xhr, error, thrown) {
             boxAlert.table();
             console.log('Respuesta del servidor:', xhr);
         }
     },
     columns: [
+        { data: 'orden' },
         { data: 'descripcion' },
-        { data: 'icon' },
+        { data: 'iconText' },
         { data: 'ruta' },
         { data: 'submenu' },
         { data: 'created_at' },
@@ -110,7 +125,7 @@ document.getElementById('form-menu').addEventListener('submit', function (event)
         },
         error: function (jqXHR) {
             console.log(jqXHR.responseJSON);
-            
+
             fMananger.formModalLoding('modal_menu', 'hide');
             let mensaje = 'Hubo un problema al procesar la solicitud. Intenta nuevamente.';
 
@@ -143,19 +158,19 @@ function Editar(id) {
                 // Verificar si la respuesta indica un error
                 if (!data.success) {
                     console.log(data.message || "Error desconocido.");
-                    return boxAlert.box({ 
-                        i: 'error', 
-                        t: 'No pudimos obtener el problema', 
-                        h: data.message || 'Hubo un problema al recuperar la información. Intenta nuevamente.' 
+                    return boxAlert.box({
+                        i: 'error',
+                        t: 'No pudimos obtener el problema',
+                        h: data.message || 'Hubo un problema al recuperar la información. Intenta nuevamente.'
                     });
                 }
 
                 // Verificar si los datos existen
                 if (!data.data) {
-                    return boxAlert.box({ 
-                        i: 'error', 
-                        t: 'Problema no encontrado', 
-                        h: 'No se encontró información sobre el problema seleccionado. Es posible que haya sido eliminado.' 
+                    return boxAlert.box({
+                        i: 'error',
+                        t: 'Problema no encontrado',
+                        h: 'No se encontró información sobre el problema seleccionado. Es posible que haya sido eliminado.'
                     });
                 }
 
@@ -178,20 +193,20 @@ function Editar(id) {
                     mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
                 }
 
-                boxAlert.box({ 
-                    i: 'error', 
-                    t: 'Error al obtener los datos', 
-                    h: mensaje 
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Error al obtener los datos',
+                    h: mensaje
                 });
 
                 console.log("Error en AJAX:", jqXHR);
             }
         });
     } catch (error) {
-        boxAlert.box({ 
-            i: 'error', 
-            t: 'Error inesperado', 
-            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        boxAlert.box({
+            i: 'error',
+            t: 'Error inesperado',
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
         });
         console.log('Error producido: ', error);
     }
@@ -229,20 +244,20 @@ async function CambiarEstado(id, estado) {
                     mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
                 }
 
-                boxAlert.box({ 
-                    i: 'error', 
-                    t: 'Error al obtener los datos', 
-                    h: mensaje 
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Error al obtener los datos',
+                    h: mensaje
                 });
 
                 console.log("Error en AJAX:", jqXHR);
             }
         });
     } catch (error) {
-        boxAlert.box({ 
-            i: 'error', 
-            t: 'Error inesperado', 
-            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        boxAlert.box({
+            i: 'error',
+            t: 'Error inesperado',
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
         });
         console.log('Error producido: ', error);
     }

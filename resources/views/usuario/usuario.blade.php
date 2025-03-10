@@ -1,7 +1,7 @@
 @extends('layout.app')
 @section('title', 'Panel de Control')
 
-@section('style')
+@section('cabecera')
 <link rel="stylesheet" href="{{asset('front/css/app/usuario/usuarios.css')}}">
 @endsection
 @section('content')

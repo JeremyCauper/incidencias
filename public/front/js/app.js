@@ -284,7 +284,7 @@ function mostrar_acciones(table = null) {
         $("tr:has(.td-acciones)").each(function () {
             const $fila = $(this);
             $fila.find(".td-acciones").removeAttr("style").removeClass('active-acciones').removeClass('sticky-activo');
-            
+
             const accionesTd = this.querySelector(".td-acciones");
             if (!accionesTd) return;
 
@@ -293,7 +293,7 @@ function mostrar_acciones(table = null) {
                 $td_activo = $("tr .td-acciones.active-acciones");
 
                 if (!$activoTd.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
-                    animateProperty($td_activo[0], "right", -40, -75, 150, 60, () => {
+                    animateProperty($td_activo[0], "right", -43, -75, 150, 60, () => {
                         $td_activo[0].classList.remove("active-acciones");
                         $td_activo[0].classList.remove("sticky-activo");
                         $td_activo[0].removeAttribute("style");
@@ -303,7 +303,7 @@ function mostrar_acciones(table = null) {
                 if ($activoTd.hasClass('active-acciones')) {
                     $button = $activoTd.find('.btn-group button[type="button"]');
                     if (!$button.hasClass('show')) {
-                        return animateProperty(accionesTd, "right", -40, -75, 150, 60, () => {
+                        return animateProperty(accionesTd, "right", -43, -75, 150, 60, () => {
                             accionesTd.classList.remove("active-acciones");
                             accionesTd.classList.remove("sticky-activo");
                             accionesTd.removeAttribute("style");
@@ -320,30 +320,29 @@ function mostrar_acciones(table = null) {
 
                 accionesTd.classList.add("active-acciones");
                 let rect = $activoTd[0].getBoundingClientRect();
-                if (rect.right >= $(window).width() - 40) {
+                if (rect.right >= $(window).width() - 43) {
                     $activoTd.addClass("sticky-activo");
                 }
                 accionesTd.setAttribute("style", `background-color: ${nuevoColor};`);
 
                 // Animación: de -75 a -40 en 200ms a 60 fps
-                animateProperty(accionesTd, "right", -75, -40, 150, 60);
+                animateProperty(accionesTd, "right", -75, -43, 150, 60);
             });
         });
     });
 
     // Evento de scroll para actualizar la clase sticky-activo
-    $(`${wrapperSelector} .dataTables_scrollBody`).off("scroll").on("scroll", function () {
+    $(`${wrapperSelector} .dataTables_scrollBody`).on("scroll", function () {
         let $accionTd = $(this).find('tr .td-acciones.active-acciones');
         if (!$accionTd.length) return;
         let rect = $accionTd[0].getBoundingClientRect();
 
-        if (rect.right <= $(window).width() - 40) {
+        if (rect.right <= $(window).width() - 43) {
             $accionTd.removeClass("sticky-activo");
         } else if (!$accionTd.hasClass('sticky-activo')) {
             $accionTd.addClass("sticky-activo");
-        }        
+        }
     });
-
 }
 
 function esCelular() {

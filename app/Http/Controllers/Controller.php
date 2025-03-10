@@ -15,18 +15,24 @@ class Controller extends BaseController
     use AuthorizesRequests, ValidatesRequests;
 
 
-    public function obtenerModulos($jsonBase64)
+    public function obtenerModulos($jsonBase64, $tipo_acceso)
     {
         // JSON en formato string con los IDs a filtrar
         $jsonString = base64_decode($jsonBase64);
     
         // Decodificar el JSON a un array asociativo
         $filteredIds = json_decode($jsonString, true);
+
+        $tipo_menu = [0];
+        if ($tipo_acceso == 5) {
+            array_push($tipo_menu, 1);
+        }
     
         // Obtener solo los menús que aparecen en el JSON
         $menu = DB::table('tb_menu')
             ->select('id_menu', 'descripcion', 'icon', 'ruta')
             ->where('estatus', 1)
+            ->whereIn('sistema', $tipo_menu)
             ->whereIn('id_menu', array_keys($filteredIds))
             ->get();
     

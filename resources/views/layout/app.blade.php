@@ -27,7 +27,9 @@
   <!-- JQuery -->
   <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
-  @yield('style')
+  <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
+  <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
+  @yield('cabecera')
 </head>
 <style>
 
@@ -229,10 +231,8 @@
   <script src="{{asset('front/js/hoverable-collapse.js') }}"></script>
   <script src="{{asset('front/js/off-canvas.js')}}"></script>
   <script src="{{asset('front/vendor/inputmask/jquery.inputmask.bundle.min.js')}}"></script>
-  <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
-  <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
   <script src="{{asset('front/js/TableManeger.js')}}"></script>
   <script src="{{asset('front/js/FormMananger.js')}}"></script>
   <!-- plugins:js -->

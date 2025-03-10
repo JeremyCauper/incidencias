@@ -226,10 +226,8 @@ const cPersonal1 = new CTable('#createPersonal1', {
 });
 
 const tb_incidencia = new DataTable('#tb_incidencia', {
-    autoWidth: true,
     scrollX: true,
     scrollY: 400,
-    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
     ajax: {
         url: `${__url}/incidencias/registradas/index`,
         dataSrc: function (json) {

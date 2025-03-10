@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mi MySql
+ Source Server         : Mysql_local
  Source Server Type    : MySQL
- Source Server Version : 100425
+ Source Server Version : 100432
  Source Host           : localhost:3306
  Source Schema         : incidencias_prueba
 
  Target Server Type    : MySQL
- Target Server Version : 100425
+ Target Server Version : 100432
  File Encoding         : 65001
 
- Date: 05/03/2025 18:06:02
+ Date: 10/03/2025 01:01:57
 */
 
 SET NAMES utf8mb4;
@@ -1233,6 +1233,8 @@ CREATE TABLE `tb_menu`  (
   `ruta` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `submenu` tinyint(1) NULL DEFAULT 0,
   `eliminado` tinyint(1) NULL DEFAULT 0,
+  `sistema` tinyint(1) NULL DEFAULT 0,
+  `orden` int(11) NULL DEFAULT NULL,
   `estatus` tinyint(1) NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
@@ -1242,14 +1244,14 @@ CREATE TABLE `tb_menu`  (
 -- ----------------------------
 -- Records of tb_menu
 -- ----------------------------
-INSERT INTO `tb_menu` VALUES (1, 'Incidencias', 'fas fa-house', '/incidencias/registradas', 0, 0, 1, '2025-02-01 18:09:27', '2025-01-31 21:00:34');
-INSERT INTO `tb_menu` VALUES (2, 'Incidencias Resueltas', 'fas fa-list-check', '/incidencias/resueltas', 0, 0, 1, '2025-02-01 15:51:23', '2025-01-31 21:00:34');
-INSERT INTO `tb_menu` VALUES (3, 'Visitas', 'fas fa-person-biking', 'ControlVisitas', 1, 0, 1, '2025-02-01 18:09:16', '2025-02-01 16:30:49');
-INSERT INTO `tb_menu` VALUES (4, 'Empresas', 'far fa-building', 'ControlEmpresas', 1, 0, 1, NULL, '2025-02-01 18:12:14');
-INSERT INTO `tb_menu` VALUES (5, 'Control de Usuarios', 'fas fa-user-group', 'ControlUsarios', 1, 0, 1, NULL, '2025-02-01 18:14:02');
-INSERT INTO `tb_menu` VALUES (6, 'Mantenimientos', 'fas fa-gears', 'ControlMantenimientos', 1, 0, 1, NULL, '2025-02-01 18:15:04');
-INSERT INTO `tb_menu` VALUES (7, 'Sistema', 'fas fa-laptop-code', 'Sistema', 1, 0, 1, NULL, '2025-02-10 15:14:55');
-INSERT INTO `tb_menu` VALUES (8, 'Buzon Tecnico', 'fas fa-address-book', 'Buzon', 1, 0, 1, NULL, '2025-02-10 16:25:23');
+INSERT INTO `tb_menu` VALUES (1, 'Incidencias', 'fas fa-house', '/incidencias/registradas', 0, 0, 0, 1, 1, '2025-02-01 18:09:27', '2025-01-31 21:00:34');
+INSERT INTO `tb_menu` VALUES (2, 'Incidencias Resueltas', 'fas fa-list-check', '/incidencias/resueltas', 0, 0, 0, 2, 1, '2025-02-01 15:51:23', '2025-01-31 21:00:34');
+INSERT INTO `tb_menu` VALUES (3, 'Visitas', 'fas fa-person-biking', 'ControlVisitas', 1, 0, 0, 3, 1, '2025-02-01 18:09:16', '2025-02-01 16:30:49');
+INSERT INTO `tb_menu` VALUES (4, 'Empresas', 'far fa-building', 'ControlEmpresas', 1, 0, 0, 4, 1, NULL, '2025-02-01 18:12:14');
+INSERT INTO `tb_menu` VALUES (5, 'Control de Usuarios', 'fas fa-user-group', 'ControlUsarios', 1, 0, 0, 5, 1, NULL, '2025-02-01 18:14:02');
+INSERT INTO `tb_menu` VALUES (6, 'Mantenimientos', 'fas fa-gears', 'ControlMantenimientos', 1, 0, 0, 6, 1, NULL, '2025-02-01 18:15:04');
+INSERT INTO `tb_menu` VALUES (7, 'Sistema', 'fas fa-laptop-code', 'Sistema', 1, 0, 1, 8, 1, NULL, '2025-02-10 15:14:55');
+INSERT INTO `tb_menu` VALUES (8, 'Buzon Tecnico', 'fas fa-address-book', 'Buzon', 1, 0, 0, 7, 1, NULL, '2025-02-10 16:25:23');
 
 -- ----------------------------
 -- Table structure for tb_orden_correlativo
@@ -2410,7 +2412,7 @@ CREATE TABLE `tipo_usuario`  (
   `color` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `estatus` tinyint(1) NULL DEFAULT 1,
   PRIMARY KEY (`id_tipo_acceso`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tipo_usuario
@@ -2419,6 +2421,7 @@ INSERT INTO `tipo_usuario` VALUES (1, 'Gerencia', 'success', 1);
 INSERT INTO `tipo_usuario` VALUES (2, 'Administrativo', 'info', 1);
 INSERT INTO `tipo_usuario` VALUES (3, 'Tecnico', 'primary', 1);
 INSERT INTO `tipo_usuario` VALUES (4, 'Personalido', 'warning', 1);
+INSERT INTO `tipo_usuario` VALUES (5, 'Sistema', 'secondary', 1);
 
 -- ----------------------------
 -- Table structure for usuarios
@@ -2460,15 +2463,16 @@ CREATE TABLE `usuarios`  (
   INDEX `Fk_Id_Area`(`id_area`) USING BTREE,
   CONSTRAINT `Fk_Id_Area` FOREIGN KEY (`id_area`) REFERENCES `tb_area` (`id_area`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `Fk_Tipo_Usuario` FOREIGN KEY (`tipo_acceso`) REFERENCES `tipo_usuario` (`id_tipo_acceso`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
-INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-02-25 08:52:42', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$Cqb.U5Z70oVD05Zdrq6a4uqS6CQIdWYHZf.cSvbk3QmYbfAsuCfG.', '123456', 'user_auth.jpg', 'fd_jcauper.png', 4, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiNyI6WyI5IiwiMTAiXSwiOCI6WyIxMSIsIjEyIl19', NULL, 0, 1, '2025-02-25 08:52:42', '2024-07-09 23:00:19');
+INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-03-07 14:38:14', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$Cqb.U5Z70oVD05Zdrq6a4uqS6CQIdWYHZf.cSvbk3QmYbfAsuCfG.', '123456', 'user_auth.jpg', 'fd_jcauper.png', 5, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiNyI6WyI5IiwiMTAiXSwiOCI6WyIxMSIsIjEyIl19', NULL, 0, 1, '2025-02-25 08:52:42', '2024-07-09 23:00:19');
 INSERT INTO `usuarios` VALUES (3, '12345678', 'Pedro', 'Suarez', 'psuarez@gmail.com', 'psuarez@email.com', '2025-02-25 08:54:29', '2003-01-14', '935423118', '952332137', 'psuarez', '$2y$12$3CmRGy97YD3R0M5j19rrRO.G6AbM6n26v8y3CPEJI8ca2.bsRSiLC', '123789', 'fp_psuarez.png', 'fd_psuarez.png', 3, 3, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 16:31:18', '2024-07-13 02:41:10');
 INSERT INTO `usuarios` VALUES (4, '74716278', 'JOSTHEIN JOSEPH', 'MAYORCA BELLEZA', 'jmayorca@gmail.com', 'jmayorca@email.com', '2025-02-25 08:54:29', '1997-06-11', '978456123', '985267341', 'jmayorca', '$2y$12$CAclmFJJoM2plUl48iJsgeRbm8WrDbu8jynetkGuWVVBxGTONEm9C', '147852', 'user_auth.jpg', 'fd_jmayorca.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 15:28:24', '2024-07-15 22:18:33');
 INSERT INTO `usuarios` VALUES (5, '70401296', 'BRYAN MARTIN', 'POLO GOMEZ', 'talvan@gmail.com', 'talvan@email.com', '2025-02-25 08:54:29', '2001-07-02', '987564123', '948741236', 'talvan', '$2y$12$6oyxU4QP06ERy7uIw4t6yeJuW1s6bmft/lUWc9SMosYlyZrHPbwN.', '987654', 'user_auth.jpg', 'fd_talvan.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 15:28:09', '2024-07-22 02:16:27');
+INSERT INTO `usuarios` VALUES (6, '72878242', 'RENZO GRACIANI', 'VIGO MALLQUI', NULL, NULL, '2025-03-07 15:26:21', '2000-01-04', NULL, NULL, 'rvigo', '$2y$12$TsJDGfxtIyBBio1kV2yVAelTj4xK/3eePkKQqS.UxVAxHzTPhodzi', '123456', 'fp_rvigo.webp', 'fd_rvigo.png', 2, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXX0=', NULL, 0, 1, NULL, '2025-03-07 15:26:21');
 
 -- ----------------------------
 -- Procedure structure for GetCodeInc

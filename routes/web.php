@@ -159,3 +159,8 @@ Route::get('/buzon-personal/visitas/resueltas/index', [RVisitaController::class,
 
 Route::get('/tipo_incidencia/index', [TipoIncidencia::class, 'all']);
 Route::get('/tipo_incidencia/{id}', [TipoIncidencia::class, 'show']);
+
+
+Route::get('/asignacion-turno', function (){
+    return view('turno.turno');
+});
