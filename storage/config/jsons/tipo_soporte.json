@@ -1,0 +1,51 @@
+[
+    {
+        "id": 1,
+        "descripcion": "Soporte Tecnico",
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 2,
+        "descripcion": "Visita Tecnica",
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 3,
+        "descripcion": "Soporte Nocturno",
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 4,
+        "descripcion": "Mantenimiento ",
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 5,
+        "descripcion": "Cambio Servidor",
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 6,
+        "descripcion": "Actualizacion de Sistema",
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 7,
+        "descripcion": "Mantenimiento Impresora",
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    }
+]

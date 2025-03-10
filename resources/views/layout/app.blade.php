@@ -1,211 +1,195 @@
 <!DOCTYPE html>
 <html lang="es">
 
-
-<!-- Mirrored from demo.bootstrapdash.com/star-admin-2-pro/themes/vertical-default-light/index.html by HTTrack Website Copier/3.x [XR&CO'2014], Wed, 26 Jun 2024 17:36:14 GMT -->
-
 <head>
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="shortcut icon" href="{{asset('front/images/app/LogoRC.png')}}" />
   <title>@yield('title')</title>
-  <!-- plugins:css -->
-  <link rel="stylesheet" href="{{asset('assets/vendors/feather/feather.css')}}">
-  <link rel="stylesheet" href="{{asset('assets/vendors/mdi/css/materialdesignicons.min.css')}}">
-  <link rel="stylesheet" href="{{asset('assets/vendors/ti-icons/css/themify-icons.css')}}">
-  <link rel="stylesheet" href="{{asset('assets/vendors/font-awesome/css/font-awesome.min.css')}}">
-  <link rel="stylesheet" href="{{asset('assets/vendors/typicons/typicons.css')}}">
-  <link rel="stylesheet" href="{{asset('assets/vendors/simple-line-icons/css/simple-line-icons.css')}}">
-  <link rel="stylesheet" href="{{asset('assets/vendors/css/vendor.bundle.base.css')}}">
-  <link rel="stylesheet" href="{{asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.css')}}">
-  <!-- endinject -->
-  <!-- Plugin css for this page -->
-  <link rel="stylesheet" href="{{asset('assets/vendors/datatables.net-bs4/dataTables.bootstrap4.css')}}">
-  <link rel="stylesheet" type="text/css" href="{{asset('assets/js/select.dataTables.min.css')}}">
-  <!-- End plugin css for this page -->
-  <!-- inject:css -->
-  <link rel="stylesheet" href="{{asset('assets/css/vertical-layout-light/style.css')}}">
-  <!-- endinject -->
-  <link rel="shortcut icon" href="{{asset('assets/images/LogoRC.png')}}" />
+  <!-- Font Awesome -->
+  <link href="{{asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}" rel="stylesheet">
+  <!-- MDB -->
+  <link href="{{asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}" rel="stylesheet">
+  <!-- Iconos -->
+  <link href="{{ asset('front/vendor/simple-icon/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ asset('front/vendor/simple-icon/styles.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
+
+  <link rel="stylesheet" href="{{asset('front/vendor/flatpickr/flatpickr.min.css')}}">
+
+  <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/animate.min.css')}}">
+  <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/default.css')}}">
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <!-- Home -->
+  <link href="{{ asset('front/css/app.css') }}" rel="stylesheet">
+  <!-- JQuery -->
+  <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
+  <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
+  <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
+  @yield('cabecera')
 </head>
 <style>
-    .sidebar-icon-only .sidebar .nav .active::before {
-      position: absolute;
-      content: "";
-      width: 2px;
-      height: 50px;
-      background-color: #1F3BB3;
-      top: 0px;
-      right: 0px;
-      z-index: 999;
-    }
+
 </style>
 
-<body class="with-welcome-text">
+<body class="with-welcome-text"> <!-- sidebar-icon-only -->
   <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
       <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
         <div class="me-3">
-          <button class="navbar-toggler navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
-            <span class="icon-menu"></span>
+          <button class="navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
+            <span class="fas fa-bars"></span>
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="{{url('/soporte')}}">
-            <img src="https://demo.bootstrapdash.com/star-admin-2-pro/themes/assets/images/logo.svg" alt="logo" />
+          <a class="navbar-brand brand-logo" href="{{url('/inicio')}}">
+            <div class="d-flex align-items-center">
+              <img src="{{asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
+            </div>
           </a>
-          <a class="navbar-brand brand-logo-mini" href="{{url('/soporte')}}">
-            <img src="https://demo.bootstrapdash.com/star-admin-2-pro/themes/assets/images/logo-mini.svg" alt="logo" />
-          </a>
+          <!-- <a class="navbar-brand brand-logo" href="{{url('/inicio')}}">
+            <img src="{{asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
+          </a> -->
         </div>
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav ms-auto">
-
-          <li class="nav-item dropdown">
-            <a class="nav-link count-indicator" id="notificationDropdown" href="#" data-bs-toggle="dropdown">
-              <i class="icon-bell"></i>
+          <!-- <li class="nav-item dropdown">
+            <a class="nav-link count-indicator" id="notificationDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+              <i class="fas fa-bell text-secondary"></i>
               <span class="count"></span>
             </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0"
-              aria-labelledby="notificationDropdown">
-              <a class="dropdown-item py-3 border-bottom">
-                <p class="mb-0 fw-medium float-start">You have 4 new notifications </p>
-                <span class="badge badge-pill badge-primary float-end">View all</span>
-              </a>
-              <a class="dropdown-item preview-item py-3">
-                <div class="preview-thumbnail">
-                  <i class="mdi mdi-alert m-auto text-primary"></i>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject fw-normal text-dark mb-1">Application Error</h6>
-                  <p class="fw-light small-text mb-0"> Just now </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item py-3">
-                <div class="preview-thumbnail">
-                  <i class="mdi mdi-lock-outline m-auto text-primary"></i>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject fw-normal text-dark mb-1">Settings</h6>
-                  <p class="fw-light small-text mb-0"> Private message </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item py-3">
-                <div class="preview-thumbnail">
-                  <i class="mdi mdi-airballoon m-auto text-primary"></i>
-                </div>
-                <div class="preview-item-content">
-                  <h6 class="preview-subject fw-normal text-dark mb-1">New user registration</h6>
-                  <p class="fw-light small-text mb-0"> 2 days ago </p>
-                </div>
-              </a>
-            </div>
+            <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
           </li>
 
           <li class="nav-item dropdown">
-            <a class="nav-link count-indicator" id="countDropdown" href="#" data-bs-toggle="dropdown"
-              aria-expanded="false">
-              <i class="icon-mail icon-lg"></i>
+            <a class="nav-link count-indicator" id="countDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
+              <i class="fas fa-envelope text-secondary"></i>
             </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown preview-list pb-0"
-              aria-labelledby="countDropdown">
-              <a class="dropdown-item py-3">
-                <p class="mb-0 fw-medium float-start">You have 7 unread mails </p>
-                <span class="badge badge-pill badge-primary float-end">View all</span>
-              </a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <img src="{{asset('assets/images/faces/face10.jpg')}}" alt="image" class="img-sm profile-pic">
-                </div>
-                <div class="preview-item-content flex-grow py-2">
-                  <p class="preview-subject ellipsis fw-medium text-dark">Marian Garner </p>
-                  <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <img src="{{asset('assets/images/faces/face12.jpg')}}" alt="image" class="img-sm profile-pic">
-                </div>
-                <div class="preview-item-content flex-grow py-2">
-                  <p class="preview-subject ellipsis fw-medium text-dark">David Grey </p>
-                  <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
-                </div>
-              </a>
-              <a class="dropdown-item preview-item">
-                <div class="preview-thumbnail">
-                  <img src="{{asset('assets/images/faces/face1.jpg')}}" alt="image" class="img-sm profile-pic">
-                </div>
-                <div class="preview-item-content flex-grow py-2">
-                  <p class="preview-subject ellipsis fw-medium text-dark">Travis Jenkins </p>
-                  <p class="fw-light small-text mb-0"> The meeting is cancelled </p>
-                </div>
-              </a>
-            </div>
-          </li>
-
-          <li class="nav-item dropdown user-dropdown">
-            <a class="nav-link" id="UserDropdown" href="#" data-bs-toggle="dropdown" aria-expanded="false">
-              <img class="img-xs rounded-circle" src="{{asset('assets/images/faces/face8.jpg')}}" alt="Profile image">
+            <ul class="dropdown-menu" aria-labelledby="countDropdown">
+              <li><a class="dropdown-item" href="#">Action</a></li>
+              <li><a class="dropdown-item" href="#">Another action</a></li>
+              <li><a class="dropdown-item" href="#">Something else here</a></li>
+            </ul>
+          </li> -->
+          <!-- <li class="nav-item dropdown user-dropdown">
+            <a class="nav-link" id="UserDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init
+              aria-expanded="false">
+              <img class="img-xs rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
+                alt="Profile image">
             </a>
             <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
               <div class="dropdown-header text-center">
-                <img class="img-md rounded-circle" src="{{asset('assets/images/faces/face8.jpg')}}" alt="Profile image">
-                <p class="mb-1 mt-3 fw-semibold">{{ Auth::user()->nombres . ' ' . Auth::user()->apellidos }}</p>
+                <img class="img-md rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
+                  alt="Profile image" style="width: 90px; height: 90px;">
+                <p class="mb-1 mt-3 fw-semibold">
+                  {{ explode(' ', Auth::user()->nombres)[0] . ' ' . explode(' ', Auth::user()->apellidos)[0]  }}
+                </p>
                 <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
               </div>
               <a class="dropdown-item">
-                <i class="dropdown-item-icon mdi mdi-account-circle-outline text-primary me-2"></i>
+                <i class="dropdown-item-icon far fa-circle-user text-primary me-2"></i>
                 Mi Perfil
                 <span class="badge badge-pill badge-danger">1</span>
               </a>
               <a class="dropdown-item">
-                <i class="dropdown-item-icon mdi mdi-calendar-check-outline text-primary me-2"></i>
+                <i class="dropdown-item-icon far fa-calendar-check text-primary me-2"></i>
                 Actividad
               </a>
               <a class="dropdown-item" href="{{url('/logout')}}">
-                <i class="dropdown-item-icon mdi mdi-power text-primary me-2"></i>
+                <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
                 Cerrar session
               </a>
             </div>
-          </li>
-
+          </li> -->
+          <!-- Avatar -->
+          <div class="dropdown">
+            <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow rounded-circle"
+              href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false" data-mdb-ripple-init>
+              <img class="img-xs rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
+                alt="Profile image">
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
+              <li>
+                <span class="dropdown-header text-center">
+                  <img class="img-md rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
+                    alt="Profile image" style="width: 90px; height: 90px;">
+                  <p class="mb-1 mt-3 fw-semibold">
+                    {{ session('nomPerfil') }}
+                  </p>
+                  <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
+                </span>
+              </li>
+              <li>
+                <a class="dropdown-item" href="{{url('/logout')}}">
+                  <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
+                  Cerrar session
+                </a>
+              </li>
+            </ul>
+          </div>
         </ul>
         <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
           data-bs-toggle="offcanvas">
-          <span class="mdi mdi-menu"></span>
+          <span class="fas fa-bars"></span>
         </button>
       </div>
+      <script>
+        var body = $('body');
+        if (eval(localStorage.sidebarIconOnly) && window.innerWidth > 992) {
+          body.addClass('sidebar-icon-only');
+        }
+        
+        $('[data-bs-toggle="minimize"]').on("click", function () {
+          localStorage.sidebarIconOnly = false;
+          if (window.innerWidth > 992) {
+            body.toggleClass('sidebar-icon-only');
+            localStorage.sidebarIconOnly = body.hasClass('sidebar-icon-only') ? true : false;
+          }
+        });
+      </script>
     </nav>
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-      <!-- partial:partials/_sidebar.html -->
+      <div class="sidebar-content"></div>
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
-          <li class="nav-item">
-            <a class="nav-link" href="{{url('/soporte')}}">
-              <i class="mdi mdi-home menu-icon"></i>
-              <span class="menu-title"><b>Panel Inicio</b></span>
-            </a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="collapse" href="#ControlUsarios" aria-expanded="false"
-              aria-controls="ControlUsarios">
-              <i class="mdi mdi-account-multiple menu-icon"></i>
-              <span class="menu-title">Control de Usuarios</span>
-              <i class="menu-arrow"></i>
-            </a>
-            <div class="collapse" id="ControlUsarios">
-              <ul class="nav flex-column sub-menu">
-                <li class="nav-item"> <a class="nav-link" href="{{url('/control-de-usuario/usuarios')}}"><b>Usuarios</b></a>
-                </li>
-                <li class="nav-item"> <a class="nav-link" href="{{url('/control-de-usuario/mi-perfil')}}"><b>Mi Perfil</b></a>
-                </li>
-              </ul>
-            </div>
-          </li>
+          @foreach (session('customModulos') as $menu)
+        <li class="nav-item menu-item">
+        <a class="nav-link menu-link" {{!empty($menu->submenu) ? 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
+          href={{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}>
+          <i class="{{ $menu->icon }} menu-icon"></i>
+          <span class="menu-title">{{ $menu->descripcion }}</span>
+          @if (!empty($menu->submenu)) <i class="menu-arrow"></i> @endif
+        </a>
+        @if (!empty($menu->submenu))
+      <div class="collapse" id="{{$menu->ruta}}">
+        <ul class="nav flex-column sub-menu">
+        @foreach ($menu->submenu as $categoria => $submenus)
+      @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
+      <li class="nav-category-item">
+      {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
+      </li>
+    @endif
+      @foreach ($submenus as $submenu)
+      <li class="nav-item">
+      <a class="nav-link" href="{{url($submenu->ruta)}}">{{ $submenu->descripcion }}</a>
+      </li>
+    @endforeach
+    @endforeach
+        </ul>
+      </div>
+    @endif
+        </li>
+      @endforeach
         </ul>
       </nav>
 
@@ -216,12 +200,12 @@
         </div>
         <!-- content-wrapper ends -->
         <!-- partial:partials/_footer.html -->
-        <footer class="footer">
+        <!-- <footer class="footer">
           <div class="d-flex justify-content-end">
             <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © {{date('Y')}}. All rights
               reserved.</span>
           </div>
-        </footer>
+        </footer> -->
         <!-- partial -->
       </div>
       <!-- main-panel ends -->
@@ -230,24 +214,29 @@
   </div>
   <!-- container-scroller -->
 
+
+  <script>
+    setTimeout(function () {
+      location.reload();
+    }, 7205000);
+    const __url = "{{url('')}}";
+    const __asset = "{{asset('/front')}}";
+    const __token = "{{ csrf_token() }}";
+  </script>
+  <!-- MDB -->
+  <script type="text/javascript" src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
+  <script src="{{asset('front/js/app.js')}}"></script>
+  <script src="{{asset('front/js/AlertMananger.js')}}"></script>
+  <script src="{{asset('front/js/template.js') }}"></script>
+  <script src="{{asset('front/js/hoverable-collapse.js') }}"></script>
+  <script src="{{asset('front/js/off-canvas.js')}}"></script>
+  <script src="{{asset('front/vendor/inputmask/jquery.inputmask.bundle.min.js')}}"></script>
+  <script src="{{asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
+  <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
+  <script src="{{asset('front/js/TableManeger.js')}}"></script>
+  <script src="{{asset('front/js/FormMananger.js')}}"></script>
   <!-- plugins:js -->
-  <script src="{{asset('assets/vendors/js/vendor.bundle.base.js')}}"></script>
-  <script src="{{asset('assets/vendors/bootstrap-datepicker/bootstrap-datepicker.min.js')}}"></script>
-  <!-- endinject -->
-  <!-- Plugin js for this page -->
-  <script src="{{asset('assets/vendors/chart.js/chart.umd.js')}}"></script>
-  <script src="{{asset('assets/vendors/progressbar.js/progressbar.min.js')}}"></script>
-  <!-- End plugin js for this page -->
-  <!-- inject:js -->
-  <script src="{{asset('assets/js/off-canvas.js')}}"></script>
-  <script src="{{asset('assets/js/hoverable-collapse.js')}}"></script>
-  <script src="{{asset('assets/js/template.js')}}"></script>
-  <script src="{{asset('assets/js/settings.js')}}"></script>
-  <script src="{{asset('assets/js/todolist.js')}}"></script>
-  <!-- endinject -->
-  <!-- Custom js for this page-->
-  <script src="{{asset('assets/js/jquery.cookie.js')}}" type="text/javascript"></script>
-  <script src="{{assert('assets/js/dashboard.js')}}"></script>
+  @yield('scripts')
 </body>
 
 </html>
