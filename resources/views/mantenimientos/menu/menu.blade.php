@@ -5,12 +5,15 @@
     <!-- <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}"> -->
 
     <style>
-        tbody tr {
+        #tb_orden_menu tbody tr {
             cursor: move;
         }
 
-        .drag-over {
-            border: 2px dashed #000;
+        /* Estilo para el placeholder */
+
+        /* Opcional: estilo para la fila que se está arrastrando */
+        .dragging {
+            opacity: 0.5;
         }
     </style>
 @endsection
@@ -153,7 +156,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
+                    <button type="submit" class="btn btn-primary" onclick="cambiarOrden()" data-mdb-ripple-init>Guardar</button>
                 </div>
             </form>
         </div>
@@ -165,60 +168,71 @@
     <script>
         function iniciarTbOrden() {
             var draggedRow = null;
+            // Creamos el placeholder
+            var $placeholder = $("<tr style='border: 2px dashed #ccc;'><td colspan='2'>&nbsp;</td></tr>");
 
-            // Inicia el arrastre de la fila
-            $('#tb_orden_menu tbody tr').on('dragstart', function (e) {
-                draggedRow = this;
-                // Configura el efecto de mover
+            // Al iniciar el arrastre: ocultamos la fila y colocamos el placeholder en su posición original
+            $('#tb_orden_menu tbody tr').on('dragstart', async function (e) {
+                draggedRow = $(this);
                 e.originalEvent.dataTransfer.effectAllowed = 'move';
+                setTimeout(() => {
+                    draggedRow.addClass('dragging').hide();
+                }, 50);
+                // Insertamos el placeholder donde estaba la fila
             });
 
-            // Permite que la fila destino reciba el drop
-            $('#tb_orden_menu tbody tr').on('dragover', function (e) {
-                e.preventDefault(); // Necesario para permitir el drop
-                e.originalEvent.dataTransfer.dropEffect = 'move';
-                $(this).addClass('drag-over'); // Resalta la fila sobre la que se pasa el cursor
-            });
-
-            // Quita el estilo al salir de la fila
-            $('#tb_orden_menu tbody tr').on('dragleave', function (e) {
-                $(this).removeClass('drag-over');
-            });
-
-            // Al soltar la fila, se reordena la tb_orden_menu
-            $('#tb_orden_menu tbody tr').on('drop', function (e) {
+            $('#tb_orden_menu tbody').on('dragover', function (e) {
                 e.preventDefault();
-                $(this).removeClass('drag-over');
-                if (draggedRow !== this) {
-                    var $thisRow = $(this);
-                    var rowHeight = $thisRow.outerHeight();
-                    var offsetY = e.originalEvent.offsetY; // posición vertical del drop relativo a la fila
-                    if (offsetY > rowHeight / 2) {
-                        // Si se soltó en la mitad inferior, insertar después
-                        $(draggedRow).insertAfter(this);
+                if (!draggedRow) return;
+
+                var posY = e.originalEvent.pageY;
+                var $target = $(e.target).closest('tr'); // Encuentra la fila sobre la que estamos pasando
+
+                if ($($target[0]).attr('tr-id') == $(draggedRow).attr('tr-id')) return;
+
+                if ($target.length && !$target.hasClass('placeholder')) {
+                    var targetOffset = $target.offset().top;
+                    var targetHeight = $target.outerHeight();
+
+                    // Si el cursor está en la mitad inferior de la fila, colocamos el placeholder después
+                    if (posY - targetOffset > targetHeight / 2) {
+                        $target.after($placeholder);
                     } else {
-                        // Si se soltó en la mitad superior, insertar antes
-                        $(draggedRow).insertBefore(this);
+                        $target.before($placeholder);
                     }
-                    actualizarOrden();
                 }
             });
 
-            // Limpia la variable global al finalizar el arrastre
-            $('#tb_orden_menu tbody tr').on('dragend', function (e) {
-                draggedRow = null;
-                $('#tb_orden_menu tbody tr').removeClass('drag-over');
+            // Al soltar, reemplazamos el placeholder por la fila oculta y actualizamos el orden
+            $('#tb_orden_menu tbody').on('drop', function (e) {
+                e.preventDefault();
+                if (draggedRow) {
+                    $placeholder.replaceWith(draggedRow);
+                    draggedRow.show().removeClass('dragging');
+                    actualizarOrden();
+                    draggedRow = null;
+                }
             });
 
-            // Actualiza el atributo tr-orden y la celda de orden
+            // En caso de cancelar el arrastre, mostramos la fila y removemos el placeholder
+            $('#tb_orden_menu tbody').on('dragend', function (e) {
+                if (draggedRow) {
+                    draggedRow.show().removeClass('dragging');
+                    draggedRow = null;
+                }
+                $placeholder.remove(); // Se elimina el placeholder
+            });
+
+            // Función para actualizar el atributo 'tr-orden' y la celda de orden
             function actualizarOrden() {
                 $('#tb_orden_menu tbody tr').each(function (index) {
-                    var nuevoOrden = index + 1; // comienza en 1
+                    var nuevoOrden = index + 1;
                     $(this).attr('tr-orden', nuevoOrden);
-                    $(this).find('td:eq(0)').text(nuevoOrden);
+                    // Actualizamos la primera celda (columna "Orden")
+                    $(this).find('td:first').text(nuevoOrden);
                 });
             }
-        };
+        }
 
         function extraerIdsYOrdenes() {
             var datos = [];

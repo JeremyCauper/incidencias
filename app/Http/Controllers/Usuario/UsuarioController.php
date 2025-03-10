@@ -37,7 +37,7 @@ class UsuarioController extends Controller
 
             $menu = DB::table('tb_menu')->select(['id_menu', 'descripcion', 'icon'])
                 ->where('estatus', 1)
-                ->whereIn('sistema', $tipo_menu)->get();
+                ->whereIn('sistema', $tipo_menu)->orderBy('orden', 'asc')->get();
             $submenus = DB::table('tb_submenu')->select(['id_submenu', 'id_menu', 'descripcion', 'categoria'])->where('estatus', 1)->get()->groupBy('id_menu');
 
             $data['menus'] = $menu->map(function ($item) use ($submenus) {

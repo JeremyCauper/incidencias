@@ -138,6 +138,7 @@ Route::get('/mantenimiento/menu/menu/{id}', [MenuController::class, 'show']);
 Route::post('/mantenimiento/menu/menu/registrar', [MenuController::class, 'create']);
 Route::post('/mantenimiento/menu/menu/actualizar', [MenuController::class, 'update']);
 Route::post('/mantenimiento/menu/menu/cambiarEstado', [MenuController::class, 'changeStatus']);
+Route::post('/mantenimiento/menu/menu/cambiarOrdenMenu', [MenuController::class, 'changeOrdenMenu']);
 
 Route::get('/mantenimiento/menu/submenu', [SubMenuController::class, 'view'])->middleware('auth');
 Route::get('/mantenimiento/menu/submenu/index', [SubMenuController::class, 'index']);

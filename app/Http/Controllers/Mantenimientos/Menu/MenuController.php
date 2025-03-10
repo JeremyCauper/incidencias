@@ -65,6 +65,7 @@ class MenuController extends Controller
                 'icono' => 'required|string|max:255',
                 'ruta' => 'required|string|max:255',
                 'submenu' => 'required|integer',
+                'desarrollo' => 'required|integer',
                 'estado' => 'required|integer'
             ]);
 
@@ -77,6 +78,7 @@ class MenuController extends Controller
             }
 
             // Validar si ya existe un menu con el mismo código o descripción
+            $conteo_menu = DB::table('tb_menu')->count();
             $existeDescripcion = DB::table('tb_menu')->where('descripcion', $request->descripcion)->exists();
             $existeIcon = DB::table('tb_menu')->where('icon', $request->icono)->exists();
             $existeRuta = DB::table('tb_menu')->where('ruta', $request->ruta)->exists();
@@ -109,6 +111,8 @@ class MenuController extends Controller
                 'icon' => $request->icono,
                 'ruta' => $request->ruta,
                 'submenu' => $request->submenu,
+                'sistema' => $request->desarrollo,
+                'orden' => $conteo_menu + 1,
                 'estatus' => $request->estado,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
@@ -162,6 +166,7 @@ class MenuController extends Controller
                 'icono' => 'required|string|max:255',
                 'ruta' => 'required|string|max:255',
                 'submenu' => 'required|integer',
+                'desarrollo' => 'required|integer',
                 'estado' => 'required|integer'
             ]);
 
@@ -206,6 +211,7 @@ class MenuController extends Controller
                 'icon' => $request->icono,
                 'ruta' => $request->ruta,
                 'submenu' => $request->submenu,
+                'sistema' => $request->desarrollo,
                 'estatus' => $request->estado,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ]);
@@ -261,25 +267,22 @@ class MenuController extends Controller
 
     public function changeOrdenMenu(Request $request)
     {
-        DB::beginTransaction();
         try {
-            // Extraemos todos los IDs para la cláusula WHERE
-            $ids = array_column($request->data, 'id');
-
-            // Construimos la consulta SQL con CASE
-            $sql = "UPDATE tu_tabla SET orden = CASE id ";
+            DB::beginTransaction();
             foreach ($request->data as $item) {
-                $sql .= "WHEN {$item['id']} THEN {$item['orden']} ";
+                DB::table('tb_menu')->where('id_menu', $item['id'])->update([
+                    'orden' => $item['orden'],
+                    'updated_at' => now()->format('Y-m-d H:i:s')
+                ]);
             }
-            $sql .= "END WHERE id IN (" . implode(',', $ids) . ")";
-
-            // Ejecutamos la consulta
-            DB::update($sql);
-
             DB::commit();
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
-            // Manejar el error
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
+                'error' => $e->getMessage()
+            ], 500);
         }
     }
 }

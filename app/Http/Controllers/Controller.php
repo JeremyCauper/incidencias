@@ -34,6 +34,7 @@ class Controller extends BaseController
             ->where('estatus', 1)
             ->whereIn('sistema', $tipo_menu)
             ->whereIn('id_menu', array_keys($filteredIds))
+            ->orderBy('orden', 'asc')
             ->get();
     
         // Obtener los submenús, pero solo los que aparecen en el JSON

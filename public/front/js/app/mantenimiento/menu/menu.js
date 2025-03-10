@@ -262,3 +262,55 @@ async function CambiarEstado(id, estado) {
         console.log('Error producido: ', error);
     }
 }
+
+async function cambiarOrden() {
+    try {
+        if (!await boxAlert.confirm('¿Esta seguro de esta accion?')) return true;
+        fMananger.formModalLoding('modal_ordenm', 'show');
+
+        $.ajax({
+            type: 'POST',
+            url: `${__url}/mantenimiento/menu/menu/cambiarOrdenMenu`,
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': __token,
+            },
+            data: JSON.stringify({
+                "data": extraerIdsYOrdenes()
+            }),
+            beforeSend: boxAlert.loading,
+            success: function (data) {
+                if (!data.success) {
+                    return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+                }
+                boxAlert.minbox({ h: data.message });
+                updateTable();
+                fMananger.formModalLoding('modal_ordenm', 'hide');
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                fMananger.formModalLoding('modal_ordenm', 'hide');
+                let mensaje = 'No pudimos procesar tu solicitud en este momento. Por favor, intenta más tarde.';
+
+                if (jqXHR.status === 404) {
+                    mensaje = 'El problema que intentas editar no existe. Verifica el código y vuelve a intentarlo.';
+                } else if (jqXHR.status === 500) {
+                    mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
+                }
+
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Error al obtener los datos',
+                    h: mensaje
+                });
+                console.log("Error en AJAX:", jqXHR);
+            }
+        });
+    } catch (error) {
+        boxAlert.box({
+            i: 'error',
+            t: 'Error inesperado',
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
+        });
+        console.log('Error producido: ', error);
+    }
+}

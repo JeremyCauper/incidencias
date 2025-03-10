@@ -69,7 +69,7 @@ $(document).ready(function () {
         $('#modal_usuariosLabel').html('REGISTRAR USUARIO');
         setCheckedFromJson('eyI4IjpbIjExIiwiMTIiXX0=');
         $('#tipo_acceso').val(3).trigger('change.select2');
-        $('#content-permisos').attr({'style': 'opacity: .55; pointer-events: none;'});
+        // $('#content-permisos').attr({ 'style': 'opacity: .55; pointer-events: none;' });
         $('#id').val('');
     });
 
@@ -87,7 +87,7 @@ $(document).ready(function () {
 
     $('#tipo_acceso').on('change', function () {
         let permisos = 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXX0=';
-        $('#content-permisos').attr({'style': 'opacity: .55; pointer-events: none;'});
+        // $('#content-permisos').attr({ 'style': 'opacity: .55; pointer-events: none;' });
         switch ($(this).val()) {
             case "3":
                 permisos = 'eyI4IjpbIjExIiwiMTIiXX0=';
@@ -95,9 +95,14 @@ $(document).ready(function () {
 
             case "4":
                 permisos = null;
-                $('#content-permisos').removeAttr('style');
+                // $('#content-permisos').removeAttr('style');
                 break;
-        
+
+            // case "5":
+            //     permisos = null;
+            //     // $('#content-permisos').removeAttr('style');
+            //     break;
+
             default:
                 break;
         }
@@ -146,7 +151,7 @@ document.getElementById('form-usuario').addEventListener('submit', function (eve
 
     var elementos = this.querySelectorAll('[name]');
     var valid = validFrom(elementos);
-    
+
     let permisos = getCheckedValues();
 
     if (!valid.success || !permisos)
@@ -198,7 +203,7 @@ function Editar(id) {
             type: 'GET',
             url: `${__url}/control-de-usuario/usuarios/${id}`,
             contentType: 'application/json',
-            success: function (data) {                
+            success: function (data) {
                 if (!data.success) {
                     return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
                 }
@@ -218,7 +223,11 @@ function Editar(id) {
                 $('#PreviFPerfil').attr('src', json.foto_perfil ? `${__asset}/images/auth/${json.foto_perfil}` : imgUserDefault);
                 $('#PreviFirma').attr('src', json.firma_digital ? `${__asset}/images/firms/${json.firma_digital}` : imgFirmDefault);
                 $('#tipo_acceso').val(json.tipo_acceso).trigger('change.select2');
-                if (json.tipo_acceso != 4) $('#content-permisos').attr({'style': 'opacity: .55; pointer-events: none;'}); else $('#content-permisos').removeAttr('style');
+                /*if (json.tipo_acceso == 4 || json.tipo_acceso == 5) {
+                    $('#content-permisos').removeAttr('style');
+                } else {
+                    $('#content-permisos').attr({ 'style': 'opacity: .55; pointer-events: none;' });
+                }*/
                 setCheckedFromJson(json.menu_usuario);
 
                 fMananger.formModalLoding('modal_usuarios', 'hide');
@@ -380,7 +389,7 @@ function setCheckedFromJson(jsonString = null) {
 
             if (childValues.length > 0) {
                 let lichild = parentCheckbox.closest('li');
-                
+
                 // Marcar solo los hijos especificados
                 childValues.forEach(childValue => {
                     let childCheckbox = lichild.querySelector(`input[id="menu${parentValue}-item${childValue}"]`);

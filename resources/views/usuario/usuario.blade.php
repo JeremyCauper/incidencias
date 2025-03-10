@@ -165,7 +165,7 @@
                 </div>
                 <div class="col-12">
                     <label class="form-label mb-0">Administrar Modulos del Sistema</label>
-                    <div class="border rounded p-2" id="content-permisos" style="opacity: .4; pointer-events: none;">
+                    <div class="border rounded p-2" id="content-permisos"> <!-- style="opacity: .4; pointer-events: none;" -->
                         <div class="row">
                             @foreach ($menus as $menu)
                                 <div class="col-xl-3 col-md-6 mb-2">
