@@ -20,6 +20,7 @@ use App\Http\Controllers\Mantenimientos\Problema\ProblemaController;
 use App\Http\Controllers\Mantenimientos\Problema\SubProblemaController;
 use App\Http\Controllers\Orden\OrdenController;
 use App\Http\Controllers\Orden\OrdenVisitaController;
+use App\Http\Controllers\Turno\TurnoController;
 use App\Http\Controllers\Usuario\UsuarioController;
 use App\Http\Controllers\Visitas\TerminadasController;
 use App\Http\Controllers\Visitas\VProgramadasController;
@@ -162,6 +163,4 @@ Route::get('/tipo_incidencia/index', [TipoIncidencia::class, 'all']);
 Route::get('/tipo_incidencia/{id}', [TipoIncidencia::class, 'show']);
 
 
-Route::get('/asignacion-turno', function (){
-    return view('turno.turno');
-});
+Route::get('/asignacion-turno', [TurnoController::class, 'view']);

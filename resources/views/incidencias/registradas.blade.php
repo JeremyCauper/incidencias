@@ -234,7 +234,7 @@
                     <h6 class="tittle text-primary">Asignar Personal
                     </h6>
                     <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-9">
                             <div class="input-group mt-2 mb-2">
                                 <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
                                 <select class="select-clear" id="createPersonal">
