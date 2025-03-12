@@ -282,8 +282,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 
     fMananger.formModalLoding('modal_orden', 'show');
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     valid.data.data.islas = MRevision.extract();
     const old_cod_ordenv = valid.data.data.cod_ordenv;
 

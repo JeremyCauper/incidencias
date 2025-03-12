@@ -300,8 +300,7 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
     fMananger.formModalLoding('modal_incidencias', 'show');
     const url = $('#id_inc').val() ? `actualizar` : `registrar`;
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     if (!valid.success)
         return fMananger.formModalLoding('modal_incidencias', 'hide');
 
@@ -693,8 +692,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
     fMananger.formModalLoding('modal_orden', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     valid.data.data.materiales = cMaterial.extract();
 
     if (!valid.success)
@@ -779,8 +777,7 @@ document.getElementById('form-addcod').addEventListener('submit', async function
 
     fMananger.formModalLoding('modal_addcod', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_addcod', 'hide');

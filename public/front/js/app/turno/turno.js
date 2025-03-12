@@ -1,6 +1,6 @@
 $(document).ready(function () {
     const controles = [
-        // Formulario incidencias datos de la empresas
+        // Formulario turno datos de la empresas
         {
             control: [
                 '#sfechaIni',
@@ -25,9 +25,9 @@ $(document).ready(function () {
         defineControllerAttributes(control.control, control.config);
     });
 
-    formatSelect('modal_incidencias');
+    formatSelect('modal_turno');
 
-    $('#tel_contac').on('change', function () {
+    $('#sfechaIni').on('change', function () {
     });
 
     $('#nro_doc').blur(async function () {
@@ -40,84 +40,180 @@ $(document).ready(function () {
     });
 });
 
-// let fechaInicial = null;
-let dias = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-let calendar = null;
-document.addEventListener('DOMContentLoaded', function () {
-    var calendarEl = document.getElementById('calendar');
+let diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+let calendario = null;
+let eventoTemporal = null;
+let anioMemoria = null;
+let añosCargados = {}; // Registro de años ya cargados para evitar duplicados
 
-    calendar = new FullCalendar.Calendar(calendarEl, {
+document.addEventListener('DOMContentLoaded', function () {
+    let elementoCalendario = document.getElementById('calendar');
+
+    calendario = new FullCalendar.Calendar(elementoCalendario, {
         initialView: 'dayGridMonth',
-        selectable: true, // Permitir selección de fechas
+        selectable: true,
         locale: 'es',
         headerToolbar: {
             left: 'title',
             center: '',
             right: 'prev,next today'
         },
-        buttonText: {
-            today: 'Hoy'
-        },
-        titleFormat: { year: 'numeric', month: 'long' },
+        buttonText: { today: 'Hoy' },
+        titleFormat: { year: 'numeric', month: 'long' }
     });
-    calendar.render();
 
-    calendar.on('dateClick', function (info) {
-        var fechaIni = info.dateStr;
-        $('#sfechaIni').val(fechaIni).trigger('change');
-        $('#sfechaFin').val(CalcularFecha(fechaIni, 7)).trigger('change');
+    calendario.render();
+    anioMemoria = calendario.getDate().getFullYear();
+    cargarEventosApi(); // Cargar eventos del año inicial
 
-        var fechaSabado = obtenerSabado(fechaIni);
-        $('#afechaIni').val(fechaSabado).trigger('change');
-        $('#afechaFin').val(CalcularFecha(fechaSabado, 2)).trigger('change');
-        
+    calendario.on('dateClick', function (info) {
+        $('#sfechaIni').val(info.dateStr).trigger('change');
         $('#modal_turno').modal('show');
     });
+
+    calendario.on('datesSet', function () {
+        let añoActual = calendario.getDate().getFullYear();
+        if (añoActual !== anioMemoria) {
+            anioMemoria = añoActual;
+            // Solo cargar si aún no se han cargado los eventos para este año
+            if (!añosCargados[añoActual]) {
+                cargarEventosApi();
+            }
+        }
+    });
+
+    calendario.on('eventClick', function (info) {
+        alert(`Evento: ${info.event.title}\nInicio: ${info.event.start.toISOString().split('T')[0]}\nFin: ${info.event.end ? info.event.end.toISOString().split('T')[0] : 'No definido'}`);
+    });    
+
+    // Manejar cambios en los inputs de fecha
+    $('#sfechaIni, #sfechaFin, #afechaIni, #afechaFin').on('change', function () {
+        actualizarNombreDia(this);
+        if (this.id === 'sfechaIni') {
+            establecerFechas(this.value);
+        }
+    });
+
+    // Guardar evento permanente
+    $('#guardarEvento').on('click', function () {
+        if (eventoTemporal) {
+            agregarEventoRango(eventoTemporal.start, eventoTemporal.end, 0);
+            eventoTemporal = null;
+        }
+        $('#modal_turno').modal('hide');
+    });
+
+    function cargarEventosApi(añoActual = calendario.getDate().getFullYear()) {
+        // Marcar el año como cargado para evitar duplicados en futuros cambios
+        añosCargados[añoActual] = true;
+        calendarLoding('show');
+        $.ajax({
+            type: 'GET',
+            url: `${__url}/asignacion-turno/index?anio=${añoActual}`,
+            contentType: 'application/json',
+            success: function (data) {
+                data.forEach(e => {
+                    // Puedes agregar una propiedad "id" o "apiEvent" en cada evento si fuera necesario
+                    agregarEventoRango(e.fecha_ini_s, e.fecha_fin_s, 0);
+                    agregarEventoRango(e.fecha_ini_a, e.fecha_fin_a, 1);
+                });
+            },
+            error: function (jqXHR) {
+                boxAlert.box({ i: 'error', t: 'Error', h: 'No se pudo cargar los datos.' });
+                console.log(jqXHR);
+            },
+            complete: function () {
+                calendarLoding('hide');
+            }
+        });
+    }
 });
 
-function AgregarRango(fechaInicial, fechaFinal, tipo = 0) {
-    let colores = [
-        ['#4d7ed0', '#013489'],
-        ['#dcad4e', '#885b01']
+function establecerFechas(fechaInicio) {
+    $('#sfechaFin').val(calcularFecha(fechaInicio, 7)).trigger('change');
+    let fechaSabado = obtenerProximoSabado(fechaInicio);
+    $('#afechaIni').val(fechaSabado).trigger('change');
+    $('#afechaFin').val(calcularFecha(fechaSabado, 2)).trigger('change');
+}
+
+function agregarEventoRango(fechaInicio, fechaFin, tipo = 0) {
+    let setting = [
+        ['#4d7ed0', '#013489', 'Turno Semanal'],
+        ['#dcad4e', '#885b01', 'Turno de Apoyo']
     ][tipo];
 
-    // Agregar el rango seleccionado como un "evento"
-    calendar.addEvent({
-        title: 'Selección',
-        start: fechaInicial,
-        end: CalcularFecha(fechaFinal, 1),
+    calendario.addEvent({
+        title: setting[2],
+        start: fechaInicio,
+        end: calcularFecha(fechaFin, 1),
         allDay: true,
-        backgroundColor: colores[0],
-        borderColor: colores[1]
+        backgroundColor: setting[0],
+        borderColor: setting[1]
     });
 }
 
-function setNombreDia(_this) {
-    let $this = $(_this);
-    let fecha = new Date($this.val());
+function actualizarNombreDia(elemento) {
+    let fecha = new Date($(elemento).val());
     let diaSemana = fecha.getDay();
-    console.log(diaSemana);
-    
-    $(`#${$this.attr('id')}Text`).html(dias[diaSemana]);
+    $(`#${elemento.id}Text`).html(diasSemana[diaSemana]);
 }
 
-function obtenerSabado(fechaStr) {
+function obtenerProximoSabado(fechaStr) {
     let fecha = new Date(fechaStr);
-    let diaSemana = fecha.getDay();
-    
-    // Calcular cuántos días faltan para el próximo sábado
-    let diasFaltantes = (6 - diaSemana + 6) % 7; 
-    fecha.setDate(fecha.getDate() + diasFaltantes);
-
-    // Formatear la fecha a "YYYY-MM-DD"
+    let diasParaSabado = (5 - fecha.getDay()) % 7;
+    fecha.setDate(fecha.getDate() + diasParaSabado);
     return fecha.toISOString().split('T')[0];
 }
 
-function CalcularFecha(fecha, suma) {
-    let newfecha = new Date(fecha); // Crear el objeto Date
-    newfecha.setDate(newfecha.getDate() + suma); // Sumar un día
-    // Formatear la nueva newfecha en "YYYY-MM-DD"
-    let fechaFin = newfecha.toISOString().split('T')[0];
-
-    return fechaFin;
+function calcularFecha(fecha, diasSumar) {
+    let nuevaFecha = new Date(fecha);
+    nuevaFecha.setDate(nuevaFecha.getDate() + diasSumar);
+    return nuevaFecha.toISOString().split('T')[0];
 }
+
+function calendarLoding(accion) {
+    const contenedorCalendario = $('#content-calendar');
+    if (accion === 'show') {
+        contenedorCalendario.prepend(`<div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>`);
+    } else if (accion === 'hide') {
+        contenedorCalendario.children('.loader-of-modal').remove();
+    }
+}
+
+document.getElementById('form-turno').addEventListener('submit', function (event) {
+    event.preventDefault();
+    fMananger.formModalLoding('modal_turno', 'show');
+
+    let url = $('#id').val() ? 'actualizar' : 'registrar';
+    let valid = validFrom(this);
+
+    if (!valid.success) {
+        return fMananger.formModalLoding('modal_turno', 'hide');
+    }
+
+    $.ajax({
+        type: 'POST',
+        url: `${__url}/asignacion-turno/${url}`,
+        contentType: 'application/json',
+        headers: { 'X-CSRF-TOKEN': __token },
+        data: JSON.stringify(valid.data.data),
+        success: function (data) {
+            if (!data.success) {
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
+            }
+            let datos = valid.data.data;
+            $('#modal_turno').modal('hide');
+            agregarEventoRango(datos.sfechaIni, datos.sfechaFin, 0);
+            agregarEventoRango(datos.afechaIni, datos.afechaFin, 1);
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message });
+        },
+        error: function (jqXHR) {
+            console.log(jqXHR);
+            let errorData = jqXHR.responseJSON;
+            boxAlert.box({ i: errorData.icon, t: errorData.title, h: errorData.message });
+        },
+        complete: function () {
+            fMananger.formModalLoding('modal_turno', 'hide');
+        }
+    });
+});

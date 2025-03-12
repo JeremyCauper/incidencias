@@ -64,8 +64,7 @@ document.getElementById('form-grupo').addEventListener('submit', function (event
     const accion = $('#id').val();
     const url = accion ? `actualizar` : `registrar`;
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_grupos', 'hide');

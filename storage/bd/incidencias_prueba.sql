@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mi MySql
+ Source Server         : Mysql_local
  Source Server Type    : MySQL
- Source Server Version : 100425
+ Source Server Version : 100432
  Source Host           : localhost:3306
  Source Schema         : incidencias_prueba
 
  Target Server Type    : MySQL
- Target Server Version : 100425
+ Target Server Version : 100432
  File Encoding         : 65001
 
- Date: 10/03/2025 23:33:35
+ Date: 11/03/2025 22:34:54
 */
 
 SET NAMES utf8mb4;
@@ -593,6 +593,37 @@ INSERT INTO `tb_contac_ordens` VALUES (3, '61505130', 'JEREMY PATRICK CAUPER SIL
 INSERT INTO `tb_contac_ordens` VALUES (4, '70401296', 'BRYAN MARTIN POLO GOMEZ', 'fdc_.png', 1, '2025-03-02 23:15:46', '2024-08-28 11:23:42');
 INSERT INTO `tb_contac_ordens` VALUES (7, '72192063', 'DANIEL EDUARDO MITTA FLORES', 'fdc_72192063.png', 1, NULL, '2025-01-12 22:48:47');
 INSERT INTO `tb_contac_ordens` VALUES (8, '10392834', 'MARLON RAUL RAMOS SAJAMI', 'fdc_10392834.png', 1, '2024-12-18 12:54:46', '2024-12-18 12:54:46');
+
+-- ----------------------------
+-- Table structure for tb_cronograma_turno
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_cronograma_turno`;
+CREATE TABLE `tb_cronograma_turno`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fecha_ini_s` date NOT NULL,
+  `hora_ini_s` time(0) NOT NULL,
+  `fecha_fin_s` date NOT NULL,
+  `hora_fin_s` time(0) NOT NULL,
+  `personal_s` int(11) NOT NULL,
+  `fecha_ini_a` date NOT NULL,
+  `hora_ini_a` time(0) NOT NULL,
+  `fecha_fin_a` date NOT NULL,
+  `hora_fin_a` time(0) NOT NULL,
+  `personal_a` int(11) NOT NULL,
+  `creador` int(11) NOT NULL,
+  `eliminado` tinyint(1) NULL DEFAULT 0,
+  `estatus` tinyint(1) NULL DEFAULT 1,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 4 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+
+-- ----------------------------
+-- Records of tb_cronograma_turno
+-- ----------------------------
+INSERT INTO `tb_cronograma_turno` VALUES (1, '2025-03-10', '18:00:00', '2025-03-17', '07:59:00', 3, '2025-03-15', '13:00:00', '2025-03-17', '07:59:00', 5, 1, 0, 1, NULL, '2025-03-11 16:59:55');
+INSERT INTO `tb_cronograma_turno` VALUES (2, '2025-03-17', '18:00:00', '2025-03-24', '07:59:00', 3, '2025-03-23', '13:00:00', '2025-03-24', '07:59:00', 6, 1, 0, 1, NULL, '2025-03-11 19:19:04');
+INSERT INTO `tb_cronograma_turno` VALUES (3, '2024-11-05', '18:00:00', '2024-11-12', '07:59:00', 4, '2024-11-10', '13:00:00', '2024-11-12', '07:59:00', 4, 1, 0, 1, NULL, '2025-03-11 19:33:57');
 
 -- ----------------------------
 -- Table structure for tb_empresas

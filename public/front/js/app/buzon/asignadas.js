@@ -253,8 +253,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
     fMananger.formModalLoding('modal_orden', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     valid.data.data.materiales = cMaterial.extract();
 
     if (!valid.success)
@@ -339,8 +338,7 @@ document.getElementById('form-addcod').addEventListener('submit', async function
 
     fMananger.formModalLoding('modal_addcod', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_addcod', 'hide');
@@ -810,8 +808,7 @@ document.getElementById('form-orden-visita').addEventListener('submit', async fu
 
     fMananger.formModalLoding('modal_orden_visita', 'show');
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     valid.data.data.islas = MRevision.extract();
     const old_cod_ordenv = valid.data.data.cod_ordenv;
 

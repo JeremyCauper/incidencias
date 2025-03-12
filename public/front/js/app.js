@@ -122,7 +122,8 @@ function defineControllerAttributes(selector, config) {
     });
 }
 
-function validFrom(dat) {
+function validFrom(_this) {
+    var dat = _this.querySelectorAll('[name]');
     var dataF = { success: true, data: { data: {}, require: [] } };
 
     for (let i = 0; i < dat.length; i++) {
