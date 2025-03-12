@@ -163,6 +163,6 @@ Route::get('/tipo_incidencia/index', [TipoIncidencia::class, 'all']);
 Route::get('/tipo_incidencia/{id}', [TipoIncidencia::class, 'show']);
 
 
-Route::get('/asignacion-turno', [TurnoController::class, 'view']);
+Route::get('/asignacion-turno', [TurnoController::class, 'view'])->middleware('auth');
 Route::get('/asignacion-turno/index', [TurnoController::class, 'index']);
 Route::post('/asignacion-turno/registrar', [TurnoController::class, 'create']);

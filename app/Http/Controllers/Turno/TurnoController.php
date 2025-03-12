@@ -18,7 +18,7 @@ class TurnoController extends Controller
         try {
             $data = [];
 
-            $data['usuarios'] = DB::table('usuarios')->where('estatus', 1)->get()->map(function ($u) {
+            $data['usuarios'] = DB::table('usuarios')->where('estatus', 1)->get()->keyBy('id_usuario')->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,
@@ -37,7 +37,7 @@ class TurnoController extends Controller
     {
         $anio = $request->query('anio');
         try {
-            $turnos = DB::table('tb_cronograma_turno')->where('eliminado', 0)->whereYear('fecha_ini_s', $anio)->get();
+            $turnos = DB::table('tb_cronograma_turno')->where('eliminado', 0)->whereYear('fecha_ini_s', $anio)->get()->keyBy('id');
             return $turnos;
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -49,10 +49,14 @@ class TurnoController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'sfechaIni' => 'required|date',
+                'shoraIni' => 'required|date_format:H:i',
                 'sfechaFin' => 'required|date',
+                'shoraFin' => 'required|date_format:H:i',
                 'spersonal' => 'required|integer',
                 'afechaIni' => 'required|date',
+                'ahoraIni' => 'required|date_format:H:i',
                 'afechaFin' => 'required|date',
+                'ahoraFin' => 'required|date_format:H:i',
                 'apersonal' => 'required|integer'
             ]);
 
@@ -61,16 +65,16 @@ class TurnoController extends Controller
             }
 
             DB::beginTransaction();
-            DB::table('tb_cronograma_turno')->insert([
+            $idTurno = DB::table('tb_cronograma_turno')->insertGetId([
                 'fecha_ini_s' => $request->sfechaIni,
-                'hora_ini_s' => "18:00:00",
+                'hora_ini_s' => $request->shoraIni,
                 'fecha_fin_s' => $request->sfechaFin,
-                'hora_fin_s' => "07:59:00",
+                'hora_fin_s' => $request->shoraFin,
                 'personal_s' => $request->spersonal,
                 'fecha_ini_a' => $request->afechaIni,
-                'hora_ini_a' => "13:00:00",
+                'hora_ini_a' => $request->ahoraIni,
                 'fecha_fin_a' => $request->afechaFin,
-                'hora_fin_a' => "07:59:00",
+                'hora_fin_a' => $request->ahoraFin,
                 'personal_a' => $request->apersonal,
                 'creador' => Auth::user()->id_usuario,
                 'created_at' => now()->format('Y-m-d H:i:s')
@@ -79,7 +83,7 @@ class TurnoController extends Controller
 
             $data = [];
 
-            return $this->message(message: "Turnos asignados exitosamente.");
+            return $this->message(message: "Turnos asignados exitosamente.", data: ["turno" => $idTurno]);
         } catch (QueryException $e) {
             DB::rollBack();
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);

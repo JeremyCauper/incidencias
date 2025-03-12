@@ -58,7 +58,7 @@ const tb_incidencias = new DataTable('#tb_incidencias', {
         { data: 'finalizado' },
         { data: 'acciones' }
     ],
-    order: [[2, 'desc']],
+    order: [[1, 'desc']],
     createdRow: function (row, data, dataIndex) {
         $(row).find('td:eq(7)').addClass(`td-acciones`);
     },

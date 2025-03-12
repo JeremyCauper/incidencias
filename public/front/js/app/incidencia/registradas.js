@@ -158,6 +158,7 @@ $(document).ready(function () {
 
     $('.modal').on('shown.bs.modal', function () {
         $('#nom_contac').val('');
+        $('#content-cantidad input[type="number"]').val(1);
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
     });
@@ -698,7 +699,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
     var n_orden = valid.data.data.n_orden;
-    valid.data.data.check_cod = eval($('#button-cod-orden').attr('check-cod')) ? false : true;
+    valid.data.data.cod_sistema = eval($('#button-cod-orden').attr('check-cod'));
 
     $.ajax({
         type: 'POST',

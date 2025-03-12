@@ -5,10 +5,10 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
     <style>
         /* .fc .fc-daygrid-day-frame {
-            min-height: 100% !important;
-            height: 80px !important;
-            position: relative !important;
-        } */
+                            min-height: 100% !important;
+                            height: 80px !important;
+                            position: relative !important;
+                        } */
     </style>
     <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
 @endsection
@@ -20,9 +20,20 @@
                 <h6 class="card-title col-form-label-sm text-primary mb-3">
                     <strong>Cronograma Mensual Turno Semanal / Apoyo</strong>
                 </h6>
-                <div id="content-calendar" style="position: relative;">
-                    <div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>
-                    <div id="calendar"></div>
+                <div>
+                    <button class="btn btn-primary px-2" onclick="cargarEventosApi()" data-mdb-ripple-init role="button">
+                        <i class="fas fa-rotate-right"></i>
+                    </button>
+                </div>
+                <div class="row justify-content-center my-2">
+                    <div id="content-calendar" class="col-md-8" style="position: relative;">
+                        <div class="loader-of-modal">
+                            <div style="display:flex; justify-content:center;">
+                                <div class="loader"></div>
+                            </div>
+                        </div>
+                        <div id="calendar"></div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -41,16 +52,15 @@
                 </div>
                 <div class="modal-body">
                     <div class="py-3 border-bottom border-primary">
-                        <h6><strong>TURNO SEMANAL</strong></h6>
+                        <h6><strong>SEMANA DE TURNO</strong></h6>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="form-label mb-0" for="sfechaIni">Inicio</label>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="sfechaIniText"></span>
-                                    <input type="date" class="form-control" id="sfechaIni" />
-                                    <span class="input-group-text" style="font-size: .75rem; width: 109px !important;">18:00
-                                        pm<i class="far fa-clock ms-2"></i></span>
+                                    <input class="form-control" id="sfechaIni" />
+                                    <input class="form-control" id="shoraIni" />
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -58,9 +68,8 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="sfechaFinText"></span>
-                                    <input type="date" class="form-control" id="sfechaFin" />
-                                    <span class="input-group-text" style="font-size: .75rem; width: 109px !important;">7:59
-                                        am<i class="far fa-clock ms-2"></i></span>
+                                    <input class="form-control" id="sfechaFin" />
+                                    <input class="form-control" id="shoraFin" />
                                 </div>
                             </div>
                             <div class="col-12">
@@ -76,16 +85,15 @@
                         </div>
                     </div>
                     <div class="py-3">
-                        <h6><strong>TURNO DE APOYO SEMANAL</strong></h6>
+                        <h6><strong>SEMANA DE TURNO - APOYO</strong></h6>
                         <div class="row">
                             <div class="col-lg-6">
                                 <label class="form-label mb-0" for="afechaIni">Inicio</label>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="afechaIniText"></span>
-                                    <input type="date" class="form-control" id="afechaIni" />
-                                    <span class="input-group-text" style="font-size: .75rem; width: 109px !important;">13:00
-                                        pm<i class="far fa-clock ms-2"></i></span>
+                                    <input class="form-control" id="afechaIni" />
+                                    <input class="form-control" id="ahoraIni" />
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -93,9 +101,8 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="afechaFinText"></span>
-                                    <input type="date" class="form-control" id="afechaFin" />
-                                    <span class="input-group-text" style="font-size: .75rem; width: 109px !important;">7:59
-                                        am<i class="far fa-clock ms-2"></i></span>
+                                    <input class="form-control" id="afechaFin" />
+                                    <input class="form-control" id="ahoraFin" />
                                 </div>
                             </div>
                             <div class="col-12">
@@ -119,8 +126,31 @@
         </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal_turno_detalle" tabindex="-1" aria-labelledby="modal_turno_detalleLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h5 class="modal-title" id="modal_turno_detalleLabel">Detalle Turno</h5>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row"></div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 @endsection
 
 @section('scripts')
+    <script>
+        let usuarios = <?=$data['usuarios']?>;
+    </script>
     <script src="{{ asset('front/js/app/turno/turno.js') }}"></script>
 @endsection

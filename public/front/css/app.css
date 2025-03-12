@@ -3927,6 +3927,16 @@ body {
     }
 }
 
+@media (max-width: 672px) {
+    .fc-toolbar-title {
+        font-size: 1em !important;
+    }
+
+    .fc .fc-button {
+        font-size: .7em !important;
+    }
+}
+
 .modal {
     padding-right: 0px !important;
 }

@@ -19,7 +19,7 @@ class LoginController extends Controller
             return $this->mesageError(exception: $e, codigo: 500);
         }
     }
-    
+
     public function login(Request $request)
     {
         $request->validate([
@@ -54,6 +54,22 @@ class LoginController extends Controller
         // Autenticación exitosa
         return response()->json(['success' => true, 'message' => '', 'data' => $modulos->ruta], 200);
     }
+
+    /*public function calcularFechas()
+    {
+        $tsemanal = DB::table('tb_cronograma_turno')->where('personal_s', Auth::user()->id_usuario)->get();
+        $tapoyo = DB::table('tb_cronograma_turno')->where('personal_a', Auth::user()->id_usuario)->get();
+
+        $fechaInicio = "2025-03-10";
+        $fechaFin = "2025-03-17";
+        $fechaAComparar = "2025-03-14";
+
+        if (strtotime($fechaAComparar) >= strtotime($fechaInicio) && strtotime($fechaAComparar) <= strtotime($fechaFin)) {
+            echo "La fecha $fechaAComparar está dentro del rango.";
+        } else {
+            echo "La fecha $fechaAComparar NO está dentro del rango.";
+        }
+    }*/
 
     public function logout(Request $request)
     {
