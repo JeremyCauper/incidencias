@@ -31,6 +31,10 @@ $(document).ready(function () {
         $('#modal_problemasLabel').html('REGISTRAR PROBLEMA');
         $('#id').val('');
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_problemas.columns.adjust().draw();
+    });
 });
 
 const tb_problemas = new DataTable('#tb_problemas', {

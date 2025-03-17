@@ -78,6 +78,10 @@ $(document).ready(function () {
     ubigeo.forEach(e => {
         $('#ubigeo').append($('<option>').val(e.codigo).text(e.nombre));
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_sucursales.columns.adjust().draw();
+    });
 });
 
 const tb_sucursales = new DataTable('#tb_sucursales', {

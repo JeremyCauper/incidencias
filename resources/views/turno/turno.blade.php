@@ -5,12 +5,15 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
     <style>
         /* .fc .fc-daygrid-day-frame {
-                            min-height: 100% !important;
-                            height: 80px !important;
-                            position: relative !important;
-                        } */
+                                        min-height: 100% !important;
+                                        height: 80px !important;
+                                        position: relative !important;
+                                    } */
+        .fc .fc-toolbar-title {
+            text-transform: capitalize;
+        }
     </style>
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.15/index.global.min.js'></script>
+    <script src="{{ asset('front/vendor/full-calendar/index.global.min.js') }}"></script>
 @endsection
 @section('content')
 
@@ -131,16 +134,18 @@
         aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title" id="modal_turno_detalleLabel">Detalle Turno</h5>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
                 <div class="modal-body">
+                    <div class="text-primary d-flex justify-content-between my-2">
+                        <h5 id="modal_turno_detalleLabel" style="font-size: 1.3rem !important; font-weight: 700;">Detalle
+                            Turno</h5>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                     <div class="row"></div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+                    <div class="text-end">
+                        <button type="button" class="btn btn-link" data-mdb-ripple-init
+                            data-mdb-dismiss="modal">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>

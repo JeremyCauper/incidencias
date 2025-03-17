@@ -194,6 +194,10 @@ $(document).ready(function () {
         $(this).attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
         $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
     })
+
+    fObservador('.content-wrapper', () => {
+        tb_incidencia.columns.adjust().draw();
+    });
 });
 
 const cMaterial = new CTable('#createMaterial', {

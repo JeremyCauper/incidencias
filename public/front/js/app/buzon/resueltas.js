@@ -23,6 +23,11 @@ $(document).ready(function () {
             firstDay: 1 // Comienza la semana en lunes
         }
     });
+    
+    fObservador('.content-wrapper', () => {
+        tb_incidencias.columns.adjust().draw();
+        tb_visitas.columns.adjust().draw();
+    });
 });
 
 const tb_incidencias = new DataTable('#tb_incidencias', {
@@ -232,24 +237,17 @@ function ShowDetailVis(e, id) {
 }
 
 
-let valorChange = false;
-async function resetTable(val) {
+async function resetTable() {
     $('#empresa').val('').trigger('change');
     $('#sucursal').val('').trigger('change');
     $('#dateRango').data('daterangepicker').setStartDate(date('Y-m-01'));
     $('#dateRango').data('daterangepicker').setEndDate(date('Y-m-d'));
 
-    var nuevoUrl = `${__url}/buzon-personal/${val ? 'visitas' : 'incidencias'}/resueltas/index?sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`;
-    valorChange = val;
-    $(`#tb_${val ? 'visitas' : 'incidencias'}_wrapper .dataTables_scrollHeadInner`).css('width', '100%')
-        .find('table').css('width', '100%');
-    if (val) {
-        tb_visitas.ajax.url(nuevoUrl).load();
-    } else {
-        tb_incidencias.ajax.url(nuevoUrl).load();
-    }
+    tb_incidencias.columns.adjust().draw();
+    tb_visitas.columns.adjust().draw();
 }
 
+let valorChange = false;
 async function filtroBusqueda() {
     var empresa = $('#empresa').val();
     var sucursal = $('#sucursal').val();

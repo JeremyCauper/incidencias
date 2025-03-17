@@ -23,6 +23,10 @@ $(document).ready(function () {
             firstDay: 1 // Comienza la semana en lunes
         }
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_vterminadas.columns.adjust().draw();
+    });
 });
 
 const tb_vterminadas = new DataTable('#tb_vterminadas', {

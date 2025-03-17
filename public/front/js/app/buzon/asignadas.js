@@ -61,6 +61,11 @@ $(document).ready(function () {
         $(this).attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
         $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
     })
+
+    fObservador('.content-wrapper', () => {
+        tb_incidencias.columns.adjust().draw();
+        tb_visitas.columns.adjust().draw();
+    });
 });
 
 const cMaterial = new CTable('#createMaterial', {
@@ -865,15 +870,7 @@ function changeCodOrdenV(val = cod_ordenv) {
     cod_ordenv = val;
 }
 
-
-
-
-async function resetTable(val) {
-    $(`#tb_${val ? 'visitas' : 'incidencias'}_wrapper .dataTables_scrollHeadInner`).css('width', '100%')
-        .find('table').css('width', '100%');
-    if (val) {
-        updateTableVis()
-    } else {
-        updateTableInc()
-    }
+function resetTable() {
+    tb_incidencias.columns.adjust().draw();
+    tb_visitas.columns.adjust().draw();
 }

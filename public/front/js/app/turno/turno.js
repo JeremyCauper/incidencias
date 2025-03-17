@@ -126,6 +126,10 @@ document.addEventListener('DOMContentLoaded', function () {
         }
         $('#modal_turno').modal('hide');
     });
+
+    fObservador('.content-wrapper', () => {
+        calendario.updateSize();
+    });
 });
 
 function cargarEventosApi(añoActual = anioMemoria) {
@@ -253,23 +257,17 @@ function abrirModalDetalle(eventInfo) {
     let datos = añosCargados[anioMemoria][info[2]];
 
     $('#modal_turno_detalle .modal-body .row').html(`
-        <div class="col-sm-6 my-2">
-            <label class="form-label mb-0">Inicio</label>
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text w-100" style="font-size: .75rem;"><i class="far fa-calendar-check me-2"></i> ${datos['fecha_ini_' + info[1]]} ${datos['hora_ini_' + info[1]]} pm</span>
-            </div>
-        </div>
-        <div class="col-sm-6 my-2">
-            <label class="form-label mb-0">Fin</label>
-            <div class="input-group flex-nowrap">
-                <span class="input-group-text w-100" style="font-size: .75rem;"><i class="far fa-calendar-check me-2"></i> ${datos['fecha_fin_' + info[1]]} ${datos['hora_fin_' + info[1]]} am</span>
-            </div>
+        <div class="col-12 my-2">
+            <label class="form-label mb-0"><i class="far fa-calendar-check me-1"></i> FECHA</label>
+            <span class="input-group-text w-100 px-0 border-0" style="font-size: .85rem;"><b class="me-1">Inicio:</b> ${datos['fecha_ini_' + info[1]]} <b class="ms-3 me-1">Fin:</b> ${datos['fecha_fin_' + info[1]]}</span>
         </div>
         <div class="col-12 my-2">
-            <label class="form-label mb-0">Asignado</label>
-            <div class="input-group flex-nowrap w-100">
-                <span class="input-group-text w-100" style="font-size: .75rem;"><i class="fas fa-user-check me-2"></i> ${usuarios[datos['personal_' + info[1]]].text}</span>
-            </div>
+            <label class="form-label mb-0"><i class="fas fa-clock me-1"></i> HORA</label>
+            <span class="input-group-text w-100 px-0 border-0" style="font-size: .85rem;"><b class="me-1">Inicio:</b> ${datos['hora_ini_' + info[1]]} pm <b class="ms-3 me-1">Fin:</b> ${datos['hora_fin_' + info[1]]} am</span>
+        </div>
+        <div class="col-12 my-2">
+            <label class="form-label mb-0"><i class="fas fa-user-check me-1"></i> TECNICO</label>
+            <span class="input-group-text w-100 px-0 border-0" style="font-size: .85rem;">${usuarios[datos['personal_' + info[1]]].text}</span>
         </div>
         `);
 }

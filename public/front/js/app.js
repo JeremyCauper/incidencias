@@ -346,6 +346,24 @@ function mostrar_acciones(table = null) {
     });
 }
 
+function fObservador(selector, callback) {
+    if (typeof selector !== 'string') return null;
+
+    let contenedor = null;
+    if (selector.startsWith('.')) {
+        contenedor = document.querySelector(selector);
+    } else if (selector.startsWith('#')) {
+        contenedor = document.getElementById(selector);
+    } else {
+        return null;
+    }
+
+    const observer = new ResizeObserver(entries => {
+        if (typeof callback === "function") callback();
+    });
+    observer.observe(contenedor);
+}
+
 function esCelular() {
     return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
 }

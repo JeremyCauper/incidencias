@@ -42,6 +42,10 @@ $(document).ready(function () {
     $('#tb_menu').off("draw.dt").on('draw.dt', function () {
         iniciarTbOrden();
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_menu.columns.adjust().draw();
+    });
 });
 
 const tb_menu = new DataTable('#tb_menu', {

@@ -37,6 +37,10 @@ $(document).ready(function () {
         $('#modal_subproblemasLabel').html('REGISTRAR SUB PROBLEMA');
         $('#id').val('');
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_subproblemas.columns.adjust().draw();
+    });
 });
 
 const tb_subproblemas = new DataTable('#tb_subproblemas', {

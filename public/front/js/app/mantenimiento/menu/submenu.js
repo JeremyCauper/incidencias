@@ -43,6 +43,10 @@ $(document).ready(function () {
         $('#modal_submenuLabel').html('REGISTRAR SUB MENU');
         $('#id').val('');
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_submenu.columns.adjust().draw();
+    });
 });
 
 const tb_submenu = new DataTable('#tb_submenu', {

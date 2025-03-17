@@ -24,6 +24,10 @@ $(document).ready(function () {
         $('#modal_gruposLabel').html('REGISTRAR GRUPO');
         $('#id').val('');
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_grupos.columns.adjust().draw();
+    });
 });
 
 const tb_grupos = new DataTable('#tb_grupos', {

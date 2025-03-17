@@ -178,7 +178,7 @@
                     <li class="nav-item" role="presentation">
                         <button data-mdb-tab-init class="nav-link position-relative active" id="home-tab0"
                             data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true"
-                            onclick="resetTable(false)">
+                            onclick="resetTable()">
                             Incidencias
                             <span id="count_asig"
                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-danger"></span>
@@ -187,7 +187,7 @@
                     <li class="nav-item" role="presentation">
                         <button data-mdb-tab-init class="nav-link position-relative" id="profile-tab0"
                             data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile"
-                            aria-selected="false" onclick="resetTable(true)">
+                            aria-selected="false" onclick="resetTable()">
                             Visitas
                             <span id="count_vis"
                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-danger"></span>

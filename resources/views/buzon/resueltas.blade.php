@@ -15,7 +15,7 @@
                 <div class="row">
                     <div class="col-xxl-5 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
-                        <select id="empresa" name="empresa" class="select-clear">
+                        <select id="empresa" name="empresa" class="select-clear form-control">
                             <option value=""></option>
                             @foreach ($data['empresas'] as $key => $val)
                                 @if ($val->status)
@@ -58,14 +58,14 @@
                     <li class="nav-item" role="presentation">
                         <button data-mdb-tab-init class="nav-link position-relative rounded-top-1 active" id="home-tab0"
                             data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true"
-                            data-mdb-ripple-init onclick="resetTable(false)">
+                            data-mdb-ripple-init onclick="resetTable()">
                             Incidencias
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button data-mdb-tab-init class="nav-link position-relative rounded-top-1" id="profile-tab0"
                             data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile"
-                            aria-selected="false" data-mdb-ripple-init onclick="resetTable(true)">
+                            aria-selected="false" data-mdb-ripple-init onclick="resetTable()">
                             Visitas
                         </button>
                     </li>

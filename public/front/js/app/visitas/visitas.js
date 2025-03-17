@@ -31,6 +31,11 @@ $(document).ready(function () {
             firstDay: 1 // Comienza la semana en lunes
         }
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_visitas.columns.adjust().draw();
+        tb_vprogramadas.columns.adjust().draw();
+    });
 });
 
 const cPersonal = new CTable('#createPersonal', {

@@ -109,6 +109,10 @@ $(document).ready(function () {
         setCheckedFromJson(permisos);
     });
     setCheckedFromJson('eyI4IjpbIjExIiwiMTIiXX0=');
+
+    fObservador('.content-wrapper', () => {
+        tb_usuario.columns.adjust().draw();
+    });
 });
 
 const tb_usuario = new DataTable('#tb_usuario', {
