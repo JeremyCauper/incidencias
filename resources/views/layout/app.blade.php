@@ -29,6 +29,7 @@
   <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
+  <script src="{{asset('front/js/AlertMananger.js')}}"></script>
   @yield('cabecera')
 </head>
 <style>
@@ -58,6 +59,9 @@
       </div>
       <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <span id="tiempo_restante_head" class="me-3" style="font-size: small;"></span>
+          </li>
           <!-- <li class="nav-item dropdown">
             <a class="nav-link count-indicator" id="notificationDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
               <i class="fas fa-bell text-secondary"></i>
@@ -147,7 +151,7 @@
         if (eval(localStorage.sidebarIconOnly) && window.innerWidth > 992) {
           body.addClass('sidebar-icon-only');
         }
-        
+
         $('[data-bs-toggle="minimize"]').on("click", function () {
           localStorage.sidebarIconOnly = false;
           if (window.innerWidth > 992) {
@@ -219,14 +223,66 @@
     setTimeout(function () {
       location.reload();
     }, 7205000);
+
     const __url = "{{url('')}}";
     const __asset = "{{asset('/front')}}";
     const __token = "{{ csrf_token() }}";
+
+    let alertaMostrada = false;
+    let logoutEjecutado = false;
+
+    const intervalo = setInterval(() => {
+      const fechaTurno = "{{ session('turno_fin') }}";
+
+      if (fechaTurno) {
+        const fechaIngresada = new Date("{{ session('turno_fin') }}");
+        const fechaActual = new Date();
+
+        // Calculamos la diferencia en milisegundos
+        const diferenciaMs = fechaIngresada - fechaActual;
+
+        // Convertimos la diferencia a minutos
+        const minutosRestantes = Math.floor(diferenciaMs / 60000); // 1 minuto = 60000 ms
+        const segundosRestantes = Math.floor((diferenciaMs % 60000) / 1000);
+        const strmin = String(minutosRestantes).padStart(2, '0');
+        const strseg = String(segundosRestantes).padStart(2, '0');
+
+        // Mostrar la alerta solo una vez cuando falte 1 minuto
+        if (minutosRestantes < 1 && !alertaMostrada) {
+          boxAlert.toast({
+            i: 'warning',
+            h: `<p class="mb-1" style="font-size: .88rem;"><b>SESSION TURNO DE APOYO</b></p><p class="mb-0" style="font-size: .85rem;" id="tiempo_restante">cerrará en ${strmin}m ${strseg}s.</p>`,
+            b: "#dfb45d",
+            c: "#ffffff",
+            tr: diferenciaMs
+          });
+          alertaMostrada = true; // Marcar como mostrada para no repetir
+        } else {
+          if (minutosRestantes >= 0 && minutosRestantes < 1 && segundosRestantes >= 0) {
+            $('#tiempo_restante').html(`cerrará en ${strmin}m ${strseg}s.`);
+            $('#tiempo_restante_head').html(`cerrará session en ${strmin}m ${strseg}s.`);
+          }
+        }
+
+        // Ejecutar el logout solo una vez cuando la fecha ya pasó
+        if (fechaIngresada <= fechaActual && !logoutEjecutado) {
+          fetch(`${__url}/logout`, {
+            method: 'GET',
+          }).then(response => {
+            if (response.ok) {
+              logoutEjecutado = true; // Marcar como ejecutado
+              clearInterval(intervalo); // Detener el setInterval
+              location.reload();
+            }
+          });
+        }
+      }
+    }, 1000);
+
   </script>
   <!-- MDB -->
   <script type="text/javascript" src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
   <script src="{{asset('front/js/app.js')}}"></script>
-  <script src="{{asset('front/js/AlertMananger.js')}}"></script>
   <script src="{{asset('front/js/template.js') }}"></script>
   <script src="{{asset('front/js/hoverable-collapse.js') }}"></script>
   <script src="{{asset('front/js/off-canvas.js')}}"></script>

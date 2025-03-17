@@ -97,8 +97,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 cargarEventosApi();
             } else {
                 Object.entries(añosCargados[añoActual]).forEach(([key, e]) => {
-                    agregarEventoRango(e.id, e.fecha_ini_s, e.fecha_fin_s, 0);
-                    agregarEventoRango(e.id, e.fecha_ini_a, e.fecha_fin_a, 1);
+                    agregarEventoRango(e.id, e.fecha_ini_s, e.fecha_fin_s, e.hora_ini_s, e.hora_fin_s, 0);
+                    agregarEventoRango(e.id, e.fecha_ini_a, e.fecha_fin_a, e.hora_ini_a, e.hora_fin_a, 1);
                 });
             }
         }
@@ -145,8 +145,8 @@ function cargarEventosApi(añoActual = anioMemoria) {
             calendario.removeAllEvents();
             Object.entries(data).forEach(([key, e]) => {
                 // Puedes agregar una propiedad "id" o "apiEvent" en cada evento si fuera necesario
-                agregarEventoRango(e.id, e.fecha_ini_s, e.fecha_fin_s, 0);
-                agregarEventoRango(e.id, e.fecha_ini_a, e.fecha_fin_a, 1);
+                agregarEventoRango(e.id, e.fecha_ini_s, e.fecha_fin_s, e.hora_ini_s, e.hora_fin_s, 0);
+                agregarEventoRango(e.id, e.fecha_ini_a, e.fecha_fin_a, e.hora_ini_a, e.hora_fin_a, 1);
             });
         },
         error: function (jqXHR) {
@@ -166,15 +166,15 @@ function establecerFechas(fechaInicio) {
     $('#afechaFin').val(calcularFecha(fechaSabado, 2)).trigger('change');
 }
 
-function agregarEventoRango(_id, fechaInicio, fechaFin, tipo = 0) {
+function agregarEventoRango(_id, fechaInicio, fechaFin, horaInicio, horaFin, tipo = 0) {
     let setting = [
-        ['#4d7ed0', '#013489', 'Turno Semanal', `event-s-${_id}`],
-        ['#dcad4e', '#885b01', 'Turno de Apoyo', `event-a-${_id}`]
+        ['#4d7ed0', '#013489', 'TS', `event-s-${_id}`],
+        ['#dcad4e', '#885b01', 'TA', `event-a-${_id}`]
     ][tipo];
 
     calendario.addEvent({
         id: setting[3],
-        title: setting[2],
+        title: setting[2] + `: ${horaInicio} - ${horaFin}`,
         start: fechaInicio,
         end: calcularFecha(fechaFin, 1),
         allDay: true,
@@ -234,8 +234,6 @@ document.getElementById('form-turno').addEventListener('submit', function (event
             }
             let datos = valid.data.data;
             $('#modal_turno').modal('hide');
-            // agregarEventoRango(data.turno, datos.sfechaIni, datos.sfechaFin, 0);
-            // agregarEventoRango(data.turno, datos.afechaIni, datos.afechaFin, 1);
             cargarEventosApi();
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
@@ -252,10 +250,15 @@ document.getElementById('form-turno').addEventListener('submit', function (event
 
 function abrirModalDetalle(eventInfo) {
     $('#modal_turno_detalle').modal('show');
-    $('#modal_turno_detalleLabel').html(`Detalle ${eventInfo.title}`);
     let info = (eventInfo.id).split('-');
     let datos = añosCargados[anioMemoria][info[2]];
 
+    $('#btn-editar-turno').attr('onclick', `editarTurno(${info[2]})`).addClass('d-none');
+    $('#btn-eliminar-turno').attr('onclick', `eliminarTurno(${info[2]})`).addClass('d-none');
+    if (info[1] == 's') {
+        $('#btn-editar-turno, #btn-eliminar-turno').removeClass('d-none');
+    }
+    $('#modal_turno_detalleLabel').html(`Detalle ${info[1] == 's' ? 'Turno Semanal' : 'Turno de Apoyo'}`);
     $('#modal_turno_detalle .modal-body .row').html(`
         <div class="col-12 my-2">
             <label class="form-label mb-0"><i class="far fa-calendar-check me-1"></i> FECHA</label>
@@ -270,4 +273,51 @@ function abrirModalDetalle(eventInfo) {
             <span class="input-group-text w-100 px-0 border-0" style="font-size: .85rem;">${usuarios[datos['personal_' + info[1]]].text}</span>
         </div>
         `);
+}
+
+async function editarTurno(id) {
+    $('#modal_turno_detalle').modal('hide');
+    setTimeout(() => {
+        $('#modal_turno').modal('show');
+        $('#modal_turnoLabel').html('Editar Turno');
+        let datos = añosCargados[anioMemoria][id];
+    
+        $("#id").val(id);
+        $("#sfechaIni").val(datos.fecha_ini_s).trigger('change');
+        $("#shoraIni").val(datos.hora_ini_s);
+        $("#sfechaFin").val(datos.fecha_fin_s).trigger('change');
+        $("#shoraFin").val(datos.hora_fin_s);
+        $("#spersonal").val(datos.personal_s).trigger('change');
+        $("#afechaIni").val(datos.fecha_ini_a).trigger('change');
+        $("#ahoraIni").val(datos.hora_ini_a);
+        $("#afechaFin").val(datos.fecha_fin_a).trigger('change');
+        $("#ahoraFin").val(datos.hora_fin_a);
+        $("#apersonal").val(datos.personal_a).trigger('change');
+    }, 500);
+}
+
+async function eliminarTurno(id) {
+    $('#modal_turno_detalle').modal('hide');
+    if (!await boxAlert.confirm('¿Esta seguro de elimniar?, no se podrá revertir los cambios y se eliminará el turno de apoyo')) return true;
+    $.ajax({
+        type: 'POST',
+        url: `${__url}/asignacion-turno/eliminar`,
+        contentType: 'application/json',
+        headers: { 'X-CSRF-TOKEN': __token },
+        data: JSON.stringify({
+            id: id
+        }),
+        beforeSend: boxAlert.loading,
+        success: function (data) {
+            if (data.success) {
+                cargarEventosApi()
+            }
+            boxAlert.box({ i: data.icon, t: data.title, h: data.message });
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+        }
+    });
 }

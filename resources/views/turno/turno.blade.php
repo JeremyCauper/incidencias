@@ -29,7 +29,7 @@
                     </button>
                 </div>
                 <div class="row justify-content-center my-2">
-                    <div id="content-calendar" class="col-md-8" style="position: relative;">
+                    <div id="content-calendar" class="col-md-9" style="position: relative;">
                         <div class="loader-of-modal">
                             <div style="display:flex; justify-content:center;">
                                 <div class="loader"></div>
@@ -48,7 +48,7 @@
             <form class="modal-content" id="form-turno" style="position: relative;">
                 <input type="hidden" name="id" id="id">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Nuevo Turno a Programar
+                    <h6 class="modal-title" id="modal_turnoLabel">Nuevo Turno a Programar
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
@@ -143,6 +143,8 @@
                     </div>
                     <div class="row"></div>
                     <div class="text-end">
+                        <button type="button" class="btn btn-danger px-2 me-2" data-mdb-ripple-init id="btn-eliminar-turno"><i class="far fa-trash-can"></i></button>
+                        <button type="button" class="btn btn-primary px-2 me-2" data-mdb-ripple-init id="btn-editar-turno"><i class="far fa-pen-to-square"></i></button>
                         <button type="button" class="btn btn-link" data-mdb-ripple-init
                             data-mdb-dismiss="modal">Cerrar</button>
                     </div>

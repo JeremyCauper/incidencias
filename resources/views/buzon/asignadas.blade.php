@@ -171,7 +171,7 @@
         <div class="card">
             <div class="card-body">
                 <h6 class="card-title col-form-label-sm text-primary mb-3">
-                    <strong>Incidencias / Visitas Resueltas</strong>
+                    <strong>Incidencias / Visitas Asignadas</strong>
                 </h6>
 
                 <ul class="nav nav-tabs mb-3" id="myTab0" role="tablist">
@@ -224,7 +224,7 @@
                     </div>
                     <div class="tab-pane fade" id="profile0" role="tabpanel" aria-labelledby="profile-tab0">
                         <div>
-                            <button class="btn btn-primary btn-sm px-1" onclick="updateTableVis()" data-mdb-ripple-init
+                            <button class="btn btn-primary px-2" onclick="updateTableVis()" data-mdb-ripple-init
                                 role="button">
                                 <i class="fas fa-rotate-right"></i>
                             </button>

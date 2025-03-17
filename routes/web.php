@@ -45,6 +45,7 @@ Route::redirect('/', url('/inicio'));
 Route::get('/inicio', [LoginController::class, 'view'])->name('login')->middleware('guest');
 Route::post('/iniciar', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
+Route::get('/validarTurno/{id}', [LoginController::class, 'validarTurno']);
 
 
 Route::get('/incidencias/registradas', [RegistradasController::class, 'view'])->middleware('auth');
@@ -166,3 +167,6 @@ Route::get('/tipo_incidencia/{id}', [TipoIncidencia::class, 'show']);
 Route::get('/asignacion-turno', [TurnoController::class, 'view'])->middleware('auth');
 Route::get('/asignacion-turno/index', [TurnoController::class, 'index']);
 Route::post('/asignacion-turno/registrar', [TurnoController::class, 'create']);
+Route::post('/asignacion-turno/actualizar', [TurnoController::class, 'update']);
+Route::post('/asignacion-turno/eliminar', [TurnoController::class, 'destroy']);
+
