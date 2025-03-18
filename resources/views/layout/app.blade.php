@@ -25,18 +25,11 @@
   <!-- Home -->
   <link href="{{ secure_asset('front/css/app.css') }}" rel="stylesheet">
   <!-- JQuery -->
-<<<<<<< HEAD
-  <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
-  <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
-  <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
-  <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
-  <script src="{{asset('front/js/AlertMananger.js')}}"></script>
-=======
+
   <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/form_select2.js')}}"></script>
->>>>>>> 3fe7e38f60abac3b3c22ef79347997a9f347f50c
   @yield('cabecera')
 </head>
 <style>
@@ -230,14 +223,9 @@
     setTimeout(function () {
       location.reload();
     }, 7205000);
-<<<<<<< HEAD
 
-    const __url = "{{url('')}}";
-    const __asset = "{{asset('/front')}}";
-=======
     const __url = "{{secure_url('')}}";
     const __asset = "{{secure_asset('/front')}}";
->>>>>>> 3fe7e38f60abac3b3c22ef79347997a9f347f50c
     const __token = "{{ csrf_token() }}";
 
     let alertaMostrada = false;
