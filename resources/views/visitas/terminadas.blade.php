@@ -2,10 +2,10 @@
 @section('title', 'Visitas')
 
 @section('cabecera')
-<script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-<script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-<link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
-<!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
+<script type="text/javascript" src="{{asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
+<script type="text/javascript" src="{{asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
+<link rel="stylesheet" type="text/css" href="{{asset('front/vendor/daterangepicker/daterangepicker.css')}}">
+<!-- <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}"> -->
 @endsection
 @section('content')
 
@@ -129,5 +129,5 @@
     const empresas = <?php echo json_encode($data['empresas']); ?>;
     const sucursales = <?php echo json_encode($data['sucursales']); ?>;
 </script>
-<script src="{{secure_asset('front/js/app/visitas/terminadas.js')}}"></script>
+<script src="{{asset('front/js/app/visitas/terminadas.js')}}"></script>
 @endsection

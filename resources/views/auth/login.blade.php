@@ -5,21 +5,21 @@
     <!-- Requiredd meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}" />
+    <link rel="shortcut icon" href="{{asset('front/images/app/LogoRC.png')}}" />
     <title>RC Incidencias | Login</title>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/auth.css')}}">
+    <link rel="stylesheet" href="{{asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}">
+    <link rel="stylesheet" href="{{asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}">
+    <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/default.css')}}">
+    <link rel="stylesheet" href="{{asset('front/css/app/auth.css')}}">
 </head>
 
 <body style="height: 100% !important;">
 
     <nav class="navbar bg-dark-subtle fixed-top">
         <div class="container-fluid py-1 mx-2">
-            <a class="navbar-brand" href="{{secure_url('/inicio')}}">
-                <img src="{{secure_asset('front/images/app/logo_tittle_rc.png')}}" height="34" alt="RC Logo" loading="lazy"
+            <a class="navbar-brand" href="{{url('/inicio')}}">
+                <img src="{{asset('front/images/app/logo_tittle_rc.png')}}" height="34" alt="RC Logo" loading="lazy"
                     style="margin-top: -1px;">
             </a>
             <span class="navbar-brand text-white me-0" style="font-size: smaller;">
@@ -32,7 +32,7 @@
         <div style="width: 22rem;">
             <form id="form-login" class="m-2">
                 <div class="text-center title-login">
-                    <img src="{{secure_asset('front/images/app/tittle_login.png')}}" height="60" alt="">
+                    <img src="{{asset('front/images/app/tittle_login.png')}}" height="60" alt="">
                 </div>
                 <div class="alert alert-danger hidden" role="alert">
                     <i class="fas fa-triangle-exclamation"></i> Usuario incorrecto
@@ -63,15 +63,15 @@
         </div>
     </div>
 
-    <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
-    <script src="{{secure_asset('front/js/AlertMananger.js')}}"></script>
+    <script src="{{asset('front/vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
+    <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
+    <script src="{{asset('front/js/AlertMananger.js')}}"></script>
     <script>
-        const __url = "{{secure_url('')}}";
+        const __url = "{{url('')}}";
         const __token = "{{ csrf_token() }}";
     </script>
-    <script src="{{secure_asset('front/js/app/auth/auth.js')}}"></script>
+    <script src="{{asset('front/js/app/auth/auth.js')}}"></script>
 </body>
 
 </html>

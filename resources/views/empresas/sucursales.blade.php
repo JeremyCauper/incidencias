@@ -143,6 +143,6 @@
 
 @section('scripts')
 <!-- jQuery Mask Plugin CDN -->
-<script src="{{secure_asset('front/vendor/ubigeos-peru/ubigeo.js')}}"></script>
-<script src="{{secure_asset('front/js/app/empresas/sucursales.js')}}"></script>
+<script src="{{asset('front/vendor/ubigeos-peru/ubigeo.js')}}"></script>
+<script src="{{asset('front/js/app/empresas/sucursales.js')}}"></script>
 @endsection
