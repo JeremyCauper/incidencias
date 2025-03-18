@@ -2,7 +2,7 @@
 @section('title', 'Panel de Control')
 
 @section('cabecera')
-<link rel="stylesheet" href="{{asset('front/css/app/usuario/usuarios.css')}}">
+<link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}">
 @endsection
 @section('content')
 
@@ -129,8 +129,8 @@
                                 </div>
                                 <input type="file" class="d-none" id="foto_perfil">
                                 <input type="text" class="d-none" name="foto_perfil" id="txtFotoPerfil">
-                                <img id="PreviFPerfil" src="{{asset('front/images/auth/user_auth.jpg')}}"
-                                    imageDefault="{{asset('front/images/auth/user_auth.jpg')}}">
+                                <img id="PreviFPerfil" src="{{secure_asset('front/images/auth/user_auth.jpg')}}"
+                                    imageDefault="{{secure_asset('front/images/auth/user_auth.jpg')}}">
                             </div>
                         </div>
                         <div class="col-6 mb-3">
@@ -148,8 +148,8 @@
                                 </div>
                                 <input type="file" class="d-none" id="firma_digital">
                                 <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
-                                <img id="PreviFirma" src="{{asset('front/images/firms/firm.png')}}"
-                                    imageDefault="{{asset('front/images/firms/firm.png')}}">
+                                <img id="PreviFirma" src="{{secure_asset('front/images/firms/firm.png')}}"
+                                    imageDefault="{{secure_asset('front/images/firms/firm.png')}}">
                             </div>
                         </div>
                     </div>
@@ -222,9 +222,9 @@
 
 @section('scripts')
 <script>
-    const imgFirmDefault = "{{asset('front/images/firms/firm.png')}}";
-    const imgUserDefault = "{{asset('front/images/auth/user_auth.jpg')}}";
+    const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}";
+    const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}";
 </script>
-<script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>
-<script src="{{asset('front/js/app/usuario/usuarios.js')}}"></script>
+<script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
+<script src="{{secure_asset('front/js/app/usuario/usuarios.js')}}"></script>
 @endsection
