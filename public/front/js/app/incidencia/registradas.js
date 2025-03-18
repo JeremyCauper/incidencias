@@ -158,6 +158,7 @@ $(document).ready(function () {
 
     $('.modal').on('shown.bs.modal', function () {
         $('#nom_contac').val('');
+        $('#content-cantidad input[type="number"]').val(1);
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
     });
@@ -193,6 +194,10 @@ $(document).ready(function () {
         $(this).attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
         $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
     })
+
+    fObservador('.content-wrapper', () => {
+        tb_incidencia.columns.adjust().draw();
+    });
 });
 
 const cMaterial = new CTable('#createMaterial', {
@@ -300,8 +305,7 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
     fMananger.formModalLoding('modal_incidencias', 'show');
     const url = $('#id_inc').val() ? `actualizar` : `registrar`;
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     if (!valid.success)
         return fMananger.formModalLoding('modal_incidencias', 'hide');
 
@@ -693,14 +697,13 @@ document.getElementById('form-orden').addEventListener('submit', async function 
     fMananger.formModalLoding('modal_orden', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     valid.data.data.materiales = cMaterial.extract();
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
     var n_orden = valid.data.data.n_orden;
-    valid.data.data.check_cod = eval($('#button-cod-orden').attr('check-cod')) ? false : true;
+    valid.data.data.cod_sistema = eval($('#button-cod-orden').attr('check-cod'));
 
     $.ajax({
         type: 'POST',
@@ -779,8 +782,7 @@ document.getElementById('form-addcod').addEventListener('submit', async function
 
     fMananger.formModalLoding('modal_addcod', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_addcod', 'hide');

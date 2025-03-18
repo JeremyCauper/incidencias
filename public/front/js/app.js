@@ -122,7 +122,8 @@ function defineControllerAttributes(selector, config) {
     });
 }
 
-function validFrom(dat) {
+function validFrom(_this) {
+    var dat = _this.querySelectorAll('[name]');
     var dataF = { success: true, data: { data: {}, require: [] } };
 
     for (let i = 0; i < dat.length; i++) {
@@ -343,6 +344,24 @@ function mostrar_acciones(table = null) {
             $accionTd.addClass("sticky-activo");
         }
     });
+}
+
+function fObservador(selector, callback) {
+    if (typeof selector !== 'string') return null;
+
+    let contenedor = null;
+    if (selector.startsWith('.')) {
+        contenedor = document.querySelector(selector);
+    } else if (selector.startsWith('#')) {
+        contenedor = document.getElementById(selector);
+    } else {
+        return null;
+    }
+
+    const observer = new ResizeObserver(entries => {
+        if (typeof callback === "function") callback();
+    });
+    observer.observe(contenedor);
 }
 
 function esCelular() {

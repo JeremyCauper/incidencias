@@ -27,9 +27,12 @@ class AlertMananger {
         });
     }
 
-    async confirm(message) {
+    async confirm(op = {}) {
+        const titulo = op.t || '';
+        const thtml = op.h || false;
         if (!(await Swal.fire({
-            title: `<h6 style="color: #a4bcc5;">${message}</h6>`,
+            title: `<h5 class="card-title text-secondary"><b>${titulo}</b></h5>`,
+            html: thtml,
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
@@ -129,6 +132,53 @@ class AlertMananger {
             background: bground,
             color: color,
             ...op
+        });
+    }
+
+    toast(op = {}) {
+        const icono = op.i || 'success';
+        const thtml = op.h || false;
+        const bground = op.b || "#3b71ca";
+        const color = op.c || "#ffffff";
+        const position = op.p || "top-end";
+        const timer = op.tr || 5000;
+        const timerProBar = timer ? true : false;
+        delete op.i;
+        delete op.h;
+        delete op.b;
+        delete op.c;
+        delete op.p;
+        delete op.tr;
+
+        Swal.fire({
+            toast: true,
+            icon: icono,
+            html: thtml,
+            position: position,
+            background: bground,
+            color: color,
+            showConfirmButton: false,
+            showCloseButton: true, // Agrega la "X" para cerrar
+            timer: timer,
+            timerProgressBar: timerProBar,
+            didOpen: (toast) => {
+                toast.onmouseenter = Swal.stopTimer;
+                toast.onmouseleave = Swal.resumeTimer;
+            },
+            showClass: {
+                popup: `
+                animate__animated
+                animate__fadeInRight
+                animate__faster
+                `
+            },
+            hideClass: {
+                popup: `
+                animate__animated
+                animate__fadeOutRight
+                animate__faster
+                `
+            }
         });
     }
 

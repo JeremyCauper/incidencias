@@ -11,7 +11,7 @@
  Target Server Version : 100432
  File Encoding         : 65001
 
- Date: 10/03/2025 01:01:57
+ Date: 18/03/2025 16:25:32
 */
 
 SET NAMES utf8mb4;
@@ -566,10 +566,10 @@ CREATE TABLE `tb_area`  (
 -- ----------------------------
 -- Records of tb_area
 -- ----------------------------
-INSERT INTO `tb_area` VALUES (1, 'Soporte', 1, '2024-07-27 19:46:46', '2024-07-27 19:46:46');
-INSERT INTO `tb_area` VALUES (2, 'Facturacion', 1, '2024-07-27 19:46:50', '2024-07-27 19:46:50');
-INSERT INTO `tb_area` VALUES (3, 'Supervisor', 1, '2024-07-27 19:46:52', '2024-07-27 19:46:52');
-INSERT INTO `tb_area` VALUES (4, 'Reportes', 1, '2024-07-27 19:46:55', '2024-07-27 19:46:55');
+INSERT INTO `tb_area` VALUES (1, 'Soporte', 1, NULL, '2024-07-27 19:46:46');
+INSERT INTO `tb_area` VALUES (2, 'Facturacion', 1, NULL, '2024-07-27 19:46:50');
+INSERT INTO `tb_area` VALUES (3, 'Supervisor', 1, NULL, '2024-07-27 19:46:52');
+INSERT INTO `tb_area` VALUES (4, 'Reportes', 1, NULL, '2024-07-27 19:46:55');
 
 -- ----------------------------
 -- Table structure for tb_contac_ordens
@@ -593,6 +593,36 @@ INSERT INTO `tb_contac_ordens` VALUES (3, '61505130', 'JEREMY PATRICK CAUPER SIL
 INSERT INTO `tb_contac_ordens` VALUES (4, '70401296', 'BRYAN MARTIN POLO GOMEZ', 'fdc_.png', 1, '2025-03-02 23:15:46', '2024-08-28 11:23:42');
 INSERT INTO `tb_contac_ordens` VALUES (7, '72192063', 'DANIEL EDUARDO MITTA FLORES', 'fdc_72192063.png', 1, NULL, '2025-01-12 22:48:47');
 INSERT INTO `tb_contac_ordens` VALUES (8, '10392834', 'MARLON RAUL RAMOS SAJAMI', 'fdc_10392834.png', 1, '2024-12-18 12:54:46', '2024-12-18 12:54:46');
+
+-- ----------------------------
+-- Table structure for tb_cronograma_turno
+-- ----------------------------
+DROP TABLE IF EXISTS `tb_cronograma_turno`;
+CREATE TABLE `tb_cronograma_turno`  (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `fecha_ini_s` date NOT NULL,
+  `hora_ini_s` time(0) NOT NULL,
+  `fecha_fin_s` date NOT NULL,
+  `hora_fin_s` time(0) NOT NULL,
+  `personal_s` int(11) NOT NULL,
+  `fecha_ini_a` date NOT NULL,
+  `hora_ini_a` time(0) NOT NULL,
+  `fecha_fin_a` date NOT NULL,
+  `hora_fin_a` time(0) NOT NULL,
+  `personal_a` int(11) NOT NULL,
+  `creador` int(11) NOT NULL,
+  `eliminado` tinyint(1) NULL DEFAULT 0,
+  `estatus` tinyint(1) NULL DEFAULT 1,
+  `updated_at` timestamp(0) NULL DEFAULT NULL,
+  `created_at` timestamp(0) NULL DEFAULT NULL,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+
+-- ----------------------------
+-- Records of tb_cronograma_turno
+-- ----------------------------
+INSERT INTO `tb_cronograma_turno` VALUES (1, '2025-03-10', '18:00:00', '2025-03-17', '08:20:00', 3, '2025-03-15', '13:00:00', '2025-03-17', '08:20:00', 4, 1, 0, 1, NULL, '2025-03-12 16:00:08');
+INSERT INTO `tb_cronograma_turno` VALUES (2, '2025-03-17', '18:00:00', '2025-03-24', '08:20:00', 4, '2025-03-22', '13:00:00', '2025-03-24', '08:20:00', 5, 1, 0, 1, '2025-03-18 16:15:31', '2025-03-14 20:27:14');
 
 -- ----------------------------
 -- Table structure for tb_empresas
@@ -1027,7 +1057,7 @@ CREATE TABLE `tb_inc_seguimiento`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_seguimiento`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 37 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 38 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_inc_seguimiento
@@ -1068,6 +1098,7 @@ INSERT INTO `tb_inc_seguimiento` VALUES (33, 3, 'INC-00000015', '2025-03-03', '1
 INSERT INTO `tb_inc_seguimiento` VALUES (34, 3, 'INC-00000019', '2025-03-05', '12:32:36', 0, NULL, '2025-03-05 12:32:36');
 INSERT INTO `tb_inc_seguimiento` VALUES (35, 3, 'INC-00000019', '2025-03-05', '12:34:48', 1, NULL, '2025-03-05 12:34:51');
 INSERT INTO `tb_inc_seguimiento` VALUES (36, 1, 'INC-00000027', '2025-03-05', '16:51:00', 0, NULL, '2025-03-05 16:51:00');
+INSERT INTO `tb_inc_seguimiento` VALUES (37, 3, 'INC-00000027', '2025-03-12', '14:26:20', 1, NULL, '2025-03-12 14:26:22');
 
 -- ----------------------------
 -- Table structure for tb_incidencias
@@ -1139,7 +1170,7 @@ INSERT INTO `tb_incidencias` VALUES (23, 'INC-00000023', '20517103633', 163, 1, 
 INSERT INTO `tb_incidencias` VALUES (24, 'INC-00000024', '20513567139', 94, 1, 'Alta', 1, 2, 1, 3, NULL, NULL, '2025-03-05', '15:51:39', 0, 1, 1, NULL, '2025-03-05 15:51:54');
 INSERT INTO `tb_incidencias` VALUES (25, 'INC-00000025', '20517103633', 163, 1, 'Alta', 1, 2, 1, 1, NULL, 'urgente', '2025-03-05', '15:56:50', 0, 1, 1, NULL, '2025-03-05 15:57:07');
 INSERT INTO `tb_incidencias` VALUES (26, 'INC-00000026', '20127765279', 17, 1, 'Alta', 1, 2, 2, 20, NULL, NULL, '2025-03-05', '15:57:53', 0, 1, 1, NULL, '2025-03-05 15:58:10');
-INSERT INTO `tb_incidencias` VALUES (27, 'INC-00000027', '20127765279', 19, 1, 'Alta', 1, 2, 2, 23, NULL, NULL, '2025-03-05', '16:08:57', 2, 1, 1, NULL, '2025-03-05 16:09:27');
+INSERT INTO `tb_incidencias` VALUES (27, 'INC-00000027', '20127765279', 19, 1, 'Alta', 1, 2, 2, 23, NULL, NULL, '2025-03-05', '16:08:57', 3, 1, 1, NULL, '2025-03-05 16:09:27');
 
 -- ----------------------------
 -- Table structure for tb_materiales
@@ -1199,7 +1230,7 @@ CREATE TABLE `tb_materiales_usados`  (
   INDEX `cod_ordens`(`cod_ordens`) USING BTREE,
   INDEX `id_material`(`id_material`) USING BTREE,
   CONSTRAINT `tb_materiales_usados_ibfk_2` FOREIGN KEY (`id_material`) REFERENCES `tb_materiales` (`id_materiales`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 18 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 19 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_materiales_usados
@@ -1221,6 +1252,7 @@ INSERT INTO `tb_materiales_usados` VALUES (14, 'ST25-00000023', 4, 2, NULL, '202
 INSERT INTO `tb_materiales_usados` VALUES (15, 'ST25-00000024', 3, 1, NULL, '2025-03-03 12:14:04');
 INSERT INTO `tb_materiales_usados` VALUES (16, 'ST25-00000024', 6, 2, NULL, '2025-03-03 12:14:04');
 INSERT INTO `tb_materiales_usados` VALUES (17, 'ST25-00000025', 1, 1, NULL, '2025-03-05 12:34:51');
+INSERT INTO `tb_materiales_usados` VALUES (18, 'OS24-00015478', 2, 1, NULL, '2025-03-12 14:26:22');
 
 -- ----------------------------
 -- Table structure for tb_menu
@@ -1239,19 +1271,20 @@ CREATE TABLE `tb_menu`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
   PRIMARY KEY (`id_menu`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_menu
 -- ----------------------------
-INSERT INTO `tb_menu` VALUES (1, 'Incidencias', 'fas fa-house', '/incidencias/registradas', 0, 0, 0, 1, 1, '2025-02-01 18:09:27', '2025-01-31 21:00:34');
-INSERT INTO `tb_menu` VALUES (2, 'Incidencias Resueltas', 'fas fa-list-check', '/incidencias/resueltas', 0, 0, 0, 2, 1, '2025-02-01 15:51:23', '2025-01-31 21:00:34');
-INSERT INTO `tb_menu` VALUES (3, 'Visitas', 'fas fa-person-biking', 'ControlVisitas', 1, 0, 0, 3, 1, '2025-02-01 18:09:16', '2025-02-01 16:30:49');
-INSERT INTO `tb_menu` VALUES (4, 'Empresas', 'far fa-building', 'ControlEmpresas', 1, 0, 0, 4, 1, NULL, '2025-02-01 18:12:14');
-INSERT INTO `tb_menu` VALUES (5, 'Control de Usuarios', 'fas fa-user-group', 'ControlUsarios', 1, 0, 0, 5, 1, NULL, '2025-02-01 18:14:02');
-INSERT INTO `tb_menu` VALUES (6, 'Mantenimientos', 'fas fa-gears', 'ControlMantenimientos', 1, 0, 0, 6, 1, NULL, '2025-02-01 18:15:04');
-INSERT INTO `tb_menu` VALUES (7, 'Sistema', 'fas fa-laptop-code', 'Sistema', 1, 0, 1, 8, 1, NULL, '2025-02-10 15:14:55');
-INSERT INTO `tb_menu` VALUES (8, 'Buzon Tecnico', 'fas fa-address-book', 'Buzon', 1, 0, 0, 7, 1, NULL, '2025-02-10 16:25:23');
+INSERT INTO `tb_menu` VALUES (1, 'Incidencias', 'fas fa-house', '/incidencias/registradas', 0, 0, 0, 2, 1, '2025-03-10 12:06:36', '2025-01-31 21:00:34');
+INSERT INTO `tb_menu` VALUES (2, 'Incidencias Resueltas', 'fas fa-list-check', '/incidencias/resueltas', 0, 0, 0, 3, 1, '2025-03-10 12:06:36', '2025-01-31 21:00:34');
+INSERT INTO `tb_menu` VALUES (3, 'Visitas', 'fas fa-person-biking', 'ControlVisitas', 1, 0, 0, 4, 1, '2025-03-10 12:06:36', '2025-02-01 16:30:49');
+INSERT INTO `tb_menu` VALUES (4, 'Empresas', 'far fa-building', 'ControlEmpresas', 1, 0, 0, 6, 1, '2025-03-10 12:06:36', '2025-02-01 18:12:14');
+INSERT INTO `tb_menu` VALUES (5, 'Control de Usuarios', 'fas fa-user-group', 'ControlUsarios', 1, 0, 0, 7, 1, '2025-03-10 12:06:36', '2025-02-01 18:14:02');
+INSERT INTO `tb_menu` VALUES (6, 'Mantenimientos', 'fas fa-gears', 'ControlMantenimientos', 1, 0, 0, 8, 1, '2025-03-10 12:06:36', '2025-02-01 18:15:04');
+INSERT INTO `tb_menu` VALUES (7, 'Sistema', 'fas fa-laptop-code', 'Sistema', 1, 0, 1, 9, 1, '2025-03-10 12:06:36', '2025-02-10 15:14:55');
+INSERT INTO `tb_menu` VALUES (8, 'Buzon Tecnico', 'fas fa-address-book', 'Buzon', 1, 0, 0, 5, 1, '2025-03-10 12:06:36', '2025-02-10 16:25:23');
+INSERT INTO `tb_menu` VALUES (9, 'Asignacion de Turno', 'fas fa-user-clock', '/asignacion-turno', 0, 0, 1, 1, 1, '2025-03-10 12:06:36', '2025-03-10 11:19:10');
 
 -- ----------------------------
 -- Table structure for tb_orden_correlativo
@@ -1303,7 +1336,7 @@ CREATE TABLE `tb_orden_servicio`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_ordens`) USING BTREE,
   INDEX `cod_ordens`(`cod_ordens`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 24 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_servicio
@@ -1324,6 +1357,7 @@ INSERT INTO `tb_orden_servicio` VALUES (20, 'ST25-00000022', 'INC-00000014', 'ee
 INSERT INTO `tb_orden_servicio` VALUES (21, 'ST25-00000023', 'INC-00000017', 'no lee', 'tiene que leer', NULL, '2025-03-03', '09:35:14', NULL, 1, NULL, '2025-03-03 09:35:17');
 INSERT INTO `tb_orden_servicio` VALUES (22, 'ST25-00000024', 'INC-00000015', 'no imprime', 'que imprima', NULL, '2025-03-03', '12:14:01', 'qwerty', 1, '2025-03-03 12:20:36', '2025-03-03 12:14:04');
 INSERT INTO `tb_orden_servicio` VALUES (23, 'ST25-00000025', 'INC-00000019', 'no lee', 'debe leer', NULL, '2025-03-05', '12:34:48', 'qwerty', 1, '2025-03-05 12:35:25', '2025-03-05 12:34:51');
+INSERT INTO `tb_orden_servicio` VALUES (24, 'OS24-00015478', 'INC-00000027', 'no imprime', 'que imprima', NULL, '2025-03-12', '14:26:20', 'qwerty123', 1, '2025-03-12 14:26:46', '2025-03-12 14:26:22');
 
 -- ----------------------------
 -- Table structure for tb_orden_visita
@@ -1545,7 +1579,7 @@ INSERT INTO `tb_problema` VALUES (5, 'L-REM', 'PROBLEMA DE LECTURA', 1, 0, 1, NU
 INSERT INTO `tb_problema` VALUES (6, 'I-REM', 'PROBLEMA DE IMPRESORA', 1, 0, 1, NULL, '2024-07-27 18:49:13');
 INSERT INTO `tb_problema` VALUES (7, 'T-REM', 'PROBLEMA DE TERMINAL TOUCH', 1, 0, 1, NULL, '2024-07-27 18:49:13');
 INSERT INTO `tb_problema` VALUES (8, 'C-REM', 'PROBLEMA DE COMUNICACIÓN', 1, 0, 1, NULL, '2024-07-27 18:49:13');
-INSERT INTO `tb_problema` VALUES (9, 'ACT-PRE', 'ACTUALIZACION DE SISTEMA', 2, 0, 1, '2025-01-31 15:51:12', '2024-07-27 18:49:13');
+INSERT INTO `tb_problema` VALUES (9, 'ACT-PRE', 'ACTUALIZACION DE SISTEMA', 2, 0, 1, '2025-03-10 11:45:53', '2024-07-27 18:49:13');
 INSERT INTO `tb_problema` VALUES (10, 'PSIS-REM', 'PROBLEMAS DE SISTEMA', 1, 0, 1, NULL, '2024-07-27 18:49:13');
 INSERT INTO `tb_problema` VALUES (11, 'MANT', 'MANTENIMIENTO GENERAL', 2, 0, 1, NULL, '2024-07-27 18:49:13');
 INSERT INTO `tb_problema` VALUES (12, 'PRU-PRE', 'PRUEBA', 2, 0, 1, NULL, '2024-07-27 18:49:13');
@@ -2468,7 +2502,7 @@ CREATE TABLE `usuarios`  (
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
-INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-03-07 14:38:14', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$Cqb.U5Z70oVD05Zdrq6a4uqS6CQIdWYHZf.cSvbk3QmYbfAsuCfG.', '123456', 'user_auth.jpg', 'fd_jcauper.png', 5, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiNyI6WyI5IiwiMTAiXSwiOCI6WyIxMSIsIjEyIl19', NULL, 0, 1, '2025-02-25 08:52:42', '2024-07-09 23:00:19');
+INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-03-10 11:41:02', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$5uZJUCoBitJY01nivL.Fy.f22TsGLJrfNggAi49bexW04zNGSIq9u', '123456', 'user_auth.jpg', 'fd_jcauper.png', 5, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiNyI6WyI5IiwiMTAiXSwiOCI6WyIxMSIsIjEyIl0sIjkiOltdfQ==', NULL, 0, 1, '2025-03-10 11:41:00', '2024-07-09 23:00:19');
 INSERT INTO `usuarios` VALUES (3, '12345678', 'Pedro', 'Suarez', 'psuarez@gmail.com', 'psuarez@email.com', '2025-02-25 08:54:29', '2003-01-14', '935423118', '952332137', 'psuarez', '$2y$12$3CmRGy97YD3R0M5j19rrRO.G6AbM6n26v8y3CPEJI8ca2.bsRSiLC', '123789', 'fp_psuarez.png', 'fd_psuarez.png', 3, 3, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 16:31:18', '2024-07-13 02:41:10');
 INSERT INTO `usuarios` VALUES (4, '74716278', 'JOSTHEIN JOSEPH', 'MAYORCA BELLEZA', 'jmayorca@gmail.com', 'jmayorca@email.com', '2025-02-25 08:54:29', '1997-06-11', '978456123', '985267341', 'jmayorca', '$2y$12$CAclmFJJoM2plUl48iJsgeRbm8WrDbu8jynetkGuWVVBxGTONEm9C', '147852', 'user_auth.jpg', 'fd_jmayorca.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 15:28:24', '2024-07-15 22:18:33');
 INSERT INTO `usuarios` VALUES (5, '70401296', 'BRYAN MARTIN', 'POLO GOMEZ', 'talvan@gmail.com', 'talvan@email.com', '2025-02-25 08:54:29', '2001-07-02', '987564123', '948741236', 'talvan', '$2y$12$6oyxU4QP06ERy7uIw4t6yeJuW1s6bmft/lUWc9SMosYlyZrHPbwN.', '987654', 'user_auth.jpg', 'fd_talvan.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 15:28:09', '2024-07-22 02:16:27');

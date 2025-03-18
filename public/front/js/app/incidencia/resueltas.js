@@ -23,6 +23,10 @@ $(document).ready(function () {
             firstDay: 1 // Comienza la semana en lunes
         }
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_orden.columns.adjust().draw();
+    });
 });
 
 const tb_orden = new DataTable('#tb_orden', {
@@ -184,8 +188,7 @@ document.getElementById('form-firmas').addEventListener('submit', async function
     if (!await boxAlert.confirm(`¿Estas seguro que deseas continuar?, no se podrá revertir los cambios`)) return true;
 
     fMananger.formModalLoding('modal_firmas', 'show');
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_firmas', 'hide');

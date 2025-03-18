@@ -25,7 +25,7 @@ class OrdenController extends Controller
             $validator = Validator::make($request->all(), [
                 'n_orden' => 'required|string',
                 'codInc' => 'required|string',
-                'check_cod' => 'required|boolean',
+                'cod_sistema' => 'required|boolean',
                 'observaciones' => 'required|string',
                 'recomendacion' => 'required|string',
                 'fecha_f' => 'required|date',
@@ -44,12 +44,15 @@ class OrdenController extends Controller
             $codAviso = $request->has('codAviso') ? $request->codAviso : 3;
 
             DB::beginTransaction();
-            // Insertar correlativo si se seleccionó
-            DB::table('tb_orden_correlativo')->insert([
-                'num_orden' => $request->n_orden,
-                'created_at' => now()->format('Y-m-d H:i:s')
-            ]);
-            
+
+            if ($request->cod_sistema) {
+                // Insertar correlativo si se seleccionó
+                DB::table('tb_orden_correlativo')->insert([
+                    'num_orden' => $request->n_orden,
+                    'created_at' => now()->format('Y-m-d H:i:s')
+                ]);
+            }
+
             // Crear contacto (si aplica)
             $idContacto = null;
             if ($request->n_doc || $request->nom_cliente) {
@@ -118,7 +121,7 @@ class OrdenController extends Controller
     public function addSignature(Request $request)
     {
         try {
-            
+
             DB::beginTransaction();
             $idContacto = $this->createContact($request);
 

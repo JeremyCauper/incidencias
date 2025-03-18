@@ -31,6 +31,10 @@ $(document).ready(function () {
         $('#modal_problemasLabel').html('REGISTRAR PROBLEMA');
         $('#id').val('');
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_problemas.columns.adjust().draw();
+    });
 });
 
 const tb_problemas = new DataTable('#tb_problemas', {
@@ -75,8 +79,7 @@ document.getElementById('form-problema').addEventListener('submit', function (ev
     const accion = $('#id').val();
     const url = accion ? `actualizar` : `registrar`;
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success) {
         return fMananger.formModalLoding('modal_problemas', 'hide');

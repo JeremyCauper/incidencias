@@ -109,6 +109,10 @@ $(document).ready(function () {
         setCheckedFromJson(permisos);
     });
     setCheckedFromJson('eyI4IjpbIjExIiwiMTIiXX0=');
+
+    fObservador('.content-wrapper', () => {
+        tb_usuario.columns.adjust().draw();
+    });
 });
 
 const tb_usuario = new DataTable('#tb_usuario', {
@@ -149,8 +153,7 @@ document.getElementById('form-usuario').addEventListener('submit', function (eve
     const accion = $('#id').val();
     const url = accion ? `actualizar` : `registrar`;
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     let permisos = getCheckedValues();
 

@@ -78,6 +78,10 @@ $(document).ready(function () {
     ubigeo.forEach(e => {
         $('#ubigeo').append($('<option>').val(e.codigo).text(e.nombre));
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_sucursales.columns.adjust().draw();
+    });
 });
 
 const tb_sucursales = new DataTable('#tb_sucursales', {
@@ -124,8 +128,7 @@ document.getElementById('form-sucursal').addEventListener('submit', function (ev
     const accion = $('#id').val();
     const url = accion ? `actualizar` : `registrar`;
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_sucursales', 'hide');

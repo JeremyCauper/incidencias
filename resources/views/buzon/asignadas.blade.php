@@ -171,14 +171,14 @@
         <div class="card">
             <div class="card-body">
                 <h6 class="card-title col-form-label-sm text-primary mb-3">
-                    <strong>Incidencias / Visitas Resueltas</strong>
+                    <strong>Incidencias / Visitas Asignadas</strong>
                 </h6>
 
                 <ul class="nav nav-tabs mb-3" id="myTab0" role="tablist">
                     <li class="nav-item" role="presentation">
                         <button data-mdb-tab-init class="nav-link position-relative active" id="home-tab0"
                             data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true"
-                            onclick="resetTable(false)">
+                            onclick="resetTable()">
                             Incidencias
                             <span id="count_asig"
                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-danger"></span>
@@ -187,7 +187,7 @@
                     <li class="nav-item" role="presentation">
                         <button data-mdb-tab-init class="nav-link position-relative" id="profile-tab0"
                             data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile"
-                            aria-selected="false" onclick="resetTable(true)">
+                            aria-selected="false" onclick="resetTable()">
                             Visitas
                             <span id="count_vis"
                                 class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-danger"></span>
@@ -224,7 +224,7 @@
                     </div>
                     <div class="tab-pane fade" id="profile0" role="tabpanel" aria-labelledby="profile-tab0">
                         <div>
-                            <button class="btn btn-primary btn-sm px-1" onclick="updateTableVis()" data-mdb-ripple-init
+                            <button class="btn btn-primary px-2" onclick="updateTableVis()" data-mdb-ripple-init
                                 role="button">
                                 <i class="fas fa-rotate-right"></i>
                             </button>

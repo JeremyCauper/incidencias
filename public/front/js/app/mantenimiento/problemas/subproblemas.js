@@ -37,6 +37,10 @@ $(document).ready(function () {
         $('#modal_subproblemasLabel').html('REGISTRAR SUB PROBLEMA');
         $('#id').val('');
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_subproblemas.columns.adjust().draw();
+    });
 });
 
 const tb_subproblemas = new DataTable('#tb_subproblemas', {
@@ -81,8 +85,7 @@ document.getElementById('form-subproblema').addEventListener('submit', function 
     const accion = $('#id').val();
     const url = accion ? `actualizar` : `registrar`;
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success) {
         return fMananger.formModalLoding('modal_subproblemas', 'hide');

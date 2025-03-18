@@ -43,6 +43,10 @@ $(document).ready(function () {
         $('#modal_submenuLabel').html('REGISTRAR SUB MENU');
         $('#id').val('');
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_submenu.columns.adjust().draw();
+    });
 });
 
 const tb_submenu = new DataTable('#tb_submenu', {
@@ -87,8 +91,7 @@ document.getElementById('form-submenu').addEventListener('submit', function (eve
     const accion = $('#id').val();
     const url = accion ? `actualizar` : `registrar`;
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success) {
         return fMananger.formModalLoding('modal_submenu', 'hide');

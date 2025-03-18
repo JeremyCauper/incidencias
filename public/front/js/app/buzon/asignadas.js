@@ -61,6 +61,11 @@ $(document).ready(function () {
         $(this).attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
         $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
     })
+
+    fObservador('.content-wrapper', () => {
+        tb_incidencias.columns.adjust().draw();
+        tb_visitas.columns.adjust().draw();
+    });
 });
 
 const cMaterial = new CTable('#createMaterial', {
@@ -253,14 +258,13 @@ document.getElementById('form-orden').addEventListener('submit', async function 
     fMananger.formModalLoding('modal_orden', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     valid.data.data.materiales = cMaterial.extract();
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
     var n_orden = valid.data.data.n_orden;
-    valid.data.data.check_cod = eval($('#button-cod-orden').attr('check-cod')) ? false : true;
+    valid.data.data.cod_sistema = eval($('#button-cod-orden').attr('check-cod'));
 
     $.ajax({
         type: 'POST',
@@ -339,8 +343,7 @@ document.getElementById('form-addcod').addEventListener('submit', async function
 
     fMananger.formModalLoding('modal_addcod', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_addcod', 'hide');
@@ -810,8 +813,7 @@ document.getElementById('form-orden-visita').addEventListener('submit', async fu
 
     fMananger.formModalLoding('modal_orden_visita', 'show');
 
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     valid.data.data.islas = MRevision.extract();
     const old_cod_ordenv = valid.data.data.cod_ordenv;
 
@@ -868,15 +870,7 @@ function changeCodOrdenV(val = cod_ordenv) {
     cod_ordenv = val;
 }
 
-
-
-
-async function resetTable(val) {
-    $(`#tb_${val ? 'visitas' : 'incidencias'}_wrapper .dataTables_scrollHeadInner`).css('width', '100%')
-        .find('table').css('width', '100%');
-    if (val) {
-        updateTableVis()
-    } else {
-        updateTableInc()
-    }
+function resetTable() {
+    tb_incidencias.columns.adjust().draw();
+    tb_visitas.columns.adjust().draw();
 }

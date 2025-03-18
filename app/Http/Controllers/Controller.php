@@ -93,7 +93,7 @@ class Controller extends BaseController
 
     public function validarPermisos($menu, $submenu = "")
     {
-        $arrayString = base64_decode(Auth::user()->menu_usuario);
+        $arrayString = base64_decode(session('menu_usuario'));
         $modulos = json_decode($arrayString);
     
         if (isset($modulos->$menu)) {

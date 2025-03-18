@@ -31,6 +31,11 @@ $(document).ready(function () {
             firstDay: 1 // Comienza la semana en lunes
         }
     });
+
+    fObservador('.content-wrapper', () => {
+        tb_visitas.columns.adjust().draw();
+        tb_vprogramadas.columns.adjust().draw();
+    });
 });
 
 const cPersonal = new CTable('#createPersonal', {
@@ -188,8 +193,7 @@ document.getElementById('form-visita').addEventListener('submit', function (even
             h: 'Primero debe asignar un personal'
         });
     fMananger.formModalLoding('modal_visitas', 'show');
-    var elementos = this.querySelectorAll('[name]');
-    var valid = validFrom(elementos);
+    var valid = validFrom(this);
     if (!valid.success)
         return fMananger.formModalLoding('modal_visitas', 'hide');
     valid.data.data['personal'] = cPersonal.extract();

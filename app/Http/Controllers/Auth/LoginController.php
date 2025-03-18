@@ -19,7 +19,7 @@ class LoginController extends Controller
             return $this->mesageError(exception: $e, codigo: 500);
         }
     }
-    
+
     public function login(Request $request)
     {
         $request->validate([
@@ -39,7 +39,13 @@ class LoginController extends Controller
         if (!Auth::attempt($credentials))
             return response()->json(['success' => false, 'message' => 'La contraseña es incorrecta'], 200);
 
-        $modulos = $this->obtenerModulos(Auth::user()->menu_usuario, Auth::user()->tipo_acceso);
+        $menu_usuario = Auth::user()->menu_usuario;
+        $turno_fin = $this->validarTurno(Auth::user()->id_usuario);
+        if (Auth::user()->tipo_acceso == 3 && !empty($turno_fin)) {
+            $menu_usuario = 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiOCI6WyIxMSIsIjEyIl19';
+        }
+
+        $modulos = $this->obtenerModulos($menu_usuario, Auth::user()->tipo_acceso);
         $nomPerfil = $this->formatearNombre(Auth::user()->nombres, Auth::user()->apellidos);
 
         session([
@@ -47,7 +53,9 @@ class LoginController extends Controller
             'rutaRedirect' => $modulos->ruta,
             'nomPerfil' => $nomPerfil,
             'id_usuario' => Auth::user()->id_usuario,
-            'tipo_acceso' => Auth::user()->tipo_acceso
+            'tipo_acceso' => Auth::user()->tipo_acceso,
+            'menu_usuario' => $menu_usuario,
+            'turno_fin' => $turno_fin
         ]);
         $request->session()->regenerate();
 
@@ -55,10 +63,30 @@ class LoginController extends Controller
         return response()->json(['success' => true, 'message' => '', 'data' => $modulos->ruta], 200);
     }
 
+    public function validarTurno(string $id)
+    {
+        $fechaActual = now()->format('Y-m-d H:i:s');
+        $tapoyo = DB::table('tb_cronograma_turno')
+            ->where(['eliminado' => 0, 'personal_a' => $id])
+            ->whereRaw('? BETWEEN CONCAT(fecha_ini_a, " ", hora_ini_a) AND CONCAT(fecha_fin_a, " ", hora_fin_a)', [$fechaActual])
+            ->first();
+        $respuesta = "";
+        if (!empty($tapoyo)) {
+            $fechaInicio = "$tapoyo->fecha_ini_a $tapoyo->hora_ini_a";
+            $fechaFin = "$tapoyo->fecha_fin_a $tapoyo->hora_fin_a";
+            $fechaActual = now()->format('Y-m-d H:i:s');
+
+            if (strtotime($fechaActual) >= strtotime($fechaInicio) && strtotime($fechaActual) <= strtotime($fechaFin)) {
+                $respuesta = $fechaFin;
+            }
+        }
+        return $respuesta;
+    }
+
     public function logout(Request $request)
     {
         Auth::logout();
-        session()->forget(['customModulos', 'rutaRedirect', 'nomPerfil', 'id_usuario', 'tipo_acceso']);
+        session()->forget(['customModulos', 'rutaRedirect', 'nomPerfil', 'id_usuario', 'tipo_acceso', 'menu_usuario', 'turno_fin']);
         return redirect('/inicio');
     }
 }

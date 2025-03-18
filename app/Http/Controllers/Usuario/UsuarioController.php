@@ -28,7 +28,12 @@ class UsuarioController extends Controller
         try {
             $data = [];
             $data['areas'] = DB::table('tb_area')->where('estatus', 1)->get();
-            $data['tipoAcceso'] = DB::table('tipo_usuario')->where('estatus', 1)->get();
+            $data['tipoAcceso'] = DB::table('tipo_usuario')
+                ->where('estatus', 1)
+                ->when(session('tipo_acceso') != 5, function ($query) {
+                    return $query->whereNot('id_tipo_acceso', 5);
+                })->get();
+
 
             $tipo_menu = [0];
             if (session('tipo_acceso') == 5) {
