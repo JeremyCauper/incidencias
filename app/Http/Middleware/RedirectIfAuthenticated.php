@@ -22,9 +22,9 @@ class RedirectIfAuthenticated
         foreach ($guards as $guard) {
             if (Auth::guard($guard)->check()) {
                 //return redirect('/inicio');
-                dd(Auth::check(), Auth::user()); // Verifica si detecta sesión activa
-                return redirect('/incidencias/registradas');
-                //return redirect(session('rutaRedirect'));
+                //dd(Auth::check(), Auth::user()); // Verifica si detecta sesión activa
+                //return redirect('/incidencias/registradas');
+                return redirect(session('rutaRedirect'));
             }
         }
 

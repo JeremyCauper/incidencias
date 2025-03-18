@@ -2,9 +2,9 @@
 @section('title', 'INC RESUELTAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{asset('front/vendor/daterangepicker/daterangepicker.css')}}">
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <style>
         /*////////////////////////////////////////
                 /        SCRIPT CSS FIRMA DIGITAL        /
@@ -866,7 +866,7 @@
         const problemas = <?php echo json_encode($data['problemas']); ?>;
         const subproblemas = <?php echo json_encode($data['subproblemas']); ?>;
     </script>
-    <script src="{{asset('front/js/RevisionMananger,js')}}"></script>
-    <script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{asset('front/js/app/buzon/asignadas.js')}}"></script>
+    <script src="{{secure_asset('front/js/RevisionMananger,js')}}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
+    <script src="{{secure_asset('front/js/app/buzon/asignadas.js')}}"></script>
 @endsection
