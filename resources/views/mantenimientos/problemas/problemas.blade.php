@@ -2,7 +2,7 @@
 @section('title', 'Problemas')
 
 @section('cabecera')
-<!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
+<!-- <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}"> -->
 @endsection
 @section('content')
 
@@ -93,6 +93,6 @@
 @endsection
 
 @section('scripts')
-<script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-<script src="{{secure_asset('front/js/app/mantenimiento/problemas/problemas.js')}}"></script>
+<script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>
+<script src="{{asset('front/js/app/mantenimiento/problemas/problemas.js')}}"></script>
 @endsection
