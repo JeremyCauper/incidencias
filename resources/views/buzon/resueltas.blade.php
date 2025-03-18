@@ -2,9 +2,9 @@
 @section('title', 'INC RESUELTAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{asset('front/vendor/daterangepicker/daterangepicker.css')}}">
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
 @endsection
 @section('content')
 
@@ -236,5 +236,5 @@
         const subproblemas = <?php echo json_encode($data['subproblemas']); ?>;
     </script>
 
-    <script src="{{asset('front/js/app/buzon/resueltas.js')}}"></script>
+    <script src="{{secure_asset('front/js/app/buzon/resueltas.js')}}"></script>
 @endsection
