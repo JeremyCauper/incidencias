@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mi MySql
+ Source Server         : Mysql_local
  Source Server Type    : MySQL
- Source Server Version : 100425
+ Source Server Version : 100432
  Source Host           : localhost:3306
  Source Schema         : incidencias_prueba
 
  Target Server Type    : MySQL
- Target Server Version : 100425
+ Target Server Version : 100432
  File Encoding         : 65001
 
- Date: 12/03/2025 18:03:12
+ Date: 18/03/2025 16:25:32
 */
 
 SET NAMES utf8mb4;
@@ -616,12 +616,13 @@ CREATE TABLE `tb_cronograma_turno`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 2 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_cronograma_turno
 -- ----------------------------
 INSERT INTO `tb_cronograma_turno` VALUES (1, '2025-03-10', '18:00:00', '2025-03-17', '08:20:00', 3, '2025-03-15', '13:00:00', '2025-03-17', '08:20:00', 4, 1, 0, 1, NULL, '2025-03-12 16:00:08');
+INSERT INTO `tb_cronograma_turno` VALUES (2, '2025-03-17', '18:00:00', '2025-03-24', '08:20:00', 4, '2025-03-22', '13:00:00', '2025-03-24', '08:20:00', 5, 1, 0, 1, '2025-03-18 16:15:31', '2025-03-14 20:27:14');
 
 -- ----------------------------
 -- Table structure for tb_empresas
