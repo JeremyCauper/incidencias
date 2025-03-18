@@ -46,12 +46,12 @@ $(document).ready(function () {
     });
 
     $('.modal').on('shown.bs.modal', function () {
-        $('#shoraIni').val('18:00');
-        $('#ahoraIni').val('13:00');
-        $('#shoraFin, #ahoraFin').val('08:20');
     });
 
     $('.modal').on('hidden.bs.modal', function () {
+        $('#shoraIni').val('18:00');
+        $('#ahoraIni').val('13:00');
+        $('#shoraFin, #ahoraFin').val('08:20');
     });
 });
 
@@ -74,7 +74,13 @@ document.addEventListener('DOMContentLoaded', function () {
             right: 'prev,next today'
         },
         buttonText: { today: 'Hoy' },
-        titleFormat: { year: 'numeric', month: 'long' }
+        titleFormat: { year: 'numeric', month: 'long' },
+        eventOrder: "start,-duration",
+        eventDidMount: function (info) {
+            info.el.style.cursor = "pointer";
+            info.el.style.height = "28px"; // Cambia la altura
+            info.el.style.lineHeight = "28px"; // Centra el texto
+        }
     });
 
     calendario.render();
@@ -106,8 +112,6 @@ document.addEventListener('DOMContentLoaded', function () {
 
     calendario.on('eventClick', function (info) {
         abrirModalDetalle(info.event);
-        // $('#modal_turno_detalle').modal('show');
-        // alert(`Evento: ${info.event.title} - ${info.event.id}\nInicio: ${info.event.start.toISOString().split('T')[0]}\nFin: ${info.event.end ? info.event.end.toISOString().split('T')[0] : 'No definido'}`);
     });
 
     // Manejar cambios en los inputs de fecha
@@ -116,15 +120,6 @@ document.addEventListener('DOMContentLoaded', function () {
         if (this.id === 'sfechaIni') {
             establecerFechas(this.value);
         }
-    });
-
-    // Guardar evento permanente
-    $('#guardarEvento').on('click', function () {
-        if (eventoTemporal) {
-            agregarEventoRango(eventoTemporal.start, eventoTemporal.end, 0);
-            eventoTemporal = null;
-        }
-        $('#modal_turno').modal('hide');
     });
 
     fObservador('.content-wrapper', () => {
@@ -175,9 +170,9 @@ function agregarEventoRango(_id, fechaInicio, fechaFin, horaInicio, horaFin, tip
     calendario.addEvent({
         id: setting[3],
         title: setting[2] + `: ${horaInicio} - ${horaFin}`,
-        start: fechaInicio,
-        end: calcularFecha(fechaFin, 1),
-        allDay: true,
+        start: `${fechaInicio}T${horaInicio}`,
+        end: `${calcularFecha(fechaFin, 1)}T${horaFin}`,
+        allDay: true, // Cambiar a false para que respete el orden de horas
         backgroundColor: setting[0],
         borderColor: setting[0]
     });
@@ -281,7 +276,10 @@ async function editarTurno(id) {
         $('#modal_turno').modal('show');
         $('#modal_turnoLabel').html('Editar Turno');
         let datos = añosCargados[anioMemoria][id];
-    
+
+        console.log(datos);
+        
+
         $("#id").val(id);
         $("#sfechaIni").val(datos.fecha_ini_s).trigger('change');
         $("#shoraIni").val(datos.hora_ini_s);

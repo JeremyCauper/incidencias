@@ -49,14 +49,14 @@ class TurnoController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'sfechaIni' => 'required|date',
-                'shoraIni' => 'required|date_format:H:i',
+                'shoraIni' => 'required|string',
                 'sfechaFin' => 'required|date',
-                'shoraFin' => 'required|date_format:H:i',
+                'shoraFin' => 'required|string',
                 'spersonal' => 'required|integer',
                 'afechaIni' => 'required|date',
-                'ahoraIni' => 'required|date_format:H:i',
+                'ahoraIni' => 'required|string',
                 'afechaFin' => 'required|date',
-                'ahoraFin' => 'required|date_format:H:i',
+                'ahoraFin' => 'required|string',
                 'apersonal' => 'required|integer'
             ]);
 
@@ -99,14 +99,14 @@ class TurnoController extends Controller
             $validator = Validator::make($request->all(), [
                 'id' => 'required|integer',
                 'sfechaIni' => 'required|date',
-                'shoraIni' => 'required|date_format:H:i',
+                'shoraIni' => 'required|string',
                 'sfechaFin' => 'required|date',
-                'shoraFin' => 'required|date_format:H:i',
+                'shoraFin' => 'required|string',
                 'spersonal' => 'required|integer',
                 'afechaIni' => 'required|date',
-                'ahoraIni' => 'required|date_format:H:i',
+                'ahoraIni' => 'required|string',
                 'afechaFin' => 'required|date',
-                'ahoraFin' => 'required|date_format:H:i',
+                'ahoraFin' => 'required|string',
                 'apersonal' => 'required|integer'
             ]);
 

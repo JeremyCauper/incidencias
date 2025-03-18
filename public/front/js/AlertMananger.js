@@ -27,9 +27,12 @@ class AlertMananger {
         });
     }
 
-    async confirm(message) {
+    async confirm(op = {}) {
+        const titulo = op.t || '';
+        const thtml = op.h || false;
         if (!(await Swal.fire({
-            title: `<h6 style="color: #a4bcc5;">${message}</h6>`,
+            title: `<h5 class="card-title text-secondary"><b>${titulo}</b></h5>`,
+            html: thtml,
             icon: "question",
             showCancelButton: true,
             confirmButtonColor: "#3085d6",
