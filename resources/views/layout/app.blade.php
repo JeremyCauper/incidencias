@@ -5,31 +5,39 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}" />
+  <link rel="shortcut icon" href="{{asset('front/images/app/LogoRC.png')}}" />
   <title>@yield('title')</title>
   <!-- Font Awesome -->
-  <link href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}" rel="stylesheet">
+  <link href="{{asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}" rel="stylesheet">
   <!-- MDB -->
-  <link href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}" rel="stylesheet">
+  <link href="{{asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}" rel="stylesheet">
   <!-- Iconos -->
-  <link href="{{ secure_asset('front/vendor/simple-icon/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ secure_asset('front/vendor/simple-icon/styles.min.css') }}" rel="stylesheet">
-  <link href="{{ secure_asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('front/vendor/simple-icon/bootstrap-icons.css') }}" rel="stylesheet">
+  <link href="{{ asset('front/vendor/simple-icon/styles.min.css') }}" rel="stylesheet">
+  <link href="{{ asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{secure_asset('front/vendor/flatpickr/flatpickr.min.css')}}">
+  <link rel="stylesheet" href="{{asset('front/vendor/flatpickr/flatpickr.min.css')}}">
 
-  <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/animate.min.css')}}">
-  <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}">
+  <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/animate.min.css')}}">
+  <link rel="stylesheet" href="{{asset('front/vendor/sweetalert/default.css')}}">
   <!-- Google Fonts -->
   <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
   <!-- Home -->
-  <link href="{{ secure_asset('front/css/app.css') }}" rel="stylesheet">
+  <link href="{{ asset('front/css/app.css') }}" rel="stylesheet">
   <!-- JQuery -->
+<<<<<<< HEAD
 
   <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/form_select2.js')}}"></script>
+=======
+  <script src="{{ asset('front/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
+  <script src="{{asset('front/vendor/select/select2.min.js')}}"></script>
+  <script src="{{asset('front/vendor/select/form_select2.js')}}"></script>
+  <script src="{{asset('front/js/AlertMananger.js')}}"></script>
+>>>>>>> ba84c901e8f898eb128948fda5e79b0ac38026cd
   @yield('cabecera')
 </head>
 <style>
@@ -49,11 +57,11 @@
         <div>
           <a class="navbar-brand brand-logo" href="{{url('/inicio')}}">
             <div class="d-flex align-items-center">
-              <img src="{{secure_asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
+              <img src="{{asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
             </div>
           </a>
           <!-- <a class="navbar-brand brand-logo" href="{{url('/inicio')}}">
-            <img src="{{secure_asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
+            <img src="{{asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
           </a> -->
         </div>
       </div>
@@ -224,8 +232,13 @@
       location.reload();
     }, 7205000);
 
+<<<<<<< HEAD
     const __url = "{{secure_url('')}}";
     const __asset = "{{secure_asset('/front')}}";
+=======
+    const __url = "{{url('')}}";
+    const __asset = "{{asset('/front')}}";
+>>>>>>> ba84c901e8f898eb128948fda5e79b0ac38026cd
     const __token = "{{ csrf_token() }}";
 
     let alertaMostrada = false;
@@ -281,7 +294,6 @@
 
   </script>
   <!-- MDB -->
-<<<<<<< HEAD
   <script type="text/javascript" src="{{asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
   <script src="{{asset('front/js/app.js')}}"></script>
   <script src="{{asset('front/js/template.js') }}"></script>
@@ -292,19 +304,6 @@
   <script src="{{asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
   <script src="{{asset('front/js/TableManeger.js')}}"></script>
   <script src="{{asset('front/js/FormMananger.js')}}"></script>
-=======
-  <script type="text/javascript" src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
-  <script src="{{secure_asset('front/js/app.js')}}"></script>
-  <script src="{{secure_asset('front/js/AlertMananger.js')}}"></script>
-  <script src="{{secure_asset('front/js/template.js') }}"></script>
-  <script src="{{secure_asset('front/js/hoverable-collapse.js') }}"></script>
-  <script src="{{secure_asset('front/js/off-canvas.js')}}"></script>
-  <script src="{{secure_asset('front/vendor/inputmask/jquery.inputmask.bundle.min.js')}}"></script>
-  <script src="{{secure_asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
-  <script src="{{secure_asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
-  <script src="{{secure_asset('front/js/TableManeger.js')}}"></script>
-  <script src="{{secure_asset('front/js/FormMananger.js')}}"></script>
->>>>>>> 3fe7e38f60abac3b3c22ef79347997a9f347f50c
   <!-- plugins:js -->
   @yield('scripts')
 </body>

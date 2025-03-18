@@ -2,7 +2,7 @@
 @section('title', 'Menu')
 
 @section('cabecera')
-    <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
+    <!-- <link rel="stylesheet" href="{{asset('front/css/app/incidencias/registradas.css')}}"> -->
 
     <style>
         #tb_orden_menu tbody tr {
@@ -244,5 +244,5 @@
             return datos;
         }
     </script>
-    <script src="{{secure_asset('front/js/app/mantenimiento/menu/menu.js')}}"></script>
+    <script src="{{asset('front/js/app/mantenimiento/menu/menu.js')}}"></script>
 @endsection
