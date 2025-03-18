@@ -2,10 +2,10 @@
 @section('title', 'INC RESUELTAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{asset('front/vendor/daterangepicker/daterangepicker.css')}}">
-    <link rel="stylesheet" href="{{asset('front/css/app/incidencias/resueltas.css')}}">
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
 @endsection
 @section('content')
 
@@ -228,6 +228,6 @@
         let obj_problem = <?php echo json_encode($data['problema']); ?>;
         let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
     </script>
-    <script src="{{asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{asset('front/js/app/incidencia/resueltas.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
+    <script src="{{secure_asset('front/js/app/incidencia/resueltas.js')}}"></script>
 @endsection
