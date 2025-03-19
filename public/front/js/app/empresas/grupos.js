@@ -131,7 +131,7 @@ function Editar(id) {
 
 async function CambiarEstado(id, estado) {
     try {
-        if (!await boxAlert.confirm('¿Esta seguro de esta accion?')) return true;
+        if (!await boxAlert.confirm({ h: `Esta apunto de ${estado ? 'des' : ''}activar el grupo.` })) return true;
 
         $.ajax({
             type: 'POST',

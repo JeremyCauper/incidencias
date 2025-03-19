@@ -253,7 +253,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
     event.preventDefault();
 
     if ($('[ctable-contable="#createMaterial"]').children().length && !$('#codAviso').val())
-        if (!await boxAlert.confirm(`El campo 'Código Aviso' está vacío. ¿Deseas continuar?`)) return $('#codAviso').focus();
+        if (!await boxAlert.confirm({ h: `El campo 'Código Aviso' está vacío.` })) return $('#codAviso').focus();
 
     fMananger.formModalLoding('modal_orden', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
@@ -305,7 +305,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 });
 
 function AddCodAviso(e, cod) {
-    const obj = extractDataRow(e, 'tb_incidencias');    
+    const obj = extractDataRow(e, 'tb_incidencias');
     obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
 
     $.each(obj, function (panel, count) {
@@ -339,7 +339,7 @@ function AddCodAviso(e, cod) {
 document.getElementById('form-addcod').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    if (!await boxAlert.confirm(`¿Estas seguro que deseas continuar?, no se podrá revertir los cambios`)) return true;
+    if (!await boxAlert.confirm({ h: `Después no se podrá modificar el codigo de aviso ingresado.` })) return true;
 
     fMananger.formModalLoding('modal_addcod', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
@@ -385,7 +385,7 @@ document.getElementById('form-addcod').addEventListener('submit', async function
 });
 
 async function StartInc(cod, estado) {
-    if (!await boxAlert.confirm(`¿Esta seguro de <b>${estado == 2 ? 're' : ''}iniciar</b> la incidencia?`)) return true;
+    if (!await boxAlert.confirm({ h: `Esta apunto de <b><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la incidencia` })) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/incidencias/registradas/startInc`,
@@ -702,7 +702,7 @@ function ShowDetailVis(e, id) {
         url: `${__url}/visitas/programadas/detail/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            
+
             if (data.success) {
                 var seguimiento = data.data.seguimiento;
                 var visita = data.data.visita;
@@ -740,7 +740,7 @@ function ShowDetailVis(e, id) {
 }
 
 async function StartVisita(id, estado) {
-    if (!await boxAlert.confirm(`¿Esta seguro de <b>${estado == 2 ? 're' : ''}iniciar</b> la visita?`)) return true;
+    if (!await boxAlert.confirm({ h: `Esta apunto de <b><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la visita` })) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/visitas/programadas/startVisita`,

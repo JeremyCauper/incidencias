@@ -498,7 +498,7 @@ function ShowAssign(e, cod) {
 }
 
 async function AssignPer() {
-    if (!await boxAlert.confirm('¿Esta seguro de realizar esta accion?')) return true;
+    if (!await boxAlert.confirm({ h: `Está apunto de asignar personal a la incidencia` })) return true;
     fMananger.formModalLoding('modal_assign', 'show');
 
     const cod = $('#modal_assign [aria-item="codigo"]').html();
@@ -557,7 +557,7 @@ async function AssignPer() {
 }
 
 async function DeleteInc(id) {
-    if (!await boxAlert.confirm('¿Esta seguro de elimniar?, no se podrá revertir los cambios')) return true;
+    if (!await boxAlert.confirm({ t: '¿Estas de suguro de eliminar la incidencia?', h: 'no se podrá no se podrá revertir está operación.' })) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/incidencias/registradas/destroy/${id}`,
@@ -582,7 +582,7 @@ async function DeleteInc(id) {
 }
 
 async function StartInc(cod, estado) {
-    if (!await boxAlert.confirm(`¿Esta seguro de <b>${estado == 2 ? 're' : ''}iniciar</b> la incidencia?`)) return true;
+    if (!await boxAlert.confirm({ h: `Esta apunto de <b><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la incidencia` })) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/incidencias/registradas/startInc`,
@@ -692,7 +692,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
     event.preventDefault();
 
     if ($('[ctable-contable="#createMaterial"]').children().length && !$('#codAviso').val())
-        if (!await boxAlert.confirm(`El campo 'Código Aviso' está vacío. ¿Deseas continuar?`)) return $('#codAviso').focus();
+        if (!await boxAlert.confirm({ h: `El campo 'Código Aviso' está vacío.` })) return $('#codAviso').focus();
 
     fMananger.formModalLoding('modal_orden', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
@@ -778,8 +778,8 @@ function AddCodAviso(e, cod) {
 document.getElementById('form-addcod').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    if (!await boxAlert.confirm(`¿Estas seguro que deseas continuar?, no se podrá revertir los cambios`)) return true;
-
+    if (!await boxAlert.confirm({ h: `Después no se podrá modificar el codigo de aviso ingresado.` })) return true;
+    
     fMananger.formModalLoding('modal_addcod', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
     var valid = validFrom(this);

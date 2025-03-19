@@ -25,10 +25,11 @@
   <!-- Home -->
   <link href="{{ secure_asset('front/css/app.css') }}" rel="stylesheet">
   <!-- JQuery -->
- <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/form_select2.js')}}"></script>
+  <script src="{{secure_asset('front/js/AlertMananger.js')}}"></script>
 
   @yield('cabecera')
 </head>
@@ -118,14 +119,15 @@
           <div class="dropdown">
             <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow rounded-circle"
               href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false" data-mdb-ripple-init>
-              <img class="img-xs rounded-circle" src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
-                alt="Profile image">
+              <img class="img-xs rounded-circle"
+                src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image">
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
               <li>
                 <span class="dropdown-header text-center">
-                  <img class="img-md rounded-circle" src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
-                    alt="Profile image" style="width: 90px; height: 90px;">
+                  <img class="img-md rounded-circle"
+                    src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image"
+                    style="width: 90px; height: 90px;">
                   <p class="mb-1 mt-3 fw-semibold">
                     {{ session('nomPerfil') }}
                   </p>

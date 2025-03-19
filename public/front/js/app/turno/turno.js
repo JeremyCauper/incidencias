@@ -296,7 +296,8 @@ async function editarTurno(id) {
 
 async function eliminarTurno(id) {
     $('#modal_turno_detalle').modal('hide');
-    if (!await boxAlert.confirm('¿Esta seguro de elimniar?, no se podrá revertir los cambios y se eliminará el turno de apoyo')) return true;
+    if (!await boxAlert.confirm({ t: '¿Estas de suguro de eliminar el turno?', h: 'no se podrá no se podrá revertir está operación.' })) return true;
+    
     $.ajax({
         type: 'POST',
         url: `${__url}/asignacion-turno/eliminar`,

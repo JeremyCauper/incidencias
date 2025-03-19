@@ -88,7 +88,7 @@ $(document).ready(function () {
     controles.forEach(control => {
         defineControllerAttributes(control.control, control.config);
     });
-    
+
     formatSelect('modal_empresas');
 
     $('.modal').on('hidden.bs.modal', function () {
@@ -184,7 +184,7 @@ function Editar(id) {
             url: `${__url}/empresas/empresas/${id}`,
             contentType: 'application/json',
             success: function (data) {
-                
+
                 if (!data.success) {
                     console.log(data.error);
                     return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
@@ -225,7 +225,7 @@ function Editar(id) {
 
 async function CambiarEstado(id, estado) {
     try {
-        if (!await boxAlert.confirm('¿Esta seguro de esta accion?')) return true;
+        if (!await boxAlert.confirm({ h: `Esta apunto de ${estado ? 'des' : ''}activar la empresa.` })) return true;
 
         $.ajax({
             type: 'POST',

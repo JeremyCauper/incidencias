@@ -28,7 +28,7 @@ class AlertMananger {
     }
 
     async confirm(op = {}) {
-        const titulo = op.t || '';
+        const titulo = op.t || '¿Estás de suguro de esta acción?';
         const thtml = op.h || false;
         if (!(await Swal.fire({
             title: `<h5 class="card-title text-secondary"><b>${titulo}</b></h5>`,
