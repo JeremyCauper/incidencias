@@ -11,7 +11,7 @@
  Target Server Version : 100425
  File Encoding         : 65001
 
- Date: 19/03/2025 23:37:05
+ Date: 19/03/2025 23:40:38
 */
 
 SET NAMES utf8mb4;
@@ -1160,6 +1160,8 @@ INSERT INTO `tb_submenu` VALUES (7, 6, 'Problemas', 'Incidentes', '/mantenimient
 INSERT INTO `tb_submenu` VALUES (8, 6, 'Sub Problemas', 'Incidentes', '/mantenimiento/problemas/subproblemas', 0, 1, NULL, '2025-02-01 20:17:36');
 INSERT INTO `tb_submenu` VALUES (9, 7, 'Menu', 'Config. Menu', '/mantenimiento/menu/menu', 0, 1, '2025-02-10 15:15:29', '2025-02-01 20:18:53');
 INSERT INTO `tb_submenu` VALUES (10, 7, 'Sub Menu', 'Config. Menu', '/mantenimiento/menu/submenu', 0, 1, '2025-02-10 15:15:44', '2025-02-01 20:19:18');
+INSERT INTO `tb_submenu` VALUES (11, 8, 'Soporte Asignadas', NULL, '/buzon-personal/asignadas', 0, 1, NULL, '2025-02-25 08:51:24');
+INSERT INTO `tb_submenu` VALUES (12, 8, 'Soporte Resueltas', NULL, '/buzon-personal/resueltas', 0, 1, NULL, '2025-02-25 08:52:00');
 
 -- ----------------------------
 -- Table structure for tb_subproblema
