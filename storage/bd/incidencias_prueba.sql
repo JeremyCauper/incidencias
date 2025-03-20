@@ -1,70 +1,21 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mysql_local
+ Source Server         : Mi MySql
  Source Server Type    : MySQL
- Source Server Version : 100432
+ Source Server Version : 100425
  Source Host           : localhost:3306
  Source Schema         : incidencias_prueba
 
  Target Server Type    : MySQL
- Target Server Version : 100432
+ Target Server Version : 100425
  File Encoding         : 65001
 
- Date: 18/03/2025 17:51:25
+ Date: 19/03/2025 23:40:38
 */
 
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-
--- ----------------------------
--- Table structure for areas
--- ----------------------------
-DROP TABLE IF EXISTS `areas`;
-CREATE TABLE `areas`  (
-  `id_area` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `estatus` tinyint(1) NULL DEFAULT 1,
-  PRIMARY KEY (`id_area`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of areas
--- ----------------------------
-INSERT INTO `areas` VALUES (1, 'Soporte', 1);
-INSERT INTO `areas` VALUES (2, 'Facturacion', 1);
-INSERT INTO `areas` VALUES (3, 'Supervisor', 1);
-INSERT INTO `areas` VALUES (4, 'Reportes', 1);
-
--- ----------------------------
--- Table structure for cargo_contacto
--- ----------------------------
-DROP TABLE IF EXISTS `cargo_contacto`;
-CREATE TABLE `cargo_contacto`  (
-  `id_cargo` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `estatus` tinyint(1) NULL DEFAULT 1,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_cargo`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 14 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of cargo_contacto
--- ----------------------------
-INSERT INTO `cargo_contacto` VALUES (1, 'Jefe de Playa', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (2, 'Islero', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (3, 'Jefe de Planta', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (4, 'Administrador(a)', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (5, 'Supervisor', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (6, 'Contadora', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (7, 'Asistente Contable', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (8, 'Encargado', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (9, 'Cajero', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (10, 'Jefe de Sistemas', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (11, 'Asistente de Sistemas', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (12, 'Gerente General', 1, NULL, NULL);
-INSERT INTO `cargo_contacto` VALUES (13, 'Gerente Comercial', 1, NULL, NULL);
 
 -- ----------------------------
 -- Table structure for contactos_empresas
@@ -80,9 +31,7 @@ CREATE TABLE `contactos_empresas`  (
   `estatus` tinyint(1) NOT NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_contact`) USING BTREE,
-  INDEX `cargo`(`cargo`) USING BTREE,
-  CONSTRAINT `contactos_empresas_ibfk_1` FOREIGN KEY (`cargo`) REFERENCES `cargo_contacto` (`id_cargo`) ON DELETE CASCADE ON UPDATE CASCADE
+  PRIMARY KEY (`id_contact`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 10 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -96,401 +45,6 @@ INSERT INTO `contactos_empresas` VALUES (6, '00098359', 'Admin3', '954872163', 2
 INSERT INTO `contactos_empresas` VALUES (7, '08670150', 'PATRICIA BETSABET GUEVARA PEREZ', '965438217', 1, NULL, 1, NULL, '2025-01-31 17:17:44');
 INSERT INTO `contactos_empresas` VALUES (8, '00098359', 'ERLINDA RAMIREZ OLIVEIRA', '912197130', 3, NULL, 1, NULL, '2025-02-02 18:39:06');
 INSERT INTO `contactos_empresas` VALUES (9, '08670150', 'PATRICIA BETSABET GUEVARA PEREZ', '965438217', 1, NULL, 1, NULL, '2025-02-17 14:36:22');
-
--- ----------------------------
--- Table structure for empresas
--- ----------------------------
-DROP TABLE IF EXISTS `empresas`;
-CREATE TABLE `empresas`  (
-  `id_empresa` int(11) NOT NULL AUTO_INCREMENT,
-  `ruc_empresa` varchar(11) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `razon_social` varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `contrato` int(11) NULL DEFAULT NULL,
-  `id_nube` int(11) NULL DEFAULT NULL,
-  `id_grupo` int(11) NULL DEFAULT NULL,
-  `direccion` varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `distrito` varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `facturacion` int(11) NULL DEFAULT NULL,
-  `prico` int(11) NULL DEFAULT NULL,
-  `encargado` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `cargo` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `telefono` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `correo` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `estado` int(11) NULL DEFAULT NULL,
-  `eds` int(11) NULL DEFAULT NULL,
-  `visitas` int(11) NULL DEFAULT NULL,
-  `mantenimientos` int(11) NULL DEFAULT NULL,
-  `dias_visita` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_empresa`) USING BTREE,
-  INDEX `ruc_empresa`(`ruc_empresa`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 314 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of empresas
--- ----------------------------
-INSERT INTO `empresas` VALUES (1, '20345774042', 'SERVICENTRO AGUKI S.A.', 0, 115, 3, 'AV. ELMER FAUCETT 5482', 'CALLAO', 1, 1, 'Freddy Taira', '', '946501508', 'ftaira@aguki.com', 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (2, '20517103633', 'AJ GROUP INVERGAS', 0, 31, 4, 'AV. SANTIAGO DE CHUCO NRO. 501 COO. UNIVERSAL (ESTACION DE SERVICIO)', 'SANTA ANITA', 1, 0, 'CAROLINA ALIAGA', 'GERENTE GENERAL', '998878575', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (3, '20603850913', 'A.J.C. NEGOCIOS E.I.R.L.', 0, 100, 5, 'CAL.ALVARADO NRO. 701 (KM. 11 DE LA AV. TUPAC AMARU)', 'COMAS', 1, 0, 'Juan Salazar', '', '933737615', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (4, '20603906790', 'TRANSPORTES VALL E.I.R.L.', 0, 99, 5, 'CAL.ALVARADO NRO. 701 (KM. 11 DE LA AV. TUPAC AMARU)', 'COMAS', 1, 0, 'Juan Salazar', '', '933737615', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (5, '20513567139', 'ALTA VIDDA GAS S.A.C.', 0, 14, 7, 'CAL.FELIPE SANTIAGO SALAVERRY NRO. 341 (ALT CDRA 18 DE AV CIRCUNVALACION)', 'SAN LUIS', 1, 1, 'KARLA VITTOR', 'GERENTE COMERCIAL', '995867602', 'kvittor@altaviddagas.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (6, '20518664019', 'AMEL PHARMA E.I.R.L.', 0, 148, 8, 'JR. PARURO NRO. 926 INT. 381', 'LIMA', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (7, '20604857105', 'CORPORACION AXELL S.A.C.', 0, 130, 9, 'JR. HUANTA NRO. 944 INT. B URB. BARRIOS ALTOS', 'LIMA', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (8, '20600251873', 'BALIAN S.A.C.', 0, 108, 10, 'AV. LAS PRADERAS MZA. U LOTE. 29 URB. PRADERA DE STA ANITA II E', 'EL AGUSTINO', 1, 1, 'Angel Morocco', '', '992210914', 'amorocco@balian.com.pe', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (9, '20546454224', 'CORPORACION BOTIFARMA E.I.R.L', 0, 9, 11, 'JR. PARURO NRO. 926 INT. 2076', 'LIMA', 1, 0, 'Wilmer Reyna', 'Administrador', '997364151', 'wilmer_reyna25@hotmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (10, '20156278751', 'J.R. TELECOM S.R.LTDA.', 0, 84, 12, 'Jr. Conray Grande Nro. 4909 - Urb. Parque El Naranjal', 'LOS OLIVOS', 1, 0, 'beatriz Crisostomo', 'Contadora', '965395755', 'bcrisostomo@cableperu.net', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (11, '20501688593', 'CABLE VIDEO PERU S.A.C.', 0, 78, 12, 'Jr. Conray Grande Nro. 4901 - Urb. Parque Naranjal - Cdra.13 Av. Naranjal', 'LOS OLIVOS', 1, 1, 'Maricela Cordova', 'Contadora', '966370237', 'mcordova@cableperu.pe', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (12, '20548480214', 'CATAFARMA S.A.C.', 0, 141, 14, 'AV. JOSE SANTOS CHOCANO NRO. 104 P.J. VEINTIDOS DE OCTUBRE (AL COSTADO DEL HOSP. SAN JOSE)', 'CALLAO', 1, 0, 'Edwin Carlos Diaz', 'Administrador', '918106426', 'boticainkaperu@hotmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (13, '20499102071', 'ALIMENTOS SELECTOS CAZTELLANI S.A.', 0, 6, 15, 'AV. ARAVICUS NRO. 228 URB. TAHUANTISUYO (KM.5 AV.TUPAC AMARU C/CARLOS IZAS)', 'INDEPENDENCIA', 1, 0, 'Roberto Aguilar', 'Gerente General', '996394345', 'cafecaztellani@gmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (14, '20605002448', 'SERVICENTROS CELESTE 3 SAC', 0, 144, 16, 'AV. QUILCA MZA. E LOTE. 29 URB. AEROPUERTO PROV. CONST. DEL CALLAO', 'CALLAO', 1, 0, ' Lizette Silva', ' Administracion', '987264002 ', 'servicentrocelestesa@gmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (15, '20168217723', 'COMERCIALIZADORA INDUSTRIAL LA MOLINA S.A.C.', 0, 92, 17, 'AV. LA MOLINA NRO. 448 URB. EL ARTESANO (BAJAR OVALO STA ANIT)', 'ATE', 1, 0, 'Carlos Briceño', '', '910736075', 'carlos.briceno@distribuidoraessa.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (16, '20491287544', 'CLINICA CORAZON DE JESUS SAC.', 0, 97, 18, 'AV. MARISCAL BENAVIDES NRO. 565', 'SAN VICENTE DE CAÑETE', 1, 0, 'Isabut', 'Administradora', '925213430', 'clinicacorazondejesus@gmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (17, '20562897128', 'CORPORACION FARMACEUTICA SALVADOR S.A.C - COFARSA S.A.C.', 0, 74, 19, 'AV. GNRAL MIGUEL IGLESIAS NRO. 947 INT. A-B ZONA D (FRENTE AL HOSPITAL MARIA AUX)', 'SAN JUAN DE MIRAFLORES', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (18, '20548279039', 'CORGAS S.A.C.', 1, 82, 20, 'LAS TORRES NRO. 497 URB. LOS SAUCES', 'ATE', 1, 1, 'GUSTAVO CHAVEZ', '', '937504719', 'gchavez36@gmail.com', 1, 1, 2, 0, 10);
-INSERT INTO `empresas` VALUES (19, '10199887608', 'QUISPE YUPANQUI SILVIO', 0, 63, 21, 'MZ D27 LOTE 13 AA.HH BOCANEGRA ZONA 3 AV. QUILCA FRENTE TOTUS DE AV. QUILCA', 'SAN MARTIN DE PORRES', 1, 0, 'Henry Quispe', 'Administrador', '983213615', 'henryqc2016@hotmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (20, '20524016070', 'DELTA COMBUSTIBLES E.I.R.L.', 0, 61, 22, 'AV. ALFREDO MENDIOLA NRO. 700 URB. INGENIERIA (ALT. CRUCE AV. HABICH E INGENIERIA A 2 C)', 'SAN MARTIN DE PORRES', 1, 1, 'DARWIN ATACHAGUA', '', '957292531', 'darwin.atachagua@deltaate.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (21, '20555690534', 'DELTA ATE E.I.R.L', 0, 64, 22, 'AV. NICOLAS AYLLON NRO. 3620 A.H. SANTA ILUMINATA (CARRETERA CENTRAL CRUCE AV ATE)', 'ATE', 1, 1, 'DARWIN ATACHAGUA', '', '957292531', 'darwin.atachagua@deltaate.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (22, '20511172633', 'ESTACION DE SERVICIOS GRIFO DENVER S.R.L.', 1, 0, 24, 'Av. Canta Callao Numero 59', 'SMP', 0, 0, 'JULIO HUERTA', '', '957992031', '', 1, 1, 2, 0, 10);
-INSERT INTO `empresas` VALUES (23, '20530743919', 'DIESEL MAX SRL', 0, 50, 25, 'AV. CRUZ BLANCA NRO. 996 (CHIRI GRIFO)', 'HUALMAY', 1, 1, 'WALTER GARCIA', '', '983489932', 'dieselmax21@yahoo.es', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (24, '20603821247', 'CORPORACION DISFARMED SAC', 0, 142, 26, 'PJ. OCHO MZA. D LOTE. 11 A.H. ALTO EL ROSAL', 'SAN JUAN DE LURIGANCHO', 1, 0, 'Miguel Cañahuaray', 'Administrador', '992514229', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (25, '20603635711', 'A & B DROFAR INVERSIONES S.A.C.', 0, 146, 27, 'JR. CUSCO NRO. 811 INT. 207 URB. BARRIOS ALTOS (ESPALDA DE RENIEC)', 'LIMA', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (26, '20538108295', 'DUOGAS S.A.', 0, 0, 28, 'Ca. Las Garzas Nro. 328', 'SAN ISIDRO', 0, 0, 'EDWIN ARANGO', '', '952675018', 'erango@duogas.com.pe', 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (27, '20517855252', 'INVERSIONES DUVAL SAC', 1, 58, 29, 'AV. ALFREDO MENDIOLA NRO. 6200 INT. 101 URB. MOLITALIA (CRUCE CON AVENIDA MEXICO)', 'LOS OLIVOS', 1, 0, ' Jorge Vargas', ' Administracion', ' 945628525', ' jorgev524@yahoo.com', 1, 1, 2, 0, 5);
-INSERT INTO `empresas` VALUES (28, '20492314154', 'INVERSIONES EBENEZER S.R.L', 0, 65, 30, 'AV. 4 MZA. B4 LOTE. 03 P.J. NESTOR GAMBETTA BAJA ESTE (COSTADO DEL MERCADO ROJO GAMBETTA)', 'CALLAO', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (29, '20521431955', 'ECO TRADING S.A.C', 1, 36, 31, 'REPUBLICA ARGENTINA NRO. 798 URB. ZONA INDUSTRIAL (ALT. DE C.C. LA CACHINA)', 'LIMA', 1, 0, ' Jose Borda', ' Administrador', '971150078', ' ecogas.ar@hotmail.com', 1, 1, 2, 1, 5);
-INSERT INTO `empresas` VALUES (30, '20478967111', 'ESTACION DE SERVICIO LURIN', 0, 119, 32, 'MZ. C. LT 2 URB. LOS HUERTOS DE VILENA', 'LURIN', 1, 0, 'RAUL SOLIER REYNOSO', '', '998322921', 'eesslurinsac@gmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (31, '20343883936', 'ESTACION DE SERVICIO NIAGARA S.R.L', 0, 35, 33, 'JR. ELVIRA GARCIA Y GARCIA NRO. 2790 (ALT.COLONIAL Y UNIVERSITARIA)', 'LIMA', 1, 0, ' Ricardo Yep', ' Gerente', ' 994219434', ' ricardoyep@hotmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (32, '10043210675', 'JAPA BORONDA MARIO RODOLFO', 0, 37, 34, 'CAR.MARGINAL NRO. SN C.P. MENOR HUANCABAMBA', 'OXAPAMPA', 1, 0, 'RULO', '', '941165440', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (33, '20512220836', 'FARMA SAN AGUSTIN S.R.L.', 0, 94, 35, 'CAL.JOSE TORRES PAZ NRO. 110 URB. CIUDAD DE DIOS ZONA A (FRENTE A LA POSTA CIUDAD DE DIOS)', 'SAN JUAN DE MIRAFLORES', 1, 0, 'Augusto Castillo', 'Gerente General', '981578374', 'castilloaugusto18@gmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (34, '20448556663', 'FARMACIA SAN FRANCISCO S.A.C.', 0, 137, 36, 'JR. HUANCANE 721 - PUNO - SAN ROMAN - JULIACA', 'JULIACA', 1, 0, 'Margarita Sucari', 'Gerente General', '962656246', 'msucari41@hotmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (35, '20600534883', 'CORPORACION GANAJUR S.A.C.', 0, 72, 37, 'JR. ANCASH 14142 BARRIOS ALTOS', 'LIMA', 1, 0, 'Juan Carlos Ortiz', '', '945363393', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (36, '20601790484', 'INVERSIONES LUMIPHARMA E.I.R.L.', 0, 71, 37, 'JR. ANTONIO MIROQUESADA NRO. 806 INT. 403 (ESQ.JR PARURO909 EDF COM MRQS 4PISO 403A)', 'LIMA', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (37, '20425788192', 'CENTRO GAS DIEGO EIRL', 0, 60, 39, 'AV. LA MOLINA NRO. 401 URB. VULCANO (LETRERO MGAS - FRENTE GRIFO MOBIL)', 'ATE', 1, 0, 'GENOVEVA ESPIRITU', '', '989003565', 'iquitos7@hotmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (38, '20502716761', 'GAS ESCORPIO S.R.L.', 0, 102, 39, 'AV. LA MOLINA NRO. 401 URB. VULCANO (ALT. OVALO SANTA ANITA) LIMA - LIMA - ATE', 'ATE', 1, 0, 'GENOVEVA ESPIRITU', '', '989003565', 'iquitos7@hotmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (39, '20492920666', 'GASBEL EQUIPOS & ASESORIA S.A.C.', 1, 93, 41, 'JR. HUARAZ NRO. 1134 URB. BREÑA', 'BREÑA', 1, 0, 'MILAGROS ALMANDROS', '', '996890808', 'malmandros@jevaro.com.pe', 1, 1, 2, 0, 9);
-INSERT INTO `empresas` VALUES (40, '20520786873', 'GASOCENTRO LIMA SUR S.A.C.', 1, 22, 42, 'AV. JUAN DE ALIAGA NRO. 278 INT. 503 (EX JOSE COSSIO)', 'MAGDALENA DEL MAR', 1, 0, ' Alex Naters', ' Gerente', ' 987937575', ' naters.alex@gmail.com', 1, 1, 2, 0, 9);
-INSERT INTO `empresas` VALUES (41, '20546818102', 'GRUPO AVTEC CONTENIDOS SAC', 0, 27, 43, 'AV. DEL PINAR NRO. 110 DPTO. 204 URB. CHACARILLA DEL ESTANQUE', 'SANTIAGO DE SURCO', 1, 0, 'FERNANDO BAZAN', 'GERENTE OPERACIONES', '989054789', 'fernando.bazan@gasored.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (42, '20600658311', 'ESTACION TRAPICHE S.A.C.', 0, 5, 43, 'AV. DEL PINAR NRO. 110 DPTO. 204 URB. CHACARILLA DEL ESTANQUE', 'SANTIAGO DE SURCO', 1, 0, 'FERNANDO BAZAN', 'GERENTE OPERACIONES', '989054789', 'fernando.bazan@gasored.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (43, '20100111838', 'GRIFOS ESPINOZA S A', 0, 104, 45, 'AV. JAVIER PRADO ESTE NRO. 6519 URB. PABLO CANEPA (ENTRE CRUCE AV. INGENIEROS, GESA MARKETS)', 'LA MOLINA', 1, 1, ' Francisco ponte', ' Gerente Com.', ' 998115473', 'fponte@grupogesa.com ', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (44, '20138645607', 'GRIFO SANTO DOMINGO DE GUZMAN SRLTDA', 0, 140, 46, 'AV. RAMIRO PRIALE LOTE. 23A ASC. DIGNIDAD NACIONAL (PARCELA L)', 'SAN JUAN DE LURIGANCHO', 1, 1, 'SUSAN', 'ADMINISTRADORA', '976363362', 'adm.santodomingo.srl@gmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (45, '', '', 0, 30, 47, 'AV. HEROES DEL ALTO CENEPA NRO. 697', 'COMAS', 1, 1, 'Felix Huaman', 'Gerente General', '993494331', 'grifotrapiche@yahoo.es', 1, 1, 2, 0, NULL);
-INSERT INTO `empresas` VALUES (46, '20514304921', 'GRUPO INTIFARMA S.A.C.', 0, 96, 48, 'AV. INSURGENTES NRO. 711 INT. 4 SAN MIGUEL (MINISTERIO MARINA)', 'LA PERLA', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (47, '20602712363', 'CONSORCIO GAS DEL SUR', 0, 20, 49, 'CAL. PANAMERICANA SUR KM. 33.5 URB. PREDIO LAS SALINAS', 'LURIN', 1, 0, ' Luis Berrios Tosi', 'Luis Berrios', '', 'contabilidad3@copepdelperu.com', 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (48, '20538807037', 'HEVALFAR SRL', 0, 91, 51, 'MZA. D-1 LOTE 26 2DO. PISO INT. 202 URB. LAS PRADERAS DE STA. ANITA', 'EL AGUSTINO', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (49, '20521111888', 'INVERSIONES Y REPRESENTACIONES EGAR S.A.C.', 0, 89, 52, 'AV. ALFREDO MENDIOLA NRO. 3973 INT. 201 URB. MICAELA BASTIDAS - Lima - Lima - Los Olivos', 'LOS OLIVOS', 1, 0, 'ORLANDO QUISPE', 'DUEÑO', '920659824', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (50, '20493089570', 'ESTACION DE SERVICIOS H & A S.A.C.', 0, 48, 53, 'AV. UNIVERSITARIA NRO. S/N (CDRA 51 ESQUINA CON LA CALLE A)', 'LOS OLIVOS', 1, 1, 'FELICIANO AZAÑERO', 'GERENTE GENERAL', '963760146', 'estacion.hasac@gmail.com>', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (51, '20556597376', 'ESTACION DE SERVICIOS ANDAHUASI S.A.C.', 0, 45, 53, 'AV. UNIVERSITARIA MZA. A LOTE. 06 (CDRA. 51 FRENTE PARQUE NARANJAL)', 'LOS OLIVOS', 1, 0, ' Maribel Bernabé', ' Administración', '963760146 ', 'estacion.hasac@gmail.com ', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (52, '20551615856', 'INVERSIONES JIARA S.A.C.', 0, 138, 55, 'AV. ESTEBAN CAMPODONICO NRO. 262 URB. SANTA CATALINA', 'LA VICTORIA', 1, 1, 'CARMEN ARAMAYO', 'GERENTE GENERAL', '959373867', 'alkohler_eirl@hotmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (53, '20371975561', 'REPRESENTACIONES JEMMS S.A.C.', 0, 136, 56, 'AV. ALFREDO MENDIOLA NRO. 1085 URB. PALAO 2DA ETAPA', 'SAN MARTIN DE PORRES', 1, 0, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (54, '20492197417', 'JE OPERADORES SAC', 0, 86, 56, 'Av. Nestor Gambeta Km. 7.10 Mz.B-6 Lt.4 Coop. Vivienda de Trab. ENAPU  - Callao - Callao - Callao ', 'CALLAO', 1, 1, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (55, '20512853529', 'ATS AMERICA SAC', 0, 87, 56, 'AV. LIMA SUR NRO. 895 CHOSICA LIMA - LIMA - LURIGANCHO', 'LURIGANCHO', 1, 1, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (56, '20535614548', 'OPERADORES DE ESTACIONES SAC', 0, 85, 56, 'AV. CIRCUNVALACION NRO. 1386 (ALT MERCADO DE FRUTAS) LIMA - LIMA - LA VICTORIA', 'LA VICTORIA', 1, 1, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (57, '20551112781', 'GRUVENI SRL', 0, 150, 56, 'JR. LOS ANTROPOLOGOS MZA. D LOTE. 4 COO. LA UNION (MODULO DE PODER JUDICIAL DE PROCERES)', 'SAN JUAN DE LURIGANCHO', 1, 0, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (58, '20551297978', 'GRANDINO S.A.C.', 0, 135, 56, 'CAL.LOS CEREZOS NRO. 291 URB. DE LA LOTIZ. CHILLON', 'PUENTE PIEDRA', 1, 0, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (59, '20566149151', 'GASNOR S.A.C.', 0, 76, 56, 'AV. ENCALADA 232 - SANTIAGO DE SURCO', 'SANTIAGO DE SURCO', 1, 0, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (60, '20566149401', 'ESTACIONES DEL NORTE SAC', 0, 70, 56, 'CAR.PANAN NORTE KM. 1168 P.J. BARRIO LETICIA', 'MANCORA', 1, 0, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (61, '20600868862', 'PETRO CALLAO SAC', 0, 88, 56, 'AV. ARGENTINA NRO. 498 URB. CHACARITAS - Callao - Callao - Callao', 'CALLAO', 1, 0, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (62, '20600908627', '524 CONSULTING S.A.C.', 0, 134, 56, 'AV. LA ENCALADA NRO. 232 URB. CENTRO COMERCIAL MONTERRICO', 'SANTIAGO DE SURCO', 1, 0, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (63, '20602003427', 'PETRO NAZCA S.A.C.', 0, 101, 56, 'AV. PANAMERICANA NRO. 891 URB. VISTA ALEGRE (GRIFO PECSA)', 'NAZCA', 1, 1, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (64, '20604631379', 'MOVI PETROL S.A.C.', 0, 131, 56, 'LA ENCALADA NRO. 232', 'SANTIAGO DE SURCO', 1, 0, 'RAFAEL ORTIZ', 'GERENTEFINANZAS', '966799508', 'rortiz@jemms.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (65, '20404000447', 'SERVICENTRO ESPINOZA NORTE S.A', 0, 149, 68, 'CAR.PAN. NORTE NRO. K191 (LA PALMA PTO. SUPE)', 'SUPE PUERTO', 1, 0, 'Manuel Menacho', 'Administrador', '992018928', 'manuluismd1999@gmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (66, '20605427147', 'INVERSIONES KATIMILA E.I.R.L.', 0, 147, 68, 'AV. CENTENARIO KM. 4.100 KM. REF (AV. CENTENARIO KM. 4.100)', 'CALLERIA', 1, 0, 'Manuel Menacho', 'Administrador', '992018928', 'manuluismd1999@gmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (67, '20283756115', 'SERVICENTRO UCAYALI S.A.C', 0, 17, 70, 'AV. CENTENARIO NRO.4100', 'YARINACOCHA', 1, 1, 'Fiorella Elias', 'Contadora', '970428573', 'f.elias@grespinoza.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (68, '20404883918', 'GRIFOS ESPINOZA DE TINGO MARIA S.A.', 0, 24, 70, 'AV ENRIQUE PIMENTEL NRO 116', 'RUPA-RUPA', 1, 1, 'Fiorella Elias', 'Contadora', '970428573', 'f.elias@grespinoza.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (69, '20508196475', 'PETROCENTRO YULIA S.A.C.', 0, 49, 70, 'AV. DE LA MARINA NRO. 2789 URB. MARANGA 1RA ET. (CRUCE CON AV.ESCARDO)', 'SAN MIGUEL', 1, 0, 'Fiorella Elias', 'Contadora', '970428573', 'f.elias@grespinoza.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (70, '20605129154', 'GRIFOS GES S.A.C.', 0, 133, 73, 'AV. ISABEL LA CATOLICA NRO. S/N URB. MATUTE (ESQUINA CON JR ANDAHUAYLAS)', 'LA VICTORIA', 1, 0, 'Anyeli Macalupu', 'Contadora', '939375251', 'amacalupu@grifosges.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (71, '20605450475', 'SERVICENTRO JAQUELINE DE PUCALLPA S.A.C.', 0, 145, 73, 'AV. CARRETERA FEDERICO BASADRE KM. 9.00 (LATERAL DERECHO)', 'YARINACOCHA', 1, 0, 'Anyeli Macalupu', 'Contadora', '939375251', 'amacalupu@grifosges.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (72, '20203530073', 'SERVICENTRO SAN HILARION S.A.', 0, 69, 75, 'AV. FLORES DE PRIMAVERA NRO. 1988 URB. SAN HILARION (MZ B - LT.03 / CRUCE CON AV.CTO.GRANDE)', 'SAN JUAN DE LURIGANCHO', 1, 0, 'Tomas Zavala', 'Gerente General', '998196242', 'huancayo18@hotmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (73, '20506467854', 'CORPORACION JULCAN S.A.', 0, 13, 75, 'AV. PROCERES DE LA INDEPENDEN NRO. 2556 URB. LOS ANGELES (ALTURA DEL PARADERO 20)', 'SAN JUAN DE LURIGANCHO', 1, 1, 'TOMAS ZAVALA', '', '998196242', 'huancayo18@hotmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (74, '20347869849', 'SERVIC. Y AFINES LAS AMERICAS EIRL', 1, 40, 77, 'AV. DE LAS AMERICAS NRO. 1259 URB. BALCONCILLO (GRIFO PETROPERU)', 'LA VICTORIA', 1, 1, ' Luisa Manco', ' Administracion', ' 987817538', ' servicentroyafineslasamericas@hotmail.com', 1, 1, 2, 1, 8);
-INSERT INTO `empresas` VALUES (75, '20459020137', 'MARKET LAS BELENES S.A.C', 0, 77, 1, 'JR. EL POLO 493 - URB EL DERBY DE MONTERRICO', 'SANTIAGO DE SURCO', 1, 0, 'Paty Medina', 'Gerente General', '966833946', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (76, '20101312519', 'LIMABANDA S.A.C.', 0, 59, 79, 'AV. MARISCAL ORBEGOSO NRO. 120 URB. EL PINO', 'SAN LUIS', 1, 1, 'LUIS NUÑEZ', '', '989005187', 'lnudarco@limabandasac.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (77, '20124367850', 'INVERSIONES TRANSP. Y SERV. CINCO S.A.C.', 0, 23, 79, 'AV. JAVIER PRADO ESTE NRO. 1059 URB. SANTA CATALINA (FRENTE AL COLG.SAN AGUSTIN)', 'LA VICTORIA', 1, 0, 'LUIS NUÑEZ', 'Gerente General', '989005187', 'lnudarco@limabandasac.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (78, '20492727661', 'LIVORNO OIL TRADING S.A.C.', 0, 103, 81, 'JR. ABTAO NRO. 784 (ESQ. HIPOLITO UNANUE)', 'LA VICTORIA', 1, 0, 'MAGNOLIA', '', '946594870', 'administracion.control@merrillperu.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (79, '20137926742', 'SERVICENTRO LOS ROSALES S.A.', 0, 124, 82, 'AV. AYACUCHO NRO 140', 'SANTIAGO DE SURCO', 1, 0, 'Maricell Guillen', 'Administradora', '998450561', 'mguillen@servicentrolosrosales.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (80, '20110623420', 'INVERSIONES LUMARCO SA', 1, 122, 1, 'CAR.CENTRAL KM. 11.2 A.H. LA ESTRELLA (GRIFO PECSA COSTADO PLAZA REAL STA CLARA)', 'ATE', 1, 1, 'Luciano Marching', 'Gerente General', '967778888', '', 1, 1, 2, 2, 10);
-INSERT INTO `empresas` VALUES (81, '20517735605', 'LUXOR PHARMACEUTICAL SAC', 0, 90, 84, 'AV. CESAR VALLEJO 895.', 'VILLA EL SALVADOR', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (82, '20524359601', 'MABA FARMA S.A.C.', 0, 11, 85, 'MZA. C LOTE. 4 JAZMIN DE OQUENDO (COSTADO MERCADO LA ALBORADA)', 'CALLAO', 1, 0, 'Miguel Balvin', 'Administrador', '975547119', 'mabafarmasac-2013@hotmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (83, '20161800920', 'LUBRIGAS S.R.LTDA.', 0, 80, 86, 'Av. Nicolas Ayllon Nro. 3562 Fnd. Mayorazgo (Frente a Planta Qui lomica Suiza)', 'ATE', 1, 1, 'Alejandro Mandujano', '', '980090788', 'amandujano@grupomandujano.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (84, '20516035758', 'GASNORTE S.A.C', 0, 79, 86, 'Av. Gerardo Unger Nro. 3301 - Urbanización: Habilit.Indust.Pan.Norte', 'INDEPENDENCIA', 1, 0, 'Alejandro Mandujano', '', '980090788', 'amandujano@grupomandujano.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (85, '20524249848', 'CENTROGAS VISTA ALEGRE S.A.C.', 0, 83, 86, 'Av. Nicolas Ayllon Nro. 4706 Fnd. Vista Alegre', 'ATE', 1, 0, 'Alejandro Mandujano', '', '980090788', 'amandujano@grupomandujano.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (86, '20547011954', 'CENTROGAS IQUITOS S.A.C.', 0, 67, 86, 'AV. IQUITOS NRO. 983 (CRUCE CON AV CATOLICA)', 'LA VICTORIA', 1, 0, 'Alejandro Mandujano', '', '980090788', 'amandujano@grupomandujano.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (87, '20557618920', 'CENTRAL PARIACHI S.A.C.', 0, 57, 86, 'AV. NICOLAS AYLLON NRO. S/N SEMI RUSTICO PARIACHI PARCELA 10906', 'ATE', 1, 0, 'Alejandro Mandujano', '', '980090788', 'amandujano@grupomandujano.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (88, '20517053351', 'MASGAS PERU S.A.C.', 1, 0, 92, 'Av. Tupac Amaru Nro. 3685 - Urb. Carabayllo ', 'CARABAYLLO', 0, 0, 'Victor Naranjo', 'Gerente General', '994271052', 'administracionperu@masgasperu.com', 1, 1, 2, 0, 5);
-INSERT INTO `empresas` VALUES (89, '20371826727', 'ESTACION DE SERVICIOS GRIFO MASTER SRL', 1, 0, 93, 'Av. Alfredo Mendiola Mza. E Lote. 16 - Asoc. Rio Santa', 'LOS OLIVOS', 0, 0, '', '', '', '', 1, 1, 2, 2, 10);
-INSERT INTO `empresas` VALUES (90, '20603673485', 'MATIAS & ALEXA E.I.R.L.', 0, 75, 94, 'JR. PARURO NRO. 926 INT. 345B GALERIA CENTRO COMERCIAL CAPON CENTER', 'LIMA', 1, 0, 'Jerson', 'Administrador', '983465591', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (91, '20304887762', 'MIDAS GAS S.A', 0, 44, 95, 'AV. NICOLAS ARRIOLA NRO. 3191 .', 'SAN LUIS', 1, 1, 'Walter Meza', 'Administrador', '987518298', 'walter.meza@midasgas.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (92, '10090647879', 'SALCEDO GUEVARA NESTOR', 0, 127, 96, 'CAR. CENTRAL NRO 16.5 URB. HUAYCAN', 'LIMA', 1, 1, ' Alexandra', ' Administradora', ' 920660239', ' Inandisa01@gmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (93, '20566091306', 'NG FARMA S.A.C.', 0, 132, 97, 'AV. SANTA ROSA 1044 APV. LOS CHASQUIS', 'SAN MARTIN DE PORRES', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (94, '20177941591', 'ORGANIZACION FUTURO SAC', 1, 121, 98, 'AV. JAVIER PRADO ESTE 6651', 'LA MOLINA', 1, 1, 'Gunther Paucar', 'Gerente General', '977810907', 'gpaucar@orfusac.com', 1, 1, 2, 0, 6);
-INSERT INTO `empresas` VALUES (95, '20517231631', 'PANAMERICAN GAS TRADING S.A.C.', 0, 0, 99, 'Av. Republica De Panama Nro. 4120 ', 'SURQUILLO', 0, 0, '', '', '', '', 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (96, '20452799368', 'ESTACION FINLANDIA E.I.R.L.', 0, 109, 100, 'AV. SIETE MZA. 9 LOTE. 02-A (ESQUINA DE AV. SIETE Y FINLANDIA)', 'LA TINGUIÑA', 1, 1, 'Miriam Ocaña', 'Administradora', '956406088', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (97, '20494793521', 'ESTACION EL OVALO E.I.R.L.', 1, 114, 100, 'AV. F. LEON DE VIVEIRO', 'ICA', 1, 1, 'Nola Cordova', 'Administradora', '924770964', '', 1, 1, 2, 2, 10);
-INSERT INTO `empresas` VALUES (98, '20601709148', 'PETRO LUMARA S.A.C.', 1, 106, 102, 'Ca. Montegrande Nro. 109 Int. 301 - Urb. Chacarilla Del Estanque', 'SANTIAGO DE SURCO', 1, 0, ' Fernando Camacho', ' Administrador', ' 975802575', '  fcamacho@cocsaperusa.com', 1, 1, 4, 0, 4);
-INSERT INTO `empresas` VALUES (99, '20511193045', 'ESTACION DE SERVICIOS MONTE EVEREST SAC', 0, 125, 103, 'AV. AVIACION NRO. 4285 (ALT.CDRA 42 AV.AVIACION)', 'SURQUILLO', 1, 1, 'x', '', '', '', 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (100, '20514636843', 'ESTACIONES DE SERVICIOS PETRO WORLD SAC', 0, 126, 103, 'AV. VENEZUELA ESQUINA CON AV. RIVA AGUERO', 'SAN MIGUEL', 1, 1, 'x', '', '', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (101, '20505133430', 'PETROCARGO S.A.C', 1, 68, 105, 'AV. ELMER FAUCCETT NRO. 6000', 'CALLAO', 1, 0, 'WILBER LEON', 'CONTADOR', '994271076', 'wilbertleon@petrocorpsa.com', 1, 1, 2, 0, 10);
-INSERT INTO `empresas` VALUES (102, '10009635128', 'TEODORA DOMINGUEZ', 0, 33, 106, 'AV. NICOLAS DE AYLLON N 441 CHACLACAYO - LIMA - LIMA', 'CHACLACAYO', 1, 0, 'Teodora', 'Gerente General', '960919061', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (103, '20127765279', 'COESTI S.A.', 1, 66, 107, 'Av. Circunvalación del Club de Golf Los Incas N° 134 Urb. Club de Golf Los Incas - Lima - Lima - Santiago de Surco', 'SANTIAGO DE SURCO', 1, 1, 'Claudio Aramburu', 'Jefe de Proyectos', '947640511', 'CAramburuL@primax.com.pe', 1, 1, 2, 2, 1);
-INSERT INTO `empresas` VALUES (104, '20330033313', 'PERUANA DE ESTACIONES SERVICIOS SAC', 0, 117, 107, 'Av. Circunvalación del Club de Golf Los Incas N° 134 Urb. Club de Golf Los Incas - Lima - Lima - Santiago de Surco', 'SANTIAGO DE SURCO', 1, 1, 'Claudio Aramburu', '', '', '', 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (105, '20603822359', 'DROGUERIA DISTRIBUIDORA PRIMED S.A.C.', 0, 105, 109, 'Av. Gral. Miguel Iglesias Mz.g Lt.30 - AA.HH. Javier Heraud', 'SAN JUAN DE MIRAFLORES', 1, 0, '', '', '', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (106, '20603012268', 'INVERSIONES RAMSAN E.I.R.L.', 0, 16, 110, 'Jr. Pedro Garenzon Nº 500, Urb. Miguel Grau', 'ANCON', 1, 0, 'Flor Roxana Sanchez', '', '', 'consor.norteno17@gmail.com / anconero.201802@gmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (107, '20503840121', 'REPSOL COMERCIAL SAC', 1, 0, 111, 'Av. Victor Andres Belaunde Nro. 147 ', 'SAN ISIDRO', 0, 0, 'Juan Carlos Evangelista', 'Jefe de Tecnologia', '996412738', 'JEVANGELISTAR@repsol.com', 1, 1, 2, 0, 10);
-INSERT INTO `empresas` VALUES (108, '20325753821', 'RED INTERNACIONAL DE COMBUSTIBLE Y SERVICIO AUTOMOTRIZ S.R.L.', 0, 51, 112, 'AV. NICOLAS ARRIOLA NRO. 1003 URB. LA POLVORA', 'LA VICTORIA', 1, 0, ' Catherine Solano', 'Administracion ', ' 992298539', '  jefeope@ricsa.com.pe', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (109, '20486255171', 'CORPORACION RIO BRANCO S A', 1, 143, 113, 'CAR.PANAMERICANA NORTE KM. 92.5 C.P. CHANCAYLLO (BARRIO SAN JUAN PASANDO EL PUENTE)', 'CHANCAY', 1, 1, 'Ralpy Hinostroza', 'Administrador', '964004784', 'riobrancoralpy@hotmail.com', 1, 1, 2, 0, 10);
-INSERT INTO `empresas` VALUES (110, '10091479791', 'CARLOS ALFREDO IBAÑEZ MANCHEGO', 0, 118, 114, 'AV. DE LOS HEROES 1187-1189', 'SAN JUAN DE MIRAFLORES', 1, 0, 'Sandra', '', '948639772', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (111, '20493091396', 'GASOCENTRO PUENTE NUEVO S.A.C.', 0, 112, 114, 'MZA. G LOTE. 1 ASOCIACION DE VIVIENDA ANCIETA', 'EL AGUSTINO', 1, 0, 'Gina Mispireta', 'Gerente General', '989265054', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (112, '20502825624', 'ESTACION DE SERVICIOS SAN JUANITO S.A.C.', 0, 116, 114, 'AV. HEROES NRO. 1109 (ALT.HOSPITAL MARIA AUXILIADORA)', 'SAN JUAN DE MIRAFLORES', 1, 0, 'Nelly', 'Administradora', '989265061', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (113, '20511053031', 'ESTACION DE SERVICIO GIO SAC', 0, 123, 114, 'AV. PACHACUTEC NRO. 3859 P.J. CESAR VALLEJO', 'VILLA MARIA DEL TRIUNFO', 1, 0, 'Jose Ibañez', 'Gerente General', '989119054', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (114, '20402786729', 'INVERSIONES SANTA ROSA E.I.R.L', 0, 12, 118, 'JR. MOQUEGUA NRO. 398 INT. 7 P.J. FLORIDA BAJA', 'CHIMBOTE', 1, 1, 'Felipe Chu', 'Gerente General', '981444073', 'grifosantarosa1998@hotmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (115, '20373831124', 'ESTACION DE SERVICIOS SCHOII S.R.L.', 0, 29, 119, 'AV. MARIANO CORNEJO NRO .1508(POR LA PLAZA DE LA BANDERA)', 'LIMA', 1, 0, '', '', '', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (116, '20518960688', 'PITS GNV SAC', 0, 34, 119, 'AV. NICOLAS DE PIEROLA NRO. 800 (MZ.H1 LT.16, ESQUINA CON AV. VILLA MARIA)', 'VILLA MARIA DEL TRIUNFO', 1, 0, 'SUSY LAO', '', '994077048', 'pitsgnvsac@yahoo.es', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (117, '20602772935', 'DISTRIBUCIONES SELMAC S.A.C.', 0, 98, 121, 'JR. PARURO NRO. 926 INT. 212 URB. BARRIOS ALTOS', 'LIMA', 1, 0, 'Sabi', 'Administrador', '955106629', 'contabilidadselmacsac@gmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (118, '20210975862', 'OPERACIONES Y SERVICIOS GENERALES S A', 0, 38, 122, 'AV. CAMINOS DEL INCA MZA. N LOTE. 19 URB. SAN JUAN BAUTISTA DE V. (URB.SAN JUAN BAUTISTA DE VILLA)', 'CHORRILLOS', 1, 1, 'Eliana Rafael ', ' Administracion', ' 946433001', 'asistenteosg@operadoresmr.com.pe ', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (119, '20334129595', 'GRIFO SERVITOR S.A', 0, 0, 123, 'Av. Alfredo Mendiola - Urb. Industrial La Milla ', 'SMP', 0, 0, 'Christian Higa', 'Gerente General', '998228493', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (120, '20517117421', 'SHICHI - FUKU CORPORATION S.A.C.', 0, 56, 124, 'AV. CANADA NRO. 298 URB. SANTA CATALINA', 'LA VICTORIA', 1, 0, ' Jose Nakada', ' Administracion', '', ' estacioncanadagnv@hotmail.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (121, '20517700640', 'SIROCO HOLDINGS S.A.C', 0, 0, 125, 'Av.Elmer Faucett #735 Callao', 'Cercado Callao', 0, 0, 'RICARDO HIDALGO', '', '994219434', 'ricardo.hidalgo@hesperservices.com', 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (122, '20377674686', 'SERVICENTRO SMILE S.A.', 1, 110, 126, 'CAL.LOS ORFEBREROS NRO. 129 URB. IND EL ARTESANO', 'ATE', 1, 1, 'ELVIS MARLON', 'ADMINISTRADOR', '999086928', 'e.napravnick@servicentrosmile.com', 1, 1, 4, 2, 3);
-INSERT INTO `empresas` VALUES (123, '20534525070', 'COMERCIALIZADORA DE COMBUSTIBLES TRIVEÑO S.A.C.', 0, 113, 127, 'AV. MATIAS MANZANILLA-2DO PIS NRO. 625 INT. 04 (FRENTE AL HOSPITAL DEL SEGURO SOCIAL)', 'ICA', 1, 0, 'ROMULO TRIVEÑO', '', '956725267', 'trivenog@comtrisac.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (124, '20298736820', 'INVERSIONES UCHIYAMA SRL', 0, 2, 128, 'AV. LA MAR NRO. 2382', 'SAN MIGUEL', 1, 0, 'Lizbeth Castro', 'Contadora', '975363363', 'lizbeth@estacionlamar.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (125, '20514326496', 'CORPORACION UNO S.A.', 0, 107, 129, 'AV. VICTOR ANDRÉS BELAUNDE NRO. 214 INT. 303 (ESQUINA CON CALLE LOS PINOS)', 'SAN ISIDRO', 1, 1, 'LEANDRA BENDITA', '', '985054954', 'leandra.bendita@senergyc.com', 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (126, '20565949731', 'CONSORCIO VITAFARMA S.A.C.', 0, 129, 130, 'JR. PARURO NRO. 775 INT. 307 URB. BARRIOS ALTOS', 'LIMA', 1, 0, '', '', '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (150, '20020020000', 'DEMO GS', 0, 15, 1, 'Condevilla', 'SAN MARTIN DE PORRES', 1, 0, '', NULL, '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (151, '12345678901', 'DEMO', 0, 19, 1, 'AV. LT PLAZA NORTE', 'SAN MARTIN DE PORRES', 1, 0, '', NULL, '', 'demo@demo.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (152, '20101127614', 'MANUEL IGREDA Y JULIO RIOS S.R.L', 0, 47, 91, 'CAL.MONTERREY NRO. 341 INT. 502', 'SANTIAGO DE SURCO', 1, 0, '', NULL, '', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (153, '20519069262', 'RICARDO CALDERON INGENIEROS SAC', 0, 52, 138, 'AV. AUGUSTO B LEGUIA NRO. 307 COO. POLICIAL (ACONT DE AV. PERU -ANTES DE ZARUMILLA)', 'SAN MARTIN DE PORRES', 1, 0, '', NULL, '9999999', 'ventas@rcingenieros.com', 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (154, '20348303636', 'ESTACION DE SERVICIOS HERCO S.A.C.', 1, 55, 49, 'CAR.PANAMERICANA SUR NUEVA KM. 33.5 MZA. C LOTE. 14 SECTOR LAS SALINAS (GRIFO HERCO) ', 'LURIN', 1, 1, '', NULL, '', 'herco@ventas.com', 1, 1, 2, 0, 8);
-INSERT INTO `empresas` VALUES (155, '20601351944', 'NEGOCIACIONES VALERIA & CHRIS S.A.C', 0, 73, 1, 'AV. LIMA SUR NRO. S/N CHOSICA (LT A2-1 A1-9) ', 'SAN JUAN DE LURIGANCHO', 1, 0, '', NULL, '', 'ventas@valeria.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (156, '20392479687', 'INVERSIONES CORONACION S.R.L.', 0, 95, 1, 'MZ E LT 10 SECTOR CENTRAL HUERTOS DE MANCHAY.', 'PACHACAMAC', 1, 0, 'Samuel.', NULL, '942416053 - 6624797', ' ', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (157, '20515789961', 'GAMA INVERSIONES GENERALES S.A.C.', 0, 111, 1, 'AV. QUILCA CUADRA 11 S/N MZA. E LOTE. 29 URB. AEROPUERTO PROV. CONST. DEL CALLAO', 'CALLAO', 1, 0, ' ', NULL, '  ', ' ', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (158, '20602359981', 'PUNTO GAS S.A.C.', 0, 139, 1, 'AV. MARISCAL OSCAR T. BENAVIDES NRO. 1657 URB. LA TRINIDAD (ALTURA CDRA. 16 EX COLONIAL) ', 'LIMA', 1, 0, '', NULL, ' ', ' ', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (159, '20604271089', 'ESTACION DE SERVICIOS VICTORIA L & K HNAS. S.A.C.', 0, 151, 34, 'JR. LAS ACACIAS NRO. SN (1 CDRA DEL GRIFO HUANCABAMBA)', 'HUANCABAMBA', 1, 0, ' ', NULL, ' ', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (160, '20522168182', 'FARMACIAS INTEGRALES DE LA SOLIDARIDAD S.A.C.', 0, 152, 1, 'AV. ANGAMOS ESTE NRO. 716 (HOSPITAL DE SOLIDARIDAD DE SURQUILLO)', 'SURQUILLO', 1, 0, ' ', NULL, ' ', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (161, '20600765044', 'EUCEL S.R.L.', 0, 153, 1, 'PJ. SAN MARTIN MZA. L LOTE. 3 CANTO CHICO', 'SAN JUAN DE LURIGANCHO', 1, 0, ' ', NULL, ' ', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (162, '20605395482', 'DROGUERIA LMG FARMA PERU S.A.C.', 0, 154, 1, 'UPIS SAN JOSE MZA. G-1 LOTE. 4 INT. 2 ', 'LURIN', 1, 0, ' ', NULL, ' (01) 4045448 / 961 297 889', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (163, '20514721280', 'GRUPO INTI S.A.C', 0, 155, 1, 'Jr. Dante 893 - 899', 'SURQUILLO', 1, 0, ' ', NULL, '447-3684', 'grupointisac@gmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (164, '20338926830', 'GRIFO VALERIA VICTORIA S.A.C.', 0, 156, 1, 'AV. RIVA AGUERO NRO. 411', 'EL AGUSTINO', 1, 0, ' ', NULL, ' ', ' ', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (165, '20484056227', 'OLEOCENTRO Y SERVICIOS SAN PEDRO EMPRESA INDIVIDUAL DE RESPONSABILIDAD LIMITADA', 0, 157, 1, 'MZA. 30 LOTE. 01 A.H. SAN PEDRO', 'PIURA', 1, 0, ' ', NULL, ' ', ' ', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (166, '20546828671', 'DRUGSTORE SOL FARMA CORP. E.I.R.L.', 0, 158, 1, 'CAL.CORACEROS NRO. 158', 'PUEBLO LIBRE', 1, 0, ' ', NULL, '4270669 / 979462433', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (167, '20605344896', 'DROGUERIA DISTRIBUIDORA E IMPORTADORA VILLALEON E.I.R.L', 0, 159, 9, 'JR. HUANTA NRO. 944 INT. B URB.  BARRIOS ALTOS', 'LIMA', 1, 0, ' ', NULL, ' ', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (168, '10214719717', 'HILARIO CHAUCA GILMAR MARCIANO', 0, 160, 1, 'AV. AVIACION S/N ', 'SANTIAGO DE SURCO', 1, 0, ' ', NULL, ' ', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (169, '20605224505', 'BOTICA NUEVO PERU E.I.R.L.', 0, 161, 1, 'AV. LOS PINOS NRO. 1414 URB. EL PINAR', 'COMAS', 1, 0, ' ', NULL, ' ', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (170, '20604193711', 'INVERSIONES P & M FARMA E.I.R.L.', 0, 162, 1, 'JR. MERCURIO NRO. 172 URB. SAN CARLOS II ETP', 'SAN JUAN DE LURIGANCHO', 1, 0, '', NULL, ' ', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (171, '10702311191', 'ALIAGA PEREZ LEONARDO CARLOS', 0, 163, 1, 'S/N', 'LIMA', 1, 0, '', NULL, ' 932 475 889', 'boticasdelahorro2019@gmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (172, '20605809686', 'GRIFOS ESSA PUCALLPA S.A.C.', 0, 164, 1, 'AV. FEDERICO BASADRE NRO. 298', 'PADRE ABAD', 1, 0, ' ', NULL, ' ', '', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (173, '20546740154', 'PRECIO S.A.C.', 0, 165, 1, 'AV. LA ENCALADA NRO. 232 URB. CENTRO COMERCIAL MONTERRICO (A 2 CUADRAS DE VIVANDA)', 'SANTIAGO DE SURCO', 1, 0, 'CHRISTIAN GONZALES', NULL, '5342336', 'atencionalcliente@estacion715.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (174, '20605764712', 'DROGUERIA JJC S.A.C.', 0, 166, 1, 'CAL.LAS ANTILLAS NRO. 150 URB. ISLA VERDE', 'PUEBLO LIBRE', 1, 0, '', NULL, ' ', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (175, '20603587481', 'CONSORCIO EFE S.A.C.', 0, 167, 1, 'AV. JOSE SANTOS CHOCANO NRO. 128 P.J. VEINTIDOS DE OCTUBRE ', 'CARMEN DE LA LEGUA', 1, 0, ' ', NULL, ' ', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (176, '20557398628', 'DISTRIBUIDORA V & G FARMA S.R.L.', 0, 168, 1, 'CAL.LOS PETALOS NRO. 189 URB. LA ACHIRANA', 'SANTA ANITA', 1, 0, '', NULL, ' 987047349 / 986745685', 'distribuidoravgfarma@gmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (177, '20553772436', 'GASOCENTRO ICA S.A.', 0, 0, 131, 'Av. Mexico # 295', 'LA VICTORIA', 0, 0, NULL, NULL, NULL, NULL, 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (179, '20100079179', 'ESTACION DE SERV BOLIVAR S A', 0, 0, 131, 'SAN ROQUE - SANDIEGO DE SURCO ', 'LIMA', 0, 0, NULL, NULL, NULL, NULL, 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (180, '20605955704', 'PETRO LAS LOMAS S.A.C.', 0, 169, 1, 'CAL.LOS PROCERES NRO. S/N PBLO. LAS LOMAS PIURA - PIURA - LAS LOMAS', 'LAS LOMAS', 1, 0, 'CHRISTIAN GONZALES', NULL, '5342336', 'atencionalcliente@estacion715.com', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (181, '20605720847', 'GRIFOS ESSA DE TINGO MARIA S.A.C', 0, 170, 1, 'CAR.TINGO MARIA A HUANUCO NRO. 2.5 CAS. AFILADOR HUANUCO', 'RUPA-RUPA', 1, 0, ' ', NULL, ' ', ' ', 1, 1, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (182, '20565966589', 'CORPORACION VICTORIA PERUANA S.A.C', 0, 171, 1, 'Calle Los Detectives Mz. F2 Lt. L1 Urb. Honor y Lealtad ', 'SANTIAGO DE SURCO', 1, 0, '', NULL, '(056) 283040', 'drogueria-america@outlook.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (183, '10463388089', 'CAHUAPAZA APAZA FREDY EDWIN', 0, 172, 1, 'Jr. Bolivar 153', 'JULIACA', 1, 0, '', NULL, '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (184, '10411640855', 'AGUIRRE ZURITA CARLOS JAVIER', 0, 173, 1, 'JR LEONCIO PRADO 1008', 'MAGDALENA DEL MAR', 1, 0, '', NULL, '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (185, '10458612256', 'CORZO LAYME MARIA LORENA', 0, 174, 1, 'Mz.188 Lt.10 AA.HH. Huascar', 'SAN JUAN DE LURIGANCHO', 1, 0, '', NULL, '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (186, '10060507291', 'CORZO OCANA EFRAIN', 0, 175, 1, '', 'LIMA', 1, 0, '', NULL, '', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (187, '20549666362', 'CONSORCIO MEDICORP & SALUD S.A.C.', 0, 176, 1, 'AV. LAS FLORES DE PRIMAVERA NRO. 1045 URB. LAS FLORES', 'SAN JUAN DE LURIGANCHO', 1, 0, '', NULL, '950279527', 'medicorp_i_salud@hotmail.com', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (189, '20606082917', 'INVERSIONES FARMACEUTICA DIAZ S.A.C', 0, 178, 1, '	JR. LAS CALEZAS NRO. 131 (ALTURA DE PLAZA VEA RIMAC)', 'RIMAC', 1, 0, '', NULL, '01-7151990', ' ', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (192, '20601136059', 'FARMA SOLUTIONS E.I.R.L.', 0, 179, 1, 'Calle Loma Los Crisantemos 117', 'SANTIAGO DE SURCO', 1, 0, '', NULL, '960207974', '', 1, 0, NULL, NULL, NULL);
-INSERT INTO `empresas` VALUES (200, '20335757697', 'WO SOCIEDAD ANONIMA', 0, NULL, 132, 'AV. GUILLERMO PRESCOTT NRO. 202 URB.  RISSO', 'SAN ISIDRO', NULL, NULL, NULL, NULL, '4419938', NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (201, '20402173476', 'CARRION INVERSIONES S.A.', 0, NULL, 1, 'JR. ANTONIO LOBATO NRO. 651', 'EL TAMBO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (202, '20602629750', 'RAINFOREST DC S.A.C.', 0, NULL, 45, 'AV. JAVIER PRADO ESTE NRO. 6519 URB.  PABLO CANEPA  (CRUCE ENTRE INGENIEROS Y JAVIER PRADO OE)', 'LA MOLINA', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (203, '20451706323', 'ESTACION DE SERVICIOS VAMA SAC', 0, NULL, 114, 'AV. DE LOS HEROES NRO. 1187 URB.  SAN JUANITO  (AL FRENTE HOSP. MARIA AUXILIADORA)', 'SAN JUAN DE MIRAFLORES', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (208, '20118180306', 'ESTACION CORMAR S.A.', 1, NULL, 148, 'AV. NICOLAS AYLLON NRO. 3456 URB.  VILLA SANTA ANITA', 'ATE', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, 0, 8);
-INSERT INTO `empresas` VALUES (209, '20487514749', 'GNV DEL NORTE S.A.C', 0, NULL, 133, 'AV. FELIPE SALAVERRY NRO. 930 URB.  PATAZCA  (CERCA A GRIFO)', 'CHICLAYO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, 0, 10);
-INSERT INTO `empresas` VALUES (211, '20457948060', 'XIN XING S.A.', 0, NULL, 1, 'JR. MIRO QUESADA NRO. 1308 LIMA LIMA LIMA', 'LIMA', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (212, '20600465237', 'EXPERIENCIA PERUANA SOCIEDAD ANONIMA CERRADA', 0, NULL, 139, 'Jr. Huaraz Nº 1484  Lima Lima Breña', 'Cercado de Lima', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (213, '20517453618', 'GLMAR SOCIEDAD ANONIMA CERRADA', 0, NULL, 139, 'Av El Triunfo # 210 VMT', 'Villa María del Triunfo', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (214, '20517767396', 'ESCOH SOCIEDAD ANONIMA CERRADA - ESCOH SAC', 0, NULL, 139, 'Av. Fernando Leon de Vivero s/n ICA - ICA  ', 'ICA', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (215, '20101285449', 'TRANSPORTES Y SERVICIOS SANTA CRUZ S A', 0, NULL, 141, 'AV. NARANJAL 299 NRO. C INT. 15 URB. NARANJAL-INDUSTRIAL LIMA - LIMA - INDEPENDENCIA', 'COMAS', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (216, '20515657119', 'ADMINISTRADORA DE SERVICIOS Y ASOCIADOS S.A.C.', 0, NULL, 142, 'AV. JAIME BAUZATE Y MEZA NRO. 1050 LIMA LIMA LA VICTORIA', 'LA VICTORIA', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (217, '20604303029', 'ADMINISTRACION DE GRIFOS L&L ONE S.A.C.', 0, NULL, 144, 'JR. MONTE ROSA NRO. 256 INT. 902 URB. CHACARILLA DEL ESTANQUE LIMA LIMA SANTIAGO DE SURCO', 'SANTIAGO DE SURCO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (218, '20604302863', 'ADMINISTRACION DE GRIFOS LEP S.A.C.', 0, NULL, 145, 'JR. MONTE ROSA NRO. 256 INT. 902 URB. CHACARILLA DEL ESTANQUE LIMA LIMA SANTIAGO DE SURCO', 'SANTIAGO DE SURCO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (219, '10704012964', 'POLO GOMEZ BRYAN MARTIN', 0, NULL, 1, 'PRUEBA', 'PRUEBA', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, NULL);
-INSERT INTO `empresas` VALUES (220, '20385649194', 'SERVICENTRO TITI S.A.C.', 0, NULL, 146, 'AV. PABLO PATRON NRO. 120 URB. SAN PABLO LIMA LIMA LA VICTORIA', 'LA VICTORIA', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (221, '20601697531', 'CORPORACION HA SOCIEDAD ANONIMA CERRADA ', 0, NULL, 53, 'AV. ALFREDO MENDIOLA NRO 6810 – SMP ', 'SMP', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (222, '20553368902', 'COMBUSTIBLES LIMPIOS PERUANOS SOCIEDAD ANONIMA CERRADA COLPE S.A.C.', 0, NULL, 149, 'CAL. REAL NRO. 588 CERCADO DE EL TAMBO JUNIN HUANCAYO EL TAMBO', 'EL TAMBO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (223, '11111111111', 'RC DEMO', 1, 0, 1, 'RCI', 'San Martin', 1, 1, 'RC DEMO', '', '55555555', '', 1, 1, 4, 0, 2);
-INSERT INTO `empresas` VALUES (224, '20549745076', 'GASOCENTRO SANTA ANA S.A.C', 1, NULL, 37, 'AV. LOS PROCERES MZA. D-2 LOTE. 41 URB. SANTA ANA LIMA LIMA LOS OLIVOS', 'LOS OLIVOS', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, 0, 9);
-INSERT INTO `empresas` VALUES (225, '20537901277', 'CORPORACION PYX S.A.C. - CORP PYX S.A.C.', 0, NULL, 150, 'AV. ANGELICA GAMARRA NRO. 1361 INT. 00 LIMA LIMA LOS OLIVOS', 'LOS OLIVOS', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (226, '20547799845', 'CONSORCIO GRIFOS DEL PERU SOCIEDAD ANONIMA CERRADA', 0, NULL, 151, 'AV. EL DERBY NRO. 254 DPTO. 704 LIMA LIMA SANTIAGO DE SURCO', 'SANTIAGO DE SURCO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (227, '20565643496', 'GLOBAL FUEL SOCIEDAD ANONIMA', 1, NULL, 152, 'AV. REPUBLICA DE PANAMA NRO. 3591 INT. 401 URB. LIMATAMBO LIMA LIMA SAN ISIDRO', 'SAN ISIDRO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, 2, 10);
-INSERT INTO `empresas` VALUES (228, '2051199502', 'TERPEL PERU S.A.C.', 0, NULL, 153, 'AV. JORGE BASADRE GROHMANN NRO. 347 INT. 1001 (EDIFICIO PATIO CENTRIC)', 'SAN ISIDRO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (229, '20566238927', 'PERU BUS INTERNACIONAL S.A.', 0, NULL, 154, 'AV. CANTA CALLAO MZA. D LOTE. 11 URB. HUERTOS DEL NARANJAL', 'SAN MARTIN DE PORRES', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, 0, 0);
-INSERT INTO `empresas` VALUES (261, '20492841014', 'GANAGAS S.A.C.', 0, NULL, 155, 'Av.Los Proceres 655 SANTIAGO DE SURCO LIMA', 'SANTIAGO DE SURCO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (262, '20507248676', 'VIJOGAS S.A.C.', 0, NULL, 156, 'AV. SANTA ROSA NRO. 610 URB. LOS SAUCES LIMA LIMA ATE', 'ATE', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (263, '20538289656', 'CONSORCIO MICE - JOCEGAS', 0, NULL, 1, 'AV. MARIA REICHE NRO. S/N URB. PACHACAMAC LIMA LIMA VILLA EL SALVADOR', 'VILLA EL SALVADOR', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (264, '20493143612', 'ESTACION DE SERVICIOS MASUR S.A.C.', 0, NULL, 158, 'AV. REPUBLICA DE PANAMA N° 4361', 'Surquillo', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (265, '20510954999', 'GASOCENTRO EL SOL S.A.C.', 0, NULL, 158, 'AV.EL SOL EQ.AV.GUARDIA C NRO. S/N LIMA LIMA CHORRILLOS', 'CHORRILLOS', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (266, '20510957581', 'SERVICENTRO SHALOM SAC', 0, NULL, 159, 'AV. EL DERBY NRO. 254 INT. 704 URB. EL DERBY DE MONTERRICO LIMA LIMA SANTIAGO DE SURCO', 'SANTIAGO DE SURCO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (289, '20519251656', 'INVERSIONES GASSURCO S.A.C', 0, NULL, 158, 'AV. EL DERBY NRO. 254 INT. 704 URB. EL DERBY DE MONTERRICO LIMA LIMA SANTIAGO DE SURCO', 'SANTIAGO DE SURCO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (292, '20605899715', 'GO ORUE SAC', 0, NULL, 99, 'Av. El Derby # 254 int 704 Lima - Lima - SANTIAGO DE SURCO', 'SURCO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (293, '20517710955', 'SERVICIOS MULTIPLES SANTA CECILIA S.A.C.  SERMUSCE S.A.C.', 0, NULL, 158, 'AV. EL DERBY NRO. 254 INT. 704 URB. EL DERBY DE MONTERRICO LIMA LIMA SANTIAGO DE SURCO', 'SANTIAGO DE SURCO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (295, '20606092998', 'CORPORACION JUDY S.A.C.', 1, NULL, 0, 'Nro. . Ex Fundo Naranjal Parcela', 'SMP', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, 2, 10);
-INSERT INTO `empresas` VALUES (302, '20593472244', 'ALLIN GROUP - JAVIER PRADO S.A.', 1, NULL, 1, 'JIRON PINOS 308', 'AL MOLINA', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, 0, 10);
-INSERT INTO `empresas` VALUES (303, '20492898717', 'ECOMOVIL SOCIEDAD ANONIMA CERRADA', 1, NULL, 0, 'AV. PROLONGACION PRIMAVERA NRO. 120 INT. A316 LIMA LIMA SANTIAGO DE SURCO', 'SANTIAGO DE SURCO', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 0, 0, 0);
-INSERT INTO `empresas` VALUES (304, '00000000', 'ECOMOVIL ', 1, NULL, 160, 'SMP', 'SMP', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, 1, 5);
-INSERT INTO `empresas` VALUES (313, '00000000000', 'CORPORACION JUDY SAC', 1, NULL, 161, 'EX FUNDO NARANJAL PARCELA 59', 'SAN MARTIN DE PORRES', NULL, NULL, NULL, NULL, NULL, NULL, 1, 1, 2, 2, 10);
-
--- ----------------------------
--- Table structure for failed_jobs
--- ----------------------------
-DROP TABLE IF EXISTS `failed_jobs`;
-CREATE TABLE `failed_jobs`  (
-  `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `uuid` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `connection` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `queue` text CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `payload` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `exception` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `failed_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
-  PRIMARY KEY (`id`) USING BTREE,
-  UNIQUE INDEX `failed_jobs_uuid_unique`(`uuid`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of failed_jobs
--- ----------------------------
-
--- ----------------------------
--- Table structure for grupos
--- ----------------------------
-DROP TABLE IF EXISTS `grupos`;
-CREATE TABLE `grupos`  (
-  `id_grupo` int(11) NOT NULL AUTO_INCREMENT,
-  `nombre` varchar(250) CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL DEFAULT NULL,
-  `descripcion` mediumtext CHARACTER SET utf8 COLLATE utf8_spanish_ci NULL,
-  `fecha` date NULL DEFAULT NULL,
-  `estado` int(11) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_grupo`) USING BTREE,
-  UNIQUE INDEX `V_REP`(`nombre`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 162 CHARACTER SET = utf8 COLLATE = utf8_spanish_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of grupos
--- ----------------------------
-INSERT INTO `grupos` VALUES (1, 'SIN GRUPO', 'EMPRESA SOLAS', '2019-10-30', 0);
-INSERT INTO `grupos` VALUES (2, 'BOTICAS', 'TODAS LAS BOTICAS', '2019-10-30', 0);
-INSERT INTO `grupos` VALUES (3, 'AGUKI', '', '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (4, 'AJ GROUP', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (5, 'AJC', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (7, 'ALTA VIDDA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (8, 'AMEL', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (9, 'AXELL', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (10, 'BALIAN', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (11, 'BOTIFARMA', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (12, 'CABLE PERU', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (14, 'CATAFARMA', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (15, 'CAZTELLANI', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (16, 'CELESTE', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (17, 'CILAMSAC', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (18, 'CLINICA CORAZON DE JESUS', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (19, 'COFARSA', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (20, 'CORGAS', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (21, 'CRUZ VERDE', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (22, 'DELTA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (24, 'DENVER', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (25, 'DIESEL MAX', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (26, 'DISFARMED', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (27, 'DROFAR', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (28, 'DUOGAS', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (29, 'DUVAL', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (30, 'EBENEZER', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (31, 'ECO TRADING', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (32, 'EDS LURIN', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (33, 'EDS NIAGARA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (34, 'ESTACION VICTORIA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (35, 'FARMA SAN AGUSTIN', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (36, 'FARMACIA SAN FRANCISCO', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (37, 'GANAJUR', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (39, 'GAS DIEGO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (41, 'GASBEL', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (42, 'GASOCENTRO LIMA SUR', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (43, 'GASORED', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (45, 'GESA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (46, 'GRIFO SANTO DOMINGO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (47, 'GRIFO TRAPICHE', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (48, 'GRUPO INTIFARMA', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (49, 'HERCO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (51, 'HEVALFAR', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (52, 'HUARAL GAS', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (53, 'HYA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (55, 'INVERSIONES JIARA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (56, 'JEMMS', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (68, 'JU-EDGAR', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (70, 'JU-ELSA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (73, 'JU-JACQUELINE', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (75, 'JULCAN', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (77, 'LAS AMERICAS', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (78, 'LAS BELENES', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (79, 'LIMABANDA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (81, 'LIVORNO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (82, 'LOS ROSALES', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (83, 'LUMARCO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (84, 'LUXOR', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (85, 'MABAFARMA', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (86, 'MANDUJANO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (91, 'MANUEL IGREDA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (92, 'MASGAS', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (93, 'MASTER', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (94, 'MATIAS Y ALEXA', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (95, 'MIDAS', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (96, 'NESTOR SALCEDO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (97, 'NG FARMA', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (98, 'ORFUSAC', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (99, 'ORUE', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (100, 'OVALO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (102, 'PETRO LUMARA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (103, 'PETROAMERICA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (105, 'PETROCARGO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (106, 'PIHUICHO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (107, 'PRIMAX', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (109, 'PRIMED', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (110, 'RAMSAN', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (111, 'REPSOL', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (112, 'RICSA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (113, 'RIO BRANCO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (114, 'SAN JUANITO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (118, 'SANTA ROSA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (119, 'SCHOII', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (121, 'SELMAC', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (122, 'SERVIGRIFOS', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (123, 'SERVITOR', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (124, 'SHICHI FUKU', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (125, 'SIROCCO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (126, 'SMILE', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (127, 'TRIVEÑO', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (128, 'UCHIYAMA', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (129, 'UNOGAS', NULL, '2020-03-02', 1);
-INSERT INTO `grupos` VALUES (130, 'VITAFARMA', NULL, '2020-03-02', 0);
-INSERT INTO `grupos` VALUES (131, 'BOLIVAR S.A.', '', '2020-03-06', 1);
-INSERT INTO `grupos` VALUES (132, 'WO SA', '', '2020-10-05', 1);
-INSERT INTO `grupos` VALUES (133, 'GASCOP', '', '2021-02-10', 1);
-INSERT INTO `grupos` VALUES (136, ' XIN XONG', '', '2021-03-13', 1);
-INSERT INTO `grupos` VALUES (138, 'OFICINA', '', '2021-03-16', 1);
-INSERT INTO `grupos` VALUES (139, 'COPETROL', '', '2021-04-13', 1);
-INSERT INTO `grupos` VALUES (141, 'SANTA CRUZ', '', '2021-04-29', 1);
-INSERT INTO `grupos` VALUES (142, 'ASSA', '', '2021-05-27', 1);
-INSERT INTO `grupos` VALUES (143, 'INTRASERV', 'ORMEÑO', '2021-07-16', 1);
-INSERT INTO `grupos` VALUES (144, 'ADMINISTRACION DE GRIFOS LLONE S.A.C', '', '2021-10-08', 1);
-INSERT INTO `grupos` VALUES (145, 'EESS PICORP', 'Administración de grifos lep sac', '2021-11-17', 1);
-INSERT INTO `grupos` VALUES (146, 'TITI', '', '2022-02-25', 1);
-INSERT INTO `grupos` VALUES (147, 'TRAILER GAS SAC', '', '2022-04-11', 1);
-INSERT INTO `grupos` VALUES (148, 'ESTACION CORMAR S.A.', '', '2022-05-13', 1);
-INSERT INTO `grupos` VALUES (149, 'COLPE S.A.C', '', '2022-07-18', 1);
-INSERT INTO `grupos` VALUES (150, 'CORPORACION PYX', '', '2022-08-01', 1);
-INSERT INTO `grupos` VALUES (151, 'CONSORCIOGRIFOS DEL PERU S.A.C', '', '2022-08-10', 1);
-INSERT INTO `grupos` VALUES (152, 'AVA SAC', '', '2022-08-23', 1);
-INSERT INTO `grupos` VALUES (153, 'Terpel Gazel', '', '2022-10-05', 1);
-INSERT INTO `grupos` VALUES (154, 'PERU BUS', '', '2022-11-14', 1);
-INSERT INTO `grupos` VALUES (155, 'GANAGAS SAC', '', '2022-11-16', 1);
-INSERT INTO `grupos` VALUES (156, 'VijoGas', '', '2022-11-25', 1);
-INSERT INTO `grupos` VALUES (157, 'CONSORCIO MICE - JOSEGAS', '', '2022-12-03', 1);
-INSERT INTO `grupos` VALUES (158, 'GO', '', '2022-12-13', 1);
-INSERT INTO `grupos` VALUES (159, 'SHALOM', '', '2022-12-20', 1);
-INSERT INTO `grupos` VALUES (160, 'ECOMOVIL', 'ECOMOVIL', '2024-05-24', 1);
-INSERT INTO `grupos` VALUES (161, 'CORPORACION JUDY SAC', '', '2024-12-28', 1);
 
 -- ----------------------------
 -- Table structure for migrations
@@ -551,27 +105,6 @@ CREATE TABLE `personal_access_tokens`  (
 -- ----------------------------
 
 -- ----------------------------
--- Table structure for tb_area
--- ----------------------------
-DROP TABLE IF EXISTS `tb_area`;
-CREATE TABLE `tb_area`  (
-  `id_area` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `estatus` tinyint(1) NULL DEFAULT 1,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_area`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of tb_area
--- ----------------------------
-INSERT INTO `tb_area` VALUES (1, 'Soporte', 1, NULL, '2024-07-27 19:46:46');
-INSERT INTO `tb_area` VALUES (2, 'Facturacion', 1, NULL, '2024-07-27 19:46:50');
-INSERT INTO `tb_area` VALUES (3, 'Supervisor', 1, NULL, '2024-07-27 19:46:52');
-INSERT INTO `tb_area` VALUES (4, 'Reportes', 1, NULL, '2024-07-27 19:46:55');
-
--- ----------------------------
 -- Table structure for tb_contac_ordens
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_contac_ordens`;
@@ -621,8 +154,8 @@ CREATE TABLE `tb_cronograma_turno`  (
 -- ----------------------------
 -- Records of tb_cronograma_turno
 -- ----------------------------
-INSERT INTO `tb_cronograma_turno` VALUES (1, '2025-03-10', '18:00:00', '2025-03-17', '08:20:00', 3, '2025-03-15', '13:00:00', '2025-03-17', '08:20:00', 4, 1, 0, 1, NULL, '2025-03-12 16:00:08');
-INSERT INTO `tb_cronograma_turno` VALUES (2, '2025-03-17', '18:00:00', '2025-03-24', '08:20:00', 4, '2025-03-22', '13:00:00', '2025-03-24', '08:20:00', 5, 1, 0, 1, '2025-03-18 16:15:31', '2025-03-14 20:27:14');
+INSERT INTO `tb_cronograma_turno` VALUES (1, '2025-03-10', '18:00:00', '2025-03-17', '08:20:00', 1, '2025-03-15', '13:00:00', '2025-03-17', '16:49:00', 3, 1, 0, 1, NULL, '2025-03-12 16:00:08');
+INSERT INTO `tb_cronograma_turno` VALUES (2, '2025-03-17', '18:00:00', '2025-03-24', '08:20:00', 4, '2025-03-22', '13:00:00', '2025-03-24', '08:20:00', 5, 1, 1, 1, '2025-03-17 18:04:20', '2025-03-17 12:43:20');
 
 -- ----------------------------
 -- Table structure for tb_empresas
@@ -1136,9 +669,9 @@ CREATE TABLE `tb_incidencias`  (
   INDEX `ruc_empresa`(`ruc_empresa`) USING BTREE,
   CONSTRAINT `FK_Sucursal` FOREIGN KEY (`id_sucursal`) REFERENCES `tb_sucursales` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_incidencias_ibfk_1` FOREIGN KEY (`id_contacto`) REFERENCES `contactos_empresas` (`id_contact`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `tb_incidencias_ibfk_2` FOREIGN KEY (`ruc_empresa`) REFERENCES `empresas` (`ruc_empresa`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_incidencias_ibfk_3` FOREIGN KEY (`id_problema`) REFERENCES `tb_problema` (`id_problema`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `tb_incidencias_ibfk_4` FOREIGN KEY (`id_subproblema`) REFERENCES `tb_subproblema` (`id_subproblema`) ON DELETE CASCADE ON UPDATE CASCADE
+  CONSTRAINT `tb_incidencias_ibfk_4` FOREIGN KEY (`id_subproblema`) REFERENCES `tb_subproblema` (`id_subproblema`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `tb_incidencias_ibfk_5` FOREIGN KEY (`ruc_empresa`) REFERENCES `tb_empresas` (`ruc`) ON DELETE RESTRICT ON UPDATE RESTRICT
 ) ENGINE = InnoDB AUTO_INCREMENT = 28 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -1190,30 +723,30 @@ CREATE TABLE `tb_materiales`  (
 -- ----------------------------
 -- Records of tb_materiales
 -- ----------------------------
-INSERT INTO `tb_materiales` VALUES (1, NULL, 'Jack Tool', NULL, 1, '2024-08-12 14:47:29', '2024-08-12 14:47:29');
-INSERT INTO `tb_materiales` VALUES (2, NULL, 'Protector de Manguera Data (05 Mtrs)', NULL, 1, '2024-08-12 14:47:33', '2024-08-12 14:47:33');
-INSERT INTO `tb_materiales` VALUES (3, NULL, 'Cable Telefonico (07 Mtrs)', NULL, 1, '2024-08-12 14:47:38', '2024-08-12 14:47:38');
-INSERT INTO `tb_materiales` VALUES (4, NULL, 'RJ 45', NULL, 1, '2024-08-12 14:47:43', '2024-08-12 14:47:43');
-INSERT INTO `tb_materiales` VALUES (5, NULL, 'RJ 12', NULL, 1, '2024-08-12 14:47:51', '2024-08-12 14:47:51');
-INSERT INTO `tb_materiales` VALUES (6, NULL, 'RJ 11', NULL, 1, '2024-08-12 14:47:53', '2024-08-12 14:47:53');
-INSERT INTO `tb_materiales` VALUES (7, NULL, 'RJ 9', NULL, 1, '2024-08-12 14:47:56', '2024-08-12 14:47:56');
-INSERT INTO `tb_materiales` VALUES (8, NULL, 'Patch cord de Red (1M)', NULL, 1, '2024-08-12 14:48:00', '2024-08-12 14:48:00');
-INSERT INTO `tb_materiales` VALUES (9, NULL, 'Patch cord de Red (2M)', NULL, 1, '2024-08-12 14:48:04', '2024-08-12 14:48:04');
-INSERT INTO `tb_materiales` VALUES (10, NULL, 'Patch cord de Red (3M)', NULL, 1, '2024-08-12 14:48:06', '2024-08-12 14:48:06');
-INSERT INTO `tb_materiales` VALUES (11, NULL, 'Fuente de 12v.', NULL, 1, '2024-08-12 14:48:09', '2024-08-12 14:48:09');
-INSERT INTO `tb_materiales` VALUES (12, NULL, 'Fuente de 5v.', NULL, 1, '2024-08-12 14:48:11', '2024-08-12 14:48:11');
-INSERT INTO `tb_materiales` VALUES (13, NULL, 'Paq. de Precintos', NULL, 1, '2024-08-12 14:48:14', '2024-08-12 14:48:14');
-INSERT INTO `tb_materiales` VALUES (14, NULL, 'Cinta aislante', NULL, 1, '2024-08-12 14:48:18', '2024-08-12 14:48:18');
-INSERT INTO `tb_materiales` VALUES (15, NULL, 'USB Serial', NULL, 1, '2024-08-12 14:48:20', '2024-08-12 14:48:20');
-INSERT INTO `tb_materiales` VALUES (16, NULL, 'Precinto', NULL, 1, '2024-08-12 14:48:23', '2024-08-12 14:48:23');
-INSERT INTO `tb_materiales` VALUES (17, NULL, 'Cinta aislante', NULL, 1, '2024-08-12 14:48:26', '2024-08-12 14:48:26');
-INSERT INTO `tb_materiales` VALUES (18, NULL, 'Cable de red Cat5e mts', NULL, 1, '2024-08-12 14:48:28', '2024-08-12 14:48:28');
-INSERT INTO `tb_materiales` VALUES (19, NULL, 'Cable vulcanizado Nro14 x  mts', NULL, 1, '2024-08-12 14:48:31', '2024-08-12 14:48:31');
-INSERT INTO `tb_materiales` VALUES (20, NULL, 'Fuente impresora Tysso(24v)', NULL, 1, '2024-08-12 14:48:34', '2024-08-12 14:48:34');
-INSERT INTO `tb_materiales` VALUES (21, NULL, 'Toma electrica externa', NULL, 1, '2024-08-12 14:48:36', '2024-08-12 14:48:36');
-INSERT INTO `tb_materiales` VALUES (22, NULL, 'Cable vulcanizado nro 16', NULL, 1, '2024-08-12 14:48:39', '2024-08-12 14:48:39');
-INSERT INTO `tb_materiales` VALUES (23, NULL, 'Bornera', NULL, 1, '2024-08-12 14:48:41', '2024-08-12 14:48:41');
-INSERT INTO `tb_materiales` VALUES (24, NULL, 'Compuesto Sellante', NULL, 1, '2024-08-12 14:48:44', '2024-08-12 14:48:44');
+INSERT INTO `tb_materiales` VALUES (1, NULL, 'Jack Tool', NULL, 1, NULL, '2024-08-12 14:47:29');
+INSERT INTO `tb_materiales` VALUES (2, NULL, 'Protector de Manguera Data (05 Mtrs)', NULL, 1, NULL, '2024-08-12 14:47:33');
+INSERT INTO `tb_materiales` VALUES (3, NULL, 'Cable Telefonico (07 Mtrs)', NULL, 1, NULL, '2024-08-12 14:47:38');
+INSERT INTO `tb_materiales` VALUES (4, NULL, 'RJ 45', NULL, 1, NULL, '2024-08-12 14:47:43');
+INSERT INTO `tb_materiales` VALUES (5, NULL, 'RJ 12', NULL, 1, NULL, '2024-08-12 14:47:51');
+INSERT INTO `tb_materiales` VALUES (6, NULL, 'RJ 11', NULL, 1, NULL, '2024-08-12 14:47:53');
+INSERT INTO `tb_materiales` VALUES (7, NULL, 'RJ 9', NULL, 1, NULL, '2024-08-12 14:47:56');
+INSERT INTO `tb_materiales` VALUES (8, NULL, 'Patch cord de Red (1M)', NULL, 1, NULL, '2024-08-12 14:48:00');
+INSERT INTO `tb_materiales` VALUES (9, NULL, 'Patch cord de Red (2M)', NULL, 1, NULL, '2024-08-12 14:48:04');
+INSERT INTO `tb_materiales` VALUES (10, NULL, 'Patch cord de Red (3M)', NULL, 1, NULL, '2024-08-12 14:48:06');
+INSERT INTO `tb_materiales` VALUES (11, NULL, 'Fuente de 12v.', NULL, 1, NULL, '2024-08-12 14:48:09');
+INSERT INTO `tb_materiales` VALUES (12, NULL, 'Fuente de 5v.', NULL, 1, NULL, '2024-08-12 14:48:11');
+INSERT INTO `tb_materiales` VALUES (13, NULL, 'Paq. de Precintos', NULL, 1, NULL, '2024-08-12 14:48:14');
+INSERT INTO `tb_materiales` VALUES (14, NULL, 'Cinta aislante', NULL, 1, NULL, '2024-08-12 14:48:18');
+INSERT INTO `tb_materiales` VALUES (15, NULL, 'USB Serial', NULL, 1, NULL, '2024-08-12 14:48:20');
+INSERT INTO `tb_materiales` VALUES (16, NULL, 'Precinto', NULL, 1, NULL, '2024-08-12 14:48:23');
+INSERT INTO `tb_materiales` VALUES (17, NULL, 'Cinta aislante', NULL, 1, NULL, '2024-08-12 14:48:26');
+INSERT INTO `tb_materiales` VALUES (18, NULL, 'Cable de red Cat5e mts', NULL, 1, NULL, '2024-08-12 14:48:28');
+INSERT INTO `tb_materiales` VALUES (19, NULL, 'Cable vulcanizado Nro14 x  mts', NULL, 1, NULL, '2024-08-12 14:48:31');
+INSERT INTO `tb_materiales` VALUES (20, NULL, 'Fuente impresora Tysso(24v)', NULL, 1, NULL, '2024-08-12 14:48:34');
+INSERT INTO `tb_materiales` VALUES (21, NULL, 'Toma electrica externa', NULL, 1, NULL, '2024-08-12 14:48:36');
+INSERT INTO `tb_materiales` VALUES (22, NULL, 'Cable vulcanizado nro 16', NULL, 1, NULL, '2024-08-12 14:48:39');
+INSERT INTO `tb_materiales` VALUES (23, NULL, 'Bornera', NULL, 1, NULL, '2024-08-12 14:48:41');
+INSERT INTO `tb_materiales` VALUES (24, NULL, 'Compuesto Sellante', NULL, 1, NULL, '2024-08-12 14:48:44');
 
 -- ----------------------------
 -- Table structure for tb_materiales_usados
@@ -1284,7 +817,7 @@ INSERT INTO `tb_menu` VALUES (5, 'Control de Usuarios', 'fas fa-user-group', 'Co
 INSERT INTO `tb_menu` VALUES (6, 'Mantenimientos', 'fas fa-gears', 'ControlMantenimientos', 1, 0, 0, 8, 1, '2025-03-10 12:06:36', '2025-02-01 18:15:04');
 INSERT INTO `tb_menu` VALUES (7, 'Sistema', 'fas fa-laptop-code', 'Sistema', 1, 0, 1, 9, 1, '2025-03-10 12:06:36', '2025-02-10 15:14:55');
 INSERT INTO `tb_menu` VALUES (8, 'Buzon Tecnico', 'fas fa-address-book', 'Buzon', 1, 0, 0, 5, 1, '2025-03-10 12:06:36', '2025-02-10 16:25:23');
-INSERT INTO `tb_menu` VALUES (9, 'Asignacion de Turno', 'fas fa-user-clock', '/asignacion-turno', 0, 0, 1, 1, 1, '2025-03-10 12:06:36', '2025-03-10 11:19:10');
+INSERT INTO `tb_menu` VALUES (9, 'Asignacion de Turno', 'fas fa-user-clock', '/asignacion-turno', 0, 0, 0, 1, 1, '2025-03-19 09:36:39', '2025-03-10 11:19:10');
 
 -- ----------------------------
 -- Table structure for tb_orden_correlativo
@@ -1563,9 +1096,7 @@ CREATE TABLE `tb_problema`  (
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_problema`) USING BTREE,
-  UNIQUE INDEX `codigo`(`codigo`) USING BTREE,
-  INDEX `FK_Tipo_Incidencia`(`tipo_incidencia`) USING BTREE,
-  CONSTRAINT `FK_Tipo_Incidencia` FOREIGN KEY (`tipo_incidencia`) REFERENCES `tb_tipo_incidencia` (`id_tipo_incidencia`) ON DELETE CASCADE ON UPDATE CASCADE
+  UNIQUE INDEX `codigo`(`codigo`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 27 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2262,73 +1793,6 @@ INSERT INTO `tb_sucursales` VALUES (353, '20565643496', 'Ava Finlandia ', '', 'A
 INSERT INTO `tb_sucursales` VALUES (354, '20606092998', 'CORPORACION JUDY SAC', '', 'EX FUNDO NARANJAL PARCELA 59', '010101', NULL, NULL, 1, 1, NULL, 1, NULL, '2024-12-30 14:36:59');
 
 -- ----------------------------
--- Table structure for tb_tipo_estacion
--- ----------------------------
-DROP TABLE IF EXISTS `tb_tipo_estacion`;
-CREATE TABLE `tb_tipo_estacion`  (
-  `id_tipo_estacion` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `estatus` tinyint(1) NULL DEFAULT 1,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_tipo_estacion`) USING BTREE,
-  UNIQUE INDEX `unique_descripcion`(`descripcion`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of tb_tipo_estacion
--- ----------------------------
-INSERT INTO `tb_tipo_estacion` VALUES (1, 'GNV', 1, '2024-07-27 22:25:59', '2024-07-27 22:26:02');
-INSERT INTO `tb_tipo_estacion` VALUES (2, 'GLP Y LIQUIDOS', 1, '2024-07-27 22:27:06', '2024-07-27 22:27:08');
-INSERT INTO `tb_tipo_estacion` VALUES (3, 'GNC', 1, '2024-07-27 22:27:37', '2024-07-27 22:27:40');
-INSERT INTO `tb_tipo_estacion` VALUES (4, 'GNL', 1, '2024-07-27 22:29:13', '2024-07-27 22:29:16');
-INSERT INTO `tb_tipo_estacion` VALUES (5, 'OFICINA', 1, '2024-07-27 23:44:10', '2024-07-27 23:44:14');
-
--- ----------------------------
--- Table structure for tb_tipo_incidencia
--- ----------------------------
-DROP TABLE IF EXISTS `tb_tipo_incidencia`;
-CREATE TABLE `tb_tipo_incidencia`  (
-  `id_tipo_incidencia` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `estatus` tinyint(1) NULL DEFAULT 1,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_tipo_incidencia`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 3 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of tb_tipo_incidencia
--- ----------------------------
-INSERT INTO `tb_tipo_incidencia` VALUES (1, 'REMOTO', 1, '2024-07-27 21:38:54', '2024-07-27 21:38:57');
-INSERT INTO `tb_tipo_incidencia` VALUES (2, 'PRESENCIAL', 1, '2024-07-27 21:39:42', '2024-07-27 21:39:45');
-
--- ----------------------------
--- Table structure for tb_tipo_soporte
--- ----------------------------
-DROP TABLE IF EXISTS `tb_tipo_soporte`;
-CREATE TABLE `tb_tipo_soporte`  (
-  `id_tipo_soporte` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `estatus` tinyint(1) NULL DEFAULT 1,
-  `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NULL DEFAULT NULL,
-  PRIMARY KEY (`id_tipo_soporte`) USING BTREE,
-  UNIQUE INDEX `unique_descripcion`(`descripcion`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of tb_tipo_soporte
--- ----------------------------
-INSERT INTO `tb_tipo_soporte` VALUES (1, 'Soporte Tecnico', 1, '2024-07-27 22:30:16', '2024-07-27 22:30:16');
-INSERT INTO `tb_tipo_soporte` VALUES (2, 'Visita Tecnica', 1, '2024-07-27 22:30:21', '2024-07-27 22:30:21');
-INSERT INTO `tb_tipo_soporte` VALUES (3, 'Soporte Nocturno', 1, '2024-07-27 22:30:23', '2024-07-27 22:30:23');
-INSERT INTO `tb_tipo_soporte` VALUES (4, 'Mantenimiento ', 1, '2024-07-27 22:30:26', '2024-07-27 22:30:26');
-INSERT INTO `tb_tipo_soporte` VALUES (5, 'Cambio Servidor', 1, '2024-07-27 22:30:30', '2024-07-27 22:30:30');
-INSERT INTO `tb_tipo_soporte` VALUES (6, 'Actualizacion de Sistema', 1, '2024-07-27 22:34:19', '2024-07-27 22:34:19');
-INSERT INTO `tb_tipo_soporte` VALUES (7, 'Mantenimiento Impresora', 1, '2024-07-27 22:34:22', '2024-07-27 22:34:22');
-
--- ----------------------------
 -- Table structure for tb_vis_asignadas
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_vis_asignadas`;
@@ -2437,27 +1901,6 @@ INSERT INTO `tb_visitas` VALUES (19, 20, 1, '2025-03-05', '13:09:39', 0, 0, 0, '
 INSERT INTO `tb_visitas` VALUES (20, 121, 1, '2025-03-05', '13:11:10', 1, 0, 0, '2025-03-05 13:11:10');
 
 -- ----------------------------
--- Table structure for tipo_usuario
--- ----------------------------
-DROP TABLE IF EXISTS `tipo_usuario`;
-CREATE TABLE `tipo_usuario`  (
-  `id_tipo_acceso` int(11) NOT NULL AUTO_INCREMENT,
-  `descripcion` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `color` varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `estatus` tinyint(1) NULL DEFAULT 1,
-  PRIMARY KEY (`id_tipo_acceso`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
-
--- ----------------------------
--- Records of tipo_usuario
--- ----------------------------
-INSERT INTO `tipo_usuario` VALUES (1, 'Gerencia', 'success', 1);
-INSERT INTO `tipo_usuario` VALUES (2, 'Administrativo', 'info', 1);
-INSERT INTO `tipo_usuario` VALUES (3, 'Tecnico', 'primary', 1);
-INSERT INTO `tipo_usuario` VALUES (4, 'Personalido', 'warning', 1);
-INSERT INTO `tipo_usuario` VALUES (5, 'Sistema', 'secondary', 1);
-
--- ----------------------------
 -- Table structure for usuarios
 -- ----------------------------
 DROP TABLE IF EXISTS `usuarios`;
@@ -2492,11 +1935,7 @@ CREATE TABLE `usuarios`  (
   UNIQUE INDEX `U_email_personal`(`email_personal`) USING BTREE,
   UNIQUE INDEX `U_email_corporativo`(`email_corporativo`) USING BTREE,
   UNIQUE INDEX `U_tel_personal`(`tel_personal`) USING BTREE,
-  UNIQUE INDEX `U_tel_corporativo`(`tel_corporativo`) USING BTREE,
-  INDEX `Fk_Tipo_Usuario`(`tipo_acceso`) USING BTREE,
-  INDEX `Fk_Id_Area`(`id_area`) USING BTREE,
-  CONSTRAINT `Fk_Id_Area` FOREIGN KEY (`id_area`) REFERENCES `tb_area` (`id_area`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `Fk_Tipo_Usuario` FOREIGN KEY (`tipo_acceso`) REFERENCES `tipo_usuario` (`id_tipo_acceso`) ON DELETE CASCADE ON UPDATE CASCADE
+  UNIQUE INDEX `U_tel_corporativo`(`tel_corporativo`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 7 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
@@ -2506,7 +1945,7 @@ INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO'
 INSERT INTO `usuarios` VALUES (3, '12345678', 'Pedro', 'Suarez', 'psuarez@gmail.com', 'psuarez@email.com', '2025-02-25 08:54:29', '2003-01-14', '935423118', '952332137', 'psuarez', '$2y$12$3CmRGy97YD3R0M5j19rrRO.G6AbM6n26v8y3CPEJI8ca2.bsRSiLC', '123789', 'fp_psuarez.png', 'fd_psuarez.png', 3, 3, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 16:31:18', '2024-07-13 02:41:10');
 INSERT INTO `usuarios` VALUES (4, '74716278', 'JOSTHEIN JOSEPH', 'MAYORCA BELLEZA', 'jmayorca@gmail.com', 'jmayorca@email.com', '2025-02-25 08:54:29', '1997-06-11', '978456123', '985267341', 'jmayorca', '$2y$12$CAclmFJJoM2plUl48iJsgeRbm8WrDbu8jynetkGuWVVBxGTONEm9C', '147852', 'user_auth.jpg', 'fd_jmayorca.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 15:28:24', '2024-07-15 22:18:33');
 INSERT INTO `usuarios` VALUES (5, '70401296', 'BRYAN MARTIN', 'POLO GOMEZ', 'talvan@gmail.com', 'talvan@email.com', '2025-02-25 08:54:29', '2001-07-02', '987564123', '948741236', 'talvan', '$2y$12$6oyxU4QP06ERy7uIw4t6yeJuW1s6bmft/lUWc9SMosYlyZrHPbwN.', '987654', 'user_auth.jpg', 'fd_talvan.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-02-10 15:28:09', '2024-07-22 02:16:27');
-INSERT INTO `usuarios` VALUES (6, '72878242', 'RENZO GRACIANI', 'VIGO MALLQUI', NULL, NULL, '2025-03-07 15:26:21', '2000-01-04', NULL, NULL, 'rvigo', '$2y$12$TsJDGfxtIyBBio1kV2yVAelTj4xK/3eePkKQqS.UxVAxHzTPhodzi', '123456', 'fp_rvigo.webp', 'fd_rvigo.png', 2, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXX0=', NULL, 0, 1, NULL, '2025-03-07 15:26:21');
+INSERT INTO `usuarios` VALUES (6, '72878242', 'RENZO GRACIANI', 'VIGO MALLQUI', NULL, NULL, '2025-03-19 09:38:02', '2000-01-04', NULL, NULL, 'rvigo', '$2y$12$0Os5ULig.nf9ypup7OAFKer24Ni4E6ZGALgPV46FHG9Dxsdrv3q16', '123456', 'fp_rvigo.webp', 'fd_rvigo.png', 2, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiOSI6W119', NULL, 0, 1, '2025-03-19 09:38:00', '2025-03-07 15:26:21');
 
 -- ----------------------------
 -- Procedure structure for GetCodeInc

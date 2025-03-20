@@ -85,7 +85,7 @@ function ShowDetail(e, id) {
 }
 
 async function StartVisita(id, estado) {
-    if (!await boxAlert.confirm(`¿Esta seguro de <b>${estado == 2 ? 're' : ''}iniciar</b> la visita?`)) return true;
+    if (!await boxAlert.confirm({ h: `Esta apunto de <b><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la visita` })) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/visitas/programadas/startVisita`,
@@ -164,7 +164,7 @@ function ShowAssign(e, id) {
 }
 
 async function AssignPer() {
-    if (!await boxAlert.confirm('¿Esta seguro de realizar esta accion?')) return true;
+    if (!await boxAlert.confirm({ h: `Está apunto de asignar personal a la visita` })) return true;
     fMananger.formModalLoding('modal_assign', 'show');
 
     const id = $('#id_visitas_asign').val();
@@ -213,7 +213,7 @@ async function AssignPer() {
 }
 
 async function DeleteVisita(id) {
-    if (!await boxAlert.confirm('¿Esta seguro de elimniar?, no se podrá revertir los cambios')) return true;
+    if (!await boxAlert.confirm({ t: '¿Estas de suguro de eliminar la visita?', h: 'no se podrá no se podrá revertir está operación.' })) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/visitas/programadas/destroy`,

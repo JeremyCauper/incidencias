@@ -9,9 +9,6 @@
             cursor: move;
         }
 
-        /* Estilo para el placeholder */
-
-        /* Opcional: estilo para la fila que se está arrastrando */
         .dragging {
             opacity: 0.5;
         }
@@ -169,7 +166,7 @@
         function iniciarTbOrden() {
             var draggedRow = null;
             // Creamos el placeholder
-            var $placeholder = $("<tr style='border: 2px dashed #ccc;'><td colspan='2'>&nbsp;</td></tr>");
+            var $placeholder = $("<tr aria-dragover style='border: 2px dashed #ccc;'><td colspan='2'>&nbsp;</td></tr>");
 
             // Al iniciar el arrastre: ocultamos la fila y colocamos el placeholder en su posición original
             $('#tb_orden_menu tbody tr').on('dragstart', async function (e) {
@@ -178,18 +175,17 @@
                 setTimeout(() => {
                     draggedRow.addClass('dragging').hide();
                 }, 50);
-                // Insertamos el placeholder donde estaba la fila
             });
 
             $('#tb_orden_menu tbody').on('dragover', function (e) {
                 e.preventDefault();
-                if (!draggedRow) return;
+                if (!draggedRow) return false;
 
                 var posY = e.originalEvent.pageY;
                 var $target = $(e.target).closest('tr'); // Encuentra la fila sobre la que estamos pasando
 
-                if ($($target[0]).attr('tr-id') == $(draggedRow).attr('tr-id')) return;
-
+                if (!$($target[0]).attr('tr-id') || $($target[0]).attr('tr-id') == $(draggedRow).attr('tr-id')) return false;
+                
                 if ($target.length && !$target.hasClass('placeholder')) {
                     var targetOffset = $target.offset().top;
                     var targetHeight = $target.outerHeight();
@@ -200,6 +196,7 @@
                     } else {
                         $target.before($placeholder);
                     }
+                    
                 }
             });
 
@@ -208,8 +205,7 @@
                 e.preventDefault();
                 if (draggedRow) {
                     $placeholder.replaceWith(draggedRow);
-                    draggedRow.show().removeClass('dragging');
-                    actualizarOrden();
+                    draggedRow.removeAttr('class').removeAttr('style');
                     draggedRow = null;
                 }
             });
@@ -217,10 +213,11 @@
             // En caso de cancelar el arrastre, mostramos la fila y removemos el placeholder
             $('#tb_orden_menu tbody').on('dragend', function (e) {
                 if (draggedRow) {
-                    draggedRow.show().removeClass('dragging');
+                    draggedRow.removeAttr('class').removeAttr('style');
                     draggedRow = null;
                 }
                 $placeholder.remove(); // Se elimina el placeholder
+                actualizarOrden();
             });
 
             // Función para actualizar el atributo 'tr-orden' y la celda de orden

@@ -59,7 +59,7 @@ const tb_menu = new DataTable('#tb_menu', {
             $("#tb_orden_menu tbody").html('');
             $.each(json, function (i, e) {
                 $("#tb_orden_menu tbody").append($('<tr>', {
-                    "tr-id": e.id_menu,
+                    "tr-id": e.id,
                     "tr-orden": e.orden,
                     "draggable": "true"
                 }).html(`<td>${e.orden}</td><td><i class="${e.icon}"></i> ${e.descripcion}</td>`));
@@ -178,11 +178,12 @@ function Editar(id) {
                 }
 
                 var json = data.data;
-                $('#id').val(json.id_menu);
+                $('#id').val(json.id);
                 $('#descripcion').val(json.descripcion);
                 $('#icono').val(json.icon);
                 $('#ruta').val(json.ruta);
                 $('#submenu').val(json.submenu).trigger('change');
+                $('#desarrollo').val(json.sistema).trigger('change');
                 $('#estado').val(json.estatus).trigger('change');
 
                 fMananger.formModalLoding('modal_menu', 'hide');
@@ -217,7 +218,7 @@ function Editar(id) {
 
 async function CambiarEstado(id, estado) {
     try {
-        if (!await boxAlert.confirm('¿Esta seguro de esta accion?')) return true;
+        if (!await boxAlert.confirm({ h: `Esta apunto de ${estado ? 'des' : ''}activar el menu.` })) return true;
 
         $.ajax({
             type: 'POST',
@@ -268,7 +269,7 @@ async function CambiarEstado(id, estado) {
 
 async function cambiarOrden() {
     try {
-        if (!await boxAlert.confirm('¿Esta seguro de esta accion?')) return true;
+        if (!await boxAlert.confirm()) return true;
         fMananger.formModalLoding('modal_ordenm', 'show');
 
         $.ajax({

@@ -25,10 +25,11 @@
   <!-- Home -->
   <link href="{{ secure_asset('front/css/app.css') }}" rel="stylesheet">
   <!-- JQuery -->
- <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
+  <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/form_select2.js')}}"></script>
+  <script src="{{secure_asset('front/js/AlertMananger.js')}}"></script>
 
   @yield('cabecera')
 </head>
@@ -118,14 +119,15 @@
           <div class="dropdown">
             <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow rounded-circle"
               href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false" data-mdb-ripple-init>
-              <img class="img-xs rounded-circle" src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
-                alt="Profile image">
+              <img class="img-xs rounded-circle"
+                src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image">
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
               <li>
                 <span class="dropdown-header text-center">
-                  <img class="img-md rounded-circle" src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
-                    alt="Profile image" style="width: 90px; height: 90px;">
+                  <img class="img-md rounded-circle"
+                    src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image"
+                    style="width: 90px; height: 90px;">
                   <p class="mb-1 mt-3 fw-semibold">
                     {{ session('nomPerfil') }}
                   </p>
@@ -164,36 +166,49 @@
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
       <div class="sidebar-content"></div>
+      <script>
+        // let modulosCargados = <?= session('customModulos') ?>;
+        // function cargarModulos() {
+        //   let nav = $('#sidebar').find('.nav');
+        //   console.log(nav);
+        //   modulosCargados.forEach(e => {
+        //     let modulo = $('<li>', { class: "nav-item menu-item" });
+
+        //     nav.append(modulo);
+        //   });
+        // }
+        // cargarModulos();
+      </script>
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           @foreach (session('customModulos') as $menu)
-        <li class="nav-item menu-item">
-        <a class="nav-link menu-link" {{!empty($menu->submenu) ? 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
-          href={{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}>
-          <i class="{{ $menu->icon }} menu-icon"></i>
-          <span class="menu-title">{{ $menu->descripcion }}</span>
-          @if (!empty($menu->submenu)) <i class="menu-arrow"></i> @endif
-        </a>
-        @if (!empty($menu->submenu))
-      <div class="collapse" id="{{$menu->ruta}}">
-        <ul class="nav flex-column sub-menu">
-        @foreach ($menu->submenu as $categoria => $submenus)
-      @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
-      <li class="nav-category-item">
-      {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
-      </li>
-    @endif
-      @foreach ($submenus as $submenu)
-      <li class="nav-item">
-      <a class="nav-link" href="{{secure_url($submenu->ruta)}}">{{ $submenu->descripcion }}</a>
-      </li>
-    @endforeach
-    @endforeach
-        </ul>
-      </div>
-    @endif
-        </li>
-      @endforeach
+          <li class="nav-item menu-item">
+            <a class="nav-link menu-link" {{!empty($menu->submenu) ? 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
+              href={{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}>
+              <i class="{{ $menu->icon }} menu-icon"></i>
+              <span class="menu-title">{{ $menu->descripcion }}</span>
+              @if (!empty($menu->submenu)) <i class="menu-arrow"></i> @endif
+            </a>
+          @if (!empty($menu->submenu))
+            <div class="collapse" id="{{$menu->ruta}}">
+              <ul class="nav flex-column sub-menu">
+                @foreach ($menu->submenu as $categoria => $submenus)
+                  @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
+                  <li class="nav-category-item">
+                    {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
+                  </li>
+                  @endif
+                  @foreach ($submenus as $submenu)
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{secure_url($submenu->ruta)}}">{{ $submenu->descripcion }}</a>
+                  </li>
+                  @endforeach
+                @endforeach
+              </ul>
+            </div>
+          @endif
+          </li>
+        @endforeach
         </ul>
       </nav>
 

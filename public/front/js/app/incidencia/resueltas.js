@@ -185,7 +185,7 @@ function AddSignature(e, cod) {
 document.getElementById('form-firmas').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    if (!await boxAlert.confirm(`¿Estas seguro que deseas continuar?, no se podrá revertir los cambios`)) return true;
+    if (!await boxAlert.confirm({ h: `Después no se podrá modificar los datos ingresados.` })) return true;
 
     fMananger.formModalLoding('modal_firmas', 'show');
     var valid = validFrom(this);

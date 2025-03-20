@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Empresas;
 
+use App\Helpers\CargoEstacion;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class EmpresasController extends Controller
         try {
             $data = [];
             $data['grupos'] = (new GruposController())->index();
-            $data['cargos'] = DB::table('cargo_contacto')->get();
+            $data['cargos'] = collect((new CargoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             
             return view('empresas.empresas', ['data' => $data]);
         } catch (Exception $e) {

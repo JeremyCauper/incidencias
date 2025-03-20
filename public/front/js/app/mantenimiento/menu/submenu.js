@@ -168,7 +168,7 @@ function Editar(id) {
                 }
 
                 var json = data.data;
-                $('#id').val(json.id_submenu);
+                $('#id').val(json.id);
                 $('#menu').val(json.id_menu).trigger('change');
                 $('#categoria').val(json.categoria);
                 $('#descripcion').val(json.descripcion);
@@ -207,7 +207,7 @@ function Editar(id) {
 
 async function CambiarEstado(id, estado) {
     try {
-        if (!await boxAlert.confirm('¿Esta seguro de esta accion?')) return true;
+        if (!await boxAlert.confirm({ h: `Esta apunto de ${estado ? 'des' : ''}activar el sub-menu.` })) return true;
 
         $.ajax({
             type: 'POST',

@@ -64,7 +64,7 @@
                         <select id="id_area" class="select">
                             <option value="">-- Seleccione --</option>
                             @foreach ($areas as $r)
-                                <option value="{{$r->id_area}}">{{$r->descripcion}}</option>
+                                <option value="{{$r['id']}}">{{$r['descripcion']}}</option>
                             @endforeach
                         </select>
                     </div>
@@ -159,7 +159,7 @@
                     <select class="select" id="tipo_acceso">
                         <option value="">-- Seleccione --</option>
                         @foreach ($tipoAcceso as $r)
-                            <option {{$r->id_tipo_acceso == 3 ? 'selected' : ''}} value="{{$r->id_tipo_acceso}}">{{$r->descripcion}}</option>
+                            <option {{$r['id'] == 3 ? 'selected' : ''}} value="{{$r['id']}}">{{$r['descripcion']}}</option>
                         @endforeach
                     </select>
                 </div>
@@ -222,6 +222,7 @@
 
 @section('scripts')
 <script>
+    let tipoAcceso = <?=$tipoAcceso?>;
     const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}";
     const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}";
 </script>
