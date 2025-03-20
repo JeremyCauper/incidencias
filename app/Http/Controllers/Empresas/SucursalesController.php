@@ -17,10 +17,6 @@ class SucursalesController extends Controller
         try {
             $data = [];
             $data['empresas'] = (new EmpresasController())->index();
-            // $data['cargos'] = DB::table('cargo_contacto')->get();
-            // foreach ($data['grupos'] as $key => $val) {
-            //     echo "{$val->id} - {$val->nombre}<br>";
-            // }
             return view('empresas.sucursales', ['data' => $data]);
         } catch (Exception $e) {
             return $this->mesageError(exception: $e, codigo: 500);

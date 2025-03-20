@@ -7,8 +7,8 @@
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <style>
         /*////////////////////////////////////////
-                /        SCRIPT CSS FIRMA DIGITAL        /
-                ////////////////////////////////////////*/
+                    /        SCRIPT CSS FIRMA DIGITAL        /
+                    ////////////////////////////////////////*/
 
         .content-image {
             margin: auto;
@@ -109,8 +109,8 @@
         }
 
         /*////////////////////////////////////////
-                /          SCRIPT CSS Doc Firma          /
-                ////////////////////////////////////////*/
+                    /          SCRIPT CSS Doc Firma          /
+                    ////////////////////////////////////////*/
 
         .search_signature_group {
             flex-wrap: nowrap;
@@ -517,7 +517,7 @@
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-addcod">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Añadir Codigo Aviso 
+                    <h6 class="modal-title">Añadir Codigo Aviso
                         <span class="badge badge-success badge-lg" aria-item="incidencia"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
@@ -663,7 +663,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>UPS</strong></div>
+                                <strong>UPS</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -696,7 +697,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>ESTABILIZADOR</strong></div>
+                                <strong>ESTABILIZADOR</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -729,7 +731,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>INTERFACE</strong></div>
+                                <strong>INTERFACE</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -741,7 +744,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>MONITOR</strong></div>
+                                <strong>MONITOR</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -753,7 +757,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>TARJETA MULTIPUERTOS</strong></div>
+                                <strong>TARJETA MULTIPUERTOS</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -765,7 +770,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>SWITCH</strong></div>
+                                <strong>SWITCH</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -781,7 +787,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>SISTEMA OPERATIVO</strong></div>
+                                <strong>SISTEMA OPERATIVO</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -793,7 +800,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>VENCIMIENTO DE ANTIVIRUS</strong></div>
+                                <strong>VENCIMIENTO DE ANTIVIRUS</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -805,7 +813,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>DISCO DURO</strong></div>
+                                <strong>DISCO DURO</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -817,7 +826,8 @@
 
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>REALIZAR BACKUP</strong></div>
+                                <strong>REALIZAR BACKUP</strong>
+                            </div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>

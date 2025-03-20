@@ -5,12 +5,39 @@ namespace App\Http\Controllers\Mantenimientos\Menu;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
 class MenuController extends Controller
 {
+    // Ruta del archivo JSON
+    private $jsonPath = 'config/jsons/menu.json';
+
+    /**
+     * Lee el archivo JSON y retorna los datos como arreglo.
+     */
+    public function readData()
+    {
+        $fullPath = storage_path($this->jsonPath);
+        if (!file_exists($fullPath)) {
+            // Si el archivo no existe, se crea con un arreglo vacío.
+            file_put_contents($fullPath, json_encode([]));
+        }
+        $json = file_get_contents($fullPath);
+        $data = json_decode($json, true);
+        return is_array($data) ? $data : [];
+    }
+
+    /**
+     * Guarda el arreglo de datos en el archivo JSON.
+     */
+    private function saveData(array $data)
+    {
+        $fullPath = storage_path($this->jsonPath);
+        $json = json_encode($data, JSON_PRETTY_PRINT);
+        return file_put_contents($fullPath, $json);
+    }
+
     public function view()
     {
         $this->validarPermisos(7, 9);
@@ -28,25 +55,37 @@ class MenuController extends Controller
     public function index()
     {
         try {
-            $menus = DB::table('tb_menu')->where('eliminado', 0)->orderBy('orden', 'asc')->get()->map(function ($val) {
+            $menus = $this->readData();
+            // Ordenar por "orden" de forma ascendente, usando 0 si no existe la clave 'orden'
+            usort($menus, function($a, $b) {
+                $ordenA = $a['orden'] ?? 0;
+                $ordenB = $b['orden'] ?? 0;
+                return $ordenA <=> $ordenB;
+            });
+
+            // Mapear cada menú para agregar propiedades adicionales
+            $menus = array_map(function ($val) {
                 $estado = [
                     ['color' => 'danger', 'text' => 'Inactivo'],
                     ['color' => 'success', 'text' => 'Activo']
                 ];
-                $val->iconText = '<i class="' . $val->icon . '"></i> ' . $val->icon;
-                $val->submenu = $val->submenu ? 'Sí' : 'No';
-                $val->estado = '<label class="badge badge-' . $estado[$val->estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$val->estatus]['text'] . '</label>';
-                // Generar acciones
-                $val->acciones = $this->DropdownAcciones([
+                $val['iconText'] = '<i class="' . ($val['icon'] ?? '') . '"></i> ' . ($val['icon'] ?? '');
+                $val['submenu'] = ($val['submenu'] ?? 0) ? 'Sí' : 'No';
+                // Usar valor por defecto para 'estatus'
+                $estatus = $val['estatus'] ?? 0;
+                $val['estado'] = '<label class="badge badge-' . $estado[$estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$estatus]['text'] . '</label>';
+                // Se utiliza el método DropdownAcciones heredado de Controller
+                $val['acciones'] = $this->DropdownAcciones([
                     'tittle' => 'Acciones',
                     'button' => [
-                        ['funcion' => "Editar({$val->id_menu})", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
-                        ['funcion' => "CambiarEstado({$val->id_menu}, {$val->estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado[$val->estatus]['color'] . '"></i>Cambiar Estado']
+                        ['funcion' => "Editar({$val['id']})", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
+                        ['funcion' => "CambiarEstado({$val['id']}, {$estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado[$estatus]['color'] . '"></i>Cambiar Estado']
                     ],
                 ]);
                 return $val;
-            });
-            return $menus;
+            }, $menus);
+
+            return response()->json($menus);
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
@@ -54,7 +93,7 @@ class MenuController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Store a newly created resource in storage.
      */
     public function create(Request $request)
     {
@@ -62,72 +101,76 @@ class MenuController extends Controller
             // Validación de los datos de entrada
             $validator = Validator::make($request->all(), [
                 'descripcion' => 'required|string|max:50',
-                'icono' => 'required|string|max:255',
-                'ruta' => 'required|string|max:255',
-                'submenu' => 'required|integer',
-                'desarrollo' => 'required|integer',
-                'estado' => 'required|integer'
+                'icono'       => 'required|string|max:255',
+                'ruta'        => 'required|string|max:255',
+                'submenu'     => 'required|integer',
+                'desarrollo'  => 'required|integer',
+                'estado'      => 'required|integer'
             ]);
 
             if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Por favor, revisa los campos e intenta nuevamente.',
-                    'errors' => $validator->errors()
+                    'errors'  => $validator->errors()
                 ], 400);
             }
 
-            // Validar si ya existe un menu con el mismo código o descripción
-            $conteo_menu = DB::table('tb_menu')->count();
-            $existeDescripcion = DB::table('tb_menu')->where('descripcion', $request->descripcion)->exists();
-            $existeIcon = DB::table('tb_menu')->where('icon', $request->icono)->exists();
-            $existeRuta = DB::table('tb_menu')->where('ruta', $request->ruta)->exists();
+            $menus = $this->readData();
 
-            if ($existeDescripcion) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.'
-                ], 409);
+            // Verificar duplicados por descripción, icono y ruta usando el operador null coalescing
+            foreach ($menus as $menu) {
+                if (($menu['descripcion'] ?? '') === $request->descripcion) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.'
+                    ], 409);
+                }
+                if (($menu['icon'] ?? '') === $request->icono) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'El icono ingresado ya está registrado. Por favor, use otro.'
+                    ], 409);
+                }
+                if (($menu['ruta'] ?? '') === $request->ruta) {
+                    return response()->json([
+                        'success' => false,
+                        'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.'
+                    ], 409);
+                }
             }
 
-            if ($existeIcon) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'El icono ingresado ya está registrado. Por favor, use otro.'
-                ], 409);
-            }
+            // Generar un nuevo ID; se puede usar el último id + 1 o buscar el máximo
+            $newId = count($menus) > 0 ? max(array_column($menus, 'id')) + 1 : 1;
+            // Determinar el nuevo orden
+            $nuevoOrden = count($menus) + 1;
 
-            if ($existeRuta) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.'
-                ], 409);
-            }
-
-            // Insertar el nuevo menu en la base de datos
-            DB::beginTransaction();
-            DB::table('tb_menu')->insert([
+            $nuevoMenu = [
+                'id'          => $newId,
                 'descripcion' => $request->descripcion,
-                'icon' => $request->icono,
-                'ruta' => $request->ruta,
-                'submenu' => $request->submenu,
-                'sistema' => $request->desarrollo,
-                'orden' => $conteo_menu + 1,
-                'estatus' => $request->estado,
-                'created_at' => now()->format('Y-m-d H:i:s')
-            ]);
-            DB::commit();
+                'icon'        => $request->icono,
+                'ruta'        => $request->ruta,
+                'submenu'     => $request->submenu,
+                'eliminado'   => 0,
+                'sistema'     => $request->desarrollo,
+                'orden'       => $nuevoOrden,
+                'estatus'     => $request->estado,
+                'created_at'  => now()->format('Y-m-d H:i:s'),
+                'updated_at'  => ""
+            ];
+
+            $menus[] = $nuevoMenu;
+            $this->saveData($menus);
 
             return response()->json([
                 'success' => true,
                 'message' => "Operación realizada con éxito."
             ]);
         } catch (Exception $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
@@ -138,13 +181,27 @@ class MenuController extends Controller
     public function show(string $id)
     {
         try {
-            $menu = DB::table('tb_menu')->where('id_menu', $id)->first();
-
-            if (!$menu) {
-                return response()->json(["success" => false, "message" => "No se encontró el menu solicitado. Verifica el código e intenta nuevamente."], 404);
+            $menus = $this->readData();
+            $menu = null;
+            foreach ($menus as $item) {
+                if (($item['id'] ?? null) == $id) {
+                    $menu = $item;
+                    break;
+                }
             }
 
-            return response()->json(["success" => true, "message" => "", "data" => $menu], 200);
+            if (!$menu) {
+                return response()->json([
+                    "success" => false,
+                    "message" => "No se encontró el menú solicitado. Verifica el código e intenta nuevamente."
+                ], 404);
+            }
+
+            return response()->json([
+                "success" => true,
+                "message" => "",
+                "data"    => $menu
+            ], 200);
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
@@ -161,81 +218,96 @@ class MenuController extends Controller
         try {
             // Validación de los datos de entrada
             $validator = Validator::make($request->all(), [
-                'id' => 'required|integer',
+                'id'          => 'required|integer',
                 'descripcion' => 'required|string|max:50',
-                'icono' => 'required|string|max:255',
-                'ruta' => 'required|string|max:255',
-                'submenu' => 'required|integer',
-                'desarrollo' => 'required|integer',
-                'estado' => 'required|integer'
+                'icono'       => 'required|string|max:255',
+                'ruta'        => 'required|string|max:255',
+                'submenu'     => 'required|integer',
+                'desarrollo'  => 'required|integer',
+                'estado'      => 'required|integer'
             ]);
 
             if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
                     'message' => 'Por favor, revisa los campos e intenta nuevamente.',
-                    'errors' => $validator->errors()
+                    'errors'  => $validator->errors()
                 ], 400);
             }
 
-            // Validar si ya existe un menu con el mismo código o descripción
-            $existeDescripcion = DB::table('tb_menu')->select('id_menu')->where('descripcion', $request->descripcion)->get()->first();
-            $existeIcon = DB::table('tb_menu')->select('id_menu')->where('icon', $request->icono)->get()->first();
-            $existeRuta = DB::table('tb_menu')->select('id_menu')->where('ruta', $request->ruta)->get()->first();
+            $menus = $this->readData();
+            $actualizado = false;
 
-            if ($existeDescripcion && $existeDescripcion->id_menu != $request->id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.'
-                ], 409);
+            // Verificar duplicados (excluyendo el menú que se está editando)
+            foreach ($menus as $menu) {
+                if (($menu['id'] ?? null) != $request->id) {
+                    if (($menu['descripcion'] ?? '') === $request->descripcion) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.'
+                        ], 409);
+                    }
+                    if (($menu['icon'] ?? '') === $request->icono) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'El icono ingresado ya está registrado. Por favor, use otro.'
+                        ], 409);
+                    }
+                    if (($menu['ruta'] ?? '') === $request->ruta) {
+                        return response()->json([
+                            'success' => false,
+                            'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.'
+                        ], 409);
+                    }
+                }
             }
 
-            if ($existeIcon && $existeIcon->id_menu != $request->id) {
+            // Actualizar el menú
+            foreach ($menus as &$menu) {
+                if (($menu['id'] ?? null) == $request->id) {
+                    $menu['descripcion'] = $request->descripcion;
+                    $menu['icon'] = $request->icono;
+                    $menu['ruta'] = $request->ruta;
+                    $menu['submenu'] = $request->submenu;
+                    $menu['sistema'] = $request->desarrollo;
+                    $menu['estatus'] = $request->estado;
+                    $menu['updated_at'] = now()->format('Y-m-d H:i:s');
+                    $actualizado = true;
+                    break;
+                }
+            }
+            unset($menu);
+
+            if (!$actualizado) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'El icono ingresado ya está registrado. Por favor, use otro.'
-                ], 409);
+                    'message' => 'No se encontró el menú a actualizar.'
+                ], 404);
             }
 
-            if ($existeRuta && $existeRuta->id_menu != $request->id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.'
-                ], 409);
-            }
-
-            // Insertar el nuevo problema en la base de datos
-            DB::beginTransaction();
-            DB::table('tb_menu')->where('id_menu', $request->id)->update([
-                'descripcion' => $request->descripcion,
-                'icon' => $request->icono,
-                'ruta' => $request->ruta,
-                'submenu' => $request->submenu,
-                'sistema' => $request->desarrollo,
-                'estatus' => $request->estado,
-                'updated_at' => now()->format('Y-m-d H:i:s')
-            ]);
-            DB::commit();
+            $this->saveData($menus);
 
             return response()->json([
                 'success' => true,
                 'message' => "Edición realizada con éxito."
             ]);
         } catch (Exception $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
 
+    /**
+     * Cambia el estado del menú.
+     */
     public function changeStatus(Request $request)
     {
         try {
             $validator = Validator::make($request->all(), [
-                'id' => 'required|integer',
+                'id'     => 'required|integer',
                 'estado' => 'required|integer'
             ]);
 
@@ -243,45 +315,75 @@ class MenuController extends Controller
                 return response()->json([
                     'success' => false,
                     'message' => 'Por favor, revisa los campos e intenta nuevamente.',
-                    'errors' => $validator->errors()
+                    'errors'  => $validator->errors()
                 ], 400);
             }
 
-            DB::beginTransaction();
-            DB::table('tb_menu')->where('id_menu', $request->id)->update([
-                'estatus' => $request->estado,
-                'updated_at' => now()->format('Y-m-d H:i:s')
-            ]);
-            DB::commit();
+            $menus = $this->readData();
+            $encontrado = false;
 
-            return response()->json(['success' => true, 'message' => 'Cambio de estado realizado con éxito.']);
+            foreach ($menus as &$menu) {
+                if (($menu['id'] ?? null) == $request->id) {
+                    $menu['estatus'] = $request->estado;
+                    $menu['updated_at'] = now()->format('Y-m-d H:i:s');
+                    $encontrado = true;
+                    break;
+                }
+            }
+            unset($menu);
+
+            if (!$encontrado) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'No se encontró el menú para cambiar el estado.'
+                ], 404);
+            }
+
+            $this->saveData($menus);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Cambio de estado realizado con éxito.'
+            ]);
         } catch (Exception $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }
 
+    /**
+     * Cambia el orden de los menús.
+     */
     public function changeOrdenMenu(Request $request)
     {
         try {
-            DB::beginTransaction();
+            $menus = $this->readData();
+
+            // Se espera que $request->data sea un arreglo con 'id' y 'orden'
             foreach ($request->data as $item) {
-                DB::table('tb_menu')->where('id_menu', $item['id'])->update([
-                    'orden' => $item['orden'],
-                    'updated_at' => now()->format('Y-m-d H:i:s')
-                ]);
+                foreach ($menus as &$menu) {
+                    if (($menu['id'] ?? null) == ($item['id'] ?? null)) {
+                        $menu['orden'] = $item['orden'] ?? $menu['orden'] ?? 0;
+                        $menu['updated_at'] = now()->format('Y-m-d H:i:s');
+                        break;
+                    }
+                }
+                unset($menu);
             }
-            DB::commit();
+
+            $this->saveData($menus);
+            return response()->json([
+                'success' => true,
+                'message' => 'Orden actualizado con éxito.'
+            ]);
         } catch (Exception $e) {
-            DB::rollBack();
             return response()->json([
                 'success' => false,
                 'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
-                'error' => $e->getMessage()
+                'error'   => $e->getMessage()
             ], 500);
         }
     }

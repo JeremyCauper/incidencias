@@ -63,8 +63,8 @@
                         <select class="select-icons" id="menu">
                             <option value=""></option>
                             @foreach ($data['menus'] as $key => $val)
-                                @if (!$val->eliminado)
-                                    <option value="{{$val->id_menu}}">{{$val->icon}}::{{$val->descripcion}}</option>
+                                @if (!$val['eliminado'])
+                                    <option value="{{$val['id']}}">{{$val['icon']}}::{{$val['descripcion']}}</option>
                                 @endif
                             @endforeach
                         </select>

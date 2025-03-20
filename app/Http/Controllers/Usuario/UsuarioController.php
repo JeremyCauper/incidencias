@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Usuario;
 
+use App\Helpers\TipoArea;
+use App\Helpers\TipoUsuario;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Database\QueryException;
@@ -27,13 +29,12 @@ class UsuarioController extends Controller
         $this->validarPermisos(5, 6);
         try {
             $data = [];
-            $data['areas'] = DB::table('tb_area')->where('estatus', 1)->get();
-            $data['tipoAcceso'] = DB::table('tipo_usuario')
-                ->where('estatus', 1)
-                ->when(session('tipo_acceso') != 5, function ($query) {
-                    return $query->whereNot('id_tipo_acceso', 5);
-                })->get();
-
+            $data['areas'] = collect((new TipoArea())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
+            $tipo_acceso = collect((new TipoUsuario())->all())->select('id', 'descripcion', 'color', 'estatus')->where('estatus', 1);
+            if (session('tipo_acceso') != 5) {
+                $tipo_acceso = $tipo_acceso->reject(fn($item) => $item['id'] == 5);
+            }
+            $data['tipoAcceso'] = $tipo_acceso->keyBy('id');      
 
             $tipo_menu = [0];
             if (session('tipo_acceso') == 5) {
@@ -64,7 +65,7 @@ class UsuarioController extends Controller
 
             return view('usuario.usuario', $data);
         } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+            return $this->message(data: ['error' => "view: " . $e->getMessage()], status: 500);
         }
     }
     /**
@@ -73,20 +74,19 @@ class UsuarioController extends Controller
     public function index()
     {
         try {
-            $tipoAcceso = DB::table('tipo_usuario')->get()->keyBy('id_tipo_acceso');
+            // $tipoAcceso = collect((new TipoUsuario())->all())->select('id', 'descripcion', 'color', 'estatus')->keyBy('id');
             $usuarios = DB::table('usuarios')
                 ->select('ndoc_usuario', 'id_usuario', 'nombres', 'apellidos', 'usuario', 'pass_view', 'estatus', 'tipo_acceso')
                 ->where('eliminado', 0)
                 ->when(session('tipo_acceso') != 5, function ($query) {
                     return $query->whereNot('tipo_acceso', 5);
                 })
-                ->get()->map(function ($usu) use ($tipoAcceso) {
+                ->get()->map(function ($usu) {
                     $estado = [
                         ['color' => 'danger', 'text' => 'Inactivo'],
                         ['color' => 'success', 'text' => 'Activo']
                     ];
                     $usu->personal = $this->formatearNombre($usu->nombres, $usu->apellidos);
-                    $usu->descripcion = '<label class="badge badge-' . $tipoAcceso[$usu->tipo_acceso]->color . '" style="font-size: .7rem;">' . $tipoAcceso[$usu->tipo_acceso]->descripcion . '</label>';
                     $usu->estado = '<label class="badge badge-' . $estado[$usu->estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$usu->estatus]['text'] . '</label>';
                     $usu->acciones = $this->DropdownAcciones([
                         'tittle' => 'Acciones',

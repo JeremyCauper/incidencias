@@ -59,7 +59,7 @@ const tb_menu = new DataTable('#tb_menu', {
             $("#tb_orden_menu tbody").html('');
             $.each(json, function (i, e) {
                 $("#tb_orden_menu tbody").append($('<tr>', {
-                    "tr-id": e.id_menu,
+                    "tr-id": e.id,
                     "tr-orden": e.orden,
                     "draggable": "true"
                 }).html(`<td>${e.orden}</td><td><i class="${e.icon}"></i> ${e.descripcion}</td>`));
@@ -178,11 +178,12 @@ function Editar(id) {
                 }
 
                 var json = data.data;
-                $('#id').val(json.id_menu);
+                $('#id').val(json.id);
                 $('#descripcion').val(json.descripcion);
                 $('#icono').val(json.icon);
                 $('#ruta').val(json.ruta);
                 $('#submenu').val(json.submenu).trigger('change');
+                $('#desarrollo').val(json.sistema).trigger('change');
                 $('#estado').val(json.estatus).trigger('change');
 
                 fMananger.formModalLoding('modal_menu', 'hide');

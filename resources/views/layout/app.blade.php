@@ -166,36 +166,49 @@
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
       <div class="sidebar-content"></div>
+      <script>
+        // let modulosCargados = <?= session('customModulos') ?>;
+        // function cargarModulos() {
+        //   let nav = $('#sidebar').find('.nav');
+        //   console.log(nav);
+        //   modulosCargados.forEach(e => {
+        //     let modulo = $('<li>', { class: "nav-item menu-item" });
+
+        //     nav.append(modulo);
+        //   });
+        // }
+        // cargarModulos();
+      </script>
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           @foreach (session('customModulos') as $menu)
-        <li class="nav-item menu-item">
-        <a class="nav-link menu-link" {{!empty($menu->submenu) ? 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
-          href={{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}>
-          <i class="{{ $menu->icon }} menu-icon"></i>
-          <span class="menu-title">{{ $menu->descripcion }}</span>
-          @if (!empty($menu->submenu)) <i class="menu-arrow"></i> @endif
-        </a>
-        @if (!empty($menu->submenu))
-      <div class="collapse" id="{{$menu->ruta}}">
-        <ul class="nav flex-column sub-menu">
-        @foreach ($menu->submenu as $categoria => $submenus)
-      @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
-      <li class="nav-category-item">
-      {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
-      </li>
-    @endif
-      @foreach ($submenus as $submenu)
-      <li class="nav-item">
-      <a class="nav-link" href="{{secure_url($submenu->ruta)}}">{{ $submenu->descripcion }}</a>
-      </li>
-    @endforeach
-    @endforeach
-        </ul>
-      </div>
-    @endif
-        </li>
-      @endforeach
+          <li class="nav-item menu-item">
+            <a class="nav-link menu-link" {{!empty($menu->submenu) ? 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
+              href={{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}>
+              <i class="{{ $menu->icon }} menu-icon"></i>
+              <span class="menu-title">{{ $menu->descripcion }}</span>
+              @if (!empty($menu->submenu)) <i class="menu-arrow"></i> @endif
+            </a>
+          @if (!empty($menu->submenu))
+            <div class="collapse" id="{{$menu->ruta}}">
+              <ul class="nav flex-column sub-menu">
+                @foreach ($menu->submenu as $categoria => $submenus)
+                  @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
+                  <li class="nav-category-item">
+                    {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
+                  </li>
+                  @endif
+                  @foreach ($submenus as $submenu)
+                  <li class="nav-item">
+                    <a class="nav-link" href="{{secure_url($submenu->ruta)}}">{{ $submenu->descripcion }}</a>
+                  </li>
+                  @endforeach
+                @endforeach
+              </ul>
+            </div>
+          @endif
+          </li>
+        @endforeach
         </ul>
       </nav>
 

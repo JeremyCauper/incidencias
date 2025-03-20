@@ -129,7 +129,9 @@ const tb_usuario = new DataTable('#tb_usuario', {
     columns: [
         { data: 'ndoc_usuario' },
         { data: 'personal' },
-        { data: 'descripcion' },
+        { data: 'tipo_acceso', render: function (data, dataSet, row) {
+            return `<label class="badge badge-${tipoAcceso[data].color}" style="font-size: .7rem;">${tipoAcceso[data].descripcion}</label>`;
+        }},
         { data: 'usuario' },
         { data: 'pass_view' },
         { data: 'estado' },

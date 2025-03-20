@@ -168,7 +168,7 @@ function Editar(id) {
                 }
 
                 var json = data.data;
-                $('#id').val(json.id_submenu);
+                $('#id').val(json.id);
                 $('#menu').val(json.id_menu).trigger('change');
                 $('#categoria').val(json.categoria);
                 $('#descripcion').val(json.descripcion);

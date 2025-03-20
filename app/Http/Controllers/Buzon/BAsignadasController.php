@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Buzon;
 
+use App\Helpers\TipoEstacion;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -16,7 +17,7 @@ class BAsignadasController extends Controller
             $data = [];
             $data['empresas'] = DB::table('tb_empresas')->select('id', 'ruc', 'razon_social', 'contrato', 'direccion', 'codigo_aviso', 'status')->get()->keyBy('ruc');;
             $data['sucursales'] = DB::table('tb_sucursales')->select('id', 'ruc', 'nombre', 'direccion', 'status')->get()->keyBy('id');
-            $data['tipo_estacion'] = DB::table('tb_tipo_estacion')->get()->keyBy('id_tipo_estacion');
+            $data['tipo_estacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['problemas'] = DB::table('tb_problema')->get()->keyBy('id_problema');
             $data['subproblemas'] = DB::table('tb_subproblema')->get()->keyBy('id_subproblema');
 
