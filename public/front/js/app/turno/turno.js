@@ -49,10 +49,15 @@ $(document).ready(function () {
     });
 
     $('.modal').on('hidden.bs.modal', function () {
+        calcularHoras();
+    });
+
+    function calcularHoras() {
         $('#shoraIni').val('18:00');
         $('#ahoraIni').val('13:00');
         $('#shoraFin, #ahoraFin').val('08:20');
-    });
+    }
+    calcularHoras()
 });
 
 let diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];

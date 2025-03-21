@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Usuario;
 
+use App\Helpers\Menu;
+use App\Helpers\SubMenu;
 use App\Helpers\TipoArea;
 use App\Helpers\TipoUsuario;
 use App\Http\Controllers\Controller;
@@ -34,24 +36,51 @@ class UsuarioController extends Controller
             if (session('tipo_acceso') != 5) {
                 $tipo_acceso = $tipo_acceso->reject(fn($item) => $item['id'] == 5);
             }
-            $data['tipoAcceso'] = $tipo_acceso->keyBy('id');      
+            $data['tipoAcceso'] = $tipo_acceso->keyBy('id');
 
             $tipo_menu = [0];
             if (session('tipo_acceso') == 5) {
                 array_push($tipo_menu, 1);
             }
 
-            $menu = DB::table('tb_menu')->select(['id_menu', 'descripcion', 'icon'])
-                ->where('estatus', 1)
-                ->whereIn('sistema', $tipo_menu)->orderBy('orden', 'asc')->get();
-            $submenus = DB::table('tb_submenu')->select(['id_submenu', 'id_menu', 'descripcion', 'categoria'])->where('estatus', 1)->get()->groupBy('id_menu');
+            // Obtener menús desde JSON y filtrarlos
+            $menu = collect((new Menu())->all())
+                ->filter(function ($item) use ($tipo_menu) {
+                    return $item->estatus == 1 && in_array($item->sistema, $tipo_menu);
+                })
+                ->sortBy('orden')
+                ->map(function ($item) {
+                    // Aquí usamos $item->id en lugar de $item->id_menu, asumiendo que el JSON de menús tiene 'id'
+                    return (object) [
+                        'id_menu' => $item->id, // Se asigna el valor de 'id' a 'id_menu' para compatibilidad
+                        'descripcion' => $item->descripcion,
+                        'icon' => $item->icon,
+                        'ruta' => isset($item->ruta) ? $item->ruta : null
+                    ];
+                });
+
+            // Obtener submenús desde JSON y filtrarlos
+            $submenus = collect((new SubMenu())->all())
+                ->filter(function ($item) {
+                    return $item->estatus == 1;
+                })
+                ->map(function ($item) {
+                    return (object) [
+                        'id_submenu' => $item->id,
+                        'id_menu' => $item->id_menu, // Aquí se conserva la clave 'id_menu'
+                        'descripcion' => $item->descripcion,
+                        'categoria' => $item->categoria,
+                        'ruta' => isset($item->ruta) ? $item->ruta : null
+                    ];
+                })
+                ->groupBy('id_menu');
 
             $data['menus'] = $menu->map(function ($item) use ($submenus) {
                 $menuId = $item->id_menu;
                 if ($submenus->has($menuId)) {
                     // Agrupar submenús por categoría
                     $groupedByCategory = $submenus[$menuId]->groupBy('categoria');
-                    // Transformar cada categoría en una clave dentro de submenu
+                    // Transformar cada categoría en una clave dentro de 'submenu'
                     $item->submenu = $groupedByCategory->mapWithKeys(function ($submenusList, $category) {
                         return [$category ?: 'sin_categoria' => $submenusList->values()];
                     });
@@ -61,7 +90,7 @@ class UsuarioController extends Controller
 
                 return $item;
             });
-            // return $data['menus'];
+
 
             return view('usuario.usuario', $data);
         } catch (Exception $e) {

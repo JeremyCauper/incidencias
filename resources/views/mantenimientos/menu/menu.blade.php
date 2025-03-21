@@ -117,7 +117,7 @@
 
     <div class="modal fade" id="modal_ordenm" tabindex="-1" aria-labelledby="modal_ordenmLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <form class="modal-content" id="form-menu">
+            <div class="modal-content">
                 <div class="modal-header  bg-primary text-white">
                     <h6 class="modal-title" id="modal_ordenmLabel">ORDENAR MENU</h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
@@ -153,9 +153,9 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" onclick="cambiarOrden()" data-mdb-ripple-init>Guardar</button>
+                    <button class="btn btn-primary" onclick="cambiarOrden()" data-mdb-ripple-init>Guardar</button>
                 </div>
-            </form>
+            </div>
         </div>
     </div>
 
