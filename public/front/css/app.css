@@ -1,6 +1,6 @@
 :root,
 [data-mdb-theme=light] {
-    --root-body-bg: #eeeded;
+    --root-body-bg: #d7d7d7;
     --root-navbar-bg: #fafafa;
     --root-box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
 }
