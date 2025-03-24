@@ -41,8 +41,8 @@ use Illuminate\Support\Facades\Route;
 // Consulta Dni
 Route::get('/ConsultaDni/{dni}', [ConsultasController::class, 'ConsultaDni']);
 
-Route::redirect('/', url('/inicio'));
-Route::get('/inicio', [LoginController::class, 'view'])->name('login')->middleware('guest');
+Route::redirect('/', url('/soporte'));
+Route::get('/soporte', [LoginController::class, 'view'])->name('login')->middleware('guest');
 Route::post('/iniciar', [LoginController::class, 'login']);
 Route::get('/logout', [LoginController::class, 'logout']);
 Route::get('/validarTurno/{id}', [LoginController::class, 'validarTurno']);

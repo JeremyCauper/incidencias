@@ -18,7 +18,7 @@
 
     <nav class="navbar bg-dark-subtle fixed-top">
         <div class="container-fluid py-1 mx-2">
-            <a class="navbar-brand" href="{{secure_url('/inicio')}}">
+            <a class="navbar-brand" href="{{secure_url('/soporte')}}">
                 <img src="{{secure_asset('front/images/app/logo_tittle_rc.png')}}" height="34" alt="RC Logo" loading="lazy"
                     style="margin-top: -1px;">
             </a>
