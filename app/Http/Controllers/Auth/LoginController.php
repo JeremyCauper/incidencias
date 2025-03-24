@@ -87,6 +87,6 @@ class LoginController extends Controller
     {
         Auth::logout();
         session()->forget(['customModulos', 'rutaRedirect', 'nomPerfil', 'id_usuario', 'tipo_acceso', 'menu_usuario', 'turno_fin']);
-        return redirect('/inicio');
+        return redirect('/soporte');
     }
 }

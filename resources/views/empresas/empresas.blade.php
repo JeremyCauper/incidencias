@@ -162,8 +162,8 @@
                         <select class="select-clear" id="cargo">
                             <option value=""></option>
                             @foreach ($data['cargos'] as $key => $val)
-                                @if ($val->estatus)
-                                    <option value="{{$val->id_cargo}}">{{$val->descripcion}}</option>
+                                @if ($val['estatus'])
+                                    <option value="{{$val['id']}}">{{$val['descripcion']}}</option>
                                 @endif
                             @endforeach
                         </select>

@@ -21,9 +21,9 @@
   <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/animate.min.css')}}">
   <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}">
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
   <!-- Home -->
-  <link href="{{ secure_asset('front/css/app.css') }}" rel="stylesheet">
+  <link rel="stylesheet" href="{{ secure_asset('front/css/app.css') }}">
   <!-- JQuery -->
   <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
@@ -48,12 +48,12 @@
           </button>
         </div>
         <div>
-          <a class="navbar-brand brand-logo" href="{{secure_url('/inicio')}}">
+          <a class="navbar-brand brand-logo" href="{{secure_url('/soporte')}}">
             <div class="d-flex align-items-center">
               <img src="{{secure_asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
             </div>
           </a>
-          <!-- <a class="navbar-brand brand-logo" href="{{secure_url('/inicio')}}">
+          <!-- <a class="navbar-brand brand-logo" href="{{secure_url('/soporte')}}">
             <img src="{{secure_asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
           </a> -->
         </div>
@@ -166,24 +166,11 @@
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
       <div class="sidebar-content"></div>
-      <script>
-        // let modulosCargados = <?= session('customModulos') ?>;
-        // function cargarModulos() {
-        //   let nav = $('#sidebar').find('.nav');
-        //   console.log(nav);
-        //   modulosCargados.forEach(e => {
-        //     let modulo = $('<li>', { class: "nav-item menu-item" });
-
-        //     nav.append(modulo);
-        //   });
-        // }
-        // cargarModulos();
-      </script>
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           @foreach (session('customModulos') as $menu)
           <li class="nav-item menu-item">
-            <a class="nav-link menu-link" {{!empty($menu->submenu) ? 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
+            <a class="nav-link menu-link" {{!empty($menu->submenu) ? (string)'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
               href={{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}>
               <i class="{{ $menu->icon }} menu-icon"></i>
               <span class="menu-title">{{ $menu->descripcion }}</span>
