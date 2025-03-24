@@ -30,46 +30,6 @@ $(document).ready(function () {
     });
 });
 
-const tb_incidencias = new DataTable('#tb_incidencias', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    ajax: {
-        url: `${__url}/buzon-personal/incidencias/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
-        dataSrc: function (json) {
-            return json;
-        },
-        error: function (xhr, error, thrown) {
-            boxAlert.table(updateTableInc);
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'cod_inc' },
-        { data: 'fecha_inc' },
-        { data: 'cod_orden' },
-        {
-            data: 'id_sucursal', render: function (data, type, row) {
-                var ruc = sucursales[data].ruc;
-                return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
-            }
-        },
-        {
-            data: 'id_sucursal', render: function (data, type, row) {
-                return sucursales[data].nombre;
-            }
-        },
-        { data: 'iniciado' },
-        { data: 'finalizado' },
-        { data: 'acciones' }
-    ],
-    order: [[1, 'desc']],
-    createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(7)').addClass(`td-acciones`);
-    },
-    processing: true
-});
-
 function updateTableInc() {
     tb_incidencias.ajax.reload();
 }
@@ -139,46 +99,6 @@ function ShowDetailInc(e, id) {
         }
     });
 }
-
-
-const tb_visitas = new DataTable('#tb_visitas', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    ajax: {
-        url: `${__url}/buzon-personal/visitas/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
-        dataSrc: function (json) {
-            return json;
-        },
-        error: function (xhr, error, thrown) {
-            boxAlert.table(updateTableVis);
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'cod_orden' },
-        { data: 'fecha_vis' },
-        {
-            data: 'id_sucursal', render: function (data, type, row) {
-                var ruc = sucursales[data].ruc;
-                return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
-            }
-        },
-        {
-            data: 'id_sucursal', render: function (data, type, row) {
-                return sucursales[data].nombre;
-            }
-        },
-        { data: 'iniciado' },
-        { data: 'finalizado' },
-        { data: 'acciones' }
-    ],
-    order: [[1, 'desc']],
-    createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(6)').addClass(`td-acciones`);
-    },
-    processing: true
-});
 
 function updateTableVis() {
     tb_visitas.ajax.reload();

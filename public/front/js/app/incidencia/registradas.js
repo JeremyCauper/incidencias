@@ -230,65 +230,6 @@ const cPersonal1 = new CTable('#createPersonal1', {
     extract: ['id']
 });
 
-const tb_incidencia = new DataTable('#tb_incidencia', {
-    scrollX: true,
-    scrollY: 400,
-    ajax: {
-        url: `${__url}/incidencias/registradas/index`,
-        dataSrc: function (json) {
-            $.each(json.conteo_data, function (panel, count) {
-                $(`b[data-panel="${panel}"]`).html(count);
-            });
-            fillSelectContac(json.contact);
-            return json.data;
-        },
-        error: function (xhr, error, thrown) {
-            boxAlert.table();
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'incidencia' },
-        { data: 'estado' },
-        {
-            data: 'empresa', render: function (data, type, row) {
-                let empresa = empresas[data];
-                return `${empresa.ruc} - ${empresa.razon_social}`;
-            }
-        },
-        {
-            data: 'sucursal', render: function (data, type, row) {
-                return sucursales[data].nombre;
-            }
-        },
-        { data: 'registrado' },
-        {
-            data: 'tipo_estacion', render: function (data, type, row) {
-                return tipo_estacion[data].descripcion;
-            }
-        },
-        {
-            data: 'tipo_incidencia', render: function (data, type, row) {
-                return tipo_incidencia[data].descripcion;
-            }
-        },
-        {
-            data: 'problema', render: function (data, type, row) {
-                return `${obj_problem[data].text} / ${obj_subproblem[row.subproblema].text}`;
-            }
-        },
-        { data: 'acciones' }
-    ],
-    order: [[4, 'desc']],
-    createdRow: function (row, data, dataIndex) {
-        const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
-        $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(8)').addClass('text-center');
-        $(row).find('td:eq(8)').addClass(`td-acciones`);
-        $(row).addClass(row_bg[data.estado_informe]);
-    },
-    processing: true
-});
-
 function updateTable() {
     tb_incidencia.ajax.reload();
 }

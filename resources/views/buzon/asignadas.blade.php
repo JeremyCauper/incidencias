@@ -7,8 +7,8 @@
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <style>
         /*////////////////////////////////////////
-                    /        SCRIPT CSS FIRMA DIGITAL        /
-                    ////////////////////////////////////////*/
+                        /        SCRIPT CSS FIRMA DIGITAL        /
+                        ////////////////////////////////////////*/
 
         .content-image {
             margin: auto;
@@ -109,8 +109,8 @@
         }
 
         /*////////////////////////////////////////
-                    /          SCRIPT CSS Doc Firma          /
-                    ////////////////////////////////////////*/
+                        /          SCRIPT CSS Doc Firma          /
+                        ////////////////////////////////////////*/
 
         .search_signature_group {
             flex-wrap: nowrap;
@@ -219,6 +219,64 @@
                                         </tr>
                                     </thead>
                                 </table>
+                                <script>
+                                    const tb_incidencias = new DataTable('#tb_incidencias', {
+                                        autoWidth: true,
+                                        scrollX: true,
+                                        scrollY: 400,
+                                        ajax: {
+                                            url: `${__url}/buzon-personal/incidencias/asignadas/index`,
+                                            dataSrc: function (json) {
+                                                if (json.count_asig) {
+                                                    $('#count_asig').removeClass('d-none').html(json.count_asig);
+                                                } else {
+                                                    $('#count_asig').addClass('d-none');
+                                                }
+                                                return json.data;
+                                            },
+                                            error: function (xhr, error, thrown) {
+                                                boxAlert.table(updateTableInc);
+                                                console.log('Respuesta del servidor:', xhr);
+                                            }
+                                        },
+                                        columns: [
+                                            { data: 'cod_inc' },
+                                            { data: 'estado' },
+                                            { data: 'registrado' },
+                                            { data: 'iniciado' },
+                                            {
+                                                data: 'id_sucursal', render: function (data, type, row) {
+                                                    var ruc = sucursales[data].ruc;
+                                                    return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
+                                                }
+                                            },
+                                            {
+                                                data: 'id_sucursal', render: function (data, type, row) {
+                                                    return sucursales[data].nombre;
+                                                }
+                                            },
+                                            {
+                                                data: 'id_tipo_estacion', render: function (data, type, row) {
+                                                    return tipo_estacion[data].descripcion;
+                                                }
+                                            },
+                                            {
+                                                data: 'id_problema', render: function (data, type, row) {
+                                                    return `${problemas[data].descripcion} / ${subproblemas[row.id_subproblema].descripcion}`;
+                                                }
+                                            },
+                                            { data: 'acciones' }
+                                        ],
+                                        createdRow: function (row, data, dataIndex) {
+                                            const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
+                                            $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(6), td:eq(8)').addClass('text-center');
+                                            $(row).find('td:eq(8)').addClass('td-acciones');
+                                            $(row).addClass(row_bg[data.estado_informe]);
+                                        },
+                                        order: [[2, 'desc']],
+                                        processing: true,
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -244,6 +302,48 @@
                                         </tr>
                                     </thead>
                                 </table>
+                                <script>
+                                    const tb_visitas = new DataTable('#tb_visitas', {
+                                        autoWidth: true,
+                                        scrollX: true,
+                                        scrollY: 400,
+                                        ajax: {
+                                            url: `${__url}/buzon-personal/visitas/asignadas/index`,
+                                            dataSrc: function (json) {
+                                                $('#count_vis').html(json.count_vis ? json.count_vis : "");
+                                                return json.data;
+                                            },
+                                            error: function (xhr, error, thrown) {
+                                                boxAlert.table(updateTableVis);
+                                                console.log('Respuesta del servidor:', xhr);
+                                            }
+                                        },
+                                        columns: [
+                                            { data: 'estado' },
+                                            { data: 'registrado' },
+                                            {
+                                                data: 'id_sucursal', render: function (data, type, row) {
+                                                    var ruc = sucursales[data].ruc;
+                                                    return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
+                                                }
+                                            },
+                                            {
+                                                data: 'id_sucursal', render: function (data, type, row) {
+                                                    return sucursales[data].nombre;
+                                                }
+                                            },
+                                            { data: 'asignado' },
+                                            { data: 'programado' },
+                                            { data: 'acciones' }
+                                        ],
+                                        order: [[1, 'desc']],
+                                        createdRow: function (row, data, dataIndex) {
+                                            $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6)').addClass('text-center');
+                                            $(row).find('td:eq(6)').addClass(`td-acciones`);
+                                        },
+                                        processing: true
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>

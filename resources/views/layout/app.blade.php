@@ -21,15 +21,22 @@
   <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/animate.min.css')}}">
   <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}">
   <!-- Google Fonts -->
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"/>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <!-- Home -->
   <link rel="stylesheet" href="{{ secure_asset('front/css/app.css') }}">
+  <script>
+    const __url = "{{secure_url('')}}";
+    const __asset = "{{secure_asset('/front')}}";
+    const __token = "{{ csrf_token() }}";
+  </script>
   <!-- JQuery -->
   <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
   <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/form_select2.js')}}"></script>
   <script src="{{secure_asset('front/js/AlertMananger.js')}}"></script>
+  <script src="{{secure_asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
+  <script src="{{secure_asset('front/js/app.js')}}"></script>
 
   @yield('cabecera')
 </head>
@@ -169,33 +176,33 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           @foreach (session('customModulos') as $menu)
-          <li class="nav-item menu-item">
-            <a class="nav-link menu-link" {{!empty($menu->submenu) ? (string)'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
-              href={{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}>
-              <i class="{{ $menu->icon }} menu-icon"></i>
-              <span class="menu-title">{{ $menu->descripcion }}</span>
-              @if (!empty($menu->submenu)) <i class="menu-arrow"></i> @endif
-            </a>
-          @if (!empty($menu->submenu))
-            <div class="collapse" id="{{$menu->ruta}}">
-              <ul class="nav flex-column sub-menu">
-                @foreach ($menu->submenu as $categoria => $submenus)
-                  @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
-                  <li class="nav-category-item">
-                    {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
-                  </li>
-                  @endif
-                  @foreach ($submenus as $submenu)
-                  <li class="nav-item">
-                    <a class="nav-link" href="{{secure_url($submenu->ruta)}}">{{ $submenu->descripcion }}</a>
-                  </li>
-                  @endforeach
-                @endforeach
-              </ul>
-            </div>
-          @endif
-          </li>
-        @endforeach
+        <li class="nav-item menu-item">
+        <a class="nav-link menu-link" {{!empty($menu->submenu) ? (string) 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
+          href={{!empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta)}}>
+          <i class="{{ $menu->icon }} menu-icon"></i>
+          <span class="menu-title">{{ $menu->descripcion }}</span>
+          @if (!empty($menu->submenu)) <i class="menu-arrow"></i> @endif
+        </a>
+        @if (!empty($menu->submenu))
+      <div class="collapse" id="{{$menu->ruta}}">
+        <ul class="nav flex-column sub-menu">
+        @foreach ($menu->submenu as $categoria => $submenus)
+      @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
+      <li class="nav-category-item">
+      {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
+      </li>
+    @endif
+      @foreach ($submenus as $submenu)
+      <li class="nav-item">
+      <a class="nav-link" href="{{secure_url($submenu->ruta)}}">{{ $submenu->descripcion }}</a>
+      </li>
+    @endforeach
+    @endforeach
+        </ul>
+      </div>
+    @endif
+        </li>
+      @endforeach
         </ul>
       </nav>
 
@@ -225,12 +232,6 @@
     setTimeout(function () {
       location.reload();
     }, 7205000);
-
-
-    const __url = "{{secure_url('')}}";
-    const __asset = "{{secure_asset('/front')}}";
-
-    const __token = "{{ csrf_token() }}";
 
     let alertaMostrada = false;
     let logoutEjecutado = false;
@@ -286,12 +287,10 @@
   </script>
   <!-- MDB -->
   <script type="text/javascript" src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
-  <script src="{{secure_asset('front/js/app.js')}}"></script>
   <script src="{{secure_asset('front/js/template.js') }}"></script>
   <script src="{{secure_asset('front/js/hoverable-collapse.js') }}"></script>
   <script src="{{secure_asset('front/js/off-canvas.js')}}"></script>
   <script src="{{secure_asset('front/vendor/inputmask/jquery.inputmask.bundle.min.js')}}"></script>
-  <script src="{{secure_asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{secure_asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
   <script src="{{secure_asset('front/js/TableManeger.js')}}"></script>
   <script src="{{secure_asset('front/js/FormMananger.js')}}"></script>

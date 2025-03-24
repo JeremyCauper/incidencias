@@ -58,44 +58,6 @@ const cPersonal1 = new CTable('#createPersonal1', {
     extract: ['id']
 });
 
-const tb_visitas = new DataTable('#tb_visitas', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-    ajax: {
-        url: `${__url}/visitas/sucursales/index`,
-        dataSrc: function (json) {
-            $.each(json.conteo, function (panel, count) {
-                $(`b[data-panel="${panel}"]`).html(count);
-            });
-            return json.data;
-        },
-        error: function (xhr, error, thrown) {
-            boxAlert.table(updateTableVisitas);
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'ruc' },
-        { data: 'sucursal' },
-        {
-            data: 'visita', render: function (data, type, row) {
-                badgeOptions = data == 'completado'
-                    ? { t: 'Completado', c: 'primary' }
-                    : (data ? { 'c': 'info', 't': `${data} Visita${(data > 1) ? 's' : ''}` } : { 'c': 'warning', 't': 'Sin Visitas' });
-
-                return `<label class="badge badge-${badgeOptions.c}" style="font-size: .7rem;">${badgeOptions.t}</label>`;
-            }
-        },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(0), td:eq(2), td:eq(3)').addClass('text-center');
-    },
-    processing: true
-});
-
 function updateTableVisitas() {
     tb_visitas.ajax.reload();
 }

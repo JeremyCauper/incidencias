@@ -60,35 +60,7 @@ $(document).ready(function () {
     calcularHoras()
 });
 
-let diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
-let calendario = null;
-let eventoTemporal = null;
-let anioMemoria = null;
-let añosCargados = {}; // Registro de años ya cargados para evitar duplicados
-
 document.addEventListener('DOMContentLoaded', function () {
-    let elementoCalendario = document.getElementById('calendar');
-
-    calendario = new FullCalendar.Calendar(elementoCalendario, {
-        initialView: 'dayGridMonth',
-        selectable: true,
-        locale: 'es',
-        headerToolbar: {
-            left: 'title',
-            center: '',
-            right: 'prev,next today'
-        },
-        buttonText: { today: 'Hoy' },
-        titleFormat: { year: 'numeric', month: 'long' },
-        eventOrder: "start,-duration",
-        eventDidMount: function (info) {
-            info.el.style.cursor = "pointer";
-            info.el.style.height = "28px"; // Cambia la altura
-            info.el.style.lineHeight = "28px"; // Centra el texto
-        }
-    });
-
-    calendario.render();
     anioMemoria = calendario.getDate().getFullYear();
     cargarEventosApi(); // Cargar eventos del año inicial
 
@@ -283,7 +255,7 @@ async function editarTurno(id) {
         let datos = añosCargados[anioMemoria][id];
 
         console.log(datos);
-        
+
 
         $("#id").val(id);
         $("#sfechaIni").val(datos.fecha_ini_s).trigger('change');
@@ -302,7 +274,7 @@ async function editarTurno(id) {
 async function eliminarTurno(id) {
     $('#modal_turno_detalle').modal('hide');
     if (!await boxAlert.confirm({ t: '¿Estas de suguro de eliminar el turno?', h: 'no se podrá no se podrá revertir está operación.' })) return true;
-    
+
     $.ajax({
         type: 'POST',
         url: `${__url}/asignacion-turno/eliminar`,

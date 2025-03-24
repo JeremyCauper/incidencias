@@ -84,39 +84,6 @@ $(document).ready(function () {
     });
 });
 
-const tb_sucursales = new DataTable('#tb_sucursales', {
-    scrollX: true,
-    scrollY: 300,
-    ajax: {
-        url: __url + '/empresas/sucursales/index',
-        dataSrc: "",
-        error: function (xhr, error, thrown) {
-            console.log('Error en la solicitud Ajax:', error);
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'grupo' },
-        { data: 'cofide' },
-        { data: 'ruc' },
-        { data: 'sucursal' },
-        { data: 'direccion' },
-        { data: 'ubigeo', render: function (data, type, row) {
-                return objUbigeo[data].nombre;
-            }
-        },
-        { data: 'created_at' },
-        { data: 'updated_at' },
-        { data: 'estado' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(2), td:eq(6), td:eq(7), td:eq(8), td:eq(9)').addClass('text-center');
-        $(row).find('td:eq(9)').addClass(`td-acciones`);
-    },
-    processing: true
-});
-
 function updateTable() {
     tb_sucursales.ajax.reload();
 }

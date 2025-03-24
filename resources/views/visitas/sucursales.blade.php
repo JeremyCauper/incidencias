@@ -16,46 +16,46 @@
 @section('content')
 
     <!-- <div class="row panel-view">
-        <div class="col-12">
-            <div class="row">
-                <div class="col-xxl-3 col-6 grid-margin">
-                    <div class="card">
-                        <div class="card-body text-danger">
-                            <h6 class="card-title title-count mb-2"><i class="fas fa-xmark"></i></i> Visitas Sin Asignar
-                            </h6>
-                            <h4 class="subtitle-count"><b data-panel="vSinAsignar">0</b></h4>
+                <div class="col-12">
+                    <div class="row">
+                        <div class="col-xxl-3 col-6 grid-margin">
+                            <div class="card">
+                                <div class="card-body text-danger">
+                                    <h6 class="card-title title-count mb-2"><i class="fas fa-xmark"></i></i> Visitas Sin Asignar
+                                    </h6>
+                                    <h4 class="subtitle-count"><b data-panel="vSinAsignar">0</b></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-3 col-6 grid-margin">
+                            <div class="card">
+                                <div class="card-body text-info">
+                                    <h6 class="card-title title-count mb-2"><i class="fas fa-clock"></i> Visitas Asignadas</h6>
+                                    <h4 class="subtitle-count"><b data-panel="vAsignadas">0</b></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-3 col-6 grid-margin">
+                            <div class="card">
+                                <div class="card-body text-primary">
+                                    <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Visitas En Proceso
+                                    </h6>
+                                    <h4 class="subtitle-count"><b data-panel="vEnProceso">0</b></h4>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xxl-3 col-6 grid-margin">
+                            <div class="card">
+                                <div class="card-body text-warning">
+                                    <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Visitas Sin
+                                        Iniciar</h6>
+                                    <h4 class="subtitle-count"><b data-panel="vSinIniciar">0</b></h4>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-xxl-3 col-6 grid-margin">
-                    <div class="card">
-                        <div class="card-body text-info">
-                            <h6 class="card-title title-count mb-2"><i class="fas fa-clock"></i> Visitas Asignadas</h6>
-                            <h4 class="subtitle-count"><b data-panel="vAsignadas">0</b></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xxl-3 col-6 grid-margin">
-                    <div class="card">
-                        <div class="card-body text-primary">
-                            <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Visitas En Proceso
-                            </h6>
-                            <h4 class="subtitle-count"><b data-panel="vEnProceso">0</b></h4>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-xxl-3 col-6 grid-margin">
-                    <div class="card">
-                        <div class="card-body text-warning">
-                            <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Visitas Sin
-                                Iniciar</h6>
-                            <h4 class="subtitle-count"><b data-panel="vSinIniciar">0</b></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div> -->
+            </div> -->
 
     <div class="row">
         <div class="col-xl-6 mb-4">
@@ -101,6 +101,45 @@
                                     </tr>
                                 </thead>
                             </table>
+                            <script>
+                                const tb_visitas = new DataTable('#tb_visitas', {
+                                    autoWidth: true,
+                                    scrollX: true,
+                                    scrollY: 400,
+                                    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
+                                    ajax: {
+                                        url: `${__url}/visitas/sucursales/index`,
+                                        dataSrc: function (json) {
+                                            $.each(json.conteo, function (panel, count) {
+                                                $(`b[data-panel="${panel}"]`).html(count);
+                                            });
+                                            return json.data;
+                                        },
+                                        error: function (xhr, error, thrown) {
+                                            boxAlert.table(updateTableVisitas);
+                                            console.log('Respuesta del servidor:', xhr);
+                                        }
+                                    },
+                                    columns: [
+                                        { data: 'ruc' },
+                                        { data: 'sucursal' },
+                                        {
+                                            data: 'visita', render: function (data, type, row) {
+                                                badgeOptions = data == 'completado'
+                                                    ? { t: 'Completado', c: 'primary' }
+                                                    : (data ? { 'c': 'info', 't': `${data} Visita${(data > 1) ? 's' : ''}` } : { 'c': 'warning', 't': 'Sin Visitas' });
+
+                                                return `<label class="badge badge-${badgeOptions.c}" style="font-size: .7rem;">${badgeOptions.t}</label>`;
+                                            }
+                                        },
+                                        { data: 'acciones' }
+                                    ],
+                                    createdRow: function (row, data, dataIndex) {
+                                        $(row).find('td:eq(0), td:eq(2), td:eq(3)').addClass('text-center');
+                                    },
+                                    processing: true
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -152,6 +191,39 @@
                                     </tr>
                                 </thead>
                             </table>
+                            <script>
+                                const tb_vprogramadas = new DataTable('#tb_vprogramadas', {
+                                    autoWidth: true,
+                                    scrollX: true,
+                                    scrollY: 400,
+                                    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
+                                    ajax: {
+                                        url: `${__url}/visitas/programadas/index`,
+                                        dataSrc: function (json) {
+                                            $.each(json.conteo, function (panel, count) {
+                                                $(`b[data-panel="${panel}"]`).html(count);
+                                            });
+                                            return json.data;
+                                        },
+                                        error: function (xhr, error, thrown) {
+                                            boxAlert.table(updateTableVProgramadas);
+                                            console.log('Respuesta del servidor:', xhr);
+                                        }
+                                    },
+                                    columns: [
+                                        { data: 'estado' },
+                                        { data: 'sucursal' },
+                                        { data: 'tecnicos' },
+                                        { data: 'fecha' },
+                                        { data: 'acciones' }
+                                    ],
+                                    createdRow: function (row, data, dataIndex) {
+                                        $(row).find('td:eq(0), td:eq(3), td:eq(4)').addClass('text-center');
+                                        $(row).find('td:eq(4)').addClass(`td-acciones`);
+                                    },
+                                    processing: true
+                                });
+                            </script>
                         </div>
                     </div>
                 </div>
@@ -648,73 +720,73 @@
 
                         <div id="content-islas" class="mt-3">
                             <!--<div class="islas-item py-2">
-                                    <div class="row my-2">
-                                        <div class="col-lg-3 col-sm-4 col-5">
-                                            <div class="input-group">
-                                                <span class="input-group-text border-0 ps-0" style="font-size: small;">ISLA</span>
-                                                <input type="text" class="form-control rounded"/>
+                                            <div class="row my-2">
+                                                <div class="col-lg-3 col-sm-4 col-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text border-0 ps-0" style="font-size: small;">ISLA</span>
+                                                        <input type="text" class="form-control rounded"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-sm-4 col-5">
+                                                    <div class="input-group">
+                                                        <span class="input-group-text border-0 ps-0" style="font-size: small;">POS</span>
+                                                        <input type="text" class="form-control rounded"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-6 col-sm-4 col-2 text-end">
+                                                    <button type="button" class="btn btn-danger px-2"><i class="far fa-trash-can"></i></button>
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-3 col-sm-4 col-5">
-                                            <div class="input-group">
-                                                <span class="input-group-text border-0 ps-0" style="font-size: small;">POS</span>
-                                                <input type="text" class="form-control rounded"/>
+
+                                            <div class="row my-2">
+                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>IMPRESORAS</strong></div>
+                                                <div class="col-lg-9">
+                                                    <input type="text" name="des7" class="form-control">
+                                                </div>
                                             </div>
-                                        </div>
-                                        <div class="col-lg-6 col-sm-4 col-2 text-end">
-                                            <button type="button" class="btn btn-danger px-2"><i class="far fa-trash-can"></i></button>
-                                        </div>
-                                    </div>
 
-                                    <div class="row my-2">
-                                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>IMPRESORAS</strong></div>
-                                        <div class="col-lg-9">
-                                            <input type="text" name="des7" class="form-control">
-                                        </div>
-                                    </div>
+                                            <div class="row my-2">
+                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>RED DE LECTORES</strong></div>
+                                                <div class="col-lg-9">
+                                                    <input type="text" name="des8" class="form-control">
+                                                </div>
+                                            </div>
 
-                                    <div class="row my-2">
-                                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>RED DE LECTORES</strong></div>
-                                        <div class="col-lg-9">
-                                            <input type="text" name="des8" class="form-control">
-                                        </div>
-                                    </div>
+                                            <div class="row my-2">
+                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>JACK TOOLS</strong></div>
+                                                <div class="col-lg-9">
+                                                    <input type="text" name="des7" class="form-control">
+                                                </div>
+                                            </div>
 
-                                    <div class="row my-2">
-                                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>JACK TOOLS</strong></div>
-                                        <div class="col-lg-9">
-                                            <input type="text" name="des7" class="form-control">
-                                        </div>
-                                    </div>
+                                            <div class="row mb-2">
+                                                <div class="col-lg-3" style="font-size: 11px;"><label>• VOLTAJE DE MANGUERAS</label></div>
+                                                <div class="col-lg-9">
+                                                    <input type="text" name="des2" class="form-control">
+                                                </div>
+                                            </div>
 
-                                    <div class="row mb-2">
-                                        <div class="col-lg-3" style="font-size: 11px;"><label>• VOLTAJE DE MANGUERAS</label></div>
-                                        <div class="col-lg-9">
-                                            <input type="text" name="des2" class="form-control">
-                                        </div>
-                                    </div>
+                                            <div class="row my-2">
+                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>CAUCHO PROTECTOR DE LECTORES</strong></div>
+                                                <div class="col-lg-9">
+                                                    <input type="text" name="des8" class="form-control">
+                                                </div>
+                                            </div>
 
-                                    <div class="row my-2">
-                                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>CAUCHO PROTECTOR DE LECTORES</strong></div>
-                                        <div class="col-lg-9">
-                                            <input type="text" name="des8" class="form-control">
-                                        </div>
-                                    </div>
+                                            <div class="row my-2">
+                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MUEBLE DE POS</strong></div>
+                                                <div class="col-lg-9">
+                                                    <input type="text" name="des9" class="form-control">
+                                                </div>
+                                            </div>
 
-                                    <div class="row my-2">
-                                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MUEBLE DE POS</strong></div>
-                                        <div class="col-lg-9">
-                                            <input type="text" name="des9" class="form-control">
-                                        </div>
-                                    </div>
-
-                                    <div class="row my-2">
-                                        <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MR 350 / DTI / TERMINAL</strong></div>
-                                        <div class="col-lg-9">
-                                            <input type="text" name="des10" class="form-control">
-                                        </div>
-                                    </div>
-                                </div>-->
+                                            <div class="row my-2">
+                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MR 350 / DTI / TERMINAL</strong></div>
+                                                <div class="col-lg-9">
+                                                    <input type="text" name="des10" class="form-control">
+                                                </div>
+                                            </div>
+                                        </div>-->
                         </div>
 
                         <div class="text-end">

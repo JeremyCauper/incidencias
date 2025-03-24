@@ -43,35 +43,6 @@ $(document).ready(function () {
     });
 });
 
-const tb_subproblemas = new DataTable('#tb_subproblemas', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-    ajax: {
-        url: __url + '/mantenimiento/problemas/subproblemas/index',
-        dataSrc: "",
-        error: function (xhr, error, thrown) {
-            boxAlert.table();
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'cod_problema' },
-        { data: 'codigo_sub' },
-        { data: 'descripcion' },
-        { data: 'created_at' },
-        { data: 'updated_at' },
-        { data: 'estado' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).addClass('text-center');
-        $(row).find('td:eq(6)').addClass(`td-acciones`);
-    },
-    processing: true
-});
-
 function updateTable() {
     tb_subproblemas.ajax.reload();
 }

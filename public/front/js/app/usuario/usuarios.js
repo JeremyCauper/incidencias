@@ -34,9 +34,7 @@ $(document).ready(function () {
         },
         {
             control: '#fechan_usu',
-            config: {
-                require: true
-            }
+            config: {}
         },
         {
             control: ['#telp_usu', '#telc_usu'],
@@ -113,35 +111,6 @@ $(document).ready(function () {
     fObservador('.content-wrapper', () => {
         tb_usuario.columns.adjust().draw();
     });
-});
-
-const tb_usuario = new DataTable('#tb_usuario', {
-    scrollX: true,
-    scrollY: 300,
-    ajax: {
-        url: `${__url}/control-de-usuario/usuarios/index`,
-        dataSrc: "",
-        error: function (xhr, error, thrown) {
-            boxAlert.table();
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'ndoc_usuario' },
-        { data: 'personal' },
-        { data: 'tipo_acceso', render: function (data, dataSet, row) {
-            return `<label class="badge badge-${tipoAcceso[data].color}" style="font-size: .7rem;">${tipoAcceso[data].descripcion}</label>`;
-        }},
-        { data: 'usuario' },
-        { data: 'pass_view' },
-        { data: 'estado' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(0), td:eq(2), td:eq(5), td:eq(6)').addClass('text-center');
-        $(row).find('td:eq(6)').addClass(`td-acciones`);
-    },
-    processing: true
 });
 
 function updateTable() {
