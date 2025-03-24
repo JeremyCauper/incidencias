@@ -1,35 +1,3 @@
-const tb_vprogramadas = new DataTable('#tb_vprogramadas', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-    ajax: {
-        url: `${__url}/visitas/programadas/index`,
-        dataSrc: function (json) {            
-            $.each(json.conteo, function (panel, count) {
-                $(`b[data-panel="${panel}"]`).html(count);
-            });
-            return json.data;
-        },
-        error: function (xhr, error, thrown) {
-            boxAlert.table(updateTableVProgramadas);
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'estado' },
-        { data: 'sucursal' },
-        { data: 'tecnicos' },
-        { data: 'fecha' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(0), td:eq(3), td:eq(4)').addClass('text-center');
-        $(row).find('td:eq(4)').addClass(`td-acciones`);
-    },
-    processing: true
-});
-
 function updateTableVProgramadas() {
     tb_vprogramadas.ajax.reload();
 }

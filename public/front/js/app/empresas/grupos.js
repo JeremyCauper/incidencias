@@ -30,33 +30,6 @@ $(document).ready(function () {
     });
 });
 
-const tb_grupos = new DataTable('#tb_grupos', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-    ajax: {
-        url: __url + '/empresas/grupos/index',
-        dataSrc: "",
-        error: function (xhr, error, thrown) {
-            boxAlert.table();
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'nombre' },
-        { data: 'created_at' },
-        { data: 'updated_at' },
-        { data: 'estado' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(1), td:eq(2), td:eq(3), td:eq(4)').addClass('text-center');
-        $(row).find('td:eq(4)').addClass(`td-acciones`);
-    },
-    processing: true
-});
-
 function updateTable() {
     tb_grupos.ajax.reload();
 }

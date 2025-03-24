@@ -5,10 +5,10 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
     <style>
         /* .fc .fc-daygrid-day-frame {
-                                        min-height: 100% !important;
-                                        height: 80px !important;
-                                        position: relative !important;
-                                    } */
+                                                min-height: 100% !important;
+                                                height: 80px !important;
+                                                position: relative !important;
+                                            } */
         .fc .fc-toolbar-title {
             text-transform: capitalize;
         }
@@ -41,6 +41,36 @@
             </div>
         </div>
     </div>
+    <script>
+        let diasSemana = ['Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado', 'Domingo'];
+        let calendario = null;
+        let eventoTemporal = null;
+        let anioMemoria = null;
+        let añosCargados = {}; // Registro de años ya cargados para evitar duplicados
+
+        let elementoCalendario = document.getElementById('calendar');
+
+        calendario = new FullCalendar.Calendar(elementoCalendario, {
+            initialView: 'dayGridMonth',
+            selectable: true,
+            locale: 'es',
+            headerToolbar: {
+                left: 'title',
+                center: '',
+                right: 'prev,next today'
+            },
+            buttonText: { today: 'Hoy' },
+            titleFormat: { year: 'numeric', month: 'long' },
+            eventOrder: "start,-duration",
+            eventDidMount: function (info) {
+                info.el.style.cursor = "pointer";
+                info.el.style.height = "28px"; // Cambia la altura
+                info.el.style.lineHeight = "28px"; // Centra el texto
+            }
+        });
+
+        calendario.render();
+    </script>
 
     <button class="d-none" data-mdb-modal-init data-mdb-target="#modal_turno"></button>
     <div class="modal fade" id="modal_turno" aria-labelledby="modal_turno" aria-hidden="true">
@@ -143,8 +173,10 @@
                     </div>
                     <div class="row"></div>
                     <div class="text-end">
-                        <button type="button" class="btn btn-danger px-2 me-2" data-mdb-ripple-init id="btn-eliminar-turno"><i class="far fa-trash-can"></i></button>
-                        <button type="button" class="btn btn-primary px-2 me-2" data-mdb-ripple-init id="btn-editar-turno"><i class="far fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-danger px-2 me-2" data-mdb-ripple-init
+                            id="btn-eliminar-turno"><i class="far fa-trash-can"></i></button>
+                        <button type="button" class="btn btn-primary px-2 me-2" data-mdb-ripple-init
+                            id="btn-editar-turno"><i class="far fa-pen-to-square"></i></button>
                         <button type="button" class="btn btn-link" data-mdb-ripple-init
                             data-mdb-dismiss="modal">Cerrar</button>
                     </div>

@@ -37,35 +37,6 @@ $(document).ready(function () {
     });
 });
 
-const tb_problemas = new DataTable('#tb_problemas', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-    ajax: {
-        url: __url + '/mantenimiento/problemas/problemas/index',
-        dataSrc: "",
-        error: function (xhr, error, thrown) {
-            boxAlert.table();
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'codigo' },
-        { data: 'descripcion' },
-        { data: 'tipo_incidencia' },
-        { data: 'created_at' },
-        { data: 'updated_at' },
-        { data: 'estado' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).addClass('text-center');
-        $(row).find('td:eq(6)').addClass(`td-acciones`);
-    },
-    processing: true
-});
-
 function updateTable() {
     tb_problemas.ajax.reload();
 }

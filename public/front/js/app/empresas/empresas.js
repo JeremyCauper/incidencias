@@ -105,34 +105,6 @@ $(document).ready(function () {
     });
 });
 
-const tb_empresas = new DataTable('#tb_empresas', {
-    scrollX: true,
-    scrollY: 300,
-    ajax: {
-        url: __url + '/empresas/empresas/index',
-        dataSrc: "",
-        error: function (xhr, error, thrown) {
-            boxAlert.table();
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'grupo' },
-        { data: 'ruc' },
-        { data: 'razonSocial' },
-        { data: 'contrato' },
-        { data: 'created_at' },
-        { data: 'updated_at' },
-        { data: 'estado' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6), td:eq(7)').addClass('text-center');
-        $(row).find('td:eq(7)').addClass(`td-acciones`);
-    },
-    processing: true
-});
-
 function updateTable() {
     tb_empresas.ajax.reload();
 }

@@ -82,19 +82,60 @@
                             <div class="col-12">
                                 <table id="tb_incidencias" class="table table-hover text-nowrap w-100">
                                     <thead>
-                                        <tr class="text-bg-primary">
+                                        <tr class="text-bg-primary text-center">
                                             <th>Incidencia</th>
                                             <th>Fecha Incidencia</th>
                                             <th>N° Orden</th>
                                             <th>Empresa</th>
                                             <th>Sucursal</th>
-                                            <!-- <th>Problema / Sub Problema</th> -->
                                             <th>Iniciada</th>
                                             <th>Terminada</th>
-                                            <th class="text-center">Acciones</th>
+                                            <th>Acciones</th>
                                         </tr>
                                     </thead>
                                 </table>
+                                <script>
+                                    const tb_incidencias = new DataTable('#tb_incidencias', {
+                                        autoWidth: true,
+                                        scrollX: true,
+                                        scrollY: 400,
+                                        ajax: {
+                                            url: `${__url}/buzon-personal/incidencias/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
+                                            dataSrc: function (json) {
+                                                return json;
+                                            },
+                                            error: function (xhr, error, thrown) {
+                                                boxAlert.table(updateTableInc);
+                                                console.log('Respuesta del servidor:', xhr);
+                                            }
+                                        },
+                                        columns: [
+                                            { data: 'cod_inc' },
+                                            { data: 'fecha_inc' },
+                                            { data: 'cod_orden' },
+                                            {
+                                                data: 'id_sucursal', render: function (data, type, row) {
+                                                    var ruc = sucursales[data].ruc;
+                                                    return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
+                                                }
+                                            },
+                                            {
+                                                data: 'id_sucursal', render: function (data, type, row) {
+                                                    return sucursales[data].nombre;
+                                                }
+                                            },
+                                            { data: 'iniciado' },
+                                            { data: 'finalizado' },
+                                            { data: 'acciones' }
+                                        ],
+                                        order: [[1, 'desc']],
+                                        createdRow: function (row, data, dataIndex) {
+                                            $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(5), td:eq(6), td:eq(7)').addClass('text-center');
+                                            $(row).find('td:eq(7)').addClass(`td-acciones`);
+                                        },
+                                        processing: true
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>
@@ -120,6 +161,47 @@
                                         </tr>
                                     </thead>
                                 </table>
+                                <script>
+                                    const tb_visitas = new DataTable('#tb_visitas', {
+                                        autoWidth: true,
+                                        scrollX: true,
+                                        scrollY: 400,
+                                        ajax: {
+                                            url: `${__url}/buzon-personal/visitas/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
+                                            dataSrc: function (json) {
+                                                return json;
+                                            },
+                                            error: function (xhr, error, thrown) {
+                                                boxAlert.table(updateTableVis);
+                                                console.log('Respuesta del servidor:', xhr);
+                                            }
+                                        },
+                                        columns: [
+                                            { data: 'cod_orden' },
+                                            { data: 'fecha_vis' },
+                                            {
+                                                data: 'id_sucursal', render: function (data, type, row) {
+                                                    var ruc = sucursales[data].ruc;
+                                                    return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
+                                                }
+                                            },
+                                            {
+                                                data: 'id_sucursal', render: function (data, type, row) {
+                                                    return sucursales[data].nombre;
+                                                }
+                                            },
+                                            { data: 'iniciado' },
+                                            { data: 'finalizado' },
+                                            { data: 'acciones' }
+                                        ],
+                                        order: [[1, 'desc']],
+                                        createdRow: function (row, data, dataIndex) {
+                                            $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6)').addClass('text-center');
+                                            $(row).find('td:eq(6)').addClass(`td-acciones`);
+                                        },
+                                        processing: true
+                                    });
+                                </script>
                             </div>
                         </div>
                     </div>

@@ -80,6 +80,58 @@
                                 </tr>
                             </thead>
                         </table>
+                        <script>
+                            const tb_orden = new DataTable('#tb_orden', {
+                                scrollX: true,
+                                scrollY: 400,
+                                ajax: {
+                                    url: `${__url}/incidencias/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
+                                    dataSrc: function (json) {
+                                        return json.data;
+                                    },
+                                    error: function (xhr, error, thrown) {
+                                        boxAlert.table();
+                                        console.log('Respuesta del servidor:', xhr);
+                                    }
+                                },
+                                columns: [
+                                    { data: 'cod_incidencia' },
+                                    { data: 'fecha_inc' },
+                                    { data: 'cod_orden' },
+                                    { data: 'asignados' },
+                                    {
+                                        data: 'empresa', render: function (data, type, row) {
+                                            let empresa = empresas[data];
+                                            return `${empresa.ruc} - ${empresa.razon_social}`;
+                                        }
+                                    },
+                                    {
+                                        data: 'sucursal', render: function (data, type, row) {
+                                            return sucursales[data].nombre;
+                                        }
+                                    },
+                                    {
+                                        data: 'tipo_incidencia', render: function (data, type, row) {
+                                            return tipo_incidencia[data].descripcion;
+                                        }
+                                    },
+                                    {
+                                        data: 'problema', render: function (data, type, row) {
+                                            return `${obj_problem[data].text} / ${obj_subproblem[row.subproblema].text}`;
+                                        }
+                                    },
+                                    { data: 'iniciado' },
+                                    { data: 'finalizado' },
+                                    { data: 'acciones' }
+                                ],
+                                createdRow: function (row, data, dataIndex) {
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(6), td:eq(8), td:eq(9), td:eq(10)').addClass('text-center');
+                                    $(row).find('td:eq(10)').addClass(`td-acciones`);
+                                },
+                                order: [[1, 'desc']],
+                                processing: true
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
