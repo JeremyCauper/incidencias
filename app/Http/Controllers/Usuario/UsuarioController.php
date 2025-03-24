@@ -142,7 +142,7 @@ class UsuarioController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'id_area' => 'required|integer',
-                'n_doc' => 'required|integer',
+                'n_doc' => 'required|string',
                 'nom_usu' => 'required|string',
                 'ape_usu' => 'required|string',
                 'emailp_usu' => 'nullable|email',
@@ -242,7 +242,7 @@ class UsuarioController extends Controller
             $validator = Validator::make($request->all(), [
                 'id' => 'required|integer',
                 'id_area' => 'required|integer',
-                'n_doc' => 'required|integer',
+                'n_doc' => 'required|string',
                 'nom_usu' => 'required|string|max:250',
                 'ape_usu' => 'required|string',
                 'emailp_usu' => 'nullable|email',
