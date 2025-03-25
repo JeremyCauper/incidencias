@@ -26,5 +26,12 @@
         "estatus": 1,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 5,
+        "descripcion": "Sistemas",
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
     }
 ]

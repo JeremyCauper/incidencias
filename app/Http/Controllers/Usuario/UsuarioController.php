@@ -31,12 +31,14 @@ class UsuarioController extends Controller
         $this->validarPermisos(5, 6);
         try {
             $data = [];
-            $data['areas'] = collect((new TipoArea())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
+            $areas = collect((new TipoArea())->all())->select('id', 'descripcion', 'estatus');
             $tipo_acceso = collect((new TipoUsuario())->all())->select('id', 'descripcion', 'color', 'estatus')->where('estatus', 1);
             if (session('tipo_acceso') != 5) {
                 $tipo_acceso = $tipo_acceso->reject(fn($item) => $item['id'] == 5);
+                $areas = $areas->reject(fn($item) => $item['id'] == 5);
             }
             $data['tipoAcceso'] = $tipo_acceso->keyBy('id');
+            $data['areas'] = $areas->keyBy('id');
 
             $tipo_menu = [0];
             if (session('tipo_acceso') == 5) {

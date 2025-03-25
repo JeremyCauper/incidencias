@@ -50,7 +50,7 @@ class RegistradasController extends Controller
                 ];
             });
 
-            $data['usuarios'] = db::table('usuarios')->where('estatus', 1)->get()->map(function ($u) {
+            $data['usuarios'] = db::table('usuarios')->where(['estatus' => 1, 'id_area' => 1])->get()->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,
@@ -190,22 +190,6 @@ class RegistradasController extends Controller
                 ]);
             }
 
-            if ($estado_info) {
-                $arr_personal = [];
-                foreach ($personal as $k => $val) {
-                    if ($val['registro']) {
-                        $arr_personal[$k]['cod_incidencia'] = $request->cod_inc;
-                        $arr_personal[$k]['id_usuario'] = $val['id'];
-                        $arr_personal[$k]['creador'] = Auth::user()->id_usuario;
-                        $arr_personal[$k]['fecha'] = now()->format('Y-m-d');
-                        $arr_personal[$k]['hora'] = now()->format('H:i:s');
-                        $arr_personal[$k]['created_at'] = now()->format('Y-m-d H:i:s');
-                        $personal[$val['id']]['registro'] = 0;
-                    }
-                }
-                DB::table('tb_inc_asignadas')->insert($arr_personal);
-            }
-
             DB::table('tb_incidencias')->insert([
                 'cod_incidencia' => $request->cod_inc,
                 'ruc_empresa' => $request->empresa,
@@ -224,6 +208,23 @@ class RegistradasController extends Controller
                 'id_usuario' => Auth::user()->id_usuario,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
+
+            if ($estado_info) {
+                $arr_personal = [];
+                foreach ($personal as $k => $val) {
+                    if ($val['registro']) {
+                        $arr_personal[$k]['cod_incidencia'] = $request->cod_inc;
+                        $arr_personal[$k]['id_usuario'] = $val['id'];
+                        $arr_personal[$k]['creador'] = Auth::user()->id_usuario;
+                        $arr_personal[$k]['fecha'] = now()->format('Y-m-d');
+                        $arr_personal[$k]['hora'] = now()->format('H:i:s');
+                        $arr_personal[$k]['created_at'] = now()->format('Y-m-d H:i:s');
+                        $personal[$val['id']]['registro'] = 0;
+                    }
+                }
+                DB::table('tb_inc_asignadas')->insert($arr_personal);
+            }
+            
             DB::commit();
 
             $data = [];
