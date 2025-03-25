@@ -188,7 +188,7 @@
                         </div>
                         <div class="col-lg-4 mb-2">
                             <label class="form-label mb-0" for="sucursal">Sucursal</label>
-                            <select class="select" id="sucursal">
+                            <select class="select-clear" id="sucursal">
                                 <option value="">-- Seleccione --</option>
                             </select>
                         </div>
