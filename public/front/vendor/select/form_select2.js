@@ -100,4 +100,18 @@ $(document).ready(function () {
             });
         });
     };
+
+    $('.select-clear, .select-search').on('select2:open', async function() {
+        let observador = new MutationObserver((mutations, obs) => {
+            let searchField = document.querySelector('input.select2-search__field');
+            if (searchField) {
+                searchField.focus();
+            }
+        });
+
+        observador.observe(document.body, { childList: true, subtree: true });
+        setTimeout(() => {
+            observador.disconnect(); // Desconecta el observador
+        }, 50);
+    });
 });

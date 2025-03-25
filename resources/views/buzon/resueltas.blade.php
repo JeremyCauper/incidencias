@@ -28,7 +28,7 @@
                     </div>
                     <div class="col-xxl-3 col-md-8 my-1">
                         <label class="form-label mb-0" for="idGrupo">Sucursal</label>
-                        <select id="sucursal" name="sucursal" class="select" disabled="true">
+                        <select id="sucursal" name="sucursal" class="select-clear" disabled="true">
                             <option value="">-- Seleccione --</option>
                         </select>
                     </div>
