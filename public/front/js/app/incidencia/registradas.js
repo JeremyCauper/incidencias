@@ -597,14 +597,6 @@ async function OrdenDetail(e, cod) {
     });
 }
 
-function fillSelectContac(data) {
-    $('#tel_contac').html('<option value=""></option>');
-    Object.entries(data).forEach(([key, e]) => {
-        $('#tel_contac').append($('<option>').val(e.telefono).text(e.telefono));
-    });
-    obj_eContactos = data;
-}
-
 function validContac(_this) {
     let tel_contac = $('#tel_contac');
     let nro_doc = $('#nro_doc');

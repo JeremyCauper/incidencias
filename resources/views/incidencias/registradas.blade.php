@@ -83,6 +83,13 @@
                             </thead>
                         </table>
                         <script>
+                            function fillSelectContac(data) {
+                                $('#tel_contac').html('<option value=""></option>');
+                                Object.entries(data).forEach(([key, e]) => {
+                                    $('#tel_contac').append($('<option>').val(e.telefono).text(e.telefono));
+                                });
+                                obj_eContactos = data;
+                            }
                             const tb_incidencia = new DataTable('#tb_incidencia', {
                                 scrollX: true,
                                 scrollY: 400,
