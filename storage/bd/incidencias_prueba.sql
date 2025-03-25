@@ -1,17 +1,17 @@
 /*
  Navicat Premium Data Transfer
 
- Source Server         : Mi MySql
+ Source Server         : incidencias_nube
  Source Server Type    : MySQL
- Source Server Version : 100425
- Source Host           : localhost:3306
- Source Schema         : incidencias_prueba
+ Source Server Version : 80035
+ Source Host           : database-1.c4coihhdspzn.us-east-2.rds.amazonaws.com:3306
+ Source Schema         : incidencias
 
  Target Server Type    : MySQL
- Target Server Version : 100425
+ Target Server Version : 80035
  File Encoding         : 65001
 
- Date: 24/03/2025 16:03:36
+ Date: 25/03/2025 11:08:50
 */
 
 SET NAMES utf8mb4;
@@ -22,11 +22,11 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 DROP TABLE IF EXISTS `contactos_empresas`;
 CREATE TABLE `contactos_empresas`  (
-  `id_contact` int(11) NOT NULL AUTO_INCREMENT,
+  `id_contact` int(0) NOT NULL AUTO_INCREMENT,
   `nro_doc` varchar(11) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `nombres` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `telefono` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `cargo` int(11) NOT NULL,
+  `cargo` int(0) NOT NULL,
   `correo` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `estatus` tinyint(1) NOT NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
@@ -43,9 +43,9 @@ CREATE TABLE `contactos_empresas`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `migrations`;
 CREATE TABLE `migrations`  (
-  `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+  `id` int(0) UNSIGNED NOT NULL AUTO_INCREMENT,
   `migration` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NOT NULL,
-  `batch` int(11) NOT NULL,
+  `batch` int(0) NOT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 5 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_unicode_ci ROW_FORMAT = DYNAMIC;
 
@@ -58,7 +58,7 @@ CREATE TABLE `migrations`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_contac_ordens`;
 CREATE TABLE `tb_contac_ordens`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `nro_doc` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `nombre_cliente` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `firma_digital` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
@@ -77,18 +77,18 @@ CREATE TABLE `tb_contac_ordens`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_cronograma_turno`;
 CREATE TABLE `tb_cronograma_turno`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `fecha_ini_s` date NOT NULL,
   `hora_ini_s` time(0) NOT NULL,
   `fecha_fin_s` date NOT NULL,
   `hora_fin_s` time(0) NOT NULL,
-  `personal_s` int(11) NOT NULL,
+  `personal_s` int(0) NOT NULL,
   `fecha_ini_a` date NOT NULL,
   `hora_ini_a` time(0) NOT NULL,
   `fecha_fin_a` date NOT NULL,
   `hora_fin_a` time(0) NOT NULL,
-  `personal_a` int(11) NOT NULL,
-  `creador` int(11) NOT NULL,
+  `personal_a` int(0) NOT NULL,
+  `creador` int(0) NOT NULL,
   `eliminado` tinyint(1) NULL DEFAULT 0,
   `estatus` tinyint(1) NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
@@ -103,34 +103,35 @@ CREATE TABLE `tb_cronograma_turno`  (
 -- ----------------------------
 -- Records of tb_cronograma_turno
 -- ----------------------------
+INSERT INTO `tb_cronograma_turno` VALUES (3, '2025-03-24', '18:00:00', '2025-03-31', '08:20:00', 14, '2025-03-29', '13:00:00', '2025-03-31', '08:20:00', 19, 6, 0, 1, NULL, '2025-03-25 10:25:55');
 
 -- ----------------------------
 -- Table structure for tb_empresas
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_empresas`;
 CREATE TABLE `tb_empresas`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `ruc` varchar(11) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `razon_social` varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `contrato` tinyint(1) NOT NULL,
-  `id_nube` int(11) NULL DEFAULT NULL,
-  `id_grupo` int(11) NOT NULL,
+  `id_nube` int(0) NULL DEFAULT NULL,
+  `id_grupo` int(0) NOT NULL,
   `direccion` varchar(500) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `ubigeo` varbinary(6) NOT NULL,
-  `facturacion` int(11) NOT NULL DEFAULT 0,
-  `prico` int(11) NOT NULL,
+  `facturacion` int(0) NOT NULL DEFAULT 0,
+  `prico` int(0) NOT NULL,
   `encargado` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `cargo` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `telefono` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `correo` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `eds` int(11) NULL DEFAULT NULL,
-  `visitas` int(11) NOT NULL DEFAULT 0,
-  `mantenimientos` int(11) NOT NULL DEFAULT 0,
-  `dias_visita` int(11) NOT NULL DEFAULT 0,
+  `eds` int(0) NULL DEFAULT NULL,
+  `visitas` int(0) NOT NULL DEFAULT 0,
+  `mantenimientos` int(0) NOT NULL DEFAULT 0,
+  `dias_visita` int(0) NOT NULL DEFAULT 0,
   `codigo_aviso` tinyint(1) NOT NULL DEFAULT 0,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `ruc`(`ruc`) USING BTREE,
   UNIQUE INDEX `razon_social`(`razon_social`) USING BTREE,
@@ -348,11 +349,11 @@ INSERT INTO `tb_empresas` VALUES (202, '20492898717', 'ECOMOVIL SOCIEDAD ANONIMA
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_grupos`;
 CREATE TABLE `tb_grupos`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(100) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `Nombre`(`nombre`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 122 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
@@ -487,10 +488,10 @@ INSERT INTO `tb_grupos` VALUES (121, 'CORPORACION JUDY SAC', 1, NULL, '2024-12-3
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_inc_asignadas`;
 CREATE TABLE `tb_inc_asignadas`  (
-  `id_asignadas` int(11) NOT NULL AUTO_INCREMENT,
-  `cod_incidencia` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `creador` int(11) NOT NULL,
+  `id_asignadas` int(0) NOT NULL AUTO_INCREMENT,
+  `cod_incidencia` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id_usuario` int(0) NOT NULL,
+  `creador` int(0) NOT NULL,
   `fecha` date NULL DEFAULT NULL,
   `hora` time(0) NULL DEFAULT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
@@ -513,9 +514,9 @@ CREATE TABLE `tb_inc_asignadas`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_inc_seguimiento`;
 CREATE TABLE `tb_inc_seguimiento`  (
-  `id_seguimiento` int(11) NOT NULL AUTO_INCREMENT,
-  `id_usuario` int(11) NOT NULL,
-  `cod_incidencia` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `id_seguimiento` int(0) NOT NULL AUTO_INCREMENT,
+  `id_usuario` int(0) NOT NULL,
+  `cod_incidencia` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `fecha` date NULL DEFAULT NULL,
   `hora` time(0) NULL DEFAULT NULL,
   `estado` tinyint(1) NULL DEFAULT 0 COMMENT '0: Iniciado / 1: Finalizado',
@@ -538,22 +539,22 @@ CREATE TABLE `tb_inc_seguimiento`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_incidencias`;
 CREATE TABLE `tb_incidencias`  (
-  `id_incidencia` int(11) NOT NULL AUTO_INCREMENT,
-  `cod_incidencia` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `id_incidencia` int(0) NOT NULL AUTO_INCREMENT,
+  `cod_incidencia` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `ruc_empresa` varchar(11) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `id_sucursal` int(11) NOT NULL,
-  `id_tipo_estacion` int(11) NOT NULL,
+  `id_sucursal` int(0) NOT NULL,
+  `id_tipo_estacion` int(0) NOT NULL,
   `prioridad` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `id_tipo_soporte` int(11) NOT NULL,
-  `id_tipo_incidencia` int(11) NOT NULL,
-  `id_problema` int(11) NOT NULL,
-  `id_subproblema` int(11) NOT NULL,
-  `id_contacto` int(11) NULL DEFAULT NULL,
-  `observacion` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+  `id_tipo_soporte` int(0) NOT NULL,
+  `id_tipo_incidencia` int(0) NOT NULL,
+  `id_problema` int(0) NOT NULL,
+  `id_subproblema` int(0) NOT NULL,
+  `id_contacto` int(0) NULL DEFAULT NULL,
+  `observacion` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NULL,
   `fecha_informe` date NOT NULL,
   `hora_informe` time(0) NOT NULL,
-  `estado_informe` int(11) NULL DEFAULT 0,
-  `id_usuario` int(11) NOT NULL,
+  `estado_informe` int(0) NULL DEFAULT 0,
+  `id_usuario` int(0) NOT NULL,
   `estatus` tinyint(1) NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
@@ -583,10 +584,10 @@ CREATE TABLE `tb_incidencias`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_materiales`;
 CREATE TABLE `tb_materiales`  (
-  `id_materiales` int(11) NOT NULL AUTO_INCREMENT,
+  `id_materiales` int(0) NOT NULL AUTO_INCREMENT,
   `codigo` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `producto` varchar(200) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `cantidad` int(11) NULL DEFAULT NULL,
+  `cantidad` int(0) NULL DEFAULT NULL,
   `estatus` tinyint(1) NOT NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
@@ -626,10 +627,10 @@ INSERT INTO `tb_materiales` VALUES (24, NULL, 'Compuesto Sellante', NULL, 1, NUL
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_materiales_usados`;
 CREATE TABLE `tb_materiales_usados`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `cod_ordens` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `id_material` int(11) NOT NULL,
-  `cantidad` int(11) NOT NULL,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `cod_ordens` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `id_material` int(0) NOT NULL,
+  `cantidad` int(0) NOT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
@@ -648,8 +649,8 @@ CREATE TABLE `tb_materiales_usados`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_orden_correlativo`;
 CREATE TABLE `tb_orden_correlativo`  (
-  `id_cor` int(11) NOT NULL AUTO_INCREMENT,
-  `num_orden` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `id_cor` int(0) NOT NULL AUTO_INCREMENT,
+  `num_orden` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_cor`) USING BTREE,
@@ -665,12 +666,12 @@ CREATE TABLE `tb_orden_correlativo`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_orden_servicio`;
 CREATE TABLE `tb_orden_servicio`  (
-  `id_ordens` int(11) NOT NULL AUTO_INCREMENT,
-  `cod_ordens` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `cod_incidencia` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `id_ordens` int(0) NOT NULL AUTO_INCREMENT,
+  `cod_ordens` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cod_incidencia` varchar(20) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
   `observaciones` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `recomendaciones` text CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `id_contacto` int(11) NULL DEFAULT NULL,
+  `id_contacto` int(0) NULL DEFAULT NULL,
   `fecha_f` date NOT NULL,
   `hora_f` time(0) NOT NULL,
   `codigo_aviso` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
@@ -695,17 +696,17 @@ CREATE TABLE `tb_orden_servicio`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_orden_visita`;
 CREATE TABLE `tb_orden_visita`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `cod_orden_visita` varchar(15) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `id_visita` int(11) NULL DEFAULT NULL,
+  `id_visita` int(0) NULL DEFAULT NULL,
   `fecha_visita` date NULL DEFAULT NULL,
   `hora_inicio` time(0) NULL DEFAULT NULL,
   `hora_fin` time(0) NULL DEFAULT NULL,
   `eliminado` tinyint(1) NULL DEFAULT 0,
-  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
-  INDEX `id_visita`(`id_visita`) USING BTREE,
   UNIQUE INDEX `cod_orden_visita`(`cod_orden_visita`) USING BTREE,
+  INDEX `id_visita`(`id_visita`) USING BTREE,
   CONSTRAINT `tb_orden_visita_ibfk_1` FOREIGN KEY (`id_visita`) REFERENCES `tb_visitas` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_orden_visita_ibfk_2` FOREIGN KEY (`cod_orden_visita`) REFERENCES `tb_orden_visita_correlativo` (`cod_orden_visita`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
@@ -719,12 +720,12 @@ CREATE TABLE `tb_orden_visita`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_orden_visita_correlativo`;
 CREATE TABLE `tb_orden_visita_correlativo`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `cod_orden_visita` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   UNIQUE INDEX `cod_orden_visita`(`cod_orden_visita`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 9 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_visita_correlativo
@@ -735,12 +736,12 @@ CREATE TABLE `tb_orden_visita_correlativo`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_orden_visita_filas`;
 CREATE TABLE `tb_orden_visita_filas`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `cod_orden_visita` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `posicion` int(11) NULL DEFAULT NULL,
-  `checked` int(11) NULL DEFAULT NULL,
+  `posicion` int(0) NULL DEFAULT NULL,
+  `checked` int(0) NULL DEFAULT NULL,
   `descripcion` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `cod_orden_visita`(`cod_orden_visita`) USING BTREE,
   CONSTRAINT `tb_orden_visita_filas_ibfk_1` FOREIGN KEY (`cod_orden_visita`) REFERENCES `tb_orden_visita` (`cod_orden_visita`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -755,27 +756,27 @@ CREATE TABLE `tb_orden_visita_filas`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_orden_visita_islas`;
 CREATE TABLE `tb_orden_visita_islas`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `cod_orden_visita` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `isla` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `pos` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `impresoras` int(11) NULL DEFAULT NULL,
+  `impresoras` int(0) NULL DEFAULT NULL,
   `des_impresoras` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `lectores` int(11) NULL DEFAULT NULL,
+  `lectores` int(0) NULL DEFAULT NULL,
   `des_lector` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `jack` int(11) NULL DEFAULT NULL,
+  `jack` int(0) NULL DEFAULT NULL,
   `des_jack` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `voltaje` int(11) NULL DEFAULT NULL,
+  `voltaje` int(0) NULL DEFAULT NULL,
   `des_voltaje` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `caucho` int(11) NULL DEFAULT NULL,
+  `caucho` int(0) NULL DEFAULT NULL,
   `des_caucho` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `mueblepos` int(11) NULL DEFAULT NULL,
+  `mueblepos` int(0) NULL DEFAULT NULL,
   `des_mueblepos` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `mr350` int(11) NULL DEFAULT NULL,
+  `mr350` int(0) NULL DEFAULT NULL,
   `des_mr350` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `switch` int(11) NULL DEFAULT NULL,
+  `switch` int(0) NULL DEFAULT NULL,
   `des_switch` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `cod_orden_visita`(`cod_orden_visita`) USING BTREE,
   CONSTRAINT `tb_orden_visita_islas_ibfk_1` FOREIGN KEY (`cod_orden_visita`) REFERENCES `tb_orden_visita` (`cod_orden_visita`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -790,10 +791,10 @@ CREATE TABLE `tb_orden_visita_islas`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_problema`;
 CREATE TABLE `tb_problema`  (
-  `id_problema` int(11) NOT NULL AUTO_INCREMENT,
+  `id_problema` int(0) NOT NULL AUTO_INCREMENT,
   `codigo` varchar(50) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `descripcion` varchar(255) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
-  `tipo_incidencia` int(11) NULL DEFAULT NULL COMMENT 'TIPO 1 : REMOTO , TIPO 2 : PRESENCIAL',
+  `tipo_incidencia` int(0) NULL DEFAULT NULL COMMENT 'TIPO 1 : REMOTO , TIPO 2 : PRESENCIAL',
   `eliminado` tinyint(1) NULL DEFAULT 0,
   `estatus` tinyint(1) NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
@@ -836,8 +837,8 @@ INSERT INTO `tb_problema` VALUES (26, 'ACT-PRUEBA', 'Problema prueba', 1, 0, 1, 
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_subproblema`;
 CREATE TABLE `tb_subproblema`  (
-  `id_subproblema` int(11) NOT NULL AUTO_INCREMENT,
-  `id_problema` int(11) NULL DEFAULT NULL,
+  `id_subproblema` int(0) NOT NULL AUTO_INCREMENT,
+  `id_problema` int(0) NULL DEFAULT NULL,
   `codigo_sub` varchar(20) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `descripcion` varchar(250) CHARACTER SET latin1 COLLATE latin1_swedish_ci NULL DEFAULT NULL,
   `eliminado` tinyint(1) NULL DEFAULT 0,
@@ -1088,20 +1089,20 @@ INSERT INTO `tb_subproblema` VALUES (254, 1, 'ACT-PRE_PRUEBA', 'Problema de lect
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_sucursales`;
 CREATE TABLE `tb_sucursales`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
   `ruc` varchar(11) CHARACTER SET latin1 COLLATE latin1_swedish_ci NOT NULL,
-  `nombre` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `cofide` varchar(100) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
-  `direccion` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `ubigeo` varchar(6) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
-  `telefono` varchar(14) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
-  `correo` varchar(250) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
+  `nombre` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `cofide` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NULL DEFAULT NULL,
+  `direccion` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `ubigeo` varchar(6) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NOT NULL,
+  `telefono` varchar(14) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NULL DEFAULT NULL,
+  `correo` varchar(250) CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NULL DEFAULT NULL,
   `v_visitas` tinyint(1) NOT NULL DEFAULT 0,
   `v_mantenimientos` tinyint(1) NOT NULL DEFAULT 0,
-  `url_mapa` text CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL,
+  `url_mapa` text CHARACTER SET utf8mb3 COLLATE utf8mb3_unicode_ci NULL,
   `status` tinyint(1) NOT NULL DEFAULT 1,
   `updated_at` timestamp(0) NULL DEFAULT NULL,
-  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `ruc`(`ruc`) USING BTREE,
   CONSTRAINT `tb_sucursales_ibfk_1` FOREIGN KEY (`ruc`) REFERENCES `tb_empresas` (`ruc`) ON DELETE CASCADE ON UPDATE CASCADE
@@ -1466,13 +1467,13 @@ INSERT INTO `tb_sucursales` VALUES (354, '20606092998', 'CORPORACION JUDY SAC', 
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_vis_asignadas`;
 CREATE TABLE `tb_vis_asignadas`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_visitas` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `creador` int(11) NOT NULL,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id_visitas` int(0) NOT NULL,
+  `id_usuario` int(0) NOT NULL,
+  `creador` int(0) NOT NULL,
   `fecha` date NOT NULL,
   `hora` time(0) NOT NULL,
-  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_visitas`(`id_visitas`) USING BTREE,
   INDEX `id_usuario`(`id_usuario`) USING BTREE,
@@ -1483,19 +1484,20 @@ CREATE TABLE `tb_vis_asignadas`  (
 -- ----------------------------
 -- Records of tb_vis_asignadas
 -- ----------------------------
+INSERT INTO `tb_vis_asignadas` VALUES (1, 21, 20, 6, '2025-03-25', '10:22:30', '2025-03-25 10:22:30');
 
 -- ----------------------------
 -- Table structure for tb_vis_seguimiento
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_vis_seguimiento`;
 CREATE TABLE `tb_vis_seguimiento`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_visitas` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id_visitas` int(0) NOT NULL,
+  `id_usuario` int(0) NOT NULL,
   `fecha` date NOT NULL,
   `hora` time(0) NOT NULL,
   `estado` tinyint(1) NOT NULL DEFAULT 0 COMMENT '0: Iniciado / 1: Finalizado',
-  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_visitas`(`id_visitas`) USING BTREE,
   INDEX `id_usuario`(`id_usuario`) USING BTREE,
@@ -1513,15 +1515,15 @@ CREATE TABLE `tb_vis_seguimiento`  (
 -- ----------------------------
 DROP TABLE IF EXISTS `tb_visitas`;
 CREATE TABLE `tb_visitas`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_sucursal` int(11) NOT NULL,
-  `id_creador` int(11) NOT NULL,
+  `id` int(0) NOT NULL AUTO_INCREMENT,
+  `id_sucursal` int(0) NOT NULL,
+  `id_creador` int(0) NOT NULL,
   `fecha` date NOT NULL,
   `hora` time(0) NOT NULL,
-  `estado` int(11) NULL DEFAULT 0,
+  `estado` int(0) NULL DEFAULT 0,
   `contingencia` tinyint(1) NULL DEFAULT 0,
   `eliminado` tinyint(1) NOT NULL DEFAULT 0,
-  `created_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0),
+  `created_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0),
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_sucursal`(`id_sucursal`) USING BTREE,
   INDEX `id_creador`(`id_creador`) USING BTREE,
@@ -1532,20 +1534,21 @@ CREATE TABLE `tb_visitas`  (
 -- ----------------------------
 -- Records of tb_visitas
 -- ----------------------------
+INSERT INTO `tb_visitas` VALUES (21, 46, 6, '2025-03-25', '10:22:30', 0, 0, 1, '2025-03-25 10:22:30');
 
 -- ----------------------------
 -- Table structure for usuarios
 -- ----------------------------
 DROP TABLE IF EXISTS `usuarios`;
 CREATE TABLE `usuarios`  (
-  `id_usuario` int(11) NOT NULL AUTO_INCREMENT,
+  `id_usuario` int(0) NOT NULL AUTO_INCREMENT,
   `ndoc_usuario` varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `nombres` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `apellidos` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `email_personal` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `email_corporativo` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
-  `email_verified_at` timestamp(0) NOT NULL DEFAULT current_timestamp(0) ON UPDATE CURRENT_TIMESTAMP(0),
-  `fecha_nacimiento` date NOT NULL,
+  `email_verified_at` timestamp(0) NOT NULL DEFAULT CURRENT_TIMESTAMP(0) ON UPDATE CURRENT_TIMESTAMP(0),
+  `fecha_nacimiento` date NULL DEFAULT NULL,
   `tel_personal` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `tel_corporativo` varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `usuario` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
@@ -1553,8 +1556,8 @@ CREATE TABLE `usuarios`  (
   `pass_view` varchar(250) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL,
   `foto_perfil` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `firma_digital` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
-  `tipo_acceso` int(11) NOT NULL,
-  `id_area` int(11) NOT NULL,
+  `tipo_acceso` int(0) NOT NULL,
+  `id_area` int(0) NOT NULL,
   `menu_usuario` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `remember_token` varchar(100) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL,
   `eliminado` tinyint(1) NULL DEFAULT 0,
@@ -1565,23 +1568,36 @@ CREATE TABLE `usuarios`  (
   UNIQUE INDEX `U_ndoc_usuario`(`ndoc_usuario`) USING BTREE,
   UNIQUE INDEX `U_usuario`(`usuario`) USING BTREE,
   UNIQUE INDEX `U_contrasena`(`contrasena`) USING BTREE,
-  UNIQUE INDEX `U_email_personal`(`email_personal`) USING BTREE,
-  UNIQUE INDEX `U_email_corporativo`(`email_corporativo`) USING BTREE,
-  UNIQUE INDEX `U_tel_personal`(`tel_personal`) USING BTREE,
-  UNIQUE INDEX `U_tel_corporativo`(`tel_corporativo`) USING BTREE
+  INDEX `U_email_personal`(`email_personal`) USING BTREE,
+  INDEX `U_email_corporativo`(`email_corporativo`) USING BTREE,
+  INDEX `U_tel_personal`(`tel_personal`) USING BTREE,
+  INDEX `U_tel_corporativo`(`tel_corporativo`) USING BTREE
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of usuarios
 -- ----------------------------
 INSERT INTO `usuarios` VALUES (1, '61505130', 'JEREMY PATRICK', 'CAUPER SILVANO', 'jcauper@gmail.com', 'jcauper@email.com', '2025-03-10 11:41:02', '2003-07-14', '974562354', '954213548', 'jcauper', '$2y$12$5uZJUCoBitJY01nivL.Fy.f22TsGLJrfNggAi49bexW04zNGSIq9u', '123456', 'user_auth.jpg', 'fd_jcauper.png', 5, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiNyI6WyI5IiwiMTAiXSwiOCI6WyIxMSIsIjEyIl0sIjkiOltdfQ==', NULL, 0, 1, '2025-03-10 11:41:00', '2024-07-09 23:00:19');
-INSERT INTO `usuarios` VALUES (3, '12345678', 'Pedro', 'Suarez', 'psuarez@gmail.com', 'psuarez@email.com', '2025-03-24 18:00:05', '2003-01-14', '935423118', '952332137', 'psuarez', '$2y$12$3CmRGy97YD3R0M5j19rrRO.G6AbM6n26v8y3CPEJI8ca2.bsRSiLC', '123789', 'fp_psuarez.png', 'fd_psuarez.png', 3, 3, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 1, 1, '2025-02-10 16:31:18', '2024-07-13 02:41:10');
-INSERT INTO `usuarios` VALUES (4, '74716278', 'JOSTHEIN JOSEPH', 'MAYORCA BELLEZA', 'jmayorca@gmail.com', 'jmayorca@email.com', '2025-03-24 18:00:16', '1997-06-11', '978456123', '985267341', 'jmayorca', '$2y$12$CAclmFJJoM2plUl48iJsgeRbm8WrDbu8jynetkGuWVVBxGTONEm9C', '147852', 'user_auth.jpg', 'fd_jmayorca.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 1, 1, '2025-02-10 15:28:24', '2024-07-15 22:18:33');
-INSERT INTO `usuarios` VALUES (5, '70401296', 'BRYAN MARTIN', 'POLO GOMEZ', 'talvan@gmail.com', 'talvan@email.com', '2025-03-24 18:00:19', '2001-07-02', '987564123', '948741236', 'talvan', '$2y$12$6oyxU4QP06ERy7uIw4t6yeJuW1s6bmft/lUWc9SMosYlyZrHPbwN.', '987654', 'user_auth.jpg', 'fd_talvan.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 1, 1, '2025-02-10 15:28:09', '2024-07-22 02:16:27');
+INSERT INTO `usuarios` VALUES (3, '12345678', 'Pedro', 'Suarez', 'psuarez@gmail.com', 'psuarez@email.com', '2025-03-25 15:58:40', '2003-01-14', '935423118', '952332137', 'psuarez', '$2y$12$3CmRGy97YD3R0M5j19rrRO.G6AbM6n26v8y3CPEJI8ca2.bsRSiLC', '123789', 'fp_psuarez.png', 'fd_psuarez.png', 3, 3, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 1, 0, '2025-02-10 16:31:18', '2024-07-13 02:41:10');
+INSERT INTO `usuarios` VALUES (4, '74716278', 'JOSTHEIN JOSEPH', 'MAYORCA BELLEZA', 'jmayorca@gmail.com', 'jmayorca@email.com', '2025-03-25 15:58:41', '1997-06-11', '978456123', '985267341', 'jmayorca', '$2y$12$CAclmFJJoM2plUl48iJsgeRbm8WrDbu8jynetkGuWVVBxGTONEm9C', '147852', 'user_auth.jpg', 'fd_jmayorca.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 1, 0, '2025-02-10 15:28:24', '2024-07-15 22:18:33');
+INSERT INTO `usuarios` VALUES (5, '70401296', 'BRYAN MARTIN', 'POLO GOMEZ', 'talvan@gmail.com', 'talvan@email.com', '2025-03-25 15:58:41', '2001-07-02', '987564123', '948741236', 'talvan', '$2y$12$6oyxU4QP06ERy7uIw4t6yeJuW1s6bmft/lUWc9SMosYlyZrHPbwN.', '987654', 'user_auth.jpg', 'fd_talvan.png', 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 1, 0, '2025-02-10 15:28:09', '2024-07-22 02:16:27');
 INSERT INTO `usuarios` VALUES (6, '72878242', 'RENZO GRACIANI', 'VIGO MALLQUI', NULL, NULL, '2025-03-21 17:07:30', '2000-01-04', NULL, NULL, 'rvigo', '$2y$12$r952GLMGgMBwZ/G6GRsNDushp5D2AyKzesrHwD0bhuZj4Bgqy/r.G', '123456', 'fp_rvigo.webp', 'fd_rvigo.png', 2, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiOSI6W119', NULL, 0, 1, '2025-03-21 17:07:30', '2025-03-07 15:26:21');
 INSERT INTO `usuarios` VALUES (7, '00000001', 'Soporte01', 'Tecnico', NULL, 'soporte01@rcingenieros.com', '2025-03-24 15:55:31', '2025-03-24', NULL, NULL, 'soporte01', '$2y$12$d4Y0KoSryXMoM8NGETl.EeHPbgxTjemoVFQGF9x6Twk8uKFgJI.vi', '123456', 'user_auth.jpg', '', 4, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiOCI6WyIxMSIsIjEyIl0sIjkiOltdfQ==', NULL, 0, 1, NULL, '2025-03-24 15:55:31');
 INSERT INTO `usuarios` VALUES (9, '00000002', 'Soporte02', 'Tecnico', NULL, 'soporte02@rcingenieros.com', '2025-03-24 15:57:50', '2025-03-24', NULL, NULL, 'soporte02', '$2y$12$.qREeZOuT0PQk4pkH1En.uue/O1UnSXAIH.XjIgMveHHOCWivCt0K', '123456', 'user_auth.jpg', '', 4, 1, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiOCI6WyIxMSIsIjEyIl0sIjkiOltdfQ==', NULL, 0, 1, '2025-03-24 15:57:48', NULL);
 INSERT INTO `usuarios` VALUES (10, '10392834', 'MARLON RAUL', 'RAMOS SAJAMI', NULL, 'mramos@rcingenieros.com', '2025-03-24 16:02:10', '2025-03-24', NULL, '994092153', 'mramos', '$2y$12$z7IC//k6SaVHxfwpCORU4.oS5R1dMAqmgIpmnA8zE.UVg/qeW2416', '912345', 'user_auth.jpg', '', 2, 3, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXSwiOSI6W119', NULL, 0, 1, NULL, '2025-03-24 16:02:10');
+INSERT INTO `usuarios` VALUES (14, '40778797', 'OMAR', 'SAENZ', NULL, NULL, '2025-03-25 15:53:14', NULL, NULL, '995910053', 'osaenz', '$2y$12$4eGytdvfCg32riFOKNd2leR35NUczurLWBLJaUsVw1kdXrt4VZ5We', '40778797', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 10:53:14', NULL);
+INSERT INTO `usuarios` VALUES (15, '72159292', 'ALVARO', 'HUERTA', NULL, NULL, '2025-03-25 15:59:41', NULL, NULL, '995910188', 'ahuerta', '$2y$12$fL6kB56dYKI5Ad3yiVrX/u48enV9vUaFl0JPuYwdJJ/rOmqXGDAuS', '72159292', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 10:59:41', NULL);
+INSERT INTO `usuarios` VALUES (16, '77043291', 'JHERSON', 'VILCAPOMA', NULL, NULL, '2025-03-25 16:00:00', NULL, NULL, '995920028', 'jvilcapoma', '$2y$12$PjNa/xSE6pj3OGpMDzesuORdywFrIZH/XaN/dlj/f6FLPhlzGxbjK', '77043291', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 11:00:00', NULL);
+INSERT INTO `usuarios` VALUES (17, '47833900', 'GIANFRANCO', 'ESTEBAN', NULL, NULL, '2025-03-25 15:54:53', NULL, NULL, '970445543', 'gesteban', '$2y$12$odWi2NSGV1ORf6eafi.d/uoLcTlKN85ocD1F9F5gldxkPQJ7SaE2e', '47833900', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 10:54:53', NULL);
+INSERT INTO `usuarios` VALUES (18, '75530490', 'KHESNIL', 'CANCHARI', NULL, NULL, '2025-03-25 16:00:29', NULL, NULL, '995910174', 'kcanchari', '$2y$12$RGp9KxzNPBCOU0d6lCJeKO1qAIZTUeh8E0B6IlLnHR9MsTm0NO/a2', '75530490', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 11:00:29', NULL);
+INSERT INTO `usuarios` VALUES (19, '75005472', 'DAYSI', 'MENDOZA', NULL, NULL, '2025-03-25 16:00:39', NULL, NULL, '995910195', 'dmendoza', '$2y$12$y5SWOx7B0kWpkWDdkZilxe7SjuKFxGVo8XhtyIoQJRqAOwafK6i/.', '75005472', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 11:00:39', NULL);
+INSERT INTO `usuarios` VALUES (20, '45458303', 'SAMUEL', 'VELARDE', NULL, NULL, '2025-03-25 15:53:32', NULL, NULL, NULL, 'svelarde', '$2y$12$.MwN669r2TPvboqFuvCw8egcgMkMCgZ.nZdtPfRng1lE.qVMaqNYO', '45458303', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 10:53:32', NULL);
+INSERT INTO `usuarios` VALUES (23, '73042819', 'RODRIGO', 'ALVAREZ', NULL, NULL, '2025-03-25 16:01:02', NULL, NULL, NULL, 'ralvarez', '$2y$12$PXa.dloB1DNQQShJbb93wegyWpELGuEPDQ9ouhDgZyiX4clh07T3K', '73042819', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 11:01:02', NULL);
+INSERT INTO `usuarios` VALUES (24, '71545548', 'OWEN', 'TRUJILLO', NULL, NULL, '2025-03-25 15:55:16', NULL, NULL, NULL, 'otrujillo', '$2y$12$sVTlO37Y.vwp./nILMNAZe278Q7w0AMaq.XSaXWA7j/.hClHF2nxS', '71545548', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 10:55:16', NULL);
+INSERT INTO `usuarios` VALUES (25, '73206022', 'SEBASTIAN', 'INCIO', NULL, NULL, '2025-03-25 16:01:15', NULL, NULL, NULL, 'sincio', '$2y$12$mGj8JNmSoaaqbeaiA7EmC.aZAgbILcQ6kTg6mJUfBa4aZKURwurz.', '73206022', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 11:01:15', NULL);
+INSERT INTO `usuarios` VALUES (26, '71618287', 'DEBORA', 'CALDERON', NULL, NULL, '2025-03-25 16:07:05', NULL, NULL, '994291205', 'dcalderon', '$2y$12$NwEg6uTUAHneOjsZdQ/f5ex/wrMZBzZhTXdJcL7sinvH9xDdSBCCO', '71618287', NULL, NULL, 2, 3, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 11:07:05', NULL);
+INSERT INTO `usuarios` VALUES (27, '09610245', 'RICARDO', 'CALDERON', NULL, NULL, '2025-03-25 16:06:40', NULL, NULL, '994287333', 'rcalderon', '$2y$12$w7PluJ/ykCfLsCgG9BFy6.WRw0pcznX3Oydepivff/iXT80C9Y51C', '09610245', NULL, NULL, 1, 3, 'eyIxIjpbXSwiMiI6W10sIjMiOlsiMSIsIjIiXSwiNCI6WyIzIiwiNCIsIjUiXSwiNSI6WyI2Il0sIjYiOlsiNyIsIjgiXX0=', NULL, 0, 1, '2025-03-25 11:06:40', NULL);
+INSERT INTO `usuarios` VALUES (28, '45716026', 'EDUARDO', 'ESCOBAR', NULL, NULL, '2025-03-25 15:54:08', '2025-03-25', NULL, '994037476', 'eescobar', '$2y$12$gVFiXJmXFJhGkJH.df26M..JLrJqQkwoky.gnvQO9Z3WQwJdZLdOq', '45716026', NULL, NULL, 3, 1, 'eyI4IjpbIjExIiwiMTIiXX0=', NULL, 0, 1, '2025-03-25 10:54:08', NULL);
 
 -- ----------------------------
 -- Procedure structure for GetCodeInc
