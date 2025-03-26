@@ -75,14 +75,13 @@ async function StartVisita(id, estado) {
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = datae.message;
+            let message = datae.message;
             if (jqXHR.status == 422) {
-                console.log("jqXHR");
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: mensaje });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
@@ -166,13 +165,13 @@ async function AssignPer() {
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
         complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_assign', 'hide');
@@ -278,13 +277,13 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
         complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_orden', 'hide');

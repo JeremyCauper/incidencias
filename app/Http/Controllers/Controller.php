@@ -257,7 +257,7 @@ class Controller extends BaseController
         $response = ["success" => $status == 200 ? true : false, "title" => $title, "message" => $message, "status" => $status];
         $statuses = [
             "success" => ["title" => "Éxito", "range" => range(200, 201)],
-            "info" => ["title" => "Algo salio mal", "range" => range(202, 399)],
+            "info" => ["title" => "Atención", "range" => range(202, 399)],
             "warning"   => ["title" => "Proceso Fallido", "range" => range(400, 599)],
             "error"  => ["title" => "Error interno del Servidor", "range" => range(500, 599)],
         ];

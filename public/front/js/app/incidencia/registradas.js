@@ -276,16 +276,16 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
                 if (datae.hasOwnProperty('unique')) {
-                    mensaje = formatUnique(datae.unique);
+                    message = formatUnique(datae.unique);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
         complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_incidencias', 'hide');
@@ -480,16 +480,16 @@ async function AssignPer() {
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
                 if (datae.hasOwnProperty('unique')) {
-                    mensaje = formatUnique(datae.unique);
+                    message = formatUnique(datae.unique);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
         complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_assign', 'hide');
@@ -523,7 +523,7 @@ async function DeleteInc(id) {
 }
 
 async function StartInc(cod, estado) {
-    if (!await boxAlert.confirm({ h: `Esta apunto de <b><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la incidencia` })) return true;
+    if (!await boxAlert.confirm({ h: `Esta apunto de <b class="text-warning"><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la incidencia` })) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/incidencias/registradas/startInc`,
@@ -536,8 +536,8 @@ async function StartInc(cod, estado) {
             'X-CSRF-TOKEN': __token,
         },
         beforeSend: boxAlert.loading,
-        success: function (data) {
-            if (data.success) {
+        success: function (data) {OrdenDetail
+            if (data.success || data.status == 202) {
                 updateTable()
             }
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
@@ -545,13 +545,13 @@ async function StartInc(cod, estado) {
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
@@ -574,10 +574,23 @@ async function OrdenDetail(e, cod) {
         url: `${__url}/incidencias/registradas/${cod}`,
         contentType: 'application/json',
         success: function (data) {
+            console.log(data);
             if (data.success) {
                 let dt = data.data;
+                if (dt.cod_orden) {
+                    $('#modal_orden').modal('hide');
+                    cod_ordenSer = dt.cod_orden;
+                    if (dt.id_tipo_incidencia == 2)
+                        window.open(`${__url}/orden/documentopdf/${cod_ordenSer}`, `Visualizar PDF ${cod_ordenSer}`, "width=900, height=800");
+                    updateTable();
+                    return true;
+                }
+
                 let personal = dt.personal_asig;
-                let empresa = empresas[dt.ruc_empresa]
+                var sucursal = sucursales[dt.id_sucursal];
+                let empresa = empresas[dt.ruc_empresa];
+
+                $(`#modal_orden [aria-item="direccion"]`).html(sucursal.direccion);
                 $('[aria-item="observacion"]').html(dt.observacion);
                 $('#codInc').val(dt.cod_incidencia);
                 var tecnicos = personal.map(persona => persona.tecnicos);
@@ -624,8 +637,9 @@ function validContac(_this) {
 document.getElementById('form-orden').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    if ($('[ctable-contable="#createMaterial"]').children().length && !$('#codAviso').val())
-        if (!await boxAlert.confirm({ h: `El campo 'Código Aviso' está vacío.` })) return $('#codAviso').focus();
+    if ($('[ctable-contable="#createMaterial"]').children().length && !$('#codAviso').val()) {
+        if (!await boxAlert.confirm({ h: `El campo <b>Código Aviso</b> está vacío.` })) return $('#codAviso').focus();
+    }
 
     fMananger.formModalLoding('modal_orden', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
@@ -648,8 +662,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         data: JSON.stringify(valid.data.data),
         success: function (data) {
             console.log(data);
-
-            if (data.success) {
+            if (data.success || data.status == 202) {
                 $('#modal_orden').modal('hide');
                 cod_ordenSer = data.data.num_orden;
                 if (atencion.toUpperCase() == 'PRESENCIAL')
@@ -662,13 +675,13 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
         complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_orden', 'hide');

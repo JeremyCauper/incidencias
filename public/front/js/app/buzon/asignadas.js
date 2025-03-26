@@ -168,6 +168,15 @@ async function OrdenDetail(e, cod) {
             console.log(data);
             if (data.success) {
                 let dt = data.data;
+                if (dt.cod_orden) {
+                    $('#modal_orden').modal('hide');
+                    cod_ordenSer = dt.cod_orden;
+                    if (dt.id_tipo_incidencia == 2)
+                        window.open(`${__url}/orden/documentopdf/${cod_ordenSer}`, `Visualizar PDF ${cod_ordenSer}`, "width=900, height=800");
+                    updateTable();
+                    return true;
+                }
+
                 let personal = dt.personal_asig;
                 var sucursal = sucursales[dt.id_sucursal];
                 var empresa = empresas[dt.ruc_empresa];
@@ -195,8 +204,9 @@ async function OrdenDetail(e, cod) {
 document.getElementById('form-orden').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    if ($('[ctable-contable="#createMaterial"]').children().length && !$('#codAviso').val())
-        if (!await boxAlert.confirm({ h: `El campo 'Código Aviso' está vacío.` })) return $('#codAviso').focus();
+    if ($('[ctable-contable="#createMaterial"]').children().length && !$('#codAviso').val()) {
+        if (!await boxAlert.confirm({ h: `El campo <b>Código Aviso</b> está vacío.` })) return $('#codAviso').focus();
+    }
 
     fMananger.formModalLoding('modal_orden', 'show');
     const atencion = $('#modal_orden [aria-item="atencion"]').html();
@@ -233,13 +243,13 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
         complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_orden', 'hide');
@@ -313,16 +323,16 @@ document.getElementById('form-addcod').addEventListener('submit', async function
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
                 if (datae.hasOwnProperty('unique')) {
-                    mensaje = formatUnique(datae.unique);
+                    message = formatUnique(datae.unique);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
     });
 });
@@ -350,13 +360,13 @@ async function StartInc(cod, estado) {
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
@@ -664,14 +674,13 @@ async function StartVisita(id, estado) {
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = datae.message;
+            let message = datae.message;
             if (jqXHR.status == 422) {
-                console.log("jqXHR");
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: mensaje });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
@@ -742,13 +751,13 @@ document.getElementById('form-orden-visita').addEventListener('submit', async fu
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
         complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_orden_visita', 'hide');

@@ -15,52 +15,10 @@
 @endsection
 @section('content')
 
-    <!-- <div class="row panel-view">
-                <div class="col-12">
-                    <div class="row">
-                        <div class="col-xxl-3 col-6 grid-margin">
-                            <div class="card">
-                                <div class="card-body text-danger">
-                                    <h6 class="card-title title-count mb-2"><i class="fas fa-xmark"></i></i> Visitas Sin Asignar
-                                    </h6>
-                                    <h4 class="subtitle-count"><b data-panel="vSinAsignar">0</b></h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xxl-3 col-6 grid-margin">
-                            <div class="card">
-                                <div class="card-body text-info">
-                                    <h6 class="card-title title-count mb-2"><i class="fas fa-clock"></i> Visitas Asignadas</h6>
-                                    <h4 class="subtitle-count"><b data-panel="vAsignadas">0</b></h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xxl-3 col-6 grid-margin">
-                            <div class="card">
-                                <div class="card-body text-primary">
-                                    <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Visitas En Proceso
-                                    </h6>
-                                    <h4 class="subtitle-count"><b data-panel="vEnProceso">0</b></h4>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xxl-3 col-6 grid-margin">
-                            <div class="card">
-                                <div class="card-body text-warning">
-                                    <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Visitas Sin
-                                        Iniciar</h6>
-                                    <h4 class="subtitle-count"><b data-panel="vSinIniciar">0</b></h4>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div> -->
-
-    <div class="row">
+    <div class="row ">
         <div class="col-xl-6 mb-4">
-            <div class="row">
-                <div class="col-6 mb-3">
+            <div class="row panel-view">
+                <div class="col-6 grid-margin">
                     <div class="card">
                         <div class="card-body text-danger">
                             <h6 class="card-title title-count mb-2"><i class="fas fa-xmark"></i></i> Visitas Sin Asignar
@@ -69,7 +27,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 mb-3">
+                <div class="col-6 grid-margin">
                     <div class="card">
                         <div class="card-body text-info">
                             <h6 class="card-title title-count mb-2"><i class="fas fa-clock"></i> Visitas Asignadas</h6>
@@ -147,8 +105,8 @@
         </div>
 
         <div class="col-xl-6 mb-3">
-            <div class="row">
-                <div class="col-6 mb-3">
+            <div class="row panel-view">
+                <div class="col-6 grid-margin">
                     <div class="card">
                         <div class="card-body text-primary">
                             <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Visitas En Proceso
@@ -157,7 +115,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-6 mb-3">
+                <div class="col-6 grid-margin">
                     <div class="card">
                         <div class="card-body text-warning">
                             <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Visitas Sin

@@ -161,8 +161,8 @@
                 <input type="hidden" name="id_inc" id="id_inc">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title">
-                        <b>NUEVA INCIDENCIA: </b>
-                        <b id="cod_inc_text">{{$data['cod_inc']}}</b>
+                        NUEVA INCIDENCIA
+                        <span class="mx-2 badge badge-success badge-lg" id="cod_inc_text">{{$data['cod_inc']}}</span>
                         <span class="d-none" aria-item="contrato"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
@@ -387,8 +387,8 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Asignar Personal -
-                        <span class="badge badge-success badge-lg" aria-item="codigo"></span>
+                    <h6 class="modal-title">Asignar Personal
+                        <span class="ms-2 badge badge-success badge-lg" aria-item="codigo"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
