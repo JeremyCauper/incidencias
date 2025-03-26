@@ -12,6 +12,11 @@
             /* padding-top: ; */
         }
     </style>
+    <script>
+        let cod_ordenv = "{{$data['cod_ordenv']}}";
+        let empresas = <?php echo json_encode($data['company']); ?>;
+        let sucursales = <?php echo json_encode($data['scompany']); ?>;
+    </script>
 @endsection
 @section('content')
 
@@ -764,11 +769,6 @@
 @endsection
 
 @section('scripts')
-    <script>
-        let cod_ordenv = "{{$data['cod_ordenv']}}";
-        let empresas = <?php echo json_encode($data['company']); ?>;
-        let sucursales = <?php echo json_encode($data['scompany']); ?>;
-    </script>
     <script src="{{secure_asset('front/js/RevisionMananger,js')}}"></script>
     <script src="{{secure_asset('front/js/app/visitas/visitas.js')}}"></script>
     <script src="{{secure_asset('front/js/app/visitas/programadas.js')}}"></script>

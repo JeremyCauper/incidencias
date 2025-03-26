@@ -18,7 +18,7 @@ class TurnoController extends Controller
         try {
             $data = [];
 
-            $data['usuarios'] = DB::table('usuarios')->where('estatus', 1)->get()->keyBy('id_usuario')->map(function ($u) {
+            $data['usuarios'] = DB::table('usuarios')->where(['estatus' => 1, 'eliminado' => 0, 'id_area' => 1])->get()->keyBy('id_usuario')->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,

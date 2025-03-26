@@ -6,6 +6,13 @@
     <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
+    <script>
+        let empresas = <?php echo json_encode($data['company']); ?>;
+        let sucursales = <?php echo json_encode($data['scompany']); ?>;
+        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
+        let obj_problem = <?php echo json_encode($data['problema']); ?>;
+        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
+    </script>
 @endsection
 @section('content')
 
@@ -273,13 +280,6 @@
 @endsection
 
 @section('scripts')
-    <script>
-        let empresas = <?php echo json_encode($data['company']); ?>;
-        let sucursales = <?php echo json_encode($data['scompany']); ?>;
-        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
-        let obj_problem = <?php echo json_encode($data['problema']); ?>;
-        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
-    </script>
     <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
     <script src="{{secure_asset('front/js/app/incidencia/resueltas.js')}}"></script>
 @endsection

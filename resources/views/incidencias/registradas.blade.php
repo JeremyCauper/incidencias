@@ -3,6 +3,20 @@
 
 @section('cabecera')
     <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}">
+
+    <script>
+        let cod_incidencia = '<?= $data['cod_inc'] ?>';
+        let cod_orden = '<?= $data['cod_orden'] ?>';
+        let empresas = <?php echo json_encode($data['company']); ?>;
+        let sucursales = <?php echo json_encode($data['scompany']); ?>;
+        let cargo_estacion = <?php echo json_encode($data['CargoEstacion']); ?>;
+        let tipo_estacion = <?php echo json_encode($data['tEstacion']); ?>;
+        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
+        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
+        let obj_problem = <?php echo json_encode($data['problema']); ?>;
+        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
+        let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
+    </script>
 @endsection
 @section('content')
 
@@ -712,17 +726,7 @@
 
 @section('scripts')
     <script>
-        let cod_incidencia = '<?= $data['cod_inc'] ?>';
-        let cod_orden = '<?= $data['cod_orden'] ?>';
-        let empresas = <?php echo json_encode($data['company']); ?>;
-        let sucursales = <?php echo json_encode($data['scompany']); ?>;
-        let cargo_estacion = <?php echo json_encode($data['CargoEstacion']); ?>;
-        let tipo_estacion = <?php echo json_encode($data['tEstacion']); ?>;
-        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
-        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
-        let obj_problem = <?php echo json_encode($data['problema']); ?>;
-        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
-        let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
+        // 
     </script>
     <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
     <script src="{{secure_asset('front/js/app/incidencia/registradas.js')}}"></script>

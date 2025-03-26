@@ -50,7 +50,7 @@ class RegistradasController extends Controller
                 ];
             });
 
-            $data['usuarios'] = db::table('usuarios')->where(['estatus' => 1, 'id_area' => 1])->get()->map(function ($u) {
+            $data['usuarios'] = db::table('usuarios')->where(['id_area' => 1])->get()->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,
@@ -271,6 +271,7 @@ class RegistradasController extends Controller
             $orden = DB::table('tb_orden_servicio')->select('cod_ordens')->where('cod_incidencia', $cod)->first();
             if ($orden) {
                 $incidencia->cod_orden = $orden->cod_ordens;
+                $incidencia->new_cod_orden = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
             }
 
             // Verificamos si se encontró la incidencia
@@ -480,7 +481,6 @@ class RegistradasController extends Controller
             }
 
             $iniciado = DB::table('tb_incidencias')->select('estado_informe')->where('cod_incidencia', $request->codigo)->first();
-            // return $this->message(message: "La incidencia ya fue iniciada y está en <b>proceso</b>.", status: 202);
             if ($iniciado->estado_informe == 2) {
                 return $this->message(message: "La incidencia ya fue iniciada y está en <b>proceso</b>.", status: 202);
             }

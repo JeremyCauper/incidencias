@@ -84,14 +84,19 @@ class VProgramadasController extends Controller
         try {
             // Verificamos si se encontró la visita por ID
             $visita = DB::table('tb_visitas')->where(['id' => $id])->first();
+            $ordenv = DB::table('tb_orden_visita')->select('cod_orden_visita')->where('id_visita', $id)->first();
+            if ($ordenv) {
+                $visita->cod_ordenv = $ordenv->cod_orden_visita;
+                $visita->new_cod_ordenv = DB::select('CALL GetCodeOrdVis(?)', [date('y')])[0]->cod_orden;
+            }
+
             if (!$visita) {
-                return $this->message(message: 'La vista que buscas no existe', status: 404);
+                return $this->message(message: 'La vista que buscas no existe', status: 204);
             }
 
             $id_asignados = DB::table('tb_vis_asignadas')->where('id_visitas', $id)->get()->pluck('id_usuario')->toArray();
             $visita->personal_asig = DB::table('usuarios')->select(['id_usuario', 'ndoc_usuario', 'nombres', 'apellidos'])
-                ->whereIn('id_usuario', $id_asignados)
-                ->where('estatus', 1)->get()
+                ->whereIn('id_usuario', $id_asignados)->get()
                 ->map(function ($usu) {
                     $nombre = $this->formatearNombre($usu->nombres, $usu->apellidos);
                     return [
@@ -121,7 +126,7 @@ class VProgramadasController extends Controller
             $asignados = DB::table('tb_vis_asignadas')->where('id_visitas', $id)->get();
             $seguimiento = DB::table('tb_vis_seguimiento')->where('id_visitas', $id)->get();
             // Obtenemos todos los usuarios activos y los almacenamos en un array asociativo por id
-            $usuarios = DB::table('usuarios')->where('estatus', 1)->get()->keyBy('id_usuario')->map(function ($u) {
+            $usuarios = DB::table('usuarios')->get()->keyBy('id_usuario')->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return (object) [
                     "foto" => $u->foto_perfil,
@@ -178,6 +183,11 @@ class VProgramadasController extends Controller
 
             if ($validator->fails())
                 return $this->message(data: ['required' => $validator->errors()], status: 422);
+
+            $iniciado = DB::table('tb_visitas')->select('estado')->where('id', $request->id)->first();
+            if ($iniciado->estado == 1) {
+                return $this->message(message: "La visita ya fue iniciada y está en <b>proceso</b>.", status: 202);
+            }
 
             $validacion = DB::table('tb_vis_asignadas')->where('id_visitas', $request->id)->count();
             if (!$validacion) {

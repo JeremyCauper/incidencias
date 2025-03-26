@@ -124,7 +124,7 @@ class ResueltasController extends Controller
         try {
             // Consultamos la incidencia por ID
             $incidencia = DB::table('tb_incidencias')->where('id_incidencia', $id)->first();
-            $usuarios = db::table('usuarios')->select(['id_usuario', 'ndoc_usuario', 'nombres', 'apellidos'])->where('estatus', 1)->get()->keyBy('id_usuario');
+            $usuarios = db::table('usuarios')->select(['id_usuario', 'ndoc_usuario', 'nombres', 'apellidos'])->get()->keyBy('id_usuario');
 
             // Verificamos si se encontró la incidencia
             if (!$incidencia)

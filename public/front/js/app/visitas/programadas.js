@@ -53,7 +53,7 @@ function ShowDetail(e, id) {
 }
 
 async function StartVisita(id, estado) {
-    if (!await boxAlert.confirm({ h: `Esta apunto de <b><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la visita` })) return true;
+    if (!await boxAlert.confirm({ h: `Esta apunto de <b class="text-warning"><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la visita` })) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/visitas/programadas/startVisita`,
@@ -67,8 +67,8 @@ async function StartVisita(id, estado) {
         },
         beforeSend: boxAlert.loading,
         success: function (data) {
-            if (data.success) {
-                updateTableVProgramadas();
+            if (data.success || data.status == 202) {
+                updateTableVProgramadas()
             }
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
@@ -206,6 +206,8 @@ async function DeleteVisita(id) {
     });
 }
 
+let sucursal = null;
+let empresa = null;
 function OrdenVisita(e, id) {
     $('#modal_orden').modal('show');
     fMananger.formModalLoding('modal_orden', 'show');
@@ -214,12 +216,20 @@ function OrdenVisita(e, id) {
         url: `${__url}/visitas/programadas/show/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
-            
             if (data.success) {
+                let dt = data.data;
+                if (dt.cod_ordenv) {
+                    $('#modal_orden').modal('hide');
+                    cod_ordenv = dt.new_cod_ordenv;
+                    if (dt.id_tipo_incidencia == 2)
+                        window.open(`${__url}/orden/documentopdf/${dt.cod_ordenv}`, `Visualizar PDF ${dt.cod_ordenv}`, "width=900, height=800");
+                    updateTableVProgramadas();
+                    boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de visita con el siguiente codigo <b>${dt.cod_ordenv}</b>.` });
+                    return true;
+                }
                 var visita = data.data;
-                let sucursal = sucursales[visita.id_sucursal];
-                let empresa = empresas[sucursal.ruc];
+                sucursal = sucursales[visita.id_sucursal];
+                empresa = empresas[sucursal.ruc];
 
                 $('[name="id_visita_orden"]').val(id);
                 $(`#modal_orden [aria-item="registrado"]`).html(visita.seguimiento[0].created_at);
@@ -251,7 +261,6 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 
     var valid = validFrom(this);
     valid.data.data.islas = MRevision.extract();
-    const old_cod_ordenv = valid.data.data.cod_ordenv;
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
@@ -264,13 +273,14 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            if (data.success) {
+            let dt = data.data;
+            console.log(data);
+            if (data.success || data.status == 202) {
                 $('#modal_orden').modal('hide');
-                changeCodOrdenV(data.data.cod_ordenv);
-                window.open(`${__url}/orden-visita/documentopdf/${old_cod_ordenv}`, `Visualizar PDF ${old_cod_ordenv}`, "width=900, height=800");
+                changeCodOrdenV(dt.new_cod_ordenv);
+                window.open(`${__url}/orden-visita/documentopdf/${dt.old_cod_ordenv}`, `Visualizar PDF ${dt.old_cod_ordenv}`, "width=900, height=800");
                 updateTableVProgramadas()
                 updateTableVisitas()
-                return true;
             }
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
