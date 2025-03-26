@@ -50,7 +50,7 @@ class RegistradasController extends Controller
                 ];
             });
 
-            $data['usuarios'] = db::table('usuarios')->where(['estatus' => 1, 'id_area' => 1])->get()->map(function ($u) {
+            $data['usuarios'] = db::table('usuarios')->where(['id_area' => 1])->get()->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,
@@ -190,8 +190,16 @@ class RegistradasController extends Controller
                 ]);
             }
 
+            $validar_codigo = "";
+            $new_codigo = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
+            if ($new_codigo != $request->cod_inc) {
+                $validar_codigo = "<b class='text-danger'>Importante:</b> El código de incidencia <b>$request->cod_inc</b> ya estaba en uso. Se asignó el nuevo código <b>$new_codigo</b>";
+            } else {
+                $new_codigo = $request->cod_inc;
+            }
+
             DB::table('tb_incidencias')->insert([
-                'cod_incidencia' => $request->cod_inc,
+                'cod_incidencia' => $new_codigo,
                 'ruc_empresa' => $request->empresa,
                 'id_sucursal' => $request->sucursal,
                 'id_tipo_estacion' => $request->tEstacion,
@@ -230,7 +238,7 @@ class RegistradasController extends Controller
             $data = [];
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
 
-            return $this->message(message: "Registro creado exitosamente.", data: ['data' => $data]);
+            return $this->message(message: "<p>Registro creado exitosamente.</p><p style='font-size: small;'>$validar_codigo</p>", data: ['data' => $data]);
         } catch (QueryException $e) {
             DB::rollBack();
             if ($e->getCode() == 23000) {
@@ -260,6 +268,11 @@ class RegistradasController extends Controller
         try {
             // Consultamos la incidencia por ID
             $incidencia = DB::table('tb_incidencias')->where('cod_incidencia', $cod)->first();
+            $orden = DB::table('tb_orden_servicio')->select('cod_ordens')->where('cod_incidencia', $cod)->first();
+            if ($orden) {
+                $incidencia->cod_orden = $orden->cod_ordens;
+                $incidencia->new_cod_orden = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
+            }
 
             // Verificamos si se encontró la incidencia
             if (!$incidencia)
@@ -465,6 +478,11 @@ class RegistradasController extends Controller
 
             if ($validator->fails()) {
                 return $this->message(data: ['required' => $validator->errors()], status: 422);
+            }
+
+            $iniciado = DB::table('tb_incidencias')->select('estado_informe')->where('cod_incidencia', $request->codigo)->first();
+            if ($iniciado->estado_informe == 2) {
+                return $this->message(message: "La incidencia ya fue iniciada y está en <b>proceso</b>.", status: 202);
             }
 
             $validacion = DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->codigo)->count();

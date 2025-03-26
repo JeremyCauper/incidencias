@@ -29,6 +29,19 @@ class OrdenVisitaController extends Controller
             if ($validator->fails()) {
                 return $this->message(data: ['required' => $validator->errors()], status: 422);
             }
+
+            $new_codigo = DB::select('CALL GetCodeOrdVis(?)', [date('y')])[0]->cod_orden;
+            $orden = DB::table('tb_orden_visita')->select('cod_orden_visita')->where('id_visita', $request->id_visita_orden)->first();
+            if ($orden) {
+                return $this->message(message: "El orden de visita para la visita en proceso, ya fue emitida.", data: ['data' => ['new_cod_ordenv' => $new_codigo]], status: 202);
+            }
+
+            $validar_codigo = "";
+            if ($new_codigo != $request->cod_ordenv) {
+                $validar_codigo = "<b class='text-danger'>Importante:</b> El código de orden <b>$request->cod_ordenv</b> ya estaba en uso. Se asignó el nuevo código <b>$new_codigo</b>";
+            } else {
+                $new_codigo = $request->cod_ordenv;
+            }
     
             // Filtrar los datos de las filas de visitas excluyendo las claves específicas
             $request_filas_visitas = array_diff_key($request->all(), array_flip(['cod_ordenv', 'id_visita_orden', 'islas']));
@@ -112,14 +125,16 @@ class OrdenVisitaController extends Controller
             ]);
     
             // Obtener código de orden de visita
-            $codOrdenV = DB::select("CALL GetCodeOrdVis(25)")[0]->cod_orden;
+            $codOrdenV = DB::select('CALL GetCodeOrdVis(?)', [date('y')])[0]->cod_orden;
     
             DB::commit();
     
             return $this->message(
-                message: 'Orden de visita generada exitosamente.',
-                data: [ 'data' => ['cod_ordenv' => $codOrdenV] ]
-            );
+                message: "<p>Orden de visita generada exitosamente.</p><p style='font-size: small;'>$validar_codigo</p>",
+                data: [ 'data' => [
+                    'new_cod_ordenv' => $codOrdenV,
+                    'old_cod_ordenv' => $new_codigo,
+                ]]);
     
         } catch (QueryException $e) {
             DB::rollBack();
@@ -203,7 +218,6 @@ class OrdenVisitaController extends Controller
 
             // Procesar usuarios asignados
             $usuarios = DB::table('usuarios')
-                ->where('estatus', 1)
                 ->get()
                 ->mapWithKeys(function ($usuario) {
                     $nombre = $this->formatearNombre($usuario->nombres, $usuario->apellidos);

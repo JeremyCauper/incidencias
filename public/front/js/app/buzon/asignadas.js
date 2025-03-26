@@ -148,6 +148,9 @@ function habilitarCodAviso(accion) {
     codAviso.removeAttr('name');
 }
 
+let sucursal = null;
+let empresa = null;
+let incidencia_temp = null;
 async function OrdenDetail(e, cod) {
     const obj = extractDataRow(e, 'tb_incidencias');
     obj.estado = (obj.estado).replaceAll('.7rem;', '1rem;');
@@ -168,9 +171,20 @@ async function OrdenDetail(e, cod) {
             console.log(data);
             if (data.success) {
                 let dt = data.data;
+                if (dt.cod_orden) {
+                    $('#modal_orden').modal('hide');
+                    cod_orden = dt.new_cod_orden;
+                    if (dt.id_tipo_incidencia == 2)
+                        window.open(`${__url}/orden/documentopdf/${dt.cod_orden}`, `Visualizar PDF ${dt.cod_orden}`, "width=900, height=800");
+                    updateTable();
+                    boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de servicio con el siguiente codigo <b>${dt.cod_orden}</b>.` });
+                    return true;
+                }
+
                 let personal = dt.personal_asig;
-                var sucursal = sucursales[dt.id_sucursal];
-                var empresa = empresas[dt.ruc_empresa];
+                sucursal = sucursales[dt.id_sucursal];
+                empresa = empresas[dt.ruc_empresa];
+                incidencia_temp = dt;
 
                 $(`#modal_orden [aria-item="direccion"]`).html(sucursal.direccion);
                 $('#modal_orden [aria-item="observacion"]').html(dt.observacion);
@@ -195,18 +209,17 @@ async function OrdenDetail(e, cod) {
 document.getElementById('form-orden').addEventListener('submit', async function (event) {
     event.preventDefault();
 
-    if ($('[ctable-contable="#createMaterial"]').children().length && !$('#codAviso').val())
-        if (!await boxAlert.confirm({ h: `El campo 'Código Aviso' está vacío.` })) return $('#codAviso').focus();
+    var cod_aviso = empresa.codigo_aviso;
+    if ($('[ctable-contable="#createMaterial"]').children().length && !$('#codAviso').val() && cod_aviso) {
+        if (!await boxAlert.confirm({ h: `El campo <b>Código Aviso</b> está vacío.` })) return $('#codAviso').focus();
+    }
 
     fMananger.formModalLoding('modal_orden', 'show');
-    const atencion = $('#modal_orden [aria-item="atencion"]').html();
-
     var valid = validFrom(this);
     valid.data.data.materiales = cMaterial.extract();
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
-    var n_orden = valid.data.data.n_orden;
     valid.data.data.cod_sistema = eval($('#button-cod-orden').attr('check-cod'));
 
     $.ajax({
@@ -218,28 +231,27 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
+            let dt = data.data;
             console.log(data);
-
-            if (data.success) {
+            if (data.success || data.status == 202) {
                 $('#modal_orden').modal('hide');
-                cod_ordenSer = data.data.num_orden;
-                if (atencion.toUpperCase() == 'PRESENCIAL')
-                    window.open(`${__url}/orden/documentopdf/${n_orden}`, `Visualizar PDF ${n_orden}`, "width=900, height=800");
-                updateTableInc();
-                return true;
+                cod_orden = dt.new_cod_orden;
+                if (incidencia_temp.id_tipo_incidencia == 2)
+                    window.open(`${__url}/orden/documentopdf/${dt.old_cod_orden}`, `Visualizar PDF ${dt.old_cod_orden}`, "width=900, height=800");
             }
+            updateTable();
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
         complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_orden', 'hide');
@@ -313,16 +325,16 @@ document.getElementById('form-addcod').addEventListener('submit', async function
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
                 if (datae.hasOwnProperty('unique')) {
-                    mensaje = formatUnique(datae.unique);
+                    message = formatUnique(datae.unique);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
     });
 });
@@ -342,21 +354,21 @@ async function StartInc(cod, estado) {
         },
         beforeSend: boxAlert.loading,
         success: function (data) {
-            if (data.success) {
-                updateTableInc()
+            if (data.success || data.status == 202) {
+                updateTable()
             }
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
@@ -642,7 +654,7 @@ function ShowDetailVis(e, id) {
 }
 
 async function StartVisita(id, estado) {
-    if (!await boxAlert.confirm({ h: `Esta apunto de <b><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la visita` })) return true;
+    if (!await boxAlert.confirm({ h: `Esta apunto de <b class="text-warning"><i class="fas fa-${estado == 2 ? 'clock-rotate-left"></i> re' : 'stopwatch"></i> '}iniciar</b> la visita` })) return true;
     $.ajax({
         type: 'POST',
         url: `${__url}/visitas/programadas/startVisita`,
@@ -656,22 +668,21 @@ async function StartVisita(id, estado) {
         },
         beforeSend: boxAlert.loading,
         success: function (data) {
-            if (data.success) {
-                updateTableVis();
+            if (data.success || data.status == 202) {
+                updateTableVis()
             }
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = datae.message;
+            let message = datae.message;
             if (jqXHR.status == 422) {
-                console.log("jqXHR");
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: mensaje });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
             $('#modal_incidencias .modal-dialog .modal-content .loader-of-modal').remove();
         }
     });
@@ -686,12 +697,25 @@ function OrdenVisita(e, id) {
         contentType: 'application/json',
         success: function (data) {
             if (data.success) {
-                var visita = data.data;
+                let dt = data.data;
+                if (dt.cod_ordenv) {
+                    $('#modal_orden').modal('hide');
+                    cod_ordenv = dt.new_cod_ordenv;
+                    if (dt.id_tipo_incidencia == 2)
+                        window.open(`${__url}/orden/documentopdf/${dt.cod_ordenv}`, `Visualizar PDF ${dt.cod_ordenv}`, "width=900, height=800");
+                    updateTableInc();
+                    updateTableVis();
+                    boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de visita con el siguiente codigo <b>${dt.cod_ordenv}</b>.` });
+                    return true;
+                }
+                sucursal = sucursales[dt.id_sucursal];
+                empresa = empresas[sucursal.ruc];
+
                 $('[name="id_visita_orden"]').val(id);
-                $(`#modal_orden_visita [aria-item="registrado"]`).html(visita.seguimiento[0].created_at);
-                $(`#modal_orden_visita [aria-item="empresa"]`).html(visita.empresa);
-                $(`#modal_orden_visita [aria-item="direccion"]`).html(visita.direccion);
-                $(`#modal_orden_visita [aria-item="sucursal"]`).html(visita.sucursal);
+                $(`#modal_orden_visita [aria-item="registrado"]`).html(dt.seguimiento[0].created_at);
+                $(`#modal_orden_visita [aria-item="empresa"]`).html(`${empresa.ruc} - ${empresa.razon_social}`);
+                $(`#modal_orden_visita [aria-item="direccion"]`).html(sucursal.direccion);
+                $(`#modal_orden_visita [aria-item="sucursal"]`).html(sucursal.nombre);
                 var tecnicos = visita.personal_asig.map(persona => persona.tecnicos);
                 $('#modal_orden_visita [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));
                 fMananger.formModalLoding('modal_orden_visita', 'hide');
@@ -742,13 +766,13 @@ document.getElementById('form-orden-visita').addEventListener('submit', async fu
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
             const datae = jqXHR.responseJSON;
-            let mensaje = "";
+            let message = datae.message;
             if (jqXHR.status == 422) {
                 if (datae.hasOwnProperty('required')) {
-                    mensaje = formatRequired(datae.required);
+                    message = formatRequired(datae.required);
                 }
             }
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+            boxAlert.box({ i: datae.icon, t: datae.title, h: message });
         },
         complete: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_orden_visita', 'hide');

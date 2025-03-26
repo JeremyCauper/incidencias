@@ -20,7 +20,7 @@ class VSucursalesController extends Controller
             // Obtener información externa de la API
             $data['company'] = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'codigo_aviso', 'status'])->get()->keyBy('ruc'); //$this->fetchAndParseApiData('empresas');
             $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
-            $data['usuarios'] = DB::table('usuarios')->where('estatus', 1)->get()->map(function ($u) {
+            $data['usuarios'] = DB::table('usuarios')->where(['id_area' => 1])->get()->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,

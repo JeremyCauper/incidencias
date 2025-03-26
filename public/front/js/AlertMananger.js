@@ -31,7 +31,7 @@ class AlertMananger {
         const titulo = op.t || '¿Estás de suguro de esta acción?';
         const thtml = op.h || false;
         if (!(await Swal.fire({
-            title: `<h5 class="card-title text-secondary"><b>${titulo}</b></h5>`,
+            title: `<h5 class="card-title text-secondary">${titulo}</h5>`,
             html: thtml,
             icon: "question",
             showCancelButton: true,
@@ -67,7 +67,7 @@ class AlertMananger {
         delete op.h;
         Swal.fire({
             icon: icono,
-            title: `<h5 class="card-title text-secondary"><b>${titulo}</b></h5>`,
+            title: `<h5 class="card-title text-secondary">${titulo}</h5>`,
             html: thtml,
             ...op,
             confirmButtonColor: "#3085d6",

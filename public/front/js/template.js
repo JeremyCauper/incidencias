@@ -76,25 +76,6 @@
       }
     }
 
-
-    // console.log(eval(localStorage.sidebarIconOnly));
-    // if (eval(localStorage.sidebarIconOnly)) {
-    //   body.addClass('sidebar-icon-only');
-    // }
-    // $('[data-bs-toggle="minimize"]').on("click", function () {
-    //   localStorage.sidebarIconOnly = false;
-    //   if (window.innerWidth > 992) {
-    //     body.toggleClass('sidebar-icon-only');
-    //     localStorage.sidebarIconOnly = body.hasClass('sidebar-icon-only') ? true : false;
-    //   }
-    //   /*if ((body.hasClass('sidebar-toggle-display')) || (body.hasClass('sidebar-absolute'))) {
-    //     body.toggleClass('sidebar-hidden');
-    //   } else {
-    //     body.toggleClass('sidebar-icon-only');
-    //     localStorage.sidebarIconOnly = true;
-    //   }*/
-    // });
-
     //checkbox and radios
     $(".form-check label,.form-radio label").append('<i class="input-helper"></i>');
 

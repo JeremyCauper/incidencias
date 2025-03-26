@@ -3,6 +3,20 @@
 
 @section('cabecera')
     <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}">
+
+    <script>
+        let cod_incidencia = '<?= $data['cod_inc'] ?>';
+        let cod_orden = '<?= $data['cod_orden'] ?>';
+        let empresas = <?php echo json_encode($data['company']); ?>;
+        let sucursales = <?php echo json_encode($data['scompany']); ?>;
+        let cargo_estacion = <?php echo json_encode($data['CargoEstacion']); ?>;
+        let tipo_estacion = <?php echo json_encode($data['tEstacion']); ?>;
+        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
+        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
+        let obj_problem = <?php echo json_encode($data['problema']); ?>;
+        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
+        let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
+    </script>
 @endsection
 @section('content')
 
@@ -161,8 +175,8 @@
                 <input type="hidden" name="id_inc" id="id_inc">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title">
-                        <b>NUEVA INCIDENCIA: </b>
-                        <b id="cod_inc_text">{{$data['cod_inc']}}</b>
+                        NUEVA INCIDENCIA
+                        <span class="mx-2 badge badge-success badge-lg" id="cod_inc_text">{{$data['cod_inc']}}</span>
                         <span class="d-none" aria-item="contrato"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
@@ -387,8 +401,8 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Asignar Personal -
-                        <span class="badge badge-success badge-lg" aria-item="codigo"></span>
+                    <h6 class="modal-title">Asignar Personal
+                        <span class="ms-2 badge badge-success badge-lg" aria-item="codigo"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
@@ -712,17 +726,7 @@
 
 @section('scripts')
     <script>
-        let cod_incidencia = '<?= $data['cod_inc'] ?>';
-        let cod_orden = '<?= $data['cod_orden'] ?>';
-        let empresas = <?php echo json_encode($data['company']); ?>;
-        let sucursales = <?php echo json_encode($data['scompany']); ?>;
-        let cargo_estacion = <?php echo json_encode($data['CargoEstacion']); ?>;
-        let tipo_estacion = <?php echo json_encode($data['tEstacion']); ?>;
-        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
-        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
-        let obj_problem = <?php echo json_encode($data['problema']); ?>;
-        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
-        let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
+        // 
     </script>
     <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
     <script src="{{secure_asset('front/js/app/incidencia/registradas.js')}}"></script>

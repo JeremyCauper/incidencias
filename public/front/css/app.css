@@ -747,7 +747,7 @@ body {
 
 :root {
     --bs-panel-view-padding: 1.5rem 1.5rem;
-    --bs-panel-view-margin: 1.5rem;
+    --bs-panel-view-margin: .8rem;
     --bs-panel-view-fonts-h6i: .9rem;
     --bs-panel-view-fonts-h4: 1.9rem;
 }
@@ -3432,10 +3432,6 @@ body {
 .img-xs {
     width: 32px;
     height: 32px;
-}
-
-.grid-margin {
-    margin-bottom: 1.5rem;
 }
 
 .table tbody tr td {

@@ -44,11 +44,23 @@ class OrdenController extends Controller
             $codAviso = $request->has('codAviso') ? $request->codAviso : 3;
 
             DB::beginTransaction();
+            $new_codigo = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
+            $orden = DB::table('tb_orden_servicio')->select('cod_ordens')->where('cod_incidencia', $request->codInc)->first();
+            if ($orden) {
+                return $this->message(message: "El orden de servicio para la incidencia <b>$request->codInc</b> ya fue emitida.", data: ['data' => ['new_cod_orden' => $new_codigo]], status: 202);
+            }
+
+            $validar_codigo = "";
+            if ($new_codigo != $request->n_orden) {
+                $validar_codigo = "<b class='text-danger'>Importante:</b> El código de orden <b>$request->n_orden</b> ya estaba en uso. Se asignó el nuevo código <b>$new_codigo</b>";
+            } else {
+                $new_codigo = $request->n_orden;
+            }
 
             if ($request->cod_sistema) {
                 // Insertar correlativo si se seleccionó
                 DB::table('tb_orden_correlativo')->insert([
-                    'num_orden' => $request->n_orden,
+                    'num_orden' => $new_codigo,
                     'created_at' => now()->format('Y-m-d H:i:s')
                 ]);
             }
@@ -61,7 +73,7 @@ class OrdenController extends Controller
 
             // Insertar orden de servicio
             DB::table('tb_orden_servicio')->insert([
-                'cod_ordens' => $request->n_orden,
+                'cod_ordens' => $new_codigo,
                 'cod_incidencia' => $request->codInc,
                 'observaciones' => $request->observaciones,
                 'recomendaciones' => $request->recomendacion,
@@ -80,7 +92,7 @@ class OrdenController extends Controller
                 $arr_materiales = [];
                 foreach ($materiales as $k => $val) {
                     if ($val['registro']) {
-                        $arr_materiales[$k]['cod_ordens'] = $request->n_orden;
+                        $arr_materiales[$k]['cod_ordens'] = $new_codigo;
                         $arr_materiales[$k]['id_material'] = $val['id_material'];
                         $arr_materiales[$k]['cantidad'] = $val['cantidad'];
                         $arr_materiales[$k]['created_at'] = now()->format('Y-m-d H:i:s');
@@ -103,12 +115,14 @@ class OrdenController extends Controller
                 'hora' => $request->hora_f,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
-
-            // Obtener número de orden generado
             $codOrdenS = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
             DB::commit();
 
-            return $this->message(message: 'Orden de servicio generada exitosamente.', data: ['data' => ['num_orden' => $codOrdenS]]);
+            return $this->message(message: "<p>Orden de servicio generada exitosamente.</p><p style='font-size: small;'>$validar_codigo</p>", data: [
+                'data' => [
+                    'new_cod_orden' => $codOrdenS,
+                    'old_cod_orden' => $new_codigo,
+                ]]);
         } catch (QueryException $e) {
             DB::rollBack();
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
@@ -278,7 +292,6 @@ class OrdenController extends Controller
 
             // Procesar usuarios asignados
             $usuarios = DB::table('usuarios')
-                ->where('estatus', 1)
                 ->get()
                 ->mapWithKeys(function ($usuario) {
                     $nombre = $this->formatearNombre($usuario->nombres, $usuario->apellidos);
