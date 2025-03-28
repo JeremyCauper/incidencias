@@ -83,12 +83,17 @@ class RegistradasController extends Controller
                 "tEnProceso" => 0,
             ];
 
+            $incidencias = DB::table('tb_incidencias')->select(['cod_incidencia', 'ruc_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as id', 'estatus'])
+                ->where('estatus', 1)->whereNot('estado_informe', 3)->get();
+                
+            $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
+
+            $inc_asig = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
             // Procesar incidencias
-            $incidencias = DB::table('tb_incidencias')
-                ->select(['cod_incidencia', 'ruc_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as id', 'estatus'])
-                ->where('estatus', 1)
-                ->whereNot('estado_informe', 3)
-                ->get()->map(function ($val) use (&$conteo_data) {
+            $incidencias = $incidencias->map(function ($val) use (&$conteo_data, $inc_asig) {
+                    if (!empty($inc_asig[$val->cod_incidencia])) {
+                        $asignados = collect($inc_asig[$val->cod_incidencia])->pluck('id_usuario')->toArray();
+                    }
 
                     // Configurar el estado del informe
                     $estadoInforme = [
@@ -116,6 +121,7 @@ class RegistradasController extends Controller
                         'incidencia' => $val->cod_incidencia,
                         'empresa' => $val->ruc_empresa,
                         'sucursal' => $val->id_sucursal,
+                        'tecnicos' => $asignados ?? [],
                         'tipo_estacion' => $val->id_tipo_estacion,
                         'tipo_incidencia' => $val->id_tipo_incidencia,
                         'problema' => $val->id_problema,

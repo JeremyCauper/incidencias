@@ -42,22 +42,24 @@ class OrdenController extends Controller
                 return $this->message(data: ['required' => $validator->errors()], status: 422);
 
             $codAviso = $request->has('codAviso') ? $request->codAviso : 3;
+            $new_codigo = $request->n_orden;
+            $validar_codigo = "";
 
             DB::beginTransaction();
-            $new_codigo = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
-            $orden = DB::table('tb_orden_servicio')->select('cod_ordens')->where('cod_incidencia', $request->codInc)->first();
-            if ($orden) {
-                return $this->message(message: "El orden de servicio para la incidencia <b>$request->codInc</b> ya fue emitida.", data: ['data' => ['new_cod_orden' => $new_codigo]], status: 202);
-            }
-
-            $validar_codigo = "";
-            if ($new_codigo != $request->n_orden) {
-                $validar_codigo = "<b class='text-danger'>Importante:</b> El código de orden <b>$request->n_orden</b> ya estaba en uso. Se asignó el nuevo código <b>$new_codigo</b>";
-            } else {
-                $new_codigo = $request->n_orden;
-            }
 
             if ($request->cod_sistema) {
+                $new_codigo = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
+                $orden = DB::table('tb_orden_servicio')->select('cod_ordens')->where('cod_incidencia', $request->codInc)->first();
+                if ($orden) {
+                    return $this->message(message: "El orden de servicio para la incidencia <b>$request->codInc</b> ya fue emitida.", data: ['data' => ['new_cod_orden' => $new_codigo]], status: 202);
+                }
+    
+                if ($new_codigo != $request->n_orden) {
+                    $validar_codigo = "<b class='text-danger'>Importante:</b> El código de orden <b>$request->n_orden</b> ya estaba en uso. Se asignó el nuevo código <b>$new_codigo</b>";
+                } else {
+                    $new_codigo = $request->n_orden;
+                }
+
                 // Insertar correlativo si se seleccionó
                 DB::table('tb_orden_correlativo')->insert([
                     'num_orden' => $new_codigo,

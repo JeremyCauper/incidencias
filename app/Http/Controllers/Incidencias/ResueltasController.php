@@ -31,6 +31,13 @@ class ResueltasController extends Controller
             $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['problema'] = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'tipo_incidencia', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
             $data['sproblema'] = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'id_problema', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
+            $data['usuarios'] = DB::table('usuarios')->get()->keyBy('id_usuario')->map(function ($user) {
+                $nombre = $this->formatearNombre($user->nombres, $user->apellidos);
+                return (object)[
+                    'id' => $user->id_usuario,
+                    'nombre' => $nombre,
+                ];
+            });
 
             return view('incidencias.resueltas', ['data' => $data]);
         } catch (Exception $e) {
@@ -62,24 +69,16 @@ class ResueltasController extends Controller
 
         $seguimientos = DB::table('tb_inc_seguimiento')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
         $inc_asig = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
-        $usuarios = DB::table('usuarios')->get()->map(function ($user) {
-            $nombre = $this->formatearNombre($user->nombres, $user->apellidos);
-            return (object)[
-                'id' => $user->id_usuario,
-                'nombre' => $nombre,
-            ];
-        });
 
         $ordenes = DB::table('tb_orden_servicio')
             ->whereIn('cod_incidencia', $cod_incidencias)->get();
         $id_contac_ordens = $ordenes->pluck('id_contacto')->toArray();
         $contac_ordens = DB::table('tb_contac_ordens')->whereIn('id', $id_contac_ordens)->get();
 
-        $incidencias = $incidencias->map(function ($incidencia) use ($ordenes, $seguimientos, $inc_asig, $usuarios, $contac_ordens) {
+        $incidencias = $incidencias->map(function ($incidencia) use ($ordenes, $seguimientos, $inc_asig, $contac_ordens) {
             $orden = $ordenes->where('cod_incidencia', $incidencia->cod_incidencia)->first();
             $cod_ordens = $orden->cod_ordens;
-            $id_asignados = collect($inc_asig[$incidencia->cod_incidencia])->pluck('id_usuario')->toArray();
-            $asignados = collect($usuarios)->whereIn('id', $id_asignados)->pluck('nombre')->toArray();
+            $asignados = collect($inc_asig[$incidencia->cod_incidencia])->pluck('id_usuario')->toArray();
             $seguimiento = $seguimientos[$incidencia->cod_incidencia] ?? collect();
 
             $contac = false;
@@ -90,9 +89,9 @@ class ResueltasController extends Controller
 
             return [
                 'cod_incidencia' => $incidencia->cod_incidencia,
-                'cod_orden' => '<label class="badge badge-info" style="font-size: .7rem;">' . $orden->cod_ordens . '</label>' ?? null,
+                'cod_orden' => (string)'<label class="badge badge-info" style="font-size: .7rem;">' . $orden->cod_ordens . '</label>' ?? null,
                 'fecha_inc' => $incidencia->created_at ?? null,
-                'asignados' => implode(", ", $asignados) ?? null,
+                'asignados' => $asignados,
                 'empresa' => $incidencia->ruc_empresa,
                 'sucursal' => $incidencia->id_sucursal,
                 'tipo_incidencia' => $incidencia->id_tipo_incidencia,
