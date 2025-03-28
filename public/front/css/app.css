@@ -733,7 +733,7 @@ body {
 }
 
 .content-wrapper {
-    padding: 1.5rem 2.187rem 1.5rem 2.187rem;
+    padding: 1.5rem 1rem 1.5rem 1rem;
     width: 100%;
     -webkit-flex-grow: 1;
     flex-grow: 1;

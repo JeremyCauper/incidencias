@@ -12,6 +12,7 @@
         let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
         let obj_problem = <?php echo json_encode($data['problema']); ?>;
         let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
+        let usuarios = <?php echo json_encode($data['usuarios']); ?>;
     </script>
 @endsection
 @section('content')
@@ -105,7 +106,10 @@
                                     { data: 'cod_incidencia' },
                                     { data: 'fecha_inc' },
                                     { data: 'cod_orden' },
-                                    { data: 'asignados' },
+                                    { data: 'asignados', render: function (data, type, row) {
+                                            return (data.map(usu => usuarios[usu].nombre)).join(", ");
+                                        }
+                                    },
                                     {
                                         data: 'empresa', render: function (data, type, row) {
                                             let empresa = empresas[data];

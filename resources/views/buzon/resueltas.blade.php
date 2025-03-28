@@ -5,6 +5,14 @@
     <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
     <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
+    
+    <script>
+        const empresas = <?php echo json_encode($data['empresas']); ?>;
+        const sucursales = <?php echo json_encode($data['sucursales']); ?>;
+        const tipos_incidencia = <?php echo json_encode($data['tipos_incidencia']); ?>;
+        const problemas = <?php echo json_encode($data['problemas']); ?>;
+        const subproblemas = <?php echo json_encode($data['subproblemas']); ?>;
+    </script>
 @endsection
 @section('content')
 
@@ -310,13 +318,5 @@
 @endsection
 
 @section('scripts')
-    <script>
-        const empresas = <?php echo json_encode($data['empresas']); ?>;
-        const sucursales = <?php echo json_encode($data['sucursales']); ?>;
-        const tipos_incidencia = <?php echo json_encode($data['tipos_incidencia']); ?>;
-        const problemas = <?php echo json_encode($data['problemas']); ?>;
-        const subproblemas = <?php echo json_encode($data['subproblemas']); ?>;
-    </script>
-
     <script src="{{secure_asset('front/js/app/buzon/resueltas.js')}}"></script>
 @endsection

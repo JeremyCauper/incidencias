@@ -169,6 +169,9 @@
           break;
       }
     });
+    form.find('textarea').each(function () {
+      $(this).val("");
+    });
     form.find('select').each(function () {
       var val = "";
       if ($(this).find('option[selected]').attr('value')) {
