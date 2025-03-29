@@ -201,8 +201,9 @@
                             <select class="select-clear" id="empresa">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['company'] as $e)
-                                    <option value="{{$e->ruc}}">{{$e->ruc}} - {{$e->razon_social}}
-                                    </option>
+                                    @if ($e->status)
+                                    <option value="{{$e->ruc}}">{{$e->ruc}} - {{$e->razon_social}}</option>
+                                    @endif
                                 @endforeach
                             </select>
                         </div>
