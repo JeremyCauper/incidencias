@@ -115,10 +115,11 @@ $(document).ready(function () {
     $('#empresa').on('change', function () {
         const empresa = empresas[$(this).val()] ?? "";
         if ($(this).val()) {
-            const contrato = [['danger', 'Sin Contrato'], ['success', 'En Contrato']];
-            $('#modal_incidencias [aria-item="contrato"]').attr('class', `ms-3 badge badge-${contrato[empresa.contrato][0]} badge-lg`).html(contrato[empresa.contrato][1]);
+            const contrato = [['badge-danger', 'Sin Contrato'], ['badge-success', 'En Contrato']];
+            const ident = empresa.contrato;
+            $('#modal_incidencias [aria-item="contrato"]').html(contrato[empresa.contrato][1]).addClass(contrato[ident][0]).removeClass(contrato[ident ? 0 : 1][0]);
         } else {
-            $('#modal_incidencias [aria-item="contrato"]').attr('class', 'd-none');
+            $('#modal_incidencias [aria-item="contrato"]').html('');
         }
         fillSelect(['#sucursal'], sucursales, 'ruc', empresa.ruc, 'id', 'nombre');
     });
@@ -158,27 +159,23 @@ $(document).ready(function () {
 
     $('.modal').on('shown.bs.modal', function () {
         $('#nom_contac').val('');
-        // $('#content-cantidad input[type="number"]').val(1);
-        manCantidad();
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
+        manCantidad();
     });
 
     $('.modal').on('hidden.bs.modal', function () {
-        $('#modal_incidencias [aria-item="codigo"]').attr('class', 'd-none');
+        $('#modal_incidencias').find('[aria-item="codigo"], [aria-item="contrato"]').html('');
         changeCodInc(cod_incidencia);
         fillSelect(['#sucursal', '#problema', '#sproblema']);
         $('#contenedor-personal').removeClass('d-none');
-        $('#observacion').val('');
-        $('#modal_incidencias [aria-item="contrato"]').attr('class', 'd-none');
-        if($('#button-cod-orden').attr('check-cod') == "true") {
-            $('#button-cod-orden').trigger('click');
-        }
         cPersonal.deleteTable();
         cPersonal1.deleteTable();
         cMaterial.deleteTable();
         removeClienteDataFirm();
+        CheckCodOrden();
     });
+    CheckCodOrden();
 
     setInterval(() => {
         $('#fecha_f').val(date('Y-m-d')).attr('disabled', true);
@@ -195,14 +192,18 @@ $(document).ready(function () {
 
     $('#button-cod-orden').on('click', function () {
         const check = eval($(this).attr('check-cod')) ? false : true;
-        $(this).attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
-        $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
+        CheckCodOrden(check);
     })
 
     fObservador('.content-wrapper', () => {
         tb_incidencia.columns.adjust().draw();
     });
 });
+
+function CheckCodOrden(check = true) {
+    $('#button-cod-orden').attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
+    $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
+}
 
 const cMaterial = new CTable('#createMaterial', {
     thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],

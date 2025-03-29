@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-mdb-theme="light">
 
 <head>
   <!-- Required meta tags -->

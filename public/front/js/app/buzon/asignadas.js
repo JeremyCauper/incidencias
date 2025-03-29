@@ -35,13 +35,14 @@ $(document).ready(function () {
     $('.modal').on('shown.bs.modal', function () {
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
-        $('input[input-cantidad=""]').val('');
         changeCodOrdenV()
     });
 
     $('.modal').on('hidden.bs.modal', function () {
         removeClienteDataFirm();
+        CheckCodOrden();
     });
+    CheckCodOrden();
 
     setInterval(() => {
         $('#fecha_f').val(date('Y-m-d')).attr('disabled', true);
@@ -58,15 +59,18 @@ $(document).ready(function () {
 
     $('#button-cod-orden').on('click', function () {
         const check = eval($(this).attr('check-cod')) ? false : true;
-        $(this).attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
-        $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
-    })
+        CheckCodOrden(check);
+    });
 
     fObservador('.content-wrapper', () => {
         tb_incidencias.columns.adjust().draw();
         tb_visitas.columns.adjust().draw();
     });
 });
+function CheckCodOrden(check = true) {
+    $('#button-cod-orden').attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
+    $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
+}
 
 const cMaterial = new CTable('#createMaterial', {
     thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
