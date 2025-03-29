@@ -119,10 +119,10 @@
           body.removeClass("sidebar-icon-only");
         }
       } else {
+        $('.sidebar, .sidebar-content').removeClass('active');
         if (localStorage.sidebarIconOnly) {
           body.addClass("sidebar-icon-only");
         }
-        $('.sidebar, .sidebar-content').removeClass('active');
       }
     });
 

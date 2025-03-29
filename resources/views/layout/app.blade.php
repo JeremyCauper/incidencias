@@ -44,84 +44,27 @@
 
 </style>
 
-<body class="with-welcome-text sidebar-icon-only"> <!-- sidebar-icon-only -->
+<body class="with-welcome-text"> <!-- sidebar-icon-only -->
   <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
-    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top d-flex align-items-top flex-row">
-      <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start">
-        <div class="me-3">
-          <button class="navbar-toggler align-self-center" type="button" data-bs-toggle="minimize">
-            <span class="fas fa-bars"></span>
-          </button>
-        </div>
-        <div>
+    <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top">
+      <!-- <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start"> -->
+        <!-- <div>
           <a class="navbar-brand brand-logo" href="{{secure_url('/soporte')}}">
             <div class="d-flex align-items-center">
               <img src="{{secure_asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
             </div>
           </a>
-          <!-- <a class="navbar-brand brand-logo" href="{{secure_url('/soporte')}}">
-            <img src="{{secure_asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
-          </a> -->
         </div>
-      </div>
+      </div> -->
+      <a class="navbar-brand" href="#">
+        <img src="{{secure_asset('front/images/app/LogoRC_WNormal.webp')}}" class="ms-2" height="45" alt="logo" />
+      </a>
       <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav ms-auto">
           <li class="nav-item">
             <span id="tiempo_restante_head" class="me-3" style="font-size: small;"></span>
           </li>
-          <!-- <li class="nav-item dropdown">
-            <a class="nav-link count-indicator" id="notificationDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-              <i class="fas fa-bell text-secondary"></i>
-              <span class="count"></span>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="notificationDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li>
-
-          <li class="nav-item dropdown">
-            <a class="nav-link count-indicator" id="countDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init aria-expanded="false">
-              <i class="fas fa-envelope text-secondary"></i>
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="countDropdown">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
-          </li> -->
-          <!-- <li class="nav-item dropdown user-dropdown">
-            <a class="nav-link" id="UserDropdown" href="#" role="button" data-mdb-dropdown-init data-mdb-ripple-init
-              aria-expanded="false">
-              <img class="img-xs rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
-                alt="Profile image">
-            </a>
-            <div class="dropdown-menu dropdown-menu-right navbar-dropdown" aria-labelledby="UserDropdown">
-              <div class="dropdown-header text-center">
-                <img class="img-md rounded-circle" src="{{ asset('front/images/auth/' . Auth::user()->foto_perfil) }}"
-                  alt="Profile image" style="width: 90px; height: 90px;">
-                <p class="mb-1 mt-3 fw-semibold">
-                  {{ explode(' ', Auth::user()->nombres)[0] . ' ' . explode(' ', Auth::user()->apellidos)[0]  }}
-                </p>
-                <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
-              </div>
-              <a class="dropdown-item">
-                <i class="dropdown-item-icon far fa-circle-user text-primary me-2"></i>
-                Mi Perfil
-                <span class="badge badge-pill badge-danger">1</span>
-              </a>
-              <a class="dropdown-item">
-                <i class="dropdown-item-icon far fa-calendar-check text-primary me-2"></i>
-                Actividad
-              </a>
-              <a class="dropdown-item" href="{{secure_url('/logout')}}">
-                <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
-                Cerrar session
-              </a>
-            </div>
-          </li> -->
           <!-- Avatar -->
           <div class="dropdown">
             <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow rounded-circle"
@@ -161,20 +104,28 @@
           body.addClass('sidebar-icon-only');
         }
 
-        $('[data-bs-toggle="minimize"]').on("click", function () {
-          localStorage.sidebarIconOnly = false;
-          if (window.innerWidth > 992) {
-            body.toggleClass('sidebar-icon-only');
-            localStorage.sidebarIconOnly = body.hasClass('sidebar-icon-only') ? true : false;
-          }
-        });
+        $(document).ready(function () {
+          $('#expandir-menu').on("click", function () {
+            localStorage.sidebarIconOnly = false;
+            if (window.innerWidth > 992) {
+              body.toggleClass('sidebar-icon-only');
+              localStorage.sidebarIconOnly = body.hasClass('sidebar-icon-only') ? true : false;
+            }
+          });
+        })
       </script>
     </nav>
     <!-- partial -->
     <div class="container-fluid page-body-wrapper">
-      <div class="sidebar-content"></div>
+      <div class="sidebar-content" role="button"></div>
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
+          <li class="nav-item menu-item text-center pb-1 menu-bar" tittle-menu>
+            <a class="nav-link menu-link" href="javascript:void(0)" role="button" id="expandir-menu">
+              <i class="fas fa-bars"></i>
+              <span class="ms-2 menu-title">Menu</span>
+            </a>
+          </li>
           @foreach (session('customModulos') as $menu)
         <li class="nav-item menu-item">
         <a class="nav-link menu-link" {{!empty($menu->submenu) ? (string) 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : ''}} data-mdb-ripple-init
