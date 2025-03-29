@@ -55,7 +55,8 @@ class RegistradasController extends Controller
                 return [
                     'value' => $u->id_usuario,
                     'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
-                    'text' => "{$u->ndoc_usuario} - {$nombre}"
+                    'text' => "{$u->ndoc_usuario} - {$nombre}",
+                    'nombre' => $nombre
                 ];
             });
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
@@ -100,7 +101,8 @@ class RegistradasController extends Controller
                         "0" => ['c' => 'warning', 't' => 'Sin Asignar'],
                         "1" => ['c' => 'info', 't' => 'Asignada'],
                         "2" => ['c' => 'primary', 't' => 'En Proceso'],
-                        "4" => ['c' => 'danger', 't' => 'Faltan Datos']
+                        "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
+                        "5" => ['c' => 'danger', 't' => 'Cierre Sistema']
                     ];
                     $badge_informe = '<label class="badge badge-' . $estadoInforme[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
 

@@ -16,6 +16,7 @@
         let obj_problem = <?php echo json_encode($data['problema']); ?>;
         let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
         let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
+        let usuarios = <?php echo json_encode($data['usuarios']); ?>;
     </script>
 @endsection
 @section('content')
@@ -86,6 +87,7 @@
                                 <tr class="text-bg-primary text-center">
                                     <th>Codigo</th>
                                     <th>Estado</th>
+                                    <th>Tecnicos</th>
                                     <th>Empresa</th>
                                     <th>Sucursal</th>
                                     <th>Registrado</th>
@@ -124,6 +126,10 @@
                                 columns: [
                                     { data: 'incidencia' },
                                     { data: 'estado' },
+                                    { data: 'tecnicos', render: function (data, type, row) {
+                                            return (data.map(usu => usuarios[usu].nombre)).join(", ");
+                                        }
+                                    },
                                     {
                                         data: 'empresa', render: function (data, type, row) {
                                             let empresa = empresas[data];
@@ -156,8 +162,8 @@
                                 order: [[4, 'desc']],
                                 createdRow: function (row, data, dataIndex) {
                                     const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(8)').addClass('text-center');
-                                    $(row).find('td:eq(8)').addClass(`td-acciones`);
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(9)').addClass('text-center');
+                                    $(row).find('td:eq(9)').addClass(`td-acciones`);
                                     $(row).addClass(row_bg[data.estado_informe]);
                                 },
                                 processing: true
@@ -177,7 +183,7 @@
                     <h6 class="modal-title">
                         NUEVA INCIDENCIA
                         <span class="mx-2 badge badge-success badge-lg" id="cod_inc_text">{{$data['cod_inc']}}</span>
-                        <span class="d-none" aria-item="contrato"></span>
+                        <span class="badge badge-lg" aria-item="contrato"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
@@ -482,7 +488,7 @@
                             <div class="col-lg-5 col-10">
                                 <label class="form-label" for="n_orden">N° de Orden </label>
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="n_orden" />
+                                    <input type="text" class="form-control" id="n_orden">
                                     <button class="btn btn-secondary" type="button" id="button-cod-orden" check-cod="false"
                                         data-mdb-ripple-init data-mdb-ripple-color="dark">
                                         Cod. Tecnito
