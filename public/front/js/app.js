@@ -1,15 +1,15 @@
-function fillSelect(selector, data, filterField, filterValue, optionValue, optionText) {
+function fillSelect(selector, data, filterField, filterValue, optionValue, optionText, optionCondition) {
     $(selector.join()).html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
     if (!filterValue) return false;
 
     if (Array.isArray(data)) {
         data.forEach(e => {
-            if (e[filterField] == filterValue)
+            if (e[filterField] == filterValue && e[optionCondition])
                 $(selector[0]).append($('<option>').val(e[optionValue]).text(e[optionText]));
         });
     } else if (typeof data === 'object') {
         Object.entries(data).forEach(([key, e]) => {
-            if (e[filterField] == filterValue)
+            if (e[filterField] == filterValue && e[optionCondition])
                 $(selector[0]).append($('<option>').val(e[optionValue]).text(e[optionText]));
         });
     }

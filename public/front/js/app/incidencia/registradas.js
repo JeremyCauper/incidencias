@@ -121,15 +121,15 @@ $(document).ready(function () {
         } else {
             $('#modal_incidencias [aria-item="contrato"]').html('');
         }
-        fillSelect(['#sucursal'], sucursales, 'ruc', empresa.ruc, 'id', 'nombre');
+        fillSelect(['#sucursal'], sucursales, 'ruc', empresa.ruc, 'id', 'nombre', 'status');
     });
 
     $('#tIncidencia').on('change', function () {
-        fillSelect(['#problema', '#sproblema'], obj_problem, 'tipo_incidencia', $(this).val(), 'id', 'text');
+        fillSelect(['#problema', '#sproblema'], obj_problem, 'tipo_incidencia', $(this).val(), 'id', 'text', 'estatus');
     });
 
     $('#problema').on('change', function () {
-        fillSelect(['#sproblema'], obj_subproblem, 'id_problema', $(this).val(), 'id', 'text');
+        fillSelect(['#sproblema'], obj_subproblem, 'id_problema', $(this).val(), 'id', 'text', 'estatus');
     });
 
     $('#tel_contac').on('change', function () {
@@ -367,7 +367,7 @@ function ShowEdit(id) {
             changeCodInc(dt.cod_incidencia);
             $('#empresa').val(dt.ruc_empresa).trigger('change');
 
-            fillSelect(['#sucursal'], sucursales, 'ruc', dt.ruc_empresa, 'id', 'nombre');
+            fillSelect(['#sucursal'], sucursales, 'ruc', dt.ruc_empresa, 'id', 'nombre', 'status');
             $('#sucursal').val(dt.id_sucursal).trigger('change');
             $('#cod_contact').val(dt.id_contacto);
             $('#tel_contac').val(dt.telefono).trigger('change');
@@ -379,9 +379,9 @@ function ShowEdit(id) {
             $('#prioridad').val(dt.prioridad).trigger('change');
             $('#tSoporte').val(dt.id_tipo_soporte).trigger('change');
             $('#tIncidencia').val(dt.id_tipo_incidencia).trigger('change');
-            fillSelect(['#problema', '#sproblema'], obj_problem, 'tipo_incidencia', dt.id_tipo_incidencia, 'id', 'text');
+            fillSelect(['#problema', '#sproblema'], obj_problem, 'tipo_incidencia', dt.id_tipo_incidencia, 'id', 'text', 'estatus');
             $('#problema').val(dt.id_problema).trigger('change');
-            fillSelect(['#sproblema'], obj_subproblem, 'id_problema', dt.id_problema, 'id', 'text');
+            fillSelect(['#sproblema'], obj_subproblem, 'id_problema', dt.id_problema, 'id', 'text', 'estatus');
             $('#sproblema').val(dt.id_subproblema).trigger('change');
             $('#fecha_imforme').val(dt.fecha_informe);
             $('#hora_informe').val(dt.hora_informe);

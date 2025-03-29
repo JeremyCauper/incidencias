@@ -50,7 +50,7 @@ class RegistradasController extends Controller
                 ];
             });
 
-            $data['usuarios'] = db::table('usuarios')->where(['id_area' => 1])->get()->map(function ($u) {
+            $data['usuarios'] = db::table('usuarios')->where(['id_area' => 1])->get()->keyBy('id_usuario')->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,
