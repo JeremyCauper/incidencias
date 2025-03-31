@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Helpers\TipoUsuario;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Exception;
@@ -47,6 +48,7 @@ class LoginController extends Controller
 
         $modulos = $this->obtenerModulos($menu_usuario, Auth::user()->tipo_acceso);
         $nomPerfil = $this->formatearNombre(Auth::user()->nombres, Auth::user()->apellidos);
+        $text_acceso = (new TipoUsuario())->show(Auth::user()->tipo_acceso)['descripcion'];
 
         session([
             'customModulos' => $modulos->menus,
@@ -54,6 +56,7 @@ class LoginController extends Controller
             'nomPerfil' => $nomPerfil,
             'id_usuario' => Auth::user()->id_usuario,
             'tipo_acceso' => Auth::user()->tipo_acceso,
+            'text_acceso' => $text_acceso,
             'menu_usuario' => $menu_usuario,
             'turno_fin' => $turno_fin
         ]);
@@ -86,7 +89,7 @@ class LoginController extends Controller
     public function logout(Request $request)
     {
         Auth::logout();
-        session()->forget(['customModulos', 'rutaRedirect', 'nomPerfil', 'id_usuario', 'tipo_acceso', 'menu_usuario', 'turno_fin']);
+        session()->forget(['customModulos', 'rutaRedirect', 'nomPerfil', 'id_usuario', 'tipo_acceso', 'text_acceso', 'menu_usuario', 'turno_fin']);
         return redirect('/soporte');
     }
 }

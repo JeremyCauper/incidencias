@@ -49,7 +49,7 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top">
       <!-- <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start"> -->
-        <!-- <div>
+      <!-- <div>
           <a class="navbar-brand brand-logo" href="{{secure_url('/soporte')}}">
             <div class="d-flex align-items-center">
               <img src="{{secure_asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
@@ -81,6 +81,7 @@
                   <p class="mb-1 mt-3 fw-semibold">
                     {{ session('nomPerfil') }}
                   </p>
+                  <p>{{ session('text_acceso') ?? null }}</p>
                   <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
                 </span>
               </li>
@@ -105,7 +106,7 @@
         }
 
         $(document).ready(function () {
-          $('#expandir-menu').on("click", function () {
+          $('#expandir-menu i').on("click", function () {
             localStorage.sidebarIconOnly = false;
             if (window.innerWidth > 992) {
               body.toggleClass('sidebar-icon-only');
@@ -121,9 +122,18 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item menu-item text-center pb-1 menu-bar" tittle-menu>
-            <a class="nav-link menu-link" href="javascript:void(0)" role="button" id="expandir-menu">
+            <a class="nav-link menu-lateral" href="javascript:void(0)" role="button" id="expandir-menu">
               <i class="fas fa-bars"></i>
               <span class="ms-2 menu-title">Menu</span>
+            </a>
+          </li>
+          <li class="nav-item menu-item text-center" tittle-menu>
+            <a class="nav-link menu-perfil" href="javascript:void(0)">
+              <img class="rounded-circle" src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}">
+              <span class="ms-2 menu-title">
+                <p class="fw-bold mb-1 nombre-personal">{{ session('nomPerfil') }}</p>
+                <p class="text-muted mb-0 tipo-personal">{{ session('text_acceso') ?? null }}</p>
+              </span>
             </a>
           </li>
           @foreach (session('customModulos') as $menu)
