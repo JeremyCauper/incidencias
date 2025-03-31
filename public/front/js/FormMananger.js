@@ -8,10 +8,12 @@ class FormMananger {
         switch (accion) {
             case 'show':
                 modalf.append(`<div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>`);
+                // modalf.find('.modal-body').addClass('d-none');
                 break;
 
             case 'hide':
                 modalf.children('.loader-of-modal').remove();
+                // modalf.find('.modal-body').removeClass('d-none');
                 break;
 
             default:

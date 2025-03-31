@@ -1,3 +1,7 @@
+function setInfoEmpresas(modal, ruc_empresa, id_sucursal, dataSet) {
+    // 
+}
+
 function fillSelect(selector, data, filterField, filterValue, optionValue, optionText, optionCondition) {
     $(selector.join()).html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
     if (!filterValue) return false;

@@ -199,6 +199,9 @@ $(document).ready(function () {
         tb_incidencia.columns.adjust().draw();
     });
 });
+let sucursal = null;
+let empresa = null;
+let incidencia_temp = null;
 
 function CheckCodOrden(check = true) {
     $('#button-cod-orden').attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
@@ -562,9 +565,6 @@ async function StartInc(cod, estado) {
     });
 }
 
-let sucursal = null;
-let empresa = null;
-let incidencia_temp = null;
 async function OrdenDetail(e, cod) {
     const obj = extractDataRow(e);
     obj.estado = (obj.estado).replaceAll('.7rem;', '1rem;');
