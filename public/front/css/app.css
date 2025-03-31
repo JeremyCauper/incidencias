@@ -991,11 +991,6 @@ body {
     content: "\f104";
 }
 
-/* .sidebar-icon-only .sidebar .nav:not(.sub-menu)>.nav-item>.nav-link[aria-expanded=true], */
-.sidebar-icon-only .sidebar .nav .nav-item.active>.nav-link {
-    background: #edf4ff;
-}
-
 /* .sidebar .nav .active::before, */
 .sidebar .nav:not(.sub-menu)>.nav-item.active>.nav-link::before,
 .sidebar-icon-only .sidebar .nav:not(.sub-menu) .nav-item.active::before {
@@ -1041,16 +1036,6 @@ body {
 .sidebar .nav:not(.sub-menu)>.nav-item>.nav-link {
     margin: 0;
 }
-
-.sidebar .nav:not(.sub-menu)>.nav-item>.nav-link[aria-expanded=true] {
-    background: #fff;
-    /* color: #3b71ca; */
-    /* border-radius: 0px 20px 0px 0px; */
-}
-
-/* .sidebar .nav:not(.sub-menu)>.nav-item>.nav-link[aria-expanded=false] {
-    border-radius: 0px 20px 20px 0px;
-} */
 
 .sidebar .nav:not(.sub-menu)>.nav-item.active {
     background: transparent;

@@ -88,7 +88,7 @@
               <li>
                 <a class="dropdown-item" href="{{secure_url('/logout')}}">
                   <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
-                  Cerrar session
+                  Cerrar sesión
                 </a>
               </li>
             </ul>
@@ -128,13 +128,13 @@
             </a>
           </li>
           <li class="nav-item menu-item text-center" tittle-menu>
-            <a class="nav-link menu-perfil" href="javascript:void(0)">
+            <div class="nav-link menu-perfil">
               <img class="rounded-circle" src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}">
               <span class="ms-2 menu-title">
                 <p class="fw-bold mb-1 nombre-personal">{{ session('nomPerfil') }}</p>
                 <p class="text-muted mb-0 tipo-personal">{{ session('text_acceso') ?? null }}</p>
               </span>
-            </a>
+            </div>
           </li>
           @foreach (session('customModulos') as $menu)
         <li class="nav-item menu-item">
