@@ -1,5 +1,5 @@
-function setearInfoEmpresas(modal, empresa, sucursal, ) {
-    
+function setInfoEmpresas(modal, ruc_empresa, id_sucursal, dataSet) {
+    // 
 }
 
 function fillSelect(selector, data, filterField, filterValue, optionValue, optionText, optionCondition) {
