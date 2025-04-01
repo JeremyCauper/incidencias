@@ -159,7 +159,7 @@
                                     },
                                     { data: 'acciones' }
                                 ],
-                                order: [[4, 'desc']],
+                                order: [[5, 'desc']],
                                 createdRow: function (row, data, dataIndex) {
                                     const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
                                     $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(9)').addClass('text-center');
