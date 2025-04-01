@@ -7,8 +7,8 @@
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <style>
         /*////////////////////////////////////////
-                        /        SCRIPT CSS FIRMA DIGITAL        /
-                        ////////////////////////////////////////*/
+                            /        SCRIPT CSS FIRMA DIGITAL        /
+                            ////////////////////////////////////////*/
 
         .content-image {
             margin: auto;
@@ -109,8 +109,8 @@
         }
 
         /*////////////////////////////////////////
-                        /          SCRIPT CSS Doc Firma          /
-                        ////////////////////////////////////////*/
+                            /          SCRIPT CSS Doc Firma          /
+                            ////////////////////////////////////////*/
 
         .search_signature_group {
             flex-wrap: nowrap;
@@ -164,6 +164,15 @@
             white-space: pre-line;
         }
     </style>
+    <script>
+        let cod_ordenv = "{{$data['cod_ordenv']}}";
+        let cod_orden = '<?= $data['cod_orden'] ?>';
+        const empresas = <?php echo json_encode($data['empresas']); ?>;
+        const sucursales = <?php echo json_encode($data['sucursales']); ?>;
+        const tipo_estacion = <?php echo json_encode($data['tipo_estacion']); ?>;
+        const problemas = <?php echo json_encode($data['problemas']); ?>;
+        const subproblemas = <?php echo json_encode($data['subproblemas']); ?>;
+    </script>
 @endsection
 @section('content')
 
@@ -967,15 +976,6 @@
 @endsection
 
 @section('scripts')
-    <script>
-        let cod_ordenv = "{{$data['cod_ordenv']}}";
-        let cod_orden = '<?= $data['cod_orden'] ?>';
-        const empresas = <?php echo json_encode($data['empresas']); ?>;
-        const sucursales = <?php echo json_encode($data['sucursales']); ?>;
-        const tipo_estacion = <?php echo json_encode($data['tipo_estacion']); ?>;
-        const problemas = <?php echo json_encode($data['problemas']); ?>;
-        const subproblemas = <?php echo json_encode($data['subproblemas']); ?>;
-    </script>
     <script src="{{secure_asset('front/js/RevisionMananger,js')}}"></script>
     <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
     <script src="{{secure_asset('front/js/app/buzon/asignadas.js')}}"></script>
