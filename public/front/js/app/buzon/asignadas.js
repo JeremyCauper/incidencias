@@ -712,6 +712,7 @@ function OrdenVisita(e, id) {
                     boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de visita con el siguiente codigo <b>${dt.cod_ordenv}</b>.` });
                     return true;
                 }
+                var visita = data.data;
                 sucursal = sucursales[dt.id_sucursal];
                 empresa = empresas[sucursal.ruc];
 
