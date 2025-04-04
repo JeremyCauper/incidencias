@@ -34,7 +34,7 @@
   <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/select2.min.js')}}"></script>
   <script src="{{secure_asset('front/vendor/select/form_select2.js')}}"></script>
-  <script src="{{secure_asset('front/js/AlertMananger.js')}}"></script>
+  <script src="{{secure_asset('front/js/app/AlertMananger.js')}}"></script>
   <script src="{{secure_asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{secure_asset('front/js/app.js')}}"></script>
 
@@ -48,15 +48,6 @@
   <div class="container-scroller">
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top">
-      <!-- <div class="text-center navbar-brand-wrapper d-flex align-items-center justify-content-start"> -->
-      <!-- <div>
-          <a class="navbar-brand brand-logo" href="{{secure_url('/soporte')}}">
-            <div class="d-flex align-items-center">
-              <img src="{{secure_asset('front/images/app/logo_tittle_rc_white.png')}}" alt="logo" />
-            </div>
-          </a>
-        </div>
-      </div> -->
       <a class="navbar-brand" href="#">
         <img src="{{secure_asset('front/images/app/LogoRC_WNormal.webp')}}" class="ms-2" height="45" alt="logo" />
       </a>
@@ -70,23 +61,22 @@
             <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow rounded-circle"
               href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false" data-mdb-ripple-init>
               <img class="img-xs rounded-circle"
-                src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image">
+                src="{{ session('config_layout')->foto_perfil }}" alt="Profile image">
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
               <li>
                 <span class="dropdown-header text-center">
                   <img class="img-md rounded-circle"
-                    src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}" alt="Profile image"
+                    src="{{ session('config_layout')->foto_perfil }}" alt="Profile image"
                     style="width: 90px; height: 90px;">
                   <p class="mb-1 mt-3 fw-semibold">
-                    {{ session('nomPerfil') }}
+                    {{ session('config_layout')->nombre_perfil }}
                   </p>
-                  <p>{{ session('text_acceso') ?? null }}</p>
-                  <p class="fw-light text-muted mb-0">{{Auth::user()->email}}</p>
+                  <p>{{ session('config_layout')->text_acceso }}</p>
                 </span>
               </li>
               <li>
-                <a class="dropdown-item" href="{{secure_url('/logout')}}">
+                <a class="dropdown-item" href="{{secure_url('/soporte/logout')}}">
                   <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
                   Cerrar sesión
                 </a>
@@ -129,10 +119,10 @@
           </li>
           <li class="nav-item menu-item text-center" tittle-menu>
             <div class="nav-link menu-perfil">
-              <img class="rounded-circle" src="{{ secure_asset('front/images/auth/' . Auth::user()->foto_perfil) }}">
+              <img class="rounded-circle" src="{{ session('config_layout')->foto_perfil }}">
               <span class="ms-2 menu-title">
-                <p class="fw-bold mb-1 nombre-personal">{{ session('nomPerfil') }}</p>
-                <p class="text-muted mb-0 tipo-personal">{{ session('text_acceso') ?? null }}</p>
+                <p class="fw-bold mb-1 nombre-personal">{{ session('config_layout')->nombre_perfil }}</p>
+                <p class="text-muted mb-0 tipo-personal">{{ session('config_layout')->text_acceso }}</p>
               </span>
             </div>
           </li>
@@ -173,14 +163,6 @@
           @yield('content')
         </div>
         <!-- content-wrapper ends -->
-        <!-- partial:partials/_footer.html -->
-        <!-- <footer class="footer">
-          <div class="d-flex justify-content-end">
-            <span class="float-none float-sm-end d-block mt-1 mt-sm-0 text-center">Copyright © {{date('Y')}}. All rights
-              reserved.</span>
-          </div>
-        </footer> -->
-        <!-- partial -->
       </div>
       <!-- main-panel ends -->
     </div>
@@ -232,7 +214,7 @@
 
         // Ejecutar el logout solo una vez cuando la fecha ya pasó
         if (fechaIngresada <= fechaActual && !logoutEjecutado) {
-          fetch(`${__url}/logout`, {
+          fetch(`${__url}/soporte/logout`, {
             method: 'GET',
           }).then(response => {
             if (response.ok) {
@@ -248,13 +230,13 @@
   </script>
   <!-- MDB -->
   <script type="text/javascript" src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
-  <script src="{{secure_asset('front/js/template.js') }}"></script>
-  <script src="{{secure_asset('front/js/hoverable-collapse.js') }}"></script>
-  <script src="{{secure_asset('front/js/off-canvas.js')}}"></script>
+  <script src="{{secure_asset('front/js/layout/template.js') }}"></script>
+  <script src="{{secure_asset('front/js/layout/hoverable-collapse.js') }}"></script>
+  <script src="{{secure_asset('front/js/layout/off-canvas.js')}}"></script>
   <script src="{{secure_asset('front/vendor/inputmask/jquery.inputmask.bundle.min.js')}}"></script>
   <script src="{{secure_asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
-  <script src="{{secure_asset('front/js/TableManeger.js')}}"></script>
-  <script src="{{secure_asset('front/js/FormMananger.js')}}"></script>
+  <script src="{{secure_asset('front/js/app/TableManeger.js')}}"></script>
+  <script src="{{secure_asset('front/js/app/FormMananger.js')}}"></script>
   <!-- plugins:js -->
   @yield('scripts')
 </body>

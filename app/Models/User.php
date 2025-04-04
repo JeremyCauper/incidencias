@@ -17,7 +17,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $table = "usuarios";
+    protected $table = "tb_personal";
     protected $primaryKey = "id_usuario";
     protected $fillable = [
         'tipo_acceso',
@@ -38,7 +38,6 @@ class User extends Authenticatable
      */
     protected $hidden = [
         'contrasena',
-        'remember_token',
     ];
 
     /**

@@ -236,7 +236,7 @@ function date(format) {
 }
 
 async function consultarDni(dni) {
-    const url = `${__url}/ConsultaDni/${dni}`;
+    const url = `${__url}/soporte/ConsultaDni/${dni}`;
 
     try {
         const response = await $.ajax({
