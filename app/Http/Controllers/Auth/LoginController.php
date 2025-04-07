@@ -49,7 +49,7 @@ class LoginController extends Controller
         $nomPerfil = $this->formatearNombre(Auth::user()->nombres, Auth::user()->apellidos);
         $text_acceso = (new TipoUsuario())->show(Auth::user()->tipo_acceso)['descripcion'];
 
-        $foto_perfil = empty(Auth::user()->foto_perfil) ? Auth::user()->foto_perfil : 'user_auth.jpg';
+        $foto_perfil = empty(Auth::user()->foto_perfil) ? 'user_auth.jpg' : Auth::user()->foto_perfil;
 
         session([
             'customModulos' => $modulos->menus,
@@ -61,7 +61,7 @@ class LoginController extends Controller
             'config_layout' => (object)[
                 'text_acceso' => $text_acceso ?? null,
                 'nombre_perfil' => $nomPerfil ?? null,
-                'foto_perfil' => secure_asset('front/images/auth/' . $foto_perfil),
+                'foto_perfil' => secure_asset("front/images/auth/$foto_perfil"),
             ]
         ]);
         $request->session()->regenerate();

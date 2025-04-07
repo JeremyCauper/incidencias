@@ -439,7 +439,7 @@
             resetText: 'Reset',
             indentGroupOptions: true,
             templates: {
-                button: '<button type="button" class="multiselect dropdown-toggle" data-toggle="dropdown"><span class="multiselect-selected-text"></span></button>',
+                button: '<button type="button" class="multiselect " data-toggle="dropdown"><span class="multiselect-selected-text"></span></button>',
                 popupContainer: '<div class="multiselect-container dropdown-menu"></div>',
                 filter: '<div class="multiselect-filter"><div class="input-group"><div class="form-group-feedback form-group-feedback-left"><input type="text" class="multiselect-search form-control"><div class="form-control-feedback"><i class="icon-search4 text-muted"></i></div></div><div class="input-group-append multiselect-clear-filter"><button type="button" class="btn btn-light btn-icon"><i class="icon-cross"></i></button></div></div></div>',
                 option: '<div class="multiselect-item"></div>',
@@ -1092,7 +1092,7 @@
 
                 $option.addClass("multiselect-all");
                 $option.removeClass("multiselect-item");
-                $option.find(".custom-control-label").addClass("font-weight-bold");
+                $option.find(".custom-control-label").addClass("font-weight-semibold");
 
                 this.$popupContainer.prepend($option);
 

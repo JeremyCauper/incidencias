@@ -56,7 +56,6 @@
                     <div class="col-xxl-2 col-md-4 my-1">
                         <label class="form-label mb-0" for="tEstado">Estado</label>
                         <select id="tEstado" multiple="multiple" class="multiselect-select-all">
-                            <option selected value="0">Todos</option>
                             <option selected value="0">Sin Asignar</option>
                             <option selected value="1">Asignada</option>
                             <option selected value="2">En Proceso</option>
