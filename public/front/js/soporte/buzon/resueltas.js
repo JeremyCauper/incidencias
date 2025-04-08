@@ -44,10 +44,6 @@ function OrdenTicketInc(cod) {
 }
 
 function ShowDetailInc(e, id) {
-    // let obj = extractDataRow(e);
-    // $.each(obj, function (panel, count) {
-    //     $(`#modal_detalle [aria-item="${panel}"]`).html(count);
-    // });
 
     $('#modal_detalle').modal('show');
     fMananger.formModalLoding('modal_detalle', 'show');
@@ -57,7 +53,6 @@ function ShowDetailInc(e, id) {
         url: `${__url}/soporte/incidencias/registradas/detail/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
             
             if (data.success) {
                 var seguimiento = data.data.seguimiento;
@@ -124,9 +119,12 @@ function ShowDetailVis(e, id) {
                 var seguimiento = data.data.seguimiento;
                 var visita = data.data.visita;
 
-                $(`#modal_seguimiento_visitasp [aria-item="empresa"]`).html(visita.empresa);
-                $(`#modal_seguimiento_visitasp [aria-item="direccion"]`).html(visita.direccion);
-                $(`#modal_seguimiento_visitasp [aria-item="sucursal"]`).html(visita.sucursal);
+                var sucursal = sucursales[visita.id_sucursal];
+                var empresa = empresas[sucursal.ruc];
+
+                $(`#modal_seguimiento_visitasp [aria-item="empresa"]`).html(`${empresa.ruc} - ${empresa.razon_social}`);
+                $(`#modal_seguimiento_visitasp [aria-item="direccion"]`).html(sucursal.direccion);
+                $(`#modal_seguimiento_visitasp [aria-item="sucursal"]`).html(sucursal.nombre);
 
                 fMananger.formModalLoding('modal_seguimiento_visitasp', 'hide');
                 seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -156,8 +154,8 @@ function ShowDetailVis(e, id) {
     });
 }
 
-
-async function resetTable() {
+let valorChange = false;
+async function resetTable(chang) {
     $('#empresa').val('').trigger('change');
     $('#sucursal').val('').trigger('change');
     $('#dateRango').data('daterangepicker').setStartDate(date('Y-m-01'));
@@ -165,9 +163,9 @@ async function resetTable() {
 
     tb_incidencias.columns.adjust().draw();
     tb_visitas.columns.adjust().draw();
+    valorChange = chang;
 }
 
-let valorChange = false;
 async function filtroBusqueda() {
     var empresa = $('#empresa').val();
     var sucursal = $('#sucursal').val();

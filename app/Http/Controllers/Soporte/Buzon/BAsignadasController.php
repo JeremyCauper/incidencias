@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Soporte\Buzon;
 
 use App\Helpers\TipoEstacion;
+use App\Helpers\TipoIncidencia;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -18,8 +19,9 @@ class BAsignadasController extends Controller
             $data['empresas'] = DB::table('tb_empresas')->select('id', 'ruc', 'razon_social', 'contrato', 'direccion', 'codigo_aviso', 'status')->get()->keyBy('ruc');;
             $data['sucursales'] = DB::table('tb_sucursales')->select('id', 'ruc', 'nombre', 'direccion', 'status')->get()->keyBy('id');
             $data['tipo_estacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
-            $data['problemas'] = DB::table('tb_problema')->get()->keyBy('id_problema');
-            $data['subproblemas'] = DB::table('tb_subproblema')->get()->keyBy('id_subproblema');
+            $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
+            $data['problema'] = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'tipo_incidencia', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
+            $data['sproblema'] = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'id_problema', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
 
             $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
                 return [

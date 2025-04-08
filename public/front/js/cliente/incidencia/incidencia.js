@@ -37,7 +37,9 @@ mostrar_acciones('tb_orden');
 function filtroBusqueda() {
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
-    var nuevoUrl = `${__url}/empresa/incidencias/index?sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
+    var tEstado = $('#tEstado').val();
+    var tInc = $('#tIncidencia').val();
+    var nuevoUrl = `${__url}/empresa/incidencias/index?sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}&tIncidencia=${tInc}&tEstado=${tEstado}`;
     
     tb_orden.ajax.url(nuevoUrl).load();
 }

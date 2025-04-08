@@ -162,11 +162,12 @@ class ResueltasController extends Controller
     {
         try {
             $orden = DB::table('tb_orden_servicio')->where('cod_ordens', $cod)->first();
+            $incidencia = DB::table('tb_incidencias')->where('cod_incidencia', $orden->cod_incidencia)->first();
             $contacto = null;
             if ($orden && !empty($orden->id_contacto)) {
                 $contacto = db::table('tb_contac_ordens')->select(['id', 'nro_doc', 'nombre_cliente', 'firma_digital'])->where(['id' => $orden->id_contacto])->first();
             }
-            return response()->json(['success' => true, 'data' => $contacto]);
+            return response()->json(['success' => true, 'data' => [ 'contacto' => $contacto, 'incidencia' => $incidencia]]);
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }

@@ -44,48 +44,59 @@ function filtroBusqueda() {
 }
 
 
-function ShowDetail(e, id) {
-    let obj = extractDataRow(e);
-    $.each(obj, function (panel, count) {
-        $(`#modal_detalle [aria-item="${panel}"]`).html(count);
-    });
-
+function ShowDetail(e, cod) {
     $('#modal_detalle').modal('show');
-    fMananger.formModalLoding('modal_detalle', 'show');
+    fMananger.formModalLoding('modal_detalle', 'show', true);
     $('#content-seguimiento').html('');
     $.ajax({
         type: 'GET',
-        url: `${__url}/soporte/incidencias/registradas/detail/${id}`,
+        url: `${__url}/soporte/incidencias/registradas/detail/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            if (data.success) {
-                var seguimiento = data.data.seguimiento;
-                var incidencia = data.data.incidencia;
-
-                $(`#modal_detalle [aria-item="observacion"]`).html(incidencia.observacion);
-
-                fMananger.formModalLoding('modal_detalle', 'hide');
-                seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
-                seguimiento.forEach(function (element) {
-                    $('#content-seguimiento').append(`
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div class="d-flex align-items-center">
-                                <img src="${element.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                                <div class="ms-3">
-                                    <p class="fw-bold mb-1">${element.nombre}</p>
-                                    <p class="text-muted" style="font-size: .73rem;font-family: Roboto; margin-bottom: .2rem;">${element.text}</p>
-                                    <p class="text-muted mb-0" style="font-size: .73rem;font-family: Roboto;">${element.contacto}</p>
-                                </div>
-                            </div>
-                            <span class="badge rounded-pill badge-primary">${element.date}</span>
-                        </li>`);
-                });
+            if (!data.success) {
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
+            var seguimiento = data.data.seguimiento;
+            var inc = data.data.incidencia;
+
+            sucursal = sucursales[inc.id_sucursal];
+            empresa = empresas[inc.ruc_empresa];
+
+            llenarInfoModal('modal_detalle', {
+                codigo: inc.cod_incidencia,
+                codigo_orden: inc.cod_orden,
+                estado: getBadgeIncidencia(inc.estado_informe),
+                razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                direccion: empresa.direccion,
+                sucursal: sucursal.nombre,
+                atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
+                dir_sucursal: sucursal.direccion,
+                problema: `${obj_problem[inc.id_problema].text} / ${obj_subproblem[inc.id_subproblema].text}`,
+                observacion: inc.observacion,
+            });
+
+            fMananger.formModalLoding('modal_detalle', 'hide');
+            seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
+            seguimiento.forEach(function (element) {
+                $('#content-seguimiento').append(`
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <img src="${element.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+                            <div class="ms-3">
+                                <p class="fw-bold mb-1">${element.nombre}</p>
+                                <p class="text-muted" style="font-size: .73rem;font-family: Roboto; margin-bottom: .2rem;">${element.text}</p>
+                                <p class="text-muted mb-0" style="font-size: .73rem;font-family: Roboto;">${element.contacto}</p>
+                            </div>
+                        </div>
+                        <span class="badge rounded-pill badge-primary">${element.date}</span>
+                    </li>`);
+            });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_detalle', 'hide');
-            boxAlert.box({ i: 'error', t: 'Ocurrio un error en el processo', h: 'No se pudo extraer los datos con exito.' });
             console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
         }
     });
 }
@@ -100,28 +111,43 @@ function OrdenTicket(cod) {
 
 function AddSignature(e, cod) {
     $('#modal_firmas').modal('show');
-    fMananger.formModalLoding('modal_firmas', 'show');
-    let obj = extractDataRow(e);
-    $.each(obj, function (panel, count) {
-        $(`#modal_firmas [aria-item="${panel}"]`).html(count);
-    });
+    fMananger.formModalLoding('modal_firmas', 'show', true);
     $('[name="cod_orden"]').val(cod);
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/incidencias/resueltas/showSignature/${cod}`,
         contentType: 'application/json',
         success: function (data) {
+            console.log(data);
+            
             
             if (data.success) {
-                var datos = data.data;
-                if (datos) {
-                    if (datos.firma_digital)
-                        $('#PrevizualizarFirma').attr('src', `${__asset}/images/client/${datos.firma_digital}`).removeClass('visually-hidden');
-                    $('#search_signature').val(`${datos.nro_doc} - ${datos.nombre_cliente}`).attr({'disabled': ''});
-                    $('#id_firmador').val(datos.id);
+                var contact = data.data.contacto;
+                if (contact) {
+                    if (contact.firma_digital)
+                        $('#PrevizualizarFirma').attr('src', `${__asset}/images/client/${contact.firma_digital}`).removeClass('visually-hidden');
+                    $('#search_signature').val(`${contact.nro_doc} - ${contact.nombre_cliente}`).attr({'disabled': ''});
+                    $('#id_firmador').val(contact.id);
                 }
+                var inc = data.data.incidencia;
+
+                sucursal = sucursales[inc.id_sucursal];
+                empresa = empresas[inc.ruc_empresa];
+    
+                llenarInfoModal('modal_firmas', {
+                    codigo: inc.cod_incidencia,
+                    codigo_orden: cod,
+                    estado: getBadgeIncidencia(inc.estado_informe),
+                    razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                    direccion: empresa.direccion,
+                    sucursal: sucursal.nombre,
+                    atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
+                    dir_sucursal: sucursal.direccion,
+                });
             }
             fMananger.formModalLoding('modal_firmas', 'hide');
+
+
         },
         error: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_firmas', 'hide');

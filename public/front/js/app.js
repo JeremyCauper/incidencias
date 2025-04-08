@@ -267,6 +267,25 @@ async function consultarDniInput($this) {
     }
 }
 
+function llenarInfoModal(id_modal, data) {
+    Object.entries(data).forEach(([key, e]) => {
+        $(`#${id_modal} [aria-item="${key}"]`).html(e);
+    });
+}
+
+function getBadgeIncidencia(estado) {
+    estadoInforme = {
+        "0": { 'color': 'warning', 'text': 'Sin Asignar' },
+        "1": { 'color': 'info', 'text': 'Asignada' },
+        "2": { 'color': 'primary', 'text': 'En Proceso' },
+        "3": { 'color': 'success', 'text': 'Finalizado' },
+        "4": { 'color': 'danger', 'text': 'Faltan Datos' },
+        "5": { 'color': 'danger', 'text': 'Cierre Sistema' },
+    };
+
+    return `<label class="badge badge-${estadoInforme[estado]['color']}" style="font-size: .7rem;">${estadoInforme[estado]['text']}</label>`;
+}
+
 function animateProperty(element, property, start, end, duration, fps, callback) {
     let current = start;
     const totalFrames = duration / (1000 / fps);

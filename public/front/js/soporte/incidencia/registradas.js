@@ -301,28 +301,35 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
     });
 });
 
-function ShowDetail(e, id) {
-    let obj = extractDataRow(e);
-    obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
-
-    $.each(obj, function (panel, count) {
-        $(`#modal_detalle [aria-item="${panel}"]`).html(count);
-    });
+function ShowDetail(e, cod) {
     $('#modal_detalle').modal('show');
-    fMananger.formModalLoding('modal_detalle', 'show');
+    fMananger.formModalLoding('modal_detalle', 'show', true);
     $('#content-seguimiento').html('');
     $.ajax({
         type: 'GET',
-        url: `${__url}/soporte/incidencias/registradas/detail/${id}`,
+        url: `${__url}/soporte/incidencias/registradas/detail/${cod}`,
         contentType: 'application/json',
         success: function (data) {
             if (!data.success) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
             var seguimiento = data.data.seguimiento;
-            var incidencia = data.data.incidencia;
+            var inc = data.data.incidencia;
 
-            $(`#modal_detalle [aria-item="observacion"]`).html(incidencia.observacion);
+            sucursal = sucursales[inc.id_sucursal];
+            empresa = empresas[inc.ruc_empresa];
+
+            llenarInfoModal('modal_detalle', {
+                codigo: inc.cod_incidencia,
+                estado: getBadgeIncidencia(inc.estado_informe),
+                razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                direccion: empresa.direccion,
+                sucursal: sucursal.nombre,
+                atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
+                dir_sucursal: sucursal.direccion,
+                problema: `${obj_problem[inc.id_problema].text} / ${obj_subproblem[inc.id_subproblema].text}`,
+                observacion: inc.observacion,
+            });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
             seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -353,7 +360,7 @@ function ShowDetail(e, id) {
 function ShowEdit(id) {
     $('#modal_incidencias').modal('show');
     $('#contenedor-personal').addClass('d-none');
-    fMananger.formModalLoding('modal_incidencias', 'show');
+    fMananger.formModalLoding('modal_incidencias', 'show', true);
 
     $.ajax({
         type: 'GET',
@@ -414,14 +421,8 @@ function habilitarCodAviso(accion) {
 
 
 function ShowAssign(e, cod) {
-    const obj = extractDataRow(e);
-    obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
-
-    $.each(obj, function (panel, count) {
-        $(`#modal_assign [aria-item="${panel}"]`).html(count);
-    });
     $('#modal_assign').modal('show');
-    fMananger.formModalLoding('modal_assign', 'show');
+    fMananger.formModalLoding('modal_assign', 'show', true);
 
     $.ajax({
         type: 'GET',
@@ -431,10 +432,27 @@ function ShowAssign(e, cod) {
             if (!data.success) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
-            const dt = data.data;
+            var inc = data.data;
+            incidencia_temp = inc;
+            
+            sucursal = sucursales[inc.id_sucursal];
+            empresa = empresas[inc.ruc_empresa];
+
+            llenarInfoModal('modal_assign', {
+                codigo: inc.cod_incidencia,
+                estado: getBadgeIncidencia(inc.estado_informe),
+                razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                direccion: empresa.direccion,
+                sucursal: sucursal.nombre,
+                atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
+                dir_sucursal: sucursal.direccion,
+                problema: `${obj_problem[inc.id_problema].text} / ${obj_subproblem[inc.id_subproblema].text}`,
+                observacion: inc.observacion,
+            });
+            
             fMananger.formModalLoding('modal_assign', 'hide');
-            (dt.personal_asig).forEach(element => {
-                const accion = dt.estado_informe == 2 ? false : true;
+            (inc.personal_asig).forEach(element => {
+                const accion = inc.estado_informe == 2 ? false : true;
                 cPersonal1.fillTable(element.id, accion);
             });
         },
@@ -450,9 +468,6 @@ async function AssignPer() {
     if (!await boxAlert.confirm({ h: `Está apunto de asignar personal a la incidencia` })) return true;
     fMananger.formModalLoding('modal_assign', 'show');
 
-    const cod = $('#modal_assign [aria-item="codigo"]').html();
-    const estado = $(`#modal_assign [aria-item="estado"]`).text().replaceAll(' ', '').toLowerCase();
-
     const personal = cPersonal1.extract();
     if (!personal) {
         return fMananger.formModalLoding('modal_assign', 'hide');
@@ -466,20 +481,15 @@ async function AssignPer() {
             'X-CSRF-TOKEN': __token,
         },
         data: JSON.stringify({
-            cod_inc: cod,
-            estado: estado == 'enproceso' ? false : true,
+            cod_inc: incidencia_temp.cod_incidencia,
+            estado: incidencia_temp.estado_informe == 2 ? false : true,
             personal_asig: personal
         }),
         success: function (data) {
-            var estadoInfo = [
-                { 'c': 'warning', 't': 'Sin Asignar' },
-                { 'c': 'info', 't': 'Asignada' },
-                { 'c': 'primary', 't': 'En Proceso' }
-            ];
             fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
                 cod_incidencia = data.data.cod_inc;
-                $(`#modal_assign [aria-item="estado"]`).find('label').attr("class", `badge badge-${estadoInfo[data.data.estado]['c']}`).html(estadoInfo[data.data.estado]['t']); //.html(`<label class="badge badge-${estadoInfo[data.data.estado]['c']}" style="font-size: .8rem;">${estadoInfo[data.data.estado]['t']}</label>`);
+                $(`#modal_assign [aria-item="estado"]`).html(getBadgeIncidencia(data.data.estado));
                 cPersonal1.data = data.data.personal;
                 updateTable();
             }
@@ -566,16 +576,9 @@ async function StartInc(cod, estado) {
 }
 
 async function OrdenDetail(e, cod) {
-    const obj = extractDataRow(e);
-    obj.estado = (obj.estado).replaceAll('.7rem;', '1rem;');
-
-    $.each(obj, function (panel, count) {
-        $(`#modal_orden [aria-item="${panel}"]`).html(count);
-    });
-    $(`#modal_orden [aria-item="empresaFooter"]`).html(obj.empresa);
     $('#modal_orden [aria-item="tecnicos"]').html('');
     $('#modal_orden').modal('show');
-    fMananger.formModalLoding('modal_orden', 'show');
+    fMananger.formModalLoding('modal_orden', 'show', true);
 
     $.ajax({
         type: 'GET',
@@ -584,29 +587,40 @@ async function OrdenDetail(e, cod) {
         success: function (data) {
             console.log(data);
             if (data.success) {
-                let dt = data.data;
-                if (dt.cod_orden) {
+                let inc = data.data;
+                if (inc.cod_orden) {
                     $('#modal_orden').modal('hide');
-                    cod_orden = dt.new_cod_orden;
-                    if (dt.id_tipo_incidencia == 2)
-                        window.open(`${__url}/soporte/orden/documentopdf/${dt.cod_orden}`, `Visualizar PDF ${dt.cod_orden}`, "width=900, height=800");
+                    cod_orden = inc.new_cod_orden;
+                    if (inc.id_tipo_incidencia == 2)
+                        window.open(`${__url}/soporte/orden/documentopdf/${inc.cod_orden}`, `Visualizar PDF ${inc.cod_orden}`, "width=900, height=800");
                     updateTable();
-                    boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de servicio con el siguiente codigo <b>${dt.cod_orden}</b>.` });
+                    boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de servicio con el siguiente codigo <b>${inc.cod_orden}</b>.` });
                     return true;
                 }
 
-                let personal = dt.personal_asig;
-                sucursal = sucursales[dt.id_sucursal];
-                empresa = empresas[dt.ruc_empresa];
-                incidencia_temp = dt;
+                let personal = inc.personal_asig;
+                sucursal = sucursales[inc.id_sucursal];
+                empresa = empresas[inc.ruc_empresa];
+                incidencia_temp = inc;
 
-                $(`#modal_orden [aria-item="direccion"]`).html(sucursal.direccion);
-                $('#modal_orden [aria-item="observacion"]').html(dt.observacion);
-                $('#codInc').val(dt.cod_incidencia);
+                $('#codInc').val(inc.cod_incidencia);
                 var tecnicos = personal.map(persona => persona.tecnicos);
                 habilitarCodAviso(empresa.codigo_aviso);
 
-                $('#modal_orden [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));
+                llenarInfoModal('modal_orden', {
+                    codigo: inc.cod_incidencia,
+                    registrado: inc.created_at,
+                    tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'),
+                    razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                    direccion: empresa.direccion,
+                    sucursal: sucursal.nombre,
+                    atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
+                    dir_sucursal: sucursal.direccion,
+                    problema: obj_problem[inc.id_problema].text,
+                    subproblema: obj_subproblem[inc.id_subproblema].text,
+                    observacion: inc.observacion,
+                    empresaFooter: `${empresa.ruc} - ${empresa.razon_social}`
+                });
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -698,14 +712,8 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 });
 
 function AddCodAviso(e, cod) {
-    const obj = extractDataRow(e);
-    obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
-
-    $.each(obj, function (panel, count) {
-        $(`#modal_addcod [aria-item="${panel}"]`).html(count);
-    });
     $('#modal_addcod').modal('show');
-    fMananger.formModalLoding('modal_addcod', 'show');
+    fMananger.formModalLoding('modal_addcod', 'show', true);
 
     $.ajax({
         type: 'GET',
@@ -716,10 +724,24 @@ function AddCodAviso(e, cod) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
 
-            const dt = data.data;
+            const inc = data.data.incidencia;
+            sucursal = sucursales[inc.id_sucursal];
+            empresa = empresas[inc.ruc_empresa];
+            incidencia_temp = inc;
+
             $('#cod_incidencia').val(cod);
-            $('#cod_orden_ser').val(dt.incidencia.cod_orden);
+            $('#cod_orden_ser').val(inc.cod_orden);
             fMananger.formModalLoding('modal_addcod', 'hide');
+
+            llenarInfoModal('modal_addcod', {
+                codigo: inc.cod_incidencia,
+                estado: getBadgeIncidencia(inc.estado_informe),
+                razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                direccion: empresa.direccion,
+                sucursal: sucursal.nombre,
+                atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
+                dir_sucursal: sucursal.direccion,
+            });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
@@ -733,9 +755,8 @@ document.getElementById('form-addcod').addEventListener('submit', async function
     event.preventDefault();
 
     if (!await boxAlert.confirm({ h: `Después no se podrá modificar el codigo de aviso ingresado.` })) return true;
-    
+
     fMananger.formModalLoding('modal_addcod', 'show');
-    const atencion = $('#modal_orden [aria-item="atencion"]').html();
     var valid = validFrom(this);
 
     if (!valid.success)
@@ -753,7 +774,7 @@ document.getElementById('form-addcod').addEventListener('submit', async function
             fMananger.formModalLoding('modal_addcod', 'hide');
             if (data.success) {
                 $('#modal_addcod').modal('hide');
-                if (atencion.toUpperCase() == 'PRESENCIAL')
+                if (incidencia_temp.id_tipo_incidencia == 2)
                     window.open(`${__url}/soporte/orden/documentopdf/${data.cod_orden}`, `Visualizar PDF ${data.cod_orden}`, "width=900, height=800");
                 updateTable();
                 return true;

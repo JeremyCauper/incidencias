@@ -67,6 +67,10 @@ $(document).ready(function () {
         tb_visitas.columns.adjust().draw();
     });
 });
+let sucursal = null;
+let empresa = null;
+let incidencia_temp = null;
+
 function CheckCodOrden(check = true) {
     $('#button-cod-orden').attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
     $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
@@ -87,30 +91,35 @@ function updateTableInc() {
 }
 mostrar_acciones('tb_incidencias');
 
-function ShowDetailInc(e, id) {
-    let obj = extractDataRow(e, 'tb_incidencias');
-    obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
-
-    $.each(obj, function (panel, count) {
-        $(`#modal_detalle [aria-item="${panel}"]`).html(count);
-    });
+function ShowDetailInc(e, cod) {
     $('#modal_detalle').modal('show');
-    fMananger.formModalLoding('modal_detalle', 'show');
+    fMananger.formModalLoding('modal_detalle', 'show', true);
     $('#content-seguimiento').html('');
     $.ajax({
         type: 'GET',
-        url: `${__url}/soporte/incidencias/registradas/detail/${id}`,
+        url: `${__url}/soporte/incidencias/registradas/detail/${cod}`,
         contentType: 'application/json',
         success: function (data) {
             if (!data.success) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
             var seguimiento = data.data.seguimiento;
-            var incidencia = data.data.incidencia;
-            var sucursal = sucursales[incidencia.id_sucursal];
+            var inc = data.data.incidencia;
 
-            $(`#modal_detalle [aria-item="direccion"]`).html(sucursal.direccion);
-            $(`#modal_detalle [aria-item="observacion"]`).html(incidencia.observacion);
+            sucursal = sucursales[inc.id_sucursal];
+            empresa = empresas[inc.ruc_empresa];
+
+            llenarInfoModal('modal_detalle', {
+                codigo: inc.cod_incidencia,
+                estado: getBadgeIncidencia(inc.estado_informe),
+                razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                direccion: empresa.direccion,
+                sucursal: sucursal.nombre,
+                atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
+                dir_sucursal: sucursal.direccion,
+                problema: `${obj_problem[inc.id_problema].text} / ${obj_subproblem[inc.id_subproblema].text}`,
+                observacion: inc.observacion,
+            });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
             seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -152,9 +161,6 @@ function habilitarCodAviso(accion) {
     codAviso.removeAttr('name');
 }
 
-let sucursal = null;
-let empresa = null;
-let incidencia_temp = null;
 async function OrdenDetail(e, cod) {
     const obj = extractDataRow(e, 'tb_incidencias');
     obj.estado = (obj.estado).replaceAll('.7rem;', '1rem;');
@@ -625,9 +631,12 @@ function ShowDetailVis(e, id) {
                 var seguimiento = data.data.seguimiento;
                 var visita = data.data.visita;
 
-                $(`#modal_seguimiento_visitasp [aria-item="empresa"]`).html(visita.empresa);
-                $(`#modal_seguimiento_visitasp [aria-item="direccion"]`).html(visita.direccion);
-                $(`#modal_seguimiento_visitasp [aria-item="sucursal"]`).html(visita.sucursal);
+                var sucursal = sucursales[visita.id_sucursal];
+                var empresa = empresas[sucursal.ruc];
+
+                $(`#modal_seguimiento_visitasp [aria-item="empresa"]`).html(`${empresa.ruc} - ${empresa.razon_social}`);
+                $(`#modal_seguimiento_visitasp [aria-item="direccion"]`).html(sucursal.direccion);
+                $(`#modal_seguimiento_visitasp [aria-item="sucursal"]`).html(sucursal.nombre);
 
                 fMananger.formModalLoding('modal_seguimiento_visitasp', 'hide');
                 seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));

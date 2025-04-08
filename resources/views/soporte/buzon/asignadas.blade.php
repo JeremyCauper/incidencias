@@ -167,11 +167,12 @@
     <script>
         let cod_ordenv = "{{$data['cod_ordenv']}}";
         let cod_orden = '<?= $data['cod_orden'] ?>';
-        const empresas = <?php echo json_encode($data['empresas']); ?>;
-        const sucursales = <?php echo json_encode($data['sucursales']); ?>;
-        const tipo_estacion = <?php echo json_encode($data['tipo_estacion']); ?>;
-        const problemas = <?php echo json_encode($data['problemas']); ?>;
-        const subproblemas = <?php echo json_encode($data['subproblemas']); ?>;
+        let empresas = <?php echo json_encode($data['empresas']); ?>;
+        let sucursales = <?php echo json_encode($data['sucursales']); ?>;
+        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
+        let tipo_estacion = <?php echo json_encode($data['tipo_estacion']); ?>;
+        let obj_problem = <?php echo json_encode($data['problema']); ?>;
+        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
     </script>
 @endsection
 @section('content')
@@ -271,7 +272,7 @@
                                             },
                                             {
                                                 data: 'id_problema', render: function (data, type, row) {
-                                                    return `${problemas[data].descripcion} / ${subproblemas[row.id_subproblema].descripcion}`;
+                                                    return `${obj_problem[data].text} / ${obj_subproblem[row.id_subproblema].text}`;
                                                 }
                                             },
                                             { data: 'acciones' }
@@ -368,29 +369,41 @@
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia
-                        <span class="ms-2 badge badge-success badge-lg" aria-item="incidencia"></span>
+                        <span class="ms-2 badge badge-success badge-lg" aria-item="codigo"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-end" aria-item="estado"></div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
+                            <div class="list-group-item border-bottom-0 pt-0 text-end" aria-item="estado">
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: 1rem;">
+                                    20506467854 - CORPORACION JULCAN S.A.</p>
+                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                            aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                    </div>
+                                    <div class="col-sm-6 text-sm-end">
+                                        <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
+                                            aria-item="atencion">Remoto</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Problema / Sub Problema:</label>
-                                <span style="font-size: .75rem;" aria-item="problema / sub problema"></span>
+                                <span style="font-size: .75rem;" aria-item="problema"></span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>

@@ -66,14 +66,14 @@
                     <li class="nav-item" role="presentation">
                         <button data-mdb-tab-init class="nav-link position-relative rounded-top-1 active" id="home-tab0"
                             data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true"
-                            data-mdb-ripple-init onclick="resetTable()">
+                            data-mdb-ripple-init onclick="resetTable(false)">
                             Incidencias
                         </button>
                     </li>
                     <li class="nav-item" role="presentation">
                         <button data-mdb-tab-init class="nav-link position-relative rounded-top-1" id="profile-tab0"
                             data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile"
-                            aria-selected="false" data-mdb-ripple-init onclick="resetTable()">
+                            aria-selected="false" data-mdb-ripple-init onclick="resetTable(true)">
                             Visitas
                         </button>
                     </li>

@@ -25,35 +25,31 @@
             <div class="card-body form-container">
                 <h6 class="text-primary"><i class="fas fa-filter"></i> Filtros de Busqueda</h6>
                 <div class="row">
-                    <div class="col-xxl-5 my-1">
+                    <div class="col-lg-7 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
                         <select id="empresa" name="empresa" class="select" disabled="true">
                             <option selected value="{{ session('empresa')->ruc }}">
                                 {{ session('config_layout')->nombre_perfil }}</option>
                         </select>
-                        <!-- <input type="text" class="form-control" id="empresa" name="empresa" value="{{ session('config_layout')->nombre_perfil }}" disabled> -->
                     </div>
-                    <div class="col-xxl-3 col-md-8 my-1">
+                    <div class="col-lg-5 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
-                        <select id="sucursal" name="sucursal" class="select-clear">
-                            <option value="">-- Seleccione --</option>
+                        <select id="sucursal" name="sucursal" class="select-search">
                             <option selected value="0">Todos</option>
                             @foreach ($data['scompany'] as $key => $val)
                                 <option value="{{$val->id}}">{{$val->nombre}}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-xxl-2 col-md-4 my-1">
+                    <div class="col-md-4 col-6 my-1">
                         <label class="form-label mb-0" for="tIncidencia">Tipo Incidencia</label>
-                        <select class="select" id="tIncidencia">
-                            <option value="">-- Seleccione --</option>
-                            <option selected value="0">Todos</option>
+                        <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
                             @foreach ($data['tIncidencia'] as $v)
-                                <option value="{{$v['id']}}">{{$v['descripcion']}}</option>
+                                <option selected value="{{$v['id']}}">{{$v['descripcion']}}</option>
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-xxl-2 col-md-4 my-1">
+                    <div class="col-md-4 col-6 my-1">
                         <label class="form-label mb-0" for="tEstado">Estado</label>
                         <select id="tEstado" multiple="multiple" class="multiselect-select-all">
                             <option selected value="0">Sin Asignar</option>
@@ -64,11 +60,11 @@
                             <option selected value="5">Cierre Sistema</option>
                         </select>
                     </div>
-                    <div class="col-xxl-2 col-md-4 my-1">
+                    <div class="col-md-4 my-1">
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
                     </div>
-                    <div class="align-items-end col-xxl-2 d-flex my-1 justify-content-end">
+                    <div class="col-12 align-items-end d-flex my-1 justify-content-end">
                         <div>
                             <button type="button" class="btn btn-primary" data-mdb-ripple-init onclick="filtroBusqueda()">
                                 <i class="fas fa-magnifying-glass"></i> Buscar
@@ -102,7 +98,7 @@
                                     <th>Fecha Incidencia</th>
                                     <th>N° Orden</th>
                                     <th>Tecnico</th>
-                                    <th>Empresa</th>
+                                    <!-- <th>Empresa</th> -->
                                     <th>Sucursal</th>
                                     <th>Tipo Incidencia</th>
                                     <th>Problema / Sub Problema</th>
@@ -117,7 +113,7 @@
                                 scrollX: true,
                                 scrollY: 400,
                                 ajax: {
-                                    url: `${__url}/empresa/incidencias/index?sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
+                                    url: `${__url}/empresa/incidencias/index?sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}&tIncidencia=${$('#tIncidencia').val()}&tEstado=${$('#tEstado').val()}`,
                                     dataSrc: function (json) {
                                         return json.data;
                                     },
@@ -136,11 +132,11 @@
                                             return (data.map(usu => usuarios[usu].nombre)).join(", ");
                                         }
                                     },
-                                    {
-                                        data: 'empresa', render: function (data, type, row) {
-                                            return `${empresa.ruc} - ${empresa.razon_social}`;
-                                        }
-                                    },
+                                    // {
+                                    //     data: 'empresa', render: function (data, type, row) {
+                                    //         return `${empresa.ruc} - ${empresa.razon_social}`;
+                                    //     }
+                                    // },
                                     {
                                         data: 'sucursal', render: function (data, type, row) {
                                             return sucursales[data].nombre;
@@ -161,8 +157,9 @@
                                     { data: 'acciones' }
                                 ],
                                 createdRow: function (row, data, dataIndex) {
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(7), td:eq(9), td:eq(10), td:eq(11)').addClass('text-center');
-                                    $(row).find('td:eq(11)').addClass(`td-acciones`);
+                                    // $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(7), td:eq(9), td:eq(10), td:eq(11)').addClass('text-center');
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(6), td:eq(8), td:eq(9), td:eq(10)').addClass('text-center');
+                                    $(row).find('td:eq(10)').addClass(`td-acciones`);
                                 },
                                 order: [[2, 'desc']],
                                 processing: true
