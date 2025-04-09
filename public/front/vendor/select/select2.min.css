@@ -121,10 +121,10 @@
 
 .select2-container--disabled .select2-selection--single {
     cursor: default;
-    color: #999;
-    /* background-color: #f5f5f5; */
-    border-color: #ccc;
-    box-shadow: none
+    color: #ececec;
+    background-color: #f6f6f6;
+    border-color: #ececec;
+    box-shadow: none;
 }
 
 .select2-container--disabled .select2-selection--single .select2-selection__clear {

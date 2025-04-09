@@ -62,10 +62,47 @@ function updateTableVisitas() {
     tb_visitas.ajax.reload();
 }
 
+function AsignarVisita(id) {
+    $('#modal_visitas').modal('show');
+    fMananger.formModalLoding('modal_visitas', 'show', true);
+
+    $.ajax({
+        type: 'GET',
+        url: `${__url}/soporte/visitas/sucursales/${id}`,
+        contentType: 'application/json',
+        success: function (data) {
+            console.log(data);
+            
+            if (data.status == 204)
+                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
+
+            const dt = data.data;
+            sucursal = sucursales[id];
+            empresa = empresas[sucursal.ruc];
+
+            llenarInfoModal('modal_visitas', {
+                contrato: getBadgeContrato(dt.contrato),
+                razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                direccion: empresa.direccion,
+                sucursal: sucursal.nombre,
+                dir_sucursal: sucursal.direccion,
+            });
+            
+            $('#idSucursal').val(dt.id);
+            fMananger.formModalLoding('modal_visitas', 'hide');
+        },
+        error: function (jqXHR, textStatus, errorThrown) {
+            console.log(jqXHR);
+            const datae = jqXHR.responseJSON;
+            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
+        }
+    });
+}
+
 function DetalleVisita(id) {
     try {
         $('#modal_detalle_visitas').modal('show');
-        fMananger.formModalLoding('modal_detalle_visitas', 'show');
+        fMananger.formModalLoding('modal_detalle_visitas', 'show', true);
         $('#tb_visitas_asignadas').addClass('d-none').find('tbody').html('');
         $('#modal_detalle_visitas [aria-item="mensaje"]').html('');
 
@@ -79,30 +116,31 @@ function DetalleVisita(id) {
 
                 const dt = data.data;
                 $('#idSucursal').val(dt.id);
-                $('#modal_detalle_visitas [aria-item="contrato"]').html(dt.contrato ? 'En Contrato' : 'Sin Contrato');
-                $('#modal_detalle_visitas [aria-item="empresa"]').html(`${dt.ruc} - ${dt.razonSocial}`);
-                $('#modal_detalle_visitas [aria-item="direccion"]').html(dt.direccion);
-                $('#modal_detalle_visitas [aria-item="sucursal"]').html(dt.sucursal);
-                $('#modal_detalle_visitas [aria-item="vTotal"]').html(dt.totalVisitas);
-                $('#modal_detalle_visitas [aria-item="rDias"]').html(dt.diasVisitas);
+                sucursal = sucursales[id];
+                empresa = empresas[sucursal.ruc];
+    
+                llenarInfoModal('modal_detalle_visitas', {
+                    contrato: getBadgeContrato(dt.contrato),
+                    razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                    direccion: empresa.direccion,
+                    sucursal: sucursal.nombre,
+                    dir_sucursal: sucursal.direccion,
+                    vTotal: dt.totalVisitas,
+                    rDias: dt.diasVisitas,
+                    mensaje: dt.message
+                });
+
                 if (dt.visitas.length) {
                     dt.visitas.forEach(e => {
-                        const estado = {
-                            "0": ['warning', 'Sin Iniciar'],
-                            "1": ['info', 'Asignada'],
-                            "2": ['primary', 'En Proceso'],
-                            "4": ['danger', 'Faltan Datos']
-                        };
                         $('#tb_visitas_asignadas').find('tbody').append(`<tr>
                             <td>${e.creador}</td>
                             <td class="text-center">${e.fecha}</td>
                             <td class="text-center">${e.created_at}</td>
-                            <td class="text-center"><label class="badge badge-${estado[e.estado][0]}" style="font-size: .8rem;">${estado[e.estado][1]}</label></td>
+                            <td class="text-center">${getBadgeVisita(e.estado)}</td>
                         </tr>`);
                     });
                     $('#tb_visitas_asignadas').removeClass('d-none');
                 }
-                $('#modal_detalle_visitas [aria-item="mensaje"]').html(dt.message);
                 fMananger.formModalLoding('modal_detalle_visitas', 'hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
@@ -115,35 +153,6 @@ function DetalleVisita(id) {
         boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: 'Ocurrio un inconveniente en el proceso de busqueda, intentelo nuevamente.' });
         console.log('Error producido: ', error);
     }
-}
-
-function AsignarVisita(id) {
-    $('#modal_visitas').modal('show');
-    fMananger.formModalLoding('modal_visitas', 'show');
-
-    $.ajax({
-        type: 'GET',
-        url: `${__url}/soporte/visitas/sucursales/${id}`,
-        contentType: 'application/json',
-        success: function (data) {
-            if (data.status == 204)
-                return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
-
-            const dt = data.data;
-            $('#idSucursal').val(dt.id);
-            $('#modal_visitas [aria-item="contrato"]').html(dt.contrato ? 'En Contrato' : 'Sin Contrato');
-            $('#modal_visitas [aria-item="empresa"]').html(`${dt.ruc} - ${dt.razonSocial}`);
-            $('#modal_visitas [aria-item="direccion"]').html(dt.direccion);
-            $('#modal_visitas [aria-item="sucursal"]').html(dt.sucursal);
-
-            fMananger.formModalLoding('modal_visitas', 'hide');
-        },
-        error: function (jqXHR, textStatus, errorThrown) {
-            console.log(jqXHR);
-            const datae = jqXHR.responseJSON;
-            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
-        }
-    });
 }
 
 document.getElementById('form-visita').addEventListener('submit', function (event) {

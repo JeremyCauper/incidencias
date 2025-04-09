@@ -182,7 +182,6 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-end" aria-item="estado"></div>
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                         <div class="list-group list-group-light">
                             <div class="list-group-item">
@@ -214,8 +213,11 @@
                             </div>
                         </div>
                     </div>
-                    <h6 class="font-weight-semibold col-form-label text-primary mt-2">Seguimiento Incidencia</h6>
-                    <div class="">
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
+                        <span aria-item="estado"></span>
+                    </div>
+                    <div class="fieldset ">
                         <ul class="list-group list-group-light" id="content-seguimiento">
                         </ul>
                     </div>
@@ -239,7 +241,6 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-end" aria-item="estado"></div>
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                         <div class="list-group list-group-light">
                             <div class="list-group-item">
@@ -263,7 +264,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col-12 text-center">
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Agregar firma</h6>
+                        <span aria-item="estado"></span>
+                    </div>
+                    <div class="col-12 fieldset text-center">
                         <input type="hidden" name="cod_orden">
                         <div class="search_signature_group mb-2">
                             <input type="text" id="search_signature" placeholder="Buscar cliente">

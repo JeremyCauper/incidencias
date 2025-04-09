@@ -56,18 +56,23 @@ function ShowDetailInc(e, id) {
             
             if (data.success) {
                 var seguimiento = data.data.seguimiento;
-                var incidencia = data.data.incidencia;
+                var inc = data.data.incidencia;
 
-                var sucursal = sucursales[incidencia.id_sucursal];
-                var empresa = empresas[sucursal.ruc];
+                sucursal = sucursales[inc.id_sucursal];
+                empresa = empresas[sucursal.ruc];
 
-                $(`#modal_detalle [aria-item="codigo"]`).html(incidencia.cod_orden);
-                $(`#modal_detalle [aria-item="empresa"]`).html(`${empresa.ruc} - ${empresa.razon_social}`);
-                $(`#modal_detalle [aria-item="direccion"]`).html(sucursal.direccion);
-                $(`#modal_detalle [aria-item="sucursal"]`).html(sucursal.nombre);
-                $(`#modal_detalle [aria-item="atencion"]`).html(tipos_incidencia[incidencia.id_tipo_incidencia].descripcion);
-                $(`#modal_detalle [aria-item="problema_sub_problema"]`).html(`${problemas[incidencia.id_problema].descripcion} / ${subproblemas[incidencia.id_subproblema].descripcion}`);
-                $(`#modal_detalle [aria-item="observasion"]`).html(incidencia.observasion);
+                llenarInfoModal('modal_detalle', {
+                    codigo: inc.cod_incidencia,
+                    estado: getBadgeIncidencia(inc.estado_informe),
+                    razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                    direccion: empresa.direccion,
+                    sucursal: sucursal.nombre,
+                    atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
+                    dir_sucursal: sucursal.direccion,
+                    problema: obj_problem[inc.id_problema].text,
+                    subproblema: obj_subproblem[inc.id_subproblema].text,
+                    observacion: inc.observacion,
+                });
 
                 fMananger.formModalLoding('modal_detalle', 'hide');
                 seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -105,26 +110,27 @@ function OrdenPdfVis(cod) {
 }
 
 function ShowDetailVis(e, id) {
-    $('#modal_seguimiento_visitasp').find('.modal-body').addClass('d-none');
     $('#modal_seguimiento_visitasp').modal('show');
-    fMananger.formModalLoding('modal_seguimiento_visitasp', 'show');
+    fMananger.formModalLoding('modal_seguimiento_visitasp', 'show', true);
     $('#content-seguimiento-vis').html('');
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/visitas/programadas/detail/${id}`,
         contentType: 'application/json',
         success: function (data) {
-
             if (data.success) {
                 var seguimiento = data.data.seguimiento;
                 var visita = data.data.visita;
+                sucursal = sucursales[visita.id_sucursal];
+                empresa = empresas[sucursal.ruc];
 
-                var sucursal = sucursales[visita.id_sucursal];
-                var empresa = empresas[sucursal.ruc];
-
-                $(`#modal_seguimiento_visitasp [aria-item="empresa"]`).html(`${empresa.ruc} - ${empresa.razon_social}`);
-                $(`#modal_seguimiento_visitasp [aria-item="direccion"]`).html(sucursal.direccion);
-                $(`#modal_seguimiento_visitasp [aria-item="sucursal"]`).html(sucursal.nombre);
+                llenarInfoModal('modal_seguimiento_visitasp', {
+                    estado: getBadgeVisita(visita.estado),
+                    razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                    direccion: empresa.direccion,
+                    sucursal: sucursal.nombre,
+                    dir_sucursal: sucursal.direccion,
+                });
 
                 fMananger.formModalLoding('modal_seguimiento_visitasp', 'hide');
                 seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));

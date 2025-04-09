@@ -597,8 +597,9 @@ class RegistradasController extends Controller
      */
     private function formatInfoData($usuario, $creador, $vPersonal, $date, $text)
     {
+        $imagen = $usuario[$creador]->foto ?? 'user_auth.jpg';
         return [
-            'img' => asset("front/images/auth/{$usuario[$creador]->foto}"),
+            'img' => asset("front/images/auth/{$imagen}"),
             'nombre' => $usuario[$creador]->tecnico,
             'text' => $text,
             'contacto' => '<i class="fab fa-whatsapp text-success"></i> ' . $usuario[$vPersonal]->telefono . ' / <i class="far fa-envelope text-danger"></i> ' . $usuario[$vPersonal]->email,

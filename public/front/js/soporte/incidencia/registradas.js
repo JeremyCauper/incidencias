@@ -327,7 +327,8 @@ function ShowDetail(e, cod) {
                 sucursal: sucursal.nombre,
                 atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                 dir_sucursal: sucursal.direccion,
-                problema: `${obj_problem[inc.id_problema].text} / ${obj_subproblem[inc.id_subproblema].text}`,
+                problema: obj_problem[inc.id_problema].text,
+                subproblema: obj_subproblem[inc.id_subproblema].text,
                 observacion: inc.observacion,
             });
 
@@ -434,7 +435,7 @@ function ShowAssign(e, cod) {
             }
             var inc = data.data;
             incidencia_temp = inc;
-            
+
             sucursal = sucursales[inc.id_sucursal];
             empresa = empresas[inc.ruc_empresa];
 
@@ -446,10 +447,11 @@ function ShowAssign(e, cod) {
                 sucursal: sucursal.nombre,
                 atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                 dir_sucursal: sucursal.direccion,
-                problema: `${obj_problem[inc.id_problema].text} / ${obj_subproblem[inc.id_subproblema].text}`,
+                problema: obj_problem[inc.id_problema].text,
+                subproblema: obj_subproblem[inc.id_subproblema].text,
                 observacion: inc.observacion,
             });
-            
+
             fMananger.formModalLoding('modal_assign', 'hide');
             (inc.personal_asig).forEach(element => {
                 const accion = inc.estado_informe == 2 ? false : true;
@@ -585,7 +587,6 @@ async function OrdenDetail(e, cod) {
         url: `${__url}/soporte/incidencias/registradas/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
             if (data.success) {
                 let inc = data.data;
                 if (inc.cod_orden) {
@@ -775,7 +776,7 @@ document.getElementById('form-addcod').addEventListener('submit', async function
             if (data.success) {
                 $('#modal_addcod').modal('hide');
                 if (incidencia_temp.id_tipo_incidencia == 2)
-                    window.open(`${__url}/soporte/orden/documentopdf/${data.cod_orden}`, `Visualizar PDF ${data.cod_orden}`, "width=900, height=800");
+                    window.open(`${__url}/soporte/orden/documentopdf/${data.data.cod_orden}`, `Visualizar PDF ${data.data.cod_orden}`, "width=900, height=800");
                 updateTable();
                 return true;
             }

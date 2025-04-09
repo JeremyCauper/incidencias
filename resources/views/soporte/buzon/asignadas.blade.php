@@ -377,10 +377,8 @@
                 <div class="modal-body">
                     <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="list-group list-group-light">
-                            <div class="list-group-item border-bottom-0 pt-0 text-end" aria-item="estado">
-                            </div>
                             <div class="list-group-item">
-                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: 1rem;">
+                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
                                     20506467854 - CORPORACION JULCAN S.A.</p>
                                 <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
@@ -402,8 +400,14 @@
                                     aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Problema / Sub Problema:</label>
-                                <span style="font-size: .75rem;" aria-item="problema"></span>
+                                <div>
+                                    <label class="form-label me-2">Problema</label>
+                                    <span style="font-size: .75rem;" aria-item="problema"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Sub Problema:</label>
+                                    <span style="font-size: .75rem;" aria-item="subproblema"></span>
+                                </div>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>
@@ -411,8 +415,11 @@
                             </div>
                         </div>
                     </div>
-                    <h6 class="font-weight-semibold col-form-label text-primary mt-2">Seguimiento Incidencia</h6>
-                    <div class="">
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
+                        <span aria-item="estado"></span>
+                    </div>
+                    <div class="fieldset">
                         <ul class="list-group list-group-light" id="content-seguimiento">
                         </ul>
                     </div>
@@ -430,7 +437,7 @@
             <form class="modal-content" id="form-orden">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title">ORDEN DE SERVICIO <span class="badge badge-success badge-lg"
-                            aria-item="incidencia"></span></h6>
+                            aria-item="codigo"></span></h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -474,23 +481,26 @@
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                             <div class="list-group list-group-light">
                                 <div class="list-group-item">
-                                    <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
+                                    <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                        20506467854 - CORPORACION JULCAN S.A.</p>
+                                    <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                        N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                                 </div>
                                 <div class="list-group-item">
-                                    <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                        aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                                </div>
-                                <div class="list-group-item">
-                                    <div class="row col-12">
+                                    <div class="row">
                                         <div class="col-sm-6">
                                             <label class="form-label me-2">Sucursal: </label><span
                                                 style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                                         </div>
-                                        <div class="col-sm-6 text-end">
-                                            <label class="form-label me-2">Atencion: </label><span
+                                        <div class="col-sm-6 text-sm-end">
+                                            <label class="form-label me-2">Atención: </label><span
                                                 style="font-size: .75rem;" aria-item="atencion">Remoto</span>
                                         </div>
                                     </div>
+                                </div>
+                                <div class="list-group-item">
+                                    <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                        aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                                 </div>
                             </div>
                         </div>
@@ -501,9 +511,12 @@
 
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                             <div class="col-md-12">
-                                <label class="form-label me-2">Clasificacion Error:</label><span style="font-size: .75rem;"
-                                    aria-item="problema / sub problema">PROBLEMA DE LECTURA / VALIDACION DE
-                                    JACKTOOL</span>
+                                <label class="form-label me-2">Problema</label>
+                                <span style="font-size: .75rem;" aria-item="problema"></span>
+                            </div>
+                            <div class="col-md-12">
+                                <label class="form-label me-2">Sub Problema:</label>
+                                <span style="font-size: .75rem;" aria-item="subproblema"></span>
                             </div>
                             <div class="col-md-12">
                                 <label class="form-label me-2">Obersevaciones Incidencia:</label>
@@ -640,35 +653,41 @@
             <form class="modal-content" id="form-addcod">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title">Añadir Codigo Aviso
-                        <span class="badge badge-success badge-lg" aria-item="incidencia"></span>
+                        <span class="badge badge-success badge-lg" aria-item="codigo"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-end" aria-item="estado"></div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="list-group list-group-light">
                             <div class="list-group-item">
-                                <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
+                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                    20506467854 - CORPORACION JULCAN S.A.</p>
+                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <div class="row col-12">
+                                <div class="row">
                                     <div class="col-sm-6">
                                         <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
                                             aria-item="sucursal">E/S INDEPENDENCIA</span>
                                     </div>
-                                    <div class="col-sm-6 text-end">
+                                    <div class="col-sm-6 text-sm-end">
                                         <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
                                             aria-item="atencion">Remoto</span>
                                     </div>
                                 </div>
                             </div>
+                            <div class="list-group-item">
+                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                            </div>
                         </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Grabar firma</h6>
+                        <span aria-item="estado"></span>
                     </div>
                     <div class="mt-4 p-3 pb-0 fieldset mb-3">
                         <input type="hidden" id="cod_incidencia" name="cod_incidencia">
@@ -692,29 +711,32 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title"><i class="fas fa-book-open"></i> Seguimiento de la visita</h6>
+                    <h6 class="modal-title">Seguimiento de la visita</h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-end" aria-item="estado"></div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                        <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
-                            </div>
+                    <div class="list-group list-group-light">
+                        <div class="list-group-item">
+                            <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                20506467854 - CORPORACION JULCAN S.A.</p>
+                            <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                N° 3689 MZ D LT 26 INDEPENDENCIA</p>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                aria-item="sucursal">E/S INDEPENDENCIA</span>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                         </div>
                     </div>
-                    <h6 class="font-weight-semibold col-form-label text-primary mt-2">Seguimiento Visita</h6>
-                    <div class="">
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Visita</h6>
+                        <span aria-item="estado"></span>
+                    </div>
+                    <div class="fieldset">
                         <ul class="list-group list-group-light" id="content-seguimiento-vis">
                         </ul>
                     </div>
@@ -763,15 +785,18 @@
                         <div class="col-12 mt-1 mb-3">
                             <div class="list-group list-group-light">
                                 <div class="list-group-item">
-                                    <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
+                                    <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                        20506467854 - CORPORACION JULCAN S.A.</p>
+                                    <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                        N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                                 </div>
                                 <div class="list-group-item">
                                     <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
                                         aria-item="sucursal">E/S INDEPENDENCIA</span>
                                 </div>
                                 <div class="list-group-item">
-                                    <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                        aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                                    <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                        aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                                 </div>
                             </div>
                         </div>

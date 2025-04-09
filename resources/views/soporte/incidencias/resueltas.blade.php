@@ -163,10 +163,8 @@
                 <div class="modal-body">
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                         <div class="list-group list-group-light">
-                            <div class="list-group-item border-bottom-0 pt-0 text-end" aria-item="estado">
-                            </div>
                             <div class="list-group-item">
-                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: 1rem;">
+                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
                                     20506467854 - CORPORACION JULCAN S.A.</p>
                                 <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
@@ -188,8 +186,14 @@
                                     aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Problema / Sub Problema:</label>
-                                <span style="font-size: .75rem;" aria-item="problema"></span>
+                                <div>
+                                    <label class="form-label me-2">Problema</label>
+                                    <span style="font-size: .75rem;" aria-item="problema"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Sub Problema:</label>
+                                    <span style="font-size: .75rem;" aria-item="subproblema"></span>
+                                </div>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>
@@ -197,8 +201,11 @@
                             </div>
                         </div>
                     </div>
-                    <h6 class="font-weight-semibold col-form-label text-primary mt-2">Seguimiento Incidencia</h6>
-                    <div class="">
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
+                        <span aria-item="estado"></span>
+                    </div>
+                    <div class="fieldset">
                         <ul class="list-group list-group-light" id="content-seguimiento">
                         </ul>
                     </div>
@@ -224,10 +231,8 @@
                 </div>
                 <div class="modal-body">
                     <div class="list-group list-group-light">
-                        <div class="list-group-item border-bottom-0 pt-0 text-end" aria-item="estado">
-                        </div>
                         <div class="list-group-item">
-                            <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: 1rem;">
+                            <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
                                 20506467854 - CORPORACION JULCAN S.A.</p>
                             <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
                                 N° 3689 MZ D LT 26 INDEPENDENCIA</p>
@@ -249,7 +254,11 @@
                                 aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                         </div>
                     </div>
-                    <div class="col-12 text-center">
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Agregar firma</h6>
+                        <span aria-item="estado"></span>
+                    </div>
+                    <div class="col-12 fieldset text-center">
                         <input type="hidden" name="cod_orden">
                         <div class="search_signature_group mb-2">
                             <input type="text" id="search_signature" placeholder="Buscar cliente">

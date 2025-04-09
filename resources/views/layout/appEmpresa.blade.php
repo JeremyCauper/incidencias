@@ -77,7 +77,7 @@
                                 </span>
                             </li>
                             <li>
-                                <a class="dropdown-item" href="{{secure_url('/soporte/logout')}}">
+                                <a class="dropdown-item" href="{{secure_url('/empresa/logout')}}">
                                     <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
                                     Cerrar sesión
                                 </a>

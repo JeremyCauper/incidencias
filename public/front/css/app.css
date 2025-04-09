@@ -4393,3 +4393,7 @@ tr {
     padding-right: .6rem !important;
     text-align: left !important;
 }
+
+.tt-upper {
+    text-transform: uppercase;
+}

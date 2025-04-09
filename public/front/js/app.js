@@ -286,6 +286,26 @@ function getBadgeIncidencia(estado) {
     return `<label class="badge badge-${estadoInforme[estado]['color']}" style="font-size: .7rem;">${estadoInforme[estado]['text']}</label>`;
 }
 
+function getBadgeVisita(estado) {
+    estadoInforme = {
+        "0": { 'color': 'warning', 'text': 'Sin Iniciar' },
+        "1": { 'color': 'primary', 'text': 'En Proceso' },
+        "2": { 'color': 'success', 'text': 'Finalizado' },
+        "4": { 'color': 'danger', 'text': 'Faltan Datos' },
+    };
+
+    return `<label class="badge badge-${estadoInforme[estado]['color']}">${estadoInforme[estado]['text']}</label>`;
+}
+
+function getBadgeContrato(estado) {
+    estadoInforme = [
+        { 'color': 'danger', 'text': 'Sin Contrato' },
+        { 'color': 'success', 'text': 'En Contrato' },
+    ];
+
+    return `<label class="badge badge-${estadoInforme[estado]['color']}">${estadoInforme[estado]['text']}</label>`;
+}
+
 function animateProperty(element, property, start, end, duration, fps, callback) {
     let current = start;
     const totalFrames = duration / (1000 / fps);

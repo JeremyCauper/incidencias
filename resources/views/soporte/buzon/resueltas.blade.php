@@ -5,13 +5,13 @@
     <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
     <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
-    
+
     <script>
-        const empresas = <?php echo json_encode($data['empresas']); ?>;
-        const sucursales = <?php echo json_encode($data['sucursales']); ?>;
-        const tipos_incidencia = <?php echo json_encode($data['tipos_incidencia']); ?>;
-        const problemas = <?php echo json_encode($data['problemas']); ?>;
-        const subproblemas = <?php echo json_encode($data['subproblemas']); ?>;
+        let empresas = <?php echo json_encode($data['empresas']); ?>;
+        let sucursales = <?php echo json_encode($data['sucursales']); ?>;
+        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
+        let obj_problem = <?php echo json_encode($data['problema']); ?>;
+        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
     </script>
 @endsection
 @section('content')
@@ -228,24 +228,29 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-end" aria-item="estado"></div>
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                         <div class="list-group list-group-light">
                             <div class="list-group-item">
-                                <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                    20506467854 - CORPORACION JULCAN S.A.</p>
+                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
                                     aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
+                            <div class="list-group-item">
+                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                            </div>
                         </div>
                     </div>
-                    <h6 class="font-weight-semibold col-form-label text-primary mt-2">Seguimiento Visita</h6>
-                    <div class="">
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Visita</h6>
+                        <span aria-item="estado"></span>
+                    </div>
+                    <div class="fieldset">
                         <ul class="list-group list-group-light" id="content-seguimiento-vis">
                         </ul>
                     </div>
@@ -269,31 +274,39 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-end" aria-item="estado"></div>
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                         <div class="list-group list-group-light">
                             <div class="list-group-item">
-                                <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
+                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                    20506467854 - CORPORACION JULCAN S.A.</p>
+                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <div class="row col-12">
+                                <div class="row">
                                     <div class="col-sm-6">
                                         <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
                                             aria-item="sucursal">E/S INDEPENDENCIA</span>
                                     </div>
-                                    <div class="col-sm-6 text-end">
+                                    <div class="col-sm-6 text-sm-end">
                                         <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
                                             aria-item="atencion">Remoto</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Problema / Sub Problema:</label>
-                                <span style="font-size: .75rem;" aria-item="problema_sub_problema"></span>
+                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                            </div>
+                            <div class="list-group-item">
+                                <div>
+                                    <label class="form-label me-2">Problema</label>
+                                    <span style="font-size: .75rem;" aria-item="problema"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Sub Problema:</label>
+                                    <span style="font-size: .75rem;" aria-item="subproblema"></span>
+                                </div>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>
@@ -301,8 +314,11 @@
                             </div>
                         </div>
                     </div>
-                    <h6 class="font-weight-semibold col-form-label text-primary mt-2">Seguimiento Incidencia</h6>
-                    <div class="">
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
+                        <span aria-item="estado"></span>
+                    </div>
+                    <div class="fieldset">
                         <ul class="list-group list-group-light" id="content-seguimiento-inc">
                         </ul>
                     </div>

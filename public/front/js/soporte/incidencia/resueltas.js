@@ -39,7 +39,7 @@ function filtroBusqueda() {
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
     var nuevoUrl = `${__url}/soporte/incidencias/resueltas/index?ruc=${empresa}&sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
-    
+
     tb_orden.ajax.url(nuevoUrl).load();
 }
 
@@ -71,7 +71,8 @@ function ShowDetail(e, cod) {
                 sucursal: sucursal.nombre,
                 atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                 dir_sucursal: sucursal.direccion,
-                problema: `${obj_problem[inc.id_problema].text} / ${obj_subproblem[inc.id_subproblema].text}`,
+                problema: obj_problem[inc.id_problema].text,
+                subproblema: obj_subproblem[inc.id_subproblema].text,
                 observacion: inc.observacion,
             });
 
@@ -119,21 +120,21 @@ function AddSignature(e, cod) {
         contentType: 'application/json',
         success: function (data) {
             console.log(data);
-            
-            
+
+
             if (data.success) {
                 var contact = data.data.contacto;
                 if (contact) {
                     if (contact.firma_digital)
                         $('#PrevizualizarFirma').attr('src', `${__asset}/images/client/${contact.firma_digital}`).removeClass('visually-hidden');
-                    $('#search_signature').val(`${contact.nro_doc} - ${contact.nombre_cliente}`).attr({'disabled': ''});
+                    $('#search_signature').val(`${contact.nro_doc} - ${contact.nombre_cliente}`).attr({ 'disabled': '' });
                     $('#id_firmador').val(contact.id);
                 }
                 var inc = data.data.incidencia;
 
                 sucursal = sucursales[inc.id_sucursal];
                 empresa = empresas[inc.ruc_empresa];
-    
+
                 llenarInfoModal('modal_firmas', {
                     codigo: inc.cod_incidencia,
                     codigo_orden: cod,
@@ -275,7 +276,7 @@ async function createDigitalSignature() {
         }
 
         const dataURL = signaturePad.toDataURL();
-        
+
         updateSignaturePreview(dataURL);
         Swal.close();
     });
@@ -348,7 +349,7 @@ $('#search_signature').on('change', function () {
             search_signature_text.html('<div class="spinner-border text-primary" role="status" style="width: 19px;height: 19px;"></div>');
         },
         success: function (data) {
-            
+
             if (data.success) {
                 var datos = data.data;
                 dni.val(`${datos.documento} - ${datos.nombre}`);
@@ -362,7 +363,7 @@ $('#search_signature').on('change', function () {
                         updateSignaturePreview(`${__asset}/images/client/${firma}`);
                     }
                 }
-                dni.attr({'disabled': ""});
+                dni.attr({ 'disabled': "" });
             } else {
                 if (dni.val() == "00000000") {
                     dni.val(`00000000 - Clientes Varios`);

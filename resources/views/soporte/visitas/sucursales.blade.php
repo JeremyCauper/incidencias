@@ -200,28 +200,28 @@
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-visita">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title" id="modal_visitasLabel">Asignar Personal Visita <span
-                            class="badge badge-success" aria-item="contrato">En Contrato</span></h6>
+                    <h6 class="modal-title" id="modal_visitasLabel">Asignar Personal Visita
+                        <span aria-item="contrato"></span>
+                    </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="list-group list-group-light">
                             <div class="list-group-item">
-                                <span aria-item="empresa"></span>
+                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                    20506467854 - CORPORACION JULCAN S.A.</p>
+                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion"></span>
+                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
-                                <div class="row col-12">
-                                    <div class="col-sm-6">
-                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                            aria-item="sucursal"></span>
-                                    </div>
-                                </div>
+                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                             </div>
                         </div>
                     </div>
@@ -267,8 +267,9 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title" id="modal_detalle_visitasLabel">Asignar Personal Visita <span
-                            class="badge badge-success" aria-item="contrato">En Contrato</span></h6>
+                    <h6 class="modal-title" id="modal_detalle_visitasLabel">Asignar Personal Visita
+                        <span aria-item="contrato"></span>
+                    </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
@@ -276,15 +277,18 @@
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                         <div class="list-group list-group-light">
                             <div class="list-group-item">
-                                <span aria-item="empresa"></span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion"></span>
+                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                    20506467854 - CORPORACION JULCAN S.A.</p>
+                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal"></span>
+                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
+                            </div>
+                            <div class="list-group-item">
+                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <div class="row col-12">
@@ -320,7 +324,7 @@
                                 </table>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Nota: </label><span style="font-size: .75rem;"
+                                <label class="form-label me-2 text-danger">Nota: </label><span style="font-size: .75rem;"
                                     aria-item="mensaje"></span>
                             </div>
                         </div>
@@ -337,29 +341,32 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title"><i class="fas fa-book-open"></i> Seguimiento de la visita</h6>
+                    <h6 class="modal-title">Seguimiento de la visita</h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-end" aria-item="estado"></div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                        <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
-                            </div>
+                    <div class="list-group list-group-light">
+                        <div class="list-group-item">
+                            <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                20506467854 - CORPORACION JULCAN S.A.</p>
+                            <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                N° 3689 MZ D LT 26 INDEPENDENCIA</p>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                aria-item="sucursal">E/S INDEPENDENCIA</span>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                         </div>
                     </div>
-                    <h6 class="font-weight-semibold col-form-label text-primary mt-2">Seguimiento Visita</h6>
-                    <div class="">
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Visita</h6>
+                        <span aria-item="estado"></span>
+                    </div>
+                    <div class="fieldset">
                         <ul class="list-group list-group-light" id="content-seguimiento">
                         </ul>
                     </div>
@@ -376,34 +383,36 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Asignar Personal -
-                        <span class="badge badge-success badge-lg" aria-item="codigo"></span>
+                    <h6 class="modal-title">Asignar Personal
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="text-end" aria-item="estado"></div>
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                        <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
-                            </div>
+                    <div class="list-group list-group-light">
+                        <div class="list-group-item">
+                            <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                20506467854 - CORPORACION JULCAN S.A.</p>
+                            <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                         </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                aria-item="sucursal">E/S INDEPENDENCIA</span>
+                        </div>
+                        <div class="list-group-item">
+                            <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                        </div>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center my-2">
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Asignar Personal</h6>
+                        <span aria-item="estado"></span>
                     </div>
                     <div class="mt-4 p-3 pb-0 fieldset mb-3">
                         <input type="hidden" id="id_visitas_asign">
                         <div class="row">
                             <div class="col-md-8">
-                                <label class="form-label mb-0" for="createPersonal1">Asignar Personal</label>
                                 <div class="input-group mb-3">
                                     <span class="input-group-text border-0 ps-0"><i
                                             class="fas fa-chalkboard-user"></i></span>
@@ -473,15 +482,18 @@
                         <div class="col-12 mt-1 mb-3">
                             <div class="list-group list-group-light">
                                 <div class="list-group-item">
-                                    <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
+                                    <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                        20506467854 - CORPORACION JULCAN S.A.</p>
+                                    <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                        N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                                 </div>
                                 <div class="list-group-item">
                                     <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
                                         aria-item="sucursal">E/S INDEPENDENCIA</span>
                                 </div>
                                 <div class="list-group-item">
-                                    <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                        aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                                    <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                        aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                                 </div>
                             </div>
                         </div>
@@ -683,73 +695,73 @@
 
                         <div id="content-islas" class="mt-3">
                             <!--<div class="islas-item py-2">
-                                            <div class="row my-2">
-                                                <div class="col-lg-3 col-sm-4 col-5">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text border-0 ps-0" style="font-size: small;">ISLA</span>
-                                                        <input type="text" class="form-control rounded"/>
+                                                <div class="row my-2">
+                                                    <div class="col-lg-3 col-sm-4 col-5">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text border-0 ps-0" style="font-size: small;">ISLA</span>
+                                                            <input type="text" class="form-control rounded"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-3 col-sm-4 col-5">
+                                                        <div class="input-group">
+                                                            <span class="input-group-text border-0 ps-0" style="font-size: small;">POS</span>
+                                                            <input type="text" class="form-control rounded"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-lg-6 col-sm-4 col-2 text-end">
+                                                        <button type="button" class="btn btn-danger px-2"><i class="far fa-trash-can"></i></button>
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-3 col-sm-4 col-5">
-                                                    <div class="input-group">
-                                                        <span class="input-group-text border-0 ps-0" style="font-size: small;">POS</span>
-                                                        <input type="text" class="form-control rounded"/>
+
+                                                <div class="row my-2">
+                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>IMPRESORAS</strong></div>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" name="des7" class="form-control">
                                                     </div>
                                                 </div>
-                                                <div class="col-lg-6 col-sm-4 col-2 text-end">
-                                                    <button type="button" class="btn btn-danger px-2"><i class="far fa-trash-can"></i></button>
-                                                </div>
-                                            </div>
 
-                                            <div class="row my-2">
-                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>IMPRESORAS</strong></div>
-                                                <div class="col-lg-9">
-                                                    <input type="text" name="des7" class="form-control">
+                                                <div class="row my-2">
+                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>RED DE LECTORES</strong></div>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" name="des8" class="form-control">
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="row my-2">
-                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>RED DE LECTORES</strong></div>
-                                                <div class="col-lg-9">
-                                                    <input type="text" name="des8" class="form-control">
+                                                <div class="row my-2">
+                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>JACK TOOLS</strong></div>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" name="des7" class="form-control">
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="row my-2">
-                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>JACK TOOLS</strong></div>
-                                                <div class="col-lg-9">
-                                                    <input type="text" name="des7" class="form-control">
+                                                <div class="row mb-2">
+                                                    <div class="col-lg-3" style="font-size: 11px;"><label>• VOLTAJE DE MANGUERAS</label></div>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" name="des2" class="form-control">
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="row mb-2">
-                                                <div class="col-lg-3" style="font-size: 11px;"><label>• VOLTAJE DE MANGUERAS</label></div>
-                                                <div class="col-lg-9">
-                                                    <input type="text" name="des2" class="form-control">
+                                                <div class="row my-2">
+                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>CAUCHO PROTECTOR DE LECTORES</strong></div>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" name="des8" class="form-control">
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="row my-2">
-                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>CAUCHO PROTECTOR DE LECTORES</strong></div>
-                                                <div class="col-lg-9">
-                                                    <input type="text" name="des8" class="form-control">
+                                                <div class="row my-2">
+                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MUEBLE DE POS</strong></div>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" name="des9" class="form-control">
+                                                    </div>
                                                 </div>
-                                            </div>
 
-                                            <div class="row my-2">
-                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MUEBLE DE POS</strong></div>
-                                                <div class="col-lg-9">
-                                                    <input type="text" name="des9" class="form-control">
+                                                <div class="row my-2">
+                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MR 350 / DTI / TERMINAL</strong></div>
+                                                    <div class="col-lg-9">
+                                                        <input type="text" name="des10" class="form-control">
+                                                    </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="row my-2">
-                                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MR 350 / DTI / TERMINAL</strong></div>
-                                                <div class="col-lg-9">
-                                                    <input type="text" name="des10" class="form-control">
-                                                </div>
-                                            </div>
-                                        </div>-->
+                                            </div>-->
                         </div>
 
                         <div class="text-end">

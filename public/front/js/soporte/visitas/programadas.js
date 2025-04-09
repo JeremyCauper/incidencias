@@ -2,27 +2,30 @@ function updateTableVProgramadas() {
     tb_vprogramadas.ajax.reload();
 }
 mostrar_acciones('tb_vprogramadas');
+let visita_tmp = null;
 
 function ShowDetail(e, id) {
-    $('#modal_seguimiento_visitasp').find('.modal-body').addClass('d-none');
     $('#modal_seguimiento_visitasp').modal('show');
-    fMananger.formModalLoding('modal_seguimiento_visitasp', 'show');
+    fMananger.formModalLoding('modal_seguimiento_visitasp', 'show', true);
     $('#content-seguimiento').html('');
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/visitas/programadas/detail/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            
             if (data.success) {
                 var seguimiento = data.data.seguimiento;
                 var visita = data.data.visita;
-                let sucursal = sucursales[visita.id_sucursal];
-                let empresa = empresas[sucursal.ruc];
+                sucursal = sucursales[visita.id_sucursal];
+                empresa = empresas[sucursal.ruc];
 
-                $(`#modal_seguimiento_visitasp [aria-item="empresa"]`).html(`${empresa.ruc} - ${empresa.razon_social}`);
-                $(`#modal_seguimiento_visitasp [aria-item="direccion"]`).html(sucursal.direccion);
-                $(`#modal_seguimiento_visitasp [aria-item="sucursal"]`).html(sucursal.nombre);
+                llenarInfoModal('modal_seguimiento_visitasp', {
+                    estado: getBadgeVisita(visita.estado),
+                    razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                    direccion: empresa.direccion,
+                    sucursal: sucursal.nombre,
+                    dir_sucursal: sucursal.direccion,
+                });
 
                 fMananger.formModalLoding('modal_seguimiento_visitasp', 'hide');
                 seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
@@ -40,7 +43,6 @@ function ShowDetail(e, id) {
                         <span class="badge rounded-pill badge-primary">${element.date}</span>
                     </li>`);
                 });
-                $('#modal_seguimiento_visitasp').find('.modal-body').removeClass('d-none');
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -88,12 +90,8 @@ async function StartVisita(id, estado) {
 }
 
 function ShowAssign(e, id) {
-    const obj = extractDataRow(e, "tb_vprogramadas");
-    obj.estado = (obj.estado).replaceAll('.7rem;', '.8rem;');
-
-    $('#modal_assign').find('.modal-body').addClass('d-none');
     $('#modal_assign').modal('show');
-    fMananger.formModalLoding('modal_assign', 'show');
+    fMananger.formModalLoding('modal_assign', 'show', true);
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/visitas/programadas/show/${id}`,
@@ -103,17 +101,19 @@ function ShowAssign(e, id) {
                 var visita = data.data;
                 let sucursal = sucursales[visita.id_sucursal];
                 let empresa = empresas[sucursal.ruc];
+                visita_tmp = visita;
+
+                llenarInfoModal('modal_assign', {
+                    estado: getBadgeVisita(visita.estado),
+                    razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                    direccion: empresa.direccion,
+                    sucursal: sucursal.nombre,
+                    dir_sucursal: sucursal.direccion,
+                });
                 
                 $('#id_visitas_asign').val(visita.id);
                 $('#fecha_visita_asign').val(visita.fecha);
-                $(`#modal_assign [aria-item="estado"]`).html(obj.estado);
-                $(`#modal_assign [aria-item="empresa"]`).html(`${empresa.ruc} - ${empresa.razon_social}`);
-                $(`#modal_assign [aria-item="direccion"]`).html(sucursal.direccion);
-                $(`#modal_assign [aria-item="sucursal"]`).html(sucursal.nombre);
-
                 fMananger.formModalLoding('modal_assign', 'hide');
-                $('#modal_assign').find('.modal-body').removeClass('d-none');
-
                 const dt = data.data;
                 (dt.personal_asig).forEach(element => {
                     const accion = dt.estado == 1 ? false : true;
@@ -134,9 +134,6 @@ async function AssignPer() {
     if (!await boxAlert.confirm({ h: `Está apunto de asignar personal a la visita` })) return true;
     fMananger.formModalLoding('modal_assign', 'show');
 
-    const id = $('#id_visitas_asign').val();
-    const estado = $(`#modal_assign [aria-item="estado"]`).text().replaceAll(' ', '').toLowerCase();
-
     const personal = cPersonal1.extract();
     if (!personal) {
         return fMananger.formModalLoding('modal_assign', 'hide');
@@ -150,8 +147,8 @@ async function AssignPer() {
             'X-CSRF-TOKEN': __token,
         },
         data: JSON.stringify({
-            id: id,
-            estado: estado == 'enproceso' ? false : true,
+            id: $('#id_visitas_asign').val(),
+            estado: visita_tmp.estado == 1 ? false : true,
             personal_asig: personal,
             fecha: $('#fecha_visita_asign').val()
         }),
@@ -206,11 +203,9 @@ async function DeleteVisita(id) {
     });
 }
 
-let sucursal = null;
-let empresa = null;
 function OrdenVisita(e, id) {
     $('#modal_orden').modal('show');
-    fMananger.formModalLoding('modal_orden', 'show');
+    fMananger.formModalLoding('modal_orden', 'show', true);
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/visitas/programadas/show/${id}`,
@@ -230,14 +225,18 @@ function OrdenVisita(e, id) {
                 var visita = data.data;
                 sucursal = sucursales[visita.id_sucursal];
                 empresa = empresas[sucursal.ruc];
-
-                $('[name="id_visita_orden"]').val(id);
-                $(`#modal_orden [aria-item="registrado"]`).html(visita.seguimiento[0].created_at);
-                $(`#modal_orden [aria-item="empresa"]`).html(`${empresa.ruc} - ${empresa.razon_social}`);
-                $(`#modal_orden [aria-item="direccion"]`).html(sucursal.direccion);
-                $(`#modal_orden [aria-item="sucursal"]`).html(sucursal.nombre);
                 var tecnicos = visita.personal_asig.map(persona => persona.tecnicos);
-                $('#modal_orden [aria-item="tecnicos"]').html('<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'));
+
+                llenarInfoModal('modal_orden', {
+                    registrado: visita.seguimiento[0].created_at,
+                    razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                    direccion: empresa.direccion,
+                    sucursal: sucursal.nombre,
+                    dir_sucursal: sucursal.direccion,
+                    tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>')
+                });
+                
+                $('[name="id_visita_orden"]').val(id);
                 fMananger.formModalLoding('modal_orden', 'hide');
             }
         },
