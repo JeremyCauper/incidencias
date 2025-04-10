@@ -4310,12 +4310,6 @@ label.custom-control {
     font-size: small;
 }
 
-@media (max-width: 572px) {
-    #modal_seguimiento_visitasp #content-seguimiento span.badge {
-        font-size: .525rem;
-    }
-}
-
 @media (max-width: 672px) {
     .fc-toolbar-title {
         font-size: 1em !important;
@@ -4396,4 +4390,10 @@ tr {
 
 .tt-upper {
     text-transform: uppercase;
+}
+
+@media (max-width: 480px) {
+    .title-seguimiento {
+        font-size: smaller;
+    }
 }

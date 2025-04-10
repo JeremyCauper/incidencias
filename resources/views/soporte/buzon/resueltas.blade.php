@@ -19,7 +19,7 @@
     <div class="col-12 mb-4">
         <div class="card">
             <div class="card-body form-container">
-                <h6 class="text-primary"><i class="fas fa-filter"></i> Filtros de Busqueda</h6>
+                <h6 class="text-primary">Filtros de Busqueda</h6>
                 <div class="row">
                     <div class="col-xxl-5 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
@@ -250,14 +250,12 @@
                         <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Visita</h6>
                         <span aria-item="estado"></span>
                     </div>
-                    <div class="fieldset">
-                        <ul class="list-group list-group-light" id="content-seguimiento-vis">
-                        </ul>
+                    <div class="fieldset" aria-item="contenedor-seguimiento">
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link " data-mdb-ripple-init
-                        data-mdb-dismiss="modal">Cerrar</button>
+                    <div class="text-end mt-3">
+                        <button type="button" class="btn btn-link " data-mdb-ripple-init
+                            data-mdb-dismiss="modal">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>
@@ -318,14 +316,12 @@
                         <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
                         <span aria-item="estado"></span>
                     </div>
-                    <div class="fieldset">
-                        <ul class="list-group list-group-light" id="content-seguimiento-inc">
-                        </ul>
+                    <div class="fieldset" aria-item="contenedor-seguimiento">
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link " data-mdb-ripple-init
-                        data-mdb-dismiss="modal">Cerrar</button>
+                    <div class="text-end mt-3">
+                        <button type="button" class="btn btn-link " data-mdb-ripple-init
+                            data-mdb-dismiss="modal">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>

@@ -40,8 +40,8 @@ class RegistradasController extends Controller
             $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['tSoporte'] = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
-            $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->keyBy('id'); //$this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'tipo_incidencia', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
-            $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->keyBy('id'); //$this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'id_problema', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
+            $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->keyBy('id');
+            $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->keyBy('id');
             $data['eContactos'] = DB::table('contactos_empresas')->where('estatus', 1)->get()->keyBy('telefono');
 
             $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
@@ -547,60 +547,97 @@ class RegistradasController extends Controller
     public function detail(string $cod)
     {
         try {
-            // Consultas iniciales para obtener datos de la incidencia, asignaciones y seguimiento
+            // Consultamos la incidencia activa
             $incidencia = DB::table('tb_incidencias')->where(['estatus' => 1, 'cod_incidencia' => $cod])->first();
+    
+            // Validamos que la incidencia exista
+            if (!$incidencia) {
+                return $this->message(message: "Incidencia no encontrada.", status: 404);
+            }
+    
+            // Consultas adicionales
             $orden = DB::table('tb_orden_servicio')->where('cod_incidencia', $cod)->first();
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $cod)->get();
-            // Obtenemos todos los usuarios activos y los almacenamos en un array asociativo por id
-            $personal = DB::table('tb_personal')->get()->keyBy('id_usuario')->map(function ($u) {
-                $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
-                return (object) [
-                    "foto" => $u->foto_perfil,
-                    "tecnico" => $nombre,
-                    "email" => $u->email_corporativo,
-                    "telefono" => $u->tel_corporativo
-                ];
-            });
-
+    
+            // Obtenemos la información del personal y la claveamos por id_usuario
+            $personal = DB::table('tb_personal')->get()->keyBy('id_usuario')
+                ->map(function ($u) {
+                    return (object) [
+                        "foto"      => $u->foto_perfil,
+                        "tecnico"   => $this->formatearNombre($u->nombres, $u->apellidos),
+                        "email"     => $u->email_corporativo,
+                        "telefono"  => $u->tel_corporativo,
+                    ];
+                });
+    
+            // Asignamos el código de orden, si existe
             $incidencia->cod_orden = $orden ? $orden->cod_ordens : null;
-
-            // Construcción del arreglo de datos
+    
+            // Formateamos la información de registro
             $data = [
-                $this->formatInfoData($personal, $incidencia->id_usuario, $incidencia->id_usuario, $incidencia->created_at, "Registró la incidencia")
+                "registro" => $this->formatInfoData(
+                    $personal,
+                    $incidencia->id_usuario,
+                    $incidencia->id_usuario,
+                    $incidencia->created_at
+                )
             ];
-
-            // Procesamos las asignaciones de la incidencia
-            foreach ($asignados as $v) {
-                $data[] = $this->formatInfoData($personal, $v->creador, $v->id_usuario, $v->created_at, "Asignó la Incidencia a <b>{$personal[$v->id_usuario]->tecnico}</b>");
+    
+            // Procesamos las asignaciones: agrupamos por creador usando groupBy
+            $asignadosGrouped = $asignados->groupBy('creador');
+    
+            // Recorremos cada grupo de asignaciones y formateamos la información
+            $data['asignado'] = $asignadosGrouped->map(function ($items, $creatorId) use ($personal) {
+                // Información del usuario creador de la asignación
+                $info = $this->formatInfoData($personal, $creatorId, $creatorId, "");
+                // Se agregan los técnicos asignados
+                $info['tecnicos'] = $items->map(function ($item) use ($personal) {
+                    return $this->formatInfoData(
+                        $personal,
+                        $item->id_usuario,
+                        $item->id_usuario,
+                        $item->created_at
+                    );
+                })->toArray();
+                return $info;
+            })->values()->toArray(); 
+    
+            // Procesamos el seguimiento: se asigna a "inicio" o "final" según el estado
+            foreach ($seguimiento as $item) {
+                $estadoTexto = $item->estado ? "final" : "inicio";
+                $data[$estadoTexto] = $this->formatInfoData(
+                    $personal,
+                    $item->id_usuario,
+                    $item->id_usuario,
+                    $item->created_at
+                );
             }
-
-            // Procesamos el seguimiento de la incidencia
-            foreach ($seguimiento as $v) {
-                $estadoTexto = $v->estado ? "Finalizó la incidencia" : "Inició la incidencia";
-                $data[] = $this->formatInfoData($personal, $v->id_usuario, $v->id_usuario, $v->created_at, $estadoTexto);
-            }
+    
+            // Retornamos la respuesta estructurada
             return $this->message(data: ['data' => ['incidencia' => $incidencia, 'seguimiento' => $data]]);
+    
         } catch (QueryException $e) {
-            DB::rollBack();
+            // Si estás usando transacciones asegúrate de iniciarlas con DB::beginTransaction()
+            // DB::rollBack(); 
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
-            DB::rollBack();
+            // DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
-    }
+    }    
 
     /**
      * Formatea la información de contacto del usuario.
      */
-    private function formatInfoData($usuario, $creador, $vPersonal, $date, $text)
+    private function formatInfoData($usuario, $creador, $vPersonal, $date)
     {
         $imagen = $usuario[$creador]->foto ?? 'user_auth.jpg';
         return [
             'img' => asset("front/images/auth/{$imagen}"),
             'nombre' => $usuario[$creador]->tecnico,
-            'text' => $text,
-            'contacto' => '<i class="fab fa-whatsapp text-success"></i> ' . $usuario[$vPersonal]->telefono . ' / <i class="far fa-envelope text-danger"></i> ' . $usuario[$vPersonal]->email,
+            'telefono' => $usuario[$vPersonal]->telefono ?: "999999999",
+            'email' => $usuario[$vPersonal]->email ?: "soporte01@rcingenieros.com",
             'date' => $date
         ];
     }

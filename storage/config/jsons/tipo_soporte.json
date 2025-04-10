@@ -1,14 +1,14 @@
 [
     {
         "id": 1,
-        "descripcion": "Incidencia",
+        "descripcion": "INCIDENCIA",
         "estatus": 1,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 2,
-        "descripcion": "Solicitud",
+        "descripcion": "SOLICITUD",
         "estatus": 1,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"

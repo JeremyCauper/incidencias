@@ -23,7 +23,7 @@
     <div class="col-12 mb-4">
         <div class="card">
             <div class="card-body form-container">
-                <h6 class="text-primary"><i class="fas fa-filter"></i> Filtros de Busqueda</h6>
+                <h6 class="text-primary">Filtros de Busqueda</h6>
                 <div class="row">
                     <div class="col-lg-7 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
@@ -149,7 +149,7 @@
                                     },
                                     {
                                         data: 'problema', render: function (data, type, row) {
-                                            return `${obj_problem[data].text} / ${obj_subproblem[row.subproblema].text}`;
+                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
                                         }
                                     },
                                     { data: 'iniciado' },
@@ -182,30 +182,39 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
                         <div class="list-group list-group-light">
                             <div class="list-group-item">
-                                <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
+                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                    20506467854 - CORPORACION JULCAN S.A.</p>
+                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                    aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <div class="row col-12">
+                                <div class="row">
                                     <div class="col-sm-6">
                                         <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
                                             aria-item="sucursal">E/S INDEPENDENCIA</span>
                                     </div>
-                                    <div class="col-sm-6 text-end">
+                                    <div class="col-sm-6 text-sm-end">
                                         <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
                                             aria-item="atencion">Remoto</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Problema / Sub Problema:</label>
-                                <span style="font-size: .75rem;" aria-item="problema / sub problema"></span>
+                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                            </div>
+                            <div class="list-group-item">
+                                <div>
+                                    <label class="form-label me-2">Problema</label>
+                                    <span style="font-size: .75rem;" aria-item="problema"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Sub Problema:</label>
+                                    <span style="font-size: .75rem;" aria-item="subproblema"></span>
+                                </div>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>
@@ -217,9 +226,7 @@
                         <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
                         <span aria-item="estado"></span>
                     </div>
-                    <div class="fieldset ">
-                        <ul class="list-group list-group-light" id="content-seguimiento">
-                        </ul>
+                    <div class="fieldset" aria-item="contenedor-seguimiento">
                     </div>
                 </div>
                 <div class="modal-footer">

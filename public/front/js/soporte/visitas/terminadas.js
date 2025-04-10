@@ -90,41 +90,29 @@ function OrdenPdf(cod) {
 }
 
 function ShowDetail(e, id) {
-    $('#modal_seguimiento_visitasp').find('.modal-body').addClass('d-none');
     $('#modal_seguimiento_visitasp').modal('show');
-    fMananger.formModalLoding('modal_seguimiento_visitasp', 'show');
-    $('#content-seguimiento').html('');
+    fMananger.formModalLoding('modal_seguimiento_visitasp', 'show', true);
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/visitas/programadas/detail/${id}`,
         contentType: 'application/json',
         success: function (data) {
-
             if (data.success) {
                 var seguimiento = data.data.seguimiento;
                 var visita = data.data.visita;
+                sucursal = sucursales[visita.id_sucursal];
+                empresa = empresas[sucursal.ruc];
 
-                $(`#modal_seguimiento_visitasp [aria-item="empresa"]`).html(visita.empresa);
-                $(`#modal_seguimiento_visitasp [aria-item="direccion"]`).html(visita.direccion);
-                $(`#modal_seguimiento_visitasp [aria-item="sucursal"]`).html(visita.sucursal);
+                llenarInfoModal('modal_seguimiento_visitasp', {
+                    estado: getBadgeVisita(visita.estado),
+                    razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
+                    direccion: empresa.direccion,
+                    sucursal: sucursal.nombre,
+                    dir_sucursal: sucursal.direccion,
+                });
 
                 fMananger.formModalLoding('modal_seguimiento_visitasp', 'hide');
-                seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
-                seguimiento.forEach(function (element) {
-                    $('#content-seguimiento').append(`
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <img src="${element.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                            <div class="ms-3">
-                                <p class="fw-bold mb-1">${element.nombre}</p>
-                                <p class="text-muted" style="font-size: .73rem;font-family: Roboto; margin-bottom: .2rem;">${element.text}</p>
-                                <p class="text-muted mb-0" style="font-size: .73rem;font-family: Roboto;">${element.contacto}</p>
-                            </div>
-                        </div>
-                        <span class="badge rounded-pill badge-primary">${element.date}</span>
-                    </li>`);
-                });
-                $('#modal_seguimiento_visitasp').find('.modal-body').removeClass('d-none');
+                llenarInfoSeguimientoVis('modal_seguimiento_visitasp', seguimiento);
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {

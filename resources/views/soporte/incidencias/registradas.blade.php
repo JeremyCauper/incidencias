@@ -155,7 +155,7 @@
                                     },
                                     {
                                         data: 'problema', render: function (data, type, row) {
-                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
+                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
                                         }
                                     },
                                     { data: 'acciones' }
@@ -394,14 +394,12 @@
                         <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
                         <span aria-item="estado"></span>
                     </div>
-                    <div class="fieldset">
-                        <ul class="list-group list-group-light" id="content-seguimiento">
-                        </ul>
+                    <div class="fieldset" aria-item="contenedor-seguimiento">
                     </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-link " data-mdb-ripple-init
-                        data-mdb-dismiss="modal">Cerrar</button>
+                    <div class="text-end mt-3">
+                        <button type="button" class="btn btn-link " data-mdb-ripple-init
+                            data-mdb-dismiss="modal">Cerrar</button>
+                    </div>
                 </div>
             </div>
         </div>

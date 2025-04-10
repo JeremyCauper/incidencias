@@ -96,7 +96,6 @@ mostrar_acciones('tb_incidencias');
 function ShowDetailInc(e, cod) {
     $('#modal_detalle').modal('show');
     fMananger.formModalLoding('modal_detalle', 'show', true);
-    $('#content-seguimiento').html('');
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/incidencias/registradas/detail/${cod}`,
@@ -119,27 +118,13 @@ function ShowDetailInc(e, cod) {
                 sucursal: sucursal.nombre,
                 atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                 dir_sucursal: sucursal.direccion,
-                problema: obj_problem[inc.id_problema].text,
-                subproblema: obj_subproblem[inc.id_subproblema].text,
+                problema: obj_problem[inc.id_problema].descripcion,
+                subproblema: getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
                 observacion: inc.observacion,
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
-            seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
-            seguimiento.forEach(function (element) {
-                $('#content-seguimiento').append(`
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <img src="${element.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                            <div class="ms-3">
-                                <p class="fw-bold mb-1">${element.nombre}</p>
-                                <p class="text-muted" style="font-size: .73rem;font-family: Roboto; margin-bottom: .2rem;">${element.text}</p>
-                                <p class="text-muted mb-0" style="font-size: .73rem;font-family: Roboto;">${element.contacto}</p>
-                            </div>
-                        </div>
-                        <span class="badge rounded-pill badge-primary">${element.date}</span>
-                    </li>`);
-            });
+            llenarInfoSeguimientoInc('modal_detalle', seguimiento);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             fMananger.formModalLoding('modal_detalle', 'hide');
@@ -204,8 +189,8 @@ async function OrdenDetail(e, cod) {
                     sucursal: sucursal.nombre,
                     atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                     dir_sucursal: sucursal.direccion,
-                    problema: obj_problem[inc.id_problema].text,
-                    subproblema: obj_subproblem[inc.id_subproblema].text,
+                    problema: obj_problem[inc.id_problema].descripcion,
+                    subproblema: getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
                     observacion: inc.observacion,
                     empresaFooter: `${empresa.ruc} - ${empresa.razon_social}`
                 });
@@ -622,10 +607,8 @@ function updateTableVis() {
 mostrar_acciones('tb_visitas');
 
 function ShowDetailVis(e, id) {
-    $('#modal_seguimiento_visitasp').find('.modal-body').addClass('d-none');
     $('#modal_seguimiento_visitasp').modal('show');
     fMananger.formModalLoding('modal_seguimiento_visitasp', 'show');
-    $('#content-seguimiento-vis').html('');
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/visitas/programadas/detail/${id}`,
@@ -646,21 +629,7 @@ function ShowDetailVis(e, id) {
                 });
 
                 fMananger.formModalLoding('modal_seguimiento_visitasp', 'hide');
-                seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
-                seguimiento.forEach(function (element) {
-                    $('#content-seguimiento-vis').append(`
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <img src="${element.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                            <div class="ms-3">
-                                <p class="fw-bold mb-1">${element.nombre}</p>
-                                <p class="text-muted" style="font-size: .73rem;font-family: Roboto; margin-bottom: .2rem;">${element.text}</p>
-                                <p class="text-muted mb-0" style="font-size: .73rem;font-family: Roboto;">${element.contacto}</p>
-                            </div>
-                        </div>
-                        <span class="badge rounded-pill badge-primary">${element.date}</span>
-                    </li>`);
-                });
+                llenarInfoSeguimientoVis('modal_seguimiento_visitasp', seguimiento);
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {

@@ -6,13 +6,17 @@
 <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
 <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
 <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
+<script>
+    let empresas = <?php echo json_encode($data['empresas']); ?>;
+    let sucursales = <?php echo json_encode($data['sucursales']); ?>;
+</script>
 @endsection
 @section('content')
 
 <div class="col-12 mb-4">
     <div class="card">
         <div class="card-body form-container">
-            <h6 class="text-primary"><i class="fas fa-filter"></i> Filtros de Busqueda</h6>
+            <h6 class="text-primary">Filtros de Busqueda</h6>
             <div class="row">
                 <div class="col-xxl-5 my-1">
                     <label class="form-label mb-0" for="empresa">Empresa</label>
@@ -92,33 +96,32 @@
                     aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                    <div class="list-group list-group-light">
-                        <div class="list-group-item">
-                            <span aria-item="empresa">20506467854 - CORPORACION JULCAN S.A.</span>
-                        </div>
-                        <div class="list-group-item">
-                            <label class="form-label me-2">Direccion:</label><span style="font-size: .75rem;"
-                                aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                        </div>
-                        <div class="list-group-item">
-                            <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                aria-item="sucursal">E/S INDEPENDENCIA</span>
-                        </div>
+                <div class="list-group list-group-light">
+                    <div class="list-group-item">
+                        <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                            20506467854 - CORPORACION JULCAN S.A.</p>
+                        <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
+                            N° 3689 MZ D LT 26 INDEPENDENCIA</p>
+                    </div>
+                    <div class="list-group-item">
+                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                            aria-item="sucursal">E/S INDEPENDENCIA</span>
+                    </div>
+                    <div class="list-group-item">
+                        <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
+                            aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between align-items-center my-2">
                     <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Visita</h6>
                     <span aria-item="estado"></span>
                 </div>
-                <div class="fieldset">
-                    <ul class="list-group list-group-light" id="content-seguimiento">
-                    </ul>
+                <div class="fieldset" aria-item="contenedor-seguimiento">
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-link " data-mdb-ripple-init
-                    data-mdb-dismiss="modal">Cerrar</button>
+                <div class="text-end mt-3">
+                    <button type="button" class="btn btn-link " data-mdb-ripple-init
+                        data-mdb-dismiss="modal">Cerrar</button>
+                </div>
             </div>
         </div>
     </div>
@@ -127,9 +130,5 @@
 @endsection
 
 @section('scripts')
-<script>
-    const empresas = <?php echo json_encode($data['empresas']); ?>;
-    const sucursales = <?php echo json_encode($data['sucursales']); ?>;
-</script>
 <script src="{{secure_asset('front/js/soporte/visitas/terminadas.js')}}"></script>
 @endsection

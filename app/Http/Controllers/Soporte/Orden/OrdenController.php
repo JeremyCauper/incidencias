@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Soporte\Orden;
 
+use App\Helpers\Problema;
+use App\Helpers\SubProblema;
 use App\Http\Controllers\Controller;
 use Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -341,16 +343,9 @@ class OrdenController extends Controller
             ];
 
             // Procesar problemas
-            $problemas = DB::table('tb_problema')
-                ->select(['id_problema as id', DB::raw("CONCAT(codigo, ' - ', descripcion) AS text")])
-                ->get();
-
-            foreach ($problemas as $problema) {
-                if ($problema->id == $incidencia->id_problema) {
-                    $datos['problema'] = $problema->text;
-                    break;
-                }
-            }
+            $problemas = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->where('id', $incidencia->id_problema)->first();
+            $sproblemas = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->where('id', $incidencia->id_subproblema)->first();
+            $datos['problema'] = "{$problemas['codigo']} - {$problemas['descripcion']} / {$sproblemas['prioridad']} - {$sproblemas['descripcion']}";
 
             // Observaciones y recomendaciones
             $datos['observacion'] = $orden->observaciones;

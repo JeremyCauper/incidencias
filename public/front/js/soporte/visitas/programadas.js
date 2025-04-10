@@ -7,7 +7,6 @@ let visita_tmp = null;
 function ShowDetail(e, id) {
     $('#modal_seguimiento_visitasp').modal('show');
     fMananger.formModalLoding('modal_seguimiento_visitasp', 'show', true);
-    $('#content-seguimiento').html('');
     $.ajax({
         type: 'GET',
         url: `${__url}/soporte/visitas/programadas/detail/${id}`,
@@ -28,21 +27,7 @@ function ShowDetail(e, id) {
                 });
 
                 fMananger.formModalLoding('modal_seguimiento_visitasp', 'hide');
-                seguimiento.sort((a, b) => new Date(a.date) - new Date(b.date));
-                seguimiento.forEach(function (element) {
-                    $('#content-seguimiento').append(`
-                    <li class="list-group-item d-flex justify-content-between align-items-center">
-                        <div class="d-flex align-items-center">
-                            <img src="${element.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                            <div class="ms-3">
-                                <p class="fw-bold mb-1">${element.nombre}</p>
-                                <p class="text-muted" style="font-size: .73rem;font-family: Roboto; margin-bottom: .2rem;">${element.text}</p>
-                                <p class="text-muted mb-0" style="font-size: .73rem;font-family: Roboto;">${element.contacto}</p>
-                            </div>
-                        </div>
-                        <span class="badge rounded-pill badge-primary">${element.date}</span>
-                    </li>`);
-                });
+                llenarInfoSeguimientoVis('modal_seguimiento_visitasp', seguimiento);
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {

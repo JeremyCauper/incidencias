@@ -138,20 +138,46 @@ class VProgramadasController extends Controller
 
             // Construcción del arreglo de datos
             $data = [
-                $this->formatInfoData($personal, $visita->id_creador, $visita->id_creador, $visita->created_at, "Registró la visita")
+                "registro" => $this->formatInfoData(
+                    $personal,
+                    $visita->id_creador,
+                    $visita->id_creador,
+                    $visita->created_at
+                )
             ];
 
-            // Procesamos las asignaciones de la visita
-            foreach ($asignados as $a) {
-                $data[] = $this->formatInfoData($personal, $a->creador, $a->id_usuario, $a->created_at, "Asignó la Visita a <b>{$personal[$a->id_usuario]->tecnico}</b>");
+            // Procesamos las asignaciones: agrupamos por creador usando groupBy
+            $asignadosGrouped = $asignados->groupBy('creador');
+    
+            // Recorremos cada grupo de asignaciones y formateamos la información
+            $data['asignado'] = $asignadosGrouped->map(function ($items, $creatorId) use ($personal) {
+                // Información del usuario creador de la asignación
+                $info = $this->formatInfoData($personal, $creatorId, $creatorId, "");
+                // Se agregan los técnicos asignados
+                $info['tecnicos'] = $items->map(function ($item) use ($personal) {
+                    return $this->formatInfoData(
+                        $personal,
+                        $item->id_usuario,
+                        $item->id_usuario,
+                        $item->created_at
+                    );
+                })->toArray();
+                return $info;
+            })->values()->toArray(); 
+
+            // Procesamos el seguimiento: se asigna a "inicio" o "final" según el estado
+            foreach ($seguimiento as $item) {
+                $estadoTexto = $item->estado ? "final" : "inicio";
+                $data[$estadoTexto] = $this->formatInfoData(
+                    $personal,
+                    $item->id_usuario,
+                    $item->id_usuario,
+                    $item->created_at
+                );
             }
 
-            // Procesamos el seguimiento de la visita
-            foreach ($seguimiento as $s) {
-                $estadoTexto = $s->estado ? "Finalizó la visita" : "Inició la visita";
-                $data[] = $this->formatInfoData($personal, $s->id_usuario, $s->id_usuario, $s->created_at, $estadoTexto);
-            }
             return $this->message(data: ['data' => ['visita' => $visita, 'seguimiento' => $data]]);
+
         } catch (QueryException $e) {
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
@@ -162,13 +188,14 @@ class VProgramadasController extends Controller
     /**
      * Formatea la información de contacto del usuario.
      */
-    private function formatInfoData($usuario, $creador, $vPersonal, $date, $text)
+    private function formatInfoData($usuario, $creador, $vPersonal, $date)
     {
+        $imagen = $usuario[$creador]->foto ?? 'user_auth.jpg';
         return [
-            'img' => asset("front/images/auth/{$usuario[$creador]->foto}"),
+            'img' => asset("front/images/auth/{$imagen}"),
             'nombre' => $usuario[$creador]->tecnico,
-            'text' => $text,
-            'contacto' => '<i class="fab fa-whatsapp text-success"></i> ' . $usuario[$vPersonal]->telefono . ' / <i class="far fa-envelope text-danger"></i> ' . $usuario[$vPersonal]->email,
+            'telefono' => $usuario[$vPersonal]->telefono ?: "999999999",
+            'email' => $usuario[$vPersonal]->email ?: "soporte01@rcingenieros.com",
             'date' => $date
         ];
     }

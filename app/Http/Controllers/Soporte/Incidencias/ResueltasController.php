@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Soporte\Incidencias;
 
 use App\Helpers\CargoEstacion;
+use App\Helpers\Problema;
+use App\Helpers\SubProblema;
 use App\Helpers\TipoEstacion;
 use App\Helpers\TipoIncidencia;
 use App\Helpers\TipoSoporte;
@@ -29,8 +31,8 @@ class ResueltasController extends Controller
 
             // Obtener información de base de datos local
             $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
-            $data['problema'] = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'tipo_incidencia', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
-            $data['sproblema'] = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'id_problema', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
+            $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->keyBy('id');
+            $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->keyBy('id');
             $data['usuarios'] = DB::table('tb_personal')->get()->keyBy('id_usuario')->map(function ($user) {
                 $nombre = $this->formatearNombre($user->nombres, $user->apellidos);
                 return (object)[
