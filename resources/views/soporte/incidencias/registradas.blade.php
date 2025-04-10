@@ -3,6 +3,10 @@
 
 @section('cabecera')
     <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}">
+    <!-- Include stylesheet -->
+    <!-- <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" /> -->
+    <!-- Include the Quill library -->
+    <!-- <script src="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.js"></script> -->
 
     <script>
         let cod_incidencia = '<?= $data['cod_inc'] ?>';
@@ -309,6 +313,18 @@
                             <label class="form-label mb-0" for="observacion">Observacion</label>
                             <textarea class="form-control" id="observacion" style="height: 106px;resize: none;"></textarea>
                         </div>
+                        <!-- <div class="col-12">
+                            <div id="editor">
+                                <p>Hello World!</p>
+                                <p>Some initial <strong>bold</strong> text</p>
+                                <p><br /></p>
+                            </div>
+                        </div>
+                        <script>
+                            const quill = new Quill('#editor', {
+                                theme: 'snow'
+                            });
+                        </script> -->
                     </div>
 
                     <div id="contenedor-personal">

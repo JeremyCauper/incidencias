@@ -256,6 +256,9 @@ async function consultarDniInput($this) {
 
     const label = $(`[for="${$this.attr('id')}"`);
     const labelHtml = label.html();
+    if (label.find('span.text-info').length) {
+        return true;
+    }
     try {
         label.addClass('d-flex justify-content-between').html(`${labelHtml} <span class="text-info"><span class="spinner-border" role="status" style="width: 1rem; height: 1rem;"></span> Consultando</span>`);
         const datos = await consultarDni($this.val());
