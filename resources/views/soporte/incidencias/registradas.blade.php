@@ -155,7 +155,7 @@
                                     },
                                     {
                                         data: 'problema', render: function (data, type, row) {
-                                            return `${obj_problem[data].text} / ${obj_subproblem[row.subproblema].text}`;
+                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
                                         }
                                     },
                                     { data: 'acciones' }
@@ -254,7 +254,7 @@
 
                     <h6 class="tittle text-primary">Datos Incidencia</h6>
                     <div class="row">
-                        <div class="col-lg-4 col-7 mb-2">
+                        <div class="col-lg-4 mb-2">
                             <label class="form-label mb-0" for="tEstacion">Tipo Estación</label>
                             <select class="select-clear" id="tEstacion">
                                 <option value="">-- Seleccione --</option>
@@ -264,29 +264,20 @@
                                 @endforeach
                             </select>
                         </div>
-                        <div class="col-lg-2 col-5 mb-2">
-                            <label class="form-label mb-0" for="prioridad">Prioridad</label>
-                            <select class="select" id="prioridad">
-                                <option selected value="Alta">Alta</option>
-                                <option value="Media">Media</option>
-                                <option value="Baja">Baja</option>
-                                <option value="Critica">Critica</option>
-                            </select>
-                        </div>
-                        <div class="col-lg-4 col-7 mb-2">
-                            <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
-                            <select class="select" id="tSoporte">
-                                <option value="">-- Seleccione --</option>
-                                @foreach ($data['tSoporte'] as $v)
-                                    <option value="{{$v['id']}}">{{$v['descripcion']}}</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-lg-2 col-5 mb-2">
+                        <div class="col-lg-4 col-6 mb-2">
                             <label class="form-label mb-0" for="tIncidencia">Tipo Incidencia</label>
                             <select class="select" id="tIncidencia">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['tIncidencia'] as $v)
+                                    <option {{$v['id'] == 1 ? 'selected' : ''}} value="{{$v['id']}}">{{$v['descripcion']}}</option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-lg-4 col-6 mb-2">
+                            <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
+                            <select class="select" id="tSoporte">
+                                <option value="">-- Seleccione --</option>
+                                @foreach ($data['tSoporte'] as $v)
                                     <option value="{{$v['id']}}">{{$v['descripcion']}}</option>
                                 @endforeach
                             </select>
@@ -299,7 +290,7 @@
                         </div>
                         <div class="col-md-6 mb-2">
                             <label class="form-label mb-0" for="sproblema">Sub Problema</label>
-                            <select class="select-clear" id="sproblema">
+                            <select class="select-icons" id="sproblema">
                             </select>
                         </div>
                         <div class="col-sm-4">

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Soporte\Incidencias;
 
 use App\Helpers\CargoEstacion;
+use App\Helpers\Problema;
+use App\Helpers\SubProblema;
 use App\Helpers\TipoEstacion;
 use App\Helpers\TipoIncidencia;
 use App\Helpers\TipoSoporte;
@@ -38,8 +40,8 @@ class RegistradasController extends Controller
             $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['tSoporte'] = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
-            $data['problema'] = $this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'tipo_incidencia', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
-            $data['sproblema'] = $this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'id_problema', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
+            $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->keyBy('id'); //$this->fetchAndParseDbData('tb_problema', ["id_problema as id", 'tipo_incidencia', 'estatus'], "CONCAT(codigo, ' - ', descripcion) AS text");
+            $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->keyBy('id'); //$this->fetchAndParseDbData('tb_subproblema', ["id_subproblema as id", 'id_problema', 'estatus'], "CONCAT(codigo_sub, ' - ', descripcion) AS text");
             $data['eContactos'] = DB::table('contactos_empresas')->where('estatus', 1)->get()->keyBy('telefono');
 
             $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
@@ -164,7 +166,6 @@ class RegistradasController extends Controller
                 'empresa' => 'required|string',
                 'sucursal' => 'required|integer',
                 'tEstacion' => 'required|integer',
-                'prioridad' => 'required|string',
                 'tSoporte' => 'required|integer',
                 'tIncidencia' => 'required|integer',
                 'problema' => 'required|integer',
@@ -211,7 +212,6 @@ class RegistradasController extends Controller
                 'ruc_empresa' => $request->empresa,
                 'id_sucursal' => $request->sucursal,
                 'id_tipo_estacion' => $request->tEstacion,
-                'prioridad' => $request->prioridad,
                 'id_tipo_soporte' => $request->tSoporte,
                 'id_tipo_incidencia' => $request->tIncidencia,
                 'id_problema' => $request->problema,
@@ -328,7 +328,6 @@ class RegistradasController extends Controller
                 'empresa' => 'required|integer',
                 'sucursal' => 'required|integer',
                 'tEstacion' => 'required|integer',
-                'prioridad' => 'required|string',
                 'tSoporte' => 'required|integer',
                 'tIncidencia' => 'required|integer',
                 'problema' => 'required|integer',
@@ -375,7 +374,6 @@ class RegistradasController extends Controller
                 'ruc_empresa' => $request->empresa,
                 'id_sucursal' => $request->sucursal,
                 'id_tipo_estacion' => $request->tEstacion,
-                'prioridad' => $request->prioridad,
                 'id_tipo_soporte' => $request->tSoporte,
                 'id_tipo_incidencia' => $request->tIncidencia,
                 'id_problema' => $request->problema,

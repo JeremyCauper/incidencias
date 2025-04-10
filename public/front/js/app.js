@@ -306,6 +306,16 @@ function getBadgeContrato(estado) {
     return `<label class="badge badge-${estadoInforme[estado]['color']}">${estadoInforme[estado]['text']}</label>`;
 }
 
+function getBadgePrioridad(estado) {
+    estadoInforme = {
+        "P2": { 'color': 'success', 'text': 'P2' },
+        "P3": { 'color': 'warning', 'text': 'P3' },
+        "P4": { 'color': 'danger', 'text': 'P4' },
+    };
+
+    return `<label class="badge badge-${estadoInforme[estado]['color']} me-2">${estadoInforme[estado]['text']}</label>`;
+}
+
 function animateProperty(element, property, start, end, duration, fps, callback) {
     let current = start;
     const totalFrames = duration / (1000 / fps);

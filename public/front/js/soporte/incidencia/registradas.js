@@ -47,7 +47,7 @@ $(document).ready(function () {
         },
         // Datos Incidencia
         {
-            control: ['#tEstacion', '#prioridad', '#tSoporte', '#tIncidencia'],
+            control: ['#tEstacion', '#tIncidencia', '#tSoporte'],
             config: {
                 require: true
             }
@@ -124,12 +124,12 @@ $(document).ready(function () {
         fillSelect(['#sucursal'], sucursales, 'ruc', empresa.ruc, 'id', 'nombre', 'status');
     });
 
-    $('#tIncidencia').on('change', function () {
-        fillSelect(['#problema', '#sproblema'], obj_problem, 'tipo_incidencia', $(this).val(), 'id', 'text', 'estatus');
+    $('#tSoporte').on('change', function () {
+        fillSelectP($(this).val());
     });
 
     $('#problema').on('change', function () {
-        fillSelect(['#sproblema'], obj_subproblem, 'id_problema', $(this).val(), 'id', 'text', 'estatus');
+        fillSelectSP($(this).val());
     });
 
     $('#tel_contac').on('change', function () {
@@ -161,6 +161,7 @@ $(document).ready(function () {
         $('#nom_contac').val('');
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
+        $('#tSoporte').val(1).trigger('change');
         manCantidad();
     });
 
@@ -327,8 +328,8 @@ function ShowDetail(e, cod) {
                 sucursal: sucursal.nombre,
                 atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                 dir_sucursal: sucursal.direccion,
-                problema: obj_problem[inc.id_problema].text,
-                subproblema: obj_subproblem[inc.id_subproblema].text,
+                problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
+                subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad) + obj_subproblem[inc.id_subproblema].descripcion,
                 observacion: inc.observacion,
             });
 
@@ -371,6 +372,8 @@ function ShowEdit(id) {
             if (!data.success) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
+            console.log(data);
+            
 
             const dt = data.data;
             fMananger.formModalLoding('modal_incidencias', 'hide');
@@ -387,12 +390,13 @@ function ShowEdit(id) {
             $('#car_contac').val(dt.cargo).trigger('change');
             $('#cor_contac').val(dt.correo);
             $('#tEstacion').val(dt.id_tipo_estacion).trigger('change');
-            $('#prioridad').val(dt.prioridad).trigger('change');
-            $('#tSoporte').val(dt.id_tipo_soporte).trigger('change');
             $('#tIncidencia').val(dt.id_tipo_incidencia).trigger('change');
-            fillSelect(['#problema', '#sproblema'], obj_problem, 'tipo_incidencia', dt.id_tipo_incidencia, 'id', 'text', 'estatus');
+            $('#tSoporte').val(dt.id_tipo_soporte).trigger('change');
+            // fillSelect(['#problema', '#sproblema'], obj_problem, 'tipo_incidencia', dt.id_tipo_incidencia, 'id', 'text', 'estatus');
+            fillSelectP(dt.id_tipo_soporte);
             $('#problema').val(dt.id_problema).trigger('change');
-            fillSelect(['#sproblema'], obj_subproblem, 'id_problema', dt.id_problema, 'id', 'text', 'estatus');
+            fillSelectSP(dt.id_problema);
+            // fillSelect(['#sproblema'], obj_subproblem, 'id_problema', dt.id_problema, 'id', 'text', 'estatus');
             $('#sproblema').val(dt.id_subproblema).trigger('change');
             $('#fecha_imforme').val(dt.fecha_informe);
             $('#hora_informe').val(dt.hora_informe);
@@ -447,8 +451,8 @@ function ShowAssign(e, cod) {
                 sucursal: sucursal.nombre,
                 atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                 dir_sucursal: sucursal.direccion,
-                problema: obj_problem[inc.id_problema].text,
-                subproblema: obj_subproblem[inc.id_subproblema].text,
+                problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
+                subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad) + obj_subproblem[inc.id_subproblema].descripcion,
                 observacion: inc.observacion,
             });
 
@@ -617,8 +621,8 @@ async function OrdenDetail(e, cod) {
                     sucursal: sucursal.nombre,
                     atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                     dir_sucursal: sucursal.direccion,
-                    problema: obj_problem[inc.id_problema].text,
-                    subproblema: obj_subproblem[inc.id_subproblema].text,
+                    problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
+                    subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad) + obj_subproblem[inc.id_subproblema].descripcion,
                     observacion: inc.observacion,
                     empresaFooter: `${empresa.ruc} - ${empresa.razon_social}`
                 });
@@ -1019,4 +1023,27 @@ function removeClienteDataFirm() {
         $('#n_doc, #nom_cliente, #id_firmador, #nomFirmaDigital').val('');
         removeSignature();
     }
+}
+
+function fillSelectP(value) {
+    $('#problema, #sproblema').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
+    if (!value) return false;
+    
+    Object.entries(obj_problem).forEach(([key, e]) => {
+        if (e.tipo_soporte == value && e.estatus)
+            $('#problema').append($('<option>').val(e.id).text(`${e.codigo} - ${e.descripcion}`));
+    });
+    $('#problema').attr('disabled', false);
+}
+
+function fillSelectSP(value) {
+    var codigo = obj_problem[value]?.codigo ?? null;
+    $('#sproblema').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
+    if (!codigo) return false;
+    
+    Object.entries(obj_subproblem).forEach(([key, e]) => {
+        if (e.codigo_problema == codigo && e.estatus)
+            $('#sproblema').append($('<option>').val(e.id).text(`${getBadgePrioridad(e.prioridad)}::${e.descripcion}`));
+    });
+    $('#sproblema').attr('disabled', false);
 }

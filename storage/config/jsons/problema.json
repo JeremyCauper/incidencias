@@ -1,0 +1,472 @@
+[
+    {
+        "id": 1,
+        "codigo": "PI-0001",
+        "descripcion": "PROBLEMA DE COMUNICACIÓN",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 2,
+        "codigo": "PI-0002",
+        "descripcion": "PROBLEMAS DE SISTEMA",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 3,
+        "codigo": "PI-0003",
+        "descripcion": "SOPORTES ADICIONALES",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 4,
+        "codigo": "PI-0004",
+        "descripcion": "REINICIOS DE SERVIDOR",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 5,
+        "codigo": "PI-0005",
+        "descripcion": "PROBLEMA DE LECTURA",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 6,
+        "codigo": "PI-0006",
+        "descripcion": "PROBLEMA DE IMPRESORA",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 7,
+        "codigo": "PI-0007",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR350",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 8,
+        "codigo": "PI-0008",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR351",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 9,
+        "codigo": "PI-0009",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR354",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 10,
+        "codigo": "PI-0010",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR355",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 11,
+        "codigo": "PI-0011",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR356",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 12,
+        "codigo": "PI-0012",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR357",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 13,
+        "codigo": "PI-0013",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR358",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 14,
+        "codigo": "PI-0014",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR363",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 15,
+        "codigo": "PI-0015",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR352",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 16,
+        "codigo": "PI-0016",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR353",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 17,
+        "codigo": "PI-0017",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR359",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 18,
+        "codigo": "PI-0018",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR360",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 19,
+        "codigo": "PI-0019",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR361",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 20,
+        "codigo": "PI-0020",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR362",
+        "tipo_soporte": 1,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 21,
+        "codigo": "PS-0001",
+        "descripcion": "PROBLEMA DE COMUNICACIÓN",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 22,
+        "codigo": "PS-0002",
+        "descripcion": "ACTUALIZACION DE SISTEMA",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 23,
+        "codigo": "PS-0003",
+        "descripcion": "MANTENIMIENTO GENERAL",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 24,
+        "codigo": "PS-0004",
+        "descripcion": "SOPORTES ADICIONALES",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 25,
+        "codigo": "PS-0005",
+        "descripcion": "CAMBIO DE SERVIDOR",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 26,
+        "codigo": "PS-0006",
+        "descripcion": "CAMBIO DE DISCO DURO",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 27,
+        "codigo": "PS-0007",
+        "descripcion": "REUBICACIÓN DE EQUIPOS",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 28,
+        "codigo": "PS-0008",
+        "descripcion": "REINICIOS DE SERVIDOR",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 29,
+        "codigo": "PS-0009",
+        "descripcion": "PROBLEMA DE LECTURA",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 30,
+        "codigo": "PS-0010",
+        "descripcion": "PROBLEMAS DE SISTEMA",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 31,
+        "codigo": "PS-0011",
+        "descripcion": "PROBLEMA DE IMPRESORAS",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 32,
+        "codigo": "PS-0012",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR350",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 33,
+        "codigo": "PS-0013",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR351",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 34,
+        "codigo": "PS-0014",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR352",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 35,
+        "codigo": "PS-0015",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR353",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 36,
+        "codigo": "PS-0016",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR354",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 37,
+        "codigo": "PS-0017",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR355",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 38,
+        "codigo": "PS-0018",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR356",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 39,
+        "codigo": "PS-0019",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR357",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 40,
+        "codigo": "PS-0020",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR358",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 41,
+        "codigo": "PS-0021",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR359",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 42,
+        "codigo": "PS-0022",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR360",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 43,
+        "codigo": "PS-0023",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR362",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 44,
+        "codigo": "PS-0024",
+        "descripcion": "PROBLEMAS DE IMPRESORA",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 45,
+        "codigo": "PS-0025",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 46,
+        "codigo": "PS-0026",
+        "descripcion": "PROBLEMA DE TERMINAL TOUCH / MR361",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id": 47,
+        "codigo": "PS-0027",
+        "descripcion": "LEVANTAMIENTO DE INFORMACIÓN",
+        "tipo_soporte": 2,
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    }
+]

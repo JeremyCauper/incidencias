@@ -31,7 +31,7 @@ $(document).ready(function () {
         var originalOption = icon.element;
         if (!icon.id) { return icon.text; }
         var valor = icon.text.split('::');
-        var $icon = `<i class="${valor[0]}"></i><span>${valor[1]}</span>`;// '<i class="icon-home8"></i>' + icon.text;
+        var $icon = `${valor[0]}<span>${valor[1]}</span>`;// '<i class="icon-home8"></i>' + icon.text;
 
         return $icon;
     }

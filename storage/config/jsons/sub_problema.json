@@ -1,0 +1,2362 @@
+[
+    {
+        "id" : 1,
+        "codigo_problema": "PI-0001",
+        "descripcion": "CONFLICTO DE PUERTOS",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 2,
+        "codigo_problema": "PI-0001",
+        "descripcion": "PUERTO FANTASMAS",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 3,
+        "codigo_problema": "PI-0002",
+        "descripcion": "PROBLEMAS CON BASE DE DATOS GASOLUTIONS",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 4,
+        "codigo_problema": "PI-0002",
+        "descripcion": "PROBLEMAS CON SISTEMA OPERATIVO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 5,
+        "codigo_problema": "PI-0003",
+        "descripcion": "PROBLEMAS CON FLUIDO ELÉCTRICO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 6,
+        "codigo_problema": "PI-0003",
+        "descripcion": "RESTABLECIMIENTO DE SISTEMAS POR PARADA DE EMERGENCIA",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 7,
+        "codigo_problema": "PI-0003",
+        "descripcion": "INCONVENIENTE CON GNV POR MANTENIMIENTE DE TABLERO ELÉCTRICO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 8,
+        "codigo_problema": "PI-0001",
+        "descripcion": "INTERFACE DESCONECTADA",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 9,
+        "codigo_problema": "PI-0001",
+        "descripcion": "INTERFACE AVERIADA",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 10,
+        "codigo_problema": "PI-0004",
+        "descripcion": "CAIDA DE SISTEMA POR REINICIO PROGRAMADO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 11,
+        "codigo_problema": "PI-0004",
+        "descripcion": "CAIDA DE SISTEMA POR REINICIO NO PROGRAMADO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 12,
+        "codigo_problema": "PI-0005",
+        "descripcion": "LENTITUD EN LECTURA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 13,
+        "codigo_problema": "PI-0005",
+        "descripcion": "DISPOSITIVO BLOQUEADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 14,
+        "codigo_problema": "PI-0005",
+        "descripcion": "CARA DESPACHO BLOQUEDA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 15,
+        "codigo_problema": "PI-0005",
+        "descripcion": "INDICE FUERA DE LA MATRIZ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 16,
+        "codigo_problema": "PI-0006",
+        "descripcion": "ATASCO DE PAPEL",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 17,
+        "codigo_problema": "PI-0006",
+        "descripcion": "ATASCO DE CUCHILLA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 18,
+        "codigo_problema": "PI-0006",
+        "descripcion": "FUENTE DESCONECTADA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 19,
+        "codigo_problema": "PI-0006",
+        "descripcion": "SOBRE ESCRITURA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 20,
+        "codigo_problema": "PI-0006",
+        "descripcion": "NO IMPRIMEN DOCUMENTOS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 21,
+        "codigo_problema": "PI-0006",
+        "descripcion": "IMPRESIÓN BORROSA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 22,
+        "codigo_problema": "PI-0006",
+        "descripcion": "IMPRESORA DE BAJA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 23,
+        "codigo_problema": "PI-0006",
+        "descripcion": "LENTITUD EN IMPRESIÓN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 24,
+        "codigo_problema": "PI-0006",
+        "descripcion": "DOCUMENTOS EN COLA DE IMPRESIÓN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 25,
+        "codigo_problema": "PI-0006",
+        "descripcion": "DOCUMENTO PENDIENTE POR ENVIAR",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 26,
+        "codigo_problema": "PI-0006",
+        "descripcion": "CONFLICTO DE IP",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 27,
+        "codigo_problema": "PI-0006",
+        "descripcion": "IMPRESIONES BASURAS/ DATOS INCORRECTO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 28,
+        "codigo_problema": "PI-0006",
+        "descripcion": "IMPRESION CON LINEAS EN BLANCO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 29,
+        "codigo_problema": "PI-0006",
+        "descripcion": "IMPRESIONES ENTRE CORTADAS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 30,
+        "codigo_problema": "PI-0007",
+        "descripcion": "PANTALLA CONGELADA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 31,
+        "codigo_problema": "PI-0008",
+        "descripcion": "FUENTE DESCONECTADA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 32,
+        "codigo_problema": "PI-0009",
+        "descripcion": "PANTALLA CONGELADA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 33,
+        "codigo_problema": "PI-0010",
+        "descripcion": "APP GST NO FIDELIZA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 34,
+        "codigo_problema": "PI-0011",
+        "descripcion": "SERVICIO AUTORIZADOR NO ENCONTRADO ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 35,
+        "codigo_problema": "PI-0012",
+        "descripcion": "PERDIDA DE COMUNICACIÓN ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 36,
+        "codigo_problema": "PI-0013",
+        "descripcion": "APLICATIVO CERRADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 37,
+        "codigo_problema": "PI-0014",
+        "descripcion": "POCA VISIBILIDAD",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 38,
+        "codigo_problema": "PI-0002",
+        "descripcion": "VENTA PERDIDA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 39,
+        "codigo_problema": "PI-0002",
+        "descripcion": "EXCEPSIÓN DEL CDC ( CLUB PGN)",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 40,
+        "codigo_problema": "PI-0002",
+        "descripcion": "VENTA CON INCONSISTENCIA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 41,
+        "codigo_problema": "PI-0002",
+        "descripcion": "PROBLEMAS CON TARJETA CORPORATIVA / BONUS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 42,
+        "codigo_problema": "PI-0002",
+        "descripcion": "VENTA EN CURSO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 43,
+        "codigo_problema": "PI-0002",
+        "descripcion": "PROBLEMAS EN CONSULTA SUNAT",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 44,
+        "codigo_problema": "PI-0002",
+        "descripcion": "EXCEPCIÓN EL RECIBO NO TIENE UN DOCUMENTO ASOCIADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 45,
+        "codigo_problema": "PI-0003",
+        "descripcion": "PROBLEMA CON EQUIPO MR",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 46,
+        "codigo_problema": "PI-0003",
+        "descripcion": "CARAS BLOQUEADAS POR VENTAS PUNTOS BONUS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 47,
+        "codigo_problema": "PI-0003",
+        "descripcion": "DIFERENCIA EN PARTE DIARO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 48,
+        "codigo_problema": "PI-0003",
+        "descripcion": "PROBLEMAS - ERROR DEL SURTIDOR",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 49,
+        "codigo_problema": "PI-0005",
+        "descripcion": "JACKTOOL SULFATADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 50,
+        "codigo_problema": "PI-0005",
+        "descripcion": "ISR BLOQUEADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 51,
+        "codigo_problema": "PI-0005",
+        "descripcion": "JACKTOOL DAÑADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 52,
+        "codigo_problema": "PI-0006",
+        "descripcion": "FUENTE INOPERATIVA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 53,
+        "codigo_problema": "PI-0006",
+        "descripcion": "PERDIDA DE COMUNICACIÓN ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 54,
+        "codigo_problema": "PI-0015",
+        "descripcion": "FUENTE INOPERATIVA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 55,
+        "codigo_problema": "PI-0016",
+        "descripcion": "PANTALLA NO ENCIENDE",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 56,
+        "codigo_problema": "PI-0017",
+        "descripcion": "PANEL DESCALIBRADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 57,
+        "codigo_problema": "PI-0018",
+        "descripcion": "NO RECONOCE TARJETA CORPORATIVA (ERROR 'DLL')",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 58,
+        "codigo_problema": "PI-0019",
+        "descripcion": "PANEL TACTIL ROTO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 59,
+        "codigo_problema": "PI-0020",
+        "descripcion": "APLICATIVO GST ELIMINADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 60,
+        "codigo_problema": "PI-0001",
+        "descripcion": "SURTIDOR APAGADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 61,
+        "codigo_problema": "PI-0001",
+        "descripcion": "CONFLICTO DE APERTURA/CIERRE DE TURNO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 62,
+        "codigo_problema": "PI-0001",
+        "descripcion": "LINEA SIN CONTINUIDAD",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 63,
+        "codigo_problema": "PI-0002",
+        "descripcion": "PROBLEMAS CON VENTA MILLONARIA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 64,
+        "codigo_problema": "PI-0005",
+        "descripcion": "CHIP BLOQUEADO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 65,
+        "codigo_problema": "PI-0002",
+        "descripcion": "PROBLEMAS CON ANULACION O CAMBIO DE DOCUMENTO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 66,
+        "codigo_problema": "PI-0002",
+        "descripcion": "PROBLEMA DE ACCESO A REPORTES",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 67,
+        "codigo_problema": "PI-0002",
+        "descripcion": "PROBLEMA DE ACCESO A  DATA ADMIN",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 68,
+        "codigo_problema": "PI-0003",
+        "descripcion": "PROBLEMAS CON PERIFERICOS",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 69,
+        "codigo_problema": "PS-0001",
+        "descripcion": "INSTALACION DEINTERFAZ DE BACKUP",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 70,
+        "codigo_problema": "PS-0001",
+        "descripcion": "INSTALACION INTERFAZ NUEVA",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 71,
+        "codigo_problema": "PS-0001",
+        "descripcion": "CONFIGURACION DE INTERFAZ",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 72,
+        "codigo_problema": "PS-0001",
+        "descripcion": "CONFIGURACION DE PUERTOS",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 73,
+        "codigo_problema": "PS-0002",
+        "descripcion": "ACTUALIZACION DE NUEVA VERSION",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 74,
+        "codigo_problema": "PS-0002",
+        "descripcion": "ACTUALIZACION PRUEBAS PILOTO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 75,
+        "codigo_problema": "PS-0002",
+        "descripcion": "ACTUALIZACION S.O.",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 76,
+        "codigo_problema": "PS-0002",
+        "descripcion": "ACTUALIZACION DE CAMBIO DE FACTURADOR ELECTRONICO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 77,
+        "codigo_problema": "PS-0003",
+        "descripcion": "MANTENMIENTO GENERAL DE EESS",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 78,
+        "codigo_problema": "PS-0004",
+        "descripcion": "IMPLEMENTACION",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 79,
+        "codigo_problema": "PS-0004",
+        "descripcion": "CAMBIO DE SERVIDOR",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 80,
+        "codigo_problema": "PS-0005",
+        "descripcion": "CAMBIO DE SERVIDOR",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 81,
+        "codigo_problema": "PS-0006",
+        "descripcion": "CAMBIO DE DISCO DURO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 82,
+        "codigo_problema": "PS-0007",
+        "descripcion": "GABINETE",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 83,
+        "codigo_problema": "PS-0008",
+        "descripcion": "REINICIO PROGRAMADO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 84,
+        "codigo_problema": "PS-0008",
+        "descripcion": "REINICIO NO PROGRAMADO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 85,
+        "codigo_problema": "PS-0009",
+        "descripcion": "REINICIO DE SERVICIOS",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 86,
+        "codigo_problema": "PS-0009",
+        "descripcion": "REINYECCION DE SISTEMA",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 87,
+        "codigo_problema": "PS-0009",
+        "descripcion": "MANTENIMIENTO DE SISTEMA",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 88,
+        "codigo_problema": "PS-0001",
+        "descripcion": "CONFIGURACION DE INTERFAZ",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 89,
+        "codigo_problema": "PS-0001",
+        "descripcion": "CONFIGURACION PUERTO INTERFAZ",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 90,
+        "codigo_problema": "PS-0001",
+        "descripcion": "CAMBIO DE PUERTO COMUNICACIÓN",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 91,
+        "codigo_problema": "PS-0010",
+        "descripcion": "REINICIO DE SERVICIO COMPLETO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 92,
+        "codigo_problema": "PS-0010",
+        "descripcion": "DEJAR BASE DE DATOS COMO HISTORICA",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 93,
+        "codigo_problema": "PS-0010",
+        "descripcion": "CAMBIO DE DISCO DURO CON SISTEMA",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 94,
+        "codigo_problema": "PS-0010",
+        "descripcion": "VALIDACIONES DE SISTEMA OPERATIVO",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 95,
+        "codigo_problema": "PS-0010",
+        "descripcion": "MANTENIMIENTO DE SISTEMAS",
+        "prioridad": "P2",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 96,
+        "codigo_problema": "PS-0009",
+        "descripcion": "VALIDACION DE JACKTOOL",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 97,
+        "codigo_problema": "PS-0009",
+        "descripcion": "RESTAURACION PROBLEMA JACKTOOL",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 98,
+        "codigo_problema": "PS-0009",
+        "descripcion": "CAMBIO DE JACKTOOL",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 99,
+        "codigo_problema": "PS-0009",
+        "descripcion": "VALIDACION DE MANGUERA TELEFONICA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 100,
+        "codigo_problema": "PS-0009",
+        "descripcion": "RESTAURACION PROBLEMA MANGUERA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 101,
+        "codigo_problema": "PS-0009",
+        "descripcion": "CAMBIO DE MANGUERA TELEFONICA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 102,
+        "codigo_problema": "PS-0009",
+        "descripcion": "VALIDACION DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 103,
+        "codigo_problema": "PS-0009",
+        "descripcion": "RESTAURACION DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 104,
+        "codigo_problema": "PS-0009",
+        "descripcion": "CAMBIO DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 105,
+        "codigo_problema": "PS-0009",
+        "descripcion": "VALIDACION DE DISPOSITIVO LECTURA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 106,
+        "codigo_problema": "PS-0009",
+        "descripcion": "RESTAURACION PROBLEMA DISPOSITIVO LECTURA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 107,
+        "codigo_problema": "PS-0009",
+        "descripcion": "CAMBIO DE DISPOTIVO LECTURA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 108,
+        "codigo_problema": "PS-0009",
+        "descripcion": "INSTALACION DE DISPOSITIVO LECTURA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 109,
+        "codigo_problema": "PS-0009",
+        "descripcion": "LECTOR DE CHIP DAÑADO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 110,
+        "codigo_problema": "PS-0009",
+        "descripcion": "VALIDACION RJ45",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 111,
+        "codigo_problema": "PS-0009",
+        "descripcion": "CAMBIO DE RJ45",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 112,
+        "codigo_problema": "PS-0009",
+        "descripcion": "VALIDACION FUENTE DE DISPOSITIVO LECTURA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 113,
+        "codigo_problema": "PS-0009",
+        "descripcion": "CAMBIO FUENTE DE DISPOSITIVO LECTURA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 114,
+        "codigo_problema": "PS-0009",
+        "descripcion": "PRUEBAS DE VENTA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 115,
+        "codigo_problema": "PS-0011",
+        "descripcion": "VALIDACION DE IMPRESORA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 116,
+        "codigo_problema": "PS-0011",
+        "descripcion": "RESTAURACION PROBLEMA IMPRESORA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 117,
+        "codigo_problema": "PS-0011",
+        "descripcion": "INSTALACION DEIMPRESORA BACKUP",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 118,
+        "codigo_problema": "PS-0011",
+        "descripcion": "RECOJO DE IMPRESORA BACKUP",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 119,
+        "codigo_problema": "PS-0011",
+        "descripcion": "INSTALACION IMPRESORA NUEVA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 120,
+        "codigo_problema": "PS-0011",
+        "descripcion": "VALIDACION DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 121,
+        "codigo_problema": "PS-0011",
+        "descripcion": "RESTAURACION DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 122,
+        "codigo_problema": "PS-0011",
+        "descripcion": "CAMBIO DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 123,
+        "codigo_problema": "PS-0011",
+        "descripcion": "CONFIGURACION DE IMPRESORA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 124,
+        "codigo_problema": "PS-0011",
+        "descripcion": "CAMBIO DE IMPRESORA POR REPOSICIÓN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 125,
+        "codigo_problema": "PS-0012",
+        "descripcion": "VALIDACION DE DISPOSITIVO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 126,
+        "codigo_problema": "PS-0013",
+        "descripcion": "RESTAURACION PROBLEMA ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 127,
+        "codigo_problema": "PS-0014",
+        "descripcion": "INSTALACION DE TERMINAL",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 128,
+        "codigo_problema": "PS-0015",
+        "descripcion": "CONFIGURACION DE TERMINAL ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 129,
+        "codigo_problema": "PS-0016",
+        "descripcion": "CONFIGURACION DE APLICATIVO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 130,
+        "codigo_problema": "PS-0017",
+        "descripcion": "DESCALIBRACION DE PANTALLA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 131,
+        "codigo_problema": "PS-0018",
+        "descripcion": "CAMBIO DE FUENTE 12V ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 132,
+        "codigo_problema": "PS-0019",
+        "descripcion": "VALIDACION DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 133,
+        "codigo_problema": "PS-0020",
+        "descripcion": "RESTAURACION DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 134,
+        "codigo_problema": "PS-0021",
+        "descripcion": "CAMBIO DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 135,
+        "codigo_problema": "PS-0022",
+        "descripcion": "ACTUALIZACION DE APLICATIVO GST",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 136,
+        "codigo_problema": "PS-0023",
+        "descripcion": "INSTALACION DE EQUIPO BACKUP",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 137,
+        "codigo_problema": "PS-0001",
+        "descripcion": "VALIDACION DEPERDIDA DE COMUNICACIÓN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 138,
+        "codigo_problema": "PS-0001",
+        "descripcion": "RESTAURACION PERDIDA DE COMUNICACIÓN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 139,
+        "codigo_problema": "PS-0001",
+        "descripcion": "VALIDACION DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 140,
+        "codigo_problema": "PS-0001",
+        "descripcion": "RESTAURACION DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 141,
+        "codigo_problema": "PS-0001",
+        "descripcion": "CAMBIO DE LINEA DATA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 142,
+        "codigo_problema": "PS-0001",
+        "descripcion": "INDEPENDIZACION DE SURTIDORES CON INTERFAZ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 143,
+        "codigo_problema": "PS-0002",
+        "descripcion": "ACTUALIZACION CAMBIO DE SERIES / PREFIJOS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 144,
+        "codigo_problema": "PS-0004",
+        "descripcion": "INSTALACION DE SWICH",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 145,
+        "codigo_problema": "PS-0004",
+        "descripcion": "APOYO ÁREA DE PROYECTOS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 146,
+        "codigo_problema": "PS-0004",
+        "descripcion": "VALIDACIÓN DE UPS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 147,
+        "codigo_problema": "PS-0004",
+        "descripcion": "REVISIÓN TÉCNICA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 148,
+        "codigo_problema": "PS-0004",
+        "descripcion": "PRUEBAS DE VENTAS CON TARJETA CORPORATIVA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 149,
+        "codigo_problema": "PS-0004",
+        "descripcion": "INSTALACION DE BANDA MAGNETICA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 150,
+        "codigo_problema": "PS-0004",
+        "descripcion": "VALIDACIÓN DE PANTALLA SERVER",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 151,
+        "codigo_problema": "PS-0004",
+        "descripcion": "INSTALACION DE EQUIPOS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 152,
+        "codigo_problema": "PS-0004",
+        "descripcion": "DEVOLUCIÓN DE EQUIPO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 153,
+        "codigo_problema": "PS-0004",
+        "descripcion": "CAMBIO DE IP",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 154,
+        "codigo_problema": "PS-0004",
+        "descripcion": "CORTO DE FLUIDO ELECTRICO / VALIDACION DE EQUIPOS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 155,
+        "codigo_problema": "PS-0004",
+        "descripcion": "INVENTARIO/ LEVANTAMIENTO DE INFO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 156,
+        "codigo_problema": "PS-0004",
+        "descripcion": "LEVANTAMIENTO DE INFORMACION",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 157,
+        "codigo_problema": "PS-0004",
+        "descripcion": "VALIDACIÓN DE EQUIPOS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 158,
+        "codigo_problema": "PS-0004",
+        "descripcion": "ENTREGA DE MANGUERAS TELEFÓNICAS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 159,
+        "codigo_problema": "PS-0004",
+        "descripcion": "SOPORTES VARIOS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 160,
+        "codigo_problema": "PS-0004",
+        "descripcion": "VALIDACIÓN - ERROR DEL SURTIDOR",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 161,
+        "codigo_problema": "PS-0004",
+        "descripcion": "APERTURA DE USER EN SERVER",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 162,
+        "codigo_problema": "PS-0004",
+        "descripcion": "REVISION DE UPS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 163,
+        "codigo_problema": "PS-0004",
+        "descripcion": "REVISIÓN DE IP SERVER/ IP PUBLICA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 164,
+        "codigo_problema": "PS-0004",
+        "descripcion": "SEGUIMEINTO PRUEBAS DE VENTA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 165,
+        "codigo_problema": "PS-0004",
+        "descripcion": "SEGUIMIENTO DE ACTIVAVIÓN CREDITO ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 166,
+        "codigo_problema": "PS-0004",
+        "descripcion": "CONFIGURACIONES DATA ADMIN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 167,
+        "codigo_problema": "PS-0004",
+        "descripcion": "VALIDACIONES CON EQUIPO MR",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 168,
+        "codigo_problema": "PS-0010",
+        "descripcion": "PROBLEMAS VARIOS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 169,
+        "codigo_problema": "PS-0007",
+        "descripcion": "IMPRESORAS TYSSO/ EPSON",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 170,
+        "codigo_problema": "PS-0007",
+        "descripcion": "EQUIPO DE LECTURA ISR",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 171,
+        "codigo_problema": "PS-0007",
+        "descripcion": "EQUIPO TERMINAL TOUCH",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 172,
+        "codigo_problema": "PS-0009",
+        "descripcion": "CONFIGURACION DISPOSITIVO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 173,
+        "codigo_problema": "PS-0009",
+        "descripcion": "VALIDACION DE VENTAS",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 174,
+        "codigo_problema": "PS-0024",
+        "descripcion": "CONFIGURACION DE IMPRESORA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 175,
+        "codigo_problema": "PS-0024",
+        "descripcion": "DERIVACION DE IMPRESIÓN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 176,
+        "codigo_problema": "PS-0025",
+        "descripcion": "VALIDACION DE DISPOSITIVO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 177,
+        "codigo_problema": "PS-0025",
+        "descripcion": "CONFIGURACION DE APLICATIVO ",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 178,
+        "codigo_problema": "PS-0025",
+        "descripcion": "DESCALIBRACION DE PANTALLA",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 179,
+        "codigo_problema": "PS-0001",
+        "descripcion": "VALIDACION DEPERDIDA DE COMUNICACIÓN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 180,
+        "codigo_problema": "PS-0001",
+        "descripcion": "RESTAURACION PERDIDA DE COMUNICACIÓN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 181,
+        "codigo_problema": "PS-0001",
+        "descripcion": "CONFIGURACION DE IP",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 182,
+        "codigo_problema": "PS-0010",
+        "descripcion": "CIERRE/ APERTURA DE TURNO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 183,
+        "codigo_problema": "PS-0010",
+        "descripcion": "CAMBIO DE PRECIO",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 184,
+        "codigo_problema": "PS-0010",
+        "descripcion": "RETRANSMISION DE VENTAS CLUB PGN",
+        "prioridad": "P3",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 185,
+        "codigo_problema": "PS-0011",
+        "descripcion": "RECOJO DE IMPRESORA EDS PARA REPARACION",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 186,
+        "codigo_problema": "PS-0011",
+        "descripcion": "SALIDA DE IMPRESORA EDS REPARADA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 187,
+        "codigo_problema": "PS-0026",
+        "descripcion": "SALIDA DE EQUIPO/ TERMINAL EDS REPARADA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 188,
+        "codigo_problema": "PS-0001",
+        "descripcion": "RECOJO DE INTERFAZ BACKUP",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 189,
+        "codigo_problema": "PS-0001",
+        "descripcion": "RECOJO DE INTERFAZ EDS PARA REPARACION",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 190,
+        "codigo_problema": "PS-0001",
+        "descripcion": "SALIDA DE INTERFAZ EDS REPARADA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 191,
+        "codigo_problema": "PS-0004",
+        "descripcion": "ENTREGA DE LECTORES",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 192,
+        "codigo_problema": "PS-0004",
+        "descripcion": "INSTALACION DE ANTIVIRUS",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 193,
+        "codigo_problema": "PS-0004",
+        "descripcion": "RECOJO DE EQUIPOS",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 194,
+        "codigo_problema": "PS-0004",
+        "descripcion": "ACTIVACIÓN DE LICENCIA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 195,
+        "codigo_problema": "PS-0004",
+        "descripcion": "APERTURA DE REPORTES",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 196,
+        "codigo_problema": "PS-0004",
+        "descripcion": "APERTURA DEL MAIN STATION",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 197,
+        "codigo_problema": "PS-0004",
+        "descripcion": "INVENTARIO PRIMAX",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 198,
+        "codigo_problema": "PS-0004",
+        "descripcion": "APERTURA DEL GENERADOR DE ARCHIVOS",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 199,
+        "codigo_problema": "PS-0004",
+        "descripcion": "CONSULTAS",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 200,
+        "codigo_problema": "PS-0004",
+        "descripcion": "VALIDACIÓN DE CHIP",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 201,
+        "codigo_problema": "PS-0004",
+        "descripcion": "CAPACITACIÓN / ESTACIÓN DE SERVICIO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 202,
+        "codigo_problema": "PS-0004",
+        "descripcion": "GENERACIÓN DE CLAVE DINÁMICA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 203,
+        "codigo_problema": "PS-0027",
+        "descripcion": "LEVANTAMIENTO DE INFORMACION",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 204,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACION DE DOCUMENTO BOLETA A CALIBRACION",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 205,
+        "codigo_problema": "PS-0010",
+        "descripcion": "INGRESAR NUEVO EMPLEADO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 206,
+        "codigo_problema": "PS-0010",
+        "descripcion": "INGRESAR NUEVO CLIENTE CRÉDITO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 207,
+        "codigo_problema": "PS-0010",
+        "descripcion": "INGRESAR NUEVO CLIENTE CON DESCUENTO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 208,
+        "codigo_problema": "PS-0010",
+        "descripcion": "INGRESAR A GENERADOR DE REPORTES",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 209,
+        "codigo_problema": "PS-0010",
+        "descripcion": "INGRESAR A REPORTES GASOLUTIONS",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 210,
+        "codigo_problema": "PS-0010",
+        "descripcion": "USUARIO BLOQUEADO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 211,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACIÓN DE DOCUMENTOS BOLETA A VALE",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 212,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACIÓN DE DOCUMENTOS BOLETA A FACTURA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 213,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ACTUALIZACION DE DATOS DE CLIENTE SUNAT",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 214,
+        "codigo_problema": "PS-0010",
+        "descripcion": "COPIA POR NUMERO DE DOCUMENTO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 215,
+        "codigo_problema": "PS-0010",
+        "descripcion": "COPIA POR NUMERO DE DOCUMENTO CLIENTE CREDITO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 216,
+        "codigo_problema": "PS-0010",
+        "descripcion": "INGRESO AL DATA ADMIN",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 217,
+        "codigo_problema": "PS-0010",
+        "descripcion": "INGRESO AL CONFIGURADOR",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 218,
+        "codigo_problema": "PS-0010",
+        "descripcion": "REGISTRO DE PLACAS",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 219,
+        "codigo_problema": "PS-0010",
+        "descripcion": "EMISION DE BOLETA CON NUMERO DE DNI",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 220,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ACTUALIZACION DE DATA CLIENTE RUC",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 221,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACIÓN DE DOCUMENTO DE FACTURA A FACTURA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 222,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACIÓN DE DOCUMENTO POR VENTA MILLONARIA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 223,
+        "codigo_problema": "PS-0010",
+        "descripcion": "AMPLIAR TIEMPO DE ANULACIÓN",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 224,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACIÓN DE DOCUMENTO VALE A BOLETA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 225,
+        "codigo_problema": "PS-0010",
+        "descripcion": "CONVERSION DE VENTA EFECTIVO A TARJETA CORPORATIVA ",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 226,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACIÓN DE DOCUMENTO SIN EMITIR OTRO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 227,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACIÓN DE DOCUMENTO POR UNA NOTA DE CRÉDITO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 228,
+        "codigo_problema": "PS-0010",
+        "descripcion": "SACAR COPIA DE TURNOS / AUDITORIA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 229,
+        "codigo_problema": "PS-0010",
+        "descripcion": "REIMPRESIÓN COPIA DE DOCUMENTO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 230,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACION DE DOCUMENTO VALE A FACTURA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 231,
+        "codigo_problema": "PS-0010",
+        "descripcion": "DESACTIVAR PLACA DE CLIENTE CREDITO",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 232,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACION DE DOCUMENTO FACTURA A VALE",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 233,
+        "codigo_problema": "PS-0010",
+        "descripcion": "DESACTIVAR DESCUENTO DE CLIENTE / CREDITO ",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 234,
+        "codigo_problema": "PS-0010",
+        "descripcion": "CONFIGURACION DE HORARIOS",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 235,
+        "codigo_problema": "PS-0010",
+        "descripcion": "ANULACIÒN DE FACTURA A BOLETA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    },
+    {
+        "id" : 236,
+        "codigo_problema": "PS-0010",
+        "descripcion": "EMITIR DOCUMENTO POR VENTA MILLONARIA",
+        "prioridad": "P4",
+        "eliminado": 0,
+        "estatus": 1,
+        "updated_at": "",
+        "created_at": "2025-02-28 17:07:57"
+    }
+]
