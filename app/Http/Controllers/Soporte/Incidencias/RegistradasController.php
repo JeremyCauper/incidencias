@@ -42,7 +42,7 @@ class RegistradasController extends Controller
             $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->keyBy('id');
             $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->keyBy('id');
-            $data['eContactos'] = DB::table('contactos_empresas')->where('estatus', 1)->get()->keyBy('telefono');
+            $data['eContactos'] = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'telefono', 'cargo', 'correo', 'estatus')->get();
 
             $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
                 return [
@@ -78,7 +78,7 @@ class RegistradasController extends Controller
     public function index()
     {
         try {
-            $contactos_empresas = DB::table('contactos_empresas')->where('estatus', 1)->get()->keyBy('telefono');
+            $contactos_empresas = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'telefono', 'cargo', 'correo', 'estatus')->get();
             $conteo_data = [
                 "totales" => 0,
                 "tAsignadas" => 0,

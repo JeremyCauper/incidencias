@@ -134,12 +134,10 @@ $(document).ready(function () {
 
     $('#tel_contac').on('change', function () {
         if (!$(this).val()) {
-            $('#car_contac').val('').trigger('change.select2');
-            $('#nro_doc, #nom_contac, #cor_contac').val('');
+            $('#nro_doc, #nom_contac, #car_contac, #cor_contac').val('').trigger('change.select2');
             return false;
         }
-
-        const contacto = obj_eContactos[$(this).val()] || null;
+        const contacto = obj_eContactos.find(contacto => contacto.telefono === $(this).val());
         if (contacto) {
             $('#cod_contact').val(contacto.id_contact);
             $('#tel_contac').val(contacto.telefono).trigger('change.select2');
@@ -151,6 +149,22 @@ $(document).ready(function () {
     });
 
     $('#nro_doc').blur(async function () {
+        if (!$(this).val()) {
+            $('#tel_contac, #nom_contac, #car_contac, #cor_contac').val('').trigger('change.select2');
+            return false;
+        }
+        const contacto = obj_eContactos.find(contacto => contacto.nro_doc === $(this).val());
+        
+        if (contacto) {
+            $('#cod_contact').val(contacto.id_contact);
+            $('#tel_contac').val(contacto.telefono).trigger('change.select2');
+            $('#nro_doc').val(contacto.nro_doc);
+            $('#nom_contac').val(contacto.nombres);
+            $('#car_contac').val(contacto.cargo).trigger('change.select2');
+            $('#cor_contac').val(contacto.correo);
+            return true;
+        }
+
         let datos = await consultarDniInput($(this));
         if (datos.success) {
             $('#nom_contac').val(datos.data.completo);
@@ -358,7 +372,7 @@ function ShowEdit(id) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
             console.log(data);
-            
+
 
             const dt = data.data;
             fMananger.formModalLoding('modal_incidencias', 'hide');
@@ -1013,7 +1027,7 @@ function removeClienteDataFirm() {
 function fillSelectP(value) {
     $('#problema, #sproblema').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
     if (!value) return false;
-    
+
     Object.entries(obj_problem).forEach(([key, e]) => {
         if (e.tipo_soporte == value && e.estatus)
             $('#problema').append($('<option>').val(e.id).text(`${e.codigo} - ${e.descripcion}`));
@@ -1025,7 +1039,7 @@ function fillSelectSP(value) {
     var codigo = obj_problem[value]?.codigo ?? null;
     $('#sproblema').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
     if (!codigo) return false;
-    
+
     Object.entries(obj_subproblem).forEach(([key, e]) => {
         if (e.codigo_problema == codigo && e.estatus)
             $('#sproblema').append($('<option>').val(e.id).text(`${getBadgePrioridad(e.prioridad)}::${e.descripcion}`));

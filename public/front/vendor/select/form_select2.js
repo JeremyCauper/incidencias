@@ -75,7 +75,7 @@ $(document).ready(function () {
     });
 
     // Aplica select2 a todos los selects dentro de los modales al mostrarse
-    window.formatSelect = function(mod) {
+    window.formatSelect = function (mod) {
         $(`#${mod}`).on('shown.bs.modal', function () {
             const modal = $(`#${mod} .modal-content .modal-body`);
             modal.find('select').each(function () {
@@ -101,10 +101,31 @@ $(document).ready(function () {
         });
     };
 
-    $('.select-clear, .select-search').on('select2:open', async function() {
+    $('.select-clear, .select-search, .select-tags').on('select2:open', async function () {
+        let clase = $(this).attr('class');
         let observador = new MutationObserver((mutations, obs) => {
             let searchField = document.querySelector('input.select2-search__field');
             if (searchField) {
+                if (clase.includes('select-tags')) {
+                    $('.select2-search__field').on('keypress', function (e) {
+                        // Permitir: teclas de navegación, backspace (8), delete (46)
+                        // (se pueden agregar más códigos si se desea)
+                        var allowedKeys = [8, 46];
+                        if (allowedKeys.indexOf(e.keyCode) !== -1) {
+                            return;
+                        }
+                        // Si ya se han ingresado 9 dígitos, no permitir más
+                        if (this.value.length >= 9) {
+                            e.preventDefault();
+                            return;
+                        }
+                        // Validar que el carácter presionado sea un dígito
+                        var char = String.fromCharCode(e.which);
+                        if (!(/[0-9]/.test(char))) {
+                            e.preventDefault();
+                        }
+                    });
+                }
                 searchField.focus();
             }
         });
