@@ -28,7 +28,6 @@ class LoginController extends Controller
             'password' => 'required|string',
         ]);
 
-
         $credentials = [
             'usuario' => $request->input('usuario'),
             'password' => $request->input('password'),
@@ -50,15 +49,20 @@ class LoginController extends Controller
         $nomPerfil = $this->formatearNombre(Auth::user()->nombres, Auth::user()->apellidos);
         $text_acceso = (new TipoUsuario())->show(Auth::user()->tipo_acceso)['descripcion'];
 
+        $foto_perfil = empty(Auth::user()->foto_perfil) ? 'user_auth.jpg' : Auth::user()->foto_perfil;
+
         session([
             'customModulos' => $modulos->menus,
             'rutaRedirect' => $modulos->ruta,
-            'nomPerfil' => $nomPerfil,
             'id_usuario' => Auth::user()->id_usuario,
             'tipo_acceso' => Auth::user()->tipo_acceso,
-            'text_acceso' => $text_acceso,
             'menu_usuario' => $menu_usuario,
-            'turno_fin' => $turno_fin
+            'turno_fin' => $turno_fin,
+            'config_layout' => (object)[
+                'text_acceso' => $text_acceso ?? null,
+                'nombre_perfil' => $nomPerfil ?? null,
+                'foto_perfil' => secure_asset("front/images/auth/$foto_perfil"),
+            ]
         ]);
         $request->session()->regenerate();
 
@@ -87,9 +91,11 @@ class LoginController extends Controller
     }
 
     public function logout(Request $request)
-    {
-        Auth::logout();
-        session()->forget(['customModulos', 'rutaRedirect', 'nomPerfil', 'id_usuario', 'tipo_acceso', 'text_acceso', 'menu_usuario', 'turno_fin']);
+    {  
+        Auth::guard('web')->logout();
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+        session()->forget(['customModulos', 'rutaRedirect', 'id_usuario', 'tipo_acceso', 'menu_usuario', 'turno_fin', 'config_layout']);
         return redirect('/soporte');
     }
 }

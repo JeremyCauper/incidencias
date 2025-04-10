@@ -236,7 +236,7 @@ function date(format) {
 }
 
 async function consultarDni(dni) {
-    const url = `${__url}/ConsultaDni/${dni}`;
+    const url = `${__url}/soporte/ConsultaDni/${dni}`;
 
     try {
         const response = await $.ajax({
@@ -265,6 +265,205 @@ async function consultarDniInput($this) {
     } finally {
         label.removeClass('d-flex justify-content-between').html(labelHtml);
     }
+}
+
+function llenarInfoModal(id_modal, data) {
+    Object.entries(data).forEach(([key, e]) => {
+        $(`#${id_modal} [aria-item="${key}"]`).html(e);
+    });
+}
+
+function llenarInfoSeguimientoInc(id_modal, data) {
+    const acciones = {
+        'registro': '<i class="fas fa-folder-open text-warning"></i> Registro de Incidencia',
+        'asignado': '<i class="fas fa-user-clock text-info"></i> Asignaciones',
+        'inicio': '<i class="fas fa-hourglass-start text-primary"></i> Inició la Incidencia',
+        'final': '<i class="fas fa-check-double text-success"></i> Finalizó la Incidencia',
+    };
+
+    let seguimiento = Object.entries(data).map(([key, e]) => {
+        let bodySeguimiento = "";
+        if (key === "asignado") {
+            if (!data["asignado"].length) return;
+        }
+
+        const contactoTemplate = (persona) => `
+            <div class="d-flex align-items-center mt-2">
+                <img src="${persona.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+                <div class="ms-3">
+                    <p class="fw-bold mb-1">${persona.nombre}</p>
+                    <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
+                        <i class="fab fa-whatsapp text-success"></i> ${persona.telefono} / <i class="far fa-envelope text-danger"></i> ${persona.email}
+                    </p>
+                </div>
+            </div>
+        `;
+
+        if (key === "asignado") {
+            bodySeguimiento = e.map(asignacion => {
+                const tecnicos = asignacion.tecnicos.map(tecnico => `
+                    <label class="p-1 rounded text-nowrap" role="button" data-mdb-ripple-init title="${tecnico.date}">
+                        <img src="${tecnico.img}" alt="" style="width: 24px; height: 24px" class="rounded-circle" />
+                        <span>${tecnico.nombre}</span>
+                    </label>
+                `).join('');
+
+                return `
+                    <div class="d-flex align-items-center mt-2">
+                        <img src="${asignacion.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+                        <div class="ms-3">
+                            <p class="fw-bold mb-1">${asignacion.nombre}</p>
+                            <p class="text-muted mb-1" style="font-size: .73rem;">Asignó la incidencia a:</p>
+                            <div class="mb-0 ms-2" style="font-size: .73rem;">${tecnicos}</div>
+                            <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
+                                <i class="fab fa-whatsapp text-success"></i> ${asignacion.telefono} / <i class="far fa-envelope text-danger"></i> ${asignacion.email}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            bodySeguimiento = contactoTemplate(e);
+        }
+
+        return `
+            <li class="list-group-item border-0">
+                <div class="p-3 rounded-5 shadow-4-strong">
+                    <div class="d-flex justify-content-between align-items-center title-seguimiento">
+                        <span class="tt-upper font-weight-semibold">${acciones[key]}</span>
+                        <span class="font-weight-semibold">${e.date ?? ""}</span>
+                    </div>
+                    <div>${bodySeguimiento}</div>
+                </div>
+            </li>
+        `;
+    }).join('');
+
+    $(`#${id_modal} [aria-item="contenedor-seguimiento"]`).html(`
+        <ul class="list-group list-group-light">
+            ${seguimiento}
+        </ul>
+    `);
+}
+
+function llenarInfoSeguimientoVis(id_modal, data) {
+    const acciones = {
+        'registro': '<i class="fas fa-folder-open text-warning"></i> Registro de Visita',
+        'asignado': '<i class="fas fa-user-clock text-info"></i> Asignaciones',
+        'inicio': '<i class="fas fa-hourglass-start text-primary"></i> Inició la Visita',
+        'final': '<i class="fas fa-check-double text-success"></i> Finalizó la Visita',
+    };
+
+    let seguimiento = Object.entries(data).map(([key, e]) => {
+        let bodySeguimiento = "";
+        if (key === "asignado") {
+            if (!data["asignado"].length) return;
+        }
+
+        const contactoTemplate = (persona) => `
+            <div class="d-flex align-items-center mt-2">
+                <img src="${persona.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+                <div class="ms-3">
+                    <p class="fw-bold mb-1">${persona.nombre}</p>
+                    <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
+                        <i class="fab fa-whatsapp text-success"></i> ${persona.telefono} / <i class="far fa-envelope text-danger"></i> ${persona.email}
+                    </p>
+                </div>
+            </div>
+        `;
+
+        if (key === "asignado") {
+            bodySeguimiento = e.map(asignacion => {
+                const tecnicos = asignacion.tecnicos.map(tecnico => `
+                    <label class="p-1 rounded text-nowrap" role="button" data-mdb-ripple-init title="${tecnico.date}">
+                        <img src="${tecnico.img}" alt="" style="width: 24px; height: 24px" class="rounded-circle" />
+                        <span>${tecnico.nombre}</span>
+                    </label>
+                `).join('');
+
+                return `
+                    <div class="d-flex align-items-center mt-2">
+                        <img src="${asignacion.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
+                        <div class="ms-3">
+                            <p class="fw-bold mb-1">${asignacion.nombre}</p>
+                            <p class="text-muted mb-1" style="font-size: .73rem;">Asignó la visita a:</p>
+                            <div class="mb-0 ms-2" style="font-size: .73rem;">${tecnicos}</div>
+                            <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
+                                <i class="fab fa-whatsapp text-success"></i> ${asignacion.telefono} / <i class="far fa-envelope text-danger"></i> ${asignacion.email}
+                            </p>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        } else {
+            bodySeguimiento = contactoTemplate(e);
+        }
+
+        return `
+            <li class="list-group-item border-0">
+                <div class="p-3 rounded-5 shadow-4-strong">
+                    <div class="d-flex justify-content-between align-items-center title-seguimiento">
+                        <span class="tt-upper font-weight-semibold">${acciones[key]}</span>
+                        <span class="font-weight-semibold">${e.date ?? ""}</span>
+                    </div>
+                    <div>${bodySeguimiento}</div>
+                </div>
+            </li>
+        `;
+    }).join('');
+
+    $(`#${id_modal} [aria-item="contenedor-seguimiento"]`).html(`
+        <ul class="list-group list-group-light">
+            ${seguimiento}
+        </ul>
+    `);
+}
+
+function getBadgeIncidencia(estado, size = '.7') {
+    estadoInforme = {
+        "0": { 'color': 'warning', 'text': 'Sin Asignar' },
+        "1": { 'color': 'info', 'text': 'Asignada' },
+        "2": { 'color': 'primary', 'text': 'En Proceso' },
+        "3": { 'color': 'success', 'text': 'Finalizado' },
+        "4": { 'color': 'danger', 'text': 'Faltan Datos' },
+        "5": { 'color': 'danger', 'text': 'Cierre Sistema' },
+    };
+    let tsize = `style="font-size: ${size}rem;"` ?? null;
+
+    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+}
+
+function getBadgeVisita(estado, size = null) {
+    estadoInforme = {
+        "0": { 'color': 'warning', 'text': 'Sin Iniciar' },
+        "1": { 'color': 'primary', 'text': 'En Proceso' },
+        "2": { 'color': 'success', 'text': 'Finalizado' },
+        "4": { 'color': 'danger', 'text': 'Faltan Datos' },
+    };
+    let tsize = `style="font-size: ${size}rem;"` ?? null;
+
+    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+}
+
+function getBadgeContrato(estado, size = null) {
+    estadoInforme = [
+        { 'color': 'danger', 'text': 'Sin Contrato' },
+        { 'color': 'success', 'text': 'En Contrato' },
+    ];
+    let tsize = `style="font-size: ${size}rem;"` ?? null;
+
+    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+}
+
+function getBadgePrioridad(estado, size = null) {
+    estadoInforme = {
+        "P2": { 'color': 'success', 'text': 'P2' },
+        "P3": { 'color': 'warning', 'text': 'P3' },
+        "P4": { 'color': 'danger', 'text': 'P4' },
+    };
+    let tsize = `style="font-size: ${size}rem;"` ?? null;
+
+    return `<label class="badge badge-${estadoInforme[estado]['color']} me-2" ${tsize}>${estadoInforme[estado]['text']}</label>`;
 }
 
 function animateProperty(element, property, start, end, duration, fps, callback) {

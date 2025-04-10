@@ -66,12 +66,12 @@
     <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}"></script>
     <script src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
     <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
-    <script src="{{secure_asset('front/js/AlertMananger.js')}}"></script>
+    <script src="{{secure_asset('front/js/app/AlertMananger.js')}}"></script>
     <script>
         const __url = "{{secure_url('')}}";
         const __token = "{{ csrf_token() }}";
     </script>
-    <script src="{{secure_asset('front/js/app/auth/auth.js')}}"></script>
+    <script src="{{secure_asset('front/js/auth/auth.js')}}"></script>
 </body>
 
 </html>

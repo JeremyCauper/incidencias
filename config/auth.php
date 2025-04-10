@@ -40,6 +40,12 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        // Nuevo guard para clientes
+        'client' => [
+            'driver' => 'session',
+            'provider' => 'clients',
+        ],
     ],
 
     /*
@@ -65,10 +71,11 @@ return [
             'model' => App\Models\User::class,
         ],
 
-        // 'users' => [
-        //     'driver' => 'database',
-        //     'table' => 'users',
-        // ],
+        // Nuevo provider para clientes
+        'clients' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\UsuarioEmpresa::class,
+        ],
     ],
 
     /*
