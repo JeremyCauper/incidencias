@@ -173,7 +173,7 @@ Route::post('/soporte/asignacion-turno/eliminar', [TurnoController::class, 'dest
 
 
 
-Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login')->middleware('guest:client');
+Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login.empresa')->middleware('guest:client');
 Route::post('/empresa/iniciar', [LoginEmpresaController::class, 'loginClient']);
 Route::get('/empresa/logout', [LoginEmpresaController::class, 'logout'])->name('logout.empresa');
 
