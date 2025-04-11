@@ -225,7 +225,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-4 p-3 pb-0 fieldset mb-3">
+                    <div class="mt-2 p-3 pb-0 fieldset mb-2">
                         <input type="hidden" id="idSucursal" name="idSucursal">
                         <div class="row">
                             <div class="col-md-8">
@@ -407,7 +407,7 @@
                         <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Asignar Personal</h6>
                         <span aria-item="estado"></span>
                     </div>
-                    <div class="mt-4 p-3 pb-0 fieldset mb-3">
+                    <div class="p-3 pb-0 fieldset">
                         <input type="hidden" id="id_visitas_asign">
                         <div class="row">
                             <div class="col-md-8">

@@ -271,8 +271,8 @@
                                                 }
                                             },
                                             {
-                                                data: 'id_problema', render: function (data, type, row) {
-                                                    return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.id_subproblema].descripcion}`;
+                                                data: 'problema', render: function (data, type, row) {
+                                                    return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
                                                 }
                                             },
                                             { data: 'acciones' }
@@ -687,7 +687,7 @@
                         <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Grabar firma</h6>
                         <span aria-item="estado"></span>
                     </div>
-                    <div class="mt-4 p-3 pb-0 fieldset mb-3">
+                    <div class="p-3 pb-0 fieldset">
                         <input type="hidden" id="cod_incidencia" name="cod_incidencia">
                         <input type="hidden" id="cod_orden_ser" name="cod_orden_ser">
                         <div class="col-md-6 mb-2">

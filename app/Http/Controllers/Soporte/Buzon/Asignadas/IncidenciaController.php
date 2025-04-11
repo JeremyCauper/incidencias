@@ -40,8 +40,8 @@ class IncidenciaController extends Controller
                     'iniciado' => $asignada,
                     'id_sucursal' => $inc->id_sucursal,
                     'id_tipo_estacion' => $inc->id_tipo_estacion,
-                    'id_problema' => $inc->id_problema,
-                    'id_subproblema' => $inc->id_subproblema,
+                    'problema' => $inc->id_problema,
+                    'subproblema' => $inc->id_subproblema,
                     'acciones' => $this->DropdownAcciones([
                         'tittle' => $badge_informe,
                         'button' => [

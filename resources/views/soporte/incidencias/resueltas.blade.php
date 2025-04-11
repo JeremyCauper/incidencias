@@ -128,7 +128,7 @@
                                     },
                                     {
                                         data: 'problema', render: function (data, type, row) {
-                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].text} / ${obj_subproblem[row.subproblema].text}`;
+                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
                                         }
                                     },
                                     { data: 'iniciado' },
