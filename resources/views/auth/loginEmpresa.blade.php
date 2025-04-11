@@ -68,7 +68,7 @@
     <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
     <script src="{{secure_asset('front/js/app/AlertMananger.js')}}"></script>
     <script>
-        const __url = "{{url('')}}";
+        const __url = "{{secure_url('')}}";
         const __token = "{{ csrf_token() }}";
     </script>
     <script src="{{secure_asset('front/js/auth/authEmpresa.js')}}"></script>
