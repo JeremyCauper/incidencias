@@ -69,7 +69,7 @@ function ShowDetailInc(e, id) {
                     atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                     dir_sucursal: sucursal.direccion,
                     problema: obj_problem[inc.id_problema].descripcion,
-                    subproblema: getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
+                    subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
                     observacion: inc.observacion,
                 });
 
