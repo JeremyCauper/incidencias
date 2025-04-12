@@ -263,7 +263,7 @@
                             <select class="select-clear" id="tEstacion">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['tEstacion'] as $v)
-                                    <option {{$v['id'] == 1 ? 'selected' : ''}} value="{{$v['id']}}">{{$v['descripcion']}}
+                                    <option {{$v['id'] == 1 && $v['estatus'] == 1 ? 'selected' : ''}} {{$v['estatus'] == 0 || $v['eliminado'] == 1 ? 'disabled' : ''}} value="{{$v['id']}}">{{$v['descripcion']}}
                                     </option>
                                 @endforeach
                             </select>
@@ -359,7 +359,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia
+                    <h6 class="modal-title">Detalle de incidencia
                         <span class="ms-2 badge badge-success badge-lg" aria-item="codigo"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"

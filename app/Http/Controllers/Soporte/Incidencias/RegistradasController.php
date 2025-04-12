@@ -37,7 +37,7 @@ class RegistradasController extends Controller
 
             // Obtener información de base de datos local
             $data['CargoEstacion'] = collect((new CargoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
-            $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
+            $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'estatus', 'eliminado')->keyBy('id');
             $data['tSoporte'] = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
             $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->keyBy('id');

@@ -368,7 +368,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia
+                    <h6 class="modal-title">Detalle de incidencia
                         <span class="ms-2 badge badge-success badge-lg" aria-item="codigo"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
