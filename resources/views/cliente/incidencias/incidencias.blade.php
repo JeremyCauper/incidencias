@@ -226,7 +226,7 @@
                     <div class="fieldset" aria-item="contenedor-seguimiento">
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer border-top-0">
                     <button type="button" class="btn btn-link " data-mdb-ripple-init
                         data-mdb-dismiss="modal">Cerrar</button>
                 </div>

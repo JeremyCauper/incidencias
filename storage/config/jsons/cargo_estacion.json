@@ -2,91 +2,117 @@
     {
         "id": 1,
         "descripcion": "Jefe de Playa",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 2,
         "descripcion": "Islero",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 3,
         "descripcion": "Jefe de Planta",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 4,
         "descripcion": "Administrador(a)",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 5,
         "descripcion": "Supervisor",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 6,
         "descripcion": "Contadora",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 7,
         "descripcion": "Asistente Contable",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 8,
         "descripcion": "Encargado",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 9,
         "descripcion": "Cajero",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 10,
         "descripcion": "Jefe de Sistemas",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 11,
         "descripcion": "Asistente de Sistemas",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 12,
         "descripcion": "Gerente General",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
     {
         "id": 13,
         "descripcion": "Gerente Comercial",
-        "estatus": 1,
+        "estatus": 0,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     }

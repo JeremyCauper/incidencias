@@ -172,17 +172,17 @@ $(document).ready(function () {
     });
 
     $('.modal').on('shown.bs.modal', function () {
-        $('#nom_contac').val('');
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
-        $('#tSoporte').val(1).trigger('change');
         manCantidad();
     });
 
     $('.modal').on('hidden.bs.modal', function () {
+        $('#nom_contac').val('');
         $('#modal_incidencias').find('[aria-item="codigo"], [aria-item="contrato"]').html('');
         changeCodInc(cod_incidencia);
-        fillSelect(['#sucursal', '#problema', '#sproblema']);
+        fillSelect(['#sucursal']);
+        $('#tSoporte').val(1).trigger('change');
         $('#contenedor-personal').removeClass('d-none');
         cPersonal.deleteTable();
         cPersonal1.deleteTable();
@@ -210,6 +210,7 @@ $(document).ready(function () {
         CheckCodOrden(check);
     })
 
+    $('#tSoporte').val(1).trigger('change');
     fObservador('.content-wrapper', () => {
         tb_incidencia.columns.adjust().draw();
     });
@@ -1042,7 +1043,7 @@ function fillSelectSP(value) {
 
     Object.entries(obj_subproblem).forEach(([key, e]) => {
         if (e.codigo_problema == codigo && e.estatus)
-            $('#sproblema').append($('<option>').val(e.id).text(`${getBadgePrioridad(e.prioridad)}::${e.descripcion}`));
+            $('#sproblema').append($('<option>').val(e.id).text(`${getBadgePrioridad(e.prioridad)} ${e.descripcion}`));
     });
     $('#sproblema').attr('disabled', false);
 }
