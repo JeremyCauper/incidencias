@@ -2,27 +2,26 @@ $(document).ready(function () {
     const config = {
         "select": {
             placeholder: '-- Seleccione --',
-            minimumResultsForSearch: Infinity
+            minimumResultsForSearch: Infinity,
         },
         "multiple": {
-            minimumResultsForSearch: Infinity
+            minimumResultsForSearch: Infinity,
         },
         "search": {},
         "clear": {
             placeholder: '-- Seleccione --',
-            allowClear: true
+            allowClear: true,
         },
         "tags": {
             placeholder: 'Buscar',
             allowClear: true,
-            tags: true
+            tags: true,
         },
         "icons": {
             placeholder: '-- Seleccione --',
             allowClear: true,
-            templateResult: iconFormat,
-            templateSelection: iconFormat,
-            escapeMarkup: function (m) { return m; }
+            // templateResult: iconFormat,
+            // templateSelection: iconFormat,
         }
     };
 
@@ -40,8 +39,41 @@ $(document).ready(function () {
     function initializeSelect2(selectElement, config, modal) {
         selectElement.select2({
             ...config,
-            dropdownParent: modal || null
+            escapeMarkup: function (m) { return m; },
+            dropdownParent: modal || null,
+            matcher: matchCustom,
+            templateResult: function (data) {
+                // Comprueba si la opción tiene un atributo data-hidden en true
+                if ($(data.element).data('hidden')) {
+                    // Puedes devolver null o una cadena vacía para no mostrar nada
+                    return null;
+                }
+                return data.text;
+            },
+            templateSelection: function (data) {
+                return data.text;
+            }
         });
+    }
+
+    function matchCustom(params, data) {
+        // Si no hay término de búsqueda, retorna el dato para mostrarlo
+        if ($.trim(params.term) === '') {
+            return data;
+        }
+
+        // Excluir la opción si tiene data-nosearch="true"
+        if ($(data.element).data('nosearch')) {
+            return null;
+        }
+
+        // Búsqueda estándar: si el texto de la opción coincide, la retorna
+        if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) > -1) {
+            return data;
+        }
+
+        // No coincide, excluir la opción
+        return null;
     }
 
     // Inicialización por defecto

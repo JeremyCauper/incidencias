@@ -104,7 +104,7 @@ class ResueltasController extends Controller
                 'acciones' => $this->DropdownAcciones([
                     'tittle' => 'Acciones',
                     'button' => [
-                        ['funcion' => "ShowDetail(this, '$incidencia->cod_incidencia')", 'texto' => '<i class="fas fa-info text-info me-2"></i> Detalle Incidencia'],
+                        ['funcion' => "ShowDetail(this, '$incidencia->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Detalle Incidencia'],
                         // ['funcion' => "OrdenDisplay(this, '$incidencia->cod_incidencia')", 'texto' => '<i class="far fa-file-lines text-primary me-2"></i> Ver Orden'],
                         ['funcion' => "OrdenPdf('$cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
                         ['funcion' => "OrdenTicket('$cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket'],

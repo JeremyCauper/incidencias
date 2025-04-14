@@ -23,7 +23,7 @@
                     style="margin-top: -1px;">
             </a>
             <span class="navbar-brand text-white me-0" style="font-size: smaller;">
-                INCIDENCIAS - RICARDO CALDERON INGENIEROS SAC
+                CLIENTES | INCIDENCIAS - RICARDO CALDERON INGENIEROS SAC
             </span>
         </div>
     </nav>

@@ -153,7 +153,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia
+                    <h6 class="modal-title">Detalle de incidencia
                         <span class="badge badge-success badge-lg" aria-item="codigo"></span>
                         <span class="badge badge-info badge-lg" aria-item="codigo_orden"></span>
                     </h6>
@@ -207,10 +207,10 @@
                     </div>
                     <div class="fieldset" aria-item="contenedor-seguimiento">
                     </div>
-                    <div class="text-end mt-3">
-                        <button type="button" class="btn btn-link " data-mdb-ripple-init
-                            data-mdb-dismiss="modal">Cerrar</button>
-                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-link " data-mdb-ripple-init
+                        data-mdb-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>

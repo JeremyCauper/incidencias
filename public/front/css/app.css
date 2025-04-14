@@ -4392,6 +4392,10 @@ tr {
     text-transform: uppercase;
 }
 
+.title-seguimiento span:not(.tt-upper) {
+    font-size: smaller;
+}
+
 @media (max-width: 480px) {
     .title-seguimiento {
         font-size: smaller;
