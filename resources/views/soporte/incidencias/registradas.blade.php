@@ -160,6 +160,7 @@
                                     {
                                         data: 'problema', render: function (data, type, row) {
                                             return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
+                                            // return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${data} / ${row.subproblema}`;
                                         }
                                     },
                                     { data: 'acciones' }
@@ -807,6 +808,7 @@
     <script>
         // 
     </script>
+    <script src="{{secure_asset('front/js/app/SelectManeger.js')}}"></script>
     <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
     <script src="{{secure_asset('front/js/soporte/incidencia/registradas.js')}}"></script>
 @endsection

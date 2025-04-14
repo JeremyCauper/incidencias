@@ -2,7 +2,7 @@
     {
         "id": 1,
         "descripcion": "GNV",
-        "estatus": 0,
+        "estatus": 1,
         "selected": 1,
         "eliminado": 0,
         "updated_at": "",

@@ -121,15 +121,15 @@ $(document).ready(function () {
         } else {
             $('#modal_incidencias [aria-item="contrato"]').html('');
         }
-        fillSelect(['#sucursal'], sucursales, 'ruc', empresa.ruc, 'id', 'nombre', 'status');
+        CS_sucursal.llenar(empresa.ruc);
     });
 
     $('#tSoporte').on('change', function () {
-        fillSelectP($(this).val());
+        CS_problema.llenar($(this).val());
     });
 
     $('#problema').on('change', function () {
-        fillSelectSP($(this).val());
+        CS_sproblema.llenar(() => { return obj_problem[$(this).val()]?.codigo ?? null; });
     });
 
     $('#tel_contac').on('change', function () {
@@ -181,7 +181,8 @@ $(document).ready(function () {
         $('#nom_contac').val('');
         $('#modal_incidencias').find('[aria-item="codigo"], [aria-item="contrato"]').html('');
         changeCodInc(cod_incidencia);
-        fillSelect(['#sucursal']);
+        CS_sucursal.llenar();
+
         $('#tSoporte').val(1).trigger('change');
         $('#contenedor-personal').removeClass('d-none');
         cPersonal.deleteTable();
@@ -223,6 +224,31 @@ function CheckCodOrden(check = true) {
     $('#button-cod-orden').attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
     $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
 }
+
+const CS_sucursal = new CSelect(['#sucursal'], {
+    dataSet: sucursales,
+    filterField: 'ruc',
+    optionText: 'nombre',
+    optionEstatus: 'status'
+});
+
+const CS_problema = new CSelect(['#problema', '#sproblema'], {
+    dataSet: obj_problem,
+    filterField: 'tipo_soporte',
+    optionText: function (data) {
+        return `${data.codigo} - ${data.descripcion}`;
+    },
+    optionEstatus: 'estatus'
+});
+
+const CS_sproblema = new CSelect(['#sproblema'], {
+    dataSet: obj_subproblem,
+    filterField: 'codigo_problema',
+    optionText: function (data) {
+        return `${getBadgePrioridad(data.prioridad)} ${data.descripcion}`;
+    },
+    optionEstatus: 'estatus'
+});
 
 const cMaterial = new CTable('#createMaterial', {
     thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
@@ -380,8 +406,7 @@ function ShowEdit(id) {
             $('#id_inc').val(dt.id_incidencia);
             changeCodInc(dt.cod_incidencia);
             $('#empresa').val(dt.ruc_empresa).trigger('change');
-
-            fillSelect(['#sucursal'], sucursales, 'ruc', dt.ruc_empresa, 'id', 'nombre', 'status');
+            CS_sucursal.llenar(dt.ruc_empresa);
             $('#sucursal').val(dt.id_sucursal).trigger('change');
             $('#cod_contact').val(dt.id_contacto);
             $('#tel_contac').val(dt.telefono).trigger('change');
@@ -392,11 +417,9 @@ function ShowEdit(id) {
             $('#tEstacion').val(dt.id_tipo_estacion).trigger('change');
             $('#tIncidencia').val(dt.id_tipo_incidencia).trigger('change');
             $('#tSoporte').val(dt.id_tipo_soporte).trigger('change');
-            // fillSelect(['#problema', '#sproblema'], obj_problem, 'tipo_incidencia', dt.id_tipo_incidencia, 'id', 'text', 'estatus');
-            fillSelectP(dt.id_tipo_soporte);
+            CS_problema.llenar(dt.id_tipo_soporte);
             $('#problema').val(dt.id_problema).trigger('change');
-            fillSelectSP(dt.id_problema);
-            // fillSelect(['#sproblema'], obj_subproblem, 'id_problema', dt.id_problema, 'id', 'text', 'estatus');
+            CS_sproblema.llenar(() => { return obj_problem[dt.id_problema]?.codigo ?? null; });
             $('#sproblema').val(dt.id_subproblema).trigger('change');
             $('#fecha_imforme').val(dt.fecha_informe);
             $('#hora_informe').val(dt.hora_informe);
@@ -1023,27 +1046,4 @@ function removeClienteDataFirm() {
         $('#n_doc, #nom_cliente, #id_firmador, #nomFirmaDigital').val('');
         removeSignature();
     }
-}
-
-function fillSelectP(value) {
-    $('#problema, #sproblema').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
-    if (!value) return false;
-
-    Object.entries(obj_problem).forEach(([key, e]) => {
-        if (e.tipo_soporte == value && e.estatus)
-            $('#problema').append($('<option>').val(e.id).text(`${e.codigo} - ${e.descripcion}`));
-    });
-    $('#problema').attr('disabled', false);
-}
-
-function fillSelectSP(value) {
-    var codigo = obj_problem[value]?.codigo ?? null;
-    $('#sproblema').html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
-    if (!codigo) return false;
-
-    Object.entries(obj_subproblem).forEach(([key, e]) => {
-        if (e.codigo_problema == codigo && e.estatus)
-            $('#sproblema').append($('<option>').val(e.id).text(`${getBadgePrioridad(e.prioridad)} ${e.descripcion}`));
-    });
-    $('#sproblema').attr('disabled', false);
 }

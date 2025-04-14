@@ -1,43 +1,40 @@
 class CSelect {
-    _this = null;
-    _selector = null;
-    _dataSet = null;
-    _filterF = null;
-
-    constructor(selector, options = {}) {
-        this._selector = selector;
-        this._dataSet = options.dataSet;
-        this._filterV = options.filterValue;
-        this._filterF = options.filterField;
-        this._optionV = options.optionValue;
-        this._optionT = options.optionText;
+    $select = null;
+    constructor(selector, { dataSet, filterField, optionValue = 'id', optionText, optionEstatus = null, optionSelected = null } = {}) {
+        this.$select = $(selector[0]);
+        this.selector = selector;
+        this.dataSet = dataSet;
+        this.filterField = filterField;
+        this.optionValue = optionValue;
+        this.optionText = optionText;
+        this.optionEstatus = optionEstatus;
+        this.optionSelected = optionSelected;
     }
 
-    llenar() {
-        $(this._selector.join()).html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
-        if (!this._filterV) return false;
-    
-        if (Array.isArray(this._dataSet)) {
-            this._dataSet.forEach(e => {
-                if (e[_filterF] == this._filterV) {
-                    $(this._selector[0]).append($('<option>').val(e[this._optionV]).text(e[this._optionT]));
+    llenar(filterValue = null) {
+        let value = typeof filterValue === 'function' ? filterValue() : filterValue;
+        // Se inicia el select con la opción por defecto y se desactiva
+        this.$select.html($('<option>', { value: '', text: '-- Seleccione --' })).attr('disabled', true);
+        if (!value) return false;
+
+        // Permite iterar sobre dataSet tanto si es arreglo como si es objeto
+        const items = Array.isArray(this.dataSet) ? this.dataSet : Object.values(this.dataSet);
+        items.forEach(item => {
+            if (item[this.filterField] == value) {
+                // Se obtiene el texto, ya sea mediante función o propiedad directa
+                const text = typeof this.optionText === 'function' ? this.optionText(item) : item[this.optionText];
+                let badge = '';
+                const atributos = {};
+                if (this.optionEstatus && this.optionEstatus == 0) {
+                    atributos['data-hidden'] = true;
+                    atributos['data-nosearch'] = true;
+                    badge = '<label class="badge badge-danger ms-2">ED</label>';
+                } else if (this.optionSelected == 1) {
+                    atributos['selected'] = '';
                 }
-            });
-        } else if (typeof this._dataSet === 'object') {
-            Object.entries(this._dataSet).forEach(([key, e]) => {
-                if (e[_filterF] == this._filterV) {
-                    $(this._selector[0]).append($('<option>').val(e[this._optionV]).text(e[this._optionT]));
-                }
-            });
-        }
-        $(this._selector[0]).attr('disabled', false);
-    }
-
-    opcion() {
-        // 
-    }
-
-    limpiar() {
-        // 
+                this.$select.append($('<option>').val(item[this.optionValue]).text(text).attr(atributos));
+            }
+        });
+        this.$select.attr('disabled', false);
     }
 }
