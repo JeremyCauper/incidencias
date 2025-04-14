@@ -74,14 +74,6 @@
         "descripcion": "Mantenimientos",
         "icon": "fas fa-gears",
         "ruta": "ControlMantenimientos",
-<<<<<<< HEAD
-        "submenu": "1",
-        "eliminado": 0,
-        "sistema": "1",
-        "orden": "8",
-        "estatus": "1",
-        "updated_at": "2025-04-11 17:30:11",
-=======
         "submenu": 1,
         "sistema": 0,
         "orden": "8",
@@ -89,7 +81,6 @@
         "selected": 0,
         "eliminado": 0,
         "updated_at": "2025-03-21 16:50:48",
->>>>>>> 6088e57158f1f500094c5c59bf6c8290c8715598
         "created_at": "2025-02-28 17:07:57"
     },
     {
