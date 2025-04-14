@@ -160,6 +160,7 @@
                                     {
                                         data: 'problema', render: function (data, type, row) {
                                             return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
+                                            // return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${data} / ${row.subproblema}`;
                                         }
                                     },
                                     { data: 'acciones' }
@@ -206,9 +207,10 @@
                             <select class="select-clear" id="empresa">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['company'] as $e)
-                                    @if ($e->status)
-                                        <option value="{{$e->ruc}}">{{$e->ruc}} - {{$e->razon_social}}</option>
-                                    @endif
+                                    <option value="{{$e->ruc}}"
+                                        {{ $e->status != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                        {{$e->ruc}} - {{$e->razon_social}} {{ $e->status != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -245,7 +247,11 @@
                             <select class="select-clear" id="car_contac" onchange="validContac(this)">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['CargoEstacion'] as $cc)
-                                    <option value="{{$cc['id']}}">{{$cc['descripcion']}}</option>
+                                    <option value="{{ $cc['id'] }}"
+                                        {{ ($cc['selected'] == 1 && $cc['estatus'] == 1) ? 'selected' : '' }}
+                                        {{ $cc['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                        {{ $cc['descripcion'] }} {{ $cc['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -262,8 +268,11 @@
                             <label class="form-label mb-0" for="tEstacion">Tipo Estación</label>
                             <select class="select-clear" id="tEstacion">
                                 <option value="">-- Seleccione --</option>
-                                @foreach ($data['tEstacion'] as $v)
-                                    <option {{$v['id'] == 1 ? 'selected' : ''}} value="{{$v['id']}}">{{$v['descripcion']}}
+                                @foreach ($data['tEstacion'] as $k => $v)
+                                    <option value="{{ $v['id'] }}"
+                                        {{ ($v['selected'] == 1 && $v['estatus'] == 1) ? 'selected' : '' }}
+                                        {{ $v['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
                                     </option>
                                 @endforeach
                             </select>
@@ -273,7 +282,11 @@
                             <select class="select" id="tIncidencia">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['tIncidencia'] as $v)
-                                    <option {{$v['id'] == 1 ? 'selected' : ''}} value="{{$v['id']}}">{{$v['descripcion']}}</option>
+                                    <option value="{{ $v['id'] }}"
+                                        {{ ($v['selected'] == 1 && $v['estatus'] == 1) ? 'selected' : '' }}
+                                        {{ $v['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -282,7 +295,11 @@
                             <select class="select" id="tSoporte">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['tSoporte'] as $v)
-                                    <option value="{{$v['id']}}">{{$v['descripcion']}}</option>
+                                    <option value="{{ $v['id'] }}"
+                                        {{ ($v['selected'] == 1 && $v['estatus'] == 1) ? 'selected' : '' }}
+                                        {{ $v['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
@@ -337,7 +354,10 @@
                                     <select class="select-clear" id="createPersonal">
                                         <option value=""></option>
                                         @foreach ($data['usuarios'] as $u)
-                                            <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}
+                                            <option value="{{$u['value']}}"
+                                                data-value="{{$u['dValue']}}"
+                                                {{ $u['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                                {{$u['text']}} {{ $u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -359,7 +379,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia
+                    <h6 class="modal-title">Detalle de incidencia
                         <span class="ms-2 badge badge-success badge-lg" aria-item="codigo"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
@@ -412,10 +432,10 @@
                     </div>
                     <div class="fieldset" aria-item="contenedor-seguimiento">
                     </div>
-                    <div class="text-end mt-3">
-                        <button type="button" class="btn btn-link " data-mdb-ripple-init
-                            data-mdb-dismiss="modal">Cerrar</button>
-                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-link " data-mdb-ripple-init
+                        data-mdb-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -484,7 +504,10 @@
                                     <select class="select-clear" id="createPersonal1">
                                         <option value=""></option>
                                         @foreach ($data['usuarios'] as $u)
-                                            <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}
+                                            <option value="{{$u['value']}}"
+                                                data-value="{{$u['dValue']}}"
+                                                {{ $u['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                                {{$u['text']}} {{ $u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -632,7 +655,10 @@
                                         <select class="select-clear" id="createMaterial">
                                             <option value=""></option>
                                             @foreach ($data['materiales'] as $m)
-                                                <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}
+                                                <option value="{{$m['value']}}"
+                                                    data-value="{{$m['dValue']}}"
+                                                    {{ $m['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                                    {{$m['text']}} {{ $m['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
                                                 </option>
                                             @endforeach
                                         </select>
@@ -782,6 +808,7 @@
     <script>
         // 
     </script>
+    <script src="{{secure_asset('front/js/app/SelectManeger.js')}}"></script>
     <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
     <script src="{{secure_asset('front/js/soporte/incidencia/registradas.js')}}"></script>
 @endsection

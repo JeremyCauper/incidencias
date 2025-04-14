@@ -62,10 +62,10 @@ class CIncidenciasController extends Controller
                 ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
                 ->where($whereInc)
                 ->when($tIncidencia, function ($query, $tIncidencia) {
-                    return $query->whereIn('id_tipo_incidencia', json_decode("[$tIncidencia]"));
+                    return $query->whereIn('id_tipo_incidencia', explode(",", $tIncidencia));
                 })
                 ->when($tEstado, function ($query, $tEstado) {
-                    return $query->whereIn('estado_informe', json_decode("[$tEstado]"));
+                    return $query->whereIn('estado_informe', explode(",", $tEstado));
                 })
                 ->get();
 
@@ -138,7 +138,7 @@ class CIncidenciasController extends Controller
                         'button' => [
                             [
                                 'funcion' => "ShowDetail(this, '$incidencia->cod_incidencia')",
-                                'texto' => '<i class="fas fa-info text-info me-2"></i> Detalle Incidencia'
+                                'texto' => '<i class="fas fa-eye text-info me-2"></i> Detalle Incidencia'
                             ],
                             !empty($orden) ? [
                                 'funcion' => "OrdenPdf('$cod_ordens')",

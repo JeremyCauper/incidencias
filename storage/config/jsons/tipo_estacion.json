@@ -3,6 +3,8 @@
         "id": 1,
         "descripcion": "GNV",
         "estatus": 1,
+        "selected": 1,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
@@ -10,6 +12,8 @@
         "id": 2,
         "descripcion": "GLP Y LIQUIDOS",
         "estatus": 1,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
@@ -17,6 +21,8 @@
         "id": 3,
         "descripcion": "GNC",
         "estatus": 1,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
@@ -24,6 +30,8 @@
         "id": 4,
         "descripcion": "GNL",
         "estatus": 1,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     },
@@ -31,6 +39,8 @@
         "id": 5,
         "descripcion": "OFICINA",
         "estatus": 1,
+        "selected": 0,
+        "eliminado": 0,
         "updated_at": "",
         "created_at": "2025-02-28 17:07:57"
     }

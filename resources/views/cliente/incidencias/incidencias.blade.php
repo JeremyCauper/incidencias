@@ -27,10 +27,7 @@
                 <div class="row">
                     <div class="col-lg-7 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
-                        <select id="empresa" name="empresa" class="select" disabled="true">
-                            <option selected value="{{ session('empresa')->ruc }}">
-                                {{ session('config_layout')->nombre_perfil }}</option>
-                        </select>
+                        <input type="text" class="form-control" value="{{ session('config_layout')->nombre_perfil }}" readonly role="button">
                     </div>
                     <div class="col-lg-5 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
@@ -175,7 +172,7 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title"><i class="fas fa-book-open"></i> Detalle de incidencia -
+                    <h6 class="modal-title">Detalle de incidencia -
                         <span class="badge badge-success badge-lg" aria-item="codigo"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
@@ -229,7 +226,7 @@
                     <div class="fieldset" aria-item="contenedor-seguimiento">
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer border-top-0">
                     <button type="button" class="btn btn-link " data-mdb-ripple-init
                         data-mdb-dismiss="modal">Cerrar</button>
                 </div>

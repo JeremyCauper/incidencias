@@ -36,19 +36,20 @@ class RegistradasController extends Controller
             $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
 
             // Obtener información de base de datos local
-            $data['CargoEstacion'] = collect((new CargoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
-            $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
-            $data['tSoporte'] = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
-            $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
-            $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->keyBy('id');
-            $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->keyBy('id');
+            $data['CargoEstacion'] = collect((new CargoEstacion())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $data['tSoporte'] = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'tipo', 'color', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'selected', 'estatus', 'eliminado')->keyBy('id');
             $data['eContactos'] = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'telefono', 'cargo', 'correo', 'estatus')->get();
 
             $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
                 return [
                     'value' => $m->id_materiales,
                     'dValue' => base64_encode(json_encode(['id_material' => $m->id_materiales, 'producto' => $m->producto, 'cantidad' => 0])),
-                    'text' => $m->producto
+                    'text' => $m->producto,
+                    'estatus' => $m->estatus
                 ];
             });
 
@@ -58,12 +59,12 @@ class RegistradasController extends Controller
                     'value' => $u->id_usuario,
                     'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
                     'text' => "{$u->ndoc_usuario} - {$nombre}",
-                    'nombre' => $nombre
+                    'nombre' => $nombre,
+                    'estatus' => $u->estatus
                 ];
             });
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
             $data['cod_orden'] = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
-
 
             // Cargar vista de las incidencias, junto a la variable data
             return view('soporte.incidencias.registradas', ['data' => $data]);

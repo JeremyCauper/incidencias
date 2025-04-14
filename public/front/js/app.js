@@ -436,6 +436,17 @@ function getBadgeIncidencia(estado, size = '.7') {
     return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
 }
 
+function getBadgeTIncidencia(estado, size = '.7') {
+    estadoInforme = {
+        "1": { 'color': 'success', 'text': 'N1' },
+        "2": { 'color': 'warning', 'text': 'N2' },
+        "3": { 'color': 'danger', 'text': 'N3' },
+    };
+    let tsize = `style="font-size: ${size}rem;"` ?? null;
+
+    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+}
+
 function getBadgeVisita(estado, size = null) {
     estadoInforme = {
         "0": { 'color': 'warning', 'text': 'Sin Iniciar' },
