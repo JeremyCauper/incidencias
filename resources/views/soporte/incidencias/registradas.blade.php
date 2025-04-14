@@ -285,7 +285,7 @@
                                     <option value="{{ $v['id'] }}"
                                         {{ ($v['selected'] == 1 && $v['estatus'] == 1) ? 'selected' : '' }}
                                         {{ $v['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                         {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
                                     </option>
                                 @endforeach
                             </select>
