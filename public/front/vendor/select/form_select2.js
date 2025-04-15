@@ -133,7 +133,7 @@ $(document).ready(function () {
         });
     };
 
-    $('.select-clear, .select-search, .select-tags').on('select2:open', async function () {
+    $('.select-clear, .select-search, .select-tags, .select-icons').on('select2:open', async function () {
         let clase = $(this).attr('class');
         let observador = new MutationObserver((mutations, obs) => {
             let searchField = document.querySelector('input.select2-search__field');

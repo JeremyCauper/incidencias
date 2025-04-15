@@ -209,7 +209,7 @@
                                 @foreach ($data['company'] as $e)
                                     <option value="{{$e->ruc}}"
                                         {{ $e->status != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{$e->ruc}} - {{$e->razon_social}} {{ $e->status != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                        {{$e->ruc}} - {{$e->razon_social}} {{ $e->status != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
                                     </option>
                                 @endforeach
                             </select>
@@ -250,7 +250,7 @@
                                     <option value="{{ $cc['id'] }}"
                                         {{ ($cc['selected'] == 1 && $cc['estatus'] == 1) ? 'selected' : '' }}
                                         {{ $cc['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{ $cc['descripcion'] }} {{ $cc['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                        {{ $cc['descripcion'] }} {{ $cc['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
                                     </option>
                                 @endforeach
                             </select>
@@ -272,7 +272,7 @@
                                     <option value="{{ $v['id'] }}"
                                         {{ ($v['selected'] == 1 && $v['estatus'] == 1) ? 'selected' : '' }}
                                         {{ $v['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
                                     </option>
                                 @endforeach
                             </select>
@@ -285,7 +285,7 @@
                                     <option value="{{ $v['id'] }}"
                                         {{ ($v['selected'] == 1 && $v['estatus'] == 1) ? 'selected' : '' }}
                                         {{ $v['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                         {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
                                     </option>
                                 @endforeach
                             </select>
@@ -298,7 +298,7 @@
                                     <option value="{{ $v['id'] }}"
                                         {{ ($v['selected'] == 1 && $v['estatus'] == 1) ? 'selected' : '' }}
                                         {{ $v['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
                                     </option>
                                 @endforeach
                             </select>
@@ -357,7 +357,7 @@
                                             <option value="{{$u['value']}}"
                                                 data-value="{{$u['dValue']}}"
                                                 {{ $u['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                                {{$u['text']}} {{ $u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                                {{$u['text']}} {{ $u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -507,7 +507,7 @@
                                             <option value="{{$u['value']}}"
                                                 data-value="{{$u['dValue']}}"
                                                 {{ $u['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                                {{$u['text']}} {{ $u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                                {{$u['text']}} {{ $u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -658,7 +658,7 @@
                                                 <option value="{{$m['value']}}"
                                                     data-value="{{$m['dValue']}}"
                                                     {{ $m['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                                    {{$m['text']}} {{ $m['estatus'] != 1 ? '<label class="badge badge-danger ms-2">ED</label>' : '' }}
+                                                    {{$m['text']}} {{ $m['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
                                                 </option>
                                             @endforeach
                                         </select>

@@ -17,3 +17,7 @@ yarn-error.log
 /.fleet
 /.idea
 /.vscode
+
+# Carpetas ignoradas por Jeremy
+/public/front/images/auth/
+/public/front/images/client/

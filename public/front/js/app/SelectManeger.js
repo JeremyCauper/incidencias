@@ -25,14 +25,15 @@ class CSelect {
                 const text = typeof this.optionText === 'function' ? this.optionText(item) : item[this.optionText];
                 let badge = '';
                 const atributos = {};
-                if (this.optionEstatus && this.optionEstatus == 0) {
+                if (this.optionEstatus !== null && item[this.optionEstatus] === 0) {
                     atributos['data-hidden'] = true;
                     atributos['data-nosearch'] = true;
-                    badge = '<label class="badge badge-danger ms-2">ED</label>';
-                } else if (this.optionSelected == 1) {
+                    badge = '<label class="badge badge-danger ms-2">Inac.</label>';
+                }
+                if (item[this.optionSelected] == 1) {
                     atributos['selected'] = '';
                 }
-                this.$select.append($('<option>').val(item[this.optionValue]).text(text).attr(atributos));
+                this.$select.append($('<option>').val(item[this.optionValue]).text(text + badge).attr(atributos));
             }
         });
         this.$select.attr('disabled', false);
