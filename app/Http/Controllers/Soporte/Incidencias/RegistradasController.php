@@ -87,7 +87,7 @@ class RegistradasController extends Controller
                 "tEnProceso" => 0,
             ];
 
-            $incidencias = DB::table('tb_incidencias')->select(['cod_incidencia', 'ruc_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as id', 'estatus'])
+            $incidencias = DB::table('tb_incidencias')->select(['cod_incidencia', 'ruc_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_soporte', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as id', 'estatus'])
                 ->where('estatus', 1)->whereNot('estado_informe', 3)->get();
                 
             $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
@@ -128,7 +128,7 @@ class RegistradasController extends Controller
                         'sucursal' => $val->id_sucursal,
                         'tecnicos' => $asignados ?? [],
                         'tipo_estacion' => $val->id_tipo_estacion,
-                        'tipo_incidencia' => $val->id_tipo_incidencia,
+                        'tipo_soporte' => $val->id_tipo_soporte,
                         'problema' => $val->id_problema,
                         'subproblema' => $val->id_subproblema,
                         'estado_informe' => $val->estado_informe,
@@ -167,8 +167,8 @@ class RegistradasController extends Controller
                 'empresa' => 'required|string',
                 'sucursal' => 'required|integer',
                 'tEstacion' => 'required|integer',
-                'tSoporte' => 'required|integer',
                 'tIncidencia' => 'required|integer',
+                'tSoporte' => 'required|integer',
                 'problema' => 'required|integer',
                 'sproblema' => 'required|integer',
                 'observacion' => 'nullable|string',
@@ -214,7 +214,6 @@ class RegistradasController extends Controller
                 'id_sucursal' => $request->sucursal,
                 'id_tipo_estacion' => $request->tEstacion,
                 'id_tipo_soporte' => $request->tSoporte,
-                'id_tipo_incidencia' => $request->tIncidencia,
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
                 'id_contacto' => $idContact ?: null,
@@ -223,6 +222,15 @@ class RegistradasController extends Controller
                 'hora_informe' => $request->hora_informe,
                 'estado_informe' => $estado_info,
                 'id_usuario' => Auth::user()->id_usuario,
+                'created_at' => now()->format('Y-m-d H:i:s')
+            ]);
+
+            DB::table('tb_inc_tipo')->insert([
+                'cod_incidencia' => $new_codigo,
+                'id_tipo_inc' => $request->tIncidencia,
+                'creador' => Auth::user()->id_usuario,
+                'fecha' => now()->format('Y-m-d'),
+                'hora' => now()->format('H:i:s'),
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
 
@@ -376,7 +384,6 @@ class RegistradasController extends Controller
                 'id_sucursal' => $request->sucursal,
                 'id_tipo_estacion' => $request->tEstacion,
                 'id_tipo_soporte' => $request->tSoporte,
-                'id_tipo_incidencia' => $request->tIncidencia,
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
                 'id_contacto' => $idContact,
@@ -560,6 +567,7 @@ class RegistradasController extends Controller
             $orden = DB::table('tb_orden_servicio')->where('cod_incidencia', $cod)->first();
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $cod)->get();
+            $incidencia->tipo_incidencia = DB::table('tb_inc_tipo')->select('id_tipo_inc', 'created_at')->where('cod_incidencia', $cod)->get();
     
             // Obtenemos la información del personal y la claveamos por id_usuario
             $personal = DB::table('tb_personal')->get()->keyBy('id_usuario')

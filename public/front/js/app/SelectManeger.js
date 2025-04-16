@@ -14,7 +14,7 @@ class CSelect {
     llenar(filterValue = null) {
         let value = typeof filterValue === 'function' ? filterValue() : filterValue;
         // Se inicia el select con la opción por defecto y se desactiva
-        this.$select.html($('<option>', { value: '', text: '-- Seleccione --' })).attr('disabled', true);
+        $(this.selector.join()).html($('<option>', { value: '', text: '-- Seleccione --' })).attr('disabled', true);
         if (!value) return false;
 
         // Permite iterar sobre dataSet tanto si es arreglo como si es objeto

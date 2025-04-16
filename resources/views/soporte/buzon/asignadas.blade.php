@@ -384,16 +384,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                            aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                    </div>
-                                    <div class="col-sm-6 text-sm-end">
-                                        <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
-                                            aria-item="atencion">Remoto</span>
-                                    </div>
-                                </div>
+                                <label class="form-label me-2">Sucursal: </label><span
+                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -401,7 +393,11 @@
                             </div>
                             <div class="list-group-item">
                                 <div>
-                                    <label class="form-label me-2">Problema</label>
+                                    <label class="form-label me-2">Tipo Soporte:</label>
+                                    <span style="font-size: .75rem;" aria-item="soporte"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="problema"></span>
                                 </div>
                                 <div>
@@ -485,16 +481,8 @@
                                         N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                                 </div>
                                 <div class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label class="form-label me-2">Sucursal: </label><span
-                                                style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                        </div>
-                                        <div class="col-sm-6 text-sm-end">
-                                            <label class="form-label me-2">Atención: </label><span
-                                                style="font-size: .75rem;" aria-item="atencion">Remoto</span>
-                                        </div>
-                                    </div>
+                                    <label class="form-label me-2">Sucursal: </label><span
+                                        style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                                 </div>
                                 <div class="list-group-item">
                                     <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -509,7 +497,7 @@
 
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                             <div class="col-md-12">
-                                <label class="form-label me-2">Problema</label>
+                                <label class="form-label me-2">Problema:</label>
                                 <span style="font-size: .75rem;" aria-item="problema"></span>
                             </div>
                             <div class="col-md-12">
@@ -666,16 +654,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                            aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                    </div>
-                                    <div class="col-sm-6 text-sm-end">
-                                        <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
-                                            aria-item="atencion">Remoto</span>
-                                    </div>
-                                </div>
+                                <label class="form-label me-2">Sucursal: </label><span
+                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"

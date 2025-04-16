@@ -68,8 +68,8 @@ function ShowDetail(e, cod) {
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                 direccion: empresa.direccion,
                 sucursal: sucursal.nombre,
-                atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                 dir_sucursal: sucursal.direccion,
+                soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
                 problema: obj_problem[inc.id_problema].descripcion,
                 subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
                 observacion: inc.observacion,
@@ -127,7 +127,6 @@ function AddSignature(e, cod) {
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                     direccion: empresa.direccion,
                     sucursal: sucursal.nombre,
-                    atencion: tipo_incidencia[inc.id_tipo_incidencia].descripcion,
                     dir_sucursal: sucursal.direccion,
                 });
             }

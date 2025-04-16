@@ -96,7 +96,7 @@
                                     <th>Sucursal</th>
                                     <th>Registrado</th>
                                     <th>Estacion</th>
-                                    <th>Atencion</th>
+                                    <th>Soporte</th>
                                     <th>Problema / Sub Problema</th>
                                     <th>Acciones</th>
                                 </tr>
@@ -153,8 +153,8 @@
                                         }
                                     },
                                     {
-                                        data: 'tipo_incidencia', render: function (data, type, row) {
-                                            return tipo_incidencia[data].descripcion;
+                                        data: 'tipo_soporte', render: function (data, type, row) {
+                                            return tipo_soporte[data].descripcion;
                                         }
                                     },
                                     {
@@ -285,7 +285,7 @@
                                     <option value="{{ $v['id'] }}"
                                         {{ ($v['selected'] == 1 && $v['estatus'] == 1) ? 'selected' : '' }}
                                         {{ $v['estatus'] != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
+                                        {{ '<label class="badge badge-' . $v['color'] . ' me-2">' . $v['tipo'] . '</label>' }} {{ $v['descripcion'] }} {{ $v['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
                                     </option>
                                 @endforeach
                             </select>
@@ -395,16 +395,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                            aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                    </div>
-                                    <div class="col-sm-6 text-sm-end">
-                                        <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
-                                            aria-item="atencion">Remoto</span>
-                                    </div>
-                                </div>
+                                <label class="form-label me-2">Sucursal: </label><span
+                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -412,12 +404,47 @@
                             </div>
                             <div class="list-group-item">
                                 <div>
-                                    <label class="form-label me-2">Problema</label>
+                                    <label class="form-label me-2">Tipo Soporte:</label>
+                                    <span style="font-size: .75rem;" aria-item="soporte"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="problema"></span>
                                 </div>
                                 <div>
                                     <label class="form-label me-2">Sub Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="subproblema"></span>
+                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <div class="row">
+                                    <div class="col-xl-4 col-lg-6 my-2">
+                                        <div class="d-flex align-items-center">
+                                            <label class="badge badge-success">N1</label>
+                                            <div class="ms-3">
+                                                <p class="mb-0" style="font-weight: 500;">REMOTO</p>
+                                                <p class="text-muted mb-0" style="font-size: smaller;">2025-04-10 08:32:52 <b>12s</b></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 my-2">
+                                        <div class="d-flex align-items-center">
+                                            <label class="badge badge-warning">N2</label>
+                                            <div class="ms-3">
+                                                <p class="mb-0" style="font-weight: 500;">PRESENCIAL</p>
+                                                <p class="text-muted mb-0" style="font-size: smaller;">2025-04-10 08:32:52 <b>12s</b></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-xl-4 col-lg-6 my-2">
+                                        <div class="d-flex align-items-center">
+                                            <label class="badge badge-danger">N3</label>
+                                            <div class="ms-3">
+                                                <p class="mb-0" style="font-weight: 500;">PROVEEDOR</p>
+                                                <p class="text-muted mb-0" style="font-size: smaller;">2025-04-10 08:32:52 <b>12s</b></p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                             <div class="list-group-item">
@@ -461,16 +488,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                            aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                    </div>
-                                    <div class="col-sm-6 text-sm-end">
-                                        <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
-                                            aria-item="atencion">Remoto</span>
-                                    </div>
-                                </div>
+                                <label class="form-label me-2">Sucursal: </label><span
+                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -478,7 +497,11 @@
                             </div>
                             <div class="list-group-item">
                                 <div>
-                                    <label class="form-label me-2">Problema</label>
+                                    <label class="form-label me-2">Tipo Soporte:</label>
+                                    <span style="font-size: .75rem;" aria-item="soporte"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="problema"></span>
                                 </div>
                                 <div>
@@ -580,16 +603,8 @@
                                         N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                                 </div>
                                 <div class="list-group-item">
-                                    <div class="row">
-                                        <div class="col-sm-6">
-                                            <label class="form-label me-2">Sucursal: </label><span
-                                                style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                        </div>
-                                        <div class="col-sm-6 text-sm-end">
-                                            <label class="form-label me-2">Atención: </label><span
-                                                style="font-size: .75rem;" aria-item="atencion">Remoto</span>
-                                        </div>
-                                    </div>
+                                    <label class="form-label me-2">Sucursal: </label><span
+                                        style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                                 </div>
                                 <div class="list-group-item">
                                     <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -602,8 +617,12 @@
                             <h6 class="tittle text-primary"> TRABAJO REALIZADO </h6>
                         </div>
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2">
+                            <div>
+                                <label class="form-label me-2">Tipo Soporte:</label>
+                                <span style="font-size: .75rem;" aria-item="soporte"></span>
+                            </div>
                             <div class="col-md-12">
-                                <label class="form-label me-2">Problema</label>
+                                <label class="form-label me-2">Problema:</label>
                                 <span style="font-size: .75rem;" aria-item="problema"></span>
                             </div>
                             <div class="col-md-12">
@@ -763,16 +782,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                            aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                    </div>
-                                    <div class="col-sm-6 text-sm-end">
-                                        <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
-                                            aria-item="atencion">Remoto</span>
-                                    </div>
-                                </div>
+                                <label class="form-label me-2">Sucursal: </label><span
+                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
