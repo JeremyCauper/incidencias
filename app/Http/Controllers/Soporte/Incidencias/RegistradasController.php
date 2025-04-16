@@ -315,6 +315,8 @@ class RegistradasController extends Controller
                     ];
                 });
 
+            $incidencia->tipo_incidencia = DB::table('tb_inc_tipo')->select('id_tipo_inc', 'created_at')->where('cod_incidencia', $cod)->get();
+
             // Retornamos la incidencia con la información de contacto y personal asignado
             return $this->message(data: ['data' => $incidencia]);
         } catch (QueryException $e) {
@@ -393,6 +395,18 @@ class RegistradasController extends Controller
                 'id_usuario' => Auth::user()->id_usuario,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ]);
+
+            $tipo_incidencia = DB::table('tb_inc_tipo')->where(['cod_incidencia' => $request->cod_inc, 'id_tipo_inc' => $request->tIncidencia])->first();
+            if (empty($tipo_incidencia)) {
+                DB::table('tb_inc_tipo')->insert([
+                    'cod_incidencia' => $request->cod_inc,
+                    'id_tipo_inc' => $request->tIncidencia,
+                    'creador' => Auth::user()->id_usuario,
+                    'fecha' => now()->format('Y-m-d'),
+                    'hora' => now()->format('H:i:s'),
+                    'created_at' => now()->format('Y-m-d H:i:s')
+                ]);
+            }
             $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
 
             DB::commit();

@@ -121,15 +121,15 @@ $(document).ready(function () {
         } else {
             $('#modal_incidencias [aria-item="contrato"]').html('');
         }
-        CS_sucursal.llenar(empresa.ruc);
+        CS_sucursal.selecionar(empresa.ruc);
     });
 
     $('#tSoporte').on('change', function () {
-        CS_problema.llenar($(this).val());
+        CS_problema.selecionar($(this).val());
     });
 
     $('#problema').on('change', function () {
-        CS_sproblema.llenar(() => { return obj_problem[$(this).val()]?.codigo ?? null; });
+        CS_sproblema.selecionar(() => { return obj_problem[$(this).val()]?.codigo ?? null; });
     });
 
     $('#tel_contac').on('change', function () {
@@ -154,7 +154,7 @@ $(document).ready(function () {
             return false;
         }
         const contacto = obj_eContactos.find(contacto => contacto.nro_doc === $(this).val());
-        
+
         if (contacto) {
             $('#cod_contact').val(contacto.id_contact);
             $('#tel_contac').val(contacto.telefono).trigger('change.select2');
@@ -181,7 +181,8 @@ $(document).ready(function () {
         $('#nom_contac').val('');
         $('#modal_incidencias').find('[aria-item="codigo"], [aria-item="contrato"]').html('');
         changeCodInc(cod_incidencia);
-        CS_sucursal.llenar();
+        CS_sucursal.selecionar();
+        CS_tIncidencia.llenar();
 
         $('#tSoporte').val(1).trigger('change');
         $('#contenedor-personal').removeClass('d-none');
@@ -230,6 +231,16 @@ const CS_sucursal = new CSelect(['#sucursal'], {
     filterField: 'ruc',
     optionText: 'nombre',
     optionEstatus: 'status'
+});
+
+const CS_tIncidencia = new CSelect(['#tIncidencia'], {
+    dataSet: tipo_incidencia,
+    filterField: 'id',
+    optionText: function (data) {
+        return `<label class="badge badge-${data.color} me-2">${data.tipo}</label>${data.descripcion}`;
+    },
+    optionEstatus: 'estatus',
+    optionSelected: 'selected'
 });
 
 const CS_problema = new CSelect(['#problema', '#sproblema'], {
@@ -374,6 +385,7 @@ function ShowDetail(e, cod) {
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
+            llenarInfoTipoInc('modal_detalle', inc.tipo_incidencia);
             llenarInfoSeguimientoInc('modal_detalle', seguimiento);
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -400,13 +412,28 @@ function ShowEdit(id) {
             }
             console.log(data);
 
+            const actualizarEstatus = (tipoInc, data) => {
+                const ids = new Set(data.map(d => d.id_tipo_inc));
+                const resetAll = ids.has(3);
 
+                return Object.fromEntries(
+                    Object.entries(tipoInc).map(([k, obj]) => [
+                        k,
+                        {
+                            ...obj,
+                            estatus: resetAll || ids.has(obj.id) ? 0 : obj.estatus
+                        }
+                    ])
+                );
+            }
             const dt = data.data;
+            let new_tipo_incidencia = actualizarEstatus(tipo_incidencia, dt.tipo_incidencia);
+            CS_tIncidencia.llenar(new_tipo_incidencia);
             fMananger.formModalLoding('modal_incidencias', 'hide');
             $('#id_inc').val(dt.id_incidencia);
             changeCodInc(dt.cod_incidencia);
             $('#empresa').val(dt.ruc_empresa).trigger('change');
-            CS_sucursal.llenar(dt.ruc_empresa);
+            CS_sucursal.selecionar(dt.ruc_empresa);
             $('#sucursal').val(dt.id_sucursal).trigger('change');
             $('#cod_contact').val(dt.id_contacto);
             $('#tel_contac').val(dt.telefono).trigger('change');
@@ -415,11 +442,11 @@ function ShowEdit(id) {
             $('#car_contac').val(dt.cargo).trigger('change');
             $('#cor_contac').val(dt.correo);
             $('#tEstacion').val(dt.id_tipo_estacion).trigger('change');
-            $('#tIncidencia').val(dt.id_tipo_incidencia).trigger('change');
+            $('#tIncidencia').val(dt.tipo_incidencia[dt.tipo_incidencia.length - 1].id_tipo_inc).trigger('change');
             $('#tSoporte').val(dt.id_tipo_soporte).trigger('change');
-            CS_problema.llenar(dt.id_tipo_soporte);
+            CS_problema.selecionar(dt.id_tipo_soporte);
             $('#problema').val(dt.id_problema).trigger('change');
-            CS_sproblema.llenar(() => { return obj_problem[dt.id_problema]?.codigo ?? null; });
+            CS_sproblema.selecionar(() => { return obj_problem[dt.id_problema]?.codigo ?? null; });
             $('#sproblema').val(dt.id_subproblema).trigger('change');
             $('#fecha_imforme').val(dt.fecha_informe);
             $('#hora_informe').val(dt.hora_informe);

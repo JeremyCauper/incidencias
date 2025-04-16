@@ -1,7 +1,3 @@
-function setInfoEmpresas(modal, ruc_empresa, id_sucursal, dataSet) {
-    // 
-}
-
 function fillSelect(selector, data, filterField, filterValue, optionValue, optionText, optionCondition) {
     $(selector.join()).html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
     if (!filterValue) return false;
@@ -276,6 +272,29 @@ function llenarInfoModal(id_modal, data) {
     });
 }
 
+function llenarInfoTipoInc(id_modal, data) {
+    let seguimiento = Object.entries(data).map(([key, e]) => {
+        let tipoInc = tipo_incidencia[e.id_tipo_inc];
+        return `
+            <div class="col-lg-4 col-md-6 mt-3">
+                <div class="d-flex align-items-center">
+                    <label class="badge badge-${tipoInc.color}">${tipoInc.tipo}</label>
+                    <div class="ms-2">
+                        <p class="mb-0" style="font-weight: 500;font-size: small;">${tipoInc.descripcion}</p>
+                        <p class="text-muted mb-0" style="font-size: smaller;">${e.created_at}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    $(`#${id_modal} [aria-item="incidencia"]`).html(`
+        <div class="row">
+            ${seguimiento}
+        </div>
+    `);
+}
+
 function llenarInfoSeguimientoInc(id_modal, data) {
     const acciones = {
         'registro': '<i class="fas fa-folder-open text-warning"></i> Registro de Incidencia',
@@ -305,19 +324,24 @@ function llenarInfoSeguimientoInc(id_modal, data) {
         if (key === "asignado") {
             bodySeguimiento = e.map(asignacion => {
                 const tecnicos = asignacion.tecnicos.map(tecnico => `
-                    <label class="p-1 rounded text-nowrap" role="button" data-mdb-ripple-init title="${tecnico.date}">
-                        <img src="${tecnico.img}" alt="" style="width: 24px; height: 24px" class="rounded-circle" />
-                        <span>${tecnico.nombre}</span>
-                    </label>
+                    <div class="col my-1 mx-2">
+                        <label class="d-flex align-items-center text-nowrap">
+                            <img src="${tecnico.img}" alt="" style="width: 24px; height: 24px" class="rounded-circle" />
+                            <div class="ms-2">
+                                <p class="mb-0" style="font-weight: 500;font-size: .75rem;">${tecnico.nombre}</p>
+                                <p class="text-muted mb-0" style="font-size: .675rem;">${tecnico.date}</p>
+                            </div>
+                        </label>
+                    </div>
                 `).join('');
 
                 return `
                     <div class="d-flex align-items-center mt-2">
                         <img src="${asignacion.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                        <div class="ms-3">
+                        <div class="ms-3 w-100">
                             <p class="fw-bold mb-1">${asignacion.nombre}</p>
                             <p class="text-muted mb-1" style="font-size: .73rem;">Asignó la incidencia a:</p>
-                            <div class="mb-0 ms-2" style="font-size: .73rem;">${tecnicos}</div>
+                            <div class="row row-cols-1 row-cols-lg-5">${tecnicos}</div>
                             <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
                                 <i class="fab fa-whatsapp text-success"></i> ${asignacion.telefono} / <i class="far fa-envelope text-danger"></i> ${asignacion.email}
                             </p>

@@ -415,36 +415,7 @@
                                     <label class="form-label me-2">Sub Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="subproblema"></span>
                                 </div>
-                            </div>
-                            <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-xl-4 col-lg-6 my-2">
-                                        <div class="d-flex align-items-center">
-                                            <label class="badge badge-success">N1</label>
-                                            <div class="ms-3">
-                                                <p class="mb-0" style="font-weight: 500;">REMOTO</p>
-                                                <p class="text-muted mb-0" style="font-size: smaller;">2025-04-10 08:32:52 <b>12s</b></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 col-lg-6 my-2">
-                                        <div class="d-flex align-items-center">
-                                            <label class="badge badge-warning">N2</label>
-                                            <div class="ms-3">
-                                                <p class="mb-0" style="font-weight: 500;">PRESENCIAL</p>
-                                                <p class="text-muted mb-0" style="font-size: smaller;">2025-04-10 08:32:52 <b>12s</b></p>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-xl-4 col-lg-6 my-2">
-                                        <div class="d-flex align-items-center">
-                                            <label class="badge badge-danger">N3</label>
-                                            <div class="ms-3">
-                                                <p class="mb-0" style="font-weight: 500;">PROVEEDOR</p>
-                                                <p class="text-muted mb-0" style="font-size: smaller;">2025-04-10 08:32:52 <b>12s</b></p>
-                                            </div>
-                                        </div>
-                                    </div>
+                                <div aria-item="incidencia">
                                 </div>
                             </div>
                             <div class="list-group-item">
