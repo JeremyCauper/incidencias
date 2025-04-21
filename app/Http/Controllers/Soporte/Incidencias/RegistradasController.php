@@ -87,67 +87,70 @@ class RegistradasController extends Controller
                 "tEnProceso" => 0,
             ];
 
-            $incidencias = DB::table('tb_incidencias')->select(['cod_incidencia', 'ruc_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_incidencia', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as id', 'estatus'])
+            $incidencias = DB::table('tb_incidencias')->select(['cod_incidencia', 'ruc_empresa', 'id_sucursal', 'created_at', 'id_tipo_estacion', 'id_tipo_soporte', 'id_problema', 'id_subproblema', 'estado_informe', 'id_incidencia as id', 'estatus'])
                 ->where('estatus', 1)->whereNot('estado_informe', 3)->get();
-                
+
             $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
 
             $inc_asig = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
+            $inc_tipo = DB::table('tb_inc_tipo')->select('cod_incidencia', 'id_tipo_inc')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
             // Procesar incidencias
-            $incidencias = $incidencias->map(function ($val) use (&$conteo_data, $inc_asig) {
-                    if (!empty($inc_asig[$val->cod_incidencia])) {
-                        $asignados = collect($inc_asig[$val->cod_incidencia])->pluck('id_usuario')->toArray();
-                    }
+            $incidencias = $incidencias->map(function ($val) use (&$conteo_data, $inc_asig, $inc_tipo) {
+                if (!empty($inc_asig[$val->cod_incidencia])) {
+                    $asignados = collect($inc_asig[$val->cod_incidencia])->pluck('id_usuario')->toArray();
+                }
+                $tipoInc = collect($inc_tipo[$val->cod_incidencia])->pluck('id_tipo_inc')->toArray();
 
-                    // Configurar el estado del informe
-                    $estadoInforme = [
-                        "0" => ['c' => 'warning', 't' => 'Sin Asignar'],
-                        "1" => ['c' => 'info', 't' => 'Asignada'],
-                        "2" => ['c' => 'primary', 't' => 'En Proceso'],
-                        "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
-                        "5" => ['c' => 'danger', 't' => 'Cierre Sistema']
-                    ];
-                    $badge_informe = '<label class="badge badge-' . $estadoInforme[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
+                // Configurar el estado del informe
+                $estadoInforme = [
+                    "0" => ['c' => 'warning', 't' => 'Sin Asignar'],
+                    "1" => ['c' => 'info', 't' => 'Asignada'],
+                    "2" => ['c' => 'primary', 't' => 'En Proceso'],
+                    "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
+                    "5" => ['c' => 'danger', 't' => 'Cierre Sistema']
+                ];
+                $badge_informe = '<label class="badge badge-' . $estadoInforme[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
 
-                    switch ($val->estado_informe) {
-                        case 0:
-                            $conteo_data['tSinAsignar']++;
-                            break;
-                        case 1:
-                            $conteo_data['tAsignadas']++;
-                            break;
-                        case 2:
-                            $conteo_data['tEnProceso']++;
-                            break;
-                    }
-                    $conteo_data['totales']++;
+                switch ($val->estado_informe) {
+                    case 0:
+                        $conteo_data['tSinAsignar']++;
+                        break;
+                    case 1:
+                        $conteo_data['tAsignadas']++;
+                        break;
+                    case 2:
+                        $conteo_data['tEnProceso']++;
+                        break;
+                }
+                $conteo_data['totales']++;
 
-                    return [
-                        'incidencia' => $val->cod_incidencia,
-                        'empresa' => $val->ruc_empresa,
-                        'sucursal' => $val->id_sucursal,
-                        'tecnicos' => $asignados ?? [],
-                        'tipo_estacion' => $val->id_tipo_estacion,
-                        'tipo_incidencia' => $val->id_tipo_incidencia,
-                        'problema' => $val->id_problema,
-                        'subproblema' => $val->id_subproblema,
-                        'estado_informe' => $val->estado_informe,
-                        'estado' => $badge_informe,
-                        'registrado' => $val->created_at,
-                        'acciones' => $this->DropdownAcciones([
-                            'tittle' => $badge_informe,
-                            'button' => [
-                                ['funcion' => "ShowDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
-                                $val->estado_informe != 4 ? ['funcion' => "ShowEdit('$val->cod_incidencia')", 'texto' => '<i class="fas fa-pen text-secondary me-2"></i> Editar'] : null,
-                                $val->estado_informe != 4 ? ['funcion' => "ShowAssign(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'] : null,
-                                $val->estado_informe == 1 ? ['funcion' => "StartInc('$val->cod_incidencia', $val->estado_informe)", 'texto' => '<i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia'] : null,
-                                $val->estado_informe == 2 ? ['funcion' => "OrdenDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio'] : null,
-                                $val->estado_informe != 4 ? ['funcion' => "DeleteInc($val->id)", 'texto' => '<i class="far fa-trash-can text-danger me-2"></i> Eliminar'] : null,
-                                $val->estado_informe == 4 ? ['funcion' => "AddCodAviso(this, '$val->cod_incidencia')", 'texto' => '<i class="far fa-file-code text-warning me-2"></i> Añadir Cod. Aviso'] : null,
-                            ],
-                        ])
-                    ];
-                });
+                return [
+                    'incidencia' => $val->cod_incidencia,
+                    'empresa' => $val->ruc_empresa,
+                    'sucursal' => $val->id_sucursal,
+                    'tecnicos' => $asignados ?? [],
+                    'tipo_incidencia' => $tipoInc,
+                    'tipo_estacion' => $val->id_tipo_estacion,
+                    'tipo_soporte' => $val->id_tipo_soporte,
+                    'problema' => $val->id_problema,
+                    'subproblema' => $val->id_subproblema,
+                    'estado_informe' => $val->estado_informe,
+                    'estado' => $badge_informe,
+                    'registrado' => $val->created_at,
+                    'acciones' => $this->DropdownAcciones([
+                        'tittle' => $badge_informe,
+                        'button' => [
+                            ['funcion' => "ShowDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
+                            $val->estado_informe != 4 ? ['funcion' => "ShowEdit('$val->cod_incidencia')", 'texto' => '<i class="fas fa-pen text-secondary me-2"></i> Editar'] : null,
+                            $val->estado_informe != 4 ? ['funcion' => "ShowAssign(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-user-plus me-2"></i> Asignar'] : null,
+                            $val->estado_informe == 1 ? ['funcion' => "StartInc('$val->cod_incidencia', $val->estado_informe)", 'texto' => '<i class="' . ($val->estado_informe != 2 ? 'far fa-clock' : 'fas fa-clock-rotate-left') . ' text-warning me-2"></i> ' . ($val->estado_informe != 2 ? 'Iniciar' : 'Reiniciar') . ' Incidencia'] : null,
+                            $val->estado_informe == 2 ? ['funcion' => "OrdenDetail(this, '$val->cod_incidencia')", 'texto' => '<i class="fas fa-book-medical text-primary me-2"></i> Orden de servicio'] : null,
+                            $val->estado_informe != 4 ? ['funcion' => "DeleteInc($val->id)", 'texto' => '<i class="far fa-trash-can text-danger me-2"></i> Eliminar'] : null,
+                            $val->estado_informe == 4 ? ['funcion' => "AddCodAviso(this, '$val->cod_incidencia')", 'texto' => '<i class="far fa-file-code text-warning me-2"></i> Añadir Cod. Aviso'] : null,
+                        ],
+                    ])
+                ];
+            });
 
             return ['data' => $incidencias, 'conteo_data' => $conteo_data, 'contact' => $contactos_empresas];
         } catch (Exception $e) {
@@ -167,8 +170,8 @@ class RegistradasController extends Controller
                 'empresa' => 'required|string',
                 'sucursal' => 'required|integer',
                 'tEstacion' => 'required|integer',
-                'tSoporte' => 'required|integer',
                 'tIncidencia' => 'required|integer',
+                'tSoporte' => 'required|integer',
                 'problema' => 'required|integer',
                 'sproblema' => 'required|integer',
                 'observacion' => 'nullable|string',
@@ -214,7 +217,6 @@ class RegistradasController extends Controller
                 'id_sucursal' => $request->sucursal,
                 'id_tipo_estacion' => $request->tEstacion,
                 'id_tipo_soporte' => $request->tSoporte,
-                'id_tipo_incidencia' => $request->tIncidencia,
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
                 'id_contacto' => $idContact ?: null,
@@ -223,6 +225,12 @@ class RegistradasController extends Controller
                 'hora_informe' => $request->hora_informe,
                 'estado_informe' => $estado_info,
                 'id_usuario' => Auth::user()->id_usuario,
+                'created_at' => now()->format('Y-m-d H:i:s')
+            ]);
+
+            DB::table('tb_inc_tipo')->insert([
+                'cod_incidencia' => $new_codigo,
+                'id_tipo_inc' => $request->tIncidencia,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
 
@@ -241,7 +249,7 @@ class RegistradasController extends Controller
                 }
                 DB::table('tb_inc_asignadas')->insert($arr_personal);
             }
-            
+
             DB::commit();
 
             $data = [];
@@ -307,6 +315,8 @@ class RegistradasController extends Controller
                     ];
                 });
 
+            $incidencia->tipo_incidencia = DB::table('tb_inc_tipo')->select('id_tipo_inc', 'created_at')->where('cod_incidencia', $cod)->get();
+
             // Retornamos la incidencia con la información de contacto y personal asignado
             return $this->message(data: ['data' => $incidencia]);
         } catch (QueryException $e) {
@@ -326,6 +336,7 @@ class RegistradasController extends Controller
             $validator = Validator::make($request->all(), [
                 'id_inc' => 'required|integer',
                 'cod_inc' => 'required|string',
+                'estado_info' => 'required|string',
                 'empresa' => 'required|integer',
                 'sucursal' => 'required|integer',
                 'tEstacion' => 'required|integer',
@@ -376,7 +387,6 @@ class RegistradasController extends Controller
                 'id_sucursal' => $request->sucursal,
                 'id_tipo_estacion' => $request->tEstacion,
                 'id_tipo_soporte' => $request->tSoporte,
-                'id_tipo_incidencia' => $request->tIncidencia,
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
                 'id_contacto' => $idContact,
@@ -386,6 +396,26 @@ class RegistradasController extends Controller
                 'id_usuario' => Auth::user()->id_usuario,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ]);
+
+            if ($request->estado_info == 2) {
+                $tipo_incidencia = DB::table('tb_inc_tipo')->where(['cod_incidencia' => $request->cod_inc, 'id_tipo_inc' => $request->tIncidencia])->first();
+                if (empty($tipo_incidencia)) {
+                    DB::table('tb_inc_tipo')->insert([
+                        'cod_incidencia' => $request->cod_inc,
+                        'id_tipo_inc' => $request->tIncidencia,
+                        'creador' => Auth::user()->id_usuario,
+                        'fecha' => now()->format('Y-m-d'),
+                        'hora' => now()->format('H:i:s'),
+                        'created_at' => now()->format('Y-m-d H:i:s')
+                    ]);
+                }
+            } else {
+                DB::table('tb_inc_tipo')->where('cod_incidencia', $request->cod_inc)->update([
+                    'id_tipo_inc' => $request->tIncidencia,
+                    'creador' => Auth::user()->id_usuario
+                ]);
+            }
+
             $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
 
             DB::commit();
@@ -414,8 +444,8 @@ class RegistradasController extends Controller
                 return $this->message(data: ['required' => $validator->errors()], status: 422);
             }
 
-            $estado_save = false ;
-            $estado_dalete = false ;
+            $estado_save = false;
+            $estado_dalete = false;
             $vPersonal = $request->personal_asig;
             if (count($request->personal_asig)) {
                 $arr_personal_new = [];
@@ -509,6 +539,10 @@ class RegistradasController extends Controller
                     'hora' => now()->format('H:i:s'),
                     'created_at' => now()->format('Y-m-d H:i:s')
                 ]);
+                DB::table('tb_inc_tipo')->where('cod_incidencia', $cod)->update([
+                    'fecha' => now()->format('Y-m-d'),
+                    'hora' => now()->format('H:i:s')
+                ]);
             }
             DB::table('tb_incidencias')->where('cod_incidencia', $cod)->update(['estado_informe' => $accion]);
             DB::commit();
@@ -550,31 +584,32 @@ class RegistradasController extends Controller
         try {
             // Consultamos la incidencia activa
             $incidencia = DB::table('tb_incidencias')->where(['estatus' => 1, 'cod_incidencia' => $cod])->first();
-    
+
             // Validamos que la incidencia exista
             if (!$incidencia) {
                 return $this->message(message: "Incidencia no encontrada.", status: 404);
             }
-    
+
             // Consultas adicionales
             $orden = DB::table('tb_orden_servicio')->where('cod_incidencia', $cod)->first();
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $cod)->get();
-    
+            $incidencia->tipo_incidencia = DB::table('tb_inc_tipo')->select('id_tipo_inc', 'fecha', 'hora', 'created_at')->where('cod_incidencia', $cod)->get();
+
             // Obtenemos la información del personal y la claveamos por id_usuario
             $personal = DB::table('tb_personal')->get()->keyBy('id_usuario')
                 ->map(function ($u) {
                     return (object) [
-                        "foto"      => $u->foto_perfil,
-                        "tecnico"   => $this->formatearNombre($u->nombres, $u->apellidos),
-                        "email"     => $u->email_corporativo,
-                        "telefono"  => $u->tel_corporativo,
+                        "foto" => $u->foto_perfil,
+                        "tecnico" => $this->formatearNombre($u->nombres, $u->apellidos),
+                        "email" => $u->email_corporativo,
+                        "telefono" => $u->tel_corporativo,
                     ];
                 });
-    
+
             // Asignamos el código de orden, si existe
             $incidencia->cod_orden = $orden ? $orden->cod_ordens : null;
-    
+
             // Formateamos la información de registro
             $data = [
                 "registro" => $this->formatInfoData(
@@ -584,10 +619,10 @@ class RegistradasController extends Controller
                     $incidencia->created_at
                 )
             ];
-    
+
             // Procesamos las asignaciones: agrupamos por creador usando groupBy
             $asignadosGrouped = $asignados->groupBy('creador');
-    
+
             // Recorremos cada grupo de asignaciones y formateamos la información
             $data['asignado'] = $asignadosGrouped->map(function ($items, $creatorId) use ($personal) {
                 // Información del usuario creador de la asignación
@@ -602,8 +637,8 @@ class RegistradasController extends Controller
                     );
                 })->toArray();
                 return $info;
-            })->values()->toArray(); 
-    
+            })->values()->toArray();
+
             // Procesamos el seguimiento: se asigna a "inicio" o "final" según el estado
             foreach ($seguimiento as $item) {
                 $estadoTexto = $item->estado ? "final" : "inicio";
@@ -614,10 +649,10 @@ class RegistradasController extends Controller
                     $item->created_at
                 );
             }
-    
+
             // Retornamos la respuesta estructurada
             return $this->message(data: ['data' => ['incidencia' => $incidencia, 'seguimiento' => $data]]);
-    
+
         } catch (QueryException $e) {
             // Si estás usando transacciones asegúrate de iniciarlas con DB::beginTransaction()
             // DB::rollBack(); 
@@ -626,7 +661,7 @@ class RegistradasController extends Controller
             // DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
-    }    
+    }
 
     /**
      * Formatea la información de contacto del usuario.

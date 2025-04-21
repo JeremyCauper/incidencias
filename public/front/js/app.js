@@ -1,7 +1,3 @@
-function setInfoEmpresas(modal, ruc_empresa, id_sucursal, dataSet) {
-    // 
-}
-
 function fillSelect(selector, data, filterField, filterValue, optionValue, optionText, optionCondition) {
     $(selector.join()).html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
     if (!filterValue) return false;
@@ -276,6 +272,48 @@ function llenarInfoModal(id_modal, data) {
     });
 }
 
+function llenarInfoTipoInc(id_modal, data) {
+    let tipoi = data.incidencia.tipo_incidencia;
+    let estado = data.incidencia.estado_informe;
+    let seguimiento = data.seguimiento?.final?.date ?? "En Proceso ...";
+
+    let resultado = Object.entries(tipoi).map(([key, e]) => {
+        let tipoInc = tipo_incidencia[e.id_tipo_inc];
+        let dnone = "", fecha_ini = "", fecha_fin = "";
+
+        if (estado == 0 || estado == 1) {
+            fecha_ini = "Sin Iniciar";
+            dnone = "d-none";
+        } else {
+            fecha_ini = `${e.fecha} ${e.hora}`;
+            if (key == (tipoi.length - 1)) {
+                fecha_fin = seguimiento;
+            } else {
+                let ffin = tipoi[eval(key) + 1];
+                fecha_fin = `${ffin.fecha} ${ffin.hora}`;
+            }
+        }
+        return `
+            <div class="col-lg-4 col-md-6 mt-2">
+                <div class="d-flex align-items-center">
+                    <label class="badge badge-${tipoInc.color}">${tipoInc.tipo}</label>
+                    <div class="ms-2 w-100">
+                        <p class="d-flex justify-content-between mb-0 pe-lg-5 col-5 col-md-12" style="font-weight: 500;font-size: small;">${tipoInc.descripcion}<span>${calcularDuracion(fecha_ini, fecha_fin)}</span></p>
+                        <p class="text-muted mb-0" style="font-size: .675rem;"><b style="letter-spacing: 0.1em;">I: </b>${fecha_ini}</p>
+                        <p class="text-muted mb-0 ${dnone}" style="font-size: .675rem;"><b>F: </b>${fecha_fin}</p>
+                    </div>
+                </div>
+            </div>
+        `;
+    }).join('');
+
+    $(`#${id_modal} [aria-item="incidencia"]`).html(`
+        <div class="row">
+            ${resultado}
+        </div>
+    `);
+}
+
 function llenarInfoSeguimientoInc(id_modal, data) {
     const acciones = {
         'registro': '<i class="fas fa-folder-open text-warning"></i> Registro de Incidencia',
@@ -305,19 +343,24 @@ function llenarInfoSeguimientoInc(id_modal, data) {
         if (key === "asignado") {
             bodySeguimiento = e.map(asignacion => {
                 const tecnicos = asignacion.tecnicos.map(tecnico => `
-                    <label class="p-1 rounded text-nowrap" role="button" data-mdb-ripple-init title="${tecnico.date}">
-                        <img src="${tecnico.img}" alt="" style="width: 24px; height: 24px" class="rounded-circle" />
-                        <span>${tecnico.nombre}</span>
-                    </label>
+                    <div class="col my-1 mx-2">
+                        <label class="d-flex align-items-center text-nowrap">
+                            <img src="${tecnico.img}" alt="" style="width: 24px; height: 24px" class="rounded-circle" />
+                            <div class="ms-2">
+                                <p class="mb-0" style="font-weight: 500;font-size: .75rem;">${tecnico.nombre}</p>
+                                <p class="text-muted mb-0" style="font-size: .675rem;">${tecnico.date}</p>
+                            </div>
+                        </label>
+                    </div>
                 `).join('');
 
                 return `
                     <div class="d-flex align-items-center mt-2">
                         <img src="${asignacion.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                        <div class="ms-3">
+                        <div class="ms-3 w-100">
                             <p class="fw-bold mb-1">${asignacion.nombre}</p>
                             <p class="text-muted mb-1" style="font-size: .73rem;">Asignó la incidencia a:</p>
-                            <div class="mb-0 ms-2" style="font-size: .73rem;">${tecnicos}</div>
+                            <div class="row row-cols-1 row-cols-lg-5">${tecnicos}</div>
                             <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
                                 <i class="fab fa-whatsapp text-success"></i> ${asignacion.telefono} / <i class="far fa-envelope text-danger"></i> ${asignacion.email}
                             </p>
@@ -421,6 +464,44 @@ function llenarInfoSeguimientoVis(id_modal, data) {
         </ul>
     `);
 }
+
+/**
+ * Calcula la diferencia entre dos fechas (format "YYYY-MM-DD HH:mm:ss")
+ * y devuelve un string "Xh Ym Zs".
+ *
+ * @param {string} fechaIni - Fecha de inicio, p. ej. "2025-04-21 10:49:44"
+ * @param {string} fechaFin - Fecha de fin,    p. ej. "2025-04-21 13:55:44"
+ * @returns {string} Diferencia en "##h ##m ##s"
+ */
+function calcularDuracion(fechaIni, fechaFin) {
+    // Convertir " " en "T" para que Date lo interprete como ISO
+    const inicio = new Date(fechaIni.replace(' ', 'T'));
+    const fin = new Date(fechaFin.replace(' ', 'T'));
+
+    // Diferencia en milisegundos
+    let diffMs = fin - inicio;
+    if (isNaN(diffMs)) {
+        return '';
+    }
+    if (diffMs < 0) {
+        // Si la fecha fin es anterior, invertimos o lanzamos error
+        diffMs = Math.abs(diffMs);
+    }
+
+    const totalSegundos = Math.floor(diffMs / 1000);
+    const segundos = totalSegundos % 60;
+    const totalMinutos = Math.floor(totalSegundos / 60);
+    const minutos = totalMinutos % 60;
+    const horas = Math.floor(totalMinutos / 60);
+
+    return `${horas}h ${minutos}m ${segundos}s`;
+}
+
+//   // Ejemplo de uso:
+//   const inicio = "2025-04-21 10:49:44";
+//   const fin    = "2025-04-21 13:55:44";
+//   console.log(calcularDuracion(inicio, fin)); // "3h 6m 0s"
+
 
 function getBadgeIncidencia(estado, size = '.7') {
     estadoInforme = {

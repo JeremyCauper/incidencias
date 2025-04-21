@@ -10,6 +10,7 @@
         let empresas = <?php echo json_encode($data['empresas']); ?>;
         let sucursales = <?php echo json_encode($data['sucursales']); ?>;
         let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
+        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
         let obj_problem = <?php echo json_encode($data['problema']); ?>;
         let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
     </script>
@@ -281,16 +282,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                            aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                    </div>
-                                    <div class="col-sm-6 text-sm-end">
-                                        <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
-                                            aria-item="atencion">Remoto</span>
-                                    </div>
-                                </div>
+                                <label class="form-label me-2">Sucursal: </label><span
+                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -298,7 +291,11 @@
                             </div>
                             <div class="list-group-item">
                                 <div>
-                                    <label class="form-label me-2">Problema</label>
+                                    <label class="form-label me-2">Tipo Soporte:</label>
+                                    <span style="font-size: .75rem;" aria-item="soporte"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="problema"></span>
                                 </div>
                                 <div>
@@ -307,8 +304,12 @@
                                 </div>
                             </div>
                             <div class="list-group-item">
+                                <label class="form-label me-2">Tipo Incidencia:</label>
+                                <div aria-item="incidencia"></div>
+                            </div>
+                            <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>
-                                <span style="font-size: .75rem;" aria-item="observasion"></span>
+                                <span style="font-size: .75rem;" aria-item="observacion"></span>
                             </div>
                         </div>
                     </div>

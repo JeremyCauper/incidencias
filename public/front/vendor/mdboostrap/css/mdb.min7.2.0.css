@@ -20637,6 +20637,10 @@ hr.divider-vertical-blurry {
     border-radius: 0
 }
 
+.dropdown-item:last-child {
+    border-radius: 0 0 .5rem .5rem
+}
+
 .dropdown-item:hover,
 .dropdown-item:focus {
     color: var(--mdb-dropdown-state-color);
@@ -21208,8 +21212,8 @@ fieldset:disabled .btn-group-vertical>.btn {
 }
 
 .badge-dark {
-    background-color: var(--mdb-dark-text-emphasis); /* var(--mdb-dark-bg-subtle);
-    color: var(--mdb-dark-text-emphasis)*/
+    background-color: var(--mdb-dark-bg-subtle);
+    color: var(--mdb-dark-text-emphasis);
 }
 
 .badge-dark i {

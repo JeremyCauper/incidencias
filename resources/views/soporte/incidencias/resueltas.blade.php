@@ -9,6 +9,7 @@
     <script>
         let empresas = <?php echo json_encode($data['company']); ?>;
         let sucursales = <?php echo json_encode($data['scompany']); ?>;
+        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
         let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
         let obj_problem = <?php echo json_encode($data['problema']); ?>;
         let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
@@ -81,6 +82,7 @@
                                     <th>Empresa</th>
                                     <th>Sucursal</th>
                                     <th>Tipo Incidencia</th>
+                                    <th>Soporte</th>
                                     <th>Problema / Sub Problema</th>
                                     <th>Iniciada</th>
                                     <th>Terminada</th>
@@ -123,7 +125,13 @@
                                     },
                                     {
                                         data: 'tipo_incidencia', render: function (data, type, row) {
-                                            return tipo_incidencia[data].descripcion;
+                                            let tipo = tipo_incidencia[data[data.length - 1]];
+                                            return `<label class="badge badge-${tipo.color} me-2" style="font-size: 0.75rem;">${tipo.tipo}</label>${tipo.descripcion}`;
+                                        }
+                                    },
+                                    {
+                                        data: 'tipo_soporte', render: function (data, type, row) {
+                                            return tipo_soporte[data].descripcion;
                                         }
                                     },
                                     {
@@ -136,8 +144,8 @@
                                     { data: 'acciones' }
                                 ],
                                 createdRow: function (row, data, dataIndex) {
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(6), td:eq(8), td:eq(9), td:eq(10)').addClass('text-center');
-                                    $(row).find('td:eq(10)').addClass(`td-acciones`);
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(6), td:eq(7), td:eq(9), td:eq(10), td:eq(11)').addClass('text-center');
+                                    $(row).find('td:eq(11)').addClass(`td-acciones`);
                                 },
                                 order: [[1, 'desc']],
                                 processing: true
@@ -170,16 +178,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <div class="row">
-                                    <div class="col-sm-6">
-                                        <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                            aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                    </div>
-                                    <div class="col-sm-6 text-sm-end">
-                                        <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
-                                            aria-item="atencion">Remoto</span>
-                                    </div>
-                                </div>
+                                <label class="form-label me-2">Sucursal: </label><span
+                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -187,13 +187,21 @@
                             </div>
                             <div class="list-group-item">
                                 <div>
-                                    <label class="form-label me-2">Problema</label>
+                                    <label class="form-label me-2">Tipo Soporte:</label>
+                                    <span style="font-size: .75rem;" aria-item="soporte"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="problema"></span>
                                 </div>
                                 <div>
                                     <label class="form-label me-2">Sub Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="subproblema"></span>
                                 </div>
+                            </div>
+                            <div class="list-group-item">
+                                <label class="form-label me-2">Tipo Incidencia:</label>
+                                <div aria-item="incidencia"></div>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>
@@ -236,16 +244,8 @@
                                 N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                         </div>
                         <div class="list-group-item">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                        aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                </div>
-                                <div class="col-sm-6 text-sm-end">
-                                    <label class="form-label me-2">Atención: </label><span style="font-size: .75rem;"
-                                        aria-item="atencion">Remoto</span>
-                                </div>
-                            </div>
+                            <label class="form-label me-2">Sucursal: </label><span
+                                style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
                         </div>
                         <div class="list-group-item">
                             <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"

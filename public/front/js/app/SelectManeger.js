@@ -11,10 +11,10 @@ class CSelect {
         this.optionSelected = optionSelected;
     }
 
-    llenar(filterValue = null) {
+    selecionar(filterValue = null) {
         let value = typeof filterValue === 'function' ? filterValue() : filterValue;
         // Se inicia el select con la opción por defecto y se desactiva
-        this.$select.html($('<option>', { value: '', text: '-- Seleccione --' })).attr('disabled', true);
+        $(this.selector.join()).html($('<option>', { value: '', text: '-- Seleccione --' })).attr('disabled', true);
         if (!value) return false;
 
         // Permite iterar sobre dataSet tanto si es arreglo como si es objeto
@@ -37,5 +37,26 @@ class CSelect {
             }
         });
         this.$select.attr('disabled', false);
+    }
+
+    llenar(dataSet = this.dataSet) {
+        // Permite iterar sobre dataSet tanto si es arreglo como si es objeto
+        const items = Array.isArray(dataSet) ? dataSet : Object.values(dataSet);
+        this.$select.html($('<option>', { value: '', text: '-- Seleccione --' }));
+        items.forEach(item => {
+            // Se obtiene el texto, ya sea mediante función o propiedad directa
+            const text = typeof this.optionText === 'function' ? this.optionText(item) : item[this.optionText];
+            let badge = '';
+            const atributos = {};
+            if (this.optionEstatus !== null && item[this.optionEstatus] === 0) {
+                atributos['data-hidden'] = true;
+                atributos['data-nosearch'] = true;
+                badge = '<label class="badge badge-danger ms-2">Inac.</label>';
+            }            
+            if (item[this.optionSelected] == 1) {
+                atributos['selected'] = '';
+            }
+            this.$select.append($('<option>').val(item[this.optionValue]).text(text + badge).attr(atributos));
+        });
     }
 }
