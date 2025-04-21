@@ -385,7 +385,7 @@ function ShowDetail(e, cod) {
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
-            llenarInfoTipoInc('modal_detalle', inc.tipo_incidencia);
+            llenarInfoTipoInc('modal_detalle', data.data);
             llenarInfoSeguimientoInc('modal_detalle', seguimiento);
         },
         error: function (jqXHR, textStatus, errorThrown) {
@@ -410,27 +410,26 @@ function ShowEdit(id) {
             if (!data.success) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
-            console.log(data);
-
             const actualizarEstatus = (tipoInc, data) => {
-                const ids = new Set(data.map(d => d.id_tipo_inc));
-                const resetAll = ids.has(3);
-
-                return Object.fromEntries(
-                    Object.entries(tipoInc).map(([k, obj]) => [
-                        k,
-                        {
-                            ...obj,
-                            estatus: resetAll || ids.has(obj.id) ? 0 : obj.estatus
-                        }
-                    ])
-                );
-            }
+                let tipoi = [], estado = true;
+                const limitante = data[data.length - 1].id_tipo_inc;
+            
+                Object.entries(tipoInc).forEach(([key, e]) => {
+                    let new_e = { ...e };
+                    new_e.estatus = estado ? 0 : 1;
+                    if (new_e.id == limitante) estado = false;
+                    tipoi.push(new_e);
+                });
+                return tipoi;
+            }            
             const dt = data.data;
-            let new_tipo_incidencia = actualizarEstatus(tipo_incidencia, dt.tipo_incidencia);
-            CS_tIncidencia.llenar(new_tipo_incidencia);
+            if (eval(dt.estado_informe) == 2) {
+                let new_tipo_incidencia = actualizarEstatus(tipo_incidencia, dt.tipo_incidencia);
+                CS_tIncidencia.llenar(new_tipo_incidencia);
+            }
             fMananger.formModalLoding('modal_incidencias', 'hide');
             $('#id_inc').val(dt.id_incidencia);
+            $('#estado_info').val(dt.estado_informe);
             changeCodInc(dt.cod_incidencia);
             $('#empresa').val(dt.ruc_empresa).trigger('change');
             CS_sucursal.selecionar(dt.ruc_empresa);

@@ -96,6 +96,7 @@
                                     <th>Sucursal</th>
                                     <th>Registrado</th>
                                     <th>Estacion</th>
+                                    <th>Tipo Incidencia</th>
                                     <th>Soporte</th>
                                     <th>Problema / Sub Problema</th>
                                     <th>Acciones</th>
@@ -153,6 +154,12 @@
                                         }
                                     },
                                     {
+                                        data: 'tipo_incidencia', render: function (data, type, row) {
+                                            let tipo = tipo_incidencia[data[data.length - 1]];
+                                            return `<label class="badge badge-${tipo.color} me-2" style="font-size: 0.75rem;">${tipo.tipo}</label>${tipo.descripcion}`;
+                                        }
+                                    },
+                                    {
                                         data: 'tipo_soporte', render: function (data, type, row) {
                                             return tipo_soporte[data].descripcion;
                                         }
@@ -168,8 +175,8 @@
                                 order: [[5, 'desc']],
                                 createdRow: function (row, data, dataIndex) {
                                     const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(9)').addClass('text-center');
-                                    $(row).find('td:eq(9)').addClass(`td-acciones`);
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(10)').addClass('text-center');
+                                    $(row).find('td:eq(10)').addClass(`td-acciones`);
                                     $(row).addClass(row_bg[data.estado_informe]);
                                 },
                                 processing: true
@@ -185,6 +192,7 @@
         <div class="modal-dialog modal-xl">
             <form class="modal-content" id="form-incidencias" style="position: relative;">
                 <input type="hidden" name="id_inc" id="id_inc">
+                <input type="hidden" name="estado_info" id="estado_info">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title">
                         NUEVA INCIDENCIA
@@ -415,10 +423,10 @@
                                     <label class="form-label me-2">Sub Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="subproblema"></span>
                                 </div>
-                                <div>
-                                    <label class="form-label me-2 mt-2">Tipo Incidencia:</label>
-                                    <div aria-item="incidencia"></div>
-                                </div>
+                            </div>
+                            <div class="list-group-item">
+                                <label class="form-label me-2">Tipo Incidencia:</label>
+                                <div aria-item="incidencia"></div>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>

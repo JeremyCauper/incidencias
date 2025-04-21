@@ -10,6 +10,7 @@
         let empresas = <?php echo json_encode($data['empresas']); ?>;
         let sucursales = <?php echo json_encode($data['sucursales']); ?>;
         let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
+        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
         let obj_problem = <?php echo json_encode($data['problema']); ?>;
         let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
     </script>
@@ -303,8 +304,12 @@
                                 </div>
                             </div>
                             <div class="list-group-item">
+                                <label class="form-label me-2">Tipo Incidencia:</label>
+                                <div aria-item="incidencia"></div>
+                            </div>
+                            <div class="list-group-item">
                                 <label class="form-label me-2">Observación:</label>
-                                <span style="font-size: .75rem;" aria-item="observasion"></span>
+                                <span style="font-size: .75rem;" aria-item="observacion"></span>
                             </div>
                         </div>
                     </div>

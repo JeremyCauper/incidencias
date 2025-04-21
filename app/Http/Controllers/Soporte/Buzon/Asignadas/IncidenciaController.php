@@ -14,13 +14,15 @@ class IncidenciaController extends Controller
         try {
             $cod_incidencias = DB::table('tb_inc_asignadas')->where('id_usuario', session('id_usuario'))->pluck('cod_incidencia')->toArray();
             $asignadas = DB::table('tb_inc_asignadas')->where('id_usuario', session('id_usuario'))->get();
-
+            $inc_tipo = DB::table('tb_inc_tipo')->select('cod_incidencia', 'id_tipo_inc')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
+            
             $count_asig = 0;
             $incidencia = DB::table('tb_incidencias')
                 ->whereIn('cod_incidencia', $cod_incidencias)
                 ->whereIn('estado_informe', [1, 2, 4])->where(['estatus' => 1])->get()
-                ->map(function ($inc) use ($asignadas, &$count_asig) {
+                ->map(function ($inc) use ($asignadas, &$count_asig, $inc_tipo) {
                 $asignada = $asignadas->where('cod_incidencia', $inc->cod_incidencia)->first()?->created_at ?? 'N/A';
+                $tipoInc = collect($inc_tipo[$inc->cod_incidencia])->pluck('id_tipo_inc')->toArray();
 
                 if ($inc->estado_informe == 1) {
                     $count_asig++;
@@ -39,7 +41,9 @@ class IncidenciaController extends Controller
                     'registrado' => $inc->created_at ?? null,
                     'iniciado' => $asignada,
                     'id_sucursal' => $inc->id_sucursal,
-                    'id_tipo_estacion' => $inc->id_tipo_estacion,
+                    'tipo_incidencia' => $tipoInc,
+                    'tipo_estacion' => $inc->id_tipo_estacion,
+                    'tipo_soporte' => $inc->id_tipo_soporte,
                     'problema' => $inc->id_problema,
                     'subproblema' => $inc->id_subproblema,
                     'acciones' => $this->DropdownAcciones([

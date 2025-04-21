@@ -75,32 +75,21 @@ class CIncidenciasController extends Controller
 
             $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
 
-            $seguimientos = DB::table('tb_inc_seguimiento')
-                ->whereIn('cod_incidencia', $cod_incidencias)
-                ->get()
-                ->groupBy('cod_incidencia');
-            $inc_asig = DB::table('tb_inc_asignadas')
-                ->whereIn('cod_incidencia', $cod_incidencias)
-                ->get()
-                ->groupBy('cod_incidencia');
+            $seguimientos = DB::table('tb_inc_seguimiento')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
+            $inc_asig = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
+            $inc_tipo = DB::table('tb_inc_tipo')->select('cod_incidencia', 'id_tipo_inc')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
 
-            $ordenes = DB::table('tb_orden_servicio')
-                ->whereIn('cod_incidencia', $cod_incidencias)
-                ->get();
+            $ordenes = DB::table('tb_orden_servicio')->whereIn('cod_incidencia', $cod_incidencias)->get();
             $id_contac_ordens = $ordenes->pluck('id_contacto')->toArray();
-            $contac_ordens = DB::table('tb_contac_ordens')
-                ->whereIn('id', $id_contac_ordens)
-                ->get();
+            $contac_ordens = DB::table('tb_contac_ordens')->whereIn('id', $id_contac_ordens)->get();
 
-            $incidencias = $incidencias->map(function ($incidencia) use ($ordenes, $seguimientos, $inc_asig, $contac_ordens) {
+            $incidencias = $incidencias->map(function ($incidencia) use ($ordenes, $seguimientos, $inc_asig, $inc_tipo, $contac_ordens) {
                 $orden = $ordenes->where('cod_incidencia', $incidencia->cod_incidencia)->first();
                 $cod_ordens = empty($orden) ? "Sin Orden" : $orden->cod_ordens;
 
                 // Usamos get() para evitar "Undefined array key"
-                $asignados = $inc_asig->get($incidencia->cod_incidencia, collect())
-                    ->pluck('id_usuario')
-                    ->toArray();
-
+                $asignados = $inc_asig->get($incidencia->cod_incidencia, collect())->pluck('id_usuario')->toArray();
+                $tipoInc = collect($inc_tipo[$incidencia->cod_incidencia])->pluck('id_tipo_inc')->toArray();
                 $seguimiento = $seguimientos->get($incidencia->cod_incidencia, collect());
 
                 $contac = false;
@@ -132,6 +121,7 @@ class CIncidenciasController extends Controller
                     'asignados' => $asignados ?? null,
                     'empresa' => $incidencia->ruc_empresa,
                     'sucursal' => $incidencia->id_sucursal,
+                    'tipo_incidencia' => $tipoInc,
                     'tipo_soporte' => $incidencia->id_tipo_soporte,
                     'problema' => $incidencia->id_problema,
                     'subproblema' => $incidencia->id_subproblema,

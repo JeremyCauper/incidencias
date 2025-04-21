@@ -124,6 +124,7 @@ function ShowDetailInc(e, cod) {
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
+            llenarInfoTipoInc('modal_detalle', data.data);
             llenarInfoSeguimientoInc('modal_detalle', seguimiento);
         },
         error: function (jqXHR, textStatus, errorThrown) {
