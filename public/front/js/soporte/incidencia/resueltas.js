@@ -76,6 +76,7 @@ function ShowDetail(e, cod) {
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
+            llenarInfoTipoInc('modal_detalle', inc.tipo_incidencia);
             llenarInfoSeguimientoInc('modal_detalle', seguimiento);
         },
         error: function (jqXHR, textStatus, errorThrown) {

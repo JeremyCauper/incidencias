@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Cliente\Incidencias;
 
 use App\Helpers\Problema;
 use App\Helpers\SubProblema;
+use App\Helpers\TipoEstacion;
 use App\Helpers\TipoIncidencia;
+use App\Helpers\TipoSoporte;
 use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Http\Request;
@@ -20,7 +22,9 @@ class CIncidenciasController extends Controller
             $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->where('ruc', ((array) session('empresa'))['ruc'])->get()->keyBy('id');
 
             // Obtener información de base de datos local
-            $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
+            $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $data['tSoporte'] = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'tipo', 'color', 'selected', 'estatus', 'eliminado')->keyBy('id');
             $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->keyBy('id');
             $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->keyBy('id');
             $data['usuarios'] = DB::table('tb_personal')->get()->keyBy('id_usuario')->map(function ($user) {
@@ -44,7 +48,7 @@ class CIncidenciasController extends Controller
     {
         try {
             $sucursal = $request->query('sucursal');
-            $tIncidencia = $request->query('tIncidencia');
+            $tSoporte = $request->query('tSoporte');
             $tEstado = $request->query('tEstado');
             $fechaIni = $request->query('fechaIni') ?: now()->format('Y-m-01');
             $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
@@ -61,8 +65,8 @@ class CIncidenciasController extends Controller
             $incidencias = DB::table('tb_incidencias')
                 ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
                 ->where($whereInc)
-                ->when($tIncidencia, function ($query, $tIncidencia) {
-                    return $query->whereIn('id_tipo_incidencia', explode(",", $tIncidencia));
+                ->when($tSoporte, function ($query, $tSoporte) {
+                    return $query->whereIn('id_tipo_soporte', explode(",", $tSoporte));
                 })
                 ->when($tEstado, function ($query, $tEstado) {
                     return $query->whereIn('estado_informe', explode(",", $tEstado));
@@ -128,7 +132,7 @@ class CIncidenciasController extends Controller
                     'asignados' => $asignados ?? null,
                     'empresa' => $incidencia->ruc_empresa,
                     'sucursal' => $incidencia->id_sucursal,
-                    'tipo_incidencia' => $incidencia->id_tipo_incidencia,
+                    'tipo_soporte' => $incidencia->id_tipo_soporte,
                     'problema' => $incidencia->id_problema,
                     'subproblema' => $incidencia->id_subproblema,
                     'iniciado' => $seguimiento->where('estado', 0)->first()?->created_at ?? 'Sin Iniciar',

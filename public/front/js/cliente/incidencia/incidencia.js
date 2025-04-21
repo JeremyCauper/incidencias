@@ -38,8 +38,8 @@ function filtroBusqueda() {
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
     var tEstado = $('#tEstado').val();
-    var tInc = $('#tIncidencia').val();
-    var nuevoUrl = `${__url}/empresa/incidencias/index?sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}&tIncidencia=${tInc}&tEstado=${tEstado}`;
+    var tSop = $('#tSoporte').val();
+    var nuevoUrl = `${__url}/empresa/incidencias/index?sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}&tSoporte=${tSop}&tEstado=${tEstado}`;
 
     tb_orden.ajax.url(nuevoUrl).load();
 }
@@ -74,6 +74,7 @@ function ShowDetail(e, id) {
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
+            llenarInfoTipoInc('modal_detalle', inc.tipo_incidencia);
             llenarInfoSeguimientoInc('modal_detalle', seguimiento);
         },
         error: function (jqXHR, textStatus, errorThrown) {

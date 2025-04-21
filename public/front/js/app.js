@@ -276,9 +276,9 @@ function llenarInfoTipoInc(id_modal, data) {
     let seguimiento = Object.entries(data).map(([key, e]) => {
         let tipoInc = tipo_incidencia[e.id_tipo_inc];
         return `
-            <div class="col-lg-4 col-md-6 mt-3">
+            <div class="col-lg-4 col-md-6 mt-1">
                 <div class="d-flex align-items-center">
-                    <label class="badge badge-${tipoInc.color}">${tipoInc.tipo}</label>
+                    <label class="badge badge-secondary">${tipoInc.tipo}</label> <!--${tipoInc.color}-->
                     <div class="ms-2">
                         <p class="mb-0" style="font-weight: 500;font-size: small;">${tipoInc.descripcion}</p>
                         <p class="text-muted mb-0" style="font-size: smaller;">${e.created_at}</p>

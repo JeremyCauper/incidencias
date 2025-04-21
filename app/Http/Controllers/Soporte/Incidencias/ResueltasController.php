@@ -30,7 +30,9 @@ class ResueltasController extends Controller
             $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
 
             // Obtener información de base de datos local
-            $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'estatus')->keyBy('id');
+            $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $data['tSoporte'] = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'tipo', 'color', 'selected', 'estatus', 'eliminado')->keyBy('id');
             $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->keyBy('id');
             $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->keyBy('id');
             $data['usuarios'] = DB::table('tb_personal')->get()->keyBy('id_usuario')->map(function ($user) {
@@ -96,7 +98,7 @@ class ResueltasController extends Controller
                 'asignados' => $asignados,
                 'empresa' => $incidencia->ruc_empresa,
                 'sucursal' => $incidencia->id_sucursal,
-                'tipo_incidencia' => $incidencia->id_tipo_incidencia,
+                'tipo_soporte' => $incidencia->id_tipo_soporte,
                 'problema' => $incidencia->id_problema,
                 'subproblema' => $incidencia->id_subproblema,
                 'iniciado' => $seguimiento->where('estado', 0)->first()?->created_at ?? 'N/A',

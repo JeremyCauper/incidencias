@@ -12,6 +12,7 @@
     <script>
         let empresa = <?php echo json_encode(session('empresa')); ?>;
         let sucursales = <?=json_encode($data['scompany'])?>;
+        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
         let tipo_incidencia = <?=json_encode($data['tIncidencia'])?>;
         let obj_problem = <?=json_encode($data['problema'])?>;
         let obj_subproblem = <?=json_encode($data['sproblema'])?>;
@@ -39,9 +40,9 @@
                         </select>
                     </div>
                     <div class="col-md-4 col-6 my-1">
-                        <label class="form-label mb-0" for="tIncidencia">Tipo Incidencia</label>
-                        <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
-                            @foreach ($data['tIncidencia'] as $v)
+                        <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
+                        <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
+                            @foreach ($data['tSoporte'] as $v)
                                 <option selected value="{{$v['id']}}">{{$v['descripcion']}}</option>
                             @endforeach
                         </select>
@@ -97,7 +98,7 @@
                                     <th>Tecnico</th>
                                     <!-- <th>Empresa</th> -->
                                     <th>Sucursal</th>
-                                    <th>Tipo Incidencia</th>
+                                    <th>Soporte</th>
                                     <th>Problema / Sub Problema</th>
                                     <th>Iniciada</th>
                                     <th>Terminada</th>
@@ -110,7 +111,7 @@
                                 scrollX: true,
                                 scrollY: 400,
                                 ajax: {
-                                    url: `${__url}/empresa/incidencias/index?sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}&tIncidencia=${$('#tIncidencia').val()}&tEstado=${$('#tEstado').val()}`,
+                                    url: `${__url}/empresa/incidencias/index?sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}&tSoporte=${$('#tSoporte').val()}&tEstado=${$('#tEstado').val()}`,
                                     dataSrc: function (json) {
                                         return json.data;
                                     },
@@ -129,19 +130,14 @@
                                             return (data.map(usu => usuarios[usu].nombre)).join(", ");
                                         }
                                     },
-                                    // {
-                                    //     data: 'empresa', render: function (data, type, row) {
-                                    //         return `${empresa.ruc} - ${empresa.razon_social}`;
-                                    //     }
-                                    // },
                                     {
                                         data: 'sucursal', render: function (data, type, row) {
                                             return sucursales[data].nombre;
                                         }
                                     },
                                     {
-                                        data: 'tipo_incidencia', render: function (data, type, row) {
-                                            return tipo_incidencia[data].descripcion;
+                                        data: 'tipo_soporte', render: function (data, type, row) {
+                                            return tipo_soporte[data].descripcion;
                                         }
                                     },
                                     {
@@ -207,6 +203,10 @@
                                 <div>
                                     <label class="form-label me-2">Sub Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="subproblema"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2 mt-2">Tipo Incidencia:</label>
+                                    <div aria-item="incidencia"></div>
                                 </div>
                             </div>
                             <div class="list-group-item">

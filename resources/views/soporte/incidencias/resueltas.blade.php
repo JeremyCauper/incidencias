@@ -9,6 +9,7 @@
     <script>
         let empresas = <?php echo json_encode($data['company']); ?>;
         let sucursales = <?php echo json_encode($data['scompany']); ?>;
+        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
         let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
         let obj_problem = <?php echo json_encode($data['problema']); ?>;
         let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
@@ -80,7 +81,7 @@
                                     <th>Tecnico</th>
                                     <th>Empresa</th>
                                     <th>Sucursal</th>
-                                    <th>Tipo Incidencia</th>
+                                    <th>Soporte</th>
                                     <th>Problema / Sub Problema</th>
                                     <th>Iniciada</th>
                                     <th>Terminada</th>
@@ -122,8 +123,8 @@
                                         }
                                     },
                                     {
-                                        data: 'tipo_incidencia', render: function (data, type, row) {
-                                            return tipo_incidencia[data].descripcion;
+                                        data: 'tipo_soporte', render: function (data, type, row) {
+                                            return tipo_soporte[data].descripcion;
                                         }
                                     },
                                     {
@@ -189,6 +190,10 @@
                                 <div>
                                     <label class="form-label me-2">Sub Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="subproblema"></span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2 mt-2">Tipo Incidencia:</label>
+                                    <div aria-item="incidencia"></div>
                                 </div>
                             </div>
                             <div class="list-group-item">

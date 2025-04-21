@@ -415,7 +415,9 @@
                                     <label class="form-label me-2">Sub Problema:</label>
                                     <span style="font-size: .75rem;" aria-item="subproblema"></span>
                                 </div>
-                                <div aria-item="incidencia">
+                                <div>
+                                    <label class="form-label me-2 mt-2">Tipo Incidencia:</label>
+                                    <div aria-item="incidencia"></div>
                                 </div>
                             </div>
                             <div class="list-group-item">
