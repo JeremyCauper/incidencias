@@ -230,6 +230,7 @@ class RegistradasController extends Controller
 
             DB::table('tb_inc_tipo')->insert([
                 'cod_incidencia' => $new_codigo,
+                'creador' => Auth::user()->id_usuario,
                 'id_tipo_inc' => $request->tIncidencia,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
