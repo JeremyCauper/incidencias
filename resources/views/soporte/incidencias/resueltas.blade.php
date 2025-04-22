@@ -144,7 +144,7 @@
                                     { data: 'acciones' }
                                 ],
                                 createdRow: function (row, data, dataIndex) {
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(6), td:eq(7), td:eq(9), td:eq(10), td:eq(11)').addClass('text-center');
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(7), td:eq(9), td:eq(10), td:eq(11)').addClass('text-center');
                                     $(row).find('td:eq(11)').addClass(`td-acciones`);
                                 },
                                 order: [[1, 'desc']],
