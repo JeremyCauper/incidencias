@@ -21,4 +21,4 @@ yarn-error.log
 # Carpetas ignoradas por Jeremy
 /public/front/images/auth/
 /public/front/images/client/
-/storage/config/jsons
+/storage/config/
