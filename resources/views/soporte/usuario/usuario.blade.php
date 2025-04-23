@@ -2,7 +2,7 @@
 @section('title', 'Panel de Control')
 
 @section('cabecera')
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}?v={{ time() }}">
 @endsection
 @section('content')
 
@@ -161,7 +161,7 @@
                                     </div>
                                     <input type="file" class="d-none" id="foto_perfil">
                                     <input type="text" class="d-none" name="foto_perfil" id="txtFotoPerfil">
-                                    <img id="PreviFPerfil" src="{{secure_asset('front/images/auth/user_auth.jpg')}}"
+                                    <img id="PreviFPerfil" src="{{secure_asset('front/images/auth/user_auth.jpg')}}?v={{ time() }}"
                                         imageDefault="{{secure_asset('front/images/auth/user_auth.jpg')}}">
                                 </div>
                             </div>
@@ -180,7 +180,7 @@
                                     </div>
                                     <input type="file" class="d-none" id="firma_digital">
                                     <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
-                                    <img id="PreviFirma" src="{{secure_asset('front/images/firms/firm.png')}}"
+                                    <img id="PreviFirma" src="{{secure_asset('front/images/firms/firm.png')}}?v={{ time() }}"
                                         imageDefault="{{secure_asset('front/images/firms/firm.png')}}">
                                 </div>
                             </div>
@@ -256,9 +256,9 @@
 @section('scripts')
     <script>
         let tipoAcceso = <?=$tipoAcceso?>;
-        const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}";
-        const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}";
+        const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}?v={{ time() }}";
+        const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}?v={{ time() }}";
     </script>
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}?v={{ time() }}"></script>
 @endsection

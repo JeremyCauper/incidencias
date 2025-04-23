@@ -2,9 +2,9 @@
 @section('title', 'Visitas')
 
 @section('cabecera')
-<script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-<script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-<link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
+<script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}?v={{ time() }}"></script>
+<script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}?v={{ time() }}"></script>
+<link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}?v={{ time() }}">
 <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
 <script>
     let empresas = <?php echo json_encode($data['empresas']); ?>;
@@ -130,5 +130,5 @@
 @endsection
 
 @section('scripts')
-<script src="{{secure_asset('front/js/soporte/visitas/terminadas.js')}}"></script>
+<script src="{{secure_asset('front/js/soporte/visitas/terminadas.js')}}?v={{ time() }}"></script>
 @endsection

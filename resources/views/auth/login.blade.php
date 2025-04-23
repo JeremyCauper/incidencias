@@ -5,13 +5,13 @@
     <!-- Requiredd meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}" />
+    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ time() }}" />
     <title>RC Incidencias | Inicio</title>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/auth.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/auth.css')}}?v={{ time() }}">
 </head>
 
 <body style="height: 100% !important;">
@@ -19,7 +19,7 @@
     <nav class="navbar bg-dark-subtle fixed-top">
         <div class="container-fluid py-1 mx-2">
             <a class="navbar-brand" href="{{secure_url('/soporte')}}">
-                <img src="{{secure_asset('front/images/app/logo_tittle_rc.png')}}" height="34" alt="RC Logo" loading="lazy"
+                <img src="{{secure_asset('front/images/app/logo_tittle_rc.png')}}?v={{ time() }}" height="34" alt="RC Logo" loading="lazy"
                     style="margin-top: -1px;">
             </a>
             <span class="navbar-brand text-white me-0" style="font-size: smaller;">
@@ -32,7 +32,7 @@
         <div style="width: 22rem;">
             <form id="form-login" class="m-2">
                 <div class="text-center title-login">
-                    <img src="{{secure_asset('front/images/app/tittle_login.png')}}" height="60" alt="">
+                    <img src="{{secure_asset('front/images/app/tittle_login.png')}}?v={{ time() }}" height="60" alt="">
                 </div>
                 <div class="alert alert-danger hidden" role="alert">
                     <i class="fas fa-triangle-exclamation"></i> Usuario incorrecto
@@ -63,15 +63,15 @@
         </div>
     </div>
 
-    <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
-    <script src="{{secure_asset('front/js/app/AlertMananger.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/app/AlertMananger.js')}}?v={{ time() }}"></script>
     <script>
         const __url = "{{secure_url('')}}";
         const __token = "{{ csrf_token() }}";
     </script>
-    <script src="{{secure_asset('front/js/auth/auth.js')}}"></script>
+    <script src="{{secure_asset('front/js/auth/auth.js')}}?v={{ time() }}"></script>
 </body>
 
 </html>

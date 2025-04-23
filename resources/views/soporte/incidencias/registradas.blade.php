@@ -2,7 +2,7 @@
 @section('title', 'Panel de Control')
 
 @section('cabecera')
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}?v={{ time() }}">
     <!-- Include stylesheet -->
     <!-- <link href="https://cdn.jsdelivr.net/npm/quill@2.0.3/dist/quill.snow.css" rel="stylesheet" /> -->
     <!-- Include the Quill library -->
@@ -687,7 +687,7 @@
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
                             <div class="row justify-content-between firmas-orden">
                                 <div class="col-lg-5 text-center my-2">
-                                    <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '' : ''}} height="130"
+                                    <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : ''}} height="130"
                                         width="160">
                                     <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
                                         Firma Tecnico
@@ -800,7 +800,7 @@
     <script>
         // 
     </script>
-    <script src="{{secure_asset('front/js/app/SelectManeger.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/incidencia/registradas.js')}}"></script>
+    <script src="{{secure_asset('front/js/app/SelectManeger.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/incidencia/registradas.js')}}?v={{ time() }}"></script>
 @endsection

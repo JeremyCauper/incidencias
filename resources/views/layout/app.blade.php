@@ -5,38 +5,38 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}" />
+  <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ time() }}" />
   <title>@yield('title')</title>
   <!-- Font Awesome -->
-  <link href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}" rel="stylesheet">
+  <link href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}?v={{ time() }}" rel="stylesheet">
   <!-- MDB -->
-  <link href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}" rel="stylesheet">
+  <link href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}?v={{ time() }}" rel="stylesheet">
   <!-- Iconos -->
-  <link href="{{ secure_asset('front/vendor/simple-icon/bootstrap-icons.css') }}" rel="stylesheet">
-  <link href="{{ secure_asset('front/vendor/simple-icon/styles.min.css') }}" rel="stylesheet">
-  <link href="{{ secure_asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
+  <link href="{{ secure_asset('front/vendor/simple-icon/bootstrap-icons.css') }}?v={{ time() }}" rel="stylesheet">
+  <link href="{{ secure_asset('front/vendor/simple-icon/styles.min.css') }}?v={{ time() }}" rel="stylesheet">
+  <link href="{{ secure_asset('front/vendor/select/select2.min.css') }}?v={{ time() }}" rel="stylesheet">
 
-  <link rel="stylesheet" href="{{secure_asset('front/vendor/flatpickr/flatpickr.min.css')}}">
+  <link rel="stylesheet" href="{{secure_asset('front/vendor/flatpickr/flatpickr.min.css')}}?v={{ time() }}">
 
-  <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/animate.min.css')}}">
-  <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}">
+  <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/animate.min.css')}}?v={{ time() }}">
+  <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}?v={{ time() }}">
   <!-- Google Fonts -->
   <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
   <!-- Home -->
-  <link rel="stylesheet" href="{{ secure_asset('front/css/app.css') }}">
+  <link rel="stylesheet" href="{{ secure_asset('front/css/app.css') }}?v={{ time() }}">
   <script>
     const __url = "{{secure_url('')}}";
     const __asset = "{{secure_asset('/front')}}";
     const __token = "{{ csrf_token() }}";
   </script>
   <!-- JQuery -->
-  <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
-  <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
-  <script src="{{secure_asset('front/vendor/select/select2.min.js')}}"></script>
-  <script src="{{secure_asset('front/vendor/select/form_select2.js')}}"></script>
-  <script src="{{secure_asset('front/js/app/AlertMananger.js')}}"></script>
-  <script src="{{secure_asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
-  <script src="{{secure_asset('front/js/app.js')}}"></script>
+  <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/vendor/select/select2.min.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/vendor/select/form_select2.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/js/app/AlertMananger.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/vendor/dataTable/jquery.dataTables.min.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/js/app.js')}}?v={{ time() }}"></script>
 
   @yield('cabecera')
 </head>
@@ -49,7 +49,7 @@
     <!-- partial:partials/_navbar.html -->
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top">
       <a class="navbar-brand" href="#">
-        <img src="{{secure_asset('front/images/app/LogoRC_WNormal.webp')}}" class="ms-2" height="45" alt="logo" />
+        <img src="{{secure_asset('front/images/app/LogoRC_WNormal.webp')}}?v={{ time() }}" class="ms-2" alt="logo" id="logoRc" />
       </a>
       <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav ms-auto">
@@ -60,15 +60,13 @@
           <div class="dropdown">
             <a data-mdb-dropdown-init class="dropdown-toggle d-flex align-items-center hidden-arrow rounded-circle"
               href="#" id="navbarDropdownMenuAvatar" role="button" aria-expanded="false" data-mdb-ripple-init>
-              <img class="img-xs rounded-circle"
-                src="{{ session('config_layout')->foto_perfil }}" alt="Profile image">
+              <img class="img-xs rounded-circle" src="{{ session('config_layout')->foto_perfil }}?v={{ time() }}" alt="Profile image">
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
               <li>
                 <span class="dropdown-header text-center">
-                  <img class="img-md rounded-circle"
-                    src="{{ session('config_layout')->foto_perfil }}" alt="Profile image"
-                    style="width: 90px; height: 90px;">
+                  <img class="img-md rounded-circle" src="{{ session('config_layout')->foto_perfil }}?v={{ time() }}"
+                    alt="Profile image" style="width: 90px; height: 90px;">
                   <p class="mb-1 mt-3 fw-semibold">
                     {{ session('config_layout')->nombre_perfil }}
                   </p>
@@ -76,7 +74,7 @@
                 </span>
               </li>
               <li>
-                <a class="dropdown-item" href="{{secure_url('/soporte/logout')}}">
+                <a class="dropdown-item" href="{{secure_url('/soporte/logout')}}?v={{ time() }}">
                   <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
                   Cerrar sesión
                 </a>
@@ -229,14 +227,14 @@
 
   </script>
   <!-- MDB -->
-  <script type="text/javascript" src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
-  <script src="{{secure_asset('front/js/layout/template.js') }}"></script>
-  <script src="{{secure_asset('front/js/layout/hoverable-collapse.js') }}"></script>
-  <script src="{{secure_asset('front/js/layout/off-canvas.js')}}"></script>
-  <script src="{{secure_asset('front/vendor/inputmask/jquery.inputmask.bundle.min.js')}}"></script>
-  <script src="{{secure_asset('front/vendor/flatpickr/flatpickr.js')}}"></script>
-  <script src="{{secure_asset('front/js/app/TableManeger.js')}}"></script>
-  <script src="{{secure_asset('front/js/app/FormMananger.js')}}"></script>
+  <script type="text/javascript" src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/js/layout/template.js') }}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/js/layout/hoverable-collapse.js') }}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/js/layout/off-canvas.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/vendor/inputmask/jquery.inputmask.bundle.min.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/vendor/flatpickr/flatpickr.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/js/app/TableManeger.js')}}?v={{ time() }}"></script>
+  <script src="{{secure_asset('front/js/app/FormMananger.js')}}?v={{ time() }}"></script>
   <!-- plugins:js -->
   @yield('scripts')
 </body>

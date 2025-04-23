@@ -107,6 +107,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/empresas/grupos.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/empresas/grupos.js')}}?v={{ time() }}"></script>
 @endsection

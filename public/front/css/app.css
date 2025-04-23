@@ -4401,3 +4401,13 @@ tr {
         font-size: smaller;
     }
 }
+
+#logoRc {
+    height: 45px;
+}
+
+@media (max-width: 512px) {
+    #logoRc {
+        height: 35px;
+    }
+}

@@ -241,5 +241,5 @@
             return datos;
         }
     </script>
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/menu.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/menu.js')}}?v={{ time() }}"></script>
 @endsection

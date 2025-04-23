@@ -2,10 +2,10 @@
 @section('title', 'INC RESUELTAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}?v={{ time() }}"></script>
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}?v={{ time() }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ time() }}">
     <script>
         let empresas = <?php echo json_encode($data['company']); ?>;
         let sucursales = <?php echo json_encode($data['scompany']); ?>;
@@ -299,6 +299,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/incidencia/resueltas.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/incidencia/resueltas.js')}}?v={{ time() }}"></script>
 @endsection

@@ -149,8 +149,8 @@
         <tr>
             <td class="w-50">
                 <div>
-                    <img src="{{public_path() . '/front/images/app/LogoRC.png'}}" alt="Logo" width="60">
-                    <img src="{{public_path() . '/front/images/app/tittle_login.png'}}" alt="Logo" width="210">
+                    <img src="{{public_path() . '/front/images/app/LogoRC.png'}}?v={{ time() }}" alt="Logo" width="60">
+                    <img src="{{public_path() . '/front/images/app/tittle_login.png'}}?v={{ time() }}" alt="Logo" width="210">
                 </div>
                 <div class="card">
                     <p><b>Direccion :</b> Av. Augusto B. Leguia 307 - Coop. Policial Lima - Lima - SMP</p>
@@ -303,7 +303,7 @@
             <td style="width: 120;"></td>
             <td class="t-center">
                 <div class="content-firmas {{$firmaC ? '' : 'content-firmas-line'}}">
-                    <img class="firmas {{$firmaC ? '' : 'hidden'}}" src="{{$firmaC}}">
+                    <img class="firmas {{$firmaC ? '' : 'hidden'}}" src="{{$firmaC}}?v={{ time() }}">
                     <!-- src="{{public_path() . '/front/images/client/fdc_61505130.png'}}"> -->
                 </div>
                 <h6 class="mb-2 mt-2">Firma Cliente</h6>

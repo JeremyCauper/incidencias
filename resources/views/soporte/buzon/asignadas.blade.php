@@ -2,9 +2,9 @@
 @section('title', 'INC RESUELTAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}?v={{ time() }}"></script>
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}?v={{ time() }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}?v={{ time() }}">
     <style>
         /*////////////////////////////////////////
                             /        SCRIPT CSS FIRMA DIGITAL        /
@@ -596,7 +596,7 @@
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
                             <div class="row justify-content-between firmas-orden">
                                 <div class="col-lg-5 text-center my-2">
-                                    <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '' : ''}} height="130"
+                                    <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : ''}} height="130"
                                         width="160">
                                     <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
                                         Firma Tecnico
@@ -1008,7 +1008,7 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/app/RevisionMananger.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/buzon/asignadas.js')}}"></script>
+    <script src="{{secure_asset('front/js/app/RevisionMananger.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/buzon/asignadas.js')}}?v={{ time() }}"></script>
 @endsection
