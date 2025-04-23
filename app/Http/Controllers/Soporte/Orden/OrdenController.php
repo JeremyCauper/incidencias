@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Soporte\Orden;
 
 use App\Helpers\Problema;
 use App\Helpers\SubProblema;
+use App\Helpers\TipoSoporte;
 use App\Http\Controllers\Controller;
 use Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -277,8 +278,9 @@ class OrdenController extends Controller
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $orden->cod_incidencia)->orderBy('created_at', 'asc')->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $orden->cod_incidencia)->get();
             $materialesUsados = DB::table('tb_materiales_usados')->where('cod_ordens', $cod)->get();
-
-            $datos['tipoSoporte'] = $incidencia->id_tipo_incidencia == 1 ? 'REMOTO' : 'PRESENCIAL';
+            
+            $tSoporte = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
+            $datos['tipoSoporte'] = $tSoporte[$incidencia->id_tipo_soporte]['descripcion'];
 
             // Procesar contactos
             if ($contactoEmpresa) {
