@@ -128,10 +128,10 @@ function Editar(id) {
                 }
 
                 var json = data.data;
-                $('#id').val(json.id_problema);
+                $('#id').val(json.id);
                 $('#codigo').val(json.codigo);
                 $('#descripcion').val(json.descripcion);
-                $('#tipo').val(json.tipo_incidencia).trigger('change');
+                $('#tipo').val(json.tipo_soporte).trigger('change');
                 $('#estado').val(json.estatus).trigger('change');
 
                 fMananger.formModalLoding('modal_problemas', 'hide');

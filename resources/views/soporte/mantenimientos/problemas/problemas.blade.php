@@ -56,7 +56,7 @@
                                 columns: [
                                     { data: 'codigo' },
                                     { data: 'descripcion' },
-                                    { data: 'tipo_incidencia' },
+                                    { data: 'tipo_soporte' },
                                     { data: 'created_at' },
                                     { data: 'updated_at' },
                                     { data: 'estado' },
@@ -98,8 +98,8 @@
                         <div class="col-6 mb-2">
                             <label class="form-label mb-0" for="tipo">Tipo</label>
                             <select class="select" id="tipo">
-                                <option selected value="1">REMOTO</option>
-                                <option value="2">PRESENCIAL</option>
+                                <option selected value="1">INCIDENCIA</option>
+                                <option value="2">SOLICITUD</option>
                             </select>
                         </div>
                         <div class="col-6 mb-2">
