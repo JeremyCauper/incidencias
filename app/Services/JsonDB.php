@@ -5,9 +5,6 @@ namespace App\Services;
 use RuntimeException;
 use Illuminate\Support\Collection;
 
-/**
- * Servicio para gestionar archivos JSON como si fueran tablas de base de datos.
- */
 class JsonDB
 {
     protected static array $schemas = [];
@@ -15,6 +12,8 @@ class JsonDB
     protected array $wheres = [];
     protected ?array $orderBy = null;
     protected array $structure = [];
+    protected ?array $selectFields = null;
+    protected ?string $keyByField = null;
 
     public static function schema(string $table, array $schema): void
     {
@@ -73,9 +72,27 @@ class JsonDB
             });
         }
 
+        $collection = collect(array_map(fn($item) => (object) $item, array_values($items)));
+
+        if ($this->selectFields) {
+            $collection = $collection->map(function ($item) {
+                $selected = [];
+                foreach ($this->selectFields as $field) {
+                    if (isset($item->$field)) {
+                        $selected[$field] = $item->$field;
+                    }
+                }
+                return (object) $selected;
+            });
+        }
+
+        if ($this->keyByField) {
+            $collection = $collection->keyBy($this->keyByField);
+        }
+
         $this->reset();
 
-        return collect(array_map(fn($item) => (object) $item, array_values($items)));
+        return $collection;
     }
 
     public function first(): ?object
@@ -94,6 +111,7 @@ class JsonDB
 
         $data = $this->applyDefaults($data);
         $data['id'] = $maxId + 1;
+        $data = $this->formatData($data);
 
         $items[] = $data;
         $this->writeJson($items);
@@ -109,6 +127,7 @@ class JsonDB
         foreach ($items as &$item) {
             if ($this->matchesWhere($item)) {
                 $item = array_merge($item, $data);
+                $item = $this->formatData($item);
                 $updated++;
             }
         }
@@ -127,9 +146,9 @@ class JsonDB
         $items = $this->readJson();
         $found = false;
 
-        foreach ($items as &$item) {
+        foreach ($items as $key => $item) {
             if ($this->matchesWhere($item)) {
-                $item['eliminado'] = 1;
+                unset($items[$key]);
                 $found = true;
             }
         }
@@ -157,6 +176,18 @@ class JsonDB
     {
         $this->orderBy = [$field, strtolower($direction)];
         return $this;
+    }
+
+    public function select(string ...$fields): self
+    {
+        $this->selectFields = $fields;
+        return $this;
+    }
+
+    public function keyBy(string $field): Collection
+    {
+        $this->keyByField = $field;
+        return $this->get();
     }
 
     protected function readJson(): array
@@ -214,5 +245,42 @@ class JsonDB
     {
         $this->wheres = [];
         $this->orderBy = null;
+        $this->selectFields = null;
+        $this->keyByField = null;
+    }
+
+    private function formatData(array $data): array
+    {
+        $schema = $this->structure;
+
+        $formatted = [];
+
+        foreach ($schema as $key => $typeInfo) {
+            if (array_key_exists($key, $data)) {
+                $typeParts = explode('|', $typeInfo);
+                $type = $typeParts[0];
+
+                $value = $data[$key];
+
+                switch ($type) {
+                    case 'int':
+                        $value = (int) $value;
+                        break;
+                    case 'float':
+                        $value = (float) $value;
+                        break;
+                    case 'string':
+                        $value = (string) $value;
+                        break;
+                    case 'bool':
+                        $value = (bool) $value;
+                        break;
+                }
+
+                $formatted[$key] = $value;
+            }
+        }
+
+        return $formatted;
     }
 }

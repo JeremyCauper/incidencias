@@ -43,50 +43,13 @@ $(document).ready(function () {
         iniciarTbOrden();
     });
 
+    $('#icono').on('change', function () {
+        $('[aria-label="icono"]').attr('class', $(this).val() || 'fas fa-question');
+    });
+
     fObservador('.content-wrapper', () => {
         tb_menu.columns.adjust().draw();
     });
-});
-
-const tb_menu = new DataTable('#tb_menu', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-    ajax: {
-        url: `${__url}/soporte/mantenimiento/menu/menu/index`,
-        dataSrc: function (json) {
-            $("#tb_orden_menu tbody").html('');
-            $.each(json, function (i, e) {
-                $("#tb_orden_menu tbody").append($('<tr>', {
-                    "tr-id": e.id,
-                    "tr-orden": e.orden,
-                    "draggable": "true"
-                }).html(`<td>${e.orden}</td><td><i class="${e.icon}"></i> ${e.descripcion}</td>`));
-            });
-            return json;
-        },
-        error: function (xhr, error, thrown) {
-            boxAlert.table();
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'orden' },
-        { data: 'descripcion' },
-        { data: 'iconText' },
-        { data: 'ruta' },
-        { data: 'submenu' },
-        { data: 'created_at' },
-        { data: 'updated_at' },
-        { data: 'estado' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).addClass('text-center');
-        $(row).find('td:eq(0), td:eq(1), td:eq(2)').addClass('text-start');
-    },
-    processing: true
 });
 
 function updateTable() {
@@ -180,7 +143,7 @@ function Editar(id) {
                 var json = data.data;
                 $('#id').val(json.id);
                 $('#descripcion').val(json.descripcion);
-                $('#icono').val(json.icon);
+                $('#icono').val(json.icon).trigger('change');
                 $('#ruta').val(json.ruta);
                 $('#submenu').val(json.submenu).trigger('change');
                 $('#desarrollo').val(json.sistema).trigger('change');
@@ -262,6 +225,56 @@ async function CambiarEstado(id, estado) {
             i: 'error',
             t: 'Error inesperado',
             h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
+        });
+        console.log('Error producido: ', error);
+    }
+}
+
+async function Eliminar(id) {
+    try {
+        if (!await boxAlert.confirm({ h: `Esta apunto de eliminar el menu.` })) return true;
+
+        $.ajax({
+            type: 'POST',
+            url: `${__url}/soporte/mantenimiento/menu/menu/eliminar`,
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': __token,
+            },
+            data: JSON.stringify({
+                "id": id
+            }),
+            beforeSend: boxAlert.loading,
+            success: function (data) {
+                if (!data.success) {
+                    return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+                }
+                boxAlert.minbox({ h: data.message });
+                updateTable();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                let mensaje = 'No pudimos procesar tu solicitud en este momento. Por favor, intenta más tarde.';
+
+                if (jqXHR.status === 404) {
+                    mensaje = 'El problema que intentas editar no existe. Verifica el código y vuelve a intentarlo.';
+                } else if (jqXHR.status === 500) {
+                    mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
+                }
+
+                boxAlert.box({ 
+                    i: 'error', 
+                    t: 'Error al obtener los datos', 
+                    h: mensaje 
+                });
+
+                console.log("Error en AJAX:", jqXHR);
+            }
+        });
+    } catch (error) {
+        boxAlert.box({ 
+            i: 'error', 
+            t: 'Error inesperado', 
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
         });
         console.log('Error producido: ', error);
     }

@@ -28,15 +28,14 @@
                     <table id="tb_submenu" class="table table-hover text-nowrap" style="width:100%">
                         <thead>
                             <tr class="text-bg-primary text-center">
-                                <th class="text-start">Menu</th>
-                                <th class="text-start">Categoria</th>
-                                <th class="text-start">Descripcion</th>
-                                <th class="text-start">Ruta</th>
+                                <th>Menu</th>
+                                <th>Categoria</th>
+                                <th>Descripcion</th>
+                                <th>Ruta</th>
                                 <th>Fecha Registro</th>
                                 <th>Actualizado</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
-                                <!-- <th class="text-bg-primary px-2 th-acciones">Acciones</th> -->
                             </tr>
                         </thead>
                     </table>
@@ -62,10 +61,11 @@
                         <label class="form-label mb-0" for="menu">Menu</label>
                         <select class="select-icons" id="menu">
                             <option value=""></option>
-                            @foreach ($data['menus'] as $key => $val)
-                                @if (!$val['eliminado'])
-                                    <option value="{{$val['id']}}">{{$val['icon']}}::{{$val['descripcion']}}</option>
-                                @endif
+                            @foreach ($data['menus'] as $v)
+                                <option value="{{ $v->id }}"
+                                    {{ $v->estatus != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                    {{ (string)'<i class="' . $v->icon . ' me-2"></i>' }} {{ $v->descripcion }} {{ $v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
+                                </option>
                             @endforeach
                         </select>
                     </div>

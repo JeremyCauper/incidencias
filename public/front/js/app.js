@@ -552,9 +552,10 @@ function getBadgeContrato(estado, size = null) {
 
 function getBadgePrioridad(estado, size = null) {
     estadoInforme = {
-        "P2": { 'color': 'success', 'text': 'P2' },
+        "P1": { 'color': 'dark', 'text': 'P1' },
+        "P2": { 'color': 'danger', 'text': 'P2' },
         "P3": { 'color': 'warning', 'text': 'P3' },
-        "P4": { 'color': 'danger', 'text': 'P4' },
+        "P4": { 'color': 'success', 'text': 'P4' },
     };
     let tsize = `style="font-size: ${size}rem;"` ?? null;
 

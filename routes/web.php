@@ -126,6 +126,7 @@ Route::get('/soporte/mantenimiento/problemas/problemas/index', [ProblemaControll
 Route::get('/soporte/mantenimiento/problemas/problemas/{id}', [ProblemaController::class, 'show']);
 Route::post('/soporte/mantenimiento/problemas/problemas/registrar', [ProblemaController::class, 'create']);
 Route::post('/soporte/mantenimiento/problemas/problemas/actualizar', [ProblemaController::class, 'update']);
+Route::post('/soporte/mantenimiento/problemas/problemas/eliminar', [ProblemaController::class, 'delete']);
 Route::post('/soporte/mantenimiento/problemas/problemas/cambiarEstado', [ProblemaController::class, 'changeStatus']);
 
 Route::get('/soporte/mantenimiento/problemas/subproblemas', [SubProblemaController::class, 'view'])->middleware('auth');
@@ -133,6 +134,7 @@ Route::get('/soporte/mantenimiento/problemas/subproblemas/index', [SubProblemaCo
 Route::get('/soporte/mantenimiento/problemas/subproblemas/{id}', [SubProblemaController::class, 'show']);
 Route::post('/soporte/mantenimiento/problemas/subproblemas/registrar', [SubProblemaController::class, 'create']);
 Route::post('/soporte/mantenimiento/problemas/subproblemas/actualizar', [SubProblemaController::class, 'update']);
+Route::post('/soporte/mantenimiento/problemas/subproblemas/eliminar', [SubProblemaController::class, 'delete']);
 Route::post('/soporte/mantenimiento/problemas/subproblemas/cambiarEstado', [SubProblemaController::class, 'changeStatus']);
 
 Route::get('/soporte/mantenimiento/menu/menu', [MenuController::class, 'view'])->middleware('auth');
@@ -140,6 +142,7 @@ Route::get('/soporte/mantenimiento/menu/menu/index', [MenuController::class, 'in
 Route::get('/soporte/mantenimiento/menu/menu/{id}', [MenuController::class, 'show']);
 Route::post('/soporte/mantenimiento/menu/menu/registrar', [MenuController::class, 'create']);
 Route::post('/soporte/mantenimiento/menu/menu/actualizar', [MenuController::class, 'update']);
+Route::post('/soporte/mantenimiento/menu/menu/eliminar', [MenuController::class, 'delete']);
 Route::post('/soporte/mantenimiento/menu/menu/cambiarEstado', [MenuController::class, 'changeStatus']);
 Route::post('/soporte/mantenimiento/menu/menu/cambiarOrdenMenu', [MenuController::class, 'changeOrdenMenu']);
 

@@ -16,8 +16,7 @@ class ProblemaController extends Controller
 {
     public function __construct()
     {
-        // Una sola vez configuramos el schema en el constructor 💖
-        JsonDB::schema('tipo_incidencia', [
+        JsonDB::schema('problema', [
             'id' => 'int',
             'codigo' => 'string',
             'descripcion' => 'string',
@@ -34,7 +33,10 @@ class ProblemaController extends Controller
     {
         $this->validarPermisos(6, 7);
         try {
-            return view('soporte.mantenimientos.problemas.problemas');
+            $data = [];
+            $data['tSoporte'] = JsonDB::table('tipo_soporte')->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
+
+            return view('soporte.mantenimientos.problemas.problemas', ['data' => $data]);
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
@@ -51,21 +53,22 @@ class ProblemaController extends Controller
                 $estado = [
                     ['color' => 'danger', 'text' => 'Inactivo'],
                     ['color' => 'success', 'text' => 'Activo']
-                ];
+                ][$val->estatus];
                 // Generar acciones
                 return [
                     'id' => $val->id,
                     'codigo' => $val->codigo,
                     'descripcion' => $val->descripcion,
-                    'tipo_soporte' => $val->tipo_soporte == 1 ? "INCIDENCIA" : "SOLICITUD",
-                    'estado' => '<label class="badge badge-' . $estado[$val->estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$val->estatus]['text'] . '</label>',
+                    'tipo_soporte' => $val->tipo_soporte,
+                    'estado' => '<label class="badge badge-' . $estado['color'] . '" style="font-size: .7rem;">' . $estado['text'] . '</label>',
                     'updated_at' => $val->updated_at,
                     'created_at' => $val->created_at,
                     'acciones' => $this->DropdownAcciones([
                         'tittle' => 'Acciones',
                         'button' => [
                             ['funcion' => "Editar({$val->id})", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
-                            ['funcion' => "CambiarEstado({$val->id}, {$val->estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado[$val->estatus]['color'] . '"></i>Cambiar Estado']
+                            ['funcion' => "CambiarEstado({$val->id}, {$val->estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado['color'] . '"></i>Cambiar Estado'],
+                            ['funcion' => "Eliminar({$val->id})", 'texto' => '<i class="far fa-trash-can me-2 text-danger"></i>Eliminar'],
                         ],
                     ])
                 ];
@@ -239,6 +242,35 @@ class ProblemaController extends Controller
             ]);
 
             return response()->json(['success' => true, 'message' => 'Cambio de estado realizado con éxito.']);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required|integer',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Por favor, revisa los campos e intenta nuevamente.',
+                    'errors' => $validator->errors()
+                ], 400);
+            }
+
+            JsonDB::table('problema')->where('id', $request->id)->update([
+                'eliminado' => 1
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'El regitro de eliminó con éxito.']);
         } catch (Exception $e) {
             return response()->json([
                 'success' => false,

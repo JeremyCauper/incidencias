@@ -29,9 +29,9 @@
                             <thead>
                                 <tr class="text-bg-primary text-center">
                                     <th>Cod. Problema</th>
-                                    <th>Cod. Sub Problema</th>
+                                    <th>Prioridad</th>
                                     <th>Descripcion</th>
-                                    <th>Fecha Registro</th>
+                                    <th>Registrado</th>
                                     <th>Actualizado</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
@@ -53,8 +53,11 @@
                                     }
                                 },
                                 columns: [
-                                    { data: 'cod_problema' },
-                                    { data: 'codigo_sub' },
+                                    { data: 'codigo_problema' },
+                                    { data: 'prioridad', render: function (data, type, row) {
+                                            return getBadgePrioridad(data, .75);
+                                        }
+                                    },
                                     { data: 'descripcion' },
                                     { data: 'created_at' },
                                     { data: 'updated_at' },
@@ -62,7 +65,7 @@
                                     { data: 'acciones' }
                                 ],
                                 createdRow: function (row, data, dataIndex) {
-                                    $(row).addClass('text-center');
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(3), td:eq(4), td:eq(5), td:eq(6)').addClass('text-center');
                                     $(row).find('td:eq(6)').addClass(`td-acciones`);
                                 },
                                 processing: true
@@ -90,17 +93,24 @@
                         <div class="col-lg-8 mb-2">
                             <label class="form-label mb-0" for="problema">Problema</label>
                             <select class="select-clear" id="problema">
-                                <option value=""></option>
-                                @foreach ($data['problemas'] as $key => $val)
-                                    @if (!$val->eliminado)
-                                        <option value="{{$val->id_problema}}">{{$val->codigo}} - {{$val->descripcion}}</option>
-                                    @endif
+                                <option value="">-- Seleccione --</option>
+                                @foreach ($data['problemas'] as $v)
+                                    <option value="{{ $v->codigo }}"
+                                        {{ $v->estatus != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                        {{$v->codigo}} - {{ $v->descripcion }} {{ $v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
+                                    </option>
                                 @endforeach
                             </select>
                         </div>
                         <div class="col-md-4 mb-2">
-                            <label class="form-label mb-0" for="codigo_sub">Codigo Sub</label>
-                            <input class="form-control" id="codigo_sub">
+                            <label class="form-label mb-0" for="prioridad">Prioridad</label>
+                            <select class="select" id="prioridad">
+                                <option value="">-- Seleccione --</option>
+                                <option value="P1">{{ '<label class="badge badge-dark me-2">P1</label>' }}CRITICA</option>
+                                <option value="P2">{{ '<label class="badge badge-danger me-2">P2</label>' }}ALTA</option>
+                                <option value="P3">{{ '<label class="badge badge-warning me-2">P3</label>' }}MEDIA</option>
+                                <option value="P4">{{ '<label class="badge badge-success me-2">P4</label>' }}BAJA</option>
+                            </select>
                         </div>
                         <div class="col-md-8 mb-2">
                             <label class="form-label mb-0" for="descripcion">Descripcion</label>
@@ -126,6 +136,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ time() }}"></script>
     <script src="{{secure_asset('front/js/soporte/mantenimiento/problemas/subproblemas.js')}}?v={{ time() }}"></script>
 @endsection

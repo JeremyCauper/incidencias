@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Soporte\Mantenimientos\Menu;
 
 use App\Http\Controllers\Controller;
+use App\Services\JsonDB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -10,57 +11,29 @@ use Illuminate\Support\Facades\Validator;
 
 class SubMenuController extends Controller
 {
-    // Ruta del archivo JSON para submenus
-    private $jsonPath = 'config/jsons/sub_menu.json';
-    
-    // Ruta del archivo JSON para menus (se asume que ya se tiene este archivo)
-    private $jsonMenusPath = 'config/jsons/menu.json';
-
-    /**
-     * Lee el archivo JSON y retorna los datos de submenus como arreglo.
-     */
-    private function readData()
+    public function __construct()
     {
-        $fullPath = storage_path($this->jsonPath);
-        if (!file_exists($fullPath)) {
-            file_put_contents($fullPath, json_encode([]));
-        }
-        $json = file_get_contents($fullPath);
-        $data = json_decode($json, true);
-        return is_array($data) ? $data : [];
+        JsonDB::schema('sub_menu', [
+            'id' => 'int',
+            'id_menu' => 'int',
+            'descripcion' => 'string',
+            'categoria' => 'string|default:""',
+            'ruta' => 'string',
+            'estatus' => 'int|default:1',
+            'selected' => 'int|default:0',
+            'eliminado' => 'int|default:0',
+            'updated_at' => 'string|default:""',
+            'created_at' => 'string|default:""'
+        ]);
     }
-
-    /**
-     * Guarda el arreglo de submenus en el archivo JSON.
-     */
-    private function saveData(array $data)
-    {
-        $fullPath = storage_path($this->jsonPath);
-        $json = json_encode($data, JSON_PRETTY_PRINT);
-        return file_put_contents($fullPath, $json);
-    }
-    
-    /**
-     * Lee el archivo JSON y retorna los datos de menus como arreglo.
-     */
-    private function readMenus()
-    {
-        $fullPath = storage_path($this->jsonMenusPath);
-        if (!file_exists($fullPath)) {
-            file_put_contents($fullPath, json_encode([]));
-        }
-        $json = file_get_contents($fullPath);
-        $data = json_decode($json, true);
-        return is_array($data) ? $data : [];
-    }
-
     public function view()
     {
         $this->validarPermisos(7, 9);
         try {
             $data = [];
             // Se leen los menús desde su JSON para pasarlos a la vista
-            $data['menus'] = $this->readMenus();
+            $data['menus'] = JsonDB::table('menu')->select('id', 'descripcion', 'icon', 'estatus', 'eliminado')->get();
+
             return view('soporte.mantenimientos.menu.submenu', ['data' => $data]);
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
@@ -74,7 +47,7 @@ class SubMenuController extends Controller
     public function index()
     {
         try {
-            $menus = $this->readMenus();
+            /*$menus = $this->readMenus();
             // Convertir los menús a un arreglo indexado por su id
             $menusKeyed = [];
             foreach ($menus as $menu) {
@@ -112,7 +85,35 @@ class SubMenuController extends Controller
                 return $val;
             }, $submenus);
             // Reindexamos el arreglo (por si se filtró algún elemento)
-            return response()->json(array_values($submenus));
+            return response()->json(array_values($submenus));*/
+            $submenus = JsonDB::table('sub_menu')->where('eliminado', 0)->get()->map(function ($val) {
+                $estado = [
+                    ['color' => 'danger', 'text' => 'Inactivo'],
+                    ['color' => 'success', 'text' => 'Activo']
+                ][$val->estatus];
+                // Generar acciones
+                return [
+                    'id' => $val->id,
+                    'orden' => $val->orden,
+                    'descripcion' => $val->descripcion,
+                    'icono' => $val->icon,
+                    'iconText' => '<i class="' . ($val->icon ?? '') . '"></i> ' . ($val->icon ?? ''),
+                    'ruta' => $val->ruta,
+                    'submenu' => ($val->submenu ?? 0) ? 'Sí' : 'No',
+                    'estado' => '<label class="badge badge-' . $estado['color'] . '" style="font-size: .7rem;">' . $estado['text'] . '</label>',
+                    'updated_at' => $val->updated_at,
+                    'created_at' => $val->created_at,
+                    'acciones' => $this->DropdownAcciones([
+                        'tittle' => 'Acciones',
+                        'button' => [
+                            ['funcion' => "Editar({$val->id})", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
+                            ['funcion' => "CambiarEstado({$val->id}, {$val->estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado['color'] . '"></i>Cambiar Estado'],
+                            ['funcion' => "Eliminar({$val->id})", 'texto' => '<i class="far fa-trash-can me-2 text-danger"></i>Eliminar'],
+                        ],
+                    ])
+                ];
+            });
+            return $submenus;
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);

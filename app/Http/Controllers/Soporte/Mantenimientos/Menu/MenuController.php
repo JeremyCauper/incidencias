@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Soporte\Mantenimientos\Menu;
 
 use App\Http\Controllers\Controller;
+use App\Services\JsonDB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
@@ -10,32 +11,38 @@ use Illuminate\Support\Facades\Validator;
 
 class MenuController extends Controller
 {
-    // Ruta del archivo JSON
-    private $jsonPath = 'config/jsons/menu.json';
-
-    /**
-     * Lee el archivo JSON y retorna los datos como arreglo.
-     */
-    public function readData()
+    private $checks;
+    public function __construct()
     {
-        $fullPath = storage_path($this->jsonPath);
-        if (!file_exists($fullPath)) {
-            // Si el archivo no existe, se crea con un arreglo vacío.
-            file_put_contents($fullPath, json_encode([]));
-        }
-        $json = file_get_contents($fullPath);
-        $data = json_decode($json, true);
-        return is_array($data) ? $data : [];
-    }
+        JsonDB::schema('menu', [
+            'id' => 'int',
+            'descripcion' => 'string',
+            'icon' => 'string',
+            'ruta' => 'string',
+            'submenu' => 'int|default:0',
+            'sistema' => 'int|default:0',
+            'orden' => 'int',
+            'estatus' => 'int|default:1',
+            'selected' => 'int|default:0',
+            'eliminado' => 'int|default:0',
+            'updated_at' => 'string|default:""',
+            'created_at' => 'string|default:""'
+        ]);
 
-    /**
-     * Guarda el arreglo de datos en el archivo JSON.
-     */
-    private function saveData(array $data)
-    {
-        $fullPath = storage_path($this->jsonPath);
-        $json = json_encode($data, JSON_PRETTY_PRINT);
-        return file_put_contents($fullPath, $json);
+        $this->checks = [
+            'descripcion' => [
+                'value'   => 'descripcion',
+                'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.',
+            ],
+            'icon' => [
+                'value'   => 'icono',
+                'message' => 'El icono ingresado ya está registrado. Por favor, use otro.',
+            ],
+            'ruta' => [
+                'value'   => 'ruta',
+                'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.',
+            ],
+        ];
     }
 
     public function view()
@@ -55,37 +62,34 @@ class MenuController extends Controller
     public function index()
     {
         try {
-            $menus = $this->readData();
-            // Ordenar por "orden" de forma ascendente, usando 0 si no existe la clave 'orden'
-            usort($menus, function($a, $b) {
-                $ordenA = $a['orden'] ?? 0;
-                $ordenB = $b['orden'] ?? 0;
-                return $ordenA <=> $ordenB;
-            });
-
-            // Mapear cada menú para agregar propiedades adicionales
-            $menus = array_map(function ($val) {
+            $menus = JsonDB::table('menu')->where('eliminado', 0)->orderBy('orden', 'asc')->get()->map(function ($val) {
                 $estado = [
                     ['color' => 'danger', 'text' => 'Inactivo'],
                     ['color' => 'success', 'text' => 'Activo']
+                ][$val->estatus];
+                // Generar acciones
+                return [
+                    'id' => $val->id,
+                    'orden' => $val->orden,
+                    'descripcion' => $val->descripcion,
+                    'icono' => $val->icon,
+                    'iconText' => '<i class="' . ($val->icon ?? '') . '"></i> ' . ($val->icon ?? ''),
+                    'ruta' => $val->ruta,
+                    'submenu' => ($val->submenu ?? 0) ? 'Sí' : 'No',
+                    'estado' => '<label class="badge badge-' . $estado['color'] . '" style="font-size: .7rem;">' . $estado['text'] . '</label>',
+                    'updated_at' => $val->updated_at,
+                    'created_at' => $val->created_at,
+                    'acciones' => $this->DropdownAcciones([
+                        'tittle' => 'Acciones',
+                        'button' => [
+                            ['funcion' => "Editar({$val->id})", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
+                            ['funcion' => "CambiarEstado({$val->id}, {$val->estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado['color'] . '"></i>Cambiar Estado'],
+                            ['funcion' => "Eliminar({$val->id})", 'texto' => '<i class="far fa-trash-can me-2 text-danger"></i>Eliminar'],
+                        ],
+                    ])
                 ];
-                $val['iconText'] = '<i class="' . ($val['icon'] ?? '') . '"></i> ' . ($val['icon'] ?? '');
-                $val['submenu'] = ($val['submenu'] ?? 0) ? 'Sí' : 'No';
-                // Usar valor por defecto para 'estatus'
-                $estatus = $val['estatus'] ?? 0;
-                $val['estado'] = '<label class="badge badge-' . $estado[$estatus]['color'] . '" style="font-size: .7rem;">' . $estado[$estatus]['text'] . '</label>';
-                // Se utiliza el método DropdownAcciones heredado de Controller
-                $val['acciones'] = $this->DropdownAcciones([
-                    'tittle' => 'Acciones',
-                    'button' => [
-                        ['funcion' => "Editar({$val['id']})", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
-                        ['funcion' => "CambiarEstado({$val['id']}, {$estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado[$estatus]['color'] . '"></i>Cambiar Estado']
-                    ],
-                ]);
-                return $val;
-            }, $menus);
-
-            return response()->json($menus);
+            });
+            return $menus;
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
@@ -116,51 +120,25 @@ class MenuController extends Controller
                 ], 400);
             }
 
-            $menus = $this->readData();
-
             // Verificar duplicados por descripción, icono y ruta usando el operador null coalescing
-            foreach ($menus as $menu) {
-                if (($menu['descripcion'] ?? '') === $request->descripcion) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.'
-                    ], 409);
-                }
-                if (($menu['icon'] ?? '') === $request->icono) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'El icono ingresado ya está registrado. Por favor, use otro.'
-                    ], 409);
-                }
-                if (($menu['ruta'] ?? '') === $request->ruta) {
-                    return response()->json([
-                        'success' => false,
-                        'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.'
-                    ], 409);
+            foreach ($this->checks as $field => $data) {
+                if (JsonDB::table('menu')->select($field)->where($field, $request[$data['value']])->first()) {
+                    return response()->json(['success' => false, 'message' => $data['message']], 409);
                 }
             }
 
-            // Generar un nuevo ID; se puede usar el último id + 1 o buscar el máximo
-            $newId = count($menus) > 0 ? max(array_column($menus, 'id')) + 1 : 1;
-            // Determinar el nuevo orden
-            $nuevoOrden = count($menus) + 1;
+            $nuevoOrden = count(JsonDB::table('menu')->get()) + 1;
 
-            $nuevoMenu = [
-                'id'          => $newId,
+            JsonDB::table('menu')->insert([
                 'descripcion' => $request->descripcion,
                 'icon'        => $request->icono,
                 'ruta'        => $request->ruta,
                 'submenu'     => $request->submenu,
-                'eliminado'   => 0,
                 'sistema'     => $request->desarrollo,
                 'orden'       => $nuevoOrden,
                 'estatus'     => $request->estado,
-                'created_at'  => now()->format('Y-m-d H:i:s'),
-                'updated_at'  => ""
-            ];
-
-            $menus[] = $nuevoMenu;
-            $this->saveData($menus);
+                'created_at'  => now()->format('Y-m-d H:i:s')
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -181,27 +159,13 @@ class MenuController extends Controller
     public function show(string $id)
     {
         try {
-            $menus = $this->readData();
-            $menu = null;
-            foreach ($menus as $item) {
-                if (($item['id'] ?? null) == $id) {
-                    $menu = $item;
-                    break;
-                }
-            }
-
+            $menu = JsonDB::table('menu')->where('id', $id)->first();
+    
             if (!$menu) {
-                return response()->json([
-                    "success" => false,
-                    "message" => "No se encontró el menú solicitado. Verifica el código e intenta nuevamente."
-                ], 404);
+                return response()->json(["success" => false, "message" => "No se encontró el problema solicitado. Verifica el código e intenta nuevamente."], 404);
             }
 
-            return response()->json([
-                "success" => true,
-                "message" => "",
-                "data"    => $menu
-            ], 200);
+            return response()->json(["success" => true, "message" => "", "data" => $menu], 200);
         } catch (Exception $e) {
             return response()->json([
                 "success" => false,
@@ -235,57 +199,22 @@ class MenuController extends Controller
                 ], 400);
             }
 
-            $menus = $this->readData();
-            $actualizado = false;
-
             // Verificar duplicados (excluyendo el menú que se está editando)
-            foreach ($menus as $menu) {
-                if (($menu['id'] ?? null) != $request->id) {
-                    if (($menu['descripcion'] ?? '') === $request->descripcion) {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.'
-                        ], 409);
-                    }
-                    if (($menu['icon'] ?? '') === $request->icono) {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'El icono ingresado ya está registrado. Por favor, use otro.'
-                        ], 409);
-                    }
-                    if (($menu['ruta'] ?? '') === $request->ruta) {
-                        return response()->json([
-                            'success' => false,
-                            'message' => 'La ruta ingresada ya está registrada. Por favor, usa otra.'
-                        ], 409);
-                    }
+            foreach ($this->checks as $field => $data) {
+                if ((JsonDB::table('menu')->where($field, $request[$data['value']])->first())->id != $request->id) {
+                    return response()->json(['success' => false, 'message' => $data['message']], 409);
                 }
             }
 
-            // Actualizar el menú
-            foreach ($menus as &$menu) {
-                if (($menu['id'] ?? null) == $request->id) {
-                    $menu['descripcion'] = $request->descripcion;
-                    $menu['icon'] = $request->icono;
-                    $menu['ruta'] = $request->ruta;
-                    $menu['submenu'] = $request->submenu;
-                    $menu['sistema'] = $request->desarrollo;
-                    $menu['estatus'] = $request->estado;
-                    $menu['updated_at'] = now()->format('Y-m-d H:i:s');
-                    $actualizado = true;
-                    break;
-                }
-            }
-            unset($menu);
-
-            if (!$actualizado) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No se encontró el menú a actualizar.'
-                ], 404);
-            }
-
-            $this->saveData($menus);
+            JsonDB::table('menu')->where('id', $request->id)->update([
+                'descripcion' => $request->descripcion,
+                'icon'        => $request->icono,
+                'ruta'        => $request->ruta,
+                'submenu'     => $request->submenu,
+                'sistema'     => $request->desarrollo,
+                'estatus'     => $request->estado,
+                'updated_at' => now()->format('Y-m-d H:i:s')
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -319,27 +248,10 @@ class MenuController extends Controller
                 ], 400);
             }
 
-            $menus = $this->readData();
-            $encontrado = false;
-
-            foreach ($menus as &$menu) {
-                if (($menu['id'] ?? null) == $request->id) {
-                    $menu['estatus'] = $request->estado;
-                    $menu['updated_at'] = now()->format('Y-m-d H:i:s');
-                    $encontrado = true;
-                    break;
-                }
-            }
-            unset($menu);
-
-            if (!$encontrado) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'No se encontró el menú para cambiar el estado.'
-                ], 404);
-            }
-
-            $this->saveData($menus);
+            JsonDB::table('menu')->where('id', $request->id)->update([
+                'estatus' => $request->estado,
+                'updated_at' => now()->format('Y-m-d H:i:s')
+            ]);
 
             return response()->json([
                 'success' => true,
@@ -354,27 +266,49 @@ class MenuController extends Controller
         }
     }
 
+    public function delete(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required|integer',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Por favor, revisa los campos e intenta nuevamente.',
+                    'errors' => $validator->errors()
+                ], 400);
+            }
+
+            JsonDB::table('menu')->where('id', $request->id)->update([
+                'eliminado' => 1
+            ]);
+
+            return response()->json(['success' => true, 'message' => 'El regitro de eliminó con éxito.']);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
+
     /**
      * Cambia el orden de los menús.
      */
     public function changeOrdenMenu(Request $request)
     {
         try {
-            $menus = $this->readData();
-
             // Se espera que $request->data sea un arreglo con 'id' y 'orden'
             foreach ($request->data as $item) {
-                foreach ($menus as &$menu) {
-                    if (($menu['id'] ?? null) == ($item['id'] ?? null)) {
-                        $menu['orden'] = $item['orden'] ?? $menu['orden'] ?? 0;
-                        $menu['updated_at'] = now()->format('Y-m-d H:i:s');
-                        break;
-                    }
-                }
-                unset($menu);
+                JsonDB::table('menu')->where('id', $item['id'])->update([
+                    'orden' => $item['orden'],
+                    'updated_at' => now()->format('Y-m-d H:i:s')
+                ]);
             }
 
-            $this->saveData($menus);
             return response()->json([
                 'success' => true,
                 'message' => 'Orden actualizado con éxito.'
