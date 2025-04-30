@@ -15,7 +15,7 @@ class SubProblemaController extends Controller
     public function __construct()
     {
         JsonDB::schema('sub_problema', [
-            'id' => 'int',
+            'id' => 'int|primary_key|auto_increment',
             'codigo_problema' => 'string',
             'descripcion' => 'string',
             'prioridad' => 'string',
@@ -178,9 +178,11 @@ class SubProblemaController extends Controller
             }
     
             // Validar si ya existe un problema con el mismo código o descripción
-            $existeDescripcion = JsonDB::table('sub_problema')->select('id')->where('descripcion', $request->descripcion)->first();
+            $reg_existe = JsonDB::table('sub_problema')
+                ->where('codigo_problema', $request->problema)
+                ->where('descripcion', $request->descripcion)->first();
     
-            if ($existeDescripcion && $existeDescripcion->id != $request->id) {
+            if ($reg_existe) {
                 return response()->json([
                     'success' => false,
                     'message' => 'La descripción con el codigo ingresado ya está registrado. Por favor, usa otra.'

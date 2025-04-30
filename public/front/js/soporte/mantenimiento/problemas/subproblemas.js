@@ -26,6 +26,8 @@ $(document).ready(function () {
         defineControllerAttributes(control.control, control.config);
     });
 
+    formatSelect('modal_subproblemas');
+
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_subproblemasLabel').html('REGISTRAR SUB PROBLEMA');
         $('#id').val('');

@@ -47,7 +47,7 @@
                                     <th>Icono</th>
                                     <th>Ruta</th>
                                     <th>Sub Menu</th>
-                                    <th>Fecha Registro</th>
+                                    <th>Registrado</th>
                                     <th>Actualizado</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>

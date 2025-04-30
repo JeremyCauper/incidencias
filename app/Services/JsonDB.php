@@ -45,45 +45,18 @@ class JsonDB
 
         foreach ($this->wheres as $where) {
             [$field, $operator, $value] = $where;
-            $items = array_filter($items, function ($item) use ($field, $operator, $value) {
-                if (!isset($item[$field])) return false;
-                switch ($operator) {
-                    case '=': return $item[$field] == $value;
-                    case '!=': return $item[$field] != $value;
-                    case '>': return $item[$field] > $value;
-                    case '<': return $item[$field] < $value;
-                    case '>=': return $item[$field] >= $value;
-                    case '<=': return $item[$field] <= $value;
-                    default: return false;
-                }
-            });
+            $items = array_filter($items, fn($item) => $this->evaluateWhere($item, $field, $operator, $value));
         }
 
         if ($this->orderBy) {
             [$field, $direction] = $this->orderBy;
-            usort($items, function ($a, $b) use ($field, $direction) {
-                $aVal = $a[$field] ?? null;
-                $bVal = $b[$field] ?? null;
-                if ($aVal == $bVal) return 0;
-                if ($direction === 'desc') {
-                    return ($aVal < $bVal) ? 1 : -1;
-                }
-                return ($aVal > $bVal) ? 1 : -1;
-            });
+            usort($items, fn($a, $b) => $this->compare($a, $b, $field, $direction));
         }
 
         $collection = collect(array_map(fn($item) => (object) $item, array_values($items)));
 
         if ($this->selectFields) {
-            $collection = $collection->map(function ($item) {
-                $selected = [];
-                foreach ($this->selectFields as $field) {
-                    if (isset($item->$field)) {
-                        $selected[$field] = $item->$field;
-                    }
-                }
-                return (object) $selected;
-            });
+            $collection = $collection->map(fn($item) => (object) array_intersect_key((array) $item, array_flip($this->selectFields)));
         }
 
         if ($this->keyByField) {
@@ -104,13 +77,13 @@ class JsonDB
     {
         $items = $this->readJson();
 
-        $maxId = 0;
-        foreach ($items as $item) {
-            $maxId = max($maxId, (int) $item['id']);
-        }
+        $this->checkUniqueConstraints($data, $items);
+        $pkField = $this->getPrimaryKeyField();
+
+        $max = array_reduce($items, fn($carry, $item) => max($carry, (int) ($item[$pkField] ?? 0)), 0);
 
         $data = $this->applyDefaults($data);
-        $data['id'] = $maxId + 1;
+        $data[$pkField] = $max + 1;
         $data = $this->formatData($data);
 
         $items[] = $data;
@@ -123,9 +96,11 @@ class JsonDB
     {
         $items = $this->readJson();
         $updated = 0;
+        $pkField = $this->getPrimaryKeyField();
 
         foreach ($items as &$item) {
             if ($this->matchesWhere($item)) {
+                $this->checkUniqueConstraints($data, $items, $pkField, $item[$pkField]);
                 $item = array_merge($item, $data);
                 $item = $this->formatData($item);
                 $updated++;
@@ -146,9 +121,9 @@ class JsonDB
         $items = $this->readJson();
         $found = false;
 
-        foreach ($items as $key => $item) {
+        foreach ($items as $k => $item) {
             if ($this->matchesWhere($item)) {
-                unset($items[$key]);
+                unset($items[$k]);
                 $found = true;
             }
         }
@@ -190,6 +165,72 @@ class JsonDB
         return $this->get();
     }
 
+    protected function checkUniqueConstraints(array $data, array $items, string $ignoreField = null, $ignoreValue = null): void
+    {
+        foreach ($this->structure as $field => $typeInfo) {
+            foreach (explode('|', $typeInfo) as $part) {
+                if (str_starts_with($part, 'unique')) {
+                    if (!isset($data[$field]))
+                        continue;
+                    $label = $field;
+                    if (preg_match('/unique:"([^"]+)"/', $part, $m)) {
+                        $label = $m[1];
+                    }
+                    foreach ($items as $item) {
+                        if ($ignoreField && $item[$ignoreField] == $ignoreValue)
+                            continue;
+                        if (isset($item[$field]) && $item[$field] == $data[$field]) {
+                            throw new RuntimeException("El valor ingresado <b>({$data[$field]})</b>, ya existe en el campo <b>$label</b>.", 409);
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    protected function getPrimaryKeyField(): string
+    {
+        foreach ($this->structure as $f => $typeInfo) {
+            $parts = explode('|', $typeInfo);
+            if (in_array('primary_key', $parts)) {
+                return $f;
+            }
+        }
+        throw new RuntimeException('No se ha definido ningún campo primary_key en el schema.');
+    }
+
+    protected function evaluateWhere(array $item, string $field, string $operator, mixed $value): bool
+    {
+        if (!isset($item[$field]))
+            return false;
+        switch ($operator) {
+            case '=':
+                return $item[$field] == $value;
+            case '!=':
+                return $item[$field] != $value;
+            case '>':
+                return $item[$field] > $value;
+            case '<':
+                return $item[$field] < $value;
+            case '>=':
+                return $item[$field] >= $value;
+            case '<=':
+                return $item[$field] <= $value;
+        }
+        return false;
+    }
+
+    protected function compare(array $a, array $b, string $field, string $direction): int
+    {
+        $aVal = $a[$field] ?? null;
+        $bVal = $b[$field] ?? null;
+        if ($aVal == $bVal)
+            return 0;
+        return ($direction === 'desc')
+            ? (($aVal < $bVal) ? 1 : -1)
+            : (($aVal > $bVal) ? 1 : -1);
+    }
+
     protected function readJson(): array
     {
         $contents = file_get_contents($this->path);
@@ -211,15 +252,34 @@ class JsonDB
     protected function matchesWhere(array $item): bool
     {
         foreach ($this->wheres as [$field, $operator, $value]) {
-            if (!isset($item[$field])) return false;
+            if (!isset($item[$field]))
+                return false;
 
             switch ($operator) {
-                case '=': if ($item[$field] != $value) return false; break;
-                case '!=': if ($item[$field] == $value) return false; break;
-                case '>': if ($item[$field] <= $value) return false; break;
-                case '<': if ($item[$field] >= $value) return false; break;
-                case '>=': if ($item[$field] < $value) return false; break;
-                case '<=': if ($item[$field] > $value) return false; break;
+                case '=':
+                    if ($item[$field] != $value)
+                        return false;
+                    break;
+                case '!=':
+                    if ($item[$field] == $value)
+                        return false;
+                    break;
+                case '>':
+                    if ($item[$field] <= $value)
+                        return false;
+                    break;
+                case '<':
+                    if ($item[$field] >= $value)
+                        return false;
+                    break;
+                case '>=':
+                    if ($item[$field] < $value)
+                        return false;
+                    break;
+                case '<=':
+                    if ($item[$field] > $value)
+                        return false;
+                    break;
             }
         }
         return true;

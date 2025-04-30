@@ -14,10 +14,11 @@ use function Laravel\Prompts\select;
 
 class ProblemaController extends Controller
 {
+    private $checks;
     public function __construct()
     {
         JsonDB::schema('problema', [
-            'id' => 'int',
+            'id' => 'int|primary_key|auto_increment',
             'codigo' => 'string',
             'descripcion' => 'string',
             'tipo_soporte' => 'int',
@@ -27,6 +28,17 @@ class ProblemaController extends Controller
             'updated_at' => 'string|default:""',
             'created_at' => 'string',
         ]);
+
+        $this->checks = [
+            'codigo' => [
+                'value'   => 'codigo',
+                'message' => 'El codigo ingresado ya está registrado. Por favor, use otro.',
+            ],
+            'descripcion' => [
+                'value'   => 'descripcion',
+                'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.',
+            ],
+        ];
     }
 
     public function view()
@@ -103,21 +115,10 @@ class ProblemaController extends Controller
             }
     
             // Validar si ya existe un problema con el mismo código o descripción
-            $existeCodigo = JsonDB::table('problema')->where('codigo', $request->codigo)->first();
-            $existeDescripcion = JsonDB::table('problema')->where('descripcion', $request->descripcion)->first();
-    
-            if (!empty($existeCodigo)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'El código ingresado ya está registrado. Por favor, usa otro.'
-                ], 409);
-            }
-    
-            if (!empty($existeDescripcion)) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'La descripción ingresada ya está registrada. Por favor, usa otra.'
-                ], 409);
+            foreach ($this->checks as $field => $data) {
+                if (JsonDB::table('problema')->select($field)->where($field, $request[$data['value']])->first()) {
+                    return response()->json(['success' => false, 'message' => $data['message']], 409);
+                }
             }
     
             // Insertar el nuevo problema en la base de datos
@@ -190,12 +191,8 @@ class ProblemaController extends Controller
             $reg_existe = JsonDB::table('problema')
                 ->where('codigo', $request->codigo)
                 ->where('descripcion', $request->descripcion)->first();
-    
-            if ($reg_existe && $reg_existe->id != $request->id) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'La descripción o el codigo ingresado ya está registrado. Por favor, usa otra.'
-                ], 409);
+            if ($reg_existe->id != $request->id) {
+                return response()->json(['success' => false, 'message' => $this->checks['descripcion']['message']], 409);
             }
     
             // Insertar el nuevo problema en la base de datos

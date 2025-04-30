@@ -43,9 +43,9 @@ $(document).ready(function () {
         iniciarTbOrden();
     });
 
-    $('#icono').on('change', function () {
+    $('#icono').on('change blur', function () {
         $('[aria-label="icono"]').attr('class', $(this).val() || 'fas fa-question');
-    });
+    });    
 
     fObservador('.content-wrapper', () => {
         tb_menu.columns.adjust().draw();

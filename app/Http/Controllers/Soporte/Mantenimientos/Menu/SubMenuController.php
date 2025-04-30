@@ -14,7 +14,7 @@ class SubMenuController extends Controller
     public function __construct()
     {
         JsonDB::schema('sub_menu', [
-            'id' => 'int',
+            'id' => 'int|primary_key|auto_increment',
             'id_menu' => 'int',
             'descripcion' => 'string',
             'categoria' => 'string|default:""',

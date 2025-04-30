@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Soporte\Mantenimientos\Menu;
+namespace App\Http\Controllers\Soporte\Mantenimientos\TipoSoporte;
 
 use App\Http\Controllers\Controller;
 use App\Services\JsonDB;
@@ -9,18 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class MenuController extends Controller
+class TipoSoporteController extends Controller
 {
     public function __construct()
     {
-        JsonDB::schema('menu', [
+        JsonDB::schema('tipo_soporte', [
             'id' => 'int|primary_key|auto_increment',
             'descripcion' => 'string|unique:"Descripcion"',
-            'icon' => 'string|unique:"Icono"',
-            'ruta' => 'string|unique:"Ruta"',
-            'submenu' => 'int|default:0',
-            'sistema' => 'int|default:0',
-            'orden' => 'int',
             'estatus' => 'int|default:1',
             'selected' => 'int|default:0',
             'eliminado' => 'int|default:0',
@@ -33,7 +28,7 @@ class MenuController extends Controller
     {
         $this->validarPermisos(7, 9);
         try {
-            return view('soporte.mantenimientos.menu.menu');
+            return view('soporte.mantenimientos.tipo_soporte.tiposoporte');
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
@@ -46,7 +41,7 @@ class MenuController extends Controller
     public function index()
     {
         try {
-            $menus = JsonDB::table('menu')->where('eliminado', 0)->orderBy('orden', 'asc')->get()->map(function ($val) {
+            $menus = JsonDB::table('tipo_soporte')->where('eliminado', 0)->get()->map(function ($val) {
                 $estado = [
                     ['color' => 'danger', 'text' => 'Inactivo'],
                     ['color' => 'success', 'text' => 'Activo']
@@ -54,12 +49,7 @@ class MenuController extends Controller
                 // Generar acciones
                 return [
                     'id' => $val->id,
-                    'orden' => $val->orden,
                     'descripcion' => $val->descripcion,
-                    'icono' => $val->icon,
-                    'iconText' => '<i class="' . ($val->icon ?? '') . '"></i> ' . ($val->icon ?? ''),
-                    'ruta' => $val->ruta,
-                    'submenu' => ($val->submenu ?? 0) ? 'Sí' : 'No',
                     'estado' => '<label class="badge badge-' . $estado['color'] . '" style="font-size: .7rem;">' . $estado['text'] . '</label>',
                     'updated_at' => $val->updated_at,
                     'created_at' => $val->created_at,
@@ -89,10 +79,6 @@ class MenuController extends Controller
             // Validación de los datos de entrada
             $validator = Validator::make($request->all(), [
                 'descripcion' => 'required|string|max:50',
-                'icono'       => 'required|string|max:255',
-                'ruta'        => 'required|string|max:255',
-                'submenu'     => 'required|integer',
-                'desarrollo'  => 'required|integer',
                 'estado'      => 'required|integer'
             ]);
 
@@ -104,15 +90,8 @@ class MenuController extends Controller
                 ], 400);
             }
 
-            $nuevoOrden = count(JsonDB::table('menu')->get()) + 1;
-
-            JsonDB::table('menu')->insert([
+            JsonDB::table('tipo_soporte')->insert([
                 'descripcion' => $request->descripcion,
-                'icon'        => $request->icono,
-                'ruta'        => $request->ruta,
-                'submenu'     => $request->submenu,
-                'sistema'     => $request->desarrollo,
-                'orden'       => $nuevoOrden,
                 'estatus'     => $request->estado,
                 'created_at'  => now()->format('Y-m-d H:i:s')
             ]);
@@ -131,18 +110,15 @@ class MenuController extends Controller
     public function show(string $id)
     {
         try {
-            $menu = JsonDB::table('menu')->where('id', $id)->first();
+            $menu = JsonDB::table('tipo_soporte')->where('id', $id)->first();
     
             if (!$menu) {
                 return response()->json(["success" => false, "message" => "No se encontró el problema solicitado. Verifica el código e intenta nuevamente."], 404);
             }
 
-            return response()->json(["success" => true, "message" => "", "data" => $menu], 200);
+            return $this->message(message: "Operación realizada con éxito.", data: ['data' => $menu]);
         } catch (Exception $e) {
-            return response()->json([
-                "success" => false,
-                "message" => "Ocurrió un error inesperado."
-            ], 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -156,10 +132,6 @@ class MenuController extends Controller
             $validator = Validator::make($request->all(), [
                 'id'          => 'required|integer',
                 'descripcion' => 'required|string|max:50',
-                'icono'       => 'required|string|max:255',
-                'ruta'        => 'required|string|max:255',
-                'submenu'     => 'required|integer',
-                'desarrollo'  => 'required|integer',
                 'estado'      => 'required|integer'
             ]);
 
@@ -171,16 +143,11 @@ class MenuController extends Controller
                 ], 400);
             }
 
-            JsonDB::table('menu')->where('id', $request->id)->update([
+            JsonDB::table('tipo_soporte')->where('id', $request->id)->update([
                 'descripcion' => $request->descripcion,
-                'icon'        => $request->icono,
-                'ruta'        => $request->ruta,
-                'submenu'     => $request->submenu,
-                'sistema'     => $request->desarrollo,
                 'estatus'     => $request->estado,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ]);
-
             return $this->message(message: "Edición realizada con éxito.");
         } catch (Exception $e) {
             if ($e->getCode() == 409) {
@@ -209,21 +176,14 @@ class MenuController extends Controller
                 ], 400);
             }
 
-            JsonDB::table('menu')->where('id', $request->id)->update([
+            JsonDB::table('tipo_soporte')->where('id', $request->id)->update([
                 'estatus' => $request->estado,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Cambio de estado realizado con éxito.'
-            ]);
+            return $this->message(message: "Cambio de estado realizado con éxito.");
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
-                'error'   => $e->getMessage()
-            ], 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -242,44 +202,13 @@ class MenuController extends Controller
                 ], 400);
             }
 
-            JsonDB::table('menu')->where('id', $request->id)->update([
+            JsonDB::table('tipo_soporte')->where('id', $request->id)->update([
                 'eliminado' => 1
             ]);
 
-            return response()->json(['success' => true, 'message' => 'El regitro de eliminó con éxito.']);
+            return $this->message(message: "El regitro de eliminó con éxito.");
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-
-    /**
-     * Cambia el orden de los menús.
-     */
-    public function changeOrdenMenu(Request $request)
-    {
-        try {
-            // Se espera que $request->data sea un arreglo con 'id' y 'orden'
-            foreach ($request->data as $item) {
-                JsonDB::table('menu')->where('id', $item['id'])->update([
-                    'orden' => $item['orden'],
-                    'updated_at' => now()->format('Y-m-d H:i:s')
-                ]);
-            }
-
-            return response()->json([
-                'success' => true,
-                'message' => 'Orden actualizado con éxito.'
-            ]);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
-                'error'   => $e->getMessage()
-            ], 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 }

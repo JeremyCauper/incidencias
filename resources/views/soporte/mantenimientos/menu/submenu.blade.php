@@ -32,7 +32,7 @@
                                 <th>Categoria</th>
                                 <th>Descripcion</th>
                                 <th>Ruta</th>
-                                <th>Fecha Registro</th>
+                                <th>Registrado</th>
                                 <th>Actualizado</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>

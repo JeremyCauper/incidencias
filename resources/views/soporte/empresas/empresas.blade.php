@@ -31,7 +31,7 @@
                                     <th>Ruc</th>
                                     <th>Empresa</th>
                                     <th>Contrato</th>
-                                    <th>Fecha Registro</th>
+                                    <th>Registrado</th>
                                     <th>Actualizado</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>

@@ -304,7 +304,7 @@
                                 </div>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Tipo Incidencia:</label>
+                                <label class="form-label me-2">Nivel Incidencia:</label>
                                 <div aria-item="incidencia"></div>
                             </div>
                             <div class="list-group-item">

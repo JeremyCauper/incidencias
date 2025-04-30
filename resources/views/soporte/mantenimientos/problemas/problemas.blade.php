@@ -34,7 +34,7 @@
                                     <th>Codigo</th>
                                     <th>Descripcion</th>
                                     <th>Tipo</th>
-                                    <th>Fecha Registro</th>
+                                    <th>Registrado</th>
                                     <th>Actualizado</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>

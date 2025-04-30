@@ -96,7 +96,7 @@
                                     <th>Sucursal</th>
                                     <th>Registrado</th>
                                     <th>Estacion</th>
-                                    <th>Tipo Incidencia</th>
+                                    <th>Nivel Incidencia</th>
                                     <th>Soporte</th>
                                     <th>Problema / Sub Problema</th>
                                     <th>Acciones</th>
@@ -286,7 +286,7 @@
                             </select>
                         </div>
                         <div class="col-lg-4 col-6 mb-2">
-                            <label class="form-label mb-0" for="tIncidencia">Tipo Incidencia</label>
+                            <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
                             <select class="select" id="tIncidencia">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['tIncidencia'] as $v)
@@ -425,7 +425,7 @@
                                 </div>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Tipo Incidencia:</label>
+                                <label class="form-label me-2">Nivel Incidencia:</label>
                                 <div aria-item="incidencia"></div>
                             </div>
                             <div class="list-group-item">
