@@ -220,18 +220,6 @@ class Controller extends BaseController
         return $this->getParseData($data);
     }
 
-    /**
-     * Fetch and parse data from Database.
-     */
-    public function fetchAndParseDbData($table, $selectFields, $withConcat = false)
-    {
-        if ($withConcat) {
-            $selectFields[] = DB::raw($withConcat);
-        }
-        $data = DB::table($table)->select($selectFields)->where('estatus', 1)->get();
-        return $this->getParseData($data);
-    }
-
     public function parseCreateFile($name, $dir, $data)
     {
         try {
@@ -306,5 +294,25 @@ class Controller extends BaseController
             }
         }
         return $datos;
+    }
+
+    public function formatEstado($estado, $field = "")
+    {
+        $respuesta = "";
+        $config = [
+            ['color' => 'danger', 'text' => 'Inactivo'],
+            ['color' => 'success', 'text' => 'Activo']
+        ][$estado];
+
+        switch ($field) {
+            case 'change':
+                $respuesta = '<i class="fas fa-rotate me-2 text-' . $config['color'] . '"></i>Cambiar Estado';
+                break;
+            
+            default:
+                $respuesta = '<label class="badge badge-' . $config['color'] . '" style="font-size: .7rem;">' . $config['text'] . '</label>';
+                break;
+        }
+        return $respuesta;
     }
 }

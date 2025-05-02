@@ -20,6 +20,8 @@ use App\Http\Controllers\Soporte\Mantenimientos\Menu\MenuController;
 use App\Http\Controllers\Soporte\Mantenimientos\Menu\SubMenuController;
 use App\Http\Controllers\Soporte\Mantenimientos\Problema\ProblemaController;
 use App\Http\Controllers\Soporte\Mantenimientos\Problema\SubProblemaController;
+use App\Http\Controllers\Soporte\Mantenimientos\TipoEstacion\TipoEstacionController;
+use App\Http\Controllers\Soporte\Mantenimientos\TipoSoporte\TipoSoporteController;
 use App\Http\Controllers\Soporte\Orden\OrdenController;
 use App\Http\Controllers\Soporte\Orden\OrdenVisitaController;
 use App\Http\Controllers\Soporte\Turno\TurnoController;
@@ -126,6 +128,7 @@ Route::get('/soporte/mantenimiento/problemas/problemas/index', [ProblemaControll
 Route::get('/soporte/mantenimiento/problemas/problemas/{id}', [ProblemaController::class, 'show']);
 Route::post('/soporte/mantenimiento/problemas/problemas/registrar', [ProblemaController::class, 'create']);
 Route::post('/soporte/mantenimiento/problemas/problemas/actualizar', [ProblemaController::class, 'update']);
+Route::post('/soporte/mantenimiento/problemas/problemas/eliminar', [ProblemaController::class, 'delete']);
 Route::post('/soporte/mantenimiento/problemas/problemas/cambiarEstado', [ProblemaController::class, 'changeStatus']);
 
 Route::get('/soporte/mantenimiento/problemas/subproblemas', [SubProblemaController::class, 'view'])->middleware('auth');
@@ -133,6 +136,7 @@ Route::get('/soporte/mantenimiento/problemas/subproblemas/index', [SubProblemaCo
 Route::get('/soporte/mantenimiento/problemas/subproblemas/{id}', [SubProblemaController::class, 'show']);
 Route::post('/soporte/mantenimiento/problemas/subproblemas/registrar', [SubProblemaController::class, 'create']);
 Route::post('/soporte/mantenimiento/problemas/subproblemas/actualizar', [SubProblemaController::class, 'update']);
+Route::post('/soporte/mantenimiento/problemas/subproblemas/eliminar', [SubProblemaController::class, 'delete']);
 Route::post('/soporte/mantenimiento/problemas/subproblemas/cambiarEstado', [SubProblemaController::class, 'changeStatus']);
 
 Route::get('/soporte/mantenimiento/menu/menu', [MenuController::class, 'view'])->middleware('auth');
@@ -140,6 +144,7 @@ Route::get('/soporte/mantenimiento/menu/menu/index', [MenuController::class, 'in
 Route::get('/soporte/mantenimiento/menu/menu/{id}', [MenuController::class, 'show']);
 Route::post('/soporte/mantenimiento/menu/menu/registrar', [MenuController::class, 'create']);
 Route::post('/soporte/mantenimiento/menu/menu/actualizar', [MenuController::class, 'update']);
+Route::post('/soporte/mantenimiento/menu/menu/eliminar', [MenuController::class, 'delete']);
 Route::post('/soporte/mantenimiento/menu/menu/cambiarEstado', [MenuController::class, 'changeStatus']);
 Route::post('/soporte/mantenimiento/menu/menu/cambiarOrdenMenu', [MenuController::class, 'changeOrdenMenu']);
 
@@ -148,7 +153,24 @@ Route::get('/soporte/mantenimiento/menu/submenu/index', [SubMenuController::clas
 Route::get('/soporte/mantenimiento/menu/submenu/{id}', [SubMenuController::class, 'show']);
 Route::post('/soporte/mantenimiento/menu/submenu/registrar', [SubMenuController::class, 'create']);
 Route::post('/soporte/mantenimiento/menu/submenu/actualizar', [SubMenuController::class, 'update']);
+Route::post('/soporte/mantenimiento/menu/submenu/eliminar', [SubMenuController::class, 'delete']);
 Route::post('/soporte/mantenimiento/menu/submenu/cambiarEstado', [SubMenuController::class, 'changeStatus']);
+
+Route::get('/soporte/mantenimiento/tiposoporte/tiposoporte', [TipoSoporteController::class, 'view'])->middleware('auth');
+Route::get('/soporte/mantenimiento/tiposoporte/tiposoporte/index', [TipoSoporteController::class, 'index']);
+Route::get('/soporte/mantenimiento/tiposoporte/tiposoporte/{id}', [TipoSoporteController::class, 'show']);
+Route::post('/soporte/mantenimiento/tiposoporte/tiposoporte/registrar', [TipoSoporteController::class, 'create']);
+Route::post('/soporte/mantenimiento/tiposoporte/tiposoporte/actualizar', [TipoSoporteController::class, 'update']);
+Route::post('/soporte/mantenimiento/tiposoporte/tiposoporte/eliminar', [TipoSoporteController::class, 'delete']);
+Route::post('/soporte/mantenimiento/tiposoporte/tiposoporte/cambiarEstado', [TipoSoporteController::class, 'changeStatus']);
+
+Route::get('/soporte/mantenimiento/tipoestacion/tipoestacion', [TipoEstacionController::class, 'view'])->middleware('auth');
+Route::get('/soporte/mantenimiento/tipoestacion/tipoestacion/index', [TipoEstacionController::class, 'index']);
+Route::get('/soporte/mantenimiento/tipoestacion/tipoestacion/{id}', [TipoEstacionController::class, 'show']);
+Route::post('/soporte/mantenimiento/tipoestacion/tipoestacion/registrar', [TipoEstacionController::class, 'create']);
+Route::post('/soporte/mantenimiento/tipoestacion/tipoestacion/actualizar', [TipoEstacionController::class, 'update']);
+Route::post('/soporte/mantenimiento/tipoestacion/tipoestacion/eliminar', [TipoEstacionController::class, 'delete']);
+Route::post('/soporte/mantenimiento/tipoestacion/tipoestacion/cambiarEstado', [TipoEstacionController::class, 'changeStatus']);
 
 // Buzon Soporte
 Route::get('/soporte/buzon-personal/asignadas', [BAsignadasController::class, 'view'])->middleware('auth');

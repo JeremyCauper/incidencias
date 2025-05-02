@@ -121,11 +121,8 @@ mostrar_acciones('tb_usuario');
 document.getElementById('form-usuario').addEventListener('submit', function (event) {
     event.preventDefault();
     fMananger.formModalLoding('modal_usuarios', 'show');
-    const accion = $('#id').val();
-    const url = accion ? `actualizar` : `registrar`;
 
     var valid = validFrom(this);
-
     let permisos = getCheckedValues();
 
     if (!valid.success || !permisos)
@@ -134,7 +131,7 @@ document.getElementById('form-usuario').addEventListener('submit', function (eve
 
     $.ajax({
         type: 'POST',
-        url: `${__url}/soporte/control-de-usuario/usuarios/${url}`,
+        url: `${__url}/soporte/control-de-usuario/usuarios/${ $('#id').val() ? 'actualizar' : 'registrar' }`,
         contentType: 'application/json',
         headers: {
             'X-CSRF-TOKEN': __token,

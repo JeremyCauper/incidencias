@@ -128,10 +128,10 @@ function Editar(id) {
                 }
 
                 var json = data.data;
-                $('#id').val(json.id_problema);
+                $('#id').val(json.id);
                 $('#codigo').val(json.codigo);
                 $('#descripcion').val(json.descripcion);
-                $('#tipo').val(json.tipo_incidencia).trigger('change');
+                $('#tipo').val(json.tipo_soporte).trigger('change');
                 $('#estado').val(json.estatus).trigger('change');
 
                 fMananger.formModalLoding('modal_problemas', 'hide');
@@ -178,6 +178,56 @@ async function CambiarEstado(id, estado) {
             data: JSON.stringify({
                 "id": id,
                 "estado": estado ? 0 : 1
+            }),
+            beforeSend: boxAlert.loading,
+            success: function (data) {
+                if (!data.success) {
+                    return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+                }
+                boxAlert.minbox({ h: data.message });
+                updateTable();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                let mensaje = 'No pudimos procesar tu solicitud en este momento. Por favor, intenta más tarde.';
+
+                if (jqXHR.status === 404) {
+                    mensaje = 'El problema que intentas editar no existe. Verifica el código y vuelve a intentarlo.';
+                } else if (jqXHR.status === 500) {
+                    mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
+                }
+
+                boxAlert.box({ 
+                    i: 'error', 
+                    t: 'Error al obtener los datos', 
+                    h: mensaje 
+                });
+
+                console.log("Error en AJAX:", jqXHR);
+            }
+        });
+    } catch (error) {
+        boxAlert.box({ 
+            i: 'error', 
+            t: 'Error inesperado', 
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        });
+        console.log('Error producido: ', error);
+    }
+}
+
+async function Eliminar(id) {
+    try {
+        if (!await boxAlert.confirm({ h: `Esta apunto de eliminar el problema.` })) return true;
+
+        $.ajax({
+            type: 'POST',
+            url: `${__url}/soporte/mantenimiento/problemas/problemas/eliminar`,
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': __token,
+            },
+            data: JSON.stringify({
+                "id": id
             }),
             beforeSend: boxAlert.loading,
             success: function (data) {

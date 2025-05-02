@@ -29,7 +29,7 @@
                             <thead>
                                 <tr class="text-bg-primary text-center">
                                     <th>Grupo</th>
-                                    <th>Fecha Registro</th>
+                                    <th>Registrado</th>
                                     <th>Actualizado</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>

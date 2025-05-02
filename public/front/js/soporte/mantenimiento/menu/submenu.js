@@ -49,36 +49,6 @@ $(document).ready(function () {
     });
 });
 
-const tb_submenu = new DataTable('#tb_submenu', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-    ajax: {
-        url: `${__url}/soporte/mantenimiento/menu/submenu/index`,
-        dataSrc: "",
-        error: function (xhr, error, thrown) {
-            boxAlert.table();
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'menu' },
-        { data: 'categoria' },
-        { data: 'descripcion' },
-        { data: 'ruta' },
-        { data: 'created_at' },
-        { data: 'updated_at' },
-        { data: 'estado' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).addClass('text-center');
-        $(row).find('td:eq(0), td:eq(1), td:eq(2)').addClass('text-start');
-    },
-    processing: true
-});
-
 function updateTable() {
     tb_submenu.ajax.reload();
 }
@@ -219,6 +189,56 @@ async function CambiarEstado(id, estado) {
             data: JSON.stringify({
                 "id": id,
                 "estado": estado ? 0 : 1
+            }),
+            beforeSend: boxAlert.loading,
+            success: function (data) {
+                if (!data.success) {
+                    return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message });
+                }
+                boxAlert.minbox({ h: data.message });
+                updateTable();
+            },
+            error: function (jqXHR, textStatus, errorThrown) {
+                let mensaje = 'No pudimos procesar tu solicitud en este momento. Por favor, intenta más tarde.';
+
+                if (jqXHR.status === 404) {
+                    mensaje = 'El problema que intentas editar no existe. Verifica el código y vuelve a intentarlo.';
+                } else if (jqXHR.status === 500) {
+                    mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
+                }
+
+                boxAlert.box({ 
+                    i: 'error', 
+                    t: 'Error al obtener los datos', 
+                    h: mensaje 
+                });
+
+                console.log("Error en AJAX:", jqXHR);
+            }
+        });
+    } catch (error) {
+        boxAlert.box({ 
+            i: 'error', 
+            t: 'Error inesperado', 
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        });
+        console.log('Error producido: ', error);
+    }
+}
+
+async function Eliminar(id) {
+    try {
+        if (!await boxAlert.confirm({ h: `Esta apunto de eliminar el sub menu.` })) return true;
+
+        $.ajax({
+            type: 'POST',
+            url: `${__url}/soporte/mantenimiento/menu/submenu/eliminar`,
+            contentType: 'application/json',
+            headers: {
+                'X-CSRF-TOKEN': __token,
+            },
+            data: JSON.stringify({
+                "id": id
             }),
             beforeSend: boxAlert.loading,
             success: function (data) {

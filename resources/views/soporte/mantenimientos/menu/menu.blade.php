@@ -43,17 +43,59 @@
                             <thead>
                                 <tr class="text-bg-primary text-center">
                                     <th>#</th>
-                                    <th class="text-start">Descripcion</th>
-                                    <th class="text-start">Icono</th>
-                                    <th class="text-start">Ruta</th>
+                                    <th>Descripcion</th>
+                                    <th>Icono</th>
+                                    <th>Ruta</th>
                                     <th>Sub Menu</th>
-                                    <th>Fecha Registro</th>
+                                    <th>Registrado</th>
                                     <th>Actualizado</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
                                 </tr>
                             </thead>
                         </table>
+                        <script>
+                            const tb_menu = new DataTable('#tb_menu', {
+                                autoWidth: true,
+                                scrollX: true,
+                                scrollY: 400,
+                                fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
+                                ajax: {
+                                    url: `${__url}/soporte/mantenimiento/menu/menu/index`,
+                                    dataSrc: function (json) {
+                                        $("#tb_orden_menu tbody").html('');
+                                        $.each(json, function (i, e) {
+                                            $("#tb_orden_menu tbody").append($('<tr>', {
+                                                "tr-id": e.id,
+                                                "tr-orden": e.orden,
+                                                "draggable": "true"
+                                            }).html(`<td>${e.orden}</td><td><i class="${e.icono} me-2"></i> ${e.descripcion}</td>`));
+                                        });
+                                        return json;
+                                    },
+                                    error: function (xhr, error, thrown) {
+                                        boxAlert.table();
+                                        console.log('Respuesta del servidor:', xhr);
+                                    }
+                                },
+                                columns: [
+                                    { data: 'orden' },
+                                    { data: 'descripcion' },
+                                    { data: 'iconText' },
+                                    { data: 'ruta' },
+                                    { data: 'submenu' },
+                                    { data: 'created_at' },
+                                    { data: 'updated_at' },
+                                    { data: 'estado' },
+                                    { data: 'acciones' }
+                                ],
+                                createdRow: function (row, data, dataIndex) {
+                                    $(row).addClass('text-center');
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(2)').addClass('text-start');
+                                },
+                                processing: true
+                            });
+                        </script>
                     </div>
                 </div>
             </div>
@@ -78,7 +120,10 @@
                         </div>
                         <div class="col-lg-6 mb-2">
                             <label class="form-label mb-0" for="icono">Icono</label>
-                            <input class="form-control" id="icono">
+                            <div class="input-group">
+                                <span class="input-group-text rounded me-1 px-2"><i class="fas fa-question" aria-label="icono"></i></span>
+                                <input type="text" class="form-control rounded" id="icono">
+                            </div>
                         </div>
                         <div class="col-lg-12 col-8 mb-2">
                             <label class="form-label mb-0" for="ruta">Ruta</label>
@@ -185,7 +230,7 @@
                 var $target = $(e.target).closest('tr'); // Encuentra la fila sobre la que estamos pasando
 
                 if (!$($target[0]).attr('tr-id') || $($target[0]).attr('tr-id') == $(draggedRow).attr('tr-id')) return false;
-                
+
                 if ($target.length && !$target.hasClass('placeholder')) {
                     var targetOffset = $target.offset().top;
                     var targetHeight = $target.outerHeight();
@@ -196,7 +241,7 @@
                     } else {
                         $target.before($placeholder);
                     }
-                    
+
                 }
             });
 

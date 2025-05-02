@@ -3,6 +3,9 @@
 
 @section('cabecera')
     <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
+    <script>
+        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
+    </script>
 @endsection
 @section('content')
 
@@ -31,7 +34,7 @@
                                     <th>Codigo</th>
                                     <th>Descripcion</th>
                                     <th>Tipo</th>
-                                    <th>Fecha Registro</th>
+                                    <th>Registrado</th>
                                     <th>Actualizado</th>
                                     <th>Estado</th>
                                     <th>Acciones</th>
@@ -56,7 +59,10 @@
                                 columns: [
                                     { data: 'codigo' },
                                     { data: 'descripcion' },
-                                    { data: 'tipo_incidencia' },
+                                    { data: 'tipo_soporte', render: function(data, type, row) {
+                                            return tipo_soporte[data].descripcion;
+                                        } 
+                                    },
                                     { data: 'created_at' },
                                     { data: 'updated_at' },
                                     { data: 'estado' },
@@ -98,8 +104,14 @@
                         <div class="col-6 mb-2">
                             <label class="form-label mb-0" for="tipo">Tipo</label>
                             <select class="select" id="tipo">
-                                <option selected value="1">REMOTO</option>
-                                <option value="2">PRESENCIAL</option>
+                                <option value="">-- Seleccione --</option>
+                                @foreach ($data['tSoporte'] as $v)
+                                    <option value="{{ $v->id }}"
+                                        {{ ($v->selected == 1 && $v->estatus == 1) ? 'selected' : '' }}
+                                        {{ $v->estatus != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                        {{ $v->descripcion }} {{ $v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                         <div class="col-6 mb-2">
