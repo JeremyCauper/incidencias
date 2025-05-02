@@ -245,8 +245,10 @@ class JsonDB
 
     protected function writeJson(array $data): void
     {
+        // if (file_exists($this->path)) {
+        //     chmod($this->path, 0777);
+        // }
         file_put_contents($this->path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
-        chmod($this->path, 0777);
     }
 
     protected function matchesWhere(array $item): bool
