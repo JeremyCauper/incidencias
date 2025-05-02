@@ -26,12 +26,12 @@ class TipoSoporteController extends Controller
 
     public function view()
     {
-        $this->validarPermisos(7, 9);
+        // $this->validarPermisos(7, 9);
         try {
-            return view('soporte.mantenimientos.tipo_soporte.tiposoporte');
+            return view('soporte.mantenimientos.tiposoporte.tiposoporte');
         } catch (Exception $e) {
-            Log::error('Error inesperado: ' . $e->getMessage());
-            return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
+            Log::error('Vista: ' . $e->getMessage());
+            return $this->message(data: ['error' => 'Vista: ' . $e->getMessage()], status: 500);
         }
     }
 
@@ -41,32 +41,28 @@ class TipoSoporteController extends Controller
     public function index()
     {
         try {
-            $menus = JsonDB::table('tipo_soporte')->where('eliminado', 0)->get()->map(function ($val) {
-                $estado = [
-                    ['color' => 'danger', 'text' => 'Inactivo'],
-                    ['color' => 'success', 'text' => 'Activo']
-                ][$val->estatus];
+            $tipo_soportes = JsonDB::table('tipo_soporte')->where('eliminado', 0)->get()->map(function ($val) {
                 // Generar acciones
                 return [
                     'id' => $val->id,
                     'descripcion' => $val->descripcion,
-                    'estado' => '<label class="badge badge-' . $estado['color'] . '" style="font-size: .7rem;">' . $estado['text'] . '</label>',
+                    'estado' => $this->formatEstado($val->estatus),
                     'updated_at' => $val->updated_at,
                     'created_at' => $val->created_at,
                     'acciones' => $this->DropdownAcciones([
                         'tittle' => 'Acciones',
                         'button' => [
                             ['funcion' => "Editar({$val->id})", 'texto' => '<i class="fas fa-pen me-2 text-info"></i>Editar'],
-                            ['funcion' => "CambiarEstado({$val->id}, {$val->estatus})", 'texto' => '<i class="fas fa-rotate me-2 text-' . $estado['color'] . '"></i>Cambiar Estado'],
+                            ['funcion' => "CambiarEstado({$val->id}, {$val->estatus})", 'texto' => $this->formatEstado($val->estatus, 'change')],
                             ['funcion' => "Eliminar({$val->id})", 'texto' => '<i class="far fa-trash-can me-2 text-danger"></i>Eliminar'],
                         ],
                     ])
                 ];
             });
-            return $menus;
+            return $tipo_soportes;
         } catch (Exception $e) {
-            Log::error('Error inesperado: ' . $e->getMessage());
-            return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
+            Log::error('Listado: ' . $e->getMessage());
+            return $this->message(data: ['error' => 'Listado: ' . $e->getMessage()], status: 500);
         }
     }
 
@@ -110,13 +106,13 @@ class TipoSoporteController extends Controller
     public function show(string $id)
     {
         try {
-            $menu = JsonDB::table('tipo_soporte')->where('id', $id)->first();
+            $tipo_soporte = JsonDB::table('tipo_soporte')->where('id', $id)->first();
     
-            if (!$menu) {
+            if (!$tipo_soporte) {
                 return response()->json(["success" => false, "message" => "No se encontró el problema solicitado. Verifica el código e intenta nuevamente."], 404);
             }
 
-            return $this->message(message: "Operación realizada con éxito.", data: ['data' => $menu]);
+            return $this->message(message: "Operación realizada con éxito.", data: ['data' => $tipo_soporte]);
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }

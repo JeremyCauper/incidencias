@@ -2,18 +2,6 @@ $(document).ready(function () {
     const controles = [
         // Formulario problemas
         {
-            control: '#menu',
-            config: {
-                require: true
-            }
-        },
-        {
-            control: '#categoria',
-            config: {
-                mxl: 50,
-            }
-        },
-        {
             control: '#descripcion',
             config: {
                 mxl: 50,
@@ -21,14 +9,7 @@ $(document).ready(function () {
             }
         },
         {
-            control: '#ruta',
-            config: {
-                mxl: 255,
-                require: true
-            }
-        },
-        {
-            control: '#estado',
+            control: ['#estado'],
             config: {
                 require: true
             }
@@ -40,56 +21,53 @@ $(document).ready(function () {
     });
 
     $('.modal').on('hidden.bs.modal', function () {
-        $('#modal_submenuLabel').html('REGISTRAR SUB MENU');
+        $('#modal_tipo_estacionLabel').html('REGISTRAR TIPO ESTACION');
         $('#id').val('');
-    });
+    }); 
 
     fObservador('.content-wrapper', () => {
-        tb_submenu.columns.adjust().draw();
+        tb_tipo_estacion.columns.adjust().draw();
     });
 });
 
 function updateTable() {
-    tb_submenu.ajax.reload();
+    tb_tipo_estacion.ajax.reload();
 }
 
-document.getElementById('form-submenu').addEventListener('submit', function (event) {
+document.getElementById('form-tipo-estacion').addEventListener('submit', function (event) {
     event.preventDefault();
 
-    fMananger.formModalLoding('modal_submenu', 'show');
-
-    const accion = $('#id').val();
-    const url = accion ? `actualizar` : `registrar`;
+    fMananger.formModalLoding('modal_tipo_estacion', 'show');
 
     var valid = validFrom(this);
 
     if (!valid.success) {
-        return fMananger.formModalLoding('modal_submenu', 'hide');
+        return fMananger.formModalLoding('modal_tipo_estacion', 'hide');
     }
 
     $.ajax({
         type: 'POST',
-        url: `${__url}/soporte/mantenimiento/menu/submenu/${url}`,
+        url: `${__url}/soporte/mantenimiento/tipoestacion/tipoestacion/${ $('#id').val() ? 'actualizar' : 'registrar' }`,
         contentType: 'application/json',
         headers: {
             'X-CSRF-TOKEN': __token,
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            fMananger.formModalLoding('modal_submenu', 'hide');
+            fMananger.formModalLoding('modal_tipo_estacion', 'hide');
 
             if (!data.success) {
                 return boxAlert.box({ i: 'error', t: 'Algo salió mal...', h: data.message || 'No se pudo completar la operación.' });
             }
 
-            $('#modal_submenu').modal('hide');
+            $('#modal_tipo_estacion').modal('hide');
             boxAlert.minbox({ h: data.message });
             updateTable();
         },
         error: function (jqXHR) {
             console.log(jqXHR.responseJSON);
-            
-            fMananger.formModalLoding('modal_submenu', 'hide');
+
+            fMananger.formModalLoding('modal_tipo_estacion', 'hide');
             let mensaje = 'Hubo un problema al procesar la solicitud. Intenta nuevamente.';
 
             if (jqXHR.status === 400) {
@@ -108,44 +86,41 @@ document.getElementById('form-submenu').addEventListener('submit', function (eve
 
 function Editar(id) {
     try {
-        $('#modal_submenuLabel').html('Editar Sub Menu');
-        $('#modal_submenu').modal('show');
-        fMananger.formModalLoding('modal_submenu', 'show');
+        $('#modal_tipo_estacionLabel').html('EDITAR TIPO ESTACION');
+        $('#modal_tipo_estacion').modal('show');
+        fMananger.formModalLoding('modal_tipo_estacion', 'show');
 
         $.ajax({
             type: 'GET',
-            url: `${__url}/soporte/mantenimiento/menu/submenu/${id}`,
+            url: `${__url}/soporte/mantenimiento/tipoestacion/tipoestacion/${id}`,
             contentType: 'application/json',
             success: function (data) {
 
                 // Verificar si la respuesta indica un error
                 if (!data.success) {
                     console.log(data.message || "Error desconocido.");
-                    return boxAlert.box({ 
-                        i: 'error', 
-                        t: 'No pudimos obtener el problema', 
-                        h: data.message || 'Hubo un problema al recuperar la información. Intenta nuevamente.' 
+                    return boxAlert.box({
+                        i: 'error',
+                        t: 'No pudimos obtener el problema',
+                        h: data.message || 'Hubo un problema al recuperar la información. Intenta nuevamente.'
                     });
                 }
 
                 // Verificar si los datos existen
                 if (!data.data) {
-                    return boxAlert.box({ 
-                        i: 'error', 
-                        t: 'Problema no encontrado', 
-                        h: 'No se encontró información sobre el problema seleccionado. Es posible que haya sido eliminado.' 
+                    return boxAlert.box({
+                        i: 'error',
+                        t: 'Problema no encontrado',
+                        h: 'No se encontró información sobre el problema seleccionado. Es posible que haya sido eliminado.'
                     });
                 }
 
                 var json = data.data;
                 $('#id').val(json.id);
-                $('#menu').val(json.id_menu).trigger('change');
-                $('#categoria').val(json.categoria);
                 $('#descripcion').val(json.descripcion);
-                $('#ruta').val(json.ruta);
                 $('#estado').val(json.estatus).trigger('change');
 
-                fMananger.formModalLoding('modal_submenu', 'hide');
+                fMananger.formModalLoding('modal_tipo_estacion', 'hide');
             },
             error: function (jqXHR, textStatus, errorThrown) {
                 let mensaje = 'No pudimos procesar tu solicitud en este momento. Por favor, intenta más tarde.';
@@ -156,20 +131,20 @@ function Editar(id) {
                     mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
                 }
 
-                boxAlert.box({ 
-                    i: 'error', 
-                    t: 'Error al obtener los datos', 
-                    h: mensaje 
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Error al obtener los datos',
+                    h: mensaje
                 });
 
                 console.log("Error en AJAX:", jqXHR);
             }
         });
     } catch (error) {
-        boxAlert.box({ 
-            i: 'error', 
-            t: 'Error inesperado', 
-            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        boxAlert.box({
+            i: 'error',
+            t: 'Error inesperado',
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
         });
         console.log('Error producido: ', error);
     }
@@ -177,11 +152,11 @@ function Editar(id) {
 
 async function CambiarEstado(id, estado) {
     try {
-        if (!await boxAlert.confirm({ h: `Esta apunto de ${estado ? 'des' : ''}activar el sub-menu.` })) return true;
+        if (!await boxAlert.confirm({ h: `Esta apunto de ${estado ? 'des' : ''}activar el tipo soporte.` })) return true;
 
         $.ajax({
             type: 'POST',
-            url: `${__url}/soporte/mantenimiento/menu/submenu/cambiarEstado`,
+            url: `${__url}/soporte/mantenimiento/tipoestacion/tipoestacion/cambiarEstado`,
             contentType: 'application/json',
             headers: {
                 'X-CSRF-TOKEN': __token,
@@ -207,20 +182,20 @@ async function CambiarEstado(id, estado) {
                     mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
                 }
 
-                boxAlert.box({ 
-                    i: 'error', 
-                    t: 'Error al obtener los datos', 
-                    h: mensaje 
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Error al obtener los datos',
+                    h: mensaje
                 });
 
                 console.log("Error en AJAX:", jqXHR);
             }
         });
     } catch (error) {
-        boxAlert.box({ 
-            i: 'error', 
-            t: 'Error inesperado', 
-            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        boxAlert.box({
+            i: 'error',
+            t: 'Error inesperado',
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
         });
         console.log('Error producido: ', error);
     }
@@ -228,11 +203,11 @@ async function CambiarEstado(id, estado) {
 
 async function Eliminar(id) {
     try {
-        if (!await boxAlert.confirm({ h: `Esta apunto de eliminar el sub menu.` })) return true;
+        if (!await boxAlert.confirm({ h: `Esta apunto de eliminar el tipo soporte.` })) return true;
 
         $.ajax({
             type: 'POST',
-            url: `${__url}/soporte/mantenimiento/menu/submenu/eliminar`,
+            url: `${__url}/soporte/mantenimiento/tipoestacion/tipoestacion/eliminar`,
             contentType: 'application/json',
             headers: {
                 'X-CSRF-TOKEN': __token,

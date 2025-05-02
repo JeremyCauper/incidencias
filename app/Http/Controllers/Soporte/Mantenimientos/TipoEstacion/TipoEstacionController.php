@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Soporte\Mantenimientos\Menu;
+namespace App\Http\Controllers\Soporte\Mantenimientos\TipoEstacion;
 
 use App\Http\Controllers\Controller;
 use App\Services\JsonDB;
@@ -9,16 +9,13 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
 
-class SubMenuController extends Controller
+class TipoEstacionController extends Controller
 {
     public function __construct()
     {
-        JsonDB::schema('sub_menu', [
+        JsonDB::schema('tipo_estacion', [
             'id' => 'int|primary_key|auto_increment',
-            'id_menu' => 'int',
             'descripcion' => 'string|unique:"Descripcion"',
-            'categoria' => 'string|default:""',
-            'ruta' => 'string|unique:"Ruta"',
             'estatus' => 'int|default:1',
             'selected' => 'int|default:0',
             'eliminado' => 'int|default:0',
@@ -26,18 +23,15 @@ class SubMenuController extends Controller
             'created_at' => 'string|default:""'
         ]);
     }
+
     public function view()
     {
-        $this->validarPermisos(7, 9);
+        // $this->validarPermisos(7, 9);
         try {
-            $data = [];
-            // Se leen los menús desde su JSON para pasarlos a la vista
-            $data['menus'] = JsonDB::table('menu')->select('id', 'descripcion', 'icon', 'estatus', 'eliminado')->get();
-
-            return view('soporte.mantenimientos.menu.submenu', ['data' => $data]);
+            return view('soporte.mantenimientos.tipoestacion.tipoestacion');
         } catch (Exception $e) {
-            Log::error('Error inesperado: ' . $e->getMessage());
-            return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
+            Log::error('Vista: ' . $e->getMessage());
+            return $this->message(data: ['error' => 'Vista: ' . $e->getMessage()], status: 500);
         }
     }
 
@@ -47,14 +41,11 @@ class SubMenuController extends Controller
     public function index()
     {
         try {
-            $submenus = JsonDB::table('sub_menu')->where('eliminado', 0)->get()->map(function ($val) {
+            $tipo_estaciones = JsonDB::table('tipo_estacion')->where('eliminado', 0)->get()->map(function ($val) {
                 // Generar acciones
                 return [
                     'id' => $val->id,
-                    'menu' => $val->id_menu,
-                    'categoria' => $val->categoria,
                     'descripcion' => $val->descripcion,
-                    'ruta' => $val->ruta,
                     'estado' => $this->formatEstado($val->estatus),
                     'updated_at' => $val->updated_at,
                     'created_at' => $val->created_at,
@@ -68,10 +59,10 @@ class SubMenuController extends Controller
                     ])
                 ];
             });
-            return $submenus;
+            return $tipo_estaciones;
         } catch (Exception $e) {
-            Log::error('Error inesperado: ' . $e->getMessage());
-            return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
+            Log::error('Listado: ' . $e->getMessage());
+            return $this->message(data: ['error' => 'Listado: ' . $e->getMessage()], status: 500);
         }
     }
 
@@ -83,13 +74,10 @@ class SubMenuController extends Controller
         try {
             // Validación de los datos de entrada
             $validator = Validator::make($request->all(), [
-                'menu'        => 'required|integer',
-                'categoria'   => 'nullable|string',
                 'descripcion' => 'required|string|max:50',
-                'ruta'        => 'required|string|max:255',
                 'estado'      => 'required|integer'
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
@@ -97,12 +85,9 @@ class SubMenuController extends Controller
                     'errors'  => $validator->errors()
                 ], 400);
             }
-    
-            JsonDB::table('sub_menu')->insert([
-                'id_menu'     => $request->menu,
-                'categoria'   => $request->categoria ?? '',
+
+            JsonDB::table('tipo_estacion')->insert([
                 'descripcion' => $request->descripcion,
-                'ruta'        => $request->ruta,
                 'estatus'     => $request->estado,
                 'created_at'  => now()->format('Y-m-d H:i:s')
             ]);
@@ -121,18 +106,15 @@ class SubMenuController extends Controller
     public function show(string $id)
     {
         try {
-            $submenu = JsonDB::table('sub_menu')->where('id', $id)->first();
+            $tipo_estacion = JsonDB::table('tipo_estacion')->where('id', $id)->first();
     
-            if (!$submenu) {
+            if (!$tipo_estacion) {
                 return response()->json(["success" => false, "message" => "No se encontró el problema solicitado. Verifica el código e intenta nuevamente."], 404);
             }
 
-            return response()->json(["success" => true, "message" => "", "data" => $submenu], 200);
+            return $this->message(message: "Operación realizada con éxito.", data: ['data' => $tipo_estacion]);
         } catch (Exception $e) {
-            return response()->json([
-                "success" => false,
-                "message" => "Ocurrió un error inesperado."
-            ], 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -142,15 +124,13 @@ class SubMenuController extends Controller
     public function update(Request $request)
     {
         try {
+            // Validación de los datos de entrada
             $validator = Validator::make($request->all(), [
                 'id'          => 'required|integer',
-                'menu'        => 'required|integer',
-                'categoria'   => 'nullable|string',
                 'descripcion' => 'required|string|max:50',
-                'ruta'        => 'required|string|max:255',
                 'estado'      => 'required|integer'
             ]);
-    
+
             if ($validator->fails()) {
                 return response()->json([
                     'success' => false,
@@ -158,14 +138,11 @@ class SubMenuController extends Controller
                     'errors'  => $validator->errors()
                 ], 400);
             }
-    
-            JsonDB::table('sub_menu')->where('id', $request->id)->update([
-                'id_menu'     => $request->menu,
-                'categoria'   => $request->categoria ?? '',
+
+            JsonDB::table('tipo_estacion')->where('id', $request->id)->update([
                 'descripcion' => $request->descripcion,
-                'ruta'        => $request->ruta,
                 'estatus'     => $request->estado,
-                'updated_at'  => now()->format('Y-m-d H:i:s')
+                'updated_at' => now()->format('Y-m-d H:i:s')
             ]);
             return $this->message(message: "Edición realizada con éxito.");
         } catch (Exception $e) {
@@ -176,35 +153,6 @@ class SubMenuController extends Controller
         }
     }
 
-    public function delete(Request $request)
-    {
-        try {
-            $validator = Validator::make($request->all(), [
-                'id' => 'required|integer',
-            ]);
-
-            if ($validator->fails()) {
-                return response()->json([
-                    'success' => false,
-                    'message' => 'Por favor, revisa los campos e intenta nuevamente.',
-                    'errors' => $validator->errors()
-                ], 400);
-            }
-
-            JsonDB::table('sub_menu')->where('id', $request->id)->update([
-                'eliminado' => 1
-            ]);
-
-            return response()->json(['success' => true, 'message' => 'El regitro de eliminó con éxito.']);
-        } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
-                'error' => $e->getMessage()
-            ], 500);
-        }
-    }
-    
     /**
      * Cambia el estado del menú.
      */
@@ -224,21 +172,39 @@ class SubMenuController extends Controller
                 ], 400);
             }
 
-            JsonDB::table('sub_menu')->where('id', $request->id)->update([
+            JsonDB::table('tipo_estacion')->where('id', $request->id)->update([
                 'estatus' => $request->estado,
                 'updated_at' => now()->format('Y-m-d H:i:s')
             ]);
 
-            return response()->json([
-                'success' => true,
-                'message' => 'Cambio de estado realizado con éxito.'
-            ]);
+            return $this->message(message: "Cambio de estado realizado con éxito.");
         } catch (Exception $e) {
-            return response()->json([
-                'success' => false,
-                'message' => 'Ocurrió un error inesperado. Intenta nuevamente más tarde.',
-                'error'   => $e->getMessage()
-            ], 500);
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
+        }
+    }
+
+    public function delete(Request $request)
+    {
+        try {
+            $validator = Validator::make($request->all(), [
+                'id' => 'required|integer',
+            ]);
+
+            if ($validator->fails()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Por favor, revisa los campos e intenta nuevamente.',
+                    'errors' => $validator->errors()
+                ], 400);
+            }
+
+            JsonDB::table('tipo_estacion')->where('id', $request->id)->update([
+                'eliminado' => 1
+            ]);
+
+            return $this->message(message: "El regitro de eliminó con éxito.");
+        } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 }
