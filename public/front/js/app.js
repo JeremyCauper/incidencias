@@ -587,12 +587,14 @@ function mostrar_acciones(table = null) {
         $("tr:has(.td-acciones)").each(function () {
             const $fila = $(this);
             $fila.find(".td-acciones").removeAttr("style").removeClass('active-acciones').removeClass('sticky-activo');
-
             const accionesTd = this.querySelector(".td-acciones");
+
             if (!accionesTd) return;
 
             $fila.off("click").on("click", function () {
                 $activoTd = $(accionesTd);
+                if($(tableSelector).width() - ($activoTd.width() / 2) < $(`${wrapperSelector} .dataTables_scroll`).width()) return;
+                
                 $td_activo = $("tr .td-acciones.active-acciones");
 
                 if (!$activoTd.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
@@ -640,7 +642,7 @@ function mostrar_acciones(table = null) {
         if (!$accionTd.length) return;
         let rect = $accionTd[0].getBoundingClientRect();
 
-        if (rect.right <= $(window).width() - 43) {
+        if (rect.right <= $(window).width() - ($accionTd.width() / 2 )) {
             $accionTd.removeClass("sticky-activo");
         } else if (!$accionTd.hasClass('sticky-activo')) {
             $accionTd.addClass("sticky-activo");

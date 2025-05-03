@@ -245,9 +245,9 @@ class JsonDB
 
     protected function writeJson(array $data): void
     {
-        // if (file_exists($this->path)) {
-        //     chmod($this->path, 0777);
-        // }
+        if (!is_writable($this->path)) {
+            throw new RuntimeException("El archivo no tiene permisos de escritura, Comuniquese con el area de sistemas.", 403);
+        }
         file_put_contents($this->path, json_encode($data, JSON_PRETTY_PRINT | JSON_UNESCAPED_UNICODE), LOCK_EX);
     }
 

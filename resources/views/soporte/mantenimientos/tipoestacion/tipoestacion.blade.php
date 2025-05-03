@@ -63,7 +63,7 @@
                                 ],
                                 createdRow: function (row, data, dataIndex) {
                                     $(row).addClass('text-center');
-                                    $(row).find('td:eq(6)').addClass(`td-acciones`);
+                                    $(row).find('td:eq(4)').addClass(`td-acciones`);
                                 },
                                 processing: true
                             });
