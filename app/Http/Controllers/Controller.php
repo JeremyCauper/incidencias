@@ -182,7 +182,7 @@ class Controller extends BaseController
 
         // Estructura del dropdown
         $dropDown = '
-            <div class="btn-group dropup shadow-0">
+            <div class="btn-group dropdown shadow-0">
                 <button
                     type="button"
                     class="btn btn-tertiary hover-btn btn-sm px-2 shadow-0"
@@ -190,6 +190,8 @@ class Controller extends BaseController
                     aria-expanded="false"
                     data-mdb-dropdown-init
                     data-mdb-ripple-color="dark"
+                    data-mdb-parent=".dataTables_scrollBody"
+                    data-mdb-dropdown-animation="off"
                     data-mdb-dropdown-initialized="true">
                     <b><i class="icon-menu9"></i></b>
                 </button>
