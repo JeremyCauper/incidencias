@@ -569,6 +569,8 @@ function mostrar_acciones(table = null) {
     const tableSelector = idTabla ? `#${idTabla}` : '';
     const dataTables_scrollBody = $(`${idTabla ? `#${idTabla}_wrapper` : '.dataTables_wrapper'} .dataTables_scrollBody`);
     let filaAccionActivo = null;
+    let filaAccionOld = null;
+    let openOnCkick = false;
 
     const animateProperty = (element, property, start, end, duration, fps, callback = null) => {
         let current = start;
@@ -610,23 +612,38 @@ function mostrar_acciones(table = null) {
     // Cuando se dibuja la tabla (draw.dt) se asocian los eventos a cada fila
     table.off("draw.dt").on('draw.dt', function () {
         let nuevaPagina = table.page();
+
+        $("tr:has(.td-acciones)").off();
         $("tr:has(.td-acciones)").each(function () {
             const tdAcciones = $(this).find(".td-acciones");
             if (!tdAcciones.length) return;
-            
+
             if (paginaActual != nuevaPagina) {
                 tdAcciones.removeClass('active-acciones sticky-activo').removeAttr('style');
+                filaAccionActivo = null;
+                filaAccionOld = null;
             }
-            $(this).off("click").on("click", function () { // Fila a la que se le dió click
-                filaAccionActivo = $(this);
-                const newTdAccion = filaAccionActivo.find(".td-acciones");
-                const oldTdAccion = $("tr .td-acciones.active-acciones");
 
-                if (!newTdAccion.hasClass('active-acciones') && oldTdAccion.hasClass('active-acciones')) {
-                    animateProperty(oldTdAccion, 'right', -43, -75, 150, 60, () => {
-                        oldTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
-                    });
+            let evento = esCelular() ? 'click' : 'mouseenter';
+            $(this).off(evento).on(evento, function () { // Fila a la que se le dió click
+                if (openOnCkick) return;
+                
+                filaAccionActivo = $(this);
+                filaAccionOld = $("tr:has(.active-acciones)")?.length ? $("tr:has(.active-acciones)") : $("tr:has(.dropdown-menu.show)");
+                const newTdAccion = filaAccionActivo.find(".td-acciones");
+
+                if (filaAccionOld?.length) {
+                    const oldTdAccion = filaAccionOld.find(".td-acciones");
+                    if (!newTdAccion.hasClass('active-acciones') && oldTdAccion.hasClass('active-acciones')) {
+                        if (oldTdAccion.find('.dropdown-menu').hasClass('show'))
+                            return;
+                        animateProperty(oldTdAccion, 'right', -43, -75, 150, 60, () => {
+                            oldTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
+                        });
+                        filaAccionOld = null;
+                    }
                 }
+                if (getScrollTdAccion(newTdAccion)) return;
 
                 if (getWidthTdAccion(newTdAccion)) {
                     if (!newTdAccion.find('.dropdown-menu').hasClass('show')) {
@@ -637,7 +654,6 @@ function mostrar_acciones(table = null) {
 
                 if (newTdAccion.hasClass('active-acciones')) {
                     if (newTdAccion.find('.dropdown-menu').hasClass('show')) return false;
-                    filaAccionActivo = null;
                     return animateProperty(newTdAccion, 'right', -43, -75, 150, 60, () => {
                         newTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
                     });
@@ -647,6 +663,39 @@ function mostrar_acciones(table = null) {
                 newTdAccion.addClass('active-acciones sticky-activo').css('background-color', getBgColorRow(filaAccionActivo));
                 animateProperty(newTdAccion, 'right', -75, -43, 150, 60);
             });
+
+            $(this).off('mouseleave').on('mouseleave', function () {
+                if (esCelular()) return;
+
+                const newTdAccion = filaAccionActivo.find(".td-acciones");
+                if (!newTdAccion.find('.dropdown-menu').hasClass('show') && !openOnCkick) {
+                    animateProperty(newTdAccion, 'right', -43, -75, 150, 60, () => {
+                        newTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
+                    });
+                }
+            });
+
+            if (!esCelular()) {
+                $(this).off('click').on('click', function () {
+                    filaAccionActivo = $(this);
+                    const newTdAccion = filaAccionActivo.find(".td-acciones");
+
+                    if (!getScrollTdAccion(newTdAccion) && !newTdAccion.hasClass('active-acciones')) {
+                        newTdAccion.addClass('active-acciones sticky-activo').css('background-color', getBgColorRow(filaAccionActivo));
+                        animateProperty(newTdAccion, 'right', -75, -43, 150, 60);
+                        openOnCkick = true;
+                    }
+                    
+                    if (filaAccionOld?.length) {
+                        const oldTdAccion = filaAccionOld.find(".td-acciones");
+                        animateProperty(oldTdAccion, 'right', -43, -75, 150, 60, () => {
+                            oldTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
+                        });
+                        filaAccionOld = null;
+                    }
+                    setTimeout(() => openOnCkick = false, 165);
+                });
+            }
         });
         paginaActual = nuevaPagina; // Actualizar la página actual
     });
@@ -656,11 +705,12 @@ function mostrar_acciones(table = null) {
         try {
             if (!filaAccionActivo?.length) return;
 
-            const accionTd = filaAccionActivo.find('.td-acciones');
+            let filaActiva = filaAccionOld?.length ? filaAccionOld : filaAccionActivo;
+            const accionTd = filaActiva.find('.td-acciones');
             if (getScrollTdAccion(accionTd)) {
                 return accionTd.removeClass('active-acciones sticky-activo').removeAttr('style');
             }
-            accionTd.addClass("active-acciones sticky-activo").css({ 'right': '-43px', 'background-color': getBgColorRow(filaAccionActivo) });
+            accionTd.addClass("active-acciones sticky-activo").css({ 'right': '-43px', 'background-color': getBgColorRow(filaActiva) });
         } catch (error) {
             console.log(error);
         }

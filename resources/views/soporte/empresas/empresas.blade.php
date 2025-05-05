@@ -24,7 +24,7 @@
                 </div>
                 <div class="row">
                     <div class="col-12">
-                        <table id="tb_empresas" class="table text-nowrap" style="width: 100%;">
+                        <table id="tb_empresas" class="table table-hover text-nowrap" style="width: 100%;">
                             <thead>
                                 <tr class="text-bg-primary text-center">
                                     <th>Grupo</th>
