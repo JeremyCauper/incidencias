@@ -562,90 +562,107 @@ function getBadgePrioridad(estado, size = null) {
     return `<label class="badge badge-${estadoInforme[estado]['color']} me-2" ${tsize}>${estadoInforme[estado]['text']}</label>`;
 }
 
-function animateProperty(element, property, start, end, duration, fps, callback) {
-    let current = start;
-    const totalFrames = duration / (1000 / fps);
-    const delta = (end - start) / totalFrames;
-    const interval = setInterval(() => {
-        current += delta;
-        element.style[property] = `${current}px`;
-        // Condición de finalización según dirección de la animación
-        if ((delta > 0 && current >= end) || (delta < 0 && current <= end)) {
-            clearInterval(interval);
-            if (typeof callback === "function") callback();
-        }
-    }, 1000 / fps);
-}
-
 function mostrar_acciones(table = null) {
-    const tableSelector = table ? `#${table}` : '';
-    // Determina el contenedor en base a si se pasa o no un id de tabla
-    const wrapperSelector = table ? `#${table}_wrapper` : '.dataTables_wrapper';
+    if (!table) return;
+    const idTabla = table.table().node().id;
 
+    const tableSelector = idTabla ? `#${idTabla}` : '';
+    const dataTables_scrollBody = $(`${idTabla ? `#${idTabla}_wrapper` : '.dataTables_wrapper'} .dataTables_scrollBody`);
+    let filaAccionActivo = null;
+
+    const animateProperty = (element, property, start, end, duration, fps, callback = null) => {
+        let current = start;
+        element.css((property == 'left' ? 'right' : 'left'), '');
+        const totalFrames = duration / (1000 / fps);
+        const delta = (end - start) / totalFrames;
+        const interval = setInterval(() => {
+            current += delta;
+            element.css(property, `${current}px`);
+            // Condición de finalización según dirección de la animación
+            if ((delta > 0 && current >= end) || (delta < 0 && current <= end)) {
+                clearInterval(interval);
+                if (typeof callback === "function") callback();
+            }
+        }, 1000 / fps);
+    }
+
+    const getWidthTdAccion = (td_accion) => {
+        const width_tabla = $(tableSelector)[0].clientWidth + 11;
+        const width_scroll = dataTables_scrollBody[0].clientWidth;
+        const width_tdAccion = td_accion[0].clientWidth;
+        const width_btnGroup = td_accion.find('.btn-group i')[0].clientWidth;
+
+        return (width_tabla - ((width_tdAccion / 2) + (width_btnGroup / 2))) < width_scroll;
+    }
+
+    const getScrollTdAccion = (td_accion) => {
+        const distanciaAlFinal = dataTables_scrollBody.get(0).scrollWidth - dataTables_scrollBody.get(0).scrollLeft - dataTables_scrollBody.get(0).clientWidth;
+        const anchoField = ((td_accion[0].clientWidth / 2) + (td_accion.find('.btn-group i')[0].clientWidth / 2));
+        return distanciaAlFinal < anchoField;
+    }
+
+    const getBgColorRow = fila_activa => { // Extraemos los valores RGB de la fila, para eliminar cualquier opacidad
+        const [r, g, b] = fila_activa.css('background-color').match(/\d+/g) || [255, 255, 255];
+        return `rgb(${r}, ${g}, ${b})`;
+    };
+
+    let paginaActual = null;
     // Cuando se dibuja la tabla (draw.dt) se asocian los eventos a cada fila
-    $(tableSelector).off("draw.dt").on('draw.dt', function () {
+    table.off("draw.dt").on('draw.dt', function () {
+        let nuevaPagina = table.page();
         $("tr:has(.td-acciones)").each(function () {
-            const $fila = $(this);
-            $fila.find(".td-acciones").removeAttr("style").removeClass('active-acciones').removeClass('sticky-activo');
-            const accionesTd = this.querySelector(".td-acciones");
+            const tdAcciones = $(this).find(".td-acciones");
+            if (!tdAcciones.length) return;
+            
+            if (paginaActual != nuevaPagina) {
+                tdAcciones.removeClass('active-acciones sticky-activo').removeAttr('style');
+            }
+            $(this).off("click").on("click", function () { // Fila a la que se le dió click
+                filaAccionActivo = $(this);
+                const newTdAccion = filaAccionActivo.find(".td-acciones");
+                const oldTdAccion = $("tr .td-acciones.active-acciones");
 
-            if (!accionesTd) return;
-
-            $fila.off("click").on("click", function () {
-                $activoTd = $(accionesTd);
-                if($(tableSelector).width() - ($activoTd.width() / 2) < $(`${wrapperSelector} .dataTables_scroll`).width()) return;
-                
-                $td_activo = $("tr .td-acciones.active-acciones");
-
-                if (!$activoTd.hasClass('active-acciones') && $td_activo.hasClass('active-acciones')) {
-                    animateProperty($td_activo[0], "right", -43, -75, 150, 60, () => {
-                        $td_activo[0].classList.remove("active-acciones");
-                        $td_activo[0].classList.remove("sticky-activo");
-                        $td_activo[0].removeAttribute("style");
+                if (!newTdAccion.hasClass('active-acciones') && oldTdAccion.hasClass('active-acciones')) {
+                    animateProperty(oldTdAccion, 'right', -43, -75, 150, 60, () => {
+                        oldTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
                     });
                 }
 
-                if ($activoTd.hasClass('active-acciones')) {
-                    $button = $activoTd.find('.btn-group button[type="button"]');
-                    if (!$button.hasClass('show')) {
-                        return animateProperty(accionesTd, "right", -43, -75, 150, 60, () => {
-                            accionesTd.classList.remove("active-acciones");
-                            accionesTd.classList.remove("sticky-activo");
-                            accionesTd.removeAttribute("style");
-                        });
-                    } else {
-                        return false;
+                if (getWidthTdAccion(newTdAccion)) {
+                    if (!newTdAccion.find('.dropdown-menu').hasClass('show')) {
+                        newTdAccion.removeClass('active-acciones').removeAttr('style');
                     }
+                    return newTdAccion.removeClass('sticky-activo');
                 }
 
-                const bgColor = $fila.css('background-color');
-                // Extraemos los valores RGB para eliminar cualquier opacidad
-                const valores = bgColor.match(/\d+/g);
-                const nuevoColor = `rgb(${valores[0]}, ${valores[1]}, ${valores[2]})`;
-
-                accionesTd.classList.add("active-acciones");
-                let rect = $activoTd[0].getBoundingClientRect();
-                if (rect.right >= $(window).width() - 43) {
-                    $activoTd.addClass("sticky-activo");
+                if (newTdAccion.hasClass('active-acciones')) {
+                    if (newTdAccion.find('.dropdown-menu').hasClass('show')) return false;
+                    filaAccionActivo = null;
+                    return animateProperty(newTdAccion, 'right', -43, -75, 150, 60, () => {
+                        newTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
+                    });
                 }
-                accionesTd.setAttribute("style", `background-color: ${nuevoColor};`);
-
-                // Animación: de -75 a -40 en 200ms a 60 fps
-                animateProperty(accionesTd, "right", -75, -43, 150, 60);
+                // Se añaden cuando el scroll esta a unos pixeles menos del final 
+                if (getScrollTdAccion(newTdAccion)) return;
+                newTdAccion.addClass('active-acciones sticky-activo').css('background-color', getBgColorRow(filaAccionActivo));
+                animateProperty(newTdAccion, 'right', -75, -43, 150, 60);
             });
         });
+        paginaActual = nuevaPagina; // Actualizar la página actual
     });
 
     // Evento de scroll para actualizar la clase sticky-activo
-    $(`${wrapperSelector} .dataTables_scrollBody`).on("scroll", function () {
-        let $accionTd = $(this).find('tr .td-acciones.active-acciones');
-        if (!$accionTd.length) return;
-        let rect = $accionTd[0].getBoundingClientRect();
+    dataTables_scrollBody.on('scroll', function () {
+        try {
+            if (!filaAccionActivo?.length) return;
 
-        if (rect.right <= $(window).width() - ($accionTd.width() / 2 )) {
-            $accionTd.removeClass("sticky-activo");
-        } else if (!$accionTd.hasClass('sticky-activo')) {
-            $accionTd.addClass("sticky-activo");
+            const accionTd = filaAccionActivo.find('.td-acciones');
+            if (getScrollTdAccion(accionTd)) {
+                return accionTd.removeClass('active-acciones sticky-activo').removeAttr('style');
+            }
+            accionTd.addClass("active-acciones sticky-activo").css({ 'right': '-43px', 'background-color': getBgColorRow(filaAccionActivo) });
+        } catch (error) {
+            console.log(error);
         }
     });
 }

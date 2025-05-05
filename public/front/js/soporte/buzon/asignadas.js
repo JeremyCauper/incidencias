@@ -91,7 +91,7 @@ const cMaterial = new CTable('#createMaterial', {
 function updateTableInc() {
     tb_incidencias.ajax.reload();
 }
-mostrar_acciones('tb_incidencias');
+mostrar_acciones(tb_incidencias);
 
 function ShowDetailInc(e, cod) {
     $('#modal_detalle').modal('show');
@@ -604,7 +604,7 @@ function removeClienteDataFirm() {
 function updateTableVis() {
     tb_visitas.ajax.reload();
 }
-mostrar_acciones('tb_visitas');
+mostrar_acciones(tb_visitas);
 
 function ShowDetailVis(e, id) {
     $('#modal_seguimiento_visitasp').modal('show');

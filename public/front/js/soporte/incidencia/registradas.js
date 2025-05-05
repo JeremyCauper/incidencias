@@ -294,7 +294,7 @@ const cPersonal1 = new CTable('#createPersonal1', {
 function updateTable() {
     tb_incidencia.ajax.reload();
 }
-mostrar_acciones('tb_incidencia');
+mostrar_acciones(tb_incidencia);
 
 
 function searchTable(search) {

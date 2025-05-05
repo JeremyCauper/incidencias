@@ -33,7 +33,7 @@ $(document).ready(function () {
 function updateTable() {
     tb_grupos.ajax.reload();
 }
-mostrar_acciones('tb_grupos');
+mostrar_acciones(tb_grupos);
 
 document.getElementById('form-grupo').addEventListener('submit', function (event) {
     event.preventDefault();

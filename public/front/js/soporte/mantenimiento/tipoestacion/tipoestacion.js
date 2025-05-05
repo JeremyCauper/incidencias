@@ -33,7 +33,7 @@ $(document).ready(function () {
 function updateTable() {
     tb_tipo_estacion.ajax.reload();
 }
-mostrar_acciones('tb_tipo_estacion');
+mostrar_acciones(tb_tipo_estacion);
 
 document.getElementById('form-tipo-estacion').addEventListener('submit', function (event) {
     event.preventDefault();

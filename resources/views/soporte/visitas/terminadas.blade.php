@@ -66,7 +66,7 @@
                 <div class="col-12">
                     <table id="tb_vterminadas" class="table table-hover text-nowrap" style="width:100%">
                         <thead>
-                            <tr class="text-bg-primary">
+                            <tr class="text-bg-primary text-center">
                                 <th>#</th>
                                 <th>N° Orden</th>
                                 <th>Fecha Servicio</th>
@@ -75,7 +75,7 @@
                                 <th>Sucursal</th>
                                 <th>Iniciada</th>
                                 <th>Terminada</th>
-                                <th class="text-center">Acciones</th>
+                                <th>Acciones</th>
                             </tr>
                         </thead>
                     </table>

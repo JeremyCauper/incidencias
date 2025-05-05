@@ -32,7 +32,7 @@ $(document).ready(function () {
 function updateTable() {
     tb_orden.ajax.reload();
 }
-mostrar_acciones('tb_orden');
+mostrar_acciones(tb_orden);
 
 function filtroBusqueda() {
     var empresa = $(`#empresa`).val();
