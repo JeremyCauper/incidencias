@@ -87,7 +87,7 @@ $(document).ready(function () {
 function updateTable() {
     tb_sucursales.ajax.reload();
 }
-mostrar_acciones('tb_sucursales');
+mostrar_acciones(tb_sucursales);
 
 document.getElementById('form-sucursal').addEventListener('submit', function (event) {
     event.preventDefault();

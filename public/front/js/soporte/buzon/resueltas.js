@@ -33,7 +33,7 @@ $(document).ready(function () {
 function updateTableInc() {
     tb_incidencias.ajax.reload();
 }
-mostrar_acciones('tb_incidencias');
+mostrar_acciones(tb_incidencias);
 
 function OrdenPdfInc(cod) {
     window.open(`${__url}/soporte/orden/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");
@@ -89,7 +89,7 @@ function ShowDetailInc(e, id) {
 function updateTableVis() {
     tb_visitas.ajax.reload();
 }
-mostrar_acciones('tb_visitas');
+mostrar_acciones(tb_visitas);
 
 function OrdenPdfVis(cod) {
     window.open(`${__url}/soporte/orden-visita/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");

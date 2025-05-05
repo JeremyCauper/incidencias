@@ -108,7 +108,7 @@ $(document).ready(function () {
 function updateTable() {
     tb_empresas.ajax.reload();
 }
-mostrar_acciones('tb_empresas');
+mostrar_acciones(tb_empresas);
 
 document.getElementById('form-empresa').addEventListener('submit', function (event) {
     event.preventDefault();

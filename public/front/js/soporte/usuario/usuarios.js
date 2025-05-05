@@ -116,7 +116,7 @@ $(document).ready(function () {
 function updateTable() {
     tb_usuario.ajax.reload();
 }
-mostrar_acciones('tb_usuario');
+mostrar_acciones(tb_usuario);
 
 document.getElementById('form-usuario').addEventListener('submit', function (event) {
     event.preventDefault();

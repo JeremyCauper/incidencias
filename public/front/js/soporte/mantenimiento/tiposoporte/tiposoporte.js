@@ -33,6 +33,7 @@ $(document).ready(function () {
 function updateTable() {
     tb_tipo_soporte.ajax.reload();
 }
+mostrar_acciones(tb_tipo_soporte);
 
 document.getElementById('form-tipo-soporte').addEventListener('submit', function (event) {
     event.preventDefault();

@@ -41,7 +41,7 @@ $(document).ready(function () {
 function updateTable() {
     tb_subproblemas.ajax.reload();
 }
-mostrar_acciones('tb_subproblemas');
+mostrar_acciones(tb_subproblemas);
 
 document.getElementById('form-subproblema').addEventListener('submit', function (event) {
     event.preventDefault();

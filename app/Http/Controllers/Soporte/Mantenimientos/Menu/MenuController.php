@@ -118,8 +118,8 @@ class MenuController extends Controller
             ]);
             return $this->message(message: "Operación realizada con éxito.");
         } catch (Exception $e) {
-            if ($e->getCode() == 409) {
-                return $this->message(message: $e->getMessage(), status: 409);
+            if ($e->getCode() == 409 || $e->getCode() == 403) {
+                return $this->message(message: $e->getMessage(), status: $e->getCode());
             }
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
@@ -183,8 +183,8 @@ class MenuController extends Controller
 
             return $this->message(message: "Edición realizada con éxito.");
         } catch (Exception $e) {
-            if ($e->getCode() == 409) {
-                return $this->message(message: $e->getMessage(), status: 409);
+            if ($e->getCode() == 409 || $e->getCode() == 403) {
+                return $this->message(message: $e->getMessage(), status: $e->getCode());
             }
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
