@@ -592,14 +592,14 @@ function mostrar_acciones(table = null) {
         const width_tabla = $(tableSelector)[0].clientWidth + 11;
         const width_scroll = dataTables_scrollBody[0].clientWidth;
         const width_tdAccion = td_accion[0].clientWidth;
-        const width_btnGroup = td_accion.find('.btn-group i')[0].clientWidth;
+        const width_btnGroup = td_accion.find('.dropdown i')[0].clientWidth;
 
         return (width_tabla - ((width_tdAccion / 2) + (width_btnGroup / 2))) < width_scroll;
     }
 
     const getScrollTdAccion = (td_accion) => {
         const distanciaAlFinal = dataTables_scrollBody.get(0).scrollWidth - dataTables_scrollBody.get(0).scrollLeft - dataTables_scrollBody.get(0).clientWidth;
-        const anchoField = ((td_accion[0].clientWidth / 2) + (td_accion.find('.btn-group i')[0].clientWidth / 2));
+        const anchoField = ((td_accion[0].clientWidth / 2) + (td_accion.find('.dropdown i')[0].clientWidth / 2));
         return distanciaAlFinal < anchoField;
     }
 
@@ -629,14 +629,17 @@ function mostrar_acciones(table = null) {
                 if (openOnCkick) return;
                 
                 filaAccionActivo = $(this);
-                filaAccionOld = $("tr:has(.active-acciones)")?.length ? $("tr:has(.active-acciones)") : $("tr:has(.dropdown-menu.show)");
+                if (!esCelular()) {
+                    filaAccionOld = ($("tr:has(.active-acciones)")?.length) ? $("tr:has(.active-acciones)") : $("tr:has(.dropdown-menu.show)");
+                } else {
+                    filaAccionOld = $("tr:has(.active-acciones)");
+                }
                 const newTdAccion = filaAccionActivo.find(".td-acciones");
-
+                
                 if (filaAccionOld?.length) {
                     const oldTdAccion = filaAccionOld.find(".td-acciones");
                     if (!newTdAccion.hasClass('active-acciones') && oldTdAccion.hasClass('active-acciones')) {
-                        if (oldTdAccion.find('.dropdown-menu').hasClass('show'))
-                            return;
+                        if (!esCelular() && oldTdAccion.find('.dropdown-menu').hasClass('show')) return;
                         animateProperty(oldTdAccion, 'right', -43, -75, 150, 60, () => {
                             oldTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
                         });
@@ -664,18 +667,16 @@ function mostrar_acciones(table = null) {
                 animateProperty(newTdAccion, 'right', -75, -43, 150, 60);
             });
 
-            $(this).off('mouseleave').on('mouseleave', function () {
-                if (esCelular()) return;
-
-                const newTdAccion = filaAccionActivo.find(".td-acciones");
-                if (!newTdAccion.find('.dropdown-menu').hasClass('show') && !openOnCkick) {
-                    animateProperty(newTdAccion, 'right', -43, -75, 150, 60, () => {
-                        newTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
-                    });
-                }
-            });
-
             if (!esCelular()) {
+                $(this).off('mouseleave').on('mouseleave', function () {
+                    const newTdAccion = filaAccionActivo.find(".td-acciones");
+                    if (!newTdAccion.find('.dropdown-menu').hasClass('show') && !openOnCkick) {
+                        animateProperty(newTdAccion, 'right', -43, -75, 150, 60, () => {
+                            newTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
+                        });
+                    }
+                });
+
                 $(this).off('click').on('click', function () {
                     filaAccionActivo = $(this);
                     const newTdAccion = filaAccionActivo.find(".td-acciones");
@@ -699,6 +700,10 @@ function mostrar_acciones(table = null) {
         });
         paginaActual = nuevaPagina; // Actualizar la página actual
     });
+
+    // $('.dropdown-menu').on('show.mdb.dropdown', function () {
+    //     console.log($(this));
+    // });
 
     // Evento de scroll para actualizar la clase sticky-activo
     dataTables_scrollBody.on('scroll', function () {
