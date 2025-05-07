@@ -256,7 +256,7 @@
                 'Yellow'
             ],
             datasets: [{
-                label: 'Chupame la pinga',
+                label: 'Total de Inicidencias',
                 data: [200, 50, 100],
                 backgroundColor: [
                     'rgb(255, 129, 156)',
