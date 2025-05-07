@@ -26,13 +26,12 @@ class VProgramadasController extends Controller
                 }
                 return $id_usu;
             });
-            $sucursales = DB::table('tb_sucursales')->select('id', 'nombre')->where('v_visitas', 1)->get()->keyBy('id');
             $conteo = [
                 "vEnProceso" => 0,
                 "vSinIniciar" => 0
             ];
 
-            $visitas = DB::table('tb_visitas')->where(['eliminado' => 0])->whereNot('estado', 2)->get()->map(function ($val) use ($asignadas, $sucursales, &$conteo) {
+            $visitas = DB::table('tb_visitas')->where(['eliminado' => 0])->whereNot('estado', 2)->get()->map(function ($val) use ($asignadas, &$conteo) {
                 // Configurar el estado del informe
                 $estadoVisita = [
                     "0" => ['c' => 'warning', 't' => 'Sin Iniciar'],
@@ -51,7 +50,7 @@ class VProgramadasController extends Controller
 
                 return [
                     'id' => $val->id,
-                    'sucursal' => $sucursales[$val->id_sucursal]->nombre,
+                    'sucursal' => $val->id_sucursal,
                     'tecnicos' => join(", ", $asignadas[$val->id]),
                     'fecha' => $val->fecha,
                     'estado' => $badge_visitas,

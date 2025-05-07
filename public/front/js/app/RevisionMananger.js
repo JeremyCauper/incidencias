@@ -55,7 +55,7 @@ class RevisionMananger {
             dataInput: "terminales",
         }
     ];
-    
+
     static _data = {};
 
     get data() {
@@ -86,13 +86,12 @@ class RevisionMananger {
                 contenedor.append(contentGroup);
                 // Si es el segundo elemento (índice 1), agregamos el botón de eliminar a la misma fila
                 if (i === 1) {
-                    let btnDelete = $('<div>', { class: "col-lg-6 col-sm-4 col-2 text-end" })
+                    let conteo = $('<div>', { class: "col text-end" })
                         .append(
-                            $('<button>', { class: "btn btn-danger px-2", type: "button", "onclick": "(new RevisionMananger()).delete(this)" })
-                                .append('<i class="far fa-trash-can"></i>')
+                            $('<strong>', { class: "me-2 text-nowrap conteo-islas-tittle" })
                         );
-                    contenedor.append(btnDelete);
                     items_islas.append(contenedor);
+                    items_islas.append(conteo);
                     contenedor = null; // Reiniciamos para que en próximas iteraciones se cree una nueva fila si es necesario
                 }
             } else {
@@ -113,29 +112,56 @@ class RevisionMananger {
                 items_islas.append(contenedor);
                 contenedor = null;
             }
+
         });
+        let btnAcciones = $('<div>', { class: "text-end" })
+            .append(
+                $('<button>', { class: "btn btn-secondary btn-sm px-1", type: "button", "onclick": "(new RevisionMananger()).create()" })
+                    .append('<i class="far fa-square-plus"></i>')
+            )
+            .append(
+                $('<button>', { class: "btn btn-danger btn-sm px-1 ms-2", type: "button", "onclick": "(new RevisionMananger()).delete(this)" })
+                    .append('<i class="far fa-trash-can"></i>')
+            );
+        items_islas.append(btnAcciones);
         _content_islas.append(items_islas);
 
         $('#conteo-islas').html(`Cant. ${_content_islas.find('.islas-item').length}`);
+
+        $('.conteo-islas-tittle').each(function (i, e) {
+            $(e).html('N° ' + (i + 1));
+        });
+
+        $("#modal_orden").animate({
+            scrollTop: $("#modal_orden")[0].scrollHeight
+        }, 800); // La duración de la animación en milisegundos (800ms = 0.8 segundos)
     }
 
     delete($this) {
-        let item_islas = $($this).parent().parent().parent();
-        let count = $('#content-islas').find('.islas-item').length;
-        if (count == 1) {
-            return boxAlert.minbox({ i: "warning", b: '#e4a11b', h: "Tiene que tener almenos un formulario de revision."});
+        let item_islas = $($this).parent().parent();
+        let conteos = $('.conteo-islas-tittle');
+        if (conteos.length == 1) {
+            return boxAlert.minbox({ i: "warning", b: '#e4a11b', h: "Tiene que tener almenos un formulario de revision." });
         }
         item_islas.remove();
-        $('#conteo-islas').html(`Cant. ${count - 1}`);
+        $('.conteo-islas-tittle').each(function (i, e) {
+            $(e).html('N° ' + (i + 1));
+        });
+        $('#conteo-islas').html(`Cant. ${conteos.length - 1}`);
+    }
+
+    deleteAll() {
+        $('#content-islas').html('');
+        this.create();
     }
 
     extract() {
         let items_islas = $('#content-islas').find('.islas-item');
         let data = [];
-        items_islas.each(function(i, e) {
+        items_islas.each(function (i, e) {
             let obj = {};
             let inputs = $(e).find('[data-isla]');
-            inputs.each(function(ii, ei) {
+            inputs.each(function (ii, ei) {
                 let input = $(ei);
                 obj[input.attr('data-isla')] = input.val();
             });

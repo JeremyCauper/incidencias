@@ -13,7 +13,7 @@
             text-transform: capitalize;
         }
     </style>
-    <script src="{{ secure_asset('front/vendor/full-calendar/index.global.min.js') }}?v={{ time() }}"></script>
+    <script src="{{ secure_asset('front/vendor/full-calendar/index.global.min.js') }}"></script>
 @endsection
 @section('content')
 

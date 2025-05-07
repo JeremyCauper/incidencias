@@ -2,7 +2,7 @@
 @section('title', 'Sucursales')
 
 @section('content')
-
+    <script src="{{secure_asset('front/vendor/ubigeos-peru/ubigeo.js')}}"></script>
     <style>
     </style>
 
@@ -177,6 +177,5 @@
 
 @section('scripts')
     <!-- jQuery Mask Plugin CDN -->
-    <script src="{{secure_asset('front/vendor/ubigeos-peru/ubigeo.js')}}?v={{ time() }}"></script>
     <script src="{{secure_asset('front/js/soporte/empresas/sucursales.js')}}?v={{ time() }}"></script>
 @endsection

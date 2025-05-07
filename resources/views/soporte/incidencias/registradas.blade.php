@@ -801,6 +801,6 @@
         // 
     </script>
     <script src="{{secure_asset('front/js/app/SelectManeger.js')}}?v={{ time() }}"></script>
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
     <script src="{{secure_asset('front/js/soporte/incidencia/registradas.js')}}?v={{ time() }}"></script>
 @endsection

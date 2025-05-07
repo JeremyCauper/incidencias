@@ -36,7 +36,7 @@ class TerminadasController extends Controller
         $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
         try {
             $whereVis = ['estado' => 2, 'eliminado' => 0];
-            if (intval($sucursal)) {
+            if (intval($sucursal) && !empty($sucursal)) {
                 $whereVis['id_sucursal'] = intval($sucursal);
             }
 
@@ -59,7 +59,7 @@ class TerminadasController extends Controller
                 $cod_ordenv = $orden[$id]->cod_orden_visita;
                 $tiempos = $seguimiento[$id];
 
-                $vis->cod_ordenv = $cod_ordenv;
+                $vis->cod_ordenv = (string)'<label class="badge badge-info" style="font-size: .7rem;">' . $cod_ordenv . '</label>' ?? null;
                 $vis->fecha = $orden[$id]->created_at;
                 $vis->tecnicos = implode(", ", $asignadas[$id]);
                 $vis->horaIni = $tiempos[0]->created_at;
@@ -73,8 +73,7 @@ class TerminadasController extends Controller
                 ]);
 
                 return $vis;
-            });
-
+            })->values();
 
             return $visitas;
         } catch (Exception $e) {

@@ -2,13 +2,13 @@
 @section('title', 'INC RESUELTAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}?v={{ time() }}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}?v={{ time() }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}?v={{ time() }}">
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ time() }}">
-    <script src="{{secure_asset('front/vendor/multiselect/bootstrap.bundle.min.js')}}?v={{ time() }}"></script>
-    <script src="{{secure_asset('front/vendor/multiselect/bootstrap_multiselect.js')}}?v={{ time() }}"></script>
-    <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/vendor/multiselect/bootstrap.bundle.min.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/multiselect/bootstrap_multiselect.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
     <script>
         let empresa = <?php echo json_encode(session('empresa')); ?>;
         let sucursales = <?=json_encode($data['scompany'])?>;

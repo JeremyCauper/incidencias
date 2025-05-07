@@ -286,7 +286,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 });
 
 function changeCheck($this) {
-    let contentInput = $($this).parent();
+    let contentInput = $($this).parent('.input-group');
     let icon = contentInput.find('span').find('i');
     if ($($this).val()) {
         icon.addClass('text-success');
