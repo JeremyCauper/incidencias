@@ -1,6 +1,6 @@
 :root,
 [data-mdb-theme=light] {
-    --root-body-bg: #d7d7d7;
+    --root-body-bg: #eeeded;
     --root-navbar-bg: #fff;
     --root-box-shadow: 0 1px 3px rgba(0, 0, 0, .12), 0 1px 2px rgba(0, 0, 0, .24);
 }
@@ -818,7 +818,7 @@ body {
     position: fixed;
     top: 86px;
     left: 10px;
-    border-radius: .5rem;
+    border-radius: .35rem;
     font-weight: 500;
     padding-top: 10px;
     width: 250px;
@@ -3180,11 +3180,11 @@ label.custom-control {
 }
 
 .custom-switch-square .custom-control-label::before {
-    border-radius: .25rem
+    border-radius: .35rem
 }
 
 .custom-switch-square .custom-control-label::after {
-    border-radius: calc(.25rem - 1px)
+    border-radius: calc(.35rem - 1px)
 }
 
 .custom-switch-inverse .custom-control-input:checked~.custom-control-label::before,
@@ -3243,14 +3243,14 @@ label.custom-control {
     border-color: #2cbacc
 }
 
-.custom-control-label {
+.dropdown-item.custom-control .custom-control-label {
     position: relative;
     margin-bottom: 0;
     vertical-align: top;
     cursor: pointer
 }
 
-.custom-control-label::before {
+.dropdown-item.custom-control .custom-control-label::before {
     position: absolute;
     top: .06253rem;
     left: -2rem;
@@ -3264,7 +3264,7 @@ label.custom-control {
     box-shadow: 0 0 0 0 transparent
 }
 
-.custom-control-label::after {
+.dropdown-item.custom-control .custom-control-label::after {
     position: absolute;
     top: .06253rem;
     left: -2rem;
@@ -4058,12 +4058,13 @@ label.custom-control {
 
 .dataTables_scrollHead {
     height: 36px !important;
+    border-radius: .35rem;
 }
 
-/* .dataTables_scrollHead .dataTables_scrollHeadInner, .dataTables_scrollHead .dataTables_scrollHeadInner table {
-    width: 100% !important;
-    table-layout: fixed;
-} */
+.dataTables_scrollHead .dataTables_scrollHeadInner,
+.dataTables_scrollHead .dataTables_scrollHeadInner table {
+    height: inherit;
+}
 
 .dataTables_scrollHead .dataTables_scrollHeadInner table thead tr .sorting {
     cursor: pointer;
@@ -4188,6 +4189,7 @@ label.custom-control {
 
 .dataTables_empty {
     text-align: center;
+    height: 36px;
 }
 
 .td-acciones .dropdown-menu .dropdown-item i {

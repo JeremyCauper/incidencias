@@ -49,7 +49,8 @@ var BootstrapMultiselect = function () {
 
         // Select All option
         $('.multiselect-select-all').multiselect({
-            includeSelectAllOption: true
+            includeSelectAllOption: true,
+            enableHTML: true
         });
 
         // Enable filtering

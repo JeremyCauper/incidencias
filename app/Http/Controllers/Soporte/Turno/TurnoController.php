@@ -14,7 +14,7 @@ class TurnoController extends Controller
 {
     public function view()
     {
-        // $this->validarPermisos(1);
+        $this->validarPermisos(9);
         try {
             $data = [];
 
