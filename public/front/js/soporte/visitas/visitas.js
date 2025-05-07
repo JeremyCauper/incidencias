@@ -10,6 +10,11 @@ $(document).ready(function () {
         // $('#contenedor-personal').addClass('d-none');
         cPersonal.deleteTable();
         cPersonal1.deleteTable();
+        MRevision.deleteAll();
+
+        $('#contendor-filas').find('.input-group .input-group-text i').each(function () {
+            $(this).attr({ 'class': 'fas fa-circle-check' });
+        });
     });
 
     $('#fecha_visita, #fecha_visita_asign').daterangepicker({
@@ -72,7 +77,7 @@ function AsignarVisita(id) {
         contentType: 'application/json',
         success: function (data) {
             console.log(data);
-            
+
             if (data.status == 204)
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
 
@@ -87,7 +92,7 @@ function AsignarVisita(id) {
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
             });
-            
+
             $('#idSucursal').val(dt.id);
             fMananger.formModalLoding('modal_visitas', 'hide');
         },
@@ -118,7 +123,7 @@ function DetalleVisita(id) {
                 $('#idSucursal').val(dt.id);
                 sucursal = sucursales[id];
                 empresa = empresas[sucursal.ruc];
-    
+
                 llenarInfoModal('modal_detalle_visitas', {
                     contrato: getBadgeContrato(dt.contrato),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
@@ -136,7 +141,7 @@ function DetalleVisita(id) {
                             <td>${e.creador}</td>
                             <td class="text-center">${e.fecha}</td>
                             <td class="text-center">${e.created_at}</td>
-                            <td class="text-center">${getBadgeVisita(e.estado)}</td>
+                            <td class="text-center">${getBadgeVisita(e.estado, .7)}</td>
                         </tr>`);
                     });
                     $('#tb_visitas_asignadas').removeClass('d-none');

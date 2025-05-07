@@ -26,7 +26,7 @@ class TipoSoporteController extends Controller
 
     public function view()
     {
-        // $this->validarPermisos(7, 9);
+        $this->validarPermisos(6, 13);
         try {
             return view('soporte.mantenimientos.tiposoporte.tiposoporte');
         } catch (Exception $e) {

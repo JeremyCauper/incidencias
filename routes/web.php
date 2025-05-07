@@ -4,6 +4,7 @@ use App\Helpers\TipoIncidencia;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LoginEmpresaController;
 use App\Http\Controllers\Cliente\Incidencias\CIncidenciasController;
+use App\Http\Controllers\Reporte\RIncidenciasController;
 use App\Http\Controllers\Soporte\Buzon\BAsignadasController;
 use App\Http\Controllers\Soporte\Buzon\BResueltasController;
 use App\Http\Controllers\Soporte\Buzon\Resueltas\IncidenciaController as RIncidenciaController;
@@ -193,6 +194,9 @@ Route::post('/soporte/asignacion-turno/registrar', [TurnoController::class, 'cre
 Route::post('/soporte/asignacion-turno/actualizar', [TurnoController::class, 'update']);
 Route::post('/soporte/asignacion-turno/eliminar', [TurnoController::class, 'destroy']);
 
+
+Route::get('/soporte/reportes/reporte-incidencias', [RIncidenciasController::class, 'view'])->middleware('auth');
+Route::get('/soporte/reportes/reporte-incidencias/index', [RIncidenciasController::class, 'index']);
 
 
 Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login.empresa')->middleware('guest:client');

@@ -29,48 +29,6 @@ $(document).ready(function () {
     });
 });
 
-const tb_vterminadas = new DataTable('#tb_vterminadas', {
-    autoWidth: true,
-    scrollX: true,
-    scrollY: 400,
-    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-    ajax: {
-        url: `${__url}/soporte/visitas/terminadas/index?sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
-        dataSrc: function (json) {
-            return json;
-        },
-        error: function (xhr, error, thrown) {
-            boxAlert.table();
-            console.log('Respuesta del servidor:', xhr);
-        }
-    },
-    columns: [
-        { data: 'id' },
-        { data: 'cod_ordenv' },
-        { data: 'fecha' },
-        { data: 'tecnicos' },
-        {
-            data: 'id_sucursal', render: function (data, type, row) {
-                var ruc = sucursales[data].ruc;
-                return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
-            }
-        },
-        {
-            data: 'id_sucursal', render: function (data, type, row) {
-                return sucursales[data].nombre;
-            }
-        },
-        { data: 'horaIni' },
-        { data: 'horaFin' },
-        { data: 'acciones' }
-    ],
-    createdRow: function (row, data, dataIndex) {
-        $(row).find('td:eq(0), td:eq(2)').addClass('text-center');
-        $(row).find('td:eq(8)').addClass(`td-acciones`);
-    },
-    processing: true
-});
-
 function updateTable() {
     tb_vterminadas.ajax.reload();
 }

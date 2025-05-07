@@ -8,8 +8,8 @@
     <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ time() }}" />
     <title>RC Incidencias | Login</title>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}?v={{ time() }}">
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}">
 </head>
 
 <body class="w-100 h-100 d-flex justify-content-center align-items-center">
@@ -54,8 +54,8 @@
 
     </div>
 
-    <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}?v={{ time() }}"></script>
-    <script src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
 </body>
 
 </html>

@@ -259,6 +259,6 @@
         const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}?v={{ time() }}";
         const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}?v={{ time() }}";
     </script>
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
     <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}?v={{ time() }}"></script>
 @endsection

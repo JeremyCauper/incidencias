@@ -2,9 +2,9 @@
 @section('title', 'Visitas')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}?v={{ time() }}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}?v={{ time() }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}?v={{ time() }}">
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
+    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
     <style>
         #tb_visitas thead tr * {
@@ -175,7 +175,12 @@
                                     },
                                     columns: [
                                         { data: 'estado' },
-                                        { data: 'sucursal' },
+                                        {
+                                            data: 'sucursal', render: function (data, type, row) {
+                                                let sucursal = sucursales[data];
+                                                return `${sucursal.ruc} - ${sucursal.nombre}`;
+                                            }
+                                        },
                                         { data: 'tecnicos' },
                                         { data: 'fecha' },
                                         { data: 'acciones' }
@@ -363,7 +368,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Visita</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
+                            Visita</h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="fieldset" aria-item="contenedor-seguimiento">
@@ -404,7 +410,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Asignar Personal</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Asignar
+                            Personal</h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="p-3 pb-0 fieldset">
@@ -480,7 +487,8 @@
                         <div class="col-12 mt-1 mb-3">
                             <div class="list-group list-group-light">
                                 <div class="list-group-item">
-                                    <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                    <p aria-item="razon_social" class="font-weight-semibold mb-2"
+                                        style="font-size: .92rem;">
                                         20506467854 - CORPORACION JULCAN S.A.</p>
                                     <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
                                         N° 3689 MZ D LT 26 INDEPENDENCIA</p>
@@ -503,178 +511,194 @@
                         <input type="hidden" name="cod_ordenv" value="{{$data['cod_ordenv']}}">
                         <input type="hidden" name="id_visita_orden">
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>UPS</strong>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des1" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                        <div id="contendor-filas">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>UPS</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des1" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row mb-2">
-                            <div class="col-lg-3" style="font-size: 11px;"><label>• BATERIAS UPS</label></div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des2" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row mb-2">
+                                <div class="col-lg-3" style="font-size: 11px;"><label>• BATERIAS UPS</label></div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des2" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des3" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row mb-2">
+                                <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des3" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>ESTABILIZADOR</strong>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des4" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>ESTABILIZADOR</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des4" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row mb-2">
-                            <div class="col-lg-3" style="font-size: 11px;"><label>• INGRESO DE ENERGIA</label></div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des5" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row mb-2">
+                                <div class="col-lg-3" style="font-size: 11px;"><label>• INGRESO DE ENERGIA</label></div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des5" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <div class="row mb-2">
-                            <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des6" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row mb-2">
+                                <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des6" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>INTERFACE</strong>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des7" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>INTERFACE</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des7" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>MONITOR</strong>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des8" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>MONITOR</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des8" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>TARJETA MULTIPUERTOS</strong>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des9" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>TARJETA MULTIPUERTOS</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des9" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>SWITCH</strong>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des10" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>SWITCH</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des10" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="col-12 mt-3">
-                            <h6 class="tittle text-primary"> REVISION DEL SERVIDOR</h6>
-                        </div>
-
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>SISTEMA OPERATIVO</strong>
+                            <div class="col-12 mt-3">
+                                <h6 class="tittle text-primary"> REVISION DEL SERVIDOR</h6>
                             </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des11" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>SISTEMA OPERATIVO</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des11" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>VENCIMIENTO DE ANTIVIRUS</strong>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des12" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>VENCIMIENTO DE ANTIVIRUS</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des12" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>DISCO DURO</strong>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des13" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>DISCO DURO</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des13" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div class="row my-2">
-                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                <strong>REALIZAR BACKUP</strong>
-                            </div>
-                            <div class="col-lg-9">
-                                <div class="input-group">
-                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
-                                    <input type="text" name="des14" class="form-control rounded"
-                                        onchange="changeCheck(this)">
+                            <div class="row my-2">
+                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                    <strong>REALIZAR BACKUP</strong>
+                                </div>
+                                <div class="col-lg-9">
+                                    <div class="input-group">
+                                        <span class="input-group-text border-0 ps-0"><i
+                                                class="fas fa-circle-check"></i></span>
+                                        <input type="text" name="des14" class="form-control rounded"
+                                            onchange="changeCheck(this)">
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -685,86 +709,15 @@
                                     CONEXIONES </h6>
                             </div>
                             <div class="col-lg-2 my-1 d-flex align-items-center justify-content-end">
+                                <button type="button" class="btn btn-danger btn-sm px-2 me-2 text-nowrap"
+                                    onclick="MRevision.deleteAll()">Limpiar Islas</button>
                                 <strong class="me-2" style="white-space: nowrap;" id="conteo-islas">Cant. 1</strong>
-                                <button type="button" class="btn btn-secondary px-2" onclick="MRevision.create()"><i
+                                <button type="button" class="btn btn-secondary btn-sm px-1" onclick="MRevision.create()"><i
                                         class="far fa-square-plus"></i></button>
                             </div>
                         </div>
 
                         <div id="content-islas" class="mt-3">
-                            <!--<div class="islas-item py-2">
-                                                <div class="row my-2">
-                                                    <div class="col-lg-3 col-sm-4 col-5">
-                                                        <div class="input-group">
-                                                            <span class="input-group-text border-0 ps-0" style="font-size: small;">ISLA</span>
-                                                            <input type="text" class="form-control rounded"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-3 col-sm-4 col-5">
-                                                        <div class="input-group">
-                                                            <span class="input-group-text border-0 ps-0" style="font-size: small;">POS</span>
-                                                            <input type="text" class="form-control rounded"/>
-                                                        </div>
-                                                    </div>
-                                                    <div class="col-lg-6 col-sm-4 col-2 text-end">
-                                                        <button type="button" class="btn btn-danger px-2"><i class="far fa-trash-can"></i></button>
-                                                    </div>
-                                                </div>
-
-                                                <div class="row my-2">
-                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>IMPRESORAS</strong></div>
-                                                    <div class="col-lg-9">
-                                                        <input type="text" name="des7" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row my-2">
-                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>RED DE LECTORES</strong></div>
-                                                    <div class="col-lg-9">
-                                                        <input type="text" name="des8" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row my-2">
-                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>JACK TOOLS</strong></div>
-                                                    <div class="col-lg-9">
-                                                        <input type="text" name="des7" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row mb-2">
-                                                    <div class="col-lg-3" style="font-size: 11px;"><label>• VOLTAJE DE MANGUERAS</label></div>
-                                                    <div class="col-lg-9">
-                                                        <input type="text" name="des2" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row my-2">
-                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>CAUCHO PROTECTOR DE LECTORES</strong></div>
-                                                    <div class="col-lg-9">
-                                                        <input type="text" name="des8" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row my-2">
-                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MUEBLE DE POS</strong></div>
-                                                    <div class="col-lg-9">
-                                                        <input type="text" name="des9" class="form-control">
-                                                    </div>
-                                                </div>
-
-                                                <div class="row my-2">
-                                                    <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575"><strong>MR 350 / DTI / TERMINAL</strong></div>
-                                                    <div class="col-lg-9">
-                                                        <input type="text" name="des10" class="form-control">
-                                                    </div>
-                                                </div>
-                                            </div>-->
-                        </div>
-
-                        <div class="text-end">
-                            <button type="button" class="btn btn-secondary px-2" onclick="MRevision.create()"><i
-                                    class="far fa-square-plus"></i></button>
                         </div>
                     </div>
                 </div>
