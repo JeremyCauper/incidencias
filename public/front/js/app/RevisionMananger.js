@@ -86,12 +86,12 @@ class RevisionMananger {
                 contenedor.append(contentGroup);
                 // Si es el segundo elemento (índice 1), agregamos el botón de eliminar a la misma fila
                 if (i === 1) {
-                    let conteo = $('<div>', { class: "col-lg-6 col-sm-4 col-2 text-end" })
+                    let conteo = $('<div>', { class: "align-items-center col-2 col-lg-6 col-sm-4 d-flex justify-content-end" })
                         .append(
                             $('<strong>', { class: "me-2 text-nowrap conteo-islas-tittle" })
                         );
+                    contenedor.append(conteo);
                     items_islas.append(contenedor);
-                    items_islas.append(conteo);
                     contenedor = null; // Reiniciamos para que en próximas iteraciones se cree una nueva fila si es necesario
                 }
             } else {
