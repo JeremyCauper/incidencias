@@ -86,7 +86,7 @@ class RevisionMananger {
                 contenedor.append(contentGroup);
                 // Si es el segundo elemento (índice 1), agregamos el botón de eliminar a la misma fila
                 if (i === 1) {
-                    let conteo = $('<div>', { class: "col text-end" })
+                    let conteo = $('<div>', { class: "col-lg-6 col-sm-4 col-2 text-end" })
                         .append(
                             $('<strong>', { class: "me-2 text-nowrap conteo-islas-tittle" })
                         );
