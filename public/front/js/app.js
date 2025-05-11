@@ -570,7 +570,7 @@ function mostrar_acciones(table = null) {
     const dataTables_scrollBody = $(`${idTabla ? `#${idTabla}_wrapper` : '.dataTables_wrapper'} .dataTables_scrollBody`);
     let filaAccionActivo = null;
     let filaAccionOld = null;
-    let openOnCkick = false;
+    // let openOnCkick = false;
 
     const animateProperty = (element, property, start, end, duration, fps, callback = null) => {
         let current = start;
@@ -626,7 +626,7 @@ function mostrar_acciones(table = null) {
 
             let evento = esCelular() ? 'click' : 'mouseenter';
             $(this).off(evento).on(evento, function () { // Fila a la que se le dió click
-                if (openOnCkick) return;
+                // if (openOnCkick) return;
 
                 filaAccionActivo = $(this);
                 if (!esCelular()) {
@@ -634,8 +634,9 @@ function mostrar_acciones(table = null) {
                 } else {
                     filaAccionOld = $("tr:has(.active-acciones)");
                 }
-                const newTdAccion = filaAccionActivo.find(".td-acciones");
 
+                if (filaAccionActivo.is(filaAccionOld)) return;
+                const newTdAccion = filaAccionActivo.find(".td-acciones");
                 if (filaAccionOld?.length) {
                     const oldTdAccion = filaAccionOld.find(".td-acciones");
                     if (!newTdAccion.hasClass('active-acciones') && oldTdAccion.hasClass('active-acciones')) {
@@ -663,14 +664,14 @@ function mostrar_acciones(table = null) {
                 }
                 // Se añaden cuando el scroll esta a unos pixeles menos del final 
                 if (getScrollTdAccion(newTdAccion)) return;
-                newTdAccion.addClass('active-acciones sticky-activo').css('background-color', getBgColorRow(filaAccionActivo));
+                newTdAccion.addClass('active-acciones sticky-activo'); //.css('background-color', getBgColorRow(filaAccionActivo));
                 animateProperty(newTdAccion, 'right', -75, -43, 150, 60);
             });
 
             if (!esCelular()) {
                 $(this).off('mouseleave').on('mouseleave', function () {
                     const newTdAccion = filaAccionActivo.find(".td-acciones");
-                    if (!newTdAccion.find('.dropdown-menu').hasClass('show') && !openOnCkick) {
+                    if (!newTdAccion.find('.dropdown-menu').hasClass('show')) { //  && !openOnCkick
                         animateProperty(newTdAccion, 'right', -43, -75, 150, 60, () => {
                             newTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
                         });
@@ -680,11 +681,13 @@ function mostrar_acciones(table = null) {
                 $(this).off('click').on('click', function () {
                     filaAccionActivo = $(this);
                     const newTdAccion = filaAccionActivo.find(".td-acciones");
+                    
+                    if (filaAccionActivo.is(filaAccionOld)) return;
 
                     if (!getScrollTdAccion(newTdAccion) && !newTdAccion.hasClass('active-acciones')) {
-                        newTdAccion.addClass('active-acciones sticky-activo').css('background-color', getBgColorRow(filaAccionActivo));
+                        newTdAccion.addClass('active-acciones sticky-activo'); //.css('background-color', getBgColorRow(filaAccionActivo));
                         animateProperty(newTdAccion, 'right', -75, -43, 150, 60);
-                        openOnCkick = true;
+                        // openOnCkick = true;
                     }
 
                     if (filaAccionOld?.length) {
@@ -694,16 +697,12 @@ function mostrar_acciones(table = null) {
                         });
                         filaAccionOld = null;
                     }
-                    setTimeout(() => openOnCkick = false, 165);
+                    // setTimeout(() => openOnCkick = false, 165);
                 });
             }
         });
         paginaActual = nuevaPagina; // Actualizar la página actual
     });
-
-    // $('.dropdown-menu').on('show.mdb.dropdown', function () {
-    //     console.log($(this));
-    // });
 
     // Evento de scroll para actualizar la clase sticky-activo
     dataTables_scrollBody.on('scroll', function () {
@@ -715,10 +714,14 @@ function mostrar_acciones(table = null) {
             if (getScrollTdAccion(accionTd)) {
                 return accionTd.removeClass('active-acciones sticky-activo').removeAttr('style');
             }
-            accionTd.addClass("active-acciones sticky-activo").css({ 'right': '-43px', 'background-color': getBgColorRow(filaActiva) });
+            accionTd.addClass("active-acciones sticky-activo").css({ 'right': '-43px' }); // , 'background-color': getBgColorRow(filaActiva)
         } catch (error) {
             console.log(error);
         }
+    });
+
+    dataTables_scrollBody.on('blur', function () {
+        console.log('salió');
     });
 }
 
@@ -777,7 +780,7 @@ function iniciarGrafico(selector, data, type = 'doughnut') {
                         },
                         tooltip: {
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     const label = context.label || '';
                                     const value = context.raw;
                                     const total = context.chart._metasets[context.datasetIndex].total;
@@ -792,7 +795,7 @@ function iniciarGrafico(selector, data, type = 'doughnut') {
                     }
                 },
                 plugins: [ChartDataLabels]
-            };            
+            };
             break;
 
         case 'bar':
@@ -811,7 +814,7 @@ function iniciarGrafico(selector, data, type = 'doughnut') {
                         },
                         tooltip: {
                             callbacks: {
-                                label: function(context) {
+                                label: function (context) {
                                     const label = context.label || '';
                                     const value = context.raw;
                                     const total = context.chart._metasets[context.datasetIndex].total;

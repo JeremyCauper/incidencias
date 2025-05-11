@@ -174,10 +174,10 @@
                                 ],
                                 order: [[5, 'desc']],
                                 createdRow: function (row, data, dataIndex) {
-                                    const row_bg = ['row-bg-warning', 'row-bg-info', 'row-bg-primary', '', 'row-bg-danger'];
+                                    const row_bg = ['row-warning', 'row-info', 'row-primary', '', 'row-danger'];
                                     $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(10)').addClass('text-center');
                                     $(row).find('td:eq(10)').addClass(`td-acciones`);
-                                    $(row).addClass(row_bg[data.estado_informe]);
+                                    $(row).addClass('row-bg ' + row_bg[data.estado_informe]);
                                 },
                                 processing: true
                             });

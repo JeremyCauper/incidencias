@@ -2,17 +2,18 @@
 [data-mdb-theme=light] {
     --root-body-bg: #ddebff;
     --root-navbar-bg: #ffffff;
-    --root-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 20px; /*0 0 3px rgba(var(--mdb-surface-color-rgb), .12), 0 1px 2px rgba(var(--mdb-surface-color-rgb), .24); */
+    --root-box-shadow: rgba(0, 0, 0, 0.1) 0px 0px 20px;
+    /*0 0 3px rgba(var(--mdb-surface-color-rgb), .12), 0 1px 2px rgba(var(--mdb-surface-color-rgb), .24); */
 
     --root-logo-rci-bg: url(../../../public/front/images/app/LogoRC_WNormal.webp) no-repeat center center;
 
     --root-hover-items-sidebar: #edf4ff;
     --root-hover-items-sidebar-sub: #f5f5f5;
 
-    --row-bg-warning : 255 227 177;
-    --row-bg-info : 187 242 255;
-    --row-bg-primary : 174 208 255;
-    --row-bg-danger : 255 171 171;
+    --row-bg-warning: 255 227 177;
+    --row-bg-info: 187 242 255;
+    --row-bg-primary: 174 208 255;
+    --row-bg-danger: 255 171 171;
 }
 
 [data-mdb-theme=dark] {
@@ -24,10 +25,10 @@
     --root-hover-items-sidebar: #484f59;
     --root-hover-items-sidebar-sub: #535353;
 
-    --row-bg-warning : 89 74 48;
-    --row-bg-info : 40 75 83;
-    --row-bg-primary : 40 61 91;
-    --row-bg-danger : 87 48 48;
+    --row-bg-warning: 89 74 48;
+    --row-bg-info: 40 75 83;
+    --row-bg-primary: 40 61 91;
+    --row-bg-danger: 87 48 48;
 }
 
 /* Miscellanoeous */
@@ -606,7 +607,7 @@ body {
     width: 12rem;
     height: 45px;
     display: block;
-    
+
 }
 
 @media (max-width: 512px) {
@@ -1008,7 +1009,8 @@ body {
     }
 }
 
-.menu-perfil, .menu-lateral {
+.menu-perfil,
+.menu-lateral {
     cursor: default;
 }
 
@@ -2643,43 +2645,57 @@ label.custom-control {
     background-color: transparent;
 }
 
-.row-bg-warning {
+.row-warning {
     background-color: rgb(var(--row-bg-warning) / 45%);
 }
 
-.row-bg-info {
+.row-info {
     background-color: rgb(var(--row-bg-info) / 45%);
-    position: relative;
 }
 
-.row-bg-primary {
+.row-primary {
     background-color: rgb(var(--row-bg-primary) / 45%);
 }
 
-.row-bg-danger {
+.row-danger {
     background-color: rgb(var(--row-bg-danger) / 45%);
 }
 
 
-.row-bg-warning:hover {
+.row-warning:hover {
     --mdb-table-hover-bg: rgb(var(--row-bg-warning) / 100%) !important;
 }
 
-.row-bg-info:hover {
+.row-info:hover {
     --mdb-table-hover-bg: rgb(var(--row-bg-info) / 100%) !important;
     position: relative;
 }
 
-.row-bg-primary:hover {
+.row-primary:hover {
     --mdb-table-hover-bg: rgb(var(--row-bg-primary) / 100%) !important;
 }
 
-.row-bg-danger:hover {
+.row-danger:hover {
     --mdb-table-hover-bg: rgb(var(--row-bg-danger) / 100%) !important;
 }
 
-tr {
-    cursor: default;
+.row-warning .active-acciones {
+    background-color: rgb(var(--row-bg-warning));
+}
+
+.row-info .active-acciones {
+    background-color: rgb(var(--row-bg-info));
+}
+
+.row-primary .active-acciones {
+    background-color: rgb(var(--row-bg-primary));
+}
+
+.row-danger .active-acciones {
+    background-color: rgb(var(--row-bg-danger));
+}
+
+tr .active-acciones {
     background-color: rgb(var(--mdb-surface-bg-rgb));
 }
 
