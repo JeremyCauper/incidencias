@@ -24,22 +24,22 @@ $(document).ready(function () {
         }
     });
 
-    fObservador('.content-wrapper', () => {
-        tb_orden.columns.adjust().draw();
-    });
+    // fObservador('.content-wrapper', () => {
+    //     tb_orden.columns.adjust().draw();
+    // });
 });
 
-function updateTable() {
-    tb_orden.ajax.reload();
-}
+// function updateTable() {
+//     tb_orden.ajax.reload();
+// }
 // mostrar_acciones(tb_orden);
 
-function filtroBusqueda() {
-    var empresa = $('#empresa').val();
-    var sucursal = $('#sucursal').val();
-    var fechas = $('#dateRango').val().split('  al  ');
-    var tIncidencia = $('#tIncidencia').val();
-    var nuevoUrl = `${__url}/soporte/reportes/reporte-incidencias/index?ruc=${empresa}&sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}&tIncidencia=${tIncidencia}`;
+// function filtroBusqueda() {
+//     var empresa = $('#empresa').val();
+//     var sucursal = $('#sucursal').val();
+//     var fechas = $('#dateRango').val().split('  al  ');
+//     var tIncidencia = $('#tIncidencia').val();
+//     var nuevoUrl = `${__url}/soporte/reportes/reporte-incidencias/index?ruc=${empresa}&sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}&tIncidencia=${tIncidencia}`;
 
-    tb_orden.ajax.url(nuevoUrl).load();
-}
+//     tb_orden.ajax.url(nuevoUrl).load();
+// }

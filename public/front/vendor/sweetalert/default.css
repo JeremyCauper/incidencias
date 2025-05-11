@@ -318,8 +318,8 @@ div:where(.swal2-container) div:where(.swal2-popup) {
   padding: 0 0 1.25em;
   border: none;
   border-radius: 5px;
-  background: #fff;
-  color: #545454;
+  background: var(--mdb-surface-bg);
+  color: var(--mdb-body-color);
   font-family: inherit;
   font-size: 1rem;
 }

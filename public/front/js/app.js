@@ -627,7 +627,7 @@ function mostrar_acciones(table = null) {
             let evento = esCelular() ? 'click' : 'mouseenter';
             $(this).off(evento).on(evento, function () { // Fila a la que se le dió click
                 if (openOnCkick) return;
-                
+
                 filaAccionActivo = $(this);
                 if (!esCelular()) {
                     filaAccionOld = ($("tr:has(.active-acciones)")?.length) ? $("tr:has(.active-acciones)") : $("tr:has(.dropdown-menu.show)");
@@ -635,7 +635,7 @@ function mostrar_acciones(table = null) {
                     filaAccionOld = $("tr:has(.active-acciones)");
                 }
                 const newTdAccion = filaAccionActivo.find(".td-acciones");
-                
+
                 if (filaAccionOld?.length) {
                     const oldTdAccion = filaAccionOld.find(".td-acciones");
                     if (!newTdAccion.hasClass('active-acciones') && oldTdAccion.hasClass('active-acciones')) {
@@ -686,7 +686,7 @@ function mostrar_acciones(table = null) {
                         animateProperty(newTdAccion, 'right', -75, -43, 150, 60);
                         openOnCkick = true;
                     }
-                    
+
                     if (filaAccionOld?.length) {
                         const oldTdAccion = filaAccionOld.find(".td-acciones");
                         animateProperty(oldTdAccion, 'right', -43, -75, 150, 60, () => {
@@ -721,6 +721,157 @@ function mostrar_acciones(table = null) {
         }
     });
 }
+
+function iniciarGrafico(selector, data, type = 'doughnut') {
+    const transformarData = (oldData) => {
+        return {
+            labels: oldData.dbody.map(item => item.titulo),
+            datasets: [{
+                label: "Total",
+                data: oldData.dbody.map(item => item.total),
+                backgroundColor: oldData.dbody.map(item => parseColor(item.color)),
+                hoverOffset: 20
+            }]
+        };
+    }
+
+    let config = null;
+    switch (type) {
+        case 'doughnut':
+            config = {
+                type: 'doughnut',
+                data: transformarData(data),
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: 20
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'left',
+                            labels: {
+                                boxWidth: 10,
+                                boxHeight: 10,
+                                padding: 10,
+                                color: 'rgb(112, 112, 112)',
+                                font: {
+                                    weight: 'bold',
+                                    size: 12
+                                },
+                            },
+                            onHover: (event, legendItem, legend) => {
+                                const chart = legend.chart;
+                                const index = legendItem.index;
+                                chart.setActiveElements([{ datasetIndex: 0, index: index }]);
+                                chart.update();
+                            },
+                            onLeave: (event, legendItem, legend) => {
+                                const chart = legend.chart;
+                                chart.setActiveElements([]);
+                                chart.update();
+                            }
+                        },
+                        title: {
+                            display: true,
+                            text: data.dhead,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw;
+                                    const total = context.chart._metasets[context.datasetIndex].total;
+                                    const percentage = ((value / total) * 100).toFixed(1) + '%';
+                                    return `Total: ${value} (${percentage})`; // `${label}: ${value} (${percentage})`
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: 'rgba(255, 255, 255, 0)',
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            };            
+            break;
+
+        case 'bar':
+            config = {
+                type: 'bar',
+                data: transformarData(data),
+                options: {
+                    responsive: true,
+                    layout: {
+                        padding: 20
+                    },
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: data.dhead,
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const label = context.label || '';
+                                    const value = context.raw;
+                                    const total = context.chart._metasets[context.datasetIndex].total;
+                                    const percentage = ((value / total) * 100).toFixed(1) + '%';
+                                    return `Total: ${value} (${percentage})`; // `${label}: ${value} (${percentage})`
+                                }
+                            }
+                        },
+                        datalabels: {
+                            color: 'rgba(255, 255, 255, 0)',
+                        }
+                    }
+                },
+                plugins: [ChartDataLabels]
+            };
+            break;
+    }
+
+    return new Chart($(selector), config);
+}
+
+function parseColor(color) {
+    if (!color) return;
+    let colores = {
+        primary: '#3b71ca',
+        secondary: '#9fa6b2',
+        success: '#14a44d',
+        danger: '#dc4c64',
+        warning: '#e4a11b',
+        info: '#54b4d3',
+        light: '#fbfbfb',
+        dark: '#332d2d',
+    }
+
+    if (colores.hasOwnProperty(color)) {
+        color = colores[color];
+    }
+    const rgbRegex = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i;
+    const hexRegex = /^#([a-f\d]{3}|[a-f\d]{6})$/i;
+
+    // Si es RGB
+    const rgbMatch = color.match(rgbRegex);
+    if (rgbMatch) {
+        return color;
+    }
+
+    // Si es HEX
+    const hexMatch = color.match(hexRegex);
+    if (hexMatch) {
+        let hex = hexMatch[1];
+        if (hex.length === 3) { hex = hex.split('').map(c => c + c).join(''); }
+        const r = parseInt(hex.slice(0, 2), 16);
+        const g = parseInt(hex.slice(2, 4), 16);
+        const b = parseInt(hex.slice(4, 6), 16);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    throw new Error('Formato de color no reconocido');
+}
+
 
 function fObservador(selector, callback) {
     if (typeof selector !== 'string') return null;
