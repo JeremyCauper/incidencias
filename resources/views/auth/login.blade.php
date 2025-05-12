@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" class="h-100">
+<html lang="es" class="h-100" data-mdb-theme="light">
 
 <head>
     <!-- Requiredd meta tags -->
@@ -38,16 +38,19 @@
                     <i class="fas fa-triangle-exclamation"></i> Usuario incorrecto
                 </div>
                 <!-- Usuario input -->
-                <div class="input-group form-outline my-4" style="padding: .1152rem;" data-mdb-input-init aria-cinput="usuario">
-                    <span class="input-group-text border-0 px-2" for="usuario"><i class="fas fa-circle-user"></i></span>
-                    <input type="text" name="usuario" id="usuario" class="form-control border-start-0 ps-1" placeholder="Usuario" autofocus require="usuario">
+                <div class="form-icon icon-usuario my-4">
+                    <input type="text" name="usuario" id="usuario" class="form-control" placeholder="Usuario" autofocus require="usuario">
                 </div>
 
                 <!-- Password input -->
-                <div class="input-group form-outline my-4" style="padding: .1152rem;" data-mdb-input-init aria-cinput="contraseña">
+                <!-- <div class="input-group form-outline my-4" style="padding: .1152rem;" data-mdb-input-init aria-cinput="contraseña">
                     <span class="input-group-text border-0 px-2" for="contrasena"><i class="fas fa-key"></i></span>
                     <input type="password" name="password" id="contrasena" class="form-control border-start-0 ps-1" placeholder="Contraseña" autofocus require="contraseña">
                     <span class="input-group-text border-0 px-2" style="padding-top: 7px;"><i class="fas fa-eye-slash" id="icon-pass"></i></span>
+                </div> -->
+                <div class="form-icon icon-contrasena my-4">
+                    <input type="password" name="password" id="contrasena" class="form-control" placeholder="Contraseña" autofocus require="contraseña">
+                    <span class="icon-pass"><i class="fas fa-eye-slash"></i></span>
                 </div>
 
                 <!-- Submit button -->

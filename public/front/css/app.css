@@ -1249,7 +1249,7 @@ body {
     text-align: left;
     padding: 4.5px 35px 3.68px 12px;
     text-transform: none;
-    background-color: #fff;
+    background-color: var(--mdb-body-bg);
     border: var(--mdb-border-width) solid var(--mdb-border-color);
     transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
     overflow: hidden;
@@ -1262,6 +1262,7 @@ body {
 .multiselect:hover {
     box-shadow: none !important;
     border: var(--mdb-border-width) solid var(--mdb-border-color);
+    background-color: var(--mdb-body-bg);
 }
 
 .multiselect:focus {
@@ -1282,7 +1283,7 @@ body {
     -moz-osx-font-smoothing: grayscale;
     width: 35px;
     height: calc(100% - 4px);
-    background-color: #fff;
+    background-color: var(--mdb-body-bg);
     text-align: center;
     padding-top: 8px;
     border-radius: inherit;
@@ -2476,7 +2477,7 @@ label.custom-control {
 }
 
 .dataTables_paginate .paginate_button:hover {
-    background-color: #e7e7e7;
+    background-color: rgb(var(--mdb-surface-color-rgb), .1);
 }
 
 .dataTables_paginate .paginate_button {
@@ -2487,7 +2488,7 @@ label.custom-control {
     text-align: center;
     line-height: 28.5px;
     font-size: .8rem;
-    color: #333;
+    color: var(--mdb-surface-color);
     cursor: pointer;
     margin: 5px;
     transition: background-color 0.3s;

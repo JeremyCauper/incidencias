@@ -58,7 +58,7 @@
                         <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
                             @foreach ($data['tIncidencia'] as $v)
                                 <option value="{{ $v->id }}" selected>
-                                    {{ '<span class="custom-control-label w-100 font-weight-semibold"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
+                                    {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
                                 </option>
                             @endforeach
                         </select>

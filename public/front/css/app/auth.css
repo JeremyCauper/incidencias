@@ -78,20 +78,63 @@
     animation: bounceOut 0.5s forwards;
 }
 
-#icon-pass {
-    width: 24px;
-    height: 24px;
+.form-icon {
+    position: relative;
+}
+
+.form-icon input {
+    padding-left: 2.25rem !important;
+    height: 39px;
+}
+
+.form-icon::after,
+.form-icon::before {
+    font-family: "Font Awesome 6 Free";
+    position: absolute;
+    top: 50%;
+    color: inherit;
+    display: block;
+    font-size: 1rem;
+    margin-top: -.5rem;
+    line-height: 1;
+    -webkit-font-smoothing: antialiased;
+}
+
+.form-icon.icon-usuario::after {
+    content: "\f2bd";
+    left: .75rem;
+}
+
+.form-icon.icon-contrasena::after {
+    content: "\f084";
+    left: .75rem;
+}
+
+.form-icon.icon-contrasena input {
+    padding-right: 2.25rem !important;
+}
+
+.form-icon .icon-pass {
+    position: absolute;
+    top: 50%;
+    right: .6rem;
+    margin-top: -.7rem;
+    line-height: 1;
+    width: 25px;
+    height: 25px;
     display: flex;
     align-items: center;
     justify-content: center;
     border-radius: 50%;
     cursor: pointer;
+    -webkit-font-smoothing: antialiased;
 }
 
-#icon-pass::before {
-    font-size: 12px;
+.form-icon .icon-pass i {
+    font-size: .8rem;
+    top: 1px;
 }
 
-#icon-pass:hover {
-    background-color: #ebebeb;
+.form-icon .icon-pass:hover {
+    background-color: rgb(var(--mdb-surface-color-rgb), .15);
 }
