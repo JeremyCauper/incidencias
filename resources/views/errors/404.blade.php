@@ -17,7 +17,7 @@
     <nav class="navbar bg-dark-subtle fixed-top">
         <div class="container-fluid py-1 mx-2">
             <a class="navbar-brand" href="{{url('/soporte')}}">
-                <img src="{{secure_asset('front/images/app/logo_tittle_rc.png')}}?v={{ time() }}" height="34" alt="RC Logo" loading="lazy" style="margin-top: -1px;">
+                <img src="{{secure_asset('front/images/app/LogoRC_WBlanco.webp')}}?v={{ time() }}" height="34" alt="RC Logo" loading="lazy" style="margin-top: -1px;">
             </a>
             <span class="navbar-brand text-white me-0" style="font-size: smaller;">
                 INCIDENCIAS - RICARDO CALDERON INGENIEROS SAC

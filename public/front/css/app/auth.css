@@ -1,12 +1,45 @@
-@media screen and (max-width: 600px) {
-    .navbar div span {
-        display: none;
+:root,
+[data-mdb-theme=light] {
+    --root-logo-navbar: url(../../../../public/front/images/app/LogoRC_WBlanco.webp) no-repeat center center;
+    --root-logo-rci-bg: url(../../../../public/front/images/app/LogoRC_TNegro.png) no-repeat center center;
+    --root-font-size-span: smaller;
+    --root-logo-width-navbar: 12rem;
+    --root-logo-height-navbar: 48px;
+}
+
+[data-mdb-theme=dark] {
+    --root-logo-rci-bg: url(../../../../public/front/images/app/LogoRC_TBlanco.png) no-repeat center center;
+}
+
+.navbar-brand .logo_rci {
+    background: var(--root-logo-navbar);
+    background-size: contain;
+    width: var(--root-logo-width-navbar);
+    height: var(--root-logo-height-navbar);
+    display: block;
+}
+
+@media screen and (max-width: 665px) {
+    :root {
+        --root-font-size-span: xx-small;
+        --root-logo-navbar: url(../../../../public/front/images/app/LogoRC.png) no-repeat center center;
+        --root-logo-width-navbar: 2.75rem;
+        --root-logo-height-navbar: 2.75rem;
     }
+}
+
+.navbar .container-fluid span {
+    font-size: var(--root-font-size-span);
 }
 
 .title-login {
     position: relative;
     color: #6c757d;
+    background: var(--root-logo-rci-bg);
+    background-size: contain;
+    width: 100%;
+    height: 48px;
+    display: block;
 }
 
 .title-login::before,

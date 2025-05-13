@@ -231,12 +231,10 @@ function date(format) {
     return format.replace(/[YmdHisjwnGaA]/g, (match) => map[match]);
 }
 
-async function consultarDni(dni) {
-    const url = `${__url}/soporte/ConsultaDni/${dni}`;
-
+async function consultarDoc(dni) {
     try {
         const response = await $.ajax({
-            url: url,
+            url: `${__url}/api/ConsultaDoc/Consulta?doc=${dni}`,
             method: "GET",
             dataType: "json"
         });
@@ -248,7 +246,8 @@ async function consultarDni(dni) {
 }
 
 async function consultarDniInput($this) {
-    if (!$this.val()) return false;
+    let doc = $this.val();
+    if (!doc || doc.length > 8) return false;
 
     const label = $(`[for="${$this.attr('id')}"`);
     const labelHtml = label.html();
@@ -257,7 +256,7 @@ async function consultarDniInput($this) {
     }
     try {
         label.addClass('d-flex justify-content-between').html(`${labelHtml} <span class="text-info"><span class="spinner-border" role="status" style="width: 1rem; height: 1rem;"></span> Consultando</span>`);
-        const datos = await consultarDni($this.val());
+        const datos = await consultarDoc(doc);
         return datos;
     } catch (error) {
         console.error("No se pudo consultar el DNI.");

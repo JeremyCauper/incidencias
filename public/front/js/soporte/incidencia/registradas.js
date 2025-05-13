@@ -167,7 +167,7 @@ $(document).ready(function () {
 
         let datos = await consultarDniInput($(this));
         if (datos.success) {
-            $('#nom_contac').val(datos.data.completo);
+            $('#nom_contac').val(datos.data.RazonSocialCliente);
         }
     });
 

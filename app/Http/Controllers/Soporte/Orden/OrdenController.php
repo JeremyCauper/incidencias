@@ -56,7 +56,7 @@ class OrdenController extends Controller
                 if ($orden) {
                     return $this->message(message: "El orden de servicio para la incidencia <b>$request->codInc</b> ya fue emitida.", data: ['data' => ['new_cod_orden' => $new_codigo]], status: 202);
                 }
-    
+
                 if ($new_codigo != $request->n_orden) {
                     $validar_codigo = "<b class='text-danger'>Importante:</b> El código de orden <b>$request->n_orden</b> ya estaba en uso. Se asignó el nuevo código <b>$new_codigo</b>";
                 } else {
@@ -127,7 +127,8 @@ class OrdenController extends Controller
                 'data' => [
                     'new_cod_orden' => $codOrdenS,
                     'old_cod_orden' => $new_codigo,
-                ]]);
+                ]
+            ]);
         } catch (QueryException $e) {
             DB::rollBack();
             return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
@@ -278,7 +279,7 @@ class OrdenController extends Controller
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $orden->cod_incidencia)->orderBy('created_at', 'asc')->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $orden->cod_incidencia)->get();
             $materialesUsados = DB::table('tb_materiales_usados')->where('cod_ordens', $cod)->get();
-            
+
             $tSoporte = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
             $datos['tipoSoporte'] = $tSoporte[$incidencia->id_tipo_soporte]['descripcion'];
 
@@ -414,5 +415,29 @@ class OrdenController extends Controller
             }
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
+    }
+
+    public function preViewPdf($cod)
+    {
+        // Datos iniciales
+        $data = $this->DataForFile($cod);
+
+        // 1) Renderizar la vista con los datos que necesites
+        $html = view('soporte.orden.incidencia.viewpdf', $data)->render();
+
+        // 2) Cargar el HTML en DomPDF
+        $pdf = Pdf::loadHTML($html)->setPaper('a4', 'portrait');
+
+        // 3) Obtener el contenido del PDF en una cadena
+        $pdfContent = $pdf->output(); // string binario del PDF
+
+        // 4) Codificarlo en Base64
+        $pdfBase64 = base64_encode($pdfContent);
+
+        // 5) Devolverlo (por ejemplo, en JSON)
+        return view('soporte.orden.pdfjs.preview', [
+            'filename' => "ORDEN - {$cod}.pdf",
+            'base64_pdf' => $pdfBase64,
+        ]);
     }
 }

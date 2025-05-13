@@ -44,7 +44,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 // Consulta Dni
-Route::get('/soporte/ConsultaDni/{dni}', [ConsultasController::class, 'ConsultaDni']);
+// Route::get('/api/ConsultaDni/{dni}', [ConsultasController::class, 'ConsultaDni']);
+Route::get('/api/ConsultaDoc/Consulta', [ConsultasController::class, 'ConsultaDoc']);
 
 Route::redirect('/', url('/soporte'));
 Route::get('/soporte', [LoginController::class, 'view'])->name('login')->middleware('guest:web');
@@ -73,6 +74,8 @@ Route::post('/soporte/orden/editCodAviso', [OrdenController::class, 'editCodAvis
 Route::post('/soporte/orden/addSignature', [OrdenController::class, 'addSignature']);
 Route::get('/soporte/orden/documentopdf/{cod}', [OrdenController::class, 'CreatePdf']);
 Route::get('/soporte/orden/documentoticket/{cod}', [OrdenController::class, 'CreateTicket']);
+Route::get('/soporte/orden/previsualizarpdf/{cod}', [OrdenController::class, 'preViewPdf']);
+Route::get('/soporte/orden/previsualizarticket/{cod}', [OrdenController::class, 'preViewTicket']);
 
 Route::post('/soporte/orden-visita/create', [OrdenVisitaController::class, 'create']);
 Route::get('/soporte/orden-visita/documentopdf/{cod}', [OrdenVisitaController::class, 'CreatePdf']);

@@ -189,7 +189,7 @@
             <td class="w-50">
                 <div>
                     <img src="{{public_path() . '/front/images/app/LogoRC.png'}}" alt="Logo" width="60">
-                    <img src="{{public_path() . '/front/images/app/tittle_login.png'}}" alt="Logo" width="210">
+                    <img src="{{public_path() . '/front/images/app/LogoRC_TNegro.png'}}" alt="Logo" width="210">
                 </div>
                 <div class="card">
                     <p><b>Direccion :</b> Av. Augusto B. Leguia 307 - Coop. Policial Lima - Lima - SMP</p>

@@ -89,7 +89,36 @@ function ShowDetail(e, cod) {
 }
 
 function OrdenPdf(cod) {
-    window.open(`${__url}/soporte/orden/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");
+    $('#modal_pdf').modal('show');
+
+    // Obtener el contenedor
+    var contenedor = $('#miContenedor');
+
+    // Obtener el ancho y la altura total
+    var anchoTotal = contenedor.width();
+    var alturaTotal = contenedor.height();
+
+    // Obtener el padding izquierdo y derecho
+    var paddingIzquierdo = parseInt(contenedor.css('padding-left'), 10);
+    var paddingDerecho = parseInt(contenedor.css('padding-right'), 10);
+
+    // Obtener el padding superior e inferior
+    var paddingSuperior = parseInt(contenedor.css('padding-top'), 10);
+    var paddingInferior = parseInt(contenedor.css('padding-bottom'), 10);
+
+    // Calcular el ancho y la altura sin el padding
+    var anchoSinPadding = anchoTotal - paddingIzquierdo - paddingDerecho;
+    var alturaSinPadding = alturaTotal - paddingSuperior - paddingInferior;
+
+    console.log("Ancho sin padding:", anchoSinPadding);
+    console.log("Altura sin padding:", alturaSinPadding);
+
+    const viewerPath = __asset + '/vendor/pdfjs/viewer.html';
+    // const dynamicUrl = encodeURIComponent(`${__url}/soporte/orden/documentopdf/${cod}`);
+
+    $('#contenedor_doc').attr('src', viewerPath);
+
+    //window.open(`${__url}/soporte/orden/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");
 }
 
 function OrdenTicket(cod) {

@@ -119,7 +119,7 @@
 
 <body>
     <div class="ticket-header">
-        <img src="{{public_path() . '/front/images/app/logo_tittle_rc_white.png'}}" class="logo">
+        <img src="{{public_path() . '/front/images/app/LogoRC_WBlanco.webp'}}" class="logo">
         <p style="font-weight: bold; font-size: 11px; margin: 0px">ORDEN DE SERVICIO</p>
         <p style="font-size: 11px; margin: 0px">{{$cod_ordens}}</p>
         <p style="font-size: 9px; margin: 9px 0px 0px 100px;"><span style="font-weight: bold;">FECHA :</span> {{$fecha}}

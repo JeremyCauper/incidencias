@@ -4051,7 +4051,7 @@ fieldset:disabled .btn {
     --mdb-dropdown-inner-border-radius: calc(0.5rem - var(--mdb-border-width));
     --mdb-dropdown-divider-bg: var(--mdb-divider-color);
     --mdb-dropdown-divider-margin-y: 0.5rem;
-    --mdb-dropdown-box-shadow: 0 3px 6px rgba(0, 0, 0, .16), 0 3px 6px rgba(0, 0, 0, .23);
+    --mdb-dropdown-box-shadow: 0 3px 6px rgba(var(--mdb-surface-color-rgb), .16), 0 3px 6px rgba(var(--mdb-surface-color-rgb), .16);
     --mdb-dropdown-link-color: var(--mdb-surface-color);
     --mdb-dropdown-link-hover-color: var(--mdb-surface-color);
     --mdb-dropdown-link-hover-bg: var(--mdb-tertiary-bg);

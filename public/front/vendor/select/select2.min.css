@@ -326,7 +326,7 @@
     width: 100%;
     z-index: 1070;
     border-radius: .25rem;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .16), 0 3px 6px rgba(0, 0, 0, .23)
+    box-shadow: 0 3px 6px rgba(var(--mdb-surface-color-rgb), .16), 0 3px 6px rgba(var(--mdb-surface-color-rgb), .16)
 }
 
 .select2-results {
