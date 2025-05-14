@@ -680,7 +680,7 @@ function mostrar_acciones(table = null) {
                 $(this).off('click').on('click', function () {
                     filaAccionActivo = $(this);
                     const newTdAccion = filaAccionActivo.find(".td-acciones");
-                    
+
                     if (filaAccionActivo.is(filaAccionOld)) return;
 
                     if (!getScrollTdAccion(newTdAccion) && !newTdAccion.hasClass('active-acciones')) {
@@ -891,6 +891,19 @@ function fObservador(selector, callback) {
         if (typeof callback === "function") callback();
     });
     observer.observe(contenedor);
+}
+
+function cargarIframeDocumento(url) {
+    $('#modal_pdf').modal('show');
+    let contenedor = $('#modal_pdf .modal-body');
+    contenedor.prepend('<div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>');
+    $('#contenedor_doc').attr('src', url).off('load').on('load', function () {
+        contenedor.find('.loader-of-modal').remove();
+        setTimeout(() => {
+            var alturaTotal = contenedor.height() - 8;
+            $(this).height(alturaTotal).removeClass('h-100');
+        }, 100);
+    });
 }
 
 function esCelular() {

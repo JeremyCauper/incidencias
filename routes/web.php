@@ -72,13 +72,11 @@ Route::get('/soporte/incidencias/resueltas/showSignature/{cod}', [ResueltasContr
 Route::post('/soporte/orden/create', [OrdenController::class, 'create']);
 Route::post('/soporte/orden/editCodAviso', [OrdenController::class, 'editCodAviso']);
 Route::post('/soporte/orden/addSignature', [OrdenController::class, 'addSignature']);
-Route::get('/soporte/orden/documentopdf/{cod}', [OrdenController::class, 'CreatePdf']);
-Route::get('/soporte/orden/documentoticket/{cod}', [OrdenController::class, 'CreateTicket']);
-Route::get('/soporte/orden/previsualizarpdf/{cod}', [OrdenController::class, 'preViewPdf']);
-Route::get('/soporte/orden/previsualizarticket/{cod}', [OrdenController::class, 'preViewTicket']);
+Route::get('/soporte/orden/exportar-documento', [OrdenController::class, 'ExportarDocumento']);
+Route::get('/soporte/orden/data/{cod}', [OrdenController::class, 'edata']);
 
 Route::post('/soporte/orden-visita/create', [OrdenVisitaController::class, 'create']);
-Route::get('/soporte/orden-visita/documentopdf/{cod}', [OrdenVisitaController::class, 'CreatePdf']);
+Route::get('/soporte/orden-visita/exportar-documento', [OrdenVisitaController::class, 'ExportarDocumento']);
 
 // Visitas Tecnicas
 Route::get('/soporte/visitas/sucursales', [VSucursalesController::class, 'view'])->middleware('auth');

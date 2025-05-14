@@ -221,12 +221,16 @@
         </tr>
         <tr>
             <td colspan="8">
-                <span class="fw-bold">Clasificacion del Error :</span> {{$problema}}
+                <span class="fw-bold">Tipo Soporte :</span> {{$tipoSoporte}}
             </td>
         </tr>
         <tr>
             <td colspan="8">
-                <span class="fw-bold">Tipo Soporte :</span> {{$tipoSoporte}}
+                <span class="fw-bold">Clasificacion del Error</span>
+                <ul style="padding-left: 10px;">
+                    <li><span class="fw-bold">Problema :</span> {{$problema}}</li>
+                    <li><span class="fw-bold">Sub Problema :</span> {{$sproblema}}</li>
+                </ul>
             </td>
         </tr>
         <tr>
@@ -256,13 +260,13 @@
                 </div>
             </td>
         </tr>
-        
+
         @if ($eCodAviso)
-        <tr>
-            <td colspan="8">
-                <span class="fw-bold">Codigo Aviso :</span> {{$codigo_aviso}}
-            </td>
-        </tr>
+            <tr>
+                <td colspan="8">
+                    <span class="fw-bold">Codigo Aviso :</span> {{$codigo_aviso}}
+                </td>
+            </tr>
         @endif
         <tr>
             <td colspan="8">
@@ -280,9 +284,9 @@
                     @if (count($materiales))
                         @foreach ($materiales as $mat)
                             <tr>
-                                <td>{{$mat['i']}}</td>
-                                <td>{{$mat['p']}}</td>
-                                <td>{{$mat['c']}}</td>
+                                <td>{{$mat['indice']}}</td>
+                                <td>{{$mat['descripcion']}}</td>
+                                <td>{{$mat['cantidad']}}</td>
                             </tr>
                         @endforeach
                     @endif

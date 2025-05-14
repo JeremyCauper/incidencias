@@ -413,7 +413,7 @@ function ShowEdit(id) {
             const actualizarEstatus = (tipoInc, data) => {
                 let tipoi = [], estado = true;
                 const limitante = data[data.length - 1].id_tipo_inc;
-            
+
                 Object.entries(tipoInc).forEach(([key, e]) => {
                     let new_e = { ...e };
                     new_e.estatus = estado ? 0 : 1;
@@ -421,7 +421,7 @@ function ShowEdit(id) {
                     tipoi.push(new_e);
                 });
                 return tipoi;
-            }            
+            }
             const dt = data.data;
             if (eval(dt.estado_informe) == 2) {
                 let new_tipo_incidencia = actualizarEstatus(tipo_incidencia, dt.tipo_incidencia);
@@ -645,8 +645,14 @@ async function OrdenDetail(e, cod) {
                 if (inc.cod_orden) {
                     $('#modal_orden').modal('hide');
                     cod_orden = inc.new_cod_orden;
-                    if (inc.id_tipo_incidencia == 2)
-                        window.open(`${__url}/soporte/orden/documentopdf/${inc.cod_orden}`, `Visualizar PDF ${inc.cod_orden}`, "width=900, height=800");
+                    if (inc.id_tipo_incidencia == 2) {
+                        const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${inc.cod_orden}`;
+                        if (esCelular()) {
+                            cargarIframeDocumento(url + '&tipo=movil');
+                        } else {
+                            window.open(url, `Visualizar PDF ${inc.cod_orden}`, "width=900, height=800");
+                        }
+                    }
                     updateTable();
                     boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de servicio con el siguiente codigo <b>${inc.cod_orden}</b>.` });
                     return true;
@@ -742,8 +748,14 @@ document.getElementById('form-orden').addEventListener('submit', async function 
             if (data.success || data.status == 202) {
                 $('#modal_orden').modal('hide');
                 cod_orden = dt.new_cod_orden;
-                if (incidencia_temp.id_tipo_incidencia == 2)
-                    window.open(`${__url}/soporte/orden/documentopdf/${dt.old_cod_orden}`, `Visualizar PDF ${dt.old_cod_orden}`, "width=900, height=800");
+                if (incidencia_temp.id_tipo_incidencia == 2) {
+                    const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${dt.old_cod_orden}`;
+                    if (esCelular()) {
+                        cargarIframeDocumento(url + '&tipo=movil');
+                    } else {
+                        window.open(url, `Visualizar PDF ${dt.old_cod_orden}`, "width=900, height=800");
+                    }
+                }
             }
             updateTable();
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
@@ -827,8 +839,14 @@ document.getElementById('form-addcod').addEventListener('submit', async function
             fMananger.formModalLoding('modal_addcod', 'hide');
             if (data.success) {
                 $('#modal_addcod').modal('hide');
-                if (incidencia_temp.id_tipo_incidencia == 2)
-                    window.open(`${__url}/soporte/orden/documentopdf/${data.data.cod_orden}`, `Visualizar PDF ${data.data.cod_orden}`, "width=900, height=800");
+                if (incidencia_temp.id_tipo_incidencia == 2) {
+                    const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${data.data.cod_orden}`;
+                    if (esCelular()) {
+                        cargarIframeDocumento(url + '&tipo=movil');
+                    } else {
+                        window.open(url, `Visualizar PDF ${data.data.cod_orden}`, "width=900, height=800");
+                    }
+                }
                 updateTable();
                 return true;
             }

@@ -38,13 +38,18 @@ function filtroBusqueda() {
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
     var nuevoUrl = `${__url}/soporte/visitas/terminadas/index?sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
-    
+
     tb_vterminadas.ajax.url(nuevoUrl).load();
 }
 
 
 function OrdenPdf(cod) {
-    window.open(`${__url}/soporte/orden-visita/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");
+    const url = `${__url}/soporte/orden-visita/exportar-documento?documento=pdf&codigo=${cod}`;
+    if (esCelular()) {
+        cargarIframeDocumento(url + '&tipo=movil');
+    } else {
+        window.open(url, `Visualizar PDF ${cod}`, "width=900, height=800");
+    }
 }
 
 function ShowDetail(e, id) {

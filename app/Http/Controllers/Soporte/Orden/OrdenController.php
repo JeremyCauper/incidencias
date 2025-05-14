@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Validator;
+use PhpParser\Node\Expr\Throw_;
 use Throwable;
 
 class OrdenController extends Controller
@@ -278,7 +279,7 @@ class OrdenController extends Controller
             $contactoOrden = DB::table('tb_contac_ordens')->where('id', $orden->id_contacto)->first();
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $orden->cod_incidencia)->orderBy('created_at', 'asc')->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $orden->cod_incidencia)->get();
-            $materialesUsados = DB::table('tb_materiales_usados')->where('cod_ordens', $cod)->get();
+            $materialesUsados = DB::table('tb_materiales_usados')->select('id_material', 'cantidad')->where('cod_ordens', $cod)->get();
 
             $tSoporte = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
             $datos['tipoSoporte'] = $tSoporte[$incidencia->id_tipo_soporte]['descripcion'];
@@ -348,7 +349,8 @@ class OrdenController extends Controller
             // Procesar problemas
             $problemas = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->where('id', $incidencia->id_problema)->first();
             $sproblemas = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->where('id', $incidencia->id_subproblema)->first();
-            $datos['problema'] = "{$problemas['codigo']} - {$problemas['descripcion']} / {$sproblemas['prioridad']} - {$sproblemas['descripcion']}";
+            $datos['problema'] = "{$problemas['codigo']} - {$problemas['descripcion']}";
+            $datos['sproblema'] = "{$sproblemas['prioridad']} - {$sproblemas['descripcion']}";
 
             // Observaciones y recomendaciones
             $datos['observacion'] = $orden->observaciones;
@@ -357,17 +359,15 @@ class OrdenController extends Controller
             $datos['fecha'] = $incidencia->created_at;
 
             // Procesar materiales
-            $materialesDisponibles = DB::table('tb_materiales')->pluck('producto', 'id_materiales')->toArray();
-
-            // return $materialesUsados;
-
-            foreach ($materialesUsados as $key => $material) {
-                $datos['materiales'][] = [
-                    'i' => $key + 1,
-                    'p' => $materialesDisponibles[$material->id] ?? 'Desconocido',
-                    'c' => $material->cantidad,
-                ];
-            }
+            $datos['materiales'] = DB::table('tb_materiales')->whereIn('id_materiales', $materialesUsados->pluck('id_material')->toArray())->get()
+                ->map(function ($val, $key) use ($materialesUsados) {
+                    $material = $materialesUsados->where('id_material', $val->id_materiales)->first();
+                    return [
+                        'indice' => $key + 1,
+                        'descripcion' => $val->producto,
+                        'cantidad' => $material->cantidad ?? '0'
+                    ];
+                });
 
             return $datos;
 
@@ -376,68 +376,59 @@ class OrdenController extends Controller
         }
     }
 
-    public function CreateTicket(string $cod)
+    public function edata(string $cod)
     {
-        try {
-            $data = $this->DataForFile($cod);
-
-            // Renderizar la vista HTML
-            $pdf = PDF::loadView('soporte.orden.incidencia.viewticket', $data);
-
-            // Definir el tamaño de la hoja en mm (80mm de ancho)
-            $pdf->setPaper([0, 0, 226.77, 800], 'portrait'); // 80mm ancho y 600 de alto (se puede ajustar)
-            return $pdf->stream("ORDEN - {$cod}.pdf");
-        } catch (QueryException $e) {
-            return $this->message(message: "Error al generar el PDF de la orden de incidencia $cod", data: ['error' => $e->getMessage()], status: 400);
-        } catch (Exception $e) {
-            if ($e->getCode() == 404) {
-                return $this->message(message: $e->getMessage(), status: 404);
-            }
-            return $this->message(data: ['error' => $e->getMessage()], status: 500);
-        }
+        return $this->DataForFile($cod);
     }
 
-    public function CreatePdf(string $cod)
+    public function ExportarDocumento(Request $request)
     {
         try {
+            $documento = $request->query('documento');
+            $codigo = $request->query('codigo');
+            $tipo = $request->query('tipo');
+
+            if (!$documento) {
+                throw new Exception("El parametro documento no puede estar vacio.");
+            } else if ($documento != 'pdf' && $documento != 'ticket') {
+                throw new Exception("El parametro documento tiene un valor incorrecto.");
+            }
+            if (!$codigo) {
+                throw new Exception("El parametro codigo no puede estar vacio.");
+            }
+
             // Datos iniciales
-            $data = $this->DataForFile($cod);
-
+            $data = $this->DataForFile($codigo);
             // Generar PDF
-            $pdf = Pdf::loadView('soporte.orden.incidencia.viewpdf', $data);
-            return $pdf->stream("ORDEN - {$cod}.pdf");
+            $pdf = Pdf::loadView("soporte.orden.incidencia.view$documento", $data);
+            if ($documento == 'ticket') {
+                // Definir el tamaño de la hoja en mm (80mm de ancho)
+                $pdf->setPaper([0, 0, 226.77, 800], 'portrait'); // 80mm ancho y 600 de alto (se puede ajustar)
+            }
+            switch ($tipo) {
+                case 'descarga':
+                    return $pdf->download("ORDEN - {$codigo}.pdf");
 
+                case 'movil':
+                    $urlDescarga = "soporte/orden/exportar-documento";
+                    $pdfContent = $pdf->output(); // string binario del PDF
+                    return view('soporte.orden.pdfjs.preview', [
+                        'urlDescarga' => $urlDescarga,
+                        'documento' => $documento,
+                        'codigo' => $codigo,
+                        'base64_pdf' => base64_encode($pdfContent)
+                    ]);
+
+                default:
+                    return $pdf->stream("ORDEN - {$codigo}.pdf");
+            }
         } catch (QueryException $e) {
-            return $this->message(message: "Error al generar el PDF de la orden de incidencia $cod", data: ['error' => $e->getMessage()], status: 400);
+            return $this->message(message: "Error al generar el PDF de la orden de incidencia $codigo", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
             if ($e->getCode() == 404) {
                 return $this->message(message: $e->getMessage(), status: 404);
             }
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
-    }
-
-    public function preViewPdf($cod)
-    {
-        // Datos iniciales
-        $data = $this->DataForFile($cod);
-
-        // 1) Renderizar la vista con los datos que necesites
-        $html = view('soporte.orden.incidencia.viewpdf', $data)->render();
-
-        // 2) Cargar el HTML en DomPDF
-        $pdf = Pdf::loadHTML($html)->setPaper('a4', 'portrait');
-
-        // 3) Obtener el contenido del PDF en una cadena
-        $pdfContent = $pdf->output(); // string binario del PDF
-
-        // 4) Codificarlo en Base64
-        $pdfBase64 = base64_encode($pdfContent);
-
-        // 5) Devolverlo (por ejemplo, en JSON)
-        return view('soporte.orden.pdfjs.preview', [
-            'filename' => "ORDEN - {$cod}.pdf",
-            'base64_pdf' => $pdfBase64,
-        ]);
     }
 }

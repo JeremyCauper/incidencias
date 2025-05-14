@@ -95,7 +95,7 @@ function ShowAssign(e, id) {
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });
-                
+
                 $('#id_visitas_asign').val(visita.id);
                 $('#fecha_visita_asign').val(visita.fecha);
                 fMananger.formModalLoding('modal_assign', 'hide');
@@ -172,7 +172,7 @@ async function DeleteVisita(id) {
             'X-CSRF-TOKEN': __token,
         },
         beforeSend: boxAlert.loading,
-        success: function (data) { 
+        success: function (data) {
             if (data.success) {
                 updateTableVProgramadas()
                 updateTableVisitas()
@@ -201,8 +201,14 @@ function OrdenVisita(e, id) {
                 if (dt.cod_ordenv) {
                     $('#modal_orden').modal('hide');
                     cod_ordenv = dt.new_cod_ordenv;
-                    if (dt.id_tipo_incidencia == 2)
-                        window.open(`${__url}/soporte/orden/documentopdf/${dt.cod_ordenv}`, `Visualizar PDF ${dt.cod_ordenv}`, "width=900, height=800");
+                    if (dt.id_tipo_incidencia == 2) {
+                        const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${dt.cod_ordenv}`;
+                        if (esCelular()) {
+                            cargarIframeDocumento(url + '&tipo=movil');
+                        } else {
+                            window.open(url, `Visualizar PDF ${dt.cod_ordenv}`, "width=900, height=800");
+                        }
+                    }
                     updateTableVProgramadas();
                     boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de visita con el siguiente codigo <b>${dt.cod_ordenv}</b>.` });
                     return true;
@@ -220,7 +226,7 @@ function OrdenVisita(e, id) {
                     dir_sucursal: sucursal.direccion,
                     tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>')
                 });
-                
+
                 $('[name="id_visita_orden"]').val(id);
                 fMananger.formModalLoding('modal_orden', 'hide');
             }
@@ -262,7 +268,13 @@ document.getElementById('form-orden').addEventListener('submit', async function 
             if (data.success || data.status == 202) {
                 $('#modal_orden').modal('hide');
                 changeCodOrdenV(dt.new_cod_ordenv);
-                window.open(`${__url}/soporte/orden-visita/documentopdf/${dt.old_cod_ordenv}`, `Visualizar PDF ${dt.old_cod_ordenv}`, "width=900, height=800");
+
+                const url = `${__url}/soporte/orden-visita/exportar-documento?documento=pdf&codigo=${dt.old_cod_ordenv}`;
+                if (esCelular()) {
+                    cargarIframeDocumento(url + '&tipo=movil');
+                } else {
+                    window.open(url, `Visualizar PDF ${dt.old_cod_ordenv}`, "width=900, height=800");
+                }
                 updateTableVProgramadas()
                 updateTableVisitas()
             }

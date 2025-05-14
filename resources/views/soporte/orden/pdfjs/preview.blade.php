@@ -1,293 +1,106 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-mdb-theme="dark" class="h-100 overflow-hidden">
 
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Font Awesome -->
+    <link href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}" rel="stylesheet">
+    <!-- MDB -->
+    <link href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}" rel="stylesheet">
+    <!-- JQuery -->
+    <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
     <title>Visor PDF</title>
-    <script src="pdf-js/pdf.min.js"></script>
 
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-        }
-
         body {
-            background-color: #171725;
-        }
-
-        .top-bar {
-            background: rgba(23, 23, 37, 0.1);
-            /* Fondo inicial transparente */
-            color: #fff;
-            padding: 3px;
-            position: fixed;
-            /* Cambiado a block para que se muestre siempre */
-            transition: background 0.3s, opacity 0.3s;
-            /* Añade una transición suave */
-            opacity: 0.7;
-            /* Opacidad inicial */
-        }
-
-        .top-bar:hover {
-            background: rgba(23, 23, 37, 0.9);
-            /* Fondo más opaco al hacer hover */
-            opacity: 1;
-            /* Totalmente visible al hacer hover */
-        }
-
-        .btn {
-            background: rgba(255, 127, 80, 0.1);
-            /* Fondo inicial semi-transparente */
-            color: #fff;
-            border: none;
-            outline: none;
-            cursor: pointer;
-            padding: 0.5rem 2rem;
-            transition: background 0.3s, opacity 0.3s;
-            /* Transición suave */
-        }
-
-        .btn:hover {
-            background: rgba(255, 127, 80, 1);
-            /* Fondo opaco al hacer hover */
-            opacity: 1;
-            /* Totalmente visible al hacer hover */
-        }
-
-        .error {
-            background: orangered;
-            color: #fff;
-            padding: 1rem;
-            margin-top: 50vh;
+            height: inherit;
         }
 
         #pdf-container {
-            display: flex;
+            /* display: flex; */
             flex-direction: column;
             align-items: center;
-            width: 100%;
+            /* width: 100%; */
         }
 
         #canvas-container {
-            width: 100%;
-            overflow: hidden;
-            display: flex;
-            justify-content: center;
-            margin-top: 10px;
-            margin-bottom: 10px;
+            /* width: 100%; */
+            /* overflow: hidden; */
+            margin-top: 46px;
+            margin-bottom: 60px;
         }
 
-        #pdf_canvas {
-            max-width: 100%;
+        #pdf-canvas {
+            /* max-width: 100%; */
             height: auto;
         }
-
-        .page-info {
-            text-align: center;
-            margin-top: 5px;
-        }
-
-        .loading {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background: #429867;
-            color: #fff;
-            padding: 1rem;
-            border-radius: 5px;
-            display: none;
-        }
-
-
-        #page_num_input {
-            width: 40px;
-            text-align: center;
-            outline: none;
-            border: none;
-            color: rgba(255, 255, 255, 1);
-            /* Negro con 20% de opacidad */
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* Ocultar las flechas en navegadores WebKit (Chrome, Safari) */
-        #page_num_input::-webkit-inner-spin-button,
-        #page_num_input::-webkit-outer-spin-button {
-            -webkit-appearance: none;
-            margin: 0;
-        }
-
-        /* Ocultar las flechas en Firefox y otros navegadores */
-        #page_num_input {
-            appearance: none;
-            /* Propiedad estándar */
-            -moz-appearance: textfield;
-            /* Propiedad para Firefox */
-        }
-
-
 
         @media (max-width: 768px) {
             #pdf-container {
                 height: 100vh;
                 justify-content: space-evenly;
             }
-
-            .top-bar {
-                position: relative;
-                /* Mantenerlo fijo */
-                bottom: 0;
-                /* Posicionar en la parte inferior */
-                opacity: 0.7;
-                /* Opacidad inicial */
-            }
-
-            .btn {
-                background: rgba(255, 127, 80, 0.9);
-            }
-
-            #canvas-container {
-                align-items: center;
-                margin-bottom: 0px;
-            }
-
-            #zoomIn,
-            #zoomOut {
-                display: none;
-            }
-
         }
     </style>
-
-    <style>
-        /* From Uiverse.io by zanina-yassine */
-        .container {
-            width: 100px;
-            height: 125px;
-            margin: auto auto;
-            position: absolute;
-            top: 50%;
-        }
-
-        .loading-title {
-            display: block;
-            text-align: center;
-            font-size: 20;
-            font-family: 'Inter', sans-serif;
-            font-weight: bold;
-            padding-bottom: 15px;
-            color: #888;
-        }
-
-        .loading-circle {
-            display: block;
-            border-left: 5px solid;
-            border-top-left-radius: 100%;
-            border-top: 5px solid;
-            margin: 5px;
-            animation-name: Loader_611;
-            animation-duration: 1500ms;
-            animation-timing-function: linear;
-            animation-delay: 0s;
-            animation-iteration-count: infinite;
-            animation-direction: normal;
-            animation-fill-mode: forwards;
-        }
-
-        .sp1 {
-            border-left-color: #F44336;
-            border-top-color: #F44336;
-            width: 40px;
-            height: 40px;
-        }
-
-        .sp2 {
-            border-left-color: #FFC107;
-            border-top-color: #FFC107;
-            width: 30px;
-            height: 30px;
-        }
-
-        .sp3 {
-            width: 20px;
-            height: 20px;
-            border-left-color: #8bc34a;
-            border-top-color: #8bc34a;
-        }
-
-        @keyframes Loader_611 {
-            0% {
-                transform: rotate(0deg);
-                transform-origin: right bottom;
-            }
-
-            25% {
-                transform: rotate(90deg);
-                transform-origin: right bottom;
-            }
-
-            50% {
-                transform: rotate(180deg);
-                transform-origin: right bottom;
-            }
-
-            75% {
-                transform: rotate(270deg);
-                transform-origin: right bottom;
-            }
-
-            100% {
-                transform: rotate(360deg);
-                transform-origin: right bottom;
-            }
-        }
-    </style>
-
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.7.2/css/all.css"
-        integrity="sha384-fnmOCqbTlWIlj8LyTjo7mOUStjsKC4pOpQbqyi7RrhN7udi9RwhKkMHpvLbHG9Sr" crossorigin="anonymous" />
 </head>
 
-<body>
-    <div id="pdf-container">
-        <div class="container" id="loading-message">
-            <label class="loading-title">Cargando ...</label>
-            <span class="loading-circle sp1">
-                <span class="loading-circle sp2">
-                    <span class="loading-circle sp3"></span>
-                </span>
-            </span>
-        </div>
+<!-- overflow-auto d-flex align-items-center justify-content-center  -->
 
-
-        <div id="canvas-container">
-            <canvas id="pdf_canvas"></canvas>
-        </div>
-        <div class="top-bar" id="top-bar" style="display: none;">
-            <div class="container-btn">
-                <button class="btn" id="prev">
-                    <i class="fas fa-arrow-circle-left"></i> Anterior
-                </button>
-                <button class="btn" id="next">
-                    Siguiente <i class="fas fa-arrow-circle-right"></i>
-                </button>
-                <button id="zoomOut" class="btn"><i class="fas fa-search-minus"></i></button>
-                <button id="zoomIn" class="btn"><i class="fas fa-search-plus"></i></button>
-            </div>
-            <div class="page-info">
-                <div class="page-info">
-                    Página <input type="number" id="page_num_input" value="1" min="1" /> de <span
-                        id="page_count"></span>
+<body class="overflow-auto mt-5">
+    <header>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg bg-body fixed-top" style="height: 46px !important;">
+            <div class="container-fluid">
+                <div>
+                    <button type="button" class="btn btn-link btn-sm btn-floating" id="zoomOut" data-mdb-ripple-init>
+                        <i class="fas fa-search-minus"></i>
+                    </button>
+                    <button type="button" class="btn btn-link btn-sm btn-floating" id="zoomIn" data-mdb-ripple-init>
+                        <i class="fas fa-search-plus"></i>
+                    </button>
+                    <button type="button" class="btn btn-link btn-sm btn-floating" id="reload_zoom"
+                        data-mdb-ripple-init>
+                        <i class="fas fa-arrow-rotate-right"></i>
+                    </button>
                 </div>
-
+                <button type="button" id="descargar" class="btn btn-link btn-sm btn-floating" data-mdb-ripple-init>
+                    <i class="fas fa-download"></i>
+                </button>
             </div>
+        </nav>
+        <!-- Navbar -->
+    </header>
+    <div id="pdf-container" class="d-flex">
+        <div id="canvas-container" class="text-center">
+            <canvas id="pdf_canvas" class="w-100"></canvas>
         </div>
-
-
     </div>
+    <footer>
+        <!-- Navbar -->
+        <nav class="navbar navbar-expand-lg bg-body py-2 fixed-bottom">
+            <div class="btn-group btn-group-sm m-auto py-1" id="top-bar" role="group" aria-label="Basic example">
+                <button type="button" class="btn" id="prev" data-mdb-ripple-init>
+                    <i class="fas fa-arrow-circle-left"></i>
+                </button>
+                <span>
+                    <span><input type="number" class="form-control" id="page_num_input"
+                            style="width: 40px; display:inline;" value="1" min="1" /></span> / <span
+                        id="page_count"></span>
+                </span>
+                <button type="button" class="btn" id="next" data-mdb-ripple-init>
+                    <i class="fas fa-arrow-circle-right"></i>
+                </button>
+            </div>
+        </nav>
+        <!-- Navbar -->
+    </footer>
 
+    <!-- MDB -->
+    <script type="text/javascript" src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
+    <script src="{{ secure_asset('front/vendor/pdfjs/pdf-js/pdf.min.js') }}"></script>
+    <script src="{{ secure_asset('front/vendor/pdfjs/pdf-js/pdf.worker.min.js') }}"></script>
     <script>
         // 1) Cadena Base64 del PDF (asegúrate de inyectarlo correctamente)
         const base64pdf = "{{ $base64_pdf }}";  // Asegúrate de que esta variable esté correctamente configurada.
@@ -304,9 +117,6 @@
                     return arr;
                 }
 
-                // 3) Apunta al worker UMD
-                pdfjsLib.GlobalWorkerOptions.workerSrc = 'pdf-js/pdf.worker.min.js';
-
                 // 4) Carga y renderiza la primera página
                 const pdfData = base64ToUint8Array(base64pdf);
                 let pdfDoc = null;
@@ -318,25 +128,40 @@
                 pdfjsLib.getDocument({ data: pdfData }).promise
                     .then((pdfDoc_) => {
                         pdfDoc = pdfDoc_;
-                        document.getElementById('loading-message').style.display = 'none';
+                        // document.getElementById('loading-message').style.display = 'none';
                         document.getElementById('top-bar').style.display = 'block';
                         document.getElementById('page_count').textContent = pdfDoc.numPages;
                         renderPage(pageNum);
                     })
                     .catch((err) => {
                         console.error('Error al cargar el PDF:', err);
-                        document.getElementById('loading-message').style.display = 'none';
+                        // document.getElementById('loading-message').style.display = 'none';
                         document.getElementById('pdf-container').innerHTML = '<div class="error">No se pudo cargar el PDF.</div>';
                     });
 
                 function renderPage(num) {
                     pageRendering = true;
                     pdfDoc.getPage(num).then((page) => {
-                        var viewport = page.getViewport({ scale: scale });
                         var canvas = document.getElementById('pdf_canvas');
+                        var container = document.getElementById('pdf-container');
+
+                        var viewport = page.getViewport({ scale: scale });
+                        // viewport.height = 679;
+                        // viewport.transform[5] = 350;
+                        // viewport.width = contenedor.clientWidth;
+                        // viewport.viewBox[2] = contenedor.clientWidth;
+                        // viewport.viewBox[3] = contenedor.clientHeight;
                         var ctx = canvas.getContext('2d');
-                        canvas.height = viewport.height;
-                        canvas.width = viewport.width;
+
+                        canvas.height = viewport.height; // viewport.height
+                        canvas.width = viewport.width; // viewport.width
+                        if (scale > 1) {
+                            canvas.classList.remove('w-100');
+                            container.classList.remove('d-flex');
+                        } else {
+                            canvas.classList.add('w-100');
+                            container.classList.add('d-flex');
+                        }
 
                         var renderContext = {
                             canvasContext: ctx,
@@ -379,6 +204,8 @@
                 // Zoom en y zoom out
                 function zoomOut() {
                     scale -= 0.1;
+                    console.log(pageNum);
+
                     renderPage(pageNum);
                 }
 
@@ -390,6 +217,27 @@
                 }
 
                 document.getElementById('zoomIn').addEventListener('click', zoomIn);
+
+                function reload_zoom() {
+                    scale = 1;
+                    renderPage(pageNum);
+                }
+
+                document.getElementById('reload_zoom').addEventListener('click', reload_zoom);
+
+                function descargar() {
+                    const url = `{{ secure_url('') }}/{{ $urlDescarga }}?documento={{ $documento }}&codigo={{ $codigo }}`;
+                    const link = document.createElement('a');
+                    link.href = url + '&tipo=descarga';
+                    link.download = ''; // puedes darle un nombre, e.g., 'orden-123.pdf'
+                    link.style.display = 'none';
+
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                }
+
+                document.getElementById('descargar').addEventListener('click', descargar);
             } else {
                 document.getElementById('pdf-container').innerHTML = '<div class="error">El PDF no está configurado correctamente.</div>';
             }
