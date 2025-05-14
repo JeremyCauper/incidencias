@@ -81,6 +81,7 @@ document.getElementById('form-login').addEventListener('submit', function (event
 function funKeyup() {
     $(`[info-message="${this.getAttribute("require")}"]`).remove();
 }
+
 document.getElementById('usuario').addEventListener('keyup', funKeyup);
 document.getElementById('contrasena').addEventListener('keyup', funKeyup);
 

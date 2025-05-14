@@ -50,8 +50,6 @@
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top">
       <a class="navbar-brand" href="#">
         <div class="logo_rci"></div>
-        <!-- <img src="{{secure_asset('front/images/app/LogoRC_WNormal.webp')}}?v={{ time() }}" class="ms-2" alt="logo"
-          id="logoRc" /> -->
       </a>
       <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav ms-auto">

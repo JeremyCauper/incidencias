@@ -30,7 +30,7 @@
                 <div class="logo_rci"></div>
             </a>
             <span class="navbar-brand text-white me-0">
-                SOPORTE | INCIDENCIAS - RICARDO CALDERON INGENIEROS SAC
+                SOPORTE | INCIDENCIAS - RC INGENIEROS SAC
             </span>
         </div>
     </nav>

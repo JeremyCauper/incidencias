@@ -118,7 +118,7 @@
     <script src="{{secure_asset('front/js/reporte/incidencias.js')}}?v={{ time() }}"></script>
     <script>
         var dom = document.getElementById('chart-container');
-        var myChart = echarts.init(dom, 'dark', {
+        var myChart = echarts.init(dom, 'null', {
             renderer: 'canvas',
             useDirtyRect: false
         });
