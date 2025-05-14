@@ -71,13 +71,13 @@
               <li>
                 <a class="dropdown-item" href="javascript:void(0)" data-theme="light">
                   <i class="fas fa-sun"></i>
-                  <span>Light</span>
+                  <span>Claro</span>
                 </a>
               </li>
               <li>
                 <a class="dropdown-item" href="javascript:void(0)" data-theme="dark">
                   <i class="fas fa-moon"></i>
-                  <span>Dark</span>
+                  <span>Oscuro</span>
                 </a>
               </li>
               <!-- <li>
