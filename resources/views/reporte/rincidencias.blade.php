@@ -10,9 +10,10 @@
     <script src="{{secure_asset('front/vendor/multiselect/bootstrap_multiselect.js')}}"></script>
     <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
 
-    <script src="{{secure_asset('front/vendor/chartjs/chart.js')}}"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script>
+    <!-- <script src="{{secure_asset('front/vendor/chartjs/chart.js')}}"></script>
+                                                                                        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script> -->
+    <script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
 
     <script>
         let empresas = <?php echo json_encode($data['company']); ?>;
@@ -23,6 +24,13 @@
         let obj_subproblem = <?=json_encode($data['sproblema'])?>;
         let usuarios = <?=json_encode($data['usuarios'])?>;
     </script>
+    <style>
+        #chart-container {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+        }
+    </style>
 @endsection
 @section('content')
 
@@ -95,89 +103,10 @@
                 <h6 class="card-title col-form-label-sm text-primary mb-3">
                     <strong>Reporte Incidencias</strong>
                 </h6>
-                <div class="row">
-                    <div class="col-4 align-content-center">
-                        <canvas id="dona_estados"></canvas>
+                <div class="row justify-content-center">
+                    <div class="col-xl-12">
+                        <div id="chart-container"></div>
                     </div>
-                    <div class="col-8 align-content-center">
-                        <canvas id="barra_estados"></canvas>
-                    </div>
-                    <!-- <div class="col-8"> -->
-                    <!-- <table id="tb_orden" class="table table-hover text-nowrap w-100">
-                                                                    <thead>
-                                                                        <tr class="text-bg-primary text-center">
-                                                                            <th>Incidencia</th>
-                                                                            <th>Estado</th>
-                                                                            <th>Fecha Incidencia</th>
-                                                                            <th>N° Orden</th>
-                                                                            <th>Tecnico</th>
-                                                                            <th>Sucursal</th>
-                                                                            <th>Nivel Incidencia</th>
-                                                                            <th>Soporte</th>
-                                                                            <th>Problema / Sub Problema</th>
-                                                                            <th>Iniciada</th>
-                                                                            <th>Terminada</th>
-                                                                        </tr>
-                                                                    </thead>
-                                                                </table>
-                                                                <script>
-                                                                    const tb_orden = new DataTable('#tb_orden', {
-                                                                        scrollX: true,
-                                                                        scrollY: 400,
-                                                                        ajax: {
-                                                                            url: `${__url}/soporte/reportes/reporte-incidencias/index?sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}&tIncidencia=${$('#tIncidencia').val()}`,
-                                                                            dataSrc: function (json) {
-                                                                                return json.data;
-                                                                            },
-                                                                            error: function (xhr, error, thrown) {
-                                                                                boxAlert.table();
-                                                                                console.log('Respuesta del servidor:', xhr);
-                                                                            }
-                                                                        },
-                                                                        columns: [
-                                                                            { data: 'cod_incidencia' },
-                                                                            { data: 'estado' },
-                                                                            { data: 'fecha_inc' },
-                                                                            { data: 'cod_orden' },
-                                                                            {
-                                                                                data: 'asignados', render: function (data, type, row) {
-                                                                                    return (data.map(usu => usuarios[usu].nombre)).join(", ");
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                data: 'sucursal', render: function (data, type, row) {
-                                                                                    return sucursales[data].nombre;
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                data: 'tipo_incidencia', render: function (data, type, row) {
-                                                                                    let tipo = tipo_incidencia[data[data.length - 1]];
-                                                                                    return `<label class="badge badge-${tipo.color} me-2" style="font-size: 0.75rem;">${tipo.tipo}</label>${tipo.descripcion}`;
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                data: 'tipo_soporte', render: function (data, type, row) {
-                                                                                    return tipo_soporte[data].descripcion;
-                                                                                }
-                                                                            },
-                                                                            {
-                                                                                data: 'problema', render: function (data, type, row) {
-                                                                                    return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
-                                                                                }
-                                                                            },
-                                                                            { data: 'iniciado' },
-                                                                            { data: 'finalizado' },
-                                                                            // { data: 'acciones' }
-                                                                        ],
-                                                                        createdRow: function (row, data, dataIndex) {
-                                                                            $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(7), td:eq(9), td:eq(10)').addClass('text-center');
-                                                                            // $(row).find('td:eq(11)').addClass(`td-acciones`);
-                                                                        },
-                                                                        order: [[2, 'desc']],
-                                                                        processing: true
-                                                                    });
-                                                                </script> -->
-                    <!-- </div> -->
                 </div>
             </div>
         </div>
@@ -188,35 +117,228 @@
 @section('scripts')
     <script src="{{secure_asset('front/js/reporte/incidencias.js')}}?v={{ time() }}"></script>
     <script>
-        /*const data = {
-            labels: [
-                'Red',
-                'Blue',
-                'Yellow'
-            ],
-            datasets: [
+        var dom = document.getElementById('chart-container');
+        var myChart = echarts.init(dom, 'dark', {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+        var app = {};
+
+        var option = {}
+
+        const data_nivel = [
+            { value: 120, name: 'A' },
+            { value: 80, name: 'B' },
+            { value: 150, name: 'C' }
+        ];
+        const total_nivel = data_nivel.reduce((sum, item) => sum + item.value, 0);
+
+        option = {
+            tooltip: {
+                trigger: 'axis',
+                axisPointer: {
+                    type: 'shadow'
+                }
+            },
+            title: [
                 {
-                    label: 'Totales',
-                    data: [200, 50, 100],
-                    backgroundColor: [
-                        'rgb(255, 129, 156)',
-                        'rgb(54, 162, 235)',
-                        'rgb(255, 205, 86)'
-                    ],
-                    hoverOffset: 20
+                    text: 'Estado de Incidencias',
+                    // subtext: '总计 ' + builderJson.all,
+                    left: '25%',
+                    top: '5%',
+                    textAlign: 'center'
+                },
+                {
+                    text: 'Nivel de Incidencias',
+                    left: '75%',
+                    top: '5%',
+                    textAlign: 'center'
+                },
+                {
+                    text: 'Problemas',
+                    left: '25%',
+                    top: '55%',
+                    textAlign: 'center'
+                },
+                {
+                    text: 'Personal',
+                    left: '75%',
+                    top: '55%',
+                    textAlign: 'center'
+                }
+            ],
+            grid: [
+                {
+                    top: '15%',
+                    width: '45%',
+                    bottom: '50%',
+                    left: '50%',
+                    containLabel: true
+                },
+                {
+                    top: '62%',
+                    width: '45%',
+                    bottom: 0,
+                    left: 10,
+                    containLabel: true
+                }
+            ],
+            xAxis: [
+                {
+                    type: 'category',
+                    data: ['N1 - REMOTO', 'N2 - PRESENCIAL', 'N3 - PROVEEDOR'],
+                    splitLine: {
+                        show: false
+                    }
+                },
+                {
+                    gridIndex: 1,
+                    type: 'value'
+                }
+            ],
+            yAxis: [
+                {
+                    type: 'value'
+                },
+                {
+                    gridIndex: 1,
+                    type: 'category',
+                    data: ['N1 - REMOTO', 'N2 - PRESENCIAL', 'N3 - PROVEEDOR'],
+                    splitLine: {
+                        show: false
+                    }
+                }
+            ],
+            series: [
+                {
+                    name: 'Access From',
+                    type: 'pie',
+                    radius: ['13%', '27%'],
+                    center: ['26%', '30%'],
+                    avoidLabelOverlap: false,
+                    itemStyle: {
+                        borderRadius: 4,
+                        borderColor: '#ffffff',
+                        borderWidth: 1
+                    },
+                    emphasis: {
+                        itemStyle: {
+                            shadowBlur: 10,
+                            shadowOffsetX: 0,
+                            shadowColor: 'rgba(0, 0, 0, 0.5)'
+                        }
+                    },
+                    label: {
+                        formatter: '{name|{b}}\n{time|{c} ({d}%)}',
+                        lineHeight: 13,
+                        rich: {
+                            time: { fontSize: 10, color: '#999' }
+                        }
+                    },
+                    data: [
+                        {
+                            value: 80,
+                            name: 'Sin Asignar',
+                            itemStyle: { color: 'rgb(228, 161, 27)' }
+                        },
+                        {
+                            value: 35,
+                            name: 'Asignada',
+                            itemStyle: { color: 'rgb(84, 180, 211)' }
+                        },
+                        {
+                            value: 15,
+                            name: 'En Proceso',
+                            itemStyle: { color: 'rgb(59, 113, 202)' }
+                        },
+                        {
+                            value: 40,
+                            name: 'Faltan Datos',
+                            itemStyle: { color: 'rgb(220, 76, 100)' }
+                        },
+                        {
+                            value: 284,
+                            name: 'Finalizado',
+                            itemStyle: { color: 'rgb(20, 164, 77)' }
+                        },
+                        {
+                            value: 100,
+                            name: 'Cierre Sistemas',
+                            itemStyle: { color: 'rgb(159, 166, 178)' }
+                        }
+                    ]
+                },
+                {
+                    name: 'Nivel',
+                    type: 'bar',
+                    barWidth: '40%',
+                    itemStyle: {
+                        borderRadius: 3,
+                        borderColor: '#ffffff',
+                        borderWidth: 1
+                    },
+                    label: {
+                        show: true,
+                        position: 'top', // o 'insideTop', 'top'
+                        align: 'center',     // ← usa esto, no textAlign
+                        verticalAlign: 'middle',
+                        formatter: function (params) {
+                            const percent = ((params.value / total_nivel) * 100).toFixed(1);
+                            return `${params.value} (${percent}%)`;
+                        },
+                        rich: {
+                            value: {
+                                fontSize: 12,
+                                color: '#fff'
+                            }
+                        }
+                    },
+                    data: [
+                        { value: 120, itemStyle: { color: '#e74c3c' } },  // rojo
+                        { value: 50, itemStyle: { color: '#3498db' } },   // azul
+                        { value: 205, itemStyle: { color: '#2ecc71' } }   // verde
+                    ]
+                },
+                {
+                    name: 'Nivel 2',
+                    type: 'bar',
+                    barWidth: '40%',
+                    xAxisIndex: 1,
+                    yAxisIndex: 1,
+                    itemStyle: {
+                        borderRadius: 3,
+                        borderColor: '#ffffff',
+                        borderWidth: 1
+                    },
+                    label: {
+                        show: true,
+                        position: 'top', // o 'insideTop', 'top'
+                        align: 'center',     // ← usa esto, no textAlign
+                        verticalAlign: 'middle',
+                        formatter: function (params) {
+                            const percent = ((params.value / total_nivel) * 100).toFixed(1);
+                            return `${params.value} (${percent}%)`;
+                        },
+                        rich: {
+                            value: {
+                                fontSize: 12,
+                                color: '#fff'
+                            }
+                        }
+                    },
+                    data: [
+                        { value: 12, itemStyle: { color: '#e74c3c' } },  // rojo
+                        { value: 50, itemStyle: { color: '#3498db' } },   // azul
+                        { value: 205, itemStyle: { color: '#2ecc71' } }   // verde
+                    ]
                 }
             ]
-        };*/
+        };
 
-        $.get(`${__url}/soporte/reportes/reporte-incidencias/index`, {
-            fechaIni: date('Y-m-01'),
-            fechaFin: date('Y-m-d'),
-            tIncidencia: $('#tIncidencia').val()
-        }, function (respuesta) {
-            let dona_estados = iniciarGrafico('#dona_estados', respuesta.data.tsoporte);
-            let barra_estados = iniciarGrafico('#barra_estados', respuesta.data.estados, 'bar');
-        }).fail(function (error) {
-            console.error('Error:', error);
-        });
+        if (option && typeof option === 'object') {
+            myChart.setOption(option);
+        }
+
+        window.addEventListener('resize', myChart.resize);
     </script>
 @endsection
