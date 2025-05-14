@@ -49,14 +49,58 @@
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top">
             <a class="navbar-brand" href="#">
-                <img src="{{secure_asset('front/images/app/LogoRC_WNormal.webp')}}" class="ms-2" height="45"
-                    alt="logo" />
+                <div class="logo_rci"></div>
             </a>
             <div class="navbar-menu-wrapper d-flex align-items-top">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <span id="tiempo_restante_head" class="me-3" style="font-size: small;"></span>
                     </li>
+                    <div class="dropdown">
+                        <a data-mdb-dropdown-init class="nav-link dropdown-toggle hidden-arrow rounded-circle px-1 me-2"
+                            href="#" id="themeSwitcher" role="button" aria-expanded="false" data-mdb-ripple-init>
+                            <i class="fas fa-moon"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="themeSwitcher">
+                            <li class="dropdown-item-text d-flex justify-content-center align-self-center text-secondary mt-2"
+                                id="themeSwitcherBtn">
+                                <span class="fw-bold">Shift</span>
+                                <i class="fas fa-plus fa-xs mx-1 align-self-center"></i>
+                                <span class="fw-bold">D</span>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0)" data-theme="light">
+                                    <i class="fas fa-sun"></i>
+                                    <span>Light</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0)" data-theme="dark">
+                                    <i class="fas fa-moon"></i>
+                                    <span>Dark</span>
+                                </a>
+                            </li>
+                            <!-- <li>
+                                <a class="dropdown-item" href="javascript:void(0)" data-theme="system">
+                                <i class="fas fa-laptop"></i>
+                                <span>System</span>
+                                </a>
+                            </li> -->
+                        </ul>
+                        <script>
+                            if (!localStorage.hasOwnProperty('data_mdb_theme') || !localStorage.data_mdb_theme) {
+                                localStorage.setItem('data_mdb_theme', 'light');
+                            }
+                            let toggleTema = $(`[data-theme="${localStorage.data_mdb_theme}"]`);
+
+                            $('html').attr('data-mdb-theme', localStorage.data_mdb_theme);
+                            $('#themeSwitcher').find('i').attr('class', toggleTema.find('i').prop('class'));
+                            toggleTema.addClass('text-primary');
+                            if (esCelular()) {
+                                $('#themeSwitcherBtn').addClass('d-none').removeClass('d-flex');
+                            }
+                        </script>
+                    </div>
                     <!-- Avatar -->
                     <div class="dropdown">
                         <a data-mdb-dropdown-init
