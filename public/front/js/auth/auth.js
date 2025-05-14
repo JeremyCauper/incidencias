@@ -84,10 +84,11 @@ function funKeyup() {
 document.getElementById('usuario').addEventListener('keyup', funKeyup);
 document.getElementById('contrasena').addEventListener('keyup', funKeyup);
 
-document.getElementById('icon-pass').addEventListener('click', function () {
+document.querySelector('.icon-pass').addEventListener('click', function () {
     let contrasena = document.getElementById('contrasena');
+    let icono = this.querySelector('i');
     const isPassword = contrasena.type === 'password';
-    this.className = isPassword ? 'fas fa-eye' : 'fas fa-eye-slash';
+    icono.className = isPassword ? 'fas fa-eye' : 'fas fa-eye-slash';
     contrasena.type = isPassword ? 'text' : 'password';
 });
 

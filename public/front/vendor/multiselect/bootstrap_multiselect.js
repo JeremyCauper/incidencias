@@ -1092,7 +1092,7 @@
 
                 $option.addClass("multiselect-all");
                 $option.removeClass("multiselect-item");
-                $option.find(".custom-control-label").addClass("font-weight-semibold");
+                $option.find(".custom-control-label"); //.addClass("font-weight-semibold"); font-w
 
                 this.$popupContainer.prepend($option);
 

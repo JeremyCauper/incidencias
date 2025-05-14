@@ -165,8 +165,14 @@ async function OrdenDetail(e, cod) {
                 if (inc.cod_orden) {
                     $('#modal_orden').modal('hide');
                     cod_orden = inc.new_cod_orden;
-                    if (inc.id_tipo_incidencia == 2)
-                        window.open(`${__url}/soporte/orden/documentopdf/${inc.cod_orden}`, `Visualizar PDF ${inc.cod_orden}`, "width=900, height=800");
+                    if (inc.id_tipo_incidencia == 2) {
+                        const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${inc.cod_orden}`;
+                        if (esCelular()) {
+                            cargarIframeDocumento(url + '&tipo=movil');
+                        } else {
+                            window.open(url, `Visualizar PDF ${inc.cod_orden}`, "width=900, height=800");
+                        }
+                    }
                     updateTableInc();
                     boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de servicio con el siguiente codigo <b>${inc.cod_orden}</b>.` });
                     return true;
@@ -238,8 +244,14 @@ document.getElementById('form-orden').addEventListener('submit', async function 
             if (data.success || data.status == 202) {
                 $('#modal_orden').modal('hide');
                 cod_orden = dt.new_cod_orden;
-                if (incidencia_temp.id_tipo_incidencia == 2)
-                    window.open(`${__url}/soporte/orden/documentopdf/${dt.old_cod_orden}`, `Visualizar PDF ${dt.old_cod_orden}`, "width=900, height=800");
+                if (incidencia_temp.id_tipo_incidencia == 2) {
+                    const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${dt.old_cod_orden}`;
+                    if (esCelular()) {
+                        cargarIframeDocumento(url + '&tipo=movil');
+                    } else {
+                        window.open(url, `Visualizar PDF ${dt.old_cod_orden}`, "width=900, height=800");
+                    }
+                }
             }
             updateTableInc();
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
@@ -323,8 +335,14 @@ document.getElementById('form-addcod').addEventListener('submit', async function
             fMananger.formModalLoding('modal_addcod', 'hide');
             if (data.success) {
                 $('#modal_addcod').modal('hide');
-                if (incidencia_temp.id_tipo_incidencia == 2)
-                    window.open(`${__url}/soporte/orden/documentopdf/${data.data.cod_orden}`, `Visualizar PDF ${data.data.cod_orden}`, "width=900, height=800");
+                if (incidencia_temp.id_tipo_incidencia == 2) {
+                    const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${data.data.cod_orden}`;
+                    if (esCelular()) {
+                        cargarIframeDocumento(url + '&tipo=movil');
+                    } else {
+                        window.open(url, `Visualizar PDF ${data.data.cod_orden}`, "width=900, height=800");
+                    }
+                }
                 updateTableInc();
                 return true;
             }
@@ -689,8 +707,14 @@ function OrdenVisita(e, id) {
                 if (dt.cod_ordenv) {
                     $('#modal_orden').modal('hide');
                     cod_ordenv = dt.new_cod_ordenv;
-                    if (dt.id_tipo_incidencia == 2)
-                        window.open(`${__url}/soporte/orden/documentopdf/${dt.cod_ordenv}`, `Visualizar PDF ${dt.cod_ordenv}`, "width=900, height=800");
+                    if (dt.id_tipo_incidencia == 2) {
+                        const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${dt.cod_ordenv}`;
+                        if (esCelular()) {
+                            cargarIframeDocumento(url + '&tipo=movil');
+                        } else {
+                            window.open(url, `Visualizar PDF ${dt.cod_ordenv}`, "width=900, height=800");
+                        }
+                    }
                     updateTableInc();
                     updateTableVis();
                     boxAlert.box({ i: 'info', t: 'Atencion', h: `Ya se emitió un orden de visita con el siguiente codigo <b>${dt.cod_ordenv}</b>.` });
@@ -750,7 +774,13 @@ document.getElementById('form-orden-visita').addEventListener('submit', async fu
             if (data.success) {
                 $('#modal_orden_visita').modal('hide');
                 changeCodOrdenV(data.data.cod_ordenv);
-                window.open(`${__url}/soporte/orden-visita/documentopdf/${old_cod_ordenv}`, `Visualizar PDF ${old_cod_ordenv}`, "width=900, height=800");
+
+                const url = `${__url}/soporte/orden-visita/exportar-documento?documento=pdf&codigo=${old_cod_ordenv}`;
+                if (esCelular()) {
+                    cargarIframeDocumento(url + '&tipo=movil');
+                } else {
+                    window.open(url, `Visualizar PDF ${old_cod_ordenv}`, "width=900, height=800");
+                }
                 updateTableVis()
                 return true;
             }

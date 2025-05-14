@@ -23,7 +23,7 @@ $(document).ready(function () {
             firstDay: 1 // Comienza la semana en lunes
         }
     });
-    
+
     fObservador('.content-wrapper', () => {
         tb_incidencias.columns.adjust().draw();
         tb_visitas.columns.adjust().draw();
@@ -36,11 +36,21 @@ function updateTableInc() {
 mostrar_acciones(tb_incidencias);
 
 function OrdenPdfInc(cod) {
-    window.open(`${__url}/soporte/orden/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");
+    const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${cod}`;
+    if (esCelular()) {
+        cargarIframeDocumento(url + '&tipo=movil');
+    } else {
+        window.open(url, `Visualizar PDF ${cod}`, "width=900, height=800");
+    }
 }
 
 function OrdenTicketInc(cod) {
-    window.open(`${__url}/soporte/orden/documentoticket/${cod}`, `Visualizar TICKET ${cod}`, "width=650, height=800");
+    const url = `${__url}/soporte/orden/exportar-documento?documento=ticket&codigo=${cod}`;
+    if (esCelular()) {
+        cargarIframeDocumento(url + '&tipo=movil');
+    } else {
+        window.open(url, `Visualizar TICKET ${cod}`, "width=650, height=800");
+    }
 }
 
 function ShowDetailInc(e, id) {
@@ -52,7 +62,7 @@ function ShowDetailInc(e, id) {
         url: `${__url}/soporte/incidencias/registradas/detail/${id}`,
         contentType: 'application/json',
         success: function (data) {
-            
+
             if (data.success) {
                 var seguimiento = data.data.seguimiento;
                 var inc = data.data.incidencia;
@@ -92,7 +102,12 @@ function updateTableVis() {
 mostrar_acciones(tb_visitas);
 
 function OrdenPdfVis(cod) {
-    window.open(`${__url}/soporte/orden-visita/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");
+    const url = `${__url}/soporte/orden-visita/exportar-documento?documento=pdf&codigo=${cod}`;
+    if (esCelular()) {
+        cargarIframeDocumento(url + '&tipo=movil');
+    } else {
+        window.open(url, `Visualizar PDF ${cod}`, "width=900, height=800");
+    }
 }
 
 function ShowDetailVis(e, id) {

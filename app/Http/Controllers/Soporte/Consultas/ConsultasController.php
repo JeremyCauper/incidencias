@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Soporte\Consultas;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 
 class ConsultasController extends Controller
@@ -75,6 +76,40 @@ class ConsultasController extends Controller
         }
 
         return $this->Msg_json(true, 200, 'Documento encontrado', $data);
+    }
+
+    public function ConsultaDoc(Request $request)
+    {
+        try {
+            $doc = $request->query('doc');
+            $ip = env('APP_ENV') == "local" ? "192.168.1.113" : "190.187.193.78";
+
+            $curl = curl_init();
+            curl_setopt_array($curl, array(
+                CURLOPT_URL => "http://$ip:8282/apugescom.api/api/ConsultaExterna/Consulta?numDoc=$doc",
+                CURLOPT_RETURNTRANSFER => true,
+                CURLOPT_ENCODING => '',
+                CURLOPT_MAXREDIRS => 10,
+                CURLOPT_TIMEOUT => 0,
+                CURLOPT_FOLLOWLOCATION => true,
+                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_CUSTOMREQUEST => 'GET',
+            ));
+            $response = json_decode(curl_exec($curl));
+            curl_close($curl);
+            
+            if (strlen($doc) == 8 && $response->EstadoErrorConsulta) {
+                $rsCliente = explode(" ", $response->RazonSocialCliente);
+                $apellidos = array_splice($rsCliente, -2);
+
+                $response->Nombres = implode(" ", $rsCliente);
+                $response->ApePaterno = $apellidos[0];
+                $response->ApeMaterno = $apellidos[1];
+            }
+            return $this->message(status: $response->EstadoErrorConsulta ? 200 : 404, data: ['data' => $response]);
+        } catch (Exception $e) {
+            return $this->message(data: ['error' => $e->getMessage()], status: $e->getCode());
+        }
     }
 
     private function Msg_json(bool $success, int $status, string $message, $data = [])

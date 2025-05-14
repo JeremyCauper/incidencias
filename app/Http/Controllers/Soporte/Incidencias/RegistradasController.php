@@ -107,7 +107,7 @@ class RegistradasController extends Controller
                     "1" => ['c' => 'info', 't' => 'Asignada'],
                     "2" => ['c' => 'primary', 't' => 'En Proceso'],
                     "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
-                    "5" => ['c' => 'danger', 't' => 'Cierre Sistema']
+                    "5" => ['c' => 'danger', 't' => 'Cierre Sistema'],
                 ];
                 $badge_informe = '<label class="badge badge-' . $estadoInforme[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
 

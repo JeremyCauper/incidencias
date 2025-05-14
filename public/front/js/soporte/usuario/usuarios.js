@@ -78,8 +78,8 @@ $(document).ready(function () {
     $('#n_doc').blur(async function () {
         let datos = await consultarDniInput($(this));
         if (datos.success) {
-            $('#nom_usu').val(datos.data.nombres);
-            $('#ape_usu').val(`${datos.data.apellidop} ${datos.data.apellidom}`);
+            $('#nom_usu').val(datos.data.Nombres);
+            $('#ape_usu').val(`${datos.data.ApePaterno} ${datos.data.ApeMaterno}`);
         }
     });
 

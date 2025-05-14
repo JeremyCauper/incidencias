@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ticket</title>
+    <title>TICKET - {{$cod_ordens}}.pdf</title>
     <style>
         @page {
             size: 80mm auto;
@@ -119,7 +119,7 @@
 
 <body>
     <div class="ticket-header">
-        <img src="{{public_path() . '/front/images/app/logo_tittle_rc_white.png'}}" class="logo">
+        <img src="{{public_path() . '/front/images/app/LogoRC_WBlanco.webp'}}" class="logo">
         <p style="font-weight: bold; font-size: 11px; margin: 0px">ORDEN DE SERVICIO</p>
         <p style="font-size: 11px; margin: 0px">{{$cod_ordens}}</p>
         <p style="font-size: 9px; margin: 9px 0px 0px 100px;"><span style="font-weight: bold;">FECHA :</span> {{$fecha}}
@@ -173,9 +173,12 @@
             </table>
         </p>
 
-        <p>
-            <span class="fw-bold">Informe: </span>
-            {{$problema}}
+        <p style="padding-top: 5px;">
+            <span class="fw-bold">Clasificacion del Error</span>
+            <ul style="padding-left: 10px;">
+                <li><span class="fw-bold">Problema :</span> {{$problema}}</li>
+                <li><span class="fw-bold">Sub Problema :</span> {{$sproblema}}</li>
+            </ul>
         </p>
     </div>
     <div class="linea"></div>
@@ -212,9 +215,9 @@
             @if (count($materiales))
                 @foreach ($materiales as $mat)
                     <tr>
-                        <td>{{$mat['i']}}</td>
-                        <td>{{$mat['p']}}</td>
-                        <td>{{$mat['c']}}</td>
+                        <td>{{$mat['indice']}}</td>
+                        <td>{{$mat['descripcion']}}</td>
+                        <td>{{$mat['cantidad']}}</td>
                     </tr>
                 @endforeach
             @endif

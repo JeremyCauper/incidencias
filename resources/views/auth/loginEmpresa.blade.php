@@ -19,7 +19,7 @@
     <nav class="navbar bg-dark-subtle fixed-top">
         <div class="container-fluid py-1 mx-2">
             <a class="navbar-brand" href="{{url('/soporte')}}">
-                <img src="{{secure_asset('front/images/app/logo_tittle_rc.png')}}?v={{ time() }}" height="34" alt="RC Logo" loading="lazy"
+                <img src="{{secure_asset('front/images/app/LogoRC_WBlanco.webp')}}?v={{ time() }}" height="34" alt="RC Logo" loading="lazy"
                     style="margin-top: -1px;">
             </a>
             <span class="navbar-brand text-white me-0" style="font-size: smaller;">
@@ -32,7 +32,7 @@
         <div style="width: 22rem;">
             <form id="form-login" class="m-2">
                 <div class="text-center title-login">
-                    <img src="{{secure_asset('front/images/app/tittle_login.png')}}?v={{ time() }}" height="60" alt="">
+                    <img src="{{secure_asset('front/images/app/LogoRC_TNegro.png')}}?v={{ time() }}" height="60" alt="">
                 </div>
                 <div class="alert alert-danger hidden" role="alert">
                     <i class="fas fa-triangle-exclamation"></i> Usuario incorrecto

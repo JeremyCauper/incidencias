@@ -122,8 +122,7 @@
 .select2-container--disabled .select2-selection--single {
     cursor: default;
     color: #ccc;
-    background-color: #f6f6f6;
-    border-color: #ececec;
+    background-color: var(--mdb-form-control-disabled-bg);
     box-shadow: none;
 }
 
@@ -318,8 +317,8 @@
 }
 
 .select2-dropdown {
-    background-color: #fff;
-    color: #333;
+    background-color: var(--mdb-surface-bg);
+    color: var(--mdb-surface-color);
     border: 0 solid rgba(0, 0, 0, .15);
     display: block;
     position: absolute;
@@ -327,7 +326,7 @@
     width: 100%;
     z-index: 1070;
     border-radius: .25rem;
-    box-shadow: 0 3px 6px rgba(0, 0, 0, .16), 0 3px 6px rgba(0, 0, 0, .23)
+    box-shadow: 0 3px 6px rgba(var(--mdb-surface-color-rgb), .16), 0 3px 6px rgba(var(--mdb-surface-color-rgb), .16)
 }
 
 .select2-results {
@@ -387,8 +386,8 @@
 }
 
 .select2-results__option.select2-results__option--highlighted {
-    background-color: #eee;
-    color: #333
+    background-color: var(--mdb-highlight-bg-color);
+    color: var(--mdb-surface-color);
 }
 
 .select2-results__option[aria-disabled=true] {
@@ -397,8 +396,8 @@
 }
 
 .select2-results__option[aria-selected=true] {
-    color: #333;
-    background-color: #ddd
+    color: var(--mdb-surface-color);
+    background-color: var(--mdb-highlight-bg-color);
 }
 
 .select2-results__options--nested>.select2-results__option {
@@ -495,9 +494,9 @@
 .select2-search--dropdown .select2-search__field {
     padding: .5rem 1rem;
     padding-left: 2.875rem;
-    background-color: #fff;
-    color: #333;
-    border: 1px solid #ccc;
+    background-color: var(--mdb-body-bg);
+    color: var(--mdb-surface-color);
+    border: var(--mdb-border-width) solid var(--mdb-border-color);
     outline: 0;
     width: 100%;
     border-radius: .25rem
@@ -634,4 +633,32 @@
 .select2-result-repository__forks,
 .select2-result-repository__stargazers {
     margin-right: .9375rem
+}
+
+@media (max-width: 512px) {
+    div:where(.swal2-container).swal2-center>.swal2-popup {
+        transform: scale(.8) !important;
+    }
+
+    div:where(.swal2-icon) {
+        transform: scale(.75) !important;
+        margin: .85em auto 0 !important;
+    }
+
+    div:where(.swal2-container) h2:where(.swal2-title) {
+        padding: 0.13em 1em .1em !important;
+    }
+
+    div:where(.swal2-container) h2:where(.swal2-title) h5 {
+        font-size: 1rem !important;
+    }
+
+    div:where(.swal2-container) .swal2-html-container {
+        padding: .3em 1.6em .4em !important;
+        font-size: .95em !important;
+    }
+
+    div:where(.swal2-container) div:where(.swal2-actions) {
+        margin: .2em auto 0 !important;
+    }
 }

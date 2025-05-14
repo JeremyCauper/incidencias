@@ -231,12 +231,10 @@ function date(format) {
     return format.replace(/[YmdHisjwnGaA]/g, (match) => map[match]);
 }
 
-async function consultarDni(dni) {
-    const url = `${__url}/soporte/ConsultaDni/${dni}`;
-
+async function consultarDoc(dni) {
     try {
         const response = await $.ajax({
-            url: url,
+            url: `${__url}/api/ConsultaDoc/Consulta?doc=${dni}`,
             method: "GET",
             dataType: "json"
         });
@@ -248,7 +246,8 @@ async function consultarDni(dni) {
 }
 
 async function consultarDniInput($this) {
-    if (!$this.val()) return false;
+    let doc = $this.val();
+    if (!doc || doc.length > 8) return false;
 
     const label = $(`[for="${$this.attr('id')}"`);
     const labelHtml = label.html();
@@ -257,7 +256,7 @@ async function consultarDniInput($this) {
     }
     try {
         label.addClass('d-flex justify-content-between').html(`${labelHtml} <span class="text-info"><span class="spinner-border" role="status" style="width: 1rem; height: 1rem;"></span> Consultando</span>`);
-        const datos = await consultarDni($this.val());
+        const datos = await consultarDoc(doc);
         return datos;
     } catch (error) {
         console.error("No se pudo consultar el DNI.");
@@ -570,7 +569,7 @@ function mostrar_acciones(table = null) {
     const dataTables_scrollBody = $(`${idTabla ? `#${idTabla}_wrapper` : '.dataTables_wrapper'} .dataTables_scrollBody`);
     let filaAccionActivo = null;
     let filaAccionOld = null;
-    let openOnCkick = false;
+    // let openOnCkick = false;
 
     const animateProperty = (element, property, start, end, duration, fps, callback = null) => {
         let current = start;
@@ -626,16 +625,17 @@ function mostrar_acciones(table = null) {
 
             let evento = esCelular() ? 'click' : 'mouseenter';
             $(this).off(evento).on(evento, function () { // Fila a la que se le dió click
-                if (openOnCkick) return;
-                
+                // if (openOnCkick) return;
+
                 filaAccionActivo = $(this);
                 if (!esCelular()) {
                     filaAccionOld = ($("tr:has(.active-acciones)")?.length) ? $("tr:has(.active-acciones)") : $("tr:has(.dropdown-menu.show)");
                 } else {
                     filaAccionOld = $("tr:has(.active-acciones)");
                 }
+
+                if (filaAccionActivo.is(filaAccionOld)) return;
                 const newTdAccion = filaAccionActivo.find(".td-acciones");
-                
                 if (filaAccionOld?.length) {
                     const oldTdAccion = filaAccionOld.find(".td-acciones");
                     if (!newTdAccion.hasClass('active-acciones') && oldTdAccion.hasClass('active-acciones')) {
@@ -663,14 +663,14 @@ function mostrar_acciones(table = null) {
                 }
                 // Se añaden cuando el scroll esta a unos pixeles menos del final 
                 if (getScrollTdAccion(newTdAccion)) return;
-                newTdAccion.addClass('active-acciones sticky-activo').css('background-color', getBgColorRow(filaAccionActivo));
+                newTdAccion.addClass('active-acciones sticky-activo'); //.css('background-color', getBgColorRow(filaAccionActivo));
                 animateProperty(newTdAccion, 'right', -75, -43, 150, 60);
             });
 
             if (!esCelular()) {
                 $(this).off('mouseleave').on('mouseleave', function () {
                     const newTdAccion = filaAccionActivo.find(".td-acciones");
-                    if (!newTdAccion.find('.dropdown-menu').hasClass('show') && !openOnCkick) {
+                    if (!newTdAccion.find('.dropdown-menu').hasClass('show')) { //  && !openOnCkick
                         animateProperty(newTdAccion, 'right', -43, -75, 150, 60, () => {
                             newTdAccion.removeClass('active-acciones sticky-activo').removeAttr('style');
                         });
@@ -681,12 +681,14 @@ function mostrar_acciones(table = null) {
                     filaAccionActivo = $(this);
                     const newTdAccion = filaAccionActivo.find(".td-acciones");
 
+                    if (filaAccionActivo.is(filaAccionOld)) return;
+
                     if (!getScrollTdAccion(newTdAccion) && !newTdAccion.hasClass('active-acciones')) {
-                        newTdAccion.addClass('active-acciones sticky-activo').css('background-color', getBgColorRow(filaAccionActivo));
+                        newTdAccion.addClass('active-acciones sticky-activo'); //.css('background-color', getBgColorRow(filaAccionActivo));
                         animateProperty(newTdAccion, 'right', -75, -43, 150, 60);
-                        openOnCkick = true;
+                        // openOnCkick = true;
                     }
-                    
+
                     if (filaAccionOld?.length) {
                         const oldTdAccion = filaAccionOld.find(".td-acciones");
                         animateProperty(oldTdAccion, 'right', -43, -75, 150, 60, () => {
@@ -694,16 +696,12 @@ function mostrar_acciones(table = null) {
                         });
                         filaAccionOld = null;
                     }
-                    setTimeout(() => openOnCkick = false, 165);
+                    // setTimeout(() => openOnCkick = false, 165);
                 });
             }
         });
         paginaActual = nuevaPagina; // Actualizar la página actual
     });
-
-    // $('.dropdown-menu').on('show.mdb.dropdown', function () {
-    //     console.log($(this));
-    // });
 
     // Evento de scroll para actualizar la clase sticky-activo
     dataTables_scrollBody.on('scroll', function () {
@@ -715,12 +713,56 @@ function mostrar_acciones(table = null) {
             if (getScrollTdAccion(accionTd)) {
                 return accionTd.removeClass('active-acciones sticky-activo').removeAttr('style');
             }
-            accionTd.addClass("active-acciones sticky-activo").css({ 'right': '-43px', 'background-color': getBgColorRow(filaActiva) });
+            accionTd.addClass("active-acciones sticky-activo").css({ 'right': '-43px' }); // , 'background-color': getBgColorRow(filaActiva)
         } catch (error) {
             console.log(error);
         }
     });
+
+    dataTables_scrollBody.on('blur', function () {
+        console.log('salió');
+    });
 }
+
+function parseColor(color) {
+    if (!color) return;
+    let colores = {
+        primary: '#3b71ca',
+        secondary: '#9fa6b2',
+        success: '#14a44d',
+        danger: '#dc4c64',
+        warning: '#e4a11b',
+        info: '#54b4d3',
+        light: '#fbfbfb',
+        dark: '#332d2d',
+    }
+
+    if (colores.hasOwnProperty(color)) {
+        color = colores[color];
+    }
+    const rgbRegex = /^rgb\(\s*(\d{1,3})\s*,\s*(\d{1,3})\s*,\s*(\d{1,3})\s*\)$/i;
+    const hexRegex = /^#([a-f\d]{3}|[a-f\d]{6})$/i;
+
+    // Si es RGB
+    const rgbMatch = color.match(rgbRegex);
+    if (rgbMatch) {
+        return color;
+    }
+
+    // Si es HEX
+    const hexMatch = color.match(hexRegex);
+    if (hexMatch) {
+        let hex = hexMatch[1];
+        if (hex.length === 3) { hex = hex.split('').map(c => c + c).join(''); }
+        const r = parseInt(hex.slice(0, 2), 16);
+        const g = parseInt(hex.slice(2, 4), 16);
+        const b = parseInt(hex.slice(4, 6), 16);
+        return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    throw new Error('Formato de color no reconocido');
+}
+
 
 function fObservador(selector, callback) {
     if (typeof selector !== 'string') return null;
@@ -738,6 +780,19 @@ function fObservador(selector, callback) {
         if (typeof callback === "function") callback();
     });
     observer.observe(contenedor);
+}
+
+function cargarIframeDocumento(url) {
+    $('#modal_pdf').modal('show');
+    let contenedor = $('#modal_pdf .modal-body');
+    contenedor.prepend('<div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>');
+    $('#contenedor_doc').attr('src', url).off('load').on('load', function () {
+        contenedor.find('.loader-of-modal').remove();
+        setTimeout(() => {
+            var alturaTotal = contenedor.height() - 8;
+            $(this).height(alturaTotal).removeClass('h-100');
+        }, 100);
+    });
 }
 
 function esCelular() {

@@ -108,7 +108,8 @@
                                     { data: 'cod_incidencia' },
                                     { data: 'fecha_inc' },
                                     { data: 'cod_orden' },
-                                    { data: 'asignados', render: function (data, type, row) {
+                                    {
+                                        data: 'asignados', render: function (data, type, row) {
                                             return (data.map(usu => usuarios[usu].nombre)).join(", ");
                                         }
                                     },
@@ -178,8 +179,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span
-                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -210,7 +211,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
+                            Incidencia</h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="fieldset" aria-item="contenedor-seguimiento">
@@ -244,8 +246,8 @@
                                 N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                         </div>
                         <div class="list-group-item">
-                            <label class="form-label me-2">Sucursal: </label><span
-                                style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                            <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                aria-item="sucursal">E/S INDEPENDENCIA</span>
                         </div>
                         <div class="list-group-item">
                             <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -253,7 +255,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Agregar firma</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Agregar firma
+                        </h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="col-12 fieldset text-center">
@@ -299,5 +302,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/incidencia/resueltas.js')}}?v={{ time() }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/resueltas.js')}}?v={{ time() }}"></script>
 @endsection

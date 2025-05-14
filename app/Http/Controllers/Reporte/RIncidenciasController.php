@@ -52,8 +52,45 @@ class RIncidenciasController extends Controller
             $tIncidencia = $request->query('tIncidencia');
             $fechaIni = $request->query('fechaIni') ?: now()->format('Y-m-01');
             $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
+            $data = [];
 
-            $whereInc = ['estatus' => 1];
+            $estadoInforme = [
+                "0" => ['c' => 'warning', 't' => 'Sin Asignar'],
+                "1" => ['c' => 'info', 't' => 'Asignada'],
+                "2" => ['c' => 'primary', 't' => 'En Proceso'],
+                "3" => ['c' => 'success', 't' => 'Finalizado'],
+                "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
+                "5" => ['c' => 'danger', 't' => 'Cierre Sistema']
+            ];
+
+            $data['estados']['dhead'] = "ESTADO DE INCIDENCIAS";
+            $data['estados']['dbody'] = DB::table('tb_incidencias')->select('estado_informe', DB::raw('COUNT(estado_informe) as total'))
+                ->groupBy('estado_informe')->get()->map(function ($val) use ($estadoInforme) {
+                    return [
+                        'titulo' => $estadoInforme[$val->estado_informe]['t'],
+                        'total' => $val->total,
+                        'color' => $estadoInforme[$val->estado_informe]['c'],
+                    ];
+                });
+
+            $tSoporte = JsonDB::table('tipo_soporte')->select('id', 'descripcion')->keyBy('id');
+            $data['tsoporte']['dhead'] = "TIPO SOPORTES";
+            $data['tsoporte']['dbody'] = DB::table('tb_incidencias')->select('id_tipo_soporte', DB::raw('COUNT(id_tipo_soporte) as total'))
+                ->groupBy('id_tipo_soporte')->get()->map(function ($val) use ($tSoporte) {
+                    $color = [
+                        "1" => "dark",
+                        "2" => "secondary",
+                    ];
+                    return [
+                        'titulo' => $tSoporte[$val->id_tipo_soporte]->descripcion ?? null,
+                        'total' => $val->total,
+                        'color' => $color[$val->id_tipo_soporte] ?? "warning",
+                    ];
+                });
+
+            return ['data' => $data];
+
+            /*$whereInc = ['estatus' => 1];
             if (!empty($ruc)) {
                 $whereInc['ruc_empresa'] = $ruc;
             }
@@ -65,7 +102,7 @@ class RIncidenciasController extends Controller
             $cod_incidencias = DB::table('tb_inc_tipo')->whereIn('id_tipo_inc', explode(",", $tIncidencia))->pluck('cod_incidencia')->toArray();
 
             // return $cod_incidencias;
-            
+
             $incidencias = DB::table('tb_incidencias')
                 ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
                 ->where($whereInc)
@@ -123,27 +160,10 @@ class RIncidenciasController extends Controller
                     'subproblema' => $incidencia->id_subproblema,
                     'iniciado' => $seguimiento->where('estado', 0)->first()?->created_at ?? 'Sin Iniciar',
                     'finalizado' => $seguimiento->where('estado', 1)->first()?->created_at ?? 'Sin Terminar',
-                    /*'acciones' => $this->DropdownAcciones([
-                        'tittle' => 'Acciones',
-                        'button' => [
-                            [
-                                'funcion' => "ShowDetail(this, '$incidencia->cod_incidencia')",
-                                'texto' => '<i class="fas fa-eye text-info me-2"></i> Detalle Incidencia'
-                            ],
-                            !empty($orden) ? [
-                                'funcion' => "OrdenPdf('$cod_ordens')",
-                                'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'
-                            ] : null,
-                            !empty($orden) ? [
-                                'funcion' => "OrdenTicket('$cod_ordens')",
-                                'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket'
-                            ] : null,
-                        ]
-                    ])*/
                 ];
             });
 
-            return ['data' => $incidencias];
+            return ['data' => $incidencias];*/
         } catch (Exception $th) {
             return response()->json(['error' => $th]);
         }

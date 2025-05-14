@@ -89,11 +89,21 @@ function ShowDetail(e, cod) {
 }
 
 function OrdenPdf(cod) {
-    window.open(`${__url}/soporte/orden/documentopdf/${cod}`, `Visualizar PDF ${cod}`, "width=900, height=800");
+    const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${cod}`;
+    if (esCelular()) {
+        cargarIframeDocumento(url + '&tipo=movil');
+    } else {
+        window.open(url, `Visualizar PDF ${cod}`, "width=900, height=800");
+    }
 }
 
 function OrdenTicket(cod) {
-    window.open(`${__url}/soporte/orden/documentoticket/${cod}`, `Visualizar TICKET ${cod}`, "width=650, height=800");
+    const url = `${__url}/soporte/orden/exportar-documento?documento=ticket&codigo=${cod}`;
+    if (esCelular()) {
+        cargarIframeDocumento(url + '&tipo=movil');
+    } else {
+        window.open(url, `Visualizar TICKET ${cod}`, "width=650, height=800");
+    }
 }
 
 function AddSignature(e, cod) {

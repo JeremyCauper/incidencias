@@ -25,7 +25,7 @@ class OrdenVisitaController extends Controller
                 'cod_ordenv' => 'required|string',
                 'id_visita_orden' => 'required|integer'
             ]);
-    
+
             if ($validator->fails()) {
                 return $this->message(data: ['required' => $validator->errors()], status: 422);
             }
@@ -42,10 +42,10 @@ class OrdenVisitaController extends Controller
             } else {
                 $new_codigo = $request->cod_ordenv;
             }
-    
+
             // Filtrar los datos de las filas de visitas excluyendo las claves específicas
             $request_filas_visitas = array_diff_key($request->all(), array_flip(['cod_ordenv', 'id_visita_orden', 'islas']));
-    
+
             // Construcción del array para insertar en tb_orden_visita_filas
             $indice = 0;
             $filas_visitas = collect($request_filas_visitas)->map(function ($item) use ($request, &$indice) {
@@ -58,10 +58,10 @@ class OrdenVisitaController extends Controller
                     'created_at' => now()->format('Y-m-d H:i:s')
                 ];
             })->values()->toArray();
-    
+
             // Construcción del array para insertar en tb_orden_visita_islas
             $islas_visitas = collect($request->islas)->map(function ($item) use ($request) {
-                $item = (object)$item;
+                $item = (object) $item;
                 return [
                     'cod_orden_visita' => $request->cod_ordenv,
                     'isla' => $item->isla,
@@ -83,15 +83,15 @@ class OrdenVisitaController extends Controller
                     'created_at' => now()->format('Y-m-d H:i:s')
                 ];
             })->values()->toArray();
-    
+
             DB::beginTransaction();
-    
+
             // Insertar en la tabla tb_orden_visita_correlativo
             DB::table('tb_orden_visita_correlativo')->insert([
                 'cod_orden_visita' => $request->cod_ordenv,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
-    
+
             // Insertar en la tabla tb_orden_visita
             DB::table('tb_orden_visita')->insert([
                 'cod_orden_visita' => $request->cod_ordenv,
@@ -101,17 +101,17 @@ class OrdenVisitaController extends Controller
                 'hora_fin' => now()->format('H:i:s'),
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
-    
+
             // Insertar en la tabla tb_orden_visita_filas
             if (!empty($filas_visitas)) {
                 DB::table('tb_orden_visita_filas')->insert($filas_visitas);
             }
-    
+
             // Insertar en la tabla tb_orden_visita_islas
             if (!empty($islas_visitas)) {
                 DB::table('tb_orden_visita_islas')->insert($islas_visitas);
             }
-    
+
             // Actualizar el estado de la visita en tb_visitas
             DB::table('tb_visitas')->where('id', $request->id_visita_orden)->update(['estado' => 2]);
 
@@ -123,19 +123,22 @@ class OrdenVisitaController extends Controller
                 'estado' => 1,
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
-    
+
             // Obtener código de orden de visita
             $codOrdenV = DB::select('CALL GetCodeOrdVis(?)', [date('y')])[0]->cod_orden;
-    
+
             DB::commit();
-    
+
             return $this->message(
                 message: "<p>Orden de visita generada exitosamente.</p><p style='font-size: small;'>$validar_codigo</p>",
-                data: [ 'data' => [
-                    'new_cod_ordenv' => $codOrdenV,
-                    'old_cod_ordenv' => $new_codigo,
-                ]]);
-    
+                data: [
+                    'data' => [
+                        'new_cod_ordenv' => $codOrdenV,
+                        'old_cod_ordenv' => $new_codigo,
+                    ]
+                ]
+            );
+
         } catch (QueryException $e) {
             DB::rollBack();
             return $this->message(
@@ -143,7 +146,7 @@ class OrdenVisitaController extends Controller
                 data: ['error' => $e->getMessage()],
                 status: 400
             );
-    
+
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(
@@ -165,31 +168,31 @@ class OrdenVisitaController extends Controller
             ];
 
             $config_filas = [
-                1 => (object)[ "text" => "UPS", "child" => false],
-                2 => (object)[ "text" => "BATERIAS UPS", "child" => true],
-                3 => (object)[ "text" => "SALIDA DE ENERGIA", "child" => true],
-                4 => (object)[ "text" => "ESTABILIZADOR", "child" => false],
-                5 => (object)[ "text" => "INGRESO DE ENERGIA", "child" => true],
-                6 => (object)[ "text" => "SALIDA DE ENERGIA", "child" => true],
-                7 => (object)[ "text" => "INTERFACE", "child" => false],
-                8 => (object)[ "text" => "MONITOR", "child" => false],
-                9 => (object)[ "text" => "TARJETA MULTIPUERTOS", "child" => false],
-                10 => (object)[ "text" => "SWITCH", "child" => false],
-                11 => (object)[ "text" => "SISTEMA OPERATIVO", "child" => false],
-                12 => (object)[ "text" => "VENCIMIENTO DE ANTIVIRUS", "child" => false],
-                13 => (object)[ "text" => "DISCO DURO", "child" => false],
-                14 => (object)[ "text" => "REALIZAR BACKUP", "child" => false],
+                1 => (object) ["text" => "UPS", "child" => false],
+                2 => (object) ["text" => "BATERIAS UPS", "child" => true],
+                3 => (object) ["text" => "SALIDA DE ENERGIA", "child" => true],
+                4 => (object) ["text" => "ESTABILIZADOR", "child" => false],
+                5 => (object) ["text" => "INGRESO DE ENERGIA", "child" => true],
+                6 => (object) ["text" => "SALIDA DE ENERGIA", "child" => true],
+                7 => (object) ["text" => "INTERFACE", "child" => false],
+                8 => (object) ["text" => "MONITOR", "child" => false],
+                9 => (object) ["text" => "TARJETA MULTIPUERTOS", "child" => false],
+                10 => (object) ["text" => "SWITCH", "child" => false],
+                11 => (object) ["text" => "SISTEMA OPERATIVO", "child" => false],
+                12 => (object) ["text" => "VENCIMIENTO DE ANTIVIRUS", "child" => false],
+                13 => (object) ["text" => "DISCO DURO", "child" => false],
+                14 => (object) ["text" => "REALIZAR BACKUP", "child" => false],
             ];
 
             $config_islas = [
-                (object)[ "text" => "IMPRESORAS", "checked" => "impresoras", "descripcion" => "des_impresoras", "child" => false],
-                (object)[ "text" => "RED DE LECTORES", "checked" => "lectores", "descripcion" => "des_lector", "child" => false],
-                (object)[ "text" => "JACK TOOLS", "checked" => "jack", "descripcion" => "des_jack", "child" => false],
-                (object)[ "text" => "VOLTAJE DE MANGUERAS", "checked" => "voltaje", "descripcion" => "des_voltaje", "child" => true],
-                (object)[ "text" => "CAUCHO PROTECTOR DE", "checked" => "caucho", "descripcion" => "des_caucho", "child" => false],
-                (object)[ "text" => "LECTORES", "checked" => "mueblepos", "descripcion" => "des_mueblepos", "child" => false],
-                (object)[ "text" => "MUEBLE DE POS", "checked" => "mr350", "descripcion" => "des_mr350", "child" => false],
-                (object)[ "text" => "MR 350 / DTI / TERMINAL", "checked" => "switch", "descripcion" => "des_switch", "child" => false],
+                (object) ["text" => "IMPRESORAS", "checked" => "impresoras", "descripcion" => "des_impresoras", "child" => false],
+                (object) ["text" => "RED DE LECTORES", "checked" => "lectores", "descripcion" => "des_lector", "child" => false],
+                (object) ["text" => "JACK TOOLS", "checked" => "jack", "descripcion" => "des_jack", "child" => false],
+                (object) ["text" => "VOLTAJE DE MANGUERAS", "checked" => "voltaje", "descripcion" => "des_voltaje", "child" => true],
+                (object) ["text" => "CAUCHO PROTECTOR DE", "checked" => "caucho", "descripcion" => "des_caucho", "child" => false],
+                (object) ["text" => "LECTORES", "checked" => "mueblepos", "descripcion" => "des_mueblepos", "child" => false],
+                (object) ["text" => "MUEBLE DE POS", "checked" => "mr350", "descripcion" => "des_mr350", "child" => false],
+                (object) ["text" => "MR 350 / DTI / TERMINAL", "checked" => "switch", "descripcion" => "des_switch", "child" => false],
             ];
 
             // Validación de orden
@@ -202,7 +205,7 @@ class OrdenVisitaController extends Controller
             $visita = DB::table('tb_visitas')->where('id', $orden->id_visita)->first();
             $asignados = DB::table('tb_vis_asignadas')->where('id_visitas', $orden->id_visita)->orderBy('created_at', 'asc')->get();
             $seguimiento = DB::table('tb_vis_seguimiento')->where('id_visitas', $orden->id_visita)->get();
-            $datos['ordenv_filas'] = DB::table('tb_orden_visita_filas')->select('posicion', 'checked', 'descripcion')->where('cod_orden_visita', $cod)->orderBy('posicion', 'asc')->get()->map(function ($fila) use($config_filas) {
+            $datos['ordenv_filas'] = DB::table('tb_orden_visita_filas')->select('posicion', 'checked', 'descripcion')->where('cod_orden_visita', $cod)->orderBy('posicion', 'asc')->get()->map(function ($fila) use ($config_filas) {
                 $fila->config = $config_filas[$fila->posicion];
                 return $fila;
             });
@@ -257,22 +260,54 @@ class OrdenVisitaController extends Controller
         }
     }
 
-    public function CreatePdf(string $cod)
+    public function ExportarDocumento(Request $request)
     {
         try {
-            // Datos iniciales
-            $data = $this->DataForFile($cod);
+            $documento = $request->query('documento');
+            $codigo = $request->query('codigo');
+            $tipo = $request->query('tipo');
 
+            if (!$documento) {
+                throw new Exception("El parametro documento no puede estar vacio.");
+            } else if ($documento != 'pdf' && $documento != 'ticket'){
+                throw new Exception("El parametro documento tiene un valor incorrecto.");
+            }
+            if (!$codigo) {
+                throw new Exception("El parametro codigo no puede estar vacio.");
+            }
+
+            // Datos iniciales
+            $data = $this->DataForFile($codigo);
             // Generar PDF
-            $pdf = Pdf::loadView('soporte.orden.visita.viewpdf', $data);
-            return $pdf->stream("ORDEN VISITA - {$cod}.pdf");
+            $pdf = Pdf::loadView("soporte.orden.visita.view$documento", $data);
+            if ($documento == 'ticket') {
+                // Definir el tamaño de la hoja en mm (80mm de ancho)
+                $pdf->setPaper([0, 0, 226.77, 800], 'portrait'); // 80mm ancho y 600 de alto (se puede ajustar)
+            }
+            switch ($tipo) {
+                case 'descarga':
+                    return $pdf->download("ORDEN VISITA - {$codigo}.pdf");
+
+                case 'movil':
+                    $urlDescarga = "soporte/orden-visita/exportar-documento";
+                    $pdfContent = $pdf->output(); // string binario del PDF
+                    return view('soporte.orden.pdfjs.preview', [
+                        'urlDescarga' => $urlDescarga,
+                        'documento' => $documento,
+                        'codigo' => $codigo,
+                        'base64_pdf' => base64_encode($pdfContent)
+                    ]);
+
+                default:
+                    return $pdf->stream("ORDEN VISITA - {$codigo}.pdf");
+            }
         } catch (QueryException $e) {
-            return $this->message(message: "Error al generar el PDF de la orden de visita $cod", data: ['error' => $e->getMessage()], status: 400);
+            return $this->message(message: "Error al generar el PDF de la orden de incidencia $codigo", data: ['error' => $e->getMessage()], status: 400);
         } catch (Exception $e) {
             if ($e->getCode() == 404) {
-                return $this->message(message: $e->getMessage(), status: $e->getCode());
+                return $this->message(message: $e->getMessage(), status: 404);
             }
-            return $this->message(data: ['error' => $e->getMessage()], status: $e->getCode());
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 }
