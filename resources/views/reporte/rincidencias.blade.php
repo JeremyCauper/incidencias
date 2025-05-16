@@ -253,11 +253,6 @@
                 axisPointer: {
                     type: 'shadow'
                 },
-                // formatter: function (params) {
-                //     const value = params[0].value; // 👈 Tomar el valor de la primera serie
-                //     const percent = ((value / total_nivel) * 100).toFixed(1);
-                //     return `${value} (${percent}%)`;
-                // }
             },
             graphic: [
                 {

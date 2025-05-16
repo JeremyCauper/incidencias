@@ -786,11 +786,11 @@ function cargarIframeDocumento(url) {
     $('#modal_pdf').modal('show');
     let contenedor = $('#modal_pdf .modal-body');
     contenedor.prepend('<div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>');
-    $('#contenedor_doc').attr('src', url).off('load').on('load', function () {
+    $('#contenedor_doc').addClass('d-none').attr('src', url).off('load').on('load', function () {
         contenedor.find('.loader-of-modal').remove();
         setTimeout(() => {
             var alturaTotal = contenedor.height() - 8;
-            $(this).height(alturaTotal).removeClass('h-100');
+            $(this).height(alturaTotal).removeClass('d-none');
         }, 100);
     });
 }
