@@ -782,7 +782,6 @@ document.getElementById('form-orden-visita').addEventListener('submit', async fu
                     window.open(url, `Visualizar PDF ${dt.old_cod_ordenv}`, "width=900, height=800");
                 }
                 updateTableVis()
-                return true;
             }
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });
         },
