@@ -218,9 +218,12 @@
 
 
     <script>
-        setTimeout(function () {
-            location.reload();
-        }, 7205000);
+        const intervalToken = setInterval(() => {
+            if (!document.cookie.includes('XSRF-TOKEN')) {
+                clearInterval(intervalToken);
+                location.reload();
+            }
+        }, 1000);
 
     </script>
     <!-- MDB -->

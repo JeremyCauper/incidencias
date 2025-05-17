@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Soporte\Visitas;
 
 use App\Http\Controllers\Controller;
+use App\Services\SqlStateHelper;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -69,7 +70,10 @@ class VProgramadasController extends Controller
 
             return ["data" => $visitas, "conteo" => $conteo];
         } catch (QueryException $e) {
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo obtener informacion la visita." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
@@ -108,7 +112,10 @@ class VProgramadasController extends Controller
 
             return $this->message(data: ['data' => $visita]);
         } catch (QueryException $e) {
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo obtener informacion la visita." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
@@ -178,7 +185,10 @@ class VProgramadasController extends Controller
             return $this->message(data: ['data' => ['visita' => $visita, 'seguimiento' => $data]]);
 
         } catch (QueryException $e) {
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo obtener detalle la visita." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
@@ -238,7 +248,11 @@ class VProgramadasController extends Controller
 
             return $this->message(message: 'La visita se ' . ($accion == 1 ? '' : 're') . 'inició con exito.');
         } catch (QueryException $e) {
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            DB::rollBack();
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo iniciar la visita." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -295,7 +309,10 @@ class VProgramadasController extends Controller
             return $this->message(message: 'Personal asignado con éxito', data: ['data' => ['personal' => $vPersonal]]);
         } catch (QueryException $e) {
             DB::rollBack();
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo asignar personal a la visita." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->mesageError(exception: $e, codigo: 500);
@@ -324,7 +341,11 @@ class VProgramadasController extends Controller
             }
             return $this->message(message: "No tiene los permisos requeridos", status: 401);
         } catch (QueryException $e) {
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            DB::rollBack();
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo eliminar la visita." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);

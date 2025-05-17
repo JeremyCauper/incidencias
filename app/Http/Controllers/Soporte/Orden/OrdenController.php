@@ -6,6 +6,7 @@ use App\Helpers\Problema;
 use App\Helpers\SubProblema;
 use App\Helpers\TipoSoporte;
 use App\Http\Controllers\Controller;
+use App\Services\SqlStateHelper;
 use Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Database\QueryException;
@@ -132,7 +133,10 @@ class OrdenController extends Controller
             ]);
         } catch (QueryException $e) {
             DB::rollBack();
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo registrar la order de servicio." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -155,7 +159,10 @@ class OrdenController extends Controller
             return $this->message(message: "La firma se añadió con exito.", data: ['data' => $request->all()]);
         } catch (QueryException $e) {
             DB::rollBack();
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo añadir la firma." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -243,7 +250,10 @@ class OrdenController extends Controller
             return $this->message(message: 'Codigo añadido con éxito', data: ['data' => ['cod_orden' => $request->cod_orden_ser]]);
         } catch (QueryException $e) {
             DB::rollBack();
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo añadir el codigo." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);

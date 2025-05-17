@@ -19,6 +19,13 @@
             localStorage.setItem('data_mdb_theme', 'light');
         }
         $('html').attr('data-mdb-theme', localStorage.data_mdb_theme);
+
+        const intervalToken = setInterval(() => {
+            if (!document.cookie.includes('XSRF-TOKEN')) {
+                clearInterval(intervalToken);
+                location.reload();
+            }
+        }, 1000);
     </script>
 </head>
 

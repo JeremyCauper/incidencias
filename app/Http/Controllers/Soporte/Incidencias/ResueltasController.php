@@ -10,7 +10,9 @@ use App\Helpers\TipoIncidencia;
 use App\Helpers\TipoSoporte;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Empresas\EmpresasController;
+use App\Services\SqlStateHelper;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -156,6 +158,12 @@ class ResueltasController extends Controller
 
             // Retornamos la incidencia con la información de contacto y personal asignado
             return response()->json(['success' => true, 'message' => '', 'data' => $incidencia]);
+        } catch (QueryException $e) {
+            DB::rollBack();
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo obtener informacion la incidencia." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             // Manejamos errores y retornamos un mensaje de error claro
             return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);

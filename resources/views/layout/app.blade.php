@@ -5,6 +5,10 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ time() }}" />
   <title>@yield('title')</title>
   <!-- Font Awesome -->
@@ -238,9 +242,12 @@
 
 
   <script>
-    setTimeout(function () {
-      location.reload();
-    }, 7205000);
+    const intervalToken = setInterval(() => {
+      if (!document.cookie.includes('XSRF-TOKEN')) {
+        clearInterval(intervalToken);
+        location.reload();
+      }
+    }, 1000);
 
     let alertaMostrada = false;
     let logoutEjecutado = false;

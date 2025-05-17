@@ -1,5 +1,6 @@
 :root,
 [data-mdb-theme=light] {
+    --root-body-bg: #ddebff;
     --root-logo-navbar: url(../../images/app/LogoRC_WBlanco.webp) no-repeat center center;
     --root-logo-rci-bg: url(../../images/app/LogoRC_TNegro.png) no-repeat center center;
     --root-font-size-span: smaller;
@@ -8,7 +9,12 @@
 }
 
 [data-mdb-theme=dark] {
+    --root-body-bg: #303030;
     --root-logo-rci-bg: url(../../images/app/LogoRC_TBlanco.png) no-repeat center center;
+}
+
+body {
+    background-color: var(--root-body-bg)
 }
 
 .navbar-brand .logo_rci {
