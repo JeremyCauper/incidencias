@@ -202,7 +202,7 @@
                             <div class="modal-body p-0 position-relative">
                                 <iframe id="contenedor_doc" class="w-100" frameborder="0"></iframe>
                             </div>
-                            <div class="modal-footer border-top-0">
+                            <div class="modal-footer border-top-0 pt-0 pb-1">
                                 <button type="button" class="btn btn-link " data-mdb-ripple-init
                                     data-mdb-dismiss="modal">Cerrar</button>
                             </div>
