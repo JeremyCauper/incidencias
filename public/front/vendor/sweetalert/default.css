@@ -2,6 +2,14 @@
 * @sweetalert2/themes v5.0.17
 * Released under the MIT License.
 */
+:root,
+[data-mdb-theme=light] {
+  --mdb-bg-fondo-rgb: rgb(0, 0, 0, 0.4);
+}
+
+[data-mdb-theme=dark] {
+  --mdb-bg-fondo-rgb: rgb(0, 0, 0, 0.6);
+}
 
 .swal2-popup.swal2-toast {
   box-sizing: border-box;
@@ -213,7 +221,7 @@ div:where(.swal2-container) {
 
 div:where(.swal2-container).swal2-backdrop-show,
 div:where(.swal2-container).swal2-noanimation {
-  background: rgba(0, 0, 0, 0.4);
+  background: var(--mdb-bg-fondo-rgb);
 }
 
 div:where(.swal2-container).swal2-backdrop-hide {

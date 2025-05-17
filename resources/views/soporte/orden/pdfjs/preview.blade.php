@@ -14,84 +14,84 @@
     <title>Visor PDF</title>
 
     <style>
-        body {
-            height: inherit;
+        header nav {
+            height: 54px !important;
         }
 
-        #pdf-container {
-            /* display: flex; */
-            flex-direction: column;
-            align-items: center;
-            /* width: 100%; */
+        header * {
+            color: #ffffff;
         }
 
-        #canvas-container {
-            /* width: 100%; */
-            /* overflow: hidden; */
-            margin-top: 46px;
-            margin-bottom: 60px;
+        main {
+            height: calc(100vh - 115px);
         }
 
-        #pdf-canvas {
-            /* max-width: 100%; */
-            height: auto;
+        footer nav {
+            height: 60px !important;
         }
 
-        @media (max-width: 768px) {
-            #pdf-container {
-                height: 100vh;
-                justify-content: space-evenly;
-            }
+        #page_num_input,
+        #page_count {
+            font-size: .9rem;
         }
+
+        #page_num_input {
+            text-align: center;
+            width: 40px;
+            display: inline;
+        }
+
+        #porcentaje_zoom {
+            font-size: .75rem;
+            background-color: rgb(30, 30, 30);
+        }
+
+        /* @media (max-width: 768px) {
+        } */
     </style>
 </head>
 
-<!-- overflow-auto d-flex align-items-center justify-content-center  -->
-
-<body class="overflow-auto mt-5">
+<body class="overflow-hidden h-100">
     <header>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg bg-body fixed-top" style="height: 46px !important;">
+        <nav class="navbar bg-body py-1"> <!--  fixed-top -->
             <div class="container-fluid">
-                <div>
-                    <button type="button" class="btn btn-link btn-sm btn-floating" id="zoomOut" data-mdb-ripple-init>
+                <div class="navbar-brand">
+                    <button type="button" class="btn btn-link btn-floating" id="zoomOut" data-mdb-ripple-init>
                         <i class="fas fa-search-minus"></i>
                     </button>
-                    <button type="button" class="btn btn-link btn-sm btn-floating" id="zoomIn" data-mdb-ripple-init>
+                    <span id="porcentaje_zoom" class="mx-1 py-1 px-2 rounded"></span>
+                    <button type="button" class="btn btn-link btn-floating" id="zoomIn" data-mdb-ripple-init>
                         <i class="fas fa-search-plus"></i>
                     </button>
-                    <button type="button" class="btn btn-link btn-sm btn-floating" id="reload_zoom"
+                    <button type="button" class="btn btn-link btn-floating d-none" id="reload_zoom"
                         data-mdb-ripple-init>
                         <i class="fas fa-arrow-rotate-right"></i>
                     </button>
                 </div>
-                <button type="button" id="descargar" class="btn btn-link btn-sm btn-floating" data-mdb-ripple-init>
+                <button type="button" id="descargar" class="btn btn-link btn-floating" data-mdb-ripple-init>
                     <i class="fas fa-download"></i>
                 </button>
             </div>
         </nav>
         <!-- Navbar -->
     </header>
-    <div id="pdf-container" class="d-flex">
+    <main id="pdf-container" class="overflow-auto px-2">
         <div id="canvas-container" class="text-center">
             <canvas id="pdf_canvas" class="w-100"></canvas>
         </div>
-    </div>
+    </main>
     <footer>
         <!-- Navbar -->
-        <nav class="navbar navbar-expand-lg bg-body py-2 fixed-bottom">
-            <div class="btn-group btn-group-sm m-auto py-1" id="top-bar" role="group" aria-label="Basic example">
-                <button type="button" class="btn" id="prev" data-mdb-ripple-init>
-                    <i class="fas fa-arrow-circle-left"></i>
-                </button>
-                <span>
-                    <span><input type="number" class="form-control" id="page_num_input"
-                            style="width: 40px; display:inline;" value="1" min="1" /></span> / <span
-                        id="page_count"></span>
-                </span>
-                <button type="button" class="btn" id="next" data-mdb-ripple-init>
-                    <i class="fas fa-arrow-circle-right"></i>
-                </button>
+        <nav class="navbar bg-body"> <!--  fixed-bottom -->
+            <div class="d-flex align-items-center m-auto py-1">
+                <i type="button" class="fas fa-arrow-circle-left" style="font-size: 1.5em;" id="prev"></i>
+                <div class="px-3">
+                    <span>
+                        <input type="text" class="form-control" id="page_num_input" value="1" onfocus="this.select()">
+                    </span> / <span id="page_count"></span>
+                </div>
+                <i type="button" class="fas fa-arrow-circle-right" style="font-size: 1.5em;" id="next"></i>
             </div>
         </nav>
         <!-- Navbar -->
@@ -105,149 +105,157 @@
         // 1) Cadena Base64 del PDF (asegúrate de inyectarlo correctamente)
         const base64pdf = "{{ $base64_pdf }}";  // Asegúrate de que esta variable esté correctamente configurada.
 
-        try {
-            if (base64pdf) {
-                // 2) Convierte Base64 a Uint8Array
-                function base64ToUint8Array(b64) {
-                    const raw = atob(b64);                   // decodifica Base64
-                    const arr = new Uint8Array(raw.length);
-                    for (let i = 0; i < raw.length; i++) {
-                        arr[i] = raw.charCodeAt(i);             // cada carácter a su byte correspondiente
+        document.addEventListener("DOMContentLoaded", function () {
+            try {
+                if (base64pdf) {
+                    // 2) Convierte Base64 a Uint8Array
+                    function base64ToUint8Array(b64) {
+                        const raw = atob(b64);                      // decodifica Base64
+                        const arr = new Uint8Array(raw.length);
+                        for (let i = 0; i < raw.length; i++) {
+                            arr[i] = raw.charCodeAt(i);             // cada carácter a su byte correspondiente
+                        }
+                        return arr;
                     }
-                    return arr;
-                }
 
-                // 4) Carga y renderiza la primera página
-                const pdfData = base64ToUint8Array(base64pdf);
-                let pdfDoc = null;
-                let pageNum = 1;
-                let pageRendering = false;
-                let pageNumPending = null;
-                let scale = 1;  // Define el zoom inicial
+                    // 4) Carga y renderiza la primera página
+                    const pdfData = base64ToUint8Array(base64pdf);
+                    let pdfDoc = null;
+                    let pageNum = 1;
+                    let pageRendering = false;
+                    let pageNumPending = null;
+                    let scale = 1;  // Define el zoom inicial
 
-                pdfjsLib.getDocument({ data: pdfData }).promise
-                    .then((pdfDoc_) => {
+                    pdfjsLib.getDocument({ data: pdfData }).promise.then((pdfDoc_) => {
                         pdfDoc = pdfDoc_;
                         // document.getElementById('loading-message').style.display = 'none';
-                        document.getElementById('top-bar').style.display = 'block';
                         document.getElementById('page_count').textContent = pdfDoc.numPages;
-                        renderPage(pageNum);
+                        renderPage();
                     })
-                    .catch((err) => {
-                        console.error('Error al cargar el PDF:', err);
-                        // document.getElementById('loading-message').style.display = 'none';
-                        document.getElementById('pdf-container').innerHTML = '<div class="error">No se pudo cargar el PDF.</div>';
-                    });
-
-                function renderPage(num) {
-                    pageRendering = true;
-                    pdfDoc.getPage(num).then((page) => {
-                        var canvas = document.getElementById('pdf_canvas');
-                        var container = document.getElementById('pdf-container');
-
-                        var viewport = page.getViewport({ scale: scale });
-                        // viewport.height = 679;
-                        // viewport.transform[5] = 350;
-                        // viewport.width = contenedor.clientWidth;
-                        // viewport.viewBox[2] = contenedor.clientWidth;
-                        // viewport.viewBox[3] = contenedor.clientHeight;
-                        var ctx = canvas.getContext('2d');
-
-                        canvas.height = viewport.height; // viewport.height
-                        canvas.width = viewport.width; // viewport.width
-                        if (scale > 1) {
-                            canvas.classList.remove('w-100');
-                            container.classList.remove('d-flex');
-                        } else {
-                            canvas.classList.add('w-100');
-                            container.classList.add('d-flex');
-                        }
-
-                        var renderContext = {
-                            canvasContext: ctx,
-                            viewport: viewport
-                        };
-                        var renderTask = page.render(renderContext);
-                        renderTask.promise.then(() => {
-                            pageRendering = false;
-                            if (pageNumPending !== null) {
-                                renderPage(pageNumPending);
-                                pageNumPending = null;
-                            }
+                        .catch((err) => {
+                            console.error('Error al cargar el PDF:', err);
+                            // document.getElementById('loading-message').style.display = 'none';
+                            document.getElementById('pdf-container').innerHTML = '<div class="error">No se pudo cargar el PDF.</div>';
                         });
+
+                    let page_num_input = document.getElementById('page_num_input');
+
+                    const canvas = document.getElementById('pdf_canvas');
+                    const container = document.getElementById('pdf-container');
+                    const context = canvas.getContext('2d');
+
+                    function renderPage() {
+                        pdfDoc.getPage(pageNum).then(function (page) {
+                            scale = parseFloat(scale.toFixed(1));
+                            let viewport = page.getViewport({ scale });
+
+                            canvas.width = viewport.width;
+                            canvas.height = viewport.height;
+                            const classesToAdd = 'd-flex justify-content-center'.split(' ');
+                            if (scale == 1) {
+                                canvas.classList.add('w-100');
+                                container.classList.add(...classesToAdd);
+                            } else {
+                                canvas.classList.remove('w-100');
+                                container.classList.remove(...classesToAdd);
+                            }
+
+                            const renderContext = {
+                                canvasContext: context,
+                                viewport: viewport
+                            };
+                            page.render(renderContext);
+                        });
+                        page_num_input.value = pageNum;
+                        hidden_reload_zoom();
+                    }
+
+                    page_num_input.addEventListener('input', function () {
+                        this.value = this.value.replace(/\D/g, '');
                     });
-                    document.getElementById('page_num_input').value = num;
-                }
 
-                // Función para renderizar la siguiente página
-                function onPrevPage() {
-                    if (pageNum <= 1) {
-                        return;
+                    // Agrega el evento para el input
+                    page_num_input.addEventListener('change', async function (event) {
+                        const inputPageNum = parseInt(this.value, 10);
+                        if (inputPageNum >= 1 && inputPageNum <= pdfDoc.numPages) {
+                            pageNum = inputPageNum;
+                            if (pageRendering) {
+                                pageNumPending = pageNum;
+                            } else {
+                                renderPage();
+                            }
+                        } else {
+                            // alert(`Por favor, ingrese un número de página válido (1 - ${pdfDoc.numPages}).`);
+                            this.value = pageNum;
+                        }
+                        this.select();
+                    });
+
+                    document.getElementById('prev').addEventListener('click', function () {
+                        if (pageNum > 1) {
+                            pageNum--;
+                            renderPage();
+                        }
+                    });
+
+                    // Función para renderizar la página anterior
+                    document.getElementById('next').addEventListener('click', function () {
+                        if (pageNum < pdfDoc.numPages) {
+                            pageNum++;
+                            renderPage();
+                        }
+                    });
+
+                    let reload_zoom = document.getElementById('reload_zoom');
+                    let zoomOut = document.getElementById("zoomOut");
+                    let zoomIn = document.getElementById('zoomIn');
+                    let descargar = document.getElementById('descargar');
+
+                    function hidden_reload_zoom() {
+                        if (scale == 1) {
+                            zoomOut.disabled = true;
+                            reload_zoom.classList.add('d-none');
+                        } else {
+                            zoomOut.disabled = false;
+                            reload_zoom.classList.remove('d-none');
+                        }
+                        document.getElementById('porcentaje_zoom').innerHTML = (((scale.toFixed(1)).toString()).replace('.', '')).padEnd(3, '0') + '%';
                     }
-                    pageNum--;
-                    renderPage(pageNum);
+
+                    // Zoom en y zoom out
+                    zoomOut.addEventListener('click', function () {
+                        scale -= 0.1;
+                        renderPage();
+                    });
+
+                    zoomIn.addEventListener('click', function zoomIn() {
+                        scale += 0.1;
+                        renderPage();
+                    });
+
+                    reload_zoom.addEventListener('click', function () {
+                        scale = 1;
+                        renderPage();
+                    });
+
+
+                    descargar.addEventListener('click', function () {
+                        const url = `{{ secure_url('') }}/{{ $urlDescarga }}?documento={{ $documento }}&codigo={{ $codigo }}`;
+                        const link = document.createElement('a');
+                        link.href = url + '&tipo=descarga';
+                        link.download = ''; // puedes darle un nombre, e.g., 'orden-123.pdf'
+                        link.style.display = 'none';
+
+                        document.body.appendChild(link);
+                        link.click();
+                        document.body.removeChild(link);
+                    });
+                } else {
+                    document.getElementById('pdf-container').innerHTML = '<div class="error">El PDF no está configurado correctamente.</div>';
                 }
-
-                document.getElementById('prev').addEventListener('click', onPrevPage);
-
-                // Función para renderizar la página anterior
-                function onNextPage() {
-                    if (pageNum >= pdfDoc.numPages) {
-                        return;
-                    }
-                    pageNum++;
-                    renderPage(pageNum);
-                }
-
-                document.getElementById('next').addEventListener('click', onNextPage);
-
-                // Zoom en y zoom out
-                function zoomOut() {
-                    scale -= 0.1;
-                    console.log(pageNum);
-
-                    renderPage(pageNum);
-                }
-
-                document.getElementById("zoomOut").addEventListener('click', zoomOut);
-
-                function zoomIn() {
-                    scale += 0.1;
-                    renderPage(pageNum);
-                }
-
-                document.getElementById('zoomIn').addEventListener('click', zoomIn);
-
-                function reload_zoom() {
-                    scale = 1;
-                    renderPage(pageNum);
-                }
-
-                document.getElementById('reload_zoom').addEventListener('click', reload_zoom);
-
-                function descargar() {
-                    const url = `{{ secure_url('') }}/{{ $urlDescarga }}?documento={{ $documento }}&codigo={{ $codigo }}`;
-                    const link = document.createElement('a');
-                    link.href = url + '&tipo=descarga';
-                    link.download = ''; // puedes darle un nombre, e.g., 'orden-123.pdf'
-                    link.style.display = 'none';
-
-                    document.body.appendChild(link);
-                    link.click();
-                    document.body.removeChild(link);
-                }
-
-                document.getElementById('descargar').addEventListener('click', descargar);
-            } else {
-                document.getElementById('pdf-container').innerHTML = '<div class="error">El PDF no está configurado correctamente.</div>';
+            } catch (error) {
+                document.getElementById('pdf-container').innerHTML = '<div class="error">' + error + '</div>';
             }
-        } catch (error) {
-            document.getElementById('pdf-container').innerHTML = '<div class="error">' + error + '</div>';
-        }
-    </script>
-    <script>
-        document.addEventListener('contextmenu', function (event) {
-            event.preventDefault();
         });
     </script>
 </body>

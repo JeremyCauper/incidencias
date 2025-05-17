@@ -20934,7 +20934,7 @@ fieldset:disabled .btn-group-vertical>.btn {
 }
 
 .navbar {
-    --mdb-navbar-box-shadow: 0 4px 12px 0 rgba(var(--mdb-box-shadow-color-rgb), 0.07), 0 2px 4px rgba(var(--mdb-box-shadow-color-rgb), 0.05);
+    --mdb-navbar-box-shadow: 0 4px 12px 0 rgba(var(--mdb-box-shadow-color-rgb), 0.3), 0 2px 4px rgba(var(--mdb-box-shadow-color-rgb), 0.2);
     --mdb-navbar-padding-top: 0.5625rem;
     --mdb-navbar-brand-img-margin-right: 0.25rem;
     box-shadow: var(--mdb-navbar-box-shadow);
