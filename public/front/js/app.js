@@ -788,10 +788,18 @@ function cargarIframeDocumento(url) {
     contenedor.prepend('<div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>');
     $('#contenedor_doc').addClass('d-none').attr('src', url).off('load').on('load', function () {
         contenedor.find('.loader-of-modal').remove();
-        setTimeout(() => {
-            var alturaTotal = contenedor.height() - 8;
-            $(this).height(alturaTotal).removeClass('d-none');
-        }, 100);
+        // setTimeout(() => {
+            $(this).removeClass('d-none');
+        // }, 100);
+    });
+    const observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            $('#contenedor_doc').height(entry.contentRect.height - 10);
+        }
+    });
+    observer.observe(contenedor.get(0));
+    $('#modal_pdf').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+        observer.unobserve(contenedor.get(0));
     });
 }
 
