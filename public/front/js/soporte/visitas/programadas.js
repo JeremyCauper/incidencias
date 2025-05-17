@@ -264,7 +264,6 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         data: JSON.stringify(valid.data.data),
         success: function (data) {
             let dt = data.data;
-            console.log(data);
             if (data.success || data.status == 202) {
                 $('#modal_orden').modal('hide');
                 changeCodOrdenV(dt.new_cod_ordenv);

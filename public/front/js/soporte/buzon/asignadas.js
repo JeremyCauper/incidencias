@@ -758,7 +758,6 @@ document.getElementById('form-orden-visita').addEventListener('submit', async fu
 
     var valid = validFrom(this);
     valid.data.data.islas = MRevision.extract();
-    const old_cod_ordenv = valid.data.data.cod_ordenv;
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden_visita', 'hide');
@@ -771,15 +770,16 @@ document.getElementById('form-orden-visita').addEventListener('submit', async fu
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            if (data.success) {
+            let dt = data.data;
+            if (data.success || data.status == 202) {
                 $('#modal_orden_visita').modal('hide');
-                changeCodOrdenV(data.data.cod_ordenv);
+                changeCodOrdenV(dt.new_cod_ordenv);
 
-                const url = `${__url}/soporte/orden-visita/exportar-documento?documento=pdf&codigo=${old_cod_ordenv}`;
+                const url = `${__url}/soporte/orden-visita/exportar-documento?documento=pdf&codigo=${dt.old_cod_ordenv}`;
                 if (esCelular()) {
                     cargarIframeDocumento(url + '&tipo=movil');
                 } else {
-                    window.open(url, `Visualizar PDF ${old_cod_ordenv}`, "width=900, height=800");
+                    window.open(url, `Visualizar PDF ${dt.old_cod_ordenv}`, "width=900, height=800");
                 }
                 updateTableVis()
                 return true;
