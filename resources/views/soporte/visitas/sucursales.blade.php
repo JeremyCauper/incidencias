@@ -527,7 +527,7 @@
                             </div>
 
                             <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px;"><label>• BATERIAS UPS</label></div>
+                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">BATERIAS UPS</label></div>
                                 <div class="col-lg-9">
                                     <div class="input-group">
                                         <span class="input-group-text border-0 ps-0"><i
@@ -538,7 +538,7 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
+                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">SALIDA DE ENERGIA</label></div>
                                 <div class="col-lg-9">
                                     <div class="input-group">
                                         <span class="input-group-text border-0 ps-0"><i
@@ -564,7 +564,7 @@
                             </div>
 
                             <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px;"><label>• INGRESO DE ENERGIA</label></div>
+                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">INGRESO DE ENERGIA</label></div>
                                 <div class="col-lg-9">
                                     <div class="input-group">
                                         <span class="input-group-text border-0 ps-0"><i
@@ -575,7 +575,7 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
+                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">SALIDA DE ENERGIA</label></div>
                                 <div class="col-lg-9">
                                     <div class="input-group">
                                         <span class="input-group-text border-0 ps-0"><i

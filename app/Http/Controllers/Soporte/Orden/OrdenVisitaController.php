@@ -89,13 +89,13 @@ class OrdenVisitaController extends Controller
 
             // Insertar en la tabla tb_orden_visita_correlativo
             DB::table('tb_orden_visita_correlativo')->insert([
-                'cod_orden_visita' => $new_codigo,
+                'cod_orden_visita' => $new_codigo, // $request->cod_ordenv
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
 
             // Insertar en la tabla tb_orden_visita
             DB::table('tb_orden_visita')->insert([
-                'cod_orden_visita' => $new_codigo,
+                'cod_orden_visita' => $new_codigo, // $request->cod_ordenv
                 'id_visita' => $request->id_visita_orden,
                 'fecha_visita' => now()->format('Y-m-d'),
                 'hora_inicio' => now()->format('H:i:s'),
