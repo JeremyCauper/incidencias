@@ -11,6 +11,7 @@ use App\Helpers\TipoSoporte;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Mantenimientos\ContactoEmpresasController;
 use App\Http\Controllers\Soporte\Consultas\ConsultasController;
+use App\Services\SqlStateHelper;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -259,23 +260,14 @@ class RegistradasController extends Controller
             return $this->message(message: "<p>Registro creado exitosamente.</p><p style='font-size: small;'>$validar_codigo</p>", data: ['data' => $data]);
         } catch (QueryException $e) {
             DB::rollBack();
-            if ($e->getCode() == 23000) {
-                $response = $this->validatorUnique($e->getMessage(), $this->validator);
-                return $this->message(data: ['unique' => $response], status: 422);
-            }
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo registrar la incidencia." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request)
-    {
-        //
     }
 
     /**
@@ -321,7 +313,11 @@ class RegistradasController extends Controller
             // Retornamos la incidencia con la información de contacto y personal asignado
             return $this->message(data: ['data' => $incidencia]);
         } catch (QueryException $e) {
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            DB::rollBack();
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo obtener informacion la incidencia." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
@@ -423,11 +419,10 @@ class RegistradasController extends Controller
             return $this->message(message: "Registro actualizado exitosamente.", data: ['data' => ['cod_inc' => $cod_inc]]);
         } catch (QueryException $e) {
             DB::rollBack();
-            if ($e->getCode() == 23000) {
-                $response = $this->validatorUnique($e->getMessage(), $this->validator);
-                return $this->message(data: ['unique' => $response], status: 422);
-            }
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo actualizar la incidencia." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -499,7 +494,10 @@ class RegistradasController extends Controller
             return $this->message(message: $message, data: ['data' => ['cod_inc' => $cod_inc, 'estado' => $request->estado ? $estado_info : 2, 'personal' => $vPersonal]]);
         } catch (QueryException $e) {
             DB::rollBack();
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo asignar personal la incidencia." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -551,7 +549,10 @@ class RegistradasController extends Controller
             return $this->message(message: 'La incidencia se ' . ($accion == 2 ? '' : 're') . 'inició con exito.');
         } catch (QueryException $e) {
             DB::rollBack();
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo iniciar la incidencia." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -573,7 +574,10 @@ class RegistradasController extends Controller
             return $this->message(message: "No tiene los permisos requeridos.", status: 204);
         } catch (QueryException $e) {
             DB::rollBack();
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se pudo eliminar la incidencia." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -655,9 +659,10 @@ class RegistradasController extends Controller
             return $this->message(data: ['data' => ['incidencia' => $incidencia, 'seguimiento' => $data]]);
 
         } catch (QueryException $e) {
-            // Si estás usando transacciones asegúrate de iniciarlas con DB::beginTransaction()
-            // DB::rollBack(); 
-            return $this->message(message: "Error en la base de datos. Inténtelo más tarde.", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "Error al obtener informacion de la incidencia." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e->getMessage()], status: $sqlHelper->codigo);
         } catch (Exception $e) {
             // DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);

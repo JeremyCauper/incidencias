@@ -5,6 +5,10 @@
   <!-- Required meta tags -->
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+  <meta http-equiv="Expires" content="0">
+
   <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ time() }}" />
   <title>@yield('title')</title>
   <!-- Font Awesome -->
@@ -50,8 +54,6 @@
     <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top">
       <a class="navbar-brand" href="#">
         <div class="logo_rci"></div>
-        <!-- <img src="{{secure_asset('front/images/app/LogoRC_WNormal.webp')}}?v={{ time() }}" class="ms-2" alt="logo"
-          id="logoRc" /> -->
       </a>
       <div class="navbar-menu-wrapper d-flex align-items-top">
         <ul class="navbar-nav ms-auto">
@@ -73,13 +75,13 @@
               <li>
                 <a class="dropdown-item" href="javascript:void(0)" data-theme="light">
                   <i class="fas fa-sun"></i>
-                  <span>Light</span>
+                  <span>Claro</span>
                 </a>
               </li>
               <li>
                 <a class="dropdown-item" href="javascript:void(0)" data-theme="dark">
                   <i class="fas fa-moon"></i>
-                  <span>Dark</span>
+                  <span>Oscuro</span>
                 </a>
               </li>
               <!-- <li>
@@ -222,9 +224,9 @@
                   aria-label="Close"></button>
               </div>
               <div class="modal-body p-0 position-relative">
-                <iframe id="contenedor_doc" class="w-100 h-100" frameborder="0"></iframe>
+                <iframe id="contenedor_doc" class="w-100" frameborder="0"></iframe>
               </div>
-              <div class="modal-footer border-top-0">
+              <div class="modal-footer border-top-0 pt-0 pb-1">
                 <button type="button" class="btn btn-link " data-mdb-ripple-init
                   data-mdb-dismiss="modal">Cerrar</button>
               </div>
@@ -240,9 +242,12 @@
 
 
   <script>
-    setTimeout(function () {
-      location.reload();
-    }, 7205000);
+    const intervalToken = setInterval(() => {
+      if (!document.cookie.includes('XSRF-TOKEN')) {
+        clearInterval(intervalToken);
+        location.reload();
+      }
+    }, 1000);
 
     let alertaMostrada = false;
     let logoutEjecutado = false;

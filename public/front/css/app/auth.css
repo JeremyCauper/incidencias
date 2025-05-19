@@ -1,14 +1,20 @@
 :root,
 [data-mdb-theme=light] {
-    --root-logo-navbar: url(../../../../public/front/images/app/LogoRC_WBlanco.webp) no-repeat center center;
-    --root-logo-rci-bg: url(../../../../public/front/images/app/LogoRC_TNegro.png) no-repeat center center;
+    --root-body-bg: #ddebff;
+    --root-logo-navbar: url(../../images/app/LogoRC_WBlanco.webp) no-repeat center center;
+    --root-logo-rci-bg: url(../../images/app/LogoRC_TNegro.png) no-repeat center center;
     --root-font-size-span: smaller;
     --root-logo-width-navbar: 12rem;
     --root-logo-height-navbar: 48px;
 }
 
 [data-mdb-theme=dark] {
-    --root-logo-rci-bg: url(../../../../public/front/images/app/LogoRC_TBlanco.png) no-repeat center center;
+    --root-body-bg: #303030;
+    --root-logo-rci-bg: url(../../images/app/LogoRC_TBlanco.png) no-repeat center center;
+}
+
+body {
+    background-color: var(--root-body-bg)
 }
 
 .navbar-brand .logo_rci {
@@ -22,7 +28,7 @@
 @media screen and (max-width: 665px) {
     :root {
         --root-font-size-span: xx-small;
-        --root-logo-navbar: url(../../../../public/front/images/app/LogoRC.png) no-repeat center center;
+        --root-logo-navbar: url(../../images/app/LogoRC.png) no-repeat center center;
         --root-logo-width-navbar: 2.75rem;
         --root-logo-height-navbar: 2.75rem;
     }

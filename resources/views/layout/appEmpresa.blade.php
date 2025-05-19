@@ -49,14 +49,58 @@
         <!-- partial:partials/_navbar.html -->
         <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top">
             <a class="navbar-brand" href="#">
-                <img src="{{secure_asset('front/images/app/LogoRC_WNormal.webp')}}" class="ms-2" height="45"
-                    alt="logo" />
+                <div class="logo_rci"></div>
             </a>
             <div class="navbar-menu-wrapper d-flex align-items-top">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
                         <span id="tiempo_restante_head" class="me-3" style="font-size: small;"></span>
                     </li>
+                    <div class="dropdown">
+                        <a data-mdb-dropdown-init class="nav-link dropdown-toggle hidden-arrow rounded-circle px-1 me-2"
+                            href="#" id="themeSwitcher" role="button" aria-expanded="false" data-mdb-ripple-init>
+                            <i class="fas fa-moon"></i>
+                        </a>
+                        <ul class="dropdown-menu" aria-labelledby="themeSwitcher">
+                            <li class="dropdown-item-text d-flex justify-content-center align-self-center text-secondary mt-2"
+                                id="themeSwitcherBtn">
+                                <span class="fw-bold">Shift</span>
+                                <i class="fas fa-plus fa-xs mx-1 align-self-center"></i>
+                                <span class="fw-bold">D</span>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0)" data-theme="light">
+                                    <i class="fas fa-sun"></i>
+                                    <span>Claro</span>
+                                </a>
+                            </li>
+                            <li>
+                                <a class="dropdown-item" href="javascript:void(0)" data-theme="dark">
+                                    <i class="fas fa-moon"></i>
+                                    <span>Oscuro</span>
+                                </a>
+                            </li>
+                            <!-- <li>
+                                <a class="dropdown-item" href="javascript:void(0)" data-theme="system">
+                                <i class="fas fa-laptop"></i>
+                                <span>System</span>
+                                </a>
+                            </li> -->
+                        </ul>
+                        <script>
+                            if (!localStorage.hasOwnProperty('data_mdb_theme') || !localStorage.data_mdb_theme) {
+                                localStorage.setItem('data_mdb_theme', 'light');
+                            }
+                            let toggleTema = $(`[data-theme="${localStorage.data_mdb_theme}"]`);
+
+                            $('html').attr('data-mdb-theme', localStorage.data_mdb_theme);
+                            $('#themeSwitcher').find('i').attr('class', toggleTema.find('i').prop('class'));
+                            toggleTema.addClass('text-primary');
+                            if (esCelular()) {
+                                $('#themeSwitcherBtn').addClass('d-none').removeClass('d-flex');
+                            }
+                        </script>
+                    </div>
                     <!-- Avatar -->
                     <div class="dropdown">
                         <a data-mdb-dropdown-init
@@ -143,6 +187,28 @@
                     @yield('content')
                 </div>
                 <!-- content-wrapper ends -->
+
+                <div class="modal fade" id="modal_pdf" aria-labelledby="modal_pdf" aria-hidden="true">
+                    <div class="modal-dialog modal-fullscreen">
+                        <div class="modal-content">
+                            <div class="modal-header bg-primary text-white">
+                                <h6 class="modal-title">Visualización de PDF
+                                    <span class="badge badge-success badge-lg" aria-item="codigo"></span>
+                                    <span class="badge badge-info badge-lg" aria-item="codigo_orden"></span>
+                                </h6>
+                                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                                    aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body p-0 position-relative">
+                                <iframe id="contenedor_doc" class="w-100" frameborder="0"></iframe>
+                            </div>
+                            <div class="modal-footer border-top-0 pt-0 pb-1">
+                                <button type="button" class="btn btn-link " data-mdb-ripple-init
+                                    data-mdb-dismiss="modal">Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             <!-- main-panel ends -->
         </div>
@@ -152,9 +218,12 @@
 
 
     <script>
-        setTimeout(function () {
-            location.reload();
-        }, 7205000);
+        const intervalToken = setInterval(() => {
+            if (!document.cookie.includes('XSRF-TOKEN')) {
+                clearInterval(intervalToken);
+                location.reload();
+            }
+        }, 1000);
 
     </script>
     <!-- MDB -->

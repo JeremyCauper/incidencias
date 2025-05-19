@@ -3,56 +3,65 @@ class RevisionMananger {
         {
             text: "ISLA",
             classText: "input-group-text border-0 ps-0",
-            styleText: "font-size: small;",
+            styleText: "font-size: small; color: #757575",
             dataInput: "isla",
+            child: false,
         },
         {
             text: "POS",
             classText: "input-group-text border-0 ps-0",
-            styleText: "font-size: small;",
+            styleText: "font-size: small; color: #757575",
             dataInput: "pos",
+            child: false,
         },
         {
             text: "IMPRESORAS",
             classText: "col-lg-3 d-flex align-items-center",
             styleText: "font-size: 11px; color: #757575",
             dataInput: "impresoras",
+            child: false,
         },
         {
             text: "RED DE LECTORES",
             classText: "col-lg-3 d-flex align-items-center",
             styleText: "font-size: 11px; color: #757575",
             dataInput: "red_lectores",
+            child: false,
         },
         {
             text: "JACK TOOLS",
             classText: "col-lg-3 d-flex align-items-center",
             styleText: "font-size: 11px; color: #757575",
             dataInput: "jack_tools",
+            child: false,
         },
         {
-            text: "• VOLTAJE DE MANGUERAS",
+            text: "VOLTAJE DE MANGUERAS",
             classText: "col-lg-3",
-            styleText: "font-size: 11px;",
+            styleText: "font-size: 11px; color: #757575",
             dataInput: "voltaje",
+            child: true,
         },
         {
             text: "CAUCHO PROTECTOR DE LECTORES",
             classText: "col-lg-3 d-flex align-items-center",
             styleText: "font-size: 11px; color: #757575",
             dataInput: "caucho_protector",
+            child: false,
         },
         {
             text: "MUEBLE DE POS",
             classText: "col-lg-3 d-flex align-items-center",
             styleText: "font-size: 11px; color: #757575",
             dataInput: "mueble_pos",
+            child: false,
         },
         {
             text: "MR 350 / DTI / TERMINAL",
             classText: "col-lg-3 d-flex align-items-center",
             styleText: "font-size: 11px; color: #757575",
             dataInput: "terminales",
+            child: false,
         }
     ];
 
@@ -102,7 +111,7 @@ class RevisionMananger {
                 // </div>
                 contenedor = $('<div>', { class: "row my-2" });
                 let titulo = $('<div>', { class: e.classText, style: e.styleText })
-                    .html($('<strong>').text(e.text));
+                    .html($('<strong>', { class: `${ e.child ? 'item-isla' : '' }`}).text(e.text));
                 let cuerpo = $('<div>', { class: "col-lg-9" })
                     .append($('<div>', { class: "input-group" })
                         .append($('<span>', { class: "input-group-text border-0 ps-0" }).html('<i class="fas fa-circle-check"></i>'))

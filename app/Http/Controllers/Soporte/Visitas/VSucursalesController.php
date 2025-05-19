@@ -4,7 +4,9 @@ namespace App\Http\Controllers\Soporte\Visitas;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Empresas\EmpresasController;
+use App\Services\SqlStateHelper;
 use Exception;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -134,6 +136,12 @@ class VSucursalesController extends Controller
             }
             DB::commit();
             return $this->message(message: "Exito al asignar visita");
+        } catch (QueryException $e) {
+            DB::rollBack();
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo registrar la visita." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
@@ -182,6 +190,11 @@ class VSucursalesController extends Controller
             ];
 
             return $this->message(data: ['data' => $result]);
+        } catch (QueryException $e) {
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo obtener la informacion la visita." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }

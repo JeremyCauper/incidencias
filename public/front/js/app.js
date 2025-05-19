@@ -786,12 +786,18 @@ function cargarIframeDocumento(url) {
     $('#modal_pdf').modal('show');
     let contenedor = $('#modal_pdf .modal-body');
     contenedor.prepend('<div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>');
-    $('#contenedor_doc').attr('src', url).off('load').on('load', function () {
+    $('#contenedor_doc').addClass('d-none').attr('src', url).off('load').on('load', function () {
+        $(this).removeClass('d-none');
         contenedor.find('.loader-of-modal').remove();
-        setTimeout(() => {
-            var alturaTotal = contenedor.height() - 8;
-            $(this).height(alturaTotal).removeClass('h-100');
-        }, 100);
+    });
+    const observer = new ResizeObserver(entries => {
+        for (let entry of entries) {
+            $('#contenedor_doc').height(entry.contentRect.height - 10);
+        }
+    });
+    observer.observe(contenedor.get(0));
+    $('#modal_pdf').on('hidden.bs.modal', function () {
+        observer.unobserve(contenedor.get(0));
     });
 }
 

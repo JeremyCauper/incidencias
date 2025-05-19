@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Soporte\Orden;
 
 use App\Http\Controllers\Controller;
+use App\Services\SqlStateHelper;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Exception;
 use Illuminate\Database\QueryException;
@@ -48,10 +49,10 @@ class OrdenVisitaController extends Controller
 
             // Construcción del array para insertar en tb_orden_visita_filas
             $indice = 0;
-            $filas_visitas = collect($request_filas_visitas)->map(function ($item) use ($request, &$indice) {
+            $filas_visitas = collect($request_filas_visitas)->map(function ($item, $key) use ($new_codigo, &$indice) {
                 $indice++;
                 return [
-                    'cod_orden_visita' => $request->cod_ordenv,
+                    'cod_orden_visita' => $new_codigo,
                     'posicion' => $indice,
                     'checked' => empty($item) ? false : true,
                     'descripcion' => $item,
@@ -60,10 +61,10 @@ class OrdenVisitaController extends Controller
             })->values()->toArray();
 
             // Construcción del array para insertar en tb_orden_visita_islas
-            $islas_visitas = collect($request->islas)->map(function ($item) use ($request) {
+            $islas_visitas = collect($request->islas)->map(function ($item) use ($new_codigo) {
                 $item = (object) $item;
                 return [
-                    'cod_orden_visita' => $request->cod_ordenv,
+                    'cod_orden_visita' => $new_codigo,
                     'isla' => $item->isla,
                     'pos' => $item->pos,
                     'impresoras' => empty($item->impresoras) ? false : true,
@@ -88,13 +89,13 @@ class OrdenVisitaController extends Controller
 
             // Insertar en la tabla tb_orden_visita_correlativo
             DB::table('tb_orden_visita_correlativo')->insert([
-                'cod_orden_visita' => $request->cod_ordenv,
+                'cod_orden_visita' => $new_codigo, // $request->cod_ordenv
                 'created_at' => now()->format('Y-m-d H:i:s')
             ]);
 
             // Insertar en la tabla tb_orden_visita
             DB::table('tb_orden_visita')->insert([
-                'cod_orden_visita' => $request->cod_ordenv,
+                'cod_orden_visita' => $new_codigo, // $request->cod_ordenv
                 'id_visita' => $request->id_visita_orden,
                 'fecha_visita' => now()->format('Y-m-d'),
                 'hora_inicio' => now()->format('H:i:s'),
@@ -141,18 +142,13 @@ class OrdenVisitaController extends Controller
 
         } catch (QueryException $e) {
             DB::rollBack();
-            return $this->message(
-                message: "Error en la base de datos. Inténtelo más tarde.",
-                data: ['error' => $e->getMessage()],
-                status: 400
-            );
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo registrar la orden de visita." : $sqlHelper->message;
 
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             DB::rollBack();
-            return $this->message(
-                data: ['error' => $e->getMessage()],
-                status: 500
-            );
+            return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
     }
 
@@ -302,7 +298,10 @@ class OrdenVisitaController extends Controller
                     return $pdf->stream("ORDEN VISITA - {$codigo}.pdf");
             }
         } catch (QueryException $e) {
-            return $this->message(message: "Error al generar el PDF de la orden de incidencia $codigo", data: ['error' => $e->getMessage()], status: 400);
+            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
+            $message = $sqlHelper->codigo == 500 ? "No se puedo generar el PDF de la orden de incidencia $codigo." : $sqlHelper->message;
+
+            return $this->message(message: $message, data: ['error' => $e], status: 500);
         } catch (Exception $e) {
             if ($e->getCode() == 404) {
                 return $this->message(message: $e->getMessage(), status: 404);
