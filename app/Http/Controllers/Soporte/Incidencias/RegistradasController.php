@@ -237,18 +237,18 @@ class RegistradasController extends Controller
             ]);
 
             if ($estado_info) {
-                $arr_personal = [];
-                foreach ($vPersonal as $k => $val) {
-                    if ($val['registro']) {
-                        $arr_personal[$k]['cod_incidencia'] = $request->cod_inc;
-                        $arr_personal[$k]['id_usuario'] = $val['id'];
-                        $arr_personal[$k]['creador'] = Auth::user()->id_usuario;
-                        $arr_personal[$k]['fecha'] = now()->format('Y-m-d');
-                        $arr_personal[$k]['hora'] = now()->format('H:i:s');
-                        $arr_personal[$k]['created_at'] = now()->format('Y-m-d H:i:s');
-                        $vPersonal[$val['id']]['registro'] = 0;
-                    }
-                }
+                $arr_personal = collect($vPersonal)
+                    ->filter(fn($val) => $val['registro'])
+                    ->map(function ($val) use ($new_codigo) {
+                        return [
+                            'cod_incidencia' => $new_codigo,
+                            'id_usuario' => $val['id'],
+                            'creador' => Auth::user()->id_usuario,
+                            'fecha' => now()->format('Y-m-d'),
+                            'hora' => now()->format('H:i:s'),
+                            'created_at' => now()->format('Y-m-d H:i:s'),
+                        ];
+                    })->values()->toArray();
                 DB::table('tb_inc_asignadas')->insert($arr_personal);
             }
 

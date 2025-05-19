@@ -14,12 +14,10 @@
     <link rel="stylesheet" href="{{secure_asset('front/css/app/auth.css')}}?v={{ time() }}">
 
     <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}"></script>
-    <script>
-        if (!localStorage.hasOwnProperty('data_mdb_theme') || !localStorage.data_mdb_theme) {
-            localStorage.setItem('data_mdb_theme', 'light');
-        }
-        $('html').attr('data-mdb-theme', localStorage.data_mdb_theme);
 
+    <link rel="stylesheet" href="{{secure_asset('front/css/tema.css')}}">
+    <script src="{{secure_asset('front/js/app/ToggleTema.js')}}"></script>
+    <script>
         const intervalToken = setInterval(() => {
             if (!document.cookie.includes('XSRF-TOKEN')) {
                 clearInterval(intervalToken);
@@ -36,9 +34,30 @@
             <a class="navbar-brand me-0 p-0" href="{{secure_url('/soporte')}}">
                 <div class="logo_rci"></div>
             </a>
-            <span class="navbar-brand text-white me-0">
-                SOPORTE | INCIDENCIAS - RC INGENIEROS SAC
-            </span>
+            <div class="navbar-brand">
+                <span class="text-white me-0">
+                    SOPORTE | INCIDENCIAS - RC INGENIEROS SAC
+                </span>
+                <div class="ms-2">
+                    <input id="check" type="checkbox">
+                    <label for="check" class="check-trail">
+                        <span class="check-handler"></span>
+                    </label>
+                    <script>
+                        if (!localStorage.hasOwnProperty('data_mdb_theme') || !localStorage.data_mdb_theme) {
+                            localStorage.setItem('data_mdb_theme', 'light');
+                        }
+                        $('html').attr('data-mdb-theme', localStorage.data_mdb_theme);
+
+                        $('#check').prop('checked', localStorage.data_mdb_theme == 'light' ? true : false);
+                        if (!esCelularTema()) {
+                            $('.check-trail').append(`<span class="badge badge-secondary toltip-theme">
+                                <b class="fw-bold">Shift</b><i class="fas fa-plus text-white"></i> <b class="fw-bold">D</b>
+                            </span>`);
+                        }
+                    </script>
+                </div>
+            </div>
         </div>
     </nav>
 

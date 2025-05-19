@@ -11,7 +11,7 @@
     <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
 
     <!-- <script src="{{secure_asset('front/vendor/chartjs/chart.js')}}"></script>
-                                                                                                                                                                                                                                                                                                                            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
+                                                                                                                                                                                                                                                                                                                                <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script> -->
     <script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
 
@@ -137,7 +137,7 @@
         <div class="card">
             <div class="card-body">
                 <!-- <div class="card-title text-primary mb-3">
-                                                                                    </div> -->
+                                                                                        </div> -->
                 <div class="row justify-content-center">
                     <div class="col-xl-12">
                         <div id="chart-container"></div>
@@ -217,15 +217,6 @@
             { value: 15, name: 'N3 - PROVEEDOR', itemStyle: { color: 'rgb(51, 45, 45)' } }
         ];
 
-
-        let config_title = {
-            textStyle: {
-                color: '#999',
-                fontWeight: 'normal',
-                fontSize: 14
-            }
-        }
-
         const waterMarkText = 'RC ING.';
         const canvas = document.createElement('canvas');
         const ctx = canvas.getContext('2d');
@@ -258,6 +249,15 @@
             },
             color: 'rgb(154, 158, 165)'
         };
+
+
+        let config_title = {
+            textStyle: {
+                color: '#999',
+                fontWeight: 'normal',
+                fontSize: 15
+            }
+        }
 
         const resizeOption = {
             serie1: {
@@ -398,12 +398,12 @@
                 {
                     show: true,
                     data: data_estado.map(item => item.name),
-                    ...resizeOption.serie1.legend['1350']
+                    ...resizeOption.serie1.legend['2000']
                 },
                 {
                     show: true,
                     data: ['Incidencias', 'Visitas'],
-                    ...resizeOption.serie2.legend['1350']
+                    ...resizeOption.serie2.legend['2000']
                 },
                 {
                     show: false
@@ -411,7 +411,7 @@
                 {
                     show: true,
                     data: data_nivel.map(item => item.name),
-                    ...resizeOption.serie4.legend['1350']
+                    ...resizeOption.serie4.legend['2000']
                 }
             ],
             tooltip: {
@@ -450,32 +450,32 @@
                 },
                 {
                     text: 'Estado de Incidencias',
-                    ...resizeOption.serie1.title['1350'],
+                    ...resizeOption.serie1.title['2000'],
                     ...config_title
                 },
                 {
                     text: 'Actividades del Personal',
-                    ...resizeOption.serie2.title['1350'],
+                    ...resizeOption.serie2.title['2000'],
                     ...config_title
                 },
                 {
                     text: 'Estadisticas Problemas',
-                    ...resizeOption.serie3.title['1350'],
+                    ...resizeOption.serie3.title['2000'],
                     ...config_title
                 },
                 {
                     text: 'Nivel de Incidencias',
-                    ...resizeOption.serie4.title['1350'],
+                    ...resizeOption.serie4.title['2000'],
                     ...config_title
                 },
             ],
             grid: [
                 {
-                    ...resizeOption.serie2.grid['1350'],
+                    ...resizeOption.serie2.grid['2000'],
                     containLabel: true
                 },
                 {
-                    ...resizeOption.serie3.grid['1350'],
+                    ...resizeOption.serie3.grid['2000'],
                     containLabel: true
                 }
             ],
@@ -512,8 +512,8 @@
                 {
                     name: 'Estado Total',
                     type: 'pie',
-                    radius: resizeOption.serie1.radius['1350'],
-                    center: resizeOption.serie1.center['1350'],
+                    radius: resizeOption.serie1.radius['2000'],
+                    center: resizeOption.serie1.center['2000'],
                     avoidLabelOverlap: false,
                     itemStyle: {
                         borderRadius: 4,
@@ -581,8 +581,8 @@
                 {
                     name: 'Nivel Total',
                     type: 'pie',
-                    radius: resizeOption.serie4.radius['1350'],
-                    center: resizeOption.serie4.center['1350'],
+                    radius: resizeOption.serie4.radius['2000'],
+                    center: resizeOption.serie4.center['2000'],
                     avoidLabelOverlap: false,
                     itemStyle: {
                         borderRadius: 4,
