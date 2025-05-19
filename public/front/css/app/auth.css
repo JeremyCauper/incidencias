@@ -3,7 +3,7 @@
     --root-body-bg: #ddebff;
     --root-logo-navbar: url(../../images/app/LogoRC_WBlanco.webp) no-repeat center center;
     --root-logo-rci-bg: url(../../images/app/LogoRC_TNegro.png) no-repeat center center;
-    --root-font-size-span: smaller;
+    --root-font-size-span: small;
     --root-logo-width-navbar: 12rem;
     --root-logo-height-navbar: 48px;
 }
@@ -34,7 +34,7 @@ body {
     }
 }
 
-.navbar .container-fluid span {
+.navbar .container-fluid div.navbar-brand span {
     font-size: var(--root-font-size-span);
 }
 

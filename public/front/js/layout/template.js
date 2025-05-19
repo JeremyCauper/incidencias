@@ -191,24 +191,4 @@
   $('.modal').on('shown.bs.modal', function () {
     $('html').addClass('overflow-hidden');
   });
-
-  const themes = ['light', 'dark'];
-  const toggleTheme = theme => {
-    themes.forEach(t =>
-      $(`[data-theme="${t}"]`).toggleClass('text-primary', t === theme)
-    );
-    localStorage.data_mdb_theme = theme;
-    $('html').attr('data-mdb-theme', theme);
-    $('#themeSwitcher i').attr('class', $(`[data-theme="${theme}"] i`).prop('class'));
-  };
-  
-  $('[data-theme]').on('click', e =>
-    toggleTheme(e.currentTarget.dataset.theme)
-  );
-  
-  $(window).on('keydown', ({ key, shiftKey }) => {
-    if (shiftKey && key.toLowerCase() === 'd') {
-      toggleTheme(localStorage.data_mdb_theme === 'dark' ? 'light' : 'dark');
-    }
-  });
 })(jQuery);
