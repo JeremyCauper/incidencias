@@ -1,5 +1,15 @@
-:root {
+:root,
+[data-mdb-theme=light] {
+    --bg-trail: #8fbaf7;
+    --bg-handler: #ffffff;
+    --color-before: #e4a11b;
     --transition: all .2s ease;
+}
+
+[data-mdb-theme=dark] {
+    --bg-trail: #303030;
+    --bg-handler: #424242;
+    --color-before: #ffffff;
 }
 
 /* Hide the input */
@@ -12,14 +22,15 @@
 .check-trail {
     position: relative;
     display: flex;
+    align-items: center;
     width: 3rem;
-    height: 1.6rem;
-    padding: .2rem;
-    /* background: var(--root-body-bg); */
-    background: #303030;
+    height: 1.76rem;
+    padding: .13rem .18rem;
+    background: var(--bg-trail);
     border-radius: 2rem;
     transition: var(--transition);
     cursor: pointer;
+    border: var(--mdb-border-width) solid var(--mdb-border-color);
 }
 
 .check-trail .toltip-theme {
@@ -40,26 +51,30 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    width: 1.25rem;
-    height: 1.25rem;
+    width: 1.3rem;
+    height: 1.3rem;
     position: relative;
-    background: #ffffff;
+    background: var(--bg-handler);
     border-radius: 50%;
+    margin-left: 4%;
     transition: var(--transition);
     box-shadow: 0 0 8px rgba(0, 0, 0, 0.3);
+    /* border: var(--mdb-border-width) solid var(--mdb-border-color); */
 
     &::before {
         content: "\f186";
         position: absolute;
         font-family: "Font Awesome 6 Free";
         transition: var(--transition);
-        color: #303030;
+        font-size: .72rem;
+        color: var(--color-before);
     }
 }
 
 #check[type="checkbox"]:checked+.check-trail {
+
     .check-handler {
-        margin-left: 50%;
+        margin-left: 45%;
 
         &::before {
             content: "\f185";
