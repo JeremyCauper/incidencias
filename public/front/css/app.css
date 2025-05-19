@@ -2725,3 +2725,20 @@ tr .active-acciones {
         font-size: smaller;
     }
 }
+
+.item-isla {
+    position: relative;
+    padding-left: 1rem;
+}
+
+.item-isla::after {
+    content: "";
+    position: absolute;
+    height: 0;
+    width: 0;
+    top: 1px;
+    left: 2px;
+    border-top: 5px solid transparent;
+    border-bottom: 5px solid transparent;
+    border-left: 10px solid #616161;
+}

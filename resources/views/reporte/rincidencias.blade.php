@@ -11,7 +11,7 @@
     <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
 
     <!-- <script src="{{secure_asset('front/vendor/chartjs/chart.js')}}"></script>
-                                                                                                                                                                                                        <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
+                                                                                                                                                                                                                                                                                                                            <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script> -->
     <script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
 
@@ -30,7 +30,43 @@
             height: 100vh;
             overflow: hidden;
         }
+
+        .capturar-btn-wrapper {
+            cursor: pointer;
+            position: fixed;
+            right: 40px;
+            bottom: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #fff;
+            background-color: #3b72ca;
+            color: #fff;
+            z-index: 1045;
+            border-radius: 6px 50% 50% 6px;
+            border-radius: 6px;
+        }
+
+        .capturar-btn-wrapper>div {
+            padding: 0 .85rem;
+        }
+
+        @media only screen and (max-width: 512px) {
+            .capturar-btn-wrapper>div {
+                display: none;
+            }
+        }
+
+        .capturar-btn {
+            padding: .6rem;
+            border-radius: 50%;
+            border: none;
+            cursor: pointer;
+            background-color: #6691d6;
+            transform: scale(1.3);
+        }
     </style>
+
 @endsection
 @section('content')
 
@@ -100,11 +136,8 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <div class="card-title text-primary mb-3">
-                    <button class="btn btn-link" onclick="capturar()" data-mdb-ripple-init>
-                        <i class="fas fa-camera"></i>
-                    </button>
-                </div>
+                <!-- <div class="card-title text-primary mb-3">
+                                                                                    </div> -->
                 <div class="row justify-content-center">
                     <div class="col-xl-12">
                         <div id="chart-container"></div>
@@ -112,6 +145,15 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="capturar-btn-wrapper" aria-label="Guardar Imagen de Graficos" title="Guardar Imagen de Graficos"
+        onclick="capturar()">
+        <div>Guardar Imagen</div>
+        <button class="capturar-btn btn-floating d-flex align-items-center justify-content-center"
+            aria-label="Guardar Imagen de Graficos" title="Guardar Imagen de Graficos">
+            <i class="fas fa-camera fa-1x"></i>
+        </button>
     </div>
 
 @endsection
@@ -177,9 +219,10 @@
 
 
         let config_title = {
-            textAlign: 'center',
             textStyle: {
-                color: 'rgb(159, 166, 178)'
+                color: '#999',
+                fontWeight: 'normal',
+                fontSize: 14
             }
         }
 
@@ -199,7 +242,7 @@
         ctx.font = '20px Microsoft Yahei';
         ctx.translate(50, 50);
         ctx.rotate(-Math.PI / 4);
-        ctx.fillStyle = '#000'; // color del texto
+        ctx.fillStyle = '#9e9e9e'; // color del texto
         ctx.fillText(waterMarkText, 0, 0);
 
         const labelOptionBar = {
@@ -216,6 +259,135 @@
             color: 'rgb(154, 158, 165)'
         };
 
+        const resizeOption = {
+            serie1: {
+                legend: {
+                    '2000': {
+                        top: '12%',
+                        left: '3%',
+                        width: '40%'
+                    },
+                    '1350': {
+                        top: '11%',
+                        left: '10%',  // o '0%', o una distancia como '10px'
+                        orient: 'vertical'  // o 'vertical', según cómo la quieras distribuir
+                    }
+                },
+                title: {
+                    '2000': {
+                        top: '8%',
+                        left: '25%',
+                        textAlign: 'center',
+                    },
+                    '1350': {
+                        top: '6.5%',
+                        left: 'center',
+                    }
+                },
+                radius: {
+                    '2000': ['13%', '23%'],
+                    '1350': ['5%', '11%'],
+                },
+                center: {
+                    '2000': ['25%', '35%'],
+                    '1350': ['60%', '20%'],
+                },
+            },
+            serie2: {
+                legend: {
+                    '2000': {
+                        top: '12%',
+                        left: '56%',
+                    },
+                    '1350': {
+                        top: '32%',
+                        left: 'center',
+                    }
+                },
+                title: {
+                    '2000': {
+                        top: '8%',
+                        left: '75%',
+                        textAlign: 'center',
+                    },
+                    '1350': {
+                        top: '30%',
+                        left: 'center',
+                    }
+                },
+                grid: {
+                    '2000': {
+                        top: '25%',
+                        left: '52%',
+                        bottom: '47%',
+                        width: '45%',
+                    },
+                    '1350': {
+                        top: '34%',
+                        bottom: '47%',
+                    }
+                },
+            },
+            serie3: {
+                title: {
+                    '2000': {
+                        top: '55%',
+                        left: '25%',
+                        textAlign: 'center',
+                    },
+                    '1350': {
+                        top: '50%',
+                        left: 'center',
+                    }
+                },
+                grid: {
+                    '2000': {
+                        top: '60%',
+                        left: '3%',
+                        bottom: '5%',
+                        width: '45%',
+                    },
+                    '1350': {
+                        top: '52%',
+                        bottom: '28%',
+                    }
+                },
+            },
+            serie4: {
+                legend: {
+                    '2000': {
+                        top: '60%',
+                        left: '56%',
+                        width: '35%'
+                    },
+                    '1350': {
+                        top: '83%',
+                        left: '10%',  // o '0%', o una distancia como '10px'
+                        orient: 'vertical'  // o 'vertical', según cómo la quieras distribuir
+                    }
+                },
+                title: {
+                    '2000': {
+                        top: '55%',
+                        left: '75%',
+                        textAlign: 'center',
+                    },
+                    '1350': {
+                        top: '76%',
+                        left: 'center',
+                    }
+                },
+                radius: {
+                    '2000': ['13%', '23%'],
+                    '1350': ['5%', '11%'],
+                },
+                center: {
+                    '2000': ['75%', '80%'],
+                    '1350': ['60%', '90%'],
+                },
+            }
+        };
+
         option = {
             backgroundColor: {
                 type: 'pattern',
@@ -226,16 +398,12 @@
                 {
                     show: true,
                     data: data_estado.map(item => item.name),
-                    top: '12%',
-                    left: '3%',
-                    width: '40%',
+                    ...resizeOption.serie1.legend['1350']
                 },
                 {
                     show: true,
                     data: ['Incidencias', 'Visitas'],
-                    top: '12%',
-                    right: '22%',
-                    width: '50%'
+                    ...resizeOption.serie2.legend['1350']
                 },
                 {
                     show: false
@@ -243,9 +411,7 @@
                 {
                     show: true,
                     data: data_nivel.map(item => item.name),
-                    top: '60%',
-                    right: '8%',
-                    width: '35%'
+                    ...resizeOption.serie4.legend['1350']
                 }
             ],
             tooltip: {
@@ -258,7 +424,7 @@
                 {
                     type: 'line',
                     left: 'center',
-                    top: 50, // Ajustar según el tamaño del texto
+                    top: 40,
                     shape: {
                         x1: -120,
                         y1: 0,
@@ -269,13 +435,13 @@
                         stroke: 'rgb(159, 166, 178)',
                         lineWidth: 2
                     }
-                }
+                },
             ],
             title: [
                 {
                     text: 'ANALISIS DE INCIDENCIAS',
                     left: '50%',
-                    top: '3%',
+                    top: '2%',
                     textAlign: 'center',
                     textStyle: {
                         fontSize: 20,
@@ -284,43 +450,32 @@
                 },
                 {
                     text: 'Estado de Incidencias',
-                    // subtext: '总计 ' + builderJson.all,
-                    left: '20%',
-                    top: '8%',
+                    ...resizeOption.serie1.title['1350'],
                     ...config_title
                 },
                 {
                     text: 'Actividades del Personal',
-                    left: '72%',
-                    top: '8%',
+                    ...resizeOption.serie2.title['1350'],
                     ...config_title
                 },
                 {
                     text: 'Estadisticas Problemas',
-                    left: '25%',
-                    top: '55%',
+                    ...resizeOption.serie3.title['1350'],
                     ...config_title
                 },
                 {
                     text: 'Nivel de Incidencias',
-                    left: '76%',
-                    top: '55%',
+                    ...resizeOption.serie4.title['1350'],
                     ...config_title
-                }
+                },
             ],
             grid: [
                 {
-                    top: '25%',
-                    width: '51%',
-                    bottom: '47%',
-                    left: '45%',
+                    ...resizeOption.serie2.grid['1350'],
                     containLabel: true
                 },
                 {
-                    top: '60%',
-                    width: '46%',
-                    bottom: '5%',
-                    left: '3.75%',
+                    ...resizeOption.serie3.grid['1350'],
                     containLabel: true
                 }
             ],
@@ -357,8 +512,8 @@
                 {
                     name: 'Estado Total',
                     type: 'pie',
-                    radius: ['13%', '23%'],
-                    center: ['20%', '35%'],
+                    radius: resizeOption.serie1.radius['1350'],
+                    center: resizeOption.serie1.center['1350'],
                     avoidLabelOverlap: false,
                     itemStyle: {
                         borderRadius: 4,
@@ -426,8 +581,8 @@
                 {
                     name: 'Nivel Total',
                     type: 'pie',
-                    radius: ['13%', '23%'],
-                    center: ['78%', '80%'],
+                    radius: resizeOption.serie4.radius['1350'],
+                    center: resizeOption.serie4.center['1350'],
                     avoidLabelOverlap: false,
                     itemStyle: {
                         borderRadius: 4,
@@ -457,7 +612,13 @@
             myChart.setOption(option);
         }
 
-        window.addEventListener('resize', myChart.resize);
+
+        // window.addEventListener('resize', myChart.resize);
+
+        fObservador('.content-wrapper', () => {
+            myChart.resize();
+            console.log($('#chart-container').width());
+        });
 
         function capturar() {
             let imgData = myChart.getDataURL({

@@ -76,7 +76,7 @@
         </nav>
         <!-- Navbar -->
     </header>
-    <main id="pdf-container" class="overflow-auto px-2">
+    <main id="pdf-container" class="overflow-auto p-2">
         <div id="canvas-container" class="text-center">
             <canvas id="pdf_canvas" class="w-100"></canvas>
         </div>

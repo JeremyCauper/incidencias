@@ -787,10 +787,8 @@ function cargarIframeDocumento(url) {
     let contenedor = $('#modal_pdf .modal-body');
     contenedor.prepend('<div class="loader-of-modal"><div style="display:flex; justify-content:center;"><div class="loader"></div></div></div>');
     $('#contenedor_doc').addClass('d-none').attr('src', url).off('load').on('load', function () {
+        $(this).removeClass('d-none');
         contenedor.find('.loader-of-modal').remove();
-        // setTimeout(() => {
-            $(this).removeClass('d-none');
-        // }, 100);
     });
     const observer = new ResizeObserver(entries => {
         for (let entry of entries) {
@@ -798,7 +796,7 @@ function cargarIframeDocumento(url) {
         }
     });
     observer.observe(contenedor.get(0));
-    $('#modal_pdf').off('hidden.bs.modal').on('hidden.bs.modal', function () {
+    $('#modal_pdf').on('hidden.bs.modal', function () {
         observer.unobserve(contenedor.get(0));
     });
 }
