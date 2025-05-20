@@ -33,7 +33,7 @@ class RegistradasController extends Controller
             $data = [];
 
             // Obtener información externa de la API
-            $data['company'] = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'codigo_aviso', 'status'])->get()->keyBy('ruc'); //$this->fetchAndParseApiData('empresas');
+            $data['company'] = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'codigo_aviso', 'status', 'eliminado'])->get()->keyBy('ruc'); //$this->fetchAndParseApiData('empresas');
             $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
 
             // Obtener información de base de datos local
@@ -50,7 +50,8 @@ class RegistradasController extends Controller
                     'value' => $m->id_materiales,
                     'dValue' => base64_encode(json_encode(['id_material' => $m->id_materiales, 'producto' => $m->producto, 'cantidad' => 0])),
                     'text' => $m->producto,
-                    'estatus' => $m->estatus
+                    'estatus' => $m->estatus,
+                    'eliminado' => $m->eliminado
                 ];
             });
 
@@ -61,7 +62,8 @@ class RegistradasController extends Controller
                     'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
                     'text' => "{$u->ndoc_usuario} - {$nombre}",
                     'nombre' => $nombre,
-                    'estatus' => $u->estatus
+                    'estatus' => $u->estatus,
+                    'eliminado' => $u->eliminado
                 ];
             });
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;

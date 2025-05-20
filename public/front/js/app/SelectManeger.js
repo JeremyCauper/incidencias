@@ -1,6 +1,6 @@
 class CSelect {
     $select = null;
-    constructor(selector, { dataSet, filterField, optionValue = 'id', optionText, optionEstatus = null, optionSelected = null } = {}) {
+    constructor(selector, { dataSet, filterField, optionValue = 'id', optionText, optionEstatus = null, optionDelete = null, optionSelected = null } = {}) {
         this.$select = $(selector[0]);
         this.selector = selector;
         this.dataSet = dataSet;
@@ -8,6 +8,7 @@ class CSelect {
         this.optionValue = optionValue;
         this.optionText = optionText;
         this.optionEstatus = optionEstatus;
+        this.optionDelete = optionDelete;
         this.optionSelected = optionSelected;
     }
 
@@ -25,10 +26,10 @@ class CSelect {
                 const text = typeof this.optionText === 'function' ? this.optionText(item) : item[this.optionText];
                 let badge = '';
                 const atributos = {};
-                if (this.optionEstatus !== null && item[this.optionEstatus] === 0) {
+                if ((this.optionEstatus !== null && item[this.optionEstatus] === 0) || (this.optionDelete !== null && item[this.optionDelete] === 1)) {
                     atributos['data-hidden'] = true;
                     atributos['data-nosearch'] = true;
-                    badge = '<label class="badge badge-danger ms-2">Inac.</label>';
+                    badge = `<label class="badge badge-danger ms-2">${ this.optionDelete == 1 ? 'Elim' : ( this.optionEstatus == 0 ? 'Inac' : '') }.</label>`;
                 }
                 if (item[this.optionSelected] == 1) {
                     atributos['selected'] = '';

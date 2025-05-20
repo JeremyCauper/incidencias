@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reporte;
+namespace App\Http\Controllers\Reporte\Rci;
 
 use App\Http\Controllers\Controller;
 use App\Services\JsonDB;
@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class RIncidenciasController extends Controller
+class ReporteIncidenciasController extends Controller
 {
     public function view()
     {
@@ -34,7 +34,7 @@ class RIncidenciasController extends Controller
                 ];
             });
 
-            return view('reporte.rincidencias', ['data' => $data]);
+            return view('reporte.rci.reporte_incidencias', ['data' => $data]);
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);

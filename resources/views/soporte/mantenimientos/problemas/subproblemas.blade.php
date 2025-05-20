@@ -96,8 +96,9 @@
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['problemas'] as $v)
                                     <option value="{{ $v->codigo }}"
-                                        {{ $v->estatus != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{$v->codigo}} - {{ $v->descripcion }} {{ $v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
+                                        {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                        {{$v->codigo}} - {{ $v->descripcion }}
+                                        {{ $v->eliminado == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
                                     </option>
                                 @endforeach
                             </select>

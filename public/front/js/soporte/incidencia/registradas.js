@@ -249,7 +249,8 @@ const CS_problema = new CSelect(['#problema', '#sproblema'], {
     optionText: function (data) {
         return `${data.codigo} - ${data.descripcion}`;
     },
-    optionEstatus: 'estatus'
+    optionEstatus: 'estatus',
+    optionDelete: 'eliminado'
 });
 
 const CS_sproblema = new CSelect(['#sproblema'], {
@@ -258,7 +259,8 @@ const CS_sproblema = new CSelect(['#sproblema'], {
     optionText: function (data) {
         return `${getBadgePrioridad(data.prioridad)} ${data.descripcion}`;
     },
-    optionEstatus: 'estatus'
+    optionEstatus: 'estatus',
+    optionDelete: 'eliminado'
 });
 
 const cMaterial = new CTable('#createMaterial', {

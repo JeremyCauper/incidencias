@@ -108,8 +108,9 @@
                                 @foreach ($data['tSoporte'] as $v)
                                     <option value="{{ $v->id }}"
                                         {{ ($v->selected == 1 && $v->estatus == 1) ? 'selected' : '' }}
-                                        {{ $v->estatus != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{ $v->descripcion }} {{ $v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
+                                        {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                        {{ $v->descripcion }}
+                                        {{ $v->eliminado == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
                                     </option>
                                 @endforeach
                             </select>
