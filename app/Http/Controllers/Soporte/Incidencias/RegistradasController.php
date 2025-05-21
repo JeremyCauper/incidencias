@@ -43,7 +43,12 @@ class RegistradasController extends Controller
             $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'tipo', 'color', 'selected', 'estatus', 'eliminado')->keyBy('id');
             $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'selected', 'estatus', 'eliminado')->keyBy('id');
             $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'selected', 'estatus', 'eliminado')->keyBy('id');
-            $data['eContactos'] = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'telefono', 'cargo', 'correo', 'estatus')->get();
+            $telefono_empresas = DB::table('contactos_telefono_empresas')->select('id', 'id_contact', 'telefono')->get()->groupBy('id_contact');
+            $data['eContactos'] = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'cargo', 'correo', 'estatus')->get()
+                ->map(function ($val) use ($telefono_empresas) {
+                    $val->telefonos = $telefono_empresas->get($val->id_contact) ?? [];
+                    return $val;
+                });
 
             $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
                 return [
@@ -82,7 +87,12 @@ class RegistradasController extends Controller
     public function index()
     {
         try {
-            $contactos_empresas = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'telefono', 'cargo', 'correo', 'estatus')->get();
+            $telefono_empresas = DB::table('contactos_telefono_empresas')->select('id', 'id_contact', 'telefono')->get()->groupBy('id_contact');
+            $contactos_empresas = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'cargo', 'correo', 'estatus')->get()
+                ->map(function ($val) use ($telefono_empresas) {
+                    $val->telefonos = $telefono_empresas->get($val->id_contact) ?? [];
+                    return $val;
+                });
             $conteo_data = [
                 "totales" => 0,
                 "tAsignadas" => 0,

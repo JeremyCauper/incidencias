@@ -15,10 +15,6 @@ $(document).ready(function () {
             }
         },
         {
-            control: '#tel_contac',
-            config: {}
-        },
-        {
             control: '#nro_doc',
             config: {
                 "control-type": "int",
@@ -29,10 +25,12 @@ $(document).ready(function () {
             }
         },
         {
+            control: '#tel_contac',
+            config: {}
+        },
+        {
             control: '#nom_contac',
-            config: {
-                mxl: 250,
-            }
+            config: {}
         },
         {
             control: '#car_contac',
@@ -149,17 +147,19 @@ $(document).ready(function () {
     });
 
     $('#nro_doc').blur(async function () {
-        if (!$(this).val()) {
-            $('#tel_contac, #nom_contac, #car_contac, #cor_contac').val('').trigger('change.select2');
+        if (!$(this).val() && !$('#nom_contac').val()) {
+            $('#cod_contact, #car_contac, #cor_contac').val('').trigger('change.select2');
+            CS_tel_contac.llenar();
+            CS_nom_contac.setValue('');
             return false;
         }
-        const contacto = obj_eContactos.find(contacto => contacto.nro_doc === $(this).val());
 
-        if (contacto) {
+        const contacto = obj_eContactos.find(contacto => contacto.nro_doc === $(this).val());
+        if (contacto && !$('#nom_contac').val()) {
             $('#cod_contact').val(contacto.id_contact);
-            $('#tel_contac').val(contacto.telefono).trigger('change.select2');
+            CS_tel_contac.llenar(contacto.telefonos);
             $('#nro_doc').val(contacto.nro_doc);
-            $('#nom_contac').val(contacto.nombres);
+            CS_nom_contac.setValue(contacto.nombres);
             $('#car_contac').val(contacto.cargo).trigger('change.select2');
             $('#cor_contac').val(contacto.correo);
             return true;
@@ -167,8 +167,31 @@ $(document).ready(function () {
 
         let datos = await consultarDniInput($(this));
         if (datos.success) {
-            $('#nom_contac').val(datos.data.RazonSocialCliente);
+            CS_nom_contac.addOption({ value: datos.data.RazonSocialCliente, text: datos.data.RazonSocialCliente });
+            CS_nom_contac.setValue(datos.data.RazonSocialCliente);
+
         }
+    });
+
+    $('#nom_contac').on('change', async function () {
+        if (!$(this).val()) {
+            $('#cod_contact, #nro_doc, #car_contac, #cor_contac').val('').trigger('change.select2');
+            CS_tel_contac.llenar();
+            CS_nom_contac.setValue('');
+            return false;
+        }
+
+        const contacto = obj_eContactos.find(contacto => contacto.nombres === $(this).val());
+        if (contacto) {
+            $('#cod_contact').val(contacto.id_contact);
+            CS_tel_contac.llenar(contacto.telefonos);
+            $('#nro_doc').val(contacto.nro_doc);
+            CS_nom_contac.setValue(contacto.nombres);
+            $('#car_contac').val(contacto.cargo).trigger('change.select2');
+            $('#cor_contac').val(contacto.correo);
+        }
+
+        validContac(this);
     });
 
     $('.modal').on('shown.bs.modal', function () {
@@ -182,6 +205,7 @@ $(document).ready(function () {
         $('#modal_incidencias').find('[aria-item="codigo"], [aria-item="contrato"]').html('');
         changeCodInc(cod_incidencia);
         CS_sucursal.selecionar();
+        CS_tel_contac.llenar();
         CS_tIncidencia.llenar();
 
         $('#tSoporte').val(1).trigger('change');
@@ -226,11 +250,26 @@ function CheckCodOrden(check = true) {
     $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
 }
 
+const CS_nom_contac = $('#nom_contac').selectize({
+    create: true,
+    persist: false,
+    createOnBlur: true,
+    plugins: ["clear_button"],
+})[0].selectize;
+
 const CS_sucursal = new CSelect(['#sucursal'], {
     dataSet: sucursales,
     filterField: 'ruc',
     optionText: 'nombre',
-    optionEstatus: 'status'
+    optionValidation: [
+        { clave: 'status', operation: '===', value: 0, badge: 'Inac.' },
+    ]
+});
+
+const CS_tel_contac = new CSelect(['#tel_contac'], {
+    dataSet: [],
+    filterField: 'id',
+    optionText: 'telefono'
 });
 
 const CS_tIncidencia = new CSelect(['#tIncidencia'], {
@@ -239,7 +278,10 @@ const CS_tIncidencia = new CSelect(['#tIncidencia'], {
     optionText: function (data) {
         return `<label class="badge badge-${data.color} me-2">${data.tipo}</label>${data.descripcion}`;
     },
-    optionEstatus: 'estatus',
+    optionValidation: [
+        { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+        { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+    ],
     optionSelected: 'selected'
 });
 
@@ -249,8 +291,10 @@ const CS_problema = new CSelect(['#problema', '#sproblema'], {
     optionText: function (data) {
         return `${data.codigo} - ${data.descripcion}`;
     },
-    optionEstatus: 'estatus',
-    optionDelete: 'eliminado'
+    optionValidation: [
+        { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+        { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+    ]
 });
 
 const CS_sproblema = new CSelect(['#sproblema'], {
@@ -259,8 +303,10 @@ const CS_sproblema = new CSelect(['#sproblema'], {
     optionText: function (data) {
         return `${getBadgePrioridad(data.prioridad)} ${data.descripcion}`;
     },
-    optionEstatus: 'estatus',
-    optionDelete: 'eliminado'
+    optionValidation: [
+        { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+        { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+    ]
 });
 
 const cMaterial = new CTable('#createMaterial', {

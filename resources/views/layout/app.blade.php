@@ -77,7 +77,7 @@
               $('#check').prop('checked', localStorage.data_mdb_theme == 'light' ? true : false);
               if (!esCelularTema()) {
                 $('.check-trail').append(`<span class="badge badge-secondary toltip-theme">
-                      <b class="fw-bold">Shift</b><i class="fas fa-plus text-white"></i> <b class="fw-bold">D</b>
+                      <b class="fw-bold">Shift</b><i class="fas fa-plus fa-2xs text-white"></i> <b class="fw-bold">D</b>
                   </span>`);
               }
             </script>
