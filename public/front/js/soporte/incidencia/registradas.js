@@ -18,6 +18,7 @@ $(document).ready(function () {
             control: '#nro_doc',
             config: {
                 "control-type": "int",
+                type: 'search',
                 mnl: 8,
                 mxl: 11,
                 errorMessage: "El numero de DNI es invalido.",
@@ -130,27 +131,147 @@ $(document).ready(function () {
         CS_sproblema.selecionar(() => { return obj_problem[$(this).val()]?.codigo ?? null; });
     });
 
-    $('#tel_contac').on('change', function () {
-        if (!$(this).val()) {
-            $('#nro_doc, #nom_contac, #car_contac, #cor_contac').val('').trigger('change.select2');
+    let valorAnterior;
+    let ignorarCambio = false;
+
+    // Evento cuando el input de DNI pierde el foco
+    $('#nro_doc').blur(async function () {
+        const $this = $(this);
+        const valorActual = $this.val();
+
+        if (valorActual == valorAnterior) return false;
+
+        valorAnterior = valorActual;
+
+        // Si está vacío, reseteamos todo
+        if (!valorActual) {
+            $('#cod_contact, #consultado_api, #car_contac, #cor_contac')
+                .val('')
+                .trigger('change.select2');
+
+            CS_tel_contac.llenar();
+            CS_nom_contac.setValue('');
+            CS_nom_contac.enable();
+
+            $('[for="nro_doc"]')
+                .removeClass('d-flex justify-content-between mt-1')
+                .find('span[data-con="consulta"]').remove();
+
             return false;
         }
-        const contacto = obj_eContactos.find(contacto => contacto.telefono === $(this).val());
+
+        const contacto = obj_eContactos.find(c => c.nro_doc === valorActual);
+
+        if (contacto && !$('#nom_contac').val()) {
+            $('#cod_contact').val(contacto.id_contact);
+            CS_tel_contac.llenar(contacto.telefonos);
+            CS_nom_contac.setValue(contacto.nombres);
+            $('#car_contac').val(contacto.cargo).trigger('change.select2');
+            $('#cor_contac').val(contacto.correo);
+            return true;
+        }
+
+        // Deshabilitamos mientras se consulta
+        if (valorActual.length === 8) {
+            setTimeout(() => CS_nom_contac.disable(), 100);
+        }
+
+        const datos = await consultarDniInput($this);
+
+        if (datos?.success) {
+            const nombre = datos.data.RazonSocialCliente;
+            CS_nom_contac.addOption({ value: nombre, text: nombre });
+            CS_nom_contac.setValue(nombre);
+        } else {
+            ignorarCambio = true;
+            CS_nom_contac.setValue('');
+            ignorarCambio = false;
+            CS_nom_contac.enable();
+        }
+        $('#consultado_api').val(datos?.success ? 1 : '');
+    });
+
+
+    // Evento cuando cambia el valor del select nom_contac
+    $('#nom_contac').on('change', async function () {
+        if (ignorarCambio) return;
+
+        const nombreSeleccionado = $(this).val();
+
+        // Si se borra el valor, reseteamos todo
+        if (!nombreSeleccionado) {
+            $('#cod_contact, #consultado_api, #car_contac, #cor_contac')
+                .val('')
+                .trigger('change.select2');
+
+            $('#nro_doc').val('').attr('disabled', false);
+            valorConsultado = '';
+            CS_tel_contac.llenar();
+
+            recargarSelectize('#nom_contac', obj_eContactos.map(c => ({
+                value: c.nombres,
+                text: c.nombres
+            })));
+            valorAnterior = '';
+
+            return false;
+        }
+
+        // Buscar el contacto y rellenar los campos
+        const contacto = obj_eContactos.find(c => c.nombres === nombreSeleccionado);
+
         if (contacto) {
             $('#cod_contact').val(contacto.id_contact);
-            $('#tel_contac').val(contacto.telefono).trigger('change.select2');
-            $('#nro_doc').val(contacto.nro_doc);
-            $('#nom_contac').val(contacto.nombres);
+            CS_tel_contac.llenar(contacto.telefonos);
+
+            const $dni = $('#nro_doc');
+            $dni.val(contacto.nro_doc)
+                .trigger('change')
+                .attr('disabled', contacto.consultado ? true : false);
+            valorAnterior = contacto.nro_doc;
+            $('#consultado_api').val(contacto.consultado);
+
+            if (!contacto.consultado) {
+                const datos = await consultarDniInput($dni);
+
+                if (datos?.success) {
+                    const nuevoTexto = datos.data.RazonSocialCliente;
+                    CS_nom_contac.addOption({ value: nuevoTexto, text: nuevoTexto });
+                    CS_nom_contac.setValue(nuevoTexto);
+
+                    $('#consultado_api').val(1);
+                    CS_nom_contac.disable();
+                }
+            } else {
+                $('[for="nro_doc"]')
+                    .removeClass('d-flex justify-content-between mt-1')
+                    .find('span[data-con="consulta"]').remove();
+            }
+
             $('#car_contac').val(contacto.cargo).trigger('change.select2');
             $('#cor_contac').val(contacto.correo);
         }
+
+        // Validación final
+        validContac(this);
     });
 
+
+    /*let valorAnterior;
     $('#nro_doc').blur(async function () {
-        if (!$(this).val() && !$('#nom_contac').val()) {
+        if ($(this).val() == valorAnterior) {
+            return false;
+        }
+        valorAnterior = $(this).val();
+        if (!$(this).val()) {
             $('#cod_contact, #car_contac, #cor_contac').val('').trigger('change.select2');
             CS_tel_contac.llenar();
             CS_nom_contac.setValue('');
+            CS_nom_contac.enable();
+
+            const label = $('[for="nro_doc"]');
+            label.removeClass('d-flex justify-content-between mt-1');
+            label.find('span[data-con="consulta"]').remove();
             return false;
         }
 
@@ -158,26 +279,42 @@ $(document).ready(function () {
         if (contacto && !$('#nom_contac').val()) {
             $('#cod_contact').val(contacto.id_contact);
             CS_tel_contac.llenar(contacto.telefonos);
-            $('#nro_doc').val(contacto.nro_doc);
             CS_nom_contac.setValue(contacto.nombres);
             $('#car_contac').val(contacto.cargo).trigger('change.select2');
             $('#cor_contac').val(contacto.correo);
             return true;
         }
 
+        if ($(this).val().length == 8) {
+            setTimeout(() => {
+                CS_nom_contac.disable();
+            }, 100);
+        }
         let datos = await consultarDniInput($(this));
-        if (datos.success) {
+        if (datos?.success) {
             CS_nom_contac.addOption({ value: datos.data.RazonSocialCliente, text: datos.data.RazonSocialCliente });
             CS_nom_contac.setValue(datos.data.RazonSocialCliente);
-
+            $('#consultado_api').val(1);
+        } else {
+            ignorarCambio = true;
+            CS_nom_contac.setValue('');
+            ignorarCambio = false;
+            CS_nom_contac.enable();
         }
     });
 
+    let ignorarCambio = false;
     $('#nom_contac').on('change', async function () {
+        if (ignorarCambio) return;
+
         if (!$(this).val()) {
-            $('#cod_contact, #nro_doc, #car_contac, #cor_contac').val('').trigger('change.select2');
+            $('#cod_contact, #car_contac, #cor_contac').val('').trigger('change.select2');
+            $('#nro_doc').val('').attr('disabled', false);
+            valorConsultado = '';
             CS_tel_contac.llenar();
-            CS_nom_contac.setValue('');
+            recargarSelectize('#nom_contac', obj_eContactos.map(contac => {
+                return { value: contac.nombres, text: contac.nombres }
+            }))
             return false;
         }
 
@@ -185,18 +322,41 @@ $(document).ready(function () {
         if (contacto) {
             $('#cod_contact').val(contacto.id_contact);
             CS_tel_contac.llenar(contacto.telefonos);
-            $('#nro_doc').val(contacto.nro_doc);
-            CS_nom_contac.setValue(contacto.nombres);
+            $('#nro_doc').val(contacto.nro_doc).trigger('change').attr('disabled', contacto.consultado ? true : false);
+            if (!contacto.consultado) {
+                let datos = await consultarDniInput($('#nro_doc'));
+                if (datos?.success) {
+                    const nuevoTexto = datos.data.RazonSocialCliente;
+                    CS_nom_contac.addOption({ value: nuevoTexto, text: nuevoTexto });
+                    CS_nom_contac.setValue(nuevoTexto);
+
+                    valorAnterior = contacto.nro_doc;
+                    $('#consultado_api').val(1);
+                    CS_nom_contac.disable();
+                }
+            } else {
+                const label = $('[for="nro_doc"]');
+                label.removeClass('d-flex justify-content-between mt-1');
+                label.find('span[data-con="consulta"]').remove();
+            };
             $('#car_contac').val(contacto.cargo).trigger('change.select2');
             $('#cor_contac').val(contacto.correo);
         }
 
         validContac(this);
-    });
+    });*/
 
     $('.modal').on('shown.bs.modal', function () {
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
+
+        CS_nom_contac.setValue('');
+        CS_nom_contac.enable();
+        recargarSelectize('#nom_contac', obj_eContactos.map(c => ({
+            value: c.nombres,
+            text: c.nombres
+        })));
+
         manCantidad();
     });
 
@@ -207,6 +367,9 @@ $(document).ready(function () {
         CS_sucursal.selecionar();
         CS_tel_contac.llenar();
         CS_tIncidencia.llenar();
+        
+        CS_nom_contac.setValue('');
+        CS_nom_contac.enable();
 
         $('#tSoporte').val(1).trigger('change');
         $('#contenedor-personal').removeClass('d-none');
@@ -249,6 +412,24 @@ function CheckCodOrden(check = true) {
     $('#button-cod-orden').attr('check-cod', check).html(check ? 'Cod. Sistema' : 'Cod. Tecnico');
     $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
 }
+
+function recargarSelectize(selector, opciones = []) {
+    const selectize = $(selector)[0].selectize;
+
+    if (!selectize) {
+        console.warn(`No se encontró Selectize en "${selector}"`);
+        return;
+    }
+
+    // Limpiar todo
+    selectize.clear();
+    selectize.clearOptions();
+
+    // Agregar nuevas opciones
+    selectize.addOption(opciones);
+    selectize.refreshOptions(false);
+}
+
 
 const CS_nom_contac = $('#nom_contac').selectize({
     create: true,

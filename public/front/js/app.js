@@ -236,32 +236,53 @@ async function consultarDoc(dni) {
         const response = await $.ajax({
             url: `${__url}/api/ConsultaDoc/Consulta?doc=${dni}`,
             method: "GET",
-            dataType: "json"
+            dataType: "json",
+            contentType: 'application/json',
         });
         return response; // Retorna la respuesta obtenida
     } catch (error) {
-        console.error("Error al consultar el DNI:", error);
-        throw error; // Lanza el error para que el manejador lo procese
+        return error.responseJSON;
     }
 }
 
 async function consultarDniInput($this) {
-    let doc = $this.val();
-    if (!doc || doc.length > 8) return false;
-
     const label = $(`[for="${$this.attr('id')}"`);
-    const labelHtml = label.html();
+    let doc = $this.val();
+
+    if (!doc || doc.length > 8) return label.find('span[data-con="consulta"]').remove();
     if (label.find('span.text-info').length) {
         return true;
     }
     try {
-        label.addClass('d-flex justify-content-between').html(`${labelHtml} <span class="text-info"><span class="spinner-border" role="status" style="width: 1rem; height: 1rem;"></span> Consultando</span>`);
+        let cargar = '<span class="spinner-border" role="status" style="width: .8rem; height: .8rem;"></span> Consultando';
+        if (label.find('span[data-con="consulta"]').length) {
+            label.find('span[data-con="consulta"]').html(cargar).attr('class', 'text-info');
+        } else {
+            label.addClass('d-flex justify-content-between mt-1').append(`<span data-con="consulta" class="text-info" style="font-size: .68rem;">${cargar}</span>`);
+        }
+        let consultar = label.find('span[data-con="consulta"]');
         const datos = await consultarDoc(doc);
+        switch (datos.status) {
+            case 200:
+                label.removeClass('d-flex justify-content-between mt-1');
+                consultar.remove();
+                break;
+
+            case 400:
+                consultar.html('Doc. Invalido').attr('class', 'text-danger');
+                break;
+
+            case 502:
+                consultar.html('Doc. Invalido').attr('class', 'text-warning');
+                break;
+
+            default:
+                consultar.html('Error Interno').attr('class', 'text-danger');
+                break;
+        }
         return datos;
     } catch (error) {
-        console.error("No se pudo consultar el DNI.");
-    } finally {
-        label.removeClass('d-flex justify-content-between').html(labelHtml);
+        console.log("No se pudo consultar el DNI.:", error);
     }
 }
 

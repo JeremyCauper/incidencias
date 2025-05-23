@@ -248,13 +248,13 @@
                 <h6 class="tittle text-primary">Datos Contacto</h6>
                 <div class="row">
                     <input type="hidden" name="cod_contact" id="cod_contact">
+                    <input type="hidden" name="consultado_api" id="consultado_api">
                     <div class="col-lg-3 col-4 mb-2">
-                        <label class="form-label mb-0" for="nro_doc">Dni</label>
-                        <input class="form-control" id="nro_doc" onkeyup="validContac(this)">
+                        <label class="form-label mb-0" for="nro_doc"><span class="texto">Dni</span></label>
+                        <input class="form-control" id="nro_doc">
                     </div>
                     <div class="col-lg-5 col-8 mb-2">
                         <label class="form-label mb-0" for="nom_contac">Nombre</label>
-                        <!-- <input class="form-control" id="nom_contac" onkeyup="validContac(this)"> -->
                         <select id="nom_contac">
                             <option value=""></option>
                             @foreach ($data['eContactos'] as $ct)
