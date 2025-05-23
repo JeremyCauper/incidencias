@@ -18,7 +18,6 @@ $(document).ready(function () {
             control: '#nro_doc',
             config: {
                 "control-type": "int",
-                type: 'search',
                 mnl: 8,
                 mxl: 11,
                 errorMessage: "El numero de DNI es invalido.",
@@ -131,13 +130,13 @@ $(document).ready(function () {
         CS_sproblema.selecionar(() => { return obj_problem[$(this).val()]?.codigo ?? null; });
     });
 
-    let valorAnterior;
-    let ignorarCambio = false;
-
     // Evento cuando el input de DNI pierde el foco
     $('#nro_doc').blur(async function () {
         const $this = $(this);
         const valorActual = $this.val();
+        $('[for="nro_doc"]')
+            .removeClass('d-flex justify-content-between mt-1')
+            .find('span[data-con="consulta"]').remove();
 
         if (valorActual == valorAnterior) return false;
 
@@ -145,27 +144,30 @@ $(document).ready(function () {
 
         // Si está vacío, reseteamos todo
         if (!valorActual) {
-            $('#cod_contact, #consultado_api, #car_contac, #cor_contac')
-                .val('')
-                .trigger('change.select2');
+            const nombreContacto = await obj_eContactos.find(c => c.id_contact == $('#cod_contact').val());
+
+            if ($('#cod_contact').val() && nombreContacto.nombres == $('#nom_contac').val()) {
+                return true;
+            }
+            $('#cod_contact, #consultado_api, #car_contac, #cor_contac').val('').trigger('change.select2');
 
             CS_tel_contac.llenar();
             CS_nom_contac.setValue('');
             CS_nom_contac.enable();
-
-            $('[for="nro_doc"]')
-                .removeClass('d-flex justify-content-between mt-1')
-                .find('span[data-con="consulta"]').remove();
 
             return false;
         }
 
         const contacto = obj_eContactos.find(c => c.nro_doc === valorActual);
 
-        if (contacto && !$('#nom_contac').val()) {
+        if (contacto) {
             $('#cod_contact').val(contacto.id_contact);
-            CS_tel_contac.llenar(contacto.telefonos);
+            $('#consultado_api').val(contacto.consultado);
+            $(this).attr('disabled', contacto.consultado ? true : false);
+            ignorarCambio = true;
             CS_nom_contac.setValue(contacto.nombres);
+            CS_nom_contac.enable();
+            CS_tel_contac.llenar(contacto.telefonos);
             $('#car_contac').val(contacto.cargo).trigger('change.select2');
             $('#cor_contac').val(contacto.correo);
             return true;
@@ -183,18 +185,16 @@ $(document).ready(function () {
             CS_nom_contac.addOption({ value: nombre, text: nombre });
             CS_nom_contac.setValue(nombre);
         } else {
-            ignorarCambio = true;
             CS_nom_contac.setValue('');
-            ignorarCambio = false;
             CS_nom_contac.enable();
         }
         $('#consultado_api').val(datos?.success ? 1 : '');
     });
 
-
     // Evento cuando cambia el valor del select nom_contac
     $('#nom_contac').on('change', async function () {
-        if (ignorarCambio) return;
+
+        if (ignorarCambio) return setTimeout(() => { ignorarCambio = false }, 100);
 
         const nombreSeleccionado = $(this).val();
 
@@ -216,7 +216,6 @@ $(document).ready(function () {
 
             return false;
         }
-
         // Buscar el contacto y rellenar los campos
         const contacto = obj_eContactos.find(c => c.nombres === nombreSeleccionado);
 
@@ -225,12 +224,12 @@ $(document).ready(function () {
             CS_tel_contac.llenar(contacto.telefonos);
 
             const $dni = $('#nro_doc');
-            $dni.val(contacto.nro_doc)
-                .trigger('change')
-                .attr('disabled', contacto.consultado ? true : false);
-            valorAnterior = contacto.nro_doc;
+            $dni.val(contacto.nro_doc).attr('disabled', contacto.consultado ? true : false);
             $('#consultado_api').val(contacto.consultado);
+            $('#car_contac').val(contacto.cargo).trigger('change.select2');
+            $('#cor_contac').val(contacto.correo);
 
+            valorAnterior = contacto.nro_doc;
             if (!contacto.consultado) {
                 const datos = await consultarDniInput($dni);
 
@@ -247,115 +246,14 @@ $(document).ready(function () {
                     .removeClass('d-flex justify-content-between mt-1')
                     .find('span[data-con="consulta"]').remove();
             }
-
-            $('#car_contac').val(contacto.cargo).trigger('change.select2');
-            $('#cor_contac').val(contacto.correo);
         }
-
         // Validación final
         validContac(this);
     });
 
-
-    /*let valorAnterior;
-    $('#nro_doc').blur(async function () {
-        if ($(this).val() == valorAnterior) {
-            return false;
-        }
-        valorAnterior = $(this).val();
-        if (!$(this).val()) {
-            $('#cod_contact, #car_contac, #cor_contac').val('').trigger('change.select2');
-            CS_tel_contac.llenar();
-            CS_nom_contac.setValue('');
-            CS_nom_contac.enable();
-
-            const label = $('[for="nro_doc"]');
-            label.removeClass('d-flex justify-content-between mt-1');
-            label.find('span[data-con="consulta"]').remove();
-            return false;
-        }
-
-        const contacto = obj_eContactos.find(contacto => contacto.nro_doc === $(this).val());
-        if (contacto && !$('#nom_contac').val()) {
-            $('#cod_contact').val(contacto.id_contact);
-            CS_tel_contac.llenar(contacto.telefonos);
-            CS_nom_contac.setValue(contacto.nombres);
-            $('#car_contac').val(contacto.cargo).trigger('change.select2');
-            $('#cor_contac').val(contacto.correo);
-            return true;
-        }
-
-        if ($(this).val().length == 8) {
-            setTimeout(() => {
-                CS_nom_contac.disable();
-            }, 100);
-        }
-        let datos = await consultarDniInput($(this));
-        if (datos?.success) {
-            CS_nom_contac.addOption({ value: datos.data.RazonSocialCliente, text: datos.data.RazonSocialCliente });
-            CS_nom_contac.setValue(datos.data.RazonSocialCliente);
-            $('#consultado_api').val(1);
-        } else {
-            ignorarCambio = true;
-            CS_nom_contac.setValue('');
-            ignorarCambio = false;
-            CS_nom_contac.enable();
-        }
-    });
-
-    let ignorarCambio = false;
-    $('#nom_contac').on('change', async function () {
-        if (ignorarCambio) return;
-
-        if (!$(this).val()) {
-            $('#cod_contact, #car_contac, #cor_contac').val('').trigger('change.select2');
-            $('#nro_doc').val('').attr('disabled', false);
-            valorConsultado = '';
-            CS_tel_contac.llenar();
-            recargarSelectize('#nom_contac', obj_eContactos.map(contac => {
-                return { value: contac.nombres, text: contac.nombres }
-            }))
-            return false;
-        }
-
-        const contacto = obj_eContactos.find(contacto => contacto.nombres === $(this).val());
-        if (contacto) {
-            $('#cod_contact').val(contacto.id_contact);
-            CS_tel_contac.llenar(contacto.telefonos);
-            $('#nro_doc').val(contacto.nro_doc).trigger('change').attr('disabled', contacto.consultado ? true : false);
-            if (!contacto.consultado) {
-                let datos = await consultarDniInput($('#nro_doc'));
-                if (datos?.success) {
-                    const nuevoTexto = datos.data.RazonSocialCliente;
-                    CS_nom_contac.addOption({ value: nuevoTexto, text: nuevoTexto });
-                    CS_nom_contac.setValue(nuevoTexto);
-
-                    valorAnterior = contacto.nro_doc;
-                    $('#consultado_api').val(1);
-                    CS_nom_contac.disable();
-                }
-            } else {
-                const label = $('[for="nro_doc"]');
-                label.removeClass('d-flex justify-content-between mt-1');
-                label.find('span[data-con="consulta"]').remove();
-            };
-            $('#car_contac').val(contacto.cargo).trigger('change.select2');
-            $('#cor_contac').val(contacto.correo);
-        }
-
-        validContac(this);
-    });*/
-
     $('.modal').on('shown.bs.modal', function () {
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
-
-        CS_nom_contac.setValue('');
-        CS_nom_contac.enable();
-        recargarSelectize('#nom_contac', obj_eContactos.map(c => ({
-            value: c.nombres,
-            text: c.nombres
-        })));
 
         manCantidad();
     });
@@ -367,9 +265,15 @@ $(document).ready(function () {
         CS_sucursal.selecionar();
         CS_tel_contac.llenar();
         CS_tIncidencia.llenar();
-        
-        CS_nom_contac.setValue('');
-        CS_nom_contac.enable();
+
+        setTimeout(() => {
+            CS_nom_contac.setValue('');
+            CS_nom_contac.enable();
+            recargarSelectize('#nom_contac', obj_eContactos.map(c => ({
+                value: c.nombres,
+                text: c.nombres
+            })));
+        }, 100);
 
         $('#tSoporte').val(1).trigger('change');
         $('#contenedor-personal').removeClass('d-none');
@@ -404,6 +308,9 @@ $(document).ready(function () {
         tb_incidencia.columns.adjust().draw();
     });
 });
+
+let valorAnterior;
+let ignorarCambio = false;
 let sucursal = null;
 let empresa = null;
 let incidencia_temp = null;
@@ -435,7 +342,17 @@ const CS_nom_contac = $('#nom_contac').selectize({
     create: true,
     persist: false,
     createOnBlur: true,
+    openOnFocus: false,
     plugins: ["clear_button"],
+    onFocus: function () {
+        $('.select2-container--open').each(function () {
+            const select = $(this).prev('select');
+            if (select.length) {
+                select.select2('close');
+                $(this).removeClass('select2-container--focus');
+            }
+        });
+    }
 })[0].selectize;
 
 const CS_sucursal = new CSelect(['#sucursal'], {
@@ -626,16 +543,17 @@ function ShowDetail(e, cod) {
     });
 }
 
-function ShowEdit(id) {
+function ShowEdit(cod) {
     $('#modal_incidencias').modal('show');
     $('#contenedor-personal').addClass('d-none');
     fMananger.formModalLoding('modal_incidencias', 'show', true);
 
     $.ajax({
         type: 'GET',
-        url: `${__url}/soporte/incidencias/registradas/${id}`,
+        url: `${__url}/soporte/incidencias/registradas/${cod}`,
         contentType: 'application/json',
         success: function (data) {
+
             if (!data.success) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
@@ -663,12 +581,19 @@ function ShowEdit(id) {
             $('#empresa').val(dt.ruc_empresa).trigger('change');
             CS_sucursal.selecionar(dt.ruc_empresa);
             $('#sucursal').val(dt.id_sucursal).trigger('change');
-            $('#cod_contact').val(dt.id_contacto);
-            $('#tel_contac').val(dt.telefono).trigger('change');
-            $('#nro_doc').val(dt.nro_doc);
-            $('#nom_contac').val(dt.nombres);
-            $('#car_contac').val(dt.cargo).trigger('change');
-            $('#cor_contac').val(dt.correo);
+            if (dt.contacto) {
+                $('#cod_contact').val(dt.contacto.id_contacto);
+                $('#consultado_api').val(dt.contacto.consultado);
+                $('#nro_doc').val(dt.contacto.nro_doc).attr('disabled', eval(dt.contacto.consultado));
+                setTimeout(() => {
+                    ignorarCambio = true;
+                    CS_nom_contac.setValue(dt.contacto.nombres);
+                    CS_tel_contac.llenar(dt.contacto.telefonos);
+                    $('#tel_contac').val(dt.id_telefono).trigger('change');
+                }, 100);
+                $('#car_contac').val(dt.contacto.cargo).trigger('change');
+                $('#cor_contac').val(dt.contacto.correo);
+            }
             $('#tEstacion').val(dt.id_tipo_estacion).trigger('change');
             $('#tIncidencia').val(dt.tipo_incidencia[dt.tipo_incidencia.length - 1].id_tipo_inc).trigger('change');
             $('#tSoporte').val(dt.id_tipo_soporte).trigger('change');

@@ -26,7 +26,7 @@
 <div class="row panel-view">
     <div class="col-12">
         <div class="row">
-            <div class="col-xxl-3 col-6 grid-margin">
+            <div class="col-lg-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-success" data-mdb-ripple-init onclick="searchTable(0)">
                         <h6 class="card-title title-count mb-2"><i class="far fa-clock"></i> Incidencias Registradas
@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-3 col-6 grid-margin">
+            <div class="col-lg-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-info" data-mdb-ripple-init onclick="searchTable(1)">
                         <h6 class="card-title title-count mb-2"><i class="fas fa-user-check"></i> Incidencias Asignadas
@@ -44,7 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-3 col-6 grid-margin">
+            <div class="col-lg-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-warning" data-mdb-ripple-init onclick="searchTable(2)">
                         <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Incidencias Sin
@@ -53,7 +53,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xxl-3 col-6 grid-margin">
+            <div class="col-lg-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-primary" data-mdb-ripple-init onclick="searchTable(3)">
                         <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En

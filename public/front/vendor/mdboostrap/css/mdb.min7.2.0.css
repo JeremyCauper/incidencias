@@ -117,7 +117,7 @@
     --mdb-highlight-bg: #fff9c4;
     --mdb-border-width: 1px;
     --mdb-border-style: solid;
-    --mdb-border-color: #ccc;
+    --mdb-border-color: #dcdcdc;
     --mdb-border-color-translucent: rgba(0, 0, 0, 0.175);
     --mdb-border-radius: 0.25rem;
     --mdb-border-radius-sm: 0.25rem;
@@ -864,17 +864,18 @@ progress {
     --mdb-gutter-y: 0;
     display: flex;
     flex-wrap: wrap;
-    margin-top: calc(-1*var(--mdb-gutter-y));
-    margin-right: calc(-0.5*var(--mdb-gutter-x));
-    margin-left: calc(-0.5*var(--mdb-gutter-x))
+    padding: 0px;
+    margin-top: calc(-1 * var(--mdb-gutter-y));
+    margin-right: calc(-0.115 * var(--mdb-gutter-x));
+    margin-left: calc(-0.115 * var(--mdb-gutter-x))
 }
 
 .row>* {
     flex-shrink: 0;
     width: 100%;
     max-width: 100%;
-    padding-right: calc(var(--mdb-gutter-x)*.5);
-    padding-left: calc(var(--mdb-gutter-x)*.5);
+    padding-right: calc(var(--mdb-gutter-x) * .125);
+    padding-left: calc(var(--mdb-gutter-x) * .125);
     margin-top: var(--mdb-gutter-y)
 }
 
@@ -5154,7 +5155,8 @@ fieldset:disabled .btn {
     --mdb-card-border-width: var(--mdb-border-width);
     --mdb-card-border-color: rgba(0, 0, 0, 0.175);
     --mdb-card-border-radius: 0.35rem;
-    --mdb-card-box-shadow: 0 2px 15px -3px rgba(var(--mdb-box-shadow-color-rgb), 0.07),0 10px 20px -2px rgba(var(--mdb-box-shadow-color-rgb), 0.04); /*0 2px 15px -3px rgba(var(--mdb-box-shadow-color-rgb), 0.07), 0 10px 20px -2px rgba(var(--mdb-box-shadow-color-rgb), 0.04);*/
+    --mdb-card-box-shadow: 0 2px 15px -3px rgba(var(--mdb-box-shadow-color-rgb), 0.07), 0 10px 20px -2px rgba(var(--mdb-box-shadow-color-rgb), 0.04);
+    /*0 2px 15px -3px rgba(var(--mdb-box-shadow-color-rgb), 0.07), 0 10px 20px -2px rgba(var(--mdb-box-shadow-color-rgb), 0.04);*/
     --mdb-card-inner-border-radius: calc(0.5rem - (var(--mdb-border-width)));
     --mdb-card-cap-padding-y: 0.75rem;
     --mdb-card-cap-padding-x: 1.5rem;
@@ -6346,7 +6348,7 @@ fieldset:disabled .btn {
 
 .modal {
     --mdb-modal-zindex: 1055;
-    --mdb-modal-width: 500px;
+    --mdb-modal-width: 650px;
     --mdb-modal-padding: 1rem;
     --mdb-modal-margin: 0.5rem;
     --mdb-modal-color: var(--mdb-surface-color);
@@ -6503,7 +6505,7 @@ fieldset:disabled .btn {
     margin: calc(var(--mdb-modal-footer-gap)*.5)
 }
 
-@media(min-width: 576px) {
+@media(min-width: 685px) {
     .modal {
         --mdb-modal-margin: 1.75rem;
         --mdb-modal-box-shadow: var(--mdb-box-shadow)
@@ -21147,7 +21149,8 @@ fieldset:disabled .btn-group-vertical>.btn {
 }
 
 .badge-primary {
-    background-color: var(--mdb-primary-text-emphasis); /* var(--mdb-primary-bg-subtle);
+    background-color: var(--mdb-primary-text-emphasis);
+    /* var(--mdb-primary-bg-subtle);
     color: var(--mdb-primary-text-emphasis) */
 }
 
@@ -21156,7 +21159,8 @@ fieldset:disabled .btn-group-vertical>.btn {
 }
 
 .badge-secondary {
-    background-color: var(--mdb-secondary-text-emphasis); /* var(--mdb-secondary-bg-subtle);
+    background-color: var(--mdb-secondary-text-emphasis);
+    /* var(--mdb-secondary-bg-subtle);
     color: var(--mdb-secondary-text-emphasis) */
 }
 
@@ -21165,7 +21169,8 @@ fieldset:disabled .btn-group-vertical>.btn {
 }
 
 .badge-success {
-    background-color: var(--mdb-success-text-emphasis); /* var(--mdb-success-bg-subtle);
+    background-color: var(--mdb-success-text-emphasis);
+    /* var(--mdb-success-bg-subtle);
     color: var(--mdb-success-text-emphasis)*/
 }
 
@@ -21174,7 +21179,8 @@ fieldset:disabled .btn-group-vertical>.btn {
 }
 
 .badge-danger {
-    background-color: var(--mdb-danger-text-emphasis); /* var(--mdb-danger-bg-subtle);
+    background-color: var(--mdb-danger-text-emphasis);
+    /* var(--mdb-danger-bg-subtle);
     color: var(--mdb-danger-text-emphasis)*/
 }
 
@@ -21183,7 +21189,8 @@ fieldset:disabled .btn-group-vertical>.btn {
 }
 
 .badge-warning {
-    background-color: var(--mdb-warning-text-emphasis); /* var(--mdb-warning-bg-subtle);
+    background-color: var(--mdb-warning-text-emphasis);
+    /* var(--mdb-warning-bg-subtle);
     color: var(--mdb-warning-text-emphasis)*/
 }
 
@@ -21192,7 +21199,8 @@ fieldset:disabled .btn-group-vertical>.btn {
 }
 
 .badge-info {
-    background-color: var(--mdb-info-text-emphasis); /* var(--mdb-info-bg-subtle);
+    background-color: var(--mdb-info-text-emphasis);
+    /* var(--mdb-info-bg-subtle);
     color: var(--mdb-info-text-emphasis)*/
 }
 
@@ -21201,7 +21209,8 @@ fieldset:disabled .btn-group-vertical>.btn {
 }
 
 .badge-light {
-    background-color: var(--mdb-light-text-emphasis); /* var(--mdb-light-bg-subtle);
+    background-color: var(--mdb-light-text-emphasis);
+    /* var(--mdb-light-bg-subtle);
     color: var(--mdb-light-text-emphasis)*/
 }
 

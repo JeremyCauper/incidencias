@@ -6,6 +6,7 @@ use App\Helpers\Problema;
 use App\Helpers\SubProblema;
 use App\Helpers\TipoSoporte;
 use App\Http\Controllers\Controller;
+use App\Services\JsonDB;
 use App\Services\SqlStateHelper;
 use Exception;
 use Barryvdh\DomPDF\Facade\Pdf;
@@ -285,20 +286,23 @@ class OrdenController extends Controller
             }
 
             $incidencia = DB::table('tb_incidencias')->where('cod_incidencia', $orden->cod_incidencia)->first();
-            $contactoEmpresa = DB::table('contactos_empresas')->where('id_contact', $incidencia->id_contacto)->first();
             $contactoOrden = DB::table('tb_contac_ordens')->where('id', $orden->id_contacto)->first();
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $orden->cod_incidencia)->orderBy('created_at', 'asc')->get();
             $seguimiento = DB::table('tb_inc_seguimiento')->where('cod_incidencia', $orden->cod_incidencia)->get();
             $materialesUsados = DB::table('tb_materiales_usados')->select('id_material', 'cantidad')->where('cod_ordens', $cod)->get();
 
-            $tSoporte = collect((new TipoSoporte())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
-            $datos['tipoSoporte'] = $tSoporte[$incidencia->id_tipo_soporte]['descripcion'];
+            $tSoporte = JsonDB::table('tipo_soporte')->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->where('id', $incidencia->id_tipo_soporte)->first();
+            $datos['tipoSoporte'] = $tSoporte->descripcion;
 
             // Procesar contactos
+            $contactoEmpresa = DB::table('contactos_empresas')->where('id_contact', $incidencia->id_contacto)->first();
             if ($contactoEmpresa) {
                 $datos['contacto'] = "{$contactoEmpresa->nro_doc} {$contactoEmpresa->nombres}";
-                $datos['telefono'] = $contactoEmpresa->telefono ?: '';
                 $datos['correo'] = $contactoEmpresa->correo ?: '';
+                if ($incidencia->id_telefono) {
+                    $contactoTelefono = DB::table('contactos_empresas')->where('id', $incidencia->id_telefono)->first();
+                    $datos['telefono'] = $contactoTelefono->telefono ?: '';
+                }
             }
 
             if ($contactoOrden) {
@@ -357,10 +361,10 @@ class OrdenController extends Controller
             ];
 
             // Procesar problemas
-            $problemas = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->where('id', $incidencia->id_problema)->first();
-            $sproblemas = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->where('id', $incidencia->id_subproblema)->first();
-            $datos['problema'] = "{$problemas['codigo']} - {$problemas['descripcion']}";
-            $datos['sproblema'] = "{$sproblemas['prioridad']} - {$sproblemas['descripcion']}";
+            $problemas = JsonDB::table('problema')->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'estatus')->where('id', $incidencia->id_problema)->first();
+            $sproblemas = JsonDB::table('sub_problema')->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->where('id', $incidencia->id_subproblema)->first();
+            $datos['problema'] = "{$problemas->codigo} - {$problemas->descripcion}";
+            $datos['sproblema'] = "{$sproblemas->prioridad} - {$sproblemas->descripcion}";
 
             // Observaciones y recomendaciones
             $datos['observacion'] = $orden->observaciones;
