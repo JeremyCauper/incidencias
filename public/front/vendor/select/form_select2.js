@@ -16,6 +16,14 @@ $(document).ready(function () {
             placeholder: 'Buscar',
             allowClear: true,
             tags: true,
+            createTag: function (params) {
+                // Creamos un nuevo objeto tag con el value que queramos
+                return {
+                    id: 'nuevo:' + params.term,          // Este será el value
+                    text: params.term,    // Este será el texto mostrado
+                    newOption: true       // Lo marcamos como nuevo si queremos estilos
+                };
+            },
         },
         "icons": {
             placeholder: '-- Seleccione --',
@@ -134,11 +142,11 @@ $(document).ready(function () {
     };
 
     $('.select-clear, .select-search, .select-tags, .select-icons').on('select2:open', async function () {
-        let clase = $(this).attr('class');
+        let selector = $(this);
         let observador = new MutationObserver((mutations, obs) => {
             let searchField = document.querySelector('input.select2-search__field');
             if (searchField) {
-                if (clase.includes('select-tags')) {
+                if ((selector.attr('class')).includes('select-tags')) {
                     $('.select2-search__field').on('keypress', function (e) {
                         // Permitir: teclas de navegación, backspace (8), delete (46)
                         // (se pueden agregar más códigos si se desea)
@@ -147,10 +155,10 @@ $(document).ready(function () {
                             return;
                         }
                         // Si ya se han ingresado 9 dígitos, no permitir más
-                        if (this.value.length >= 9) {
-                            e.preventDefault();
-                            return;
-                        }
+                        // if (this.value.length >= 9) {
+                        //     e.preventDefault();
+                        //     return;
+                        // }
                         // Validar que el carácter presionado sea un dígito
                         var char = String.fromCharCode(e.which);
                         if (!(/[0-9]/.test(char))) {
@@ -158,6 +166,8 @@ $(document).ready(function () {
                         }
                     });
                 }
+                searchField.setAttribute('minlength', selector.attr('minlength'));
+                searchField.setAttribute('maxlength', selector.attr('maxlength'));
                 searchField.focus();
             }
         });

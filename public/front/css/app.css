@@ -663,13 +663,13 @@ body {
 
 @media (max-width: 767px) {
     .content-wrapper {
-        padding: 1.5rem;
+        padding: 1rem .5rem;
     }
 }
 
 :root {
     --bs-panel-view-padding: 1.5rem 1.5rem;
-    --bs-panel-view-margin: .8rem;
+    --bs-panel-view-margin: .375rem;
     --bs-panel-view-fonts-h6i: .9rem;
     --bs-panel-view-fonts-h4: 1.9rem;
 }
@@ -691,10 +691,15 @@ body {
     font-size: var(--bs-panel-view-fonts-h4);
 }
 
+@media (max-width: 1120px) {
+    :root {
+        --bs-panel-view-fonts-h6i: .7rem;
+    }
+}
+
 @media (max-width: 730px) {
     :root {
         --bs-panel-view-fonts-h6i: .8rem;
-        --bs-panel-view-fonts-h4: 1.6rem;
     }
 }
 
@@ -702,14 +707,12 @@ body {
     :root {
         --bs-panel-view-padding: 1rem 1.15rem;
         --bs-panel-view-fonts-h6i: .7rem;
-        --bs-panel-view-fonts-h4: 1.5rem;
     }
 }
 
 @media (max-width: 530px) {
     :root {
         --bs-panel-view-padding: 1rem .85rem;
-        --bs-panel-view-margin: .65rem;
         --bs-panel-view-fonts-h6i: .6rem;
         --bs-panel-view-fonts-h4: 1.4rem;
     }
@@ -718,7 +721,6 @@ body {
 @media (max-width: 430px) {
     :root {
         --bs-panel-view-padding: .8rem .6rem;
-        --bs-panel-view-margin: .5rem;
         --bs-panel-view-fonts-h6i: .5rem;
         --bs-panel-view-fonts-h4: 1.3rem;
     }
@@ -726,7 +728,6 @@ body {
 
 @media (max-width: 350px) {
     :root {
-        --bs-panel-view-fonts-h6i: .4rem;
         --bs-panel-view-fonts-h4: 1.2rem;
     }
 }

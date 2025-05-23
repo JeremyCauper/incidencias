@@ -39,7 +39,7 @@ class ResueltasController extends Controller
             $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'estatus')->keyBy('id');
             $data['usuarios'] = DB::table('tb_personal')->get()->keyBy('id_usuario')->map(function ($user) {
                 $nombre = $this->formatearNombre($user->nombres, $user->apellidos);
-                return (object)[
+                return (object) [
                     'id' => $user->id_usuario,
                     'nombre' => $nombre,
                 ];
@@ -97,7 +97,7 @@ class ResueltasController extends Controller
 
             return [
                 'cod_incidencia' => $incidencia->cod_incidencia,
-                'cod_orden' => (string)'<label class="badge badge-info" style="font-size: .7rem;">' . $orden->cod_ordens . '</label>' ?? null,
+                'cod_orden' => (string) '<label class="badge badge-info" style="font-size: .7rem;">' . $orden->cod_ordens . '</label>' ?? null,
                 'fecha_inc' => $incidencia->created_at ?? null,
                 'asignados' => $asignados,
                 'empresa' => $incidencia->ruc_empresa,
@@ -125,52 +125,6 @@ class ResueltasController extends Controller
     }
 
     /**
-     * Display the specified resource.
-     */
-    public function show(string $id)
-    {
-        try {
-            // Consultamos la incidencia por ID
-            $incidencia = DB::table('tb_incidencias')->where('id_incidencia', $id)->first();
-            $personal = db::table('tb_personal')->select(['id_usuario', 'ndoc_usuario', 'nombres', 'apellidos'])->get()->keyBy('id_usuario');
-
-            // Verificamos si se encontró la incidencia
-            if (!$incidencia)
-                return response()->json(['success' => false, 'message' => 'Incidencia no encontrada']);
-            $cod = $incidencia->cod_incidencia;
-
-            // Consultamos los contactos asociados a la incidencia y los añadimos como propiedades del objeto incidencia
-            $contacto = DB::table('contactos_empresas')->where('id_contact', $incidencia->id_contacto)->first();
-            if ($contacto) {
-                foreach ((array) $contacto as $key => $value) {
-                    $incidencia->$key = $value;
-                }
-            }
-
-            $incidencia->personal_asig = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->get()->map(function ($u) use ($personal) {
-                $nombre = ucwords(strtolower("{$personal[$u->id_usuario]->nombres} {$personal[$u->id_usuario]->apellidos}"));
-                return [
-                    'id' => $u->id_usuario,
-                    'dni' => $personal[$u->id_usuario]->ndoc_usuario,
-                    'tecnicos' => $nombre
-                ];
-            });
-
-            // Retornamos la incidencia con la información de contacto y personal asignado
-            return response()->json(['success' => true, 'message' => '', 'data' => $incidencia]);
-        } catch (QueryException $e) {
-            DB::rollBack();
-            $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());
-            $message = $sqlHelper->codigo == 500 ? "No se puedo obtener informacion la incidencia." : $sqlHelper->message;
-
-            return $this->message(message: $message, data: ['error' => $e], status: 500);
-        } catch (Exception $e) {
-            // Manejamos errores y retornamos un mensaje de error claro
-            return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
-        }
-    }
-
-    /**
      * Show the form for editing the specified resource.
      */
     public function showSignature(string $cod)
@@ -182,7 +136,7 @@ class ResueltasController extends Controller
             if ($orden && !empty($orden->id_contacto)) {
                 $contacto = db::table('tb_contac_ordens')->select(['id', 'nro_doc', 'nombre_cliente', 'firma_digital'])->where(['id' => $orden->id_contacto])->first();
             }
-            return response()->json(['success' => true, 'data' => [ 'contacto' => $contacto, 'incidencia' => $incidencia]]);
+            return response()->json(['success' => true, 'data' => ['contacto' => $contacto, 'incidencia' => $incidencia]]);
         } catch (Exception $e) {
             return response()->json(['success' => false, 'message' => 'Error: ' . $e->getMessage()]);
         }

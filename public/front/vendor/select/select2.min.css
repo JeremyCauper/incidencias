@@ -3,7 +3,9 @@
     position: relative;
     display: inline-block;
     vertical-align: middle;
-    text-align: left
+    text-align: left;
+    border: var(--mdb-border-width) solid var(--mdb-border-color);
+    border-radius: .25rem;
 }
 
 .select2-selection--single {
@@ -15,7 +17,6 @@
     color: var(--mdb-surface-color);
     background-color: var(--mdb-body-bg);
     position: relative;
-    border: var(--mdb-border-width) solid var(--mdb-border-color);
     white-space: nowrap;
     -webkit-user-select: none;
     -moz-user-select: none;

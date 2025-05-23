@@ -100,9 +100,10 @@
                             <select class="select-icons" id="menu">
                                 <option value=""></option>
                                 @foreach ($data['menus'] as $v)
-                                    <option value="{{ $v->id }}" {{ $v->estatus != 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                    <option value="{{ $v->id }}"
+                                        {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
                                         {{ (string) '<i class="' . $v->icon . ' me-2"></i>' }} {{ $v->descripcion }}
-                                        {{ $v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '' }}
+                                        {{ $v->eliminado == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
                                     </option>
                                 @endforeach
                             </select>

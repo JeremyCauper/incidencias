@@ -33,7 +33,7 @@ class RegistradasController extends Controller
             $data = [];
 
             // Obtener información externa de la API
-            $data['company'] = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'codigo_aviso', 'status'])->get()->keyBy('ruc'); //$this->fetchAndParseApiData('empresas');
+            $data['company'] = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'codigo_aviso', 'status', 'eliminado'])->get()->keyBy('ruc'); //$this->fetchAndParseApiData('empresas');
             $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->get()->keyBy('id'); //$this->fetchAndParseApiData('sucursales');
 
             // Obtener información de base de datos local
@@ -43,14 +43,20 @@ class RegistradasController extends Controller
             $data['tIncidencia'] = collect((new TipoIncidencia())->all())->select('id', 'descripcion', 'tipo', 'color', 'selected', 'estatus', 'eliminado')->keyBy('id');
             $data['problema'] = collect((new Problema())->all())->select('id', 'codigo', 'descripcion', 'tipo_soporte', 'selected', 'estatus', 'eliminado')->keyBy('id');
             $data['sproblema'] = collect((new SubProblema())->all())->select('id', 'codigo_problema', 'descripcion', 'prioridad', 'selected', 'estatus', 'eliminado')->keyBy('id');
-            $data['eContactos'] = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'telefono', 'cargo', 'correo', 'estatus')->get();
+            $telefono_empresas = DB::table('contactos_telefono_empresas')->select('id', 'id_contact', 'telefono')->get()->groupBy('id_contact');
+            $data['eContactos'] = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'cargo', 'correo', 'consultado', 'estatus')->get()
+                ->map(function ($val) use ($telefono_empresas) {
+                    $val->telefonos = $telefono_empresas->get($val->id_contact) ?? [];
+                    return $val;
+                });
 
             $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
                 return [
                     'value' => $m->id_materiales,
                     'dValue' => base64_encode(json_encode(['id_material' => $m->id_materiales, 'producto' => $m->producto, 'cantidad' => 0])),
                     'text' => $m->producto,
-                    'estatus' => $m->estatus
+                    'estatus' => $m->estatus,
+                    'eliminado' => $m->eliminado
                 ];
             });
 
@@ -61,7 +67,8 @@ class RegistradasController extends Controller
                     'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
                     'text' => "{$u->ndoc_usuario} - {$nombre}",
                     'nombre' => $nombre,
-                    'estatus' => $u->estatus
+                    'estatus' => $u->estatus,
+                    'eliminado' => $u->eliminado
                 ];
             });
             $data['cod_inc'] = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
@@ -80,7 +87,12 @@ class RegistradasController extends Controller
     public function index()
     {
         try {
-            $contactos_empresas = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'telefono', 'cargo', 'correo', 'estatus')->get();
+            $telefono_empresas = DB::table('contactos_telefono_empresas')->select('id', 'id_contact', 'telefono')->get()->groupBy('id_contact');
+            $contactos_empresas = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'cargo', 'correo', 'consultado', 'estatus')->get()
+                ->map(function ($val) use ($telefono_empresas) {
+                    $val->telefonos = $telefono_empresas->get($val->id_contact) ?? [];
+                    return $val;
+                });
             $conteo_data = [
                 "totales" => 0,
                 "tAsignadas" => 0,
@@ -178,9 +190,11 @@ class RegistradasController extends Controller
                 'observacion' => 'nullable|string',
                 'fecha_imforme' => 'required|date',
                 'hora_informe' => 'required|date_format:H:i:s',
-                'tel_contac' => 'nullable|string',
+                'cod_contact' => 'nullable|integer',
+                'consultado_api' => 'nullable|integer',
                 'nro_doc' => 'nullable|string',
                 'nom_contac' => 'nullable|string',
+                'tel_contac' => 'nullable|string',
                 'car_contac' => 'nullable|string',
                 'cor_contac' => 'nullable|string'
             ]);
@@ -193,13 +207,28 @@ class RegistradasController extends Controller
             $estado_info = count($vPersonal) ? 1 : 0;
 
             DB::beginTransaction();
-            if ($request->tel_contac || $request->nom_contac || $request->car_contac) {
-                $idContact = DB::table('contactos_empresas')->insertGetId([
-                    'telefono' => $request->tel_contac,
-                    'nro_doc' => $request->nro_doc ?: null,
-                    'nombres' => $request->nom_contac,
-                    'cargo' => $request->car_contac,
-                    'correo' => $request->cor_contac ?: null,
+
+            $idContact = $request->cod_contact;
+            $registro_contacto = [
+                'nro_doc' => $request->nro_doc ?: null,
+                'nombres' => $request->nom_contac ?: null,
+                'cargo' => $request->car_contac ?: null,
+                'correo' => $request->cor_contac ?: null,
+                'consultado' => $request->consultado_api ?: 0,
+                (empty($idContact) ? 'created_at' : 'updated_at') => now()->format('Y-m-d H:i:s')
+            ];
+            if (empty($idContact)) {
+                $idContact = DB::table('contactos_empresas')->insertGetId($registro_contacto);
+            } else {
+                DB::table('contactos_empresas')->where('id_contact', $idContact)->update($registro_contacto);
+            }
+
+            $idTelefono = $request->tel_contac;
+            if (!empty($idTelefono) && str_starts_with($idTelefono, "nuevo:")) {
+                $newTelefono = substr($idTelefono, strlen("nuevo:"));
+                $idTelefono = DB::table('contactos_telefono_empresas')->insertGetId([
+                    'id_contact' => $idContact,
+                    'telefono' => $newTelefono,
                     'created_at' => now()->format('Y-m-d H:i:s')
                 ]);
             }
@@ -221,6 +250,7 @@ class RegistradasController extends Controller
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
                 'id_contacto' => $idContact ?: null,
+                'id_telefono' => $idTelefono ?: null,
                 'observacion' => $request->observacion,
                 'fecha_informe' => $request->fecha_imforme,
                 'hora_informe' => $request->hora_informe,
@@ -289,12 +319,12 @@ class RegistradasController extends Controller
                 return $this->message(message: "Incidencia no encontrada", status: 204);
 
             // Consultamos los contactos asociados a la incidencia y los añadimos como propiedades del objeto incidencia
-            $contacto = DB::table('contactos_empresas')->where('id_contact', $incidencia->id_contacto)->first();
-            if ($contacto) {
-                foreach ((array) $contacto as $key => $value) {
-                    $incidencia->$key = $value;
-                }
+            $contactos_empresas = DB::table('contactos_empresas')->select('id_contact', 'nro_doc', 'nombres', 'cargo', 'correo', 'consultado', 'estatus')
+                ->where('id_contact', $incidencia->id_contacto)->first();
+            if ($contactos_empresas) {
+                $contactos_empresas->telefonos = DB::table('contactos_telefono_empresas')->select('id', 'telefono')->where('id_contact', $incidencia->id_contacto)->get();
             }
+            $incidencia->contacto = $contactos_empresas ?: [];
 
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->pluck('id_usuario')->toArray();
             $incidencia->personal_asig = DB::table('tb_personal')
@@ -345,9 +375,10 @@ class RegistradasController extends Controller
                 'fecha_imforme' => 'required|date',
                 'hora_informe' => 'required|date_format:H:i:s',
                 'cod_contact' => 'nullable|integer',
-                'tel_contac' => 'nullable|string',
+                'consultado_api' => 'nullable|integer',
                 'nro_doc' => 'nullable|string',
                 'nom_contac' => 'nullable|string',
+                'tel_contac' => 'nullable|string',
                 'car_contac' => 'nullable|string',
                 'cor_contac' => 'nullable|string'
             ]);
@@ -356,26 +387,31 @@ class RegistradasController extends Controller
                 return $this->message(data: ['required' => $validator->errors()], status: 422);
             }
 
-            $rContact = [
-                'telefono' => $request->tel_contac,
-                'nro_doc' => $request->nro_doc,
-                'nombres' => $request->nom_contac,
-                'cargo' => $request->car_contac,
-                'correo' => $request->cor_contac
-            ];
-            $idContact = $request->cod_contact;
-
             DB::beginTransaction();
-            if ($rContact['telefono'] || $rContact['nombres'] || $rContact['cargo']) {
-                if ($idContact) {
-                    $rContact['updated_at'] = now()->format('Y-m-d H:i:s');
-                    DB::table('contactos_empresas')->where('id_contact', $idContact)->update($rContact);
-                } else {
-                    $rContact['created_at'] = now()->format('Y-m-d H:i:s');
-                    $idContact = DB::table('contactos_empresas')->insertGetId($rContact);
-                }
+
+            $idContact = $request->cod_contact;
+            $registro_contacto = [
+                'nro_doc' => $request->nro_doc ?: null,
+                'nombres' => $request->nom_contac ?: null,
+                'cargo' => $request->car_contac ?: null,
+                'correo' => $request->cor_contac ?: null,
+                'consultado' => $request->consultado_api ?: 0,
+                (empty($idContact) ? 'created_at' : 'updated_at') => now()->format('Y-m-d H:i:s')
+            ];
+            if (empty($idContact)) {
+                $idContact = DB::table('contactos_empresas')->insertGetId($registro_contacto);
             } else {
-                $idContact = null;
+                DB::table('contactos_empresas')->where('id_contact', $idContact)->update($registro_contacto);
+            }
+
+            $idTelefono = $request->tel_contac;
+            if (!empty($idTelefono) && str_starts_with($idTelefono, "nuevo:")) {
+                $newTelefono = substr($idTelefono, strlen("nuevo:"));
+                $idTelefono = DB::table('contactos_telefono_empresas')->insertGetId([
+                    'id_contact' => $idContact,
+                    'telefono' => $newTelefono,
+                    'created_at' => now()->format('Y-m-d H:i:s')
+                ]);
             }
 
             DB::table('tb_incidencias')->where('id_incidencia', $request->id_inc)->update([
@@ -386,7 +422,8 @@ class RegistradasController extends Controller
                 'id_tipo_soporte' => $request->tSoporte,
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
-                'id_contacto' => $idContact,
+                'id_contacto' => $idContact ?: null,
+                'id_telefono' => $idTelefono ?: null,
                 'observacion' => $request->observacion,
                 'fecha_informe' => $request->fecha_imforme,
                 'hora_informe' => $request->hora_informe,

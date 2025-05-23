@@ -82,33 +82,55 @@ class ConsultasController extends Controller
     {
         try {
             $doc = $request->query('doc');
+
+            if (empty($doc) || !ctype_digit($doc)) {
+                return $this->message(data: ['error' => 'Número de documento inválido'], status: 400);
+            }
+
             $ip = env('APP_ENV') == "local" ? "192.168.1.113" : "190.187.193.78";
 
             $curl = curl_init();
-            curl_setopt_array($curl, array(
+            curl_setopt_array($curl, [
                 CURLOPT_URL => "http://$ip:8282/apugescom.api/api/ConsultaExterna/Consulta?numDoc=$doc",
                 CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+                CURLOPT_TIMEOUT => 10,
                 CURLOPT_CUSTOMREQUEST => 'GET',
-            ));
-            $response = json_decode(curl_exec($curl));
+            ]);
+
+            $responseRaw = curl_exec($curl);
+            if (curl_errno($curl)) {
+                $error_msg = curl_error($curl);
+                curl_close($curl);
+                return $this->message(data: ['error' => "Error al consultar el servicio: $error_msg"], status: 502);
+            }
             curl_close($curl);
-            
-            if (strlen($doc) == 8 && $response->EstadoErrorConsulta) {
+
+            $response = json_decode($responseRaw);
+            if (json_last_error() !== JSON_ERROR_NONE) {
+                return $this->message(data: ['error' => 'Respuesta JSON inválida del servicio externo'], status: 500);
+            }
+
+            if (!empty($response) && strlen($doc) == 8 && !empty($response->EstadoErrorConsulta) && isset($response->RazonSocialCliente)) {
                 $rsCliente = explode(" ", $response->RazonSocialCliente);
                 $apellidos = array_splice($rsCliente, -2);
 
                 $response->Nombres = implode(" ", $rsCliente);
-                $response->ApePaterno = $apellidos[0];
-                $response->ApeMaterno = $apellidos[1];
+                $response->ApePaterno = $apellidos[0] ?? '';
+                $response->ApeMaterno = $apellidos[1] ?? '';
+                $EstadoErrorConsulta = $response->EstadoErrorConsulta;
+            } else {
+                $EstadoErrorConsulta = false;
             }
-            return $this->message(status: $response->EstadoErrorConsulta ? 200 : 404, data: ['data' => $response]);
+
+            return $this->message(
+                status: $EstadoErrorConsulta ? 200 : 400,
+                data: ['message' => $EstadoErrorConsulta ? 'Consulta exitosa' : 'Documento consultado invalido', 'data' => $response]
+            );
         } catch (Exception $e) {
-            return $this->message(data: ['error' => $e->getMessage()], status: $e->getCode());
+            return $this->message(data: [
+                'error' => $e->getMessage(),
+                'status' => $e->getCode() ?: 500
+            ], status: 500);
         }
     }
 

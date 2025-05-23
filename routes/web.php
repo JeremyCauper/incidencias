@@ -4,7 +4,7 @@ use App\Helpers\TipoIncidencia;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LoginEmpresaController;
 use App\Http\Controllers\Cliente\Incidencias\CIncidenciasController;
-use App\Http\Controllers\Reporte\RIncidenciasController;
+use App\Http\Controllers\Reporte\Rci\ReporteIncidenciasController;
 use App\Http\Controllers\Soporte\Buzon\BAsignadasController;
 use App\Http\Controllers\Soporte\Buzon\BResueltasController;
 use App\Http\Controllers\Soporte\Buzon\Resueltas\IncidenciaController as RIncidenciaController;
@@ -56,7 +56,7 @@ Route::get('/validarTurno/{id}', [LoginController::class, 'validarTurno']);
 Route::get('/soporte/incidencias/registradas', [RegistradasController::class, 'view'])->middleware('auth');
 Route::get('/soporte/incidencias/registradas/index', [RegistradasController::class, 'index']);
 Route::get('/soporte/incidencias/registradas/detail/{cod}', [RegistradasController::class, 'detail']);
-Route::get('/soporte/incidencias/registradas/{id}', [RegistradasController::class, 'show']);
+Route::get('/soporte/incidencias/registradas/{cod}', [RegistradasController::class, 'show']);
 Route::post('/soporte/incidencias/registradas/registrar', [RegistradasController::class, 'create']);
 Route::post('/soporte/incidencias/registradas/actualizar', [RegistradasController::class, 'update']);
 Route::post('/soporte/incidencias/registradas/assignPer', [RegistradasController::class, 'assignPer']);
@@ -66,7 +66,6 @@ Route::get('/soporte/incidencias/registradas/searchCliente/{dni}', [RegistradasC
 
 Route::get('/soporte/incidencias/resueltas', [ResueltasController::class, 'view'])->middleware('auth');
 Route::get('/soporte/incidencias/resueltas/index', [ResueltasController::class, 'index']);
-Route::get('/soporte/incidencias/resueltas/detail/{cod}', [ResueltasController::class, 'detail']);
 Route::get('/soporte/incidencias/resueltas/showSignature/{cod}', [ResueltasController::class, 'showSignature']);
 
 Route::post('/soporte/orden/create', [OrdenController::class, 'create']);
@@ -196,8 +195,8 @@ Route::post('/soporte/asignacion-turno/actualizar', [TurnoController::class, 'up
 Route::post('/soporte/asignacion-turno/eliminar', [TurnoController::class, 'destroy']);
 
 
-Route::get('/soporte/reportes/reporte-incidencias', [RIncidenciasController::class, 'view'])->middleware('auth');
-Route::get('/soporte/reportes/reporte-incidencias/index', [RIncidenciasController::class, 'index']);
+Route::get('/soporte/reportes/reporte-incidencias', [ReporteIncidenciasController::class, 'view'])->middleware('auth');
+Route::get('/soporte/reportes/reporte-incidencias/index', [ReporteIncidenciasController::class, 'index']);
 
 
 Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login.empresa')->middleware('guest:client');
