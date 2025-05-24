@@ -300,7 +300,7 @@ class OrdenController extends Controller
                 $datos['contacto'] = "{$contactoEmpresa->nro_doc} {$contactoEmpresa->nombres}";
                 $datos['correo'] = $contactoEmpresa->correo ?: '';
                 if ($incidencia->id_telefono) {
-                    $contactoTelefono = DB::table('contactos_empresas')->where('id', $incidencia->id_telefono)->first();
+                    $contactoTelefono = DB::table('contactos_telefono_empresas')->where('id', $incidencia->id_telefono)->first();
                     $datos['telefono'] = $contactoTelefono->telefono ?: '';
                 }
             }
@@ -386,7 +386,7 @@ class OrdenController extends Controller
             return $datos;
 
         } catch (Throwable $th) {
-            throw new Exception($th->getMessage(), $th->getCode());
+            throw new Exception($th->getCode() . ': ' . $th->getMessage(), 500);
         }
     }
 
