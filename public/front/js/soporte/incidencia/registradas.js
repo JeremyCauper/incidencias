@@ -134,12 +134,9 @@ $(document).ready(function () {
     $('#nro_doc').blur(async function () {
         const $this = $(this);
         const valorActual = $this.val();
-        $('[for="nro_doc"]')
-            .removeClass('d-flex justify-content-between mt-1')
-            .find('span[data-con="consulta"]').remove();
 
         if (valorActual == valorAnterior) return false;
-
+        cancelarConsultarDoc();
         valorAnterior = valorActual;
 
         // Si está vacío, reseteamos todo
@@ -158,7 +155,7 @@ $(document).ready(function () {
             return false;
         }
 
-        const contacto = obj_eContactos.find(c => c.nro_doc === valorActual);
+        const contacto = obj_eContactos.find(c => c.nro_doc == valorActual);
 
         if (contacto) {
             $('#cod_contact').val(contacto.id_contact);
@@ -193,12 +190,10 @@ $(document).ready(function () {
 
     // Evento cuando cambia el valor del select nom_contac
     $('#nom_contac').on('change', async function () {
-
+        cancelarConsultarDoc();
         if (ignorarCambio) return setTimeout(() => { ignorarCambio = false }, 100);
-
         const nombreSeleccionado = $(this).val();
 
-        // Si se borra el valor, reseteamos todo
         if (!nombreSeleccionado) {
             $('#cod_contact, #consultado_api, #car_contac, #cor_contac')
                 .val('')
@@ -216,8 +211,7 @@ $(document).ready(function () {
 
             return false;
         }
-        // Buscar el contacto y rellenar los campos
-        const contacto = obj_eContactos.find(c => c.nombres === nombreSeleccionado);
+        const contacto = obj_eContactos.find(c => c.nombres == nombreSeleccionado);
 
         if (contacto) {
             $('#cod_contact').val(contacto.id_contact);
@@ -247,7 +241,6 @@ $(document).ready(function () {
                     .find('span[data-con="consulta"]').remove();
             }
         }
-        // Validación final
         validContac(this);
     });
 
