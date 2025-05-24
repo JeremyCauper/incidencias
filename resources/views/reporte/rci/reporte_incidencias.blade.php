@@ -11,7 +11,7 @@
     <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
 
     <!-- <script src="{{secure_asset('front/vendor/chartjs/chart.js')}}"></script>
-                                                                                                                                                                                                                                                                                                                                <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
+                                                                                                                                                                                                                                                                                                                                                                                    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script> -->
     <script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
 
@@ -64,6 +64,13 @@
             cursor: pointer;
             background-color: #6691d6;
             transform: scale(1.3);
+        }
+
+        #chart-estado,
+        #chart-personal {
+            position: relative;
+            height: 25vh;
+            overflow: hidden;
         }
     </style>
 
@@ -133,11 +140,46 @@
         </div>
     </div>
 
+    <div class="col-12 mb-4">
+        <div class="row panel-view">
+            <div class="col-xl-6 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-12">
+                            <div id="chart-estado"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="col-12">
+                            <div id="chart-personal"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chart-problemas"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-6 grid-margin">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chart-niveles"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <!-- <div class="card-title text-primary mb-3">
-                                                                                        </div> -->
                 <div class="row justify-content-center">
                     <div class="col-xl-12">
                         <div id="chart-container"></div>
@@ -161,7 +203,7 @@
 @section('scripts')
     <script src="{{secure_asset('front/js/reporte/incidencias.js')}}?v={{ time() }}"></script>
     <script>
-        var dom = document.getElementById('chart-container');
+        /*var dom = document.getElementById('chart-container');
         var myChart = echarts.init(dom, 'null', {
             renderer: 'canvas',
             useDirtyRect: false
@@ -630,6 +672,101 @@
             link.href = imgData;
             link.download = 'Aanálisis de Incidencias.png';
             link.click();
+        }*/
+
+        const getTitle = (text) => {
+            return {
+                text: text,
+                left: 'center',
+                textStyle: {
+                    color: '#999',
+                    fontWeight: 'normal',
+                    fontSize: 14,
+                    fontWeight: 'bold'
+                }
+            }
         }
+
+        const getEmphasis = (serie) => {
+            return serie == 'pie' ? {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            } : {}
+        }
+
+        const getConfigPie = (name, data) => {
+            return {
+                title: getTitle(name),
+                tooltip: {
+                    trigger: 'item'
+                },
+                series: [
+                    {
+                        name: 'ESTADO INCIDENCIAS',
+                        type: 'pie',
+                        radius: ['40%', '70%'],
+                        top: '15%',
+                        avoidLabelOverlap: false,
+                        emphasis: getEmphasis('pie'),
+                        data: data
+                    }
+                ]
+            }
+        }
+
+
+        var myChart_estado = echarts.init($('#chart-estado').get(0), null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+
+        var option_estado = getConfigPie('ESTADO DE INCIDENCIAS', [
+            { value: 80, name: 'Sin Asignar', itemStyle: { color: 'rgb(228, 161, 27)' } },
+            { value: 35, name: 'Asignada', itemStyle: { color: 'rgb(84, 180, 211)' } },
+            { value: 15, name: 'En Proceso', itemStyle: { color: 'rgb(59, 113, 202)' } },
+            { value: 40, name: 'Faltan Datos', itemStyle: { color: 'rgb(220, 76, 100)' } },
+            { value: 284, name: 'Finalizado', itemStyle: { color: 'rgb(20, 164, 77)' } },
+            { value: 100, name: 'Cierre Sistemas', itemStyle: { color: 'rgb(159, 166, 178)' } }
+        ]);
+
+        if (option_estado && typeof option_estado === 'object') {
+            myChart_estado.setOption(option_estado);
+        }
+
+
+        var myChart_peronal = echarts.init($('#chart-personal').get(0), null, {
+            renderer: 'canvas',
+            useDirtyRect: false
+        });
+
+        var option_peronal = getConfigPie('ACTIVIDADES DEL PERSONAL', [
+            { name: 'RENZO VIGO', count: { incidencias: 12, visitas: 120 } },
+            { name: 'Soporte01 Tecnico', count: { incidencias: 51, visitas: 71 } },
+            { name: 'Soporte02 Tecnico', count: { incidencias: 24, visitas: 88 } },
+            { name: 'OMAR SAENZ', count: { incidencias: 41, visitas: 40 } },
+            { name: 'ALVARO HUERTA', count: { incidencias: 54, visitas: 65 } },
+            { name: 'JHERSON VILCAPOMA', count: { incidencias: 21, visitas: 74 } },
+            { name: 'GIANFRANCO ESTEBAN', count: { incidencias: 31, visitas: 58 } },
+            { name: 'KHESNIL CANCHARI', count: { incidencias: 12, visitas: 34 } },
+            { name: 'DAYSI MENDOZA', count: { incidencias: 75, visitas: 45 } },
+            { name: 'SAMUEL VELARDE', count: { incidencias: 41, visitas: 53 } },
+            { name: 'RODRIGO ALVAREZ', count: { incidencias: 72, visitas: 67 } },
+            { name: 'OWEN TRUJILLO', count: { incidencias: 100, visitas: 83 } },
+            { name: 'SEBASTIAN INCIO', count: { incidencias: 41, visitas: 92 } },
+            { name: 'EDUARDO ESCOBAR', count: { incidencias: 27, visitas: 61 } },
+        ]);
+
+        if (option_peronal && typeof option_peronal === 'object') {
+            myChart_peronal.setOption(option_peronal);
+        }
+
+
+        window.addEventListener('resize', () => {
+            myChart_estado.resize();
+            myChart_peronal.resize();
+        });
     </script>
 @endsection

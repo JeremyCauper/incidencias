@@ -324,7 +324,7 @@ class RegistradasController extends Controller
             if ($contactos_empresas) {
                 $contactos_empresas->telefonos = DB::table('contactos_telefono_empresas')->select('id', 'telefono')->where('id_contact', $incidencia->id_contacto)->get();
             }
-            $incidencia->contacto = $contactos_empresas ?: [];
+            $incidencia->contacto = $contactos_empresas ?: null;
 
             $asignados = DB::table('tb_inc_asignadas')->where('cod_incidencia', $cod)->pluck('id_usuario')->toArray();
             $incidencia->personal_asig = DB::table('tb_personal')

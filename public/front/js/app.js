@@ -231,17 +231,42 @@ function date(format) {
     return format.replace(/[YmdHisjwnGaA]/g, (match) => map[match]);
 }
 
+let xhrConsultaDni = null;
 async function consultarDoc(dni) {
+    if (xhrConsultaDni) {
+        xhrConsultaDni.abort();
+    }
+
     try {
-        const response = await $.ajax({
+        xhrConsultaDni = $.ajax({
             url: `${__url}/api/ConsultaDoc/Consulta?doc=${dni}`,
             method: "GET",
             dataType: "json",
             contentType: 'application/json',
         });
-        return response; // Retorna la respuesta obtenida
+
+        const response = await xhrConsultaDni;
+        return response;
+
     } catch (error) {
-        return error.responseJSON;
+        if (error.statusText === "abort") {
+            console.log("Petición cancelada");
+            return { status: 0, message: "Petición cancelada" };
+        }
+        return error.responseJSON || { status: 500, message: "Error desconocido" };
+    } finally {
+        xhrConsultaDni = null;
+    }
+}
+
+async function cancelarConsultarDoc() {
+    consulta = $('span[data-con="consulta"]');
+    if (consulta.length) {
+        consulta.parent().addClass('d-flex justify-content-between mt-1');
+        consulta.remove();
+    }
+    if (xhrConsultaDni) {
+        xhrConsultaDni.abort();
     }
 }
 
