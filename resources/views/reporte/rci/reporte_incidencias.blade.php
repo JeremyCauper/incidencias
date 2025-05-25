@@ -11,7 +11,7 @@
     <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
 
     <!-- <script src="{{secure_asset('front/vendor/chartjs/chart.js')}}"></script>
-                                                                                                                                                                                                                                                                                                                                                                                    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
     <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script> -->
     <script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
 
@@ -25,11 +25,11 @@
         let usuarios = <?=json_encode($data['usuarios'])?>;
     </script>
     <style>
-        #chart-container {
-            position: relative;
-            height: 100vh;
-            overflow: hidden;
-        }
+        /* #chart-container {
+                                                                        position: relative;
+                                                                        height: 100vh;
+                                                                        overflow: hidden;
+                                                                    } */
 
         .capturar-btn-wrapper {
             cursor: pointer;
@@ -67,9 +67,11 @@
         }
 
         #chart-estado,
-        #chart-personal {
+        #chart-personal,
+        #chart-problemas,
+        #chart-niveles {
             position: relative;
-            height: 25vh;
+            height: 40vh;
             overflow: hidden;
         }
     </style>
@@ -163,14 +165,18 @@
             <div class="col-xl-6 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <div id="chart-problemas"></div>
+                        <div class="col-12">
+                            <div id="chart-problemas"></div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col-xl-6 grid-margin">
                 <div class="card">
                     <div class="card-body">
-                        <div id="chart-niveles"></div>
+                        <div class="col-12">
+                            <div id="chart-niveles"></div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -250,8 +256,6 @@
             { value: 357, name: 'PS-0001' }, // , itemStyle: { color: 'rgb(64, 64, 64)' }
             { value: 456, name: 'PS-0002' } // , itemStyle: { color: 'rgb(90, 90, 90)' }
         ];
-        const total_nivel = data_problema.reduce((sum, item) => sum + item.value, 0);
-        data_problema.sort((a, b) => a.value - b.value);
 
         const data_nivel = [
             { value: 80, name: 'N1 - REMOTO', itemStyle: { color: 'rgb(159, 166, 178)' } },
@@ -674,99 +678,345 @@
             link.click();
         }*/
 
-        const getTitle = (text) => {
-            return {
-                text: text,
-                left: 'center',
-                textStyle: {
-                    color: '#999',
-                    fontWeight: 'normal',
-                    fontSize: 14,
-                    fontWeight: 'bold'
-                }
-            }
-        }
+        // Obtener el valor computado de la variable CSS
 
-        const getEmphasis = (serie) => {
-            return serie == 'pie' ? {
-                itemStyle: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            } : {}
-        }
-
-        const getConfigPie = (name, data) => {
+        const getConfigSeriePie = (text, name, data, myChart) => {
+            const varColor = getComputedStyle(document.documentElement).getPropertyValue('--mdb-surface-color').trim();
             return {
-                title: getTitle(name),
+                title: {
+                    text: text,
+                    left: 'center',
+                    textStyle: {
+                        color: '#999',
+                        fontWeight: 'normal',
+                        fontSize: 14,
+                        fontWeight: 'bold'
+                    }
+                },
                 tooltip: {
                     trigger: 'item'
                 },
+                legend: {
+                    top: '6%',
+                    textStyle: {
+                        color: varColor,
+                        fontSize: 11,
+                        fontFamily: 'Arial'
+                    },
+                    itemWidth: 14,
+                    itemHeight: 14
+                },
                 series: [
                     {
-                        name: 'ESTADO INCIDENCIAS',
+                        name: name,
                         type: 'pie',
-                        radius: ['40%', '70%'],
                         top: '15%',
+                        left: 'center',
+                        width: myChart.getWidth() < 700 ? '100%' : '60%',
+                        radius: myChart.getWidth() < 700 ? ['25%', '45%'] : ['35%', '60%'],
                         avoidLabelOverlap: false,
-                        emphasis: getEmphasis('pie'),
+                        itemStyle: {
+                            borderRadius: 2,
+                        },
+                        label: {
+                            alignTo: 'edge',
+                            formatter: '{name|{b}}\n{time|{c} ({d}%)}',
+                            minMargin: 5,
+                            edgeDistance: 10,
+                            lineHeight: 15,
+                            color: varColor,
+                            rich: {
+                                time: {
+                                    fontSize: 10,
+                                    color: '#999'
+                                }
+                            }
+                        },
+                        labelLine: {
+                            length: 40,
+                            length2: 15,
+                            maxSurfaceAngle: 80
+                        },
+                        labelLayout: function (params) {
+                            const isLeft = params.labelRect.x < myChart.getWidth() / 2;
+                            const points = params.labelLinePoints;
+                            // Update the end point.
+                            points[2][0] = isLeft
+                                ? params.labelRect.x
+                                : params.labelRect.x + params.labelRect.width;
+                            return {
+                                labelLinePoints: points
+                            };
+                        },
+                        emphasis: {
+                            itemStyle: {
+                                shadowBlur: 10,
+                                shadowOffsetX: 0,
+                                shadowColor: 'rgba(0, 0, 0, 0.5)'
+                            }
+                        },
                         data: data
                     }
                 ]
             }
         }
 
+        const getConfigSerieBar = (text, data, config) => {
+            const varColor = getComputedStyle(document.documentElement).getPropertyValue('--mdb-surface-color').trim();
+            const theme = $('html').attr('data-mdb-theme') == 'dark' ? false : true;
+            const keys = Object.keys(data[0].series);
 
-        var myChart_estado = echarts.init($('#chart-estado').get(0), null, {
-            renderer: 'canvas',
-            useDirtyRect: false
-        });
+            const getSeries = () => {
+                const totals = {};
+                keys.forEach(key => {
+                    totals[key] = data.reduce((sum, item) => sum + item.series[key], 0);
+                });
 
-        var option_estado = getConfigPie('ESTADO DE INCIDENCIAS', [
+                const series = keys.map((key) => {
+                    return {
+                        name: key.toUpperCase(), // Nombre en mayúsculas
+                        type: 'bar',
+                        barGap: 0,
+                        label: {
+                            show: true,
+                            position: config.xAxis == 'value' ? 'right' : 'top',
+                            distance: 2,
+                            ...(config.xAxis == 'value' ? {} : {
+                                align: 'left',
+                                verticalAlign: 'middle',
+                                rotate: 90,
+                            }),
+                            formatter: function (params) {
+                                const total = totals[key]; // Total de la serie actual
+                                const percent = ((params.value / total) * 100).toFixed(1);
+                                return `${params.value} (${percent}%)`;
+                            },
+                            fontSize: 10,
+                            color: varColor,
+                            // fontWeight: 'bold'
+                        },
+                        emphasis: {
+                            focus: 'series'
+                        },
+                        data: data.map(item => item.series[key]) // Valores para la serie actual
+                    };
+                });
+
+                return series;
+            };
+
+            const config_axis = (axis) => {
+                return axis == 'value' ? {
+                    axisLine: {
+                        lineStyle: {
+                            color: theme ? '#ccc' : '#757575' // Color de la línea del eje Y
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: theme ? '#ccc' : '#757575', // Cambia al color que prefieras
+                            width: 1,
+                            type: 'dotted' // Opcional: puede ser 'solid', 'dashed', o 'dotted'
+                        }
+                    }
+                } : {
+                    axisTick: { show: false },
+                    data: data.map(item => item.name),
+                    axisLabel: {
+                        interval: 0,
+                        rotate: 30,
+                        textStyle: {
+                            color: varColor,
+                            fontSize: 10.5,
+                            fontWeight: 'bold'
+                        },
+                    },
+                }
+            }
+            return {
+                title: {
+                    text: text,
+                    left: 'center',
+                    textStyle: {
+                        color: '#999',
+                        fontWeight: 'normal',
+                        fontSize: 14,
+                        fontWeight: 'bold'
+                    }
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    }
+                },
+                legend: {
+                    top: '6%',
+                    data: keys.map(k => { return k.toUpperCase() }),
+                    textStyle: {
+                        color: varColor,
+                        fontSize: 11,
+                        fontFamily: 'Arial'
+                    },
+                    itemWidth: 14,
+                    itemHeight: 14
+                },
+                // toolbox: {
+                //     show: true,
+                //     orient: 'vertical',
+                //     left: 'right',
+                //     top: 'center',
+                //     feature: {
+                //         mark: { show: true },
+                //         dataView: { show: true, readOnly: false },
+                //         magicType: { show: true, type: ['line', 'bar', 'stack'] },
+                //         restore: { show: true },
+                //         saveAsImage: { show: true }
+                //     }
+                // },
+                grid: [
+                    {
+                        top: config.xAxis == 'value' ? '20%' : '35%',
+                        bottom: '10%',
+                        left: '5%',
+                        right: config.xAxis == 'value' ? '18%' : '5%',
+                        with: '100%',
+                        containLabel: true
+                    },
+                ],
+                xAxis: [
+                    {
+                        type: config.xAxis,
+                        ...config_axis(config.xAxis)
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: config.yAxis,
+                        ...config_axis(config.yAxis)
+                    }
+                ],
+                series: getSeries()
+            }
+        }
+
+        // DATOS DE SERIES
+        let data_estado = [
             { value: 80, name: 'Sin Asignar', itemStyle: { color: 'rgb(228, 161, 27)' } },
             { value: 35, name: 'Asignada', itemStyle: { color: 'rgb(84, 180, 211)' } },
             { value: 15, name: 'En Proceso', itemStyle: { color: 'rgb(59, 113, 202)' } },
             { value: 40, name: 'Faltan Datos', itemStyle: { color: 'rgb(220, 76, 100)' } },
             { value: 284, name: 'Finalizado', itemStyle: { color: 'rgb(20, 164, 77)' } },
             { value: 100, name: 'Cierre Sistemas', itemStyle: { color: 'rgb(159, 166, 178)' } }
-        ]);
+        ];
 
-        if (option_estado && typeof option_estado === 'object') {
-            myChart_estado.setOption(option_estado);
-        }
+        let data_personal = [
+            { name: 'RENZO VIGO', series: { incidencias: 12, visitas: 120 } },
+            { name: 'Soporte01 Tecnico', series: { incidencias: 51, visitas: 71 } },
+            { name: 'Soporte02 Tecnico', series: { incidencias: 24, visitas: 88 } },
+            { name: 'OMAR SAENZ', series: { incidencias: 41, visitas: 40 } },
+            { name: 'ALVARO HUERTA', series: { incidencias: 54, visitas: 65 } },
+            { name: 'JHERSON VILCAPOMA', series: { incidencias: 21, visitas: 74 } },
+            { name: 'GIANFRANCO ESTEBAN', series: { incidencias: 31, visitas: 58 } },
+            { name: 'KHESNIL CANCHARI', series: { incidencias: 12, visitas: 34 } },
+            { name: 'DAYSI MENDOZA', series: { incidencias: 75, visitas: 45 } },
+            { name: 'SAMUEL VELARDE', series: { incidencias: 41, visitas: 53 } },
+            { name: 'RODRIGO ALVAREZ', series: { incidencias: 72, visitas: 67 } },
+            { name: 'OWEN TRUJILLO', series: { incidencias: 100, visitas: 83 } },
+            { name: 'SEBASTIAN INCIO', series: { incidencias: 41, visitas: 92 } },
+            { name: 'EDUARDO ESCOBAR', series: { incidencias: 27, visitas: 61 } },
+        ];
 
+        const data_problema = [
+            { name: 'PI-0001', series: { problemas: 423 } },
+            { name: 'PI-0002', series: { problemas: 845 } },
+            { name: 'PI-0003', series: { problemas: 784 } },
+            { name: 'PI-0004', series: { problemas: 659 } },
+            { name: 'PI-0005', series: { problemas: 243 } },
+            { name: 'PI-0006', series: { problemas: 219 } },
+            { name: 'PI-0007', series: { problemas: 321 } },
+            { name: 'PI-0008', series: { problemas: 156 } },
+            { name: 'PS-0001', series: { problemas: 357 } },
+            { name: 'PS-0002', series: { problemas: 456 } }
+        ];
 
-        var myChart_peronal = echarts.init($('#chart-personal').get(0), null, {
+        const data_nivel = [
+            { value: 80, name: 'N1 - REMOTO', itemStyle: { color: 'rgb(159, 166, 178)' } },
+            { value: 35, name: 'N2 - PRESENCIAL', itemStyle: { color: 'rgb(84, 180, 211)' } },
+            { value: 15, name: 'N3 - PROVEEDOR', itemStyle: { color: 'rgb(51, 45, 45)' } }
+        ];
+
+        // CONFIGURACION CONTEINER SERIES
+        let config_init = {
             renderer: 'canvas',
             useDirtyRect: false
-        });
+        }
+        var myChart_estado = echarts.init($('#chart-estado').get(0), null, config_init);
+        var myChart_peronal = echarts.init($('#chart-personal').get(0), null, config_init);
+        var myChart_problemas = echarts.init($('#chart-problemas').get(0), null, config_init);
+        var myChart_niveles = echarts.init($('#chart-niveles').get(0), null, config_init);
 
-        var option_peronal = getConfigPie('ACTIVIDADES DEL PERSONAL', [
-            { name: 'RENZO VIGO', count: { incidencias: 12, visitas: 120 } },
-            { name: 'Soporte01 Tecnico', count: { incidencias: 51, visitas: 71 } },
-            { name: 'Soporte02 Tecnico', count: { incidencias: 24, visitas: 88 } },
-            { name: 'OMAR SAENZ', count: { incidencias: 41, visitas: 40 } },
-            { name: 'ALVARO HUERTA', count: { incidencias: 54, visitas: 65 } },
-            { name: 'JHERSON VILCAPOMA', count: { incidencias: 21, visitas: 74 } },
-            { name: 'GIANFRANCO ESTEBAN', count: { incidencias: 31, visitas: 58 } },
-            { name: 'KHESNIL CANCHARI', count: { incidencias: 12, visitas: 34 } },
-            { name: 'DAYSI MENDOZA', count: { incidencias: 75, visitas: 45 } },
-            { name: 'SAMUEL VELARDE', count: { incidencias: 41, visitas: 53 } },
-            { name: 'RODRIGO ALVAREZ', count: { incidencias: 72, visitas: 67 } },
-            { name: 'OWEN TRUJILLO', count: { incidencias: 100, visitas: 83 } },
-            { name: 'SEBASTIAN INCIO', count: { incidencias: 41, visitas: 92 } },
-            { name: 'EDUARDO ESCOBAR', count: { incidencias: 27, visitas: 61 } },
-        ]);
-
-        if (option_peronal && typeof option_peronal === 'object') {
-            myChart_peronal.setOption(option_peronal);
+        // CONFIGURACION OPTIONS SERIES
+        var option_estado = () => {
+            return getConfigSeriePie('ESTADO DE INCIDENCIAS', 'ESTADO', data_estado, myChart_estado);
+        }
+        var option_peronal = () => {
+            return getConfigSerieBar('ACTIVIDADES DEL PERSONAL', data_personal, { xAxis: 'category', yAxis: 'value' });
+        }
+        var option_problema = () => {
+            return getConfigSerieBar('PROBLEMAS DE INCIDENCIAS', data_problema, { xAxis: 'value', yAxis: 'category' });
+        }
+        var option_nivel = () => {
+            return getConfigSeriePie('NIVELES DE INCIDENCIAS', 'NIVEL', data_nivel, myChart_niveles);
         }
 
+        // VERIFICAR SI OPTIONS ES OBJETO
+        if (option_estado() && typeof option_estado() === 'object') {
+            myChart_estado.setOption(option_estado());
+        }
+        if (option_peronal() && typeof option_peronal() === 'object') {
+            myChart_peronal.setOption(option_peronal());
+        }
+        if (option_problema() && typeof option_problema() === 'object') {
+            myChart_problemas.setOption(option_problema());
+        }
+        if (option_nivel() && typeof option_nivel() === 'object') {
+            myChart_niveles.setOption(option_nivel());
+        }
 
-        window.addEventListener('resize', () => {
+        $('.check-trail').on('click', function () {
+            setTimeout(() => {
+                myChart_estado.setOption(option_estado(), true);
+                myChart_peronal.setOption(option_peronal(), true);
+                myChart_problemas.setOption(option_problema(), true);
+                myChart_niveles.setOption(option_nivel(), true);
+            }, 10);
+        })
+
+        function manejarResizePie(myChart, option) {
+            const ancho = myChart.getWidth();
+            if (manejarResizePie.estadoAnterior === undefined) {
+                manejarResizePie.estadoAnterior = null;
+                return;
+            }
+            
+            if (ancho < 700 && manejarResizePie.estadoAnterior !== true) {
+                myChart.setOption(option, true);
+                manejarResizePie.estadoAnterior = true;
+            } else if (ancho >= 700 && manejarResizePie.estadoAnterior !== false) {
+                myChart.setOption(option, true);
+                manejarResizePie.estadoAnterior = false;
+            }
+        }
+
+        fObservador('.content-wrapper', () => {
             myChart_estado.resize();
             myChart_peronal.resize();
+            myChart_problemas.resize();
+            myChart_niveles.resize();
+
+            manejarResizePie(myChart_estado, option_estado());
+            manejarResizePie(myChart_niveles, option_nivel());
         });
     </script>
 @endsection

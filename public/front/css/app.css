@@ -669,7 +669,7 @@ body {
 
 :root {
     --bs-panel-view-padding: 1.5rem 1.5rem;
-    --bs-panel-view-margin: .375rem;
+    --bs-panel-view-margin: .5rem;
     --bs-panel-view-fonts-h6i: .9rem;
     --bs-panel-view-fonts-h4: 1.9rem;
 }
