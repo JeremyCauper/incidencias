@@ -43,7 +43,7 @@ class MaterialesController extends Controller
                 ];
             });
 
-            return $materiales_usuados;
+            return $this->message(data: ['data' => $materiales_usuados ]);
         } catch (Exception $e) {
             return $this->message(message: "Ocurrió un error interno en el servidor.", data: ['error' => $e->getCode(), 'linea' => $e->getLine()], status: 500);
         }
