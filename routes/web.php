@@ -4,6 +4,7 @@ use App\Helpers\TipoIncidencia;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LoginEmpresaController;
 use App\Http\Controllers\Cliente\Incidencias\CIncidenciasController;
+use App\Http\Controllers\Reporte\Cliente\CReporteIncidenciasController;
 use App\Http\Controllers\Reporte\Rci\ReporteIncidenciasController;
 use App\Http\Controllers\Soporte\Buzon\BAsignadasController;
 use App\Http\Controllers\Soporte\Buzon\BResueltasController;
@@ -199,12 +200,17 @@ Route::post('/soporte/asignacion-turno/eliminar', [TurnoController::class, 'dest
 Route::get('/soporte/reportes/reporte-incidencias', [ReporteIncidenciasController::class, 'view'])->middleware('auth');
 Route::get('/soporte/reportes/reporte-incidencias/index', [ReporteIncidenciasController::class, 'index']);
 
+
+
 Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login.empresa')->middleware('guest:client');
 Route::post('/empresa/iniciar', [LoginEmpresaController::class, 'loginClient']);
 Route::get('/empresa/logout', [LoginEmpresaController::class, 'logout'])->name('logout.empresa');
 
 Route::get('/empresa/incidencias', [CIncidenciasController::class, 'view'])->middleware('auth:client');
 Route::get('/empresa/incidencias/index', [CIncidenciasController::class, 'index']);
+
+Route::get('/empresa/reportes/reporte-incidencias', [CReporteIncidenciasController::class, 'view'])->middleware('auth:client');
+Route::get('/empresa/reportes/reporte-incidencias/index', [CReporteIncidenciasController::class, 'index']);
 
 // Apis
 Route::get('/listado/materiales-usados', [MaterialesController::class, 'MaterialesUsados']);
