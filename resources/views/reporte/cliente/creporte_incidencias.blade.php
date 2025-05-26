@@ -1,4 +1,4 @@
-@extends('layout.app')
+@extends('layout.appEmpresa')
 @section('title', 'INC RESUELTAS')
 
 @section('cabecera')
@@ -6,27 +6,17 @@
     <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ time() }}">
-    <script src="{{secure_asset('front/vendor/multiselect/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/multiselect/bootstrap_multiselect.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
 
     <!-- <script src=""></script> -->
     <script src="{{secure_asset('front/vendor/echartjs/echarts.min.js')}}"></script>
     <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}"></script>
 
-
     <script>
-        let empresas = <?php echo json_encode($data['company']); ?>;
+        let empresa = <?php echo json_encode(session('empresa')); ?>;
         let sucursales = <?=json_encode($data['scompany'])?>;
-        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
-        let tipo_incidencia = <?=json_encode($data['tIncidencia'])?>;
-        let obj_problem = <?=json_encode($data['problema'])?>;
-        let obj_subproblem = <?=json_encode($data['sproblema'])?>;
-        let usuarios = <?=json_encode($data['usuarios'])?>;
     </script>
     <style>
         #chart-estado,
-        #chart-personal,
         #chart-problemas,
         #chart-niveles {
             position: relative;
@@ -34,7 +24,6 @@
             overflow: hidden;
         }
     </style>
-
 @endsection
 @section('content')
 
@@ -45,16 +34,7 @@
                 <div class="row">
                     <div class="col-lg-6 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
-                        <select id="empresa" name="empresa" class="select-clear">
-                            <option value=""></option>
-                            @foreach ($data['company'] as $key => $val)
-                                @if ($val->status)
-                                    <option value="{{$val->ruc}}">
-                                        {{$val->ruc . ' - ' . $val->razon_social}}
-                                    </option>
-                                @endif
-                            @endforeach
-                        </select>
+                        <input type="text" class="form-control" value="{{ session('config_layout')->nombre_perfil }}" readonly role="button">
                     </div>
                     <div class="col-lg-4 col-sm-8 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
@@ -65,26 +45,6 @@
                             @endforeach
                         </select>
                     </div>
-                    <!-- <div class="col-md-4 col-6 my-1">
-                                                        <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
-                                                        <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
-                                                            @foreach ($data['tIncidencia'] as $v)
-                                                                <option value="{{ $v->id }}" selected>
-                                                                    {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-4 col-6 my-1">
-                                                        <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
-                                                        <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
-                                                            @foreach ($data['tSoporte'] as $v)
-                                                                <option value="{{ $v->id }}" selected>
-                                                                    {{ $v->descripcion }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div> -->
                     <div class="col-lg-2 col-sm-4 my-1">
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
@@ -108,7 +68,7 @@
             </div>
             <div class="card-body pt-0">
                 <div class="col-12 mb-4">
-                    <div class="row panel-view">
+                    <div class="row justify-content-center panel-view">
                         <div class="col-xl-6 grid-margin">
                             <div class="card shadow-2-strong grid-estadisticas grid-loading">
                                 <div class="title-estadisticas text-secondary shadow-2-strong">ESTADO DE INCIDENCIAS</div>
@@ -121,32 +81,21 @@
                         </div>
                         <div class="col-xl-6 grid-margin">
                             <div class="card shadow-2-strong grid-estadisticas grid-loading">
-                                <div class="title-estadisticas text-secondary shadow-2-strong">ACTIVIDADES DEL PERSONAL
-                                </div>
+                                <div class="title-estadisticas text-secondary shadow-2-strong">NIVELES DE INCIDENCIAS</div>
                                 <div class="card-body">
                                     <div class="col-12">
-                                        <div id="chart-personal"></div>
+                                        <div id="chart-niveles"></div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="col-xl-6 grid-margin">
+                        <div class="col-xl-8 grid-margin">
                             <div class="card shadow-2-strong grid-estadisticas grid-loading">
                                 <div class="title-estadisticas text-secondary shadow-2-strong">PROBLEMAS DE INCIDENCIAS
                                 </div>
                                 <div class="card-body">
                                     <div class="col-12">
                                         <div id="chart-problemas"></div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-xl-6 grid-margin">
-                            <div class="card shadow-2-strong grid-estadisticas grid-loading">
-                                <div class="title-estadisticas text-secondary shadow-2-strong">NIVELES DE INCIDENCIAS</div>
-                                <div class="card-body">
-                                    <div class="col-12">
-                                        <div id="chart-niveles"></div>
                                     </div>
                                 </div>
                             </div>
@@ -169,5 +118,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/reporte/rci/incidencias.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/reporte/cliente/crincidencias.js')}}?v={{ time() }}"></script>
 @endsection

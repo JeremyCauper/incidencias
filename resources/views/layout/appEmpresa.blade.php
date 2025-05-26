@@ -155,6 +155,12 @@
                             <span class="menu-title">Incidencias</span>
                         </a>
                     </li>
+                    <li class="nav-item menu-item">
+                        <a class="nav-link menu-link" data-mdb-ripple-init="" href="{{ url('/empresa/reportes/reporte-incidencias') }}">
+                            <i class="fas fa-chart-column menu-icon"></i>
+                            <span class="menu-title">Reporte Incidencias</span>
+                        </a>
+                    </li>
                 </ul>
             </nav>
 
