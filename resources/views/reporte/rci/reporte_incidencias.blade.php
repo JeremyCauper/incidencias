@@ -10,10 +10,9 @@
     <script src="{{secure_asset('front/vendor/multiselect/bootstrap_multiselect.js')}}"></script>
     <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
 
-    <!-- <script src="{{secure_asset('front/vendor/chartjs/chart.js')}}"></script> -->
-    <script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+    <!-- <script src=""></script> -->
+    <script src="{{secure_asset('front/vendor/echartjs/echarts.min.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}"></script>
 
 
     <script>
@@ -26,10 +25,6 @@
         let usuarios = <?=json_encode($data['usuarios'])?>;
     </script>
     <style>
-        /* #chart-container {
-                                            width: 969px;
-                                            height: 1797px;
-                                        } */
         .capturar-btn-wrapper {
             cursor: pointer;
             position: fixed;
@@ -106,25 +101,25 @@
                         </select>
                     </div>
                     <!-- <div class="col-md-4 col-6 my-1">
-                        <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
-                        <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
-                            @foreach ($data['tIncidencia'] as $v)
-                                <option value="{{ $v->id }}" selected>
-                                    {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div>
-                    <div class="col-md-4 col-6 my-1">
-                        <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
-                        <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
-                            @foreach ($data['tSoporte'] as $v)
-                                <option value="{{ $v->id }}" selected>
-                                    {{ $v->descripcion }}
-                                </option>
-                            @endforeach
-                        </select>
-                    </div> -->
+                            <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
+                            <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
+                                @foreach ($data['tIncidencia'] as $v)
+                                    <option value="{{ $v->id }}" selected>
+                                        {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-6 my-1">
+                            <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
+                            <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
+                                @foreach ($data['tSoporte'] as $v)
+                                    <option value="{{ $v->id }}" selected>
+                                        {{ $v->descripcion }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div> -->
                     <div class="col-lg-2 col-sm-4 my-1">
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
@@ -198,16 +193,16 @@
     </div>
 
     <!-- <div class="col-12 grid-margin">
-                                                <div class="card">
-                                                    <div class="card-body">
-                                                        <div class="row justify-content-center">
-                                                            <div class="col-xl-12">
-                                                                <div id="chart-container"></div>
+                                                    <div class="card">
+                                                        <div class="card-body">
+                                                            <div class="row justify-content-center">
+                                                                <div class="col-xl-12">
+                                                                    <div id="chart-container"></div>
+                                                                </div>
                                                             </div>
                                                         </div>
                                                     </div>
-                                                </div>
-                                            </div> -->
+                                                </div> -->
 
     <div class="capturar-btn-wrapper" aria-label="Guardar Imagen de Graficos" title="Guardar Imagen de Graficos"
         onclick="capturar()">
@@ -797,6 +792,7 @@
             const title = gConfig.title ?? null;
             const data = gConfig.data ?? null;
             const config = gConfig.config ?? null;
+            const chart = gConfig.chart ?? null;
 
             const varColor = getComputedStyle(document.documentElement).getPropertyValue('--mdb-surface-color').trim();
             const theme = $('html').attr('data-mdb-theme') == 'dark' ? false : true;
@@ -827,7 +823,7 @@
                                 const percent = ((params.value / total) * 100).toFixed(1);
                                 return `${params.value} (${percent}%)`;
                             },
-                            fontSize: 10,
+                            fontSize: chart ? (chart.getWidth() < 700 ? 8.5 : 10) : 10,
                             color: varColor,
                         },
                         emphasis: {
@@ -998,7 +994,7 @@
             return getConfigSeriePie({ name: 'ESTADO', data: data_estado, chart: myChart_estado });
         }
         var option_peronal = () => {
-            return getConfigSerieBar({ data: data_personal, config: { xAxis: 'category', yAxis: 'value' } });
+            return getConfigSerieBar({ data: data_personal, config: { xAxis: 'category', yAxis: 'value' }, chart: myChart_peronal });
         }
         var option_problema = () => {
             return getConfigSerieBar({ data: data_problema, config: { xAxis: 'value', yAxis: 'category' } });
@@ -1056,8 +1052,9 @@
             myChart_problemas.resize();
             myChart_niveles.resize();
 
-            manejarResizePie(myChart_niveles, option_nivel());
             manejarResizePie(myChart_estado, option_estado());
+            manejarResizePie(myChart_peronal, option_peronal());
+            manejarResizePie(myChart_niveles, option_nivel());
         });
     </script>
     <script src="{{secure_asset('front/js/reporte/incidencias.js')}}?v={{ time() }}"></script>

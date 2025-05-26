@@ -49,19 +49,17 @@ function filtroBusqueda() {
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
 
-    var settings = {
+    $.ajax({
         method: "GET",
-        url: "http://192.168.1.140/incidencias/public/soporte/reportes/reporte-incidencias/index?=&=0&=2025-01-01&=2025-05-25",
-        data: JSON.stringify({
+        url: "http://192.168.1.140/incidencias/public/soporte/reportes/reporte-incidencias/index",
+        data: {
             ruc: empresa,
             sucursal: sucursal,
             fechaIni: fechas[0],
             fechaFin: fechas[1],
-        }),
+        },
         timeout: 0,
-    };
-
-    $.ajax(settings).done(function (response) {
+    }).done(function (response) {
         console.log(response);
     });
 }
