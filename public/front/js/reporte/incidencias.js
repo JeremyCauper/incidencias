@@ -43,3 +43,23 @@ $(document).ready(function () {
 
 //     tb_orden.ajax.url(nuevoUrl).load();
 // }
+
+function filtroBusqueda() {
+    var empresa = $('#empresa').val();
+    var sucursal = $('#sucursal').val();
+    var fechas = $('#dateRango').val().split('  al  ');
+
+    $.ajax({
+        method: "GET",
+        url: "http://192.168.1.140/incidencias/public/soporte/reportes/reporte-incidencias/index",
+        data: {
+            ruc: empresa,
+            sucursal: sucursal,
+            fechaIni: fechas[0],
+            fechaFin: fechas[1],
+        },
+        timeout: 0,
+    }).done(function (response) {
+        console.log(response);
+    });
+}

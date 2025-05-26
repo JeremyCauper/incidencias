@@ -17,6 +17,7 @@ use App\Http\Controllers\Soporte\Empresas\GruposController;
 use App\Http\Controllers\Soporte\Empresas\SucursalesController;
 use App\Http\Controllers\Soporte\Incidencias\RegistradasController;
 use App\Http\Controllers\Soporte\Incidencias\ResueltasController;
+use App\Http\Controllers\Soporte\Mantenimientos\MaterialesController;
 use App\Http\Controllers\Soporte\Mantenimientos\Menu\MenuController;
 use App\Http\Controllers\Soporte\Mantenimientos\Menu\SubMenuController;
 use App\Http\Controllers\Soporte\Mantenimientos\Problema\ProblemaController;
@@ -198,10 +199,12 @@ Route::post('/soporte/asignacion-turno/eliminar', [TurnoController::class, 'dest
 Route::get('/soporte/reportes/reporte-incidencias', [ReporteIncidenciasController::class, 'view'])->middleware('auth');
 Route::get('/soporte/reportes/reporte-incidencias/index', [ReporteIncidenciasController::class, 'index']);
 
-
 Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login.empresa')->middleware('guest:client');
 Route::post('/empresa/iniciar', [LoginEmpresaController::class, 'loginClient']);
 Route::get('/empresa/logout', [LoginEmpresaController::class, 'logout'])->name('logout.empresa');
 
 Route::get('/empresa/incidencias', [CIncidenciasController::class, 'view'])->middleware('auth:client');
 Route::get('/empresa/incidencias/index', [CIncidenciasController::class, 'index']);
+
+// Apis
+Route::get('/listado/materiales-usados', [MaterialesController::class, 'MaterialesUsados']);

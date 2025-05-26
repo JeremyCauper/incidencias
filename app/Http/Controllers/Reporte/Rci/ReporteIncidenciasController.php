@@ -49,44 +49,51 @@ class ReporteIncidenciasController extends Controller
         try {
             $ruc = $request->query('ruc');
             $sucursal = $request->query('sucursal');
-            $tIncidencia = $request->query('tIncidencia');
             $fechaIni = $request->query('fechaIni') ?: now()->format('Y-m-01');
             $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
             $data = [];
 
-            $estadoInforme = [
-                "0" => ['c' => 'warning', 't' => 'Sin Asignar'],
-                "1" => ['c' => 'info', 't' => 'Asignada'],
-                "2" => ['c' => 'primary', 't' => 'En Proceso'],
-                "3" => ['c' => 'success', 't' => 'Finalizado'],
-                "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
-                "5" => ['c' => 'danger', 't' => 'Cierre Sistema']
+            $whereInc = ['estatus' => 1];
+            if ($ruc) {
+                $whereInc['ruc_empresa'] = $ruc;
+            }
+            if (intval($sucursal)) {
+                $whereInc['id_sucursal'] = intval($sucursal);
+            }
+
+            $incidencias = DB::table('tb_incidencias')
+                ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
+                ->where($whereInc)
+                ->get();
+
+            $estados = [
+                ['name' => 'Sin Asignar', 'value' => 0, 'itemStyle' => ['color' => 'rgb(228, 161, 27)']], // 0
+                ['name' => 'Asignada', 'value' => 0, 'itemStyle' => ['color' => 'rgb(84, 180, 211)']], // 1
+                ['name' => 'En Proceso', 'value' => 0, 'itemStyle' => ['color' => 'rgb(59, 113, 202)']], // 2
+                ['name' => 'Finalizado', 'value' => 0, 'itemStyle' => ['color' => 'rgb(20, 164, 77)']], // 3
+                ['name' => 'Faltan Datos', 'value' => 0, 'itemStyle' => ['color' => 'rgb(220, 76, 100)']], // 4
+                ['name' => 'Cierre Sistema', 'value' => 0, 'itemStyle' => ['color' => 'rgb(159, 166, 178)']], // 5
             ];
 
-            $data['estados']['dhead'] = "ESTADO DE INCIDENCIAS";
-            $data['estados']['dbody'] = DB::table('tb_incidencias')->select('estado_informe', DB::raw('COUNT(estado_informe) as total'))
-                ->groupBy('estado_informe')->get()->map(function ($val) use ($estadoInforme) {
-                    return [
-                        'titulo' => $estadoInforme[$val->estado_informe]['t'],
-                        'total' => $val->total,
-                        'color' => $estadoInforme[$val->estado_informe]['c'],
-                    ];
-                });
+            // $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
 
-            $tSoporte = JsonDB::table('tipo_soporte')->select('id', 'descripcion')->keyBy('id');
-            $data['tsoporte']['dhead'] = "TIPO SOPORTES";
-            $data['tsoporte']['dbody'] = DB::table('tb_incidencias')->select('id_tipo_soporte', DB::raw('COUNT(id_tipo_soporte) as total'))
-                ->groupBy('id_tipo_soporte')->get()->map(function ($val) use ($tSoporte) {
-                    $color = [
-                        "1" => "dark",
-                        "2" => "secondary",
-                    ];
+            $incidencias->map(function ($items) use (&$estados) {
+                $estados[$items->estado_informe]['value']++;
+            });
+            $data['estados'] = $estados;
+
+            $problemas = JsonDB::table('problema')->get()->keyBy('id');
+            $data['problemas'] = $incidencias->groupBy('id_problema')
+                ->map(function ($items, $id) use($problemas) {
                     return [
-                        'titulo' => $tSoporte[$val->id_tipo_soporte]->descripcion ?? null,
-                        'total' => $val->total,
-                        'color' => $color[$val->id_tipo_soporte] ?? "warning",
+                        'name' => $problemas[$id]->codigo,
+                        'series' => [ 'problemas' => count($items) ],
                     ];
-                });
+                })
+                ->sortByDesc('total')
+                ->take(10)
+                ->values();
+
 
             return ['data' => $data];
 

@@ -866,16 +866,16 @@ progress {
     flex-wrap: wrap;
     padding: 0px;
     margin-top: calc(-1 * var(--mdb-gutter-y));
-    margin-right: calc(-0.115 * var(--mdb-gutter-x));
-    margin-left: calc(-0.115 * var(--mdb-gutter-x))
+    margin-right: calc(-0.15 * var(--mdb-gutter-x));
+    margin-left: calc(-0.15 * var(--mdb-gutter-x))
 }
 
 .row>* {
     flex-shrink: 0;
     width: 100%;
     max-width: 100%;
-    padding-right: calc(var(--mdb-gutter-x) * .125);
-    padding-left: calc(var(--mdb-gutter-x) * .125);
+    padding-right: calc(var(--mdb-gutter-x) * .175);
+    padding-left: calc(var(--mdb-gutter-x) * .175);
     margin-top: var(--mdb-gutter-y)
 }
 
