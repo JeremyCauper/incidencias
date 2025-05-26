@@ -2743,3 +2743,20 @@ tr .active-acciones {
     border-bottom: 5px solid transparent;
     border-left: 10px solid #616161;
 }
+
+.grid-estadisticas {
+    position: relative;
+    margin-top: 1.5rem;
+}
+
+.grid-estadisticas .title-estadisticas {
+    position: absolute;
+    background-color: var(--mdb-card-bg);
+    padding: .4rem .6rem;
+    border-radius: .3rem;
+    font-weight: 500;
+    white-space: nowrap !important;
+    top: 0;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}

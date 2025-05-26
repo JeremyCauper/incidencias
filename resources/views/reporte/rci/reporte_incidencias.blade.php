@@ -10,10 +10,11 @@
     <script src="{{secure_asset('front/vendor/multiselect/bootstrap_multiselect.js')}}"></script>
     <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
 
-    <!-- <script src="{{secure_asset('front/vendor/chartjs/chart.js')}}"></script>
-                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2"></script> -->
-    <!-- <script src="https://cdn.jsdelivr.net/npm/echarts@5.6.0/dist/echarts.min.js"></script> -->
+    <!-- <script src="{{secure_asset('front/vendor/chartjs/chart.js')}}"></script> -->
     <script src="https://echarts.apache.org/en/js/vendors/echarts/dist/echarts.min.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dom-to-image/2.6.0/dom-to-image.min.js"></script>
+
 
     <script>
         let empresas = <?php echo json_encode($data['company']); ?>;
@@ -26,11 +27,9 @@
     </script>
     <style>
         /* #chart-container {
-                                                                        position: relative;
-                                                                        height: 100vh;
-                                                                        overflow: hidden;
-                                                                    } */
-
+                                            width: 969px;
+                                            height: 1797px;
+                                        } */
         .capturar-btn-wrapper {
             cursor: pointer;
             position: fixed;
@@ -84,7 +83,7 @@
             <div class="card-body form-container">
                 <h6 class="text-primary">Filtros de Busqueda</h6>
                 <div class="row">
-                    <div class="col-lg-7 my-1">
+                    <div class="col-lg-6 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
                         <select id="empresa" name="empresa" class="select-clear">
                             <option value=""></option>
@@ -97,7 +96,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-lg-5 my-1">
+                    <div class="col-lg-4 col-sm-8 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
                         <select id="sucursal" name="sucursal" class="select-search" disabled="true">
                             <option selected value="0">Todos</option>
@@ -106,7 +105,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-md-4 col-6 my-1">
+                    <!-- <div class="col-md-4 col-6 my-1">
                         <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
                         <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
                             @foreach ($data['tIncidencia'] as $v)
@@ -125,8 +124,8 @@
                                 </option>
                             @endforeach
                         </select>
-                    </div>
-                    <div class="col-md-4 my-1">
+                    </div> -->
+                    <div class="col-lg-2 col-sm-4 my-1">
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
                     </div>
@@ -142,40 +141,55 @@
         </div>
     </div>
 
-    <div class="col-12 mb-4">
-        <div class="row panel-view">
-            <div class="col-xl-6 grid-margin">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-12">
-                            <div id="chart-estado"></div>
-                        </div>
-                    </div>
+    <div class="col-12" id="chart-container">
+        <div class="card">
+            <div class="card-body">
+                <div class="text-center mb-3">
+                    <h4 class="text-secondary" style="text-decoration: underline;">ANALISIS DE INCIDENCIAS</h4>
                 </div>
-            </div>
-            <div class="col-xl-6 grid-margin">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-12">
-                            <div id="chart-personal"></div>
+                <div class="col-12 mb-4">
+                    <div class="row panel-view">
+                        <div class="col-xl-6 grid-margin">
+                            <div class="card shadow-2-strong grid-estadisticas">
+                                <div class="title-estadisticas text-secondary shadow-2-strong">ESTADO DE INCIDENCIAS</div>
+                                <div class="card-body">
+                                    <div class="col-12">
+                                        <div id="chart-estado"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-6 grid-margin">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-12">
-                            <div id="chart-problemas"></div>
+                        <div class="col-xl-6 grid-margin">
+                            <div class="card shadow-2-strong grid-estadisticas">
+                                <div class="title-estadisticas text-secondary shadow-2-strong">ACTIVIDADES DEL PERSONAL
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-12">
+                                        <div id="chart-personal"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-6 grid-margin">
-                <div class="card">
-                    <div class="card-body">
-                        <div class="col-12">
-                            <div id="chart-niveles"></div>
+                        <div class="col-xl-6 grid-margin">
+                            <div class="card shadow-2-strong grid-estadisticas">
+                                <div class="title-estadisticas text-secondary shadow-2-strong">PROBLEMAS DE INCIDENCIAS
+                                </div>
+                                <div class="card-body">
+                                    <div class="col-12">
+                                        <div id="chart-problemas"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-6 grid-margin">
+                            <div class="card shadow-2-strong grid-estadisticas">
+                                <div class="title-estadisticas text-secondary shadow-2-strong">NIVELES DE INCIDENCIAS</div>
+                                <div class="card-body">
+                                    <div class="col-12">
+                                        <div id="chart-niveles"></div>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -183,17 +197,17 @@
         </div>
     </div>
 
-    <div class="col-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <div class="row justify-content-center">
-                    <div class="col-xl-12">
-                        <div id="chart-container"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- <div class="col-12 grid-margin">
+                                                <div class="card">
+                                                    <div class="card-body">
+                                                        <div class="row justify-content-center">
+                                                            <div class="col-xl-12">
+                                                                <div id="chart-container"></div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div> -->
 
     <div class="capturar-btn-wrapper" aria-label="Guardar Imagen de Graficos" title="Guardar Imagen de Graficos"
         onclick="capturar()">
@@ -207,7 +221,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/reporte/incidencias.js')}}?v={{ time() }}"></script>
     <script>
         /*var dom = document.getElementById('chart-container');
         var myChart = echarts.init(dom, 'null', {
@@ -678,21 +691,40 @@
             link.click();
         }*/
 
-        // Obtener el valor computado de la variable CSS
+        function capturar() {
+            var nodo = document.getElementById('chart-container');
+            domtoimage.toPng(nodo)
+                .then(function (dataUrl) {
+                    var enlace = document.createElement('a');
+                    enlace.download = 'mi-vista.png';
+                    enlace.href = dataUrl;
+                    enlace.click();
+                })
+                .catch(function (error) {
+                    console.error('Error al generar imagen:', error);
+                });
+        }
 
-        const getConfigSeriePie = (text, name, data, myChart) => {
+        const getConfigSeriePie = (gConfig = {}) => {
+            const title = gConfig.title ?? null;
+            const name = gConfig.name ?? null;
+            const data = gConfig.data ?? null;
+            const chart = gConfig.chart ?? null;
+
             const varColor = getComputedStyle(document.documentElement).getPropertyValue('--mdb-surface-color').trim();
             return {
-                title: {
-                    text: text,
-                    left: 'center',
-                    textStyle: {
-                        color: '#999',
-                        fontWeight: 'normal',
-                        fontSize: 14,
-                        fontWeight: 'bold'
+                ...(title ? {
+                    title: {
+                        text: title,
+                        left: 'center',
+                        textStyle: {
+                            color: '#999',
+                            fontWeight: 'normal',
+                            fontSize: 14,
+                            fontWeight: 'bold'
+                        }
                     }
-                },
+                } : {}),
                 tooltip: {
                     trigger: 'item'
                 },
@@ -712,8 +744,8 @@
                         type: 'pie',
                         top: '15%',
                         left: 'center',
-                        width: myChart.getWidth() < 700 ? '100%' : '60%',
-                        radius: myChart.getWidth() < 700 ? ['25%', '45%'] : ['35%', '60%'],
+                        width: chart.getWidth() < 700 ? '100%' : '60%',
+                        radius: chart.getWidth() < 700 ? ['25%', '45%'] : ['35%', '60%'],
                         avoidLabelOverlap: false,
                         itemStyle: {
                             borderRadius: 2,
@@ -738,7 +770,7 @@
                             maxSurfaceAngle: 80
                         },
                         labelLayout: function (params) {
-                            const isLeft = params.labelRect.x < myChart.getWidth() / 2;
+                            const isLeft = params.labelRect.x < chart.getWidth() / 2;
                             const points = params.labelLinePoints;
                             // Update the end point.
                             points[2][0] = isLeft
@@ -761,7 +793,11 @@
             }
         }
 
-        const getConfigSerieBar = (text, data, config) => {
+        const getConfigSerieBar = (gConfig = {}) => {
+            const title = gConfig.title ?? null;
+            const data = gConfig.data ?? null;
+            const config = gConfig.config ?? null;
+
             const varColor = getComputedStyle(document.documentElement).getPropertyValue('--mdb-surface-color').trim();
             const theme = $('html').attr('data-mdb-theme') == 'dark' ? false : true;
             const keys = Object.keys(data[0].series);
@@ -793,7 +829,6 @@
                             },
                             fontSize: 10,
                             color: varColor,
-                            // fontWeight: 'bold'
                         },
                         emphasis: {
                             focus: 'series'
@@ -834,16 +869,18 @@
                 }
             }
             return {
-                title: {
-                    text: text,
-                    left: 'center',
-                    textStyle: {
-                        color: '#999',
-                        fontWeight: 'normal',
-                        fontSize: 14,
-                        fontWeight: 'bold'
+                ...(title ? {
+                    title: {
+                        text: title,
+                        left: 'center',
+                        textStyle: {
+                            color: '#999',
+                            fontWeight: 'normal',
+                            fontSize: 14,
+                            fontWeight: 'bold'
+                        }
                     }
-                },
+                } : {}),
                 tooltip: {
                     trigger: 'axis',
                     axisPointer: {
@@ -958,16 +995,16 @@
 
         // CONFIGURACION OPTIONS SERIES
         var option_estado = () => {
-            return getConfigSeriePie('ESTADO DE INCIDENCIAS', 'ESTADO', data_estado, myChart_estado);
+            return getConfigSeriePie({ name: 'ESTADO', data: data_estado, chart: myChart_estado });
         }
         var option_peronal = () => {
-            return getConfigSerieBar('ACTIVIDADES DEL PERSONAL', data_personal, { xAxis: 'category', yAxis: 'value' });
+            return getConfigSerieBar({ data: data_personal, config: { xAxis: 'category', yAxis: 'value' } });
         }
         var option_problema = () => {
-            return getConfigSerieBar('PROBLEMAS DE INCIDENCIAS', data_problema, { xAxis: 'value', yAxis: 'category' });
+            return getConfigSerieBar({ data: data_problema, config: { xAxis: 'value', yAxis: 'category' } });
         }
         var option_nivel = () => {
-            return getConfigSeriePie('NIVELES DE INCIDENCIAS', 'NIVEL', data_nivel, myChart_niveles);
+            return getConfigSeriePie({ name: 'NIVEL', data: data_nivel, chart: myChart_niveles });
         }
 
         // VERIFICAR SI OPTIONS ES OBJETO
@@ -993,21 +1030,25 @@
             }, 10);
         })
 
-        function manejarResizePie(myChart, option) {
+        const estadoAnteriorMap = new WeakMap();
+        let manejarResizePie = (myChart, option) => {
             const ancho = myChart.getWidth();
-            if (manejarResizePie.estadoAnterior === undefined) {
-                manejarResizePie.estadoAnterior = null;
+            const estadoAnterior = estadoAnteriorMap.get(myChart);
+
+            if (estadoAnterior === undefined) {
+                estadoAnteriorMap.set(myChart, null);
                 return;
             }
-            
-            if (ancho < 700 && manejarResizePie.estadoAnterior !== true) {
+
+            if (ancho < 700 && estadoAnterior !== true) {
                 myChart.setOption(option, true);
-                manejarResizePie.estadoAnterior = true;
-            } else if (ancho >= 700 && manejarResizePie.estadoAnterior !== false) {
+                estadoAnteriorMap.set(myChart, true);
+            } else if (ancho >= 700 && estadoAnterior !== false) {
                 myChart.setOption(option, true);
-                manejarResizePie.estadoAnterior = false;
+                estadoAnteriorMap.set(myChart, false);
             }
-        }
+        };
+
 
         fObservador('.content-wrapper', () => {
             myChart_estado.resize();
@@ -1015,8 +1056,9 @@
             myChart_problemas.resize();
             myChart_niveles.resize();
 
-            manejarResizePie(myChart_estado, option_estado());
             manejarResizePie(myChart_niveles, option_nivel());
+            manejarResizePie(myChart_estado, option_estado());
         });
     </script>
+    <script src="{{secure_asset('front/js/reporte/incidencias.js')}}?v={{ time() }}"></script>
 @endsection

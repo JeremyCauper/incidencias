@@ -43,3 +43,25 @@ $(document).ready(function () {
 
 //     tb_orden.ajax.url(nuevoUrl).load();
 // }
+
+function filtroBusqueda() {
+    var empresa = $('#empresa').val();
+    var sucursal = $('#sucursal').val();
+    var fechas = $('#dateRango').val().split('  al  ');
+
+    var settings = {
+        method: "GET",
+        url: "http://192.168.1.140/incidencias/public/soporte/reportes/reporte-incidencias/index?=&=0&=2025-01-01&=2025-05-25",
+        data: JSON.stringify({
+            ruc: empresa,
+            sucursal: sucursal,
+            fechaIni: fechas[0],
+            fechaFin: fechas[1],
+        }),
+        timeout: 0,
+    };
+
+    $.ajax(settings).done(function (response) {
+        console.log(response);
+    });
+}
