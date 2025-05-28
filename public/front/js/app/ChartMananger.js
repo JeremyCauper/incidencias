@@ -61,13 +61,26 @@ class ChartMananger {
         } : {};
 
         const buildTooltip = () => {
+            const totals = {};
+            if (this.type == 'bar') {
+                const keys = Object.keys(this.data[0].series);
+                
+                keys.forEach(k => {
+                    totals[k] = this.data.reduce((sum, item) => sum + item.series[k], 0);
+                });
+            }
             const trigger = this.type === 'bar' ? 'axis' : 'item';
             const barTooltip = this.type === 'bar' ? {
                 axisPointer: { type: 'shadow' },
                 formatter: (params) => {
                     let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
+
                     params.forEach(item => {
-                        result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${item.data.value}</b><br/>`;
+                        const value = item.data.value;
+                        const total = totals[item.seriesName.toLowerCase()];
+                        const percent = total > 0 ? ((value / total) * 100) : 0;
+
+                        result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value} (${percent.toFixed(1)}%)</b><br/>`;
                     });
                     return result;
                 }
@@ -163,18 +176,20 @@ class ChartMananger {
                     label: {
                         show: true,
                         position: this.config?.xAxis === 'value' ? 'right' : 'top',
-                        distance: 2,
+                        distance: 4,
                         ...(this.config?.xAxis === 'value' ? {} : {
                             align: 'left',
                             verticalAlign: 'middle',
                             rotate: 90,
                         }),
                         formatter: (params) => {
+                            const value = params.value;
                             const total = totals[key];
-                            const percent = ((params.value / total) * 100).toFixed(1);
-                            return `${params.value} (${percent}%)`;
+                            const percent = ((value / total) * 100).toFixed(1);
+
+                            return (value == 0) ? '' : `${value} (${percent}%)`;
                         },
-                        fontSize: this.chart?.getWidth() < this.sizeGraphic ? 8.5 : 10,
+                        fontSize: 10,
                         color: getColor('--mdb-surface-color')
                     },
                     emphasis: { focus: 'series' },

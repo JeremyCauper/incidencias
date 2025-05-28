@@ -12,6 +12,7 @@
 
     <!-- <script src=""></script> -->
     <script src="{{secure_asset('front/vendor/echartjs/echarts.min.js')}}"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}"></script>
 
 
@@ -59,32 +60,32 @@
                     <div class="col-lg-4 col-sm-8 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
                         <select id="sucursal" name="sucursal" class="select-search" disabled="true">
-                            <option selected value="0">Todos</option>
+                            <option selected value="">Todos</option>
                             @foreach ($data['scompany'] as $key => $val)
                                 <option value="{{$val->id}}">{{$val->nombre}}</option>
                             @endforeach
                         </select>
                     </div>
                     <!-- <div class="col-md-4 col-6 my-1">
-                            <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
-                            <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
-                                @foreach ($data['tIncidencia'] as $v)
-                                    <option value="{{ $v->id }}" selected>
-                                        {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-4 col-6 my-1">
-                            <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
-                            <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
-                                @foreach ($data['tSoporte'] as $v)
-                                    <option value="{{ $v->id }}" selected>
-                                        {{ $v->descripcion }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div> -->
+                                        <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
+                                        <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
+                                            @foreach ($data['tIncidencia'] as $v)
+                                                <option value="{{ $v->id }}" selected>
+                                                    {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                    <div class="col-md-4 col-6 my-1">
+                                        <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
+                                        <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
+                                            @foreach ($data['tSoporte'] as $v)
+                                                <option value="{{ $v->id }}" selected>
+                                                    {{ $v->descripcion }}
+                                                </option>
+                                            @endforeach
+                                        </select>
+                                    </div> -->
                     <div class="col-lg-2 col-sm-4 my-1">
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
@@ -103,17 +104,39 @@
 
     <div class="col-12" id="chart-container">
         <div class="card">
-            <div class="mb-3 py-3 rounded-top-2 text-bg-primary chart-container-title"> <!-- chart-title -->
-                <div class="logo_rci position-absolute d-none" style="left: 0;"></div>
+            <div class="mb-3 py-3 rounded-top-2 text-bg-primary chart-container-header"> <!-- chart-header -->
+                <div class="logo_rci_white position-absolute d-none" style="left: 0;"></div>
                 <h2 class="mb-0 text-nowrap">ANALISIS DE INCIDENCIAS</h2>
             </div>
-            <div class="card-body pt-0">
+            <div class="card-body pt-0 chart-container-body">
+                <div class="card chart-info d-none mb-4">
+                    <div class="card-body py-2">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div>
+                                    <label class="form-label me-2">Empresa: </label>
+                                    <span style="font-size: .75rem;" aria-item="empresa">...</span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Sucursal: </label>
+                                    <span style="font-size: .75rem;" aria-item="sucursal">...</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <label class="form-label me-2">Fecha: </label>
+                                <span style="font-size: .75rem;" aria-item="fechas">...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12 mb-4">
                     <div class="row panel-view">
                         <div class="col-xl-6 grid-margin">
-                            <div class="card shadow-2-strong grid-estadisticas grid-loading">
-                                <div class="title-estadisticas text-secondary shadow-2-strong">ESTADO DE INCIDENCIAS</div>
+                            <div class="card chart-contenedor chart-loading">
+                                <div class="chart-title text-secondary">ESTADO DE INCIDENCIAS</div>
                                 <div class="card-body">
+                                    <div class="chart-descripcion">Muestra la distribución de las incidencias según su
+                                        estado.</div>
                                     <div class="col-12">
                                         <div id="chart-estado"></div>
                                     </div>
@@ -121,10 +144,12 @@
                             </div>
                         </div>
                         <div class="col-xl-6 grid-margin">
-                            <div class="card shadow-2-strong grid-estadisticas grid-loading">
-                                <div class="title-estadisticas text-secondary shadow-2-strong">ACTIVIDADES DEL PERSONAL
+                            <div class="card chart-contenedor chart-loading">
+                                <div class="chart-title text-secondary">ACTIVIDADES DEL PERSONAL
                                 </div>
                                 <div class="card-body">
+                                    <div class="chart-descripcion">Muestra la cantidad de visitas e incidencias gestionadas
+                                        por técnico.</div>
                                     <div class="col-12">
                                         <div id="chart-personal"></div>
                                     </div>
@@ -132,10 +157,12 @@
                             </div>
                         </div>
                         <div class="col-xl-6 grid-margin">
-                            <div class="card shadow-2-strong grid-estadisticas grid-loading">
-                                <div class="title-estadisticas text-secondary shadow-2-strong">PROBLEMAS DE INCIDENCIAS
+                            <div class="card chart-contenedor chart-loading">
+                                <div class="chart-title text-secondary">PROBLEMAS DE INCIDENCIAS
                                 </div>
                                 <div class="card-body">
+                                    <div class="chart-descripcion">Muestra los 10 problemas más frecuentes registrados.
+                                    </div>
                                     <div class="col-12">
                                         <div id="chart-problemas"></div>
                                     </div>
@@ -143,9 +170,11 @@
                             </div>
                         </div>
                         <div class="col-xl-6 grid-margin">
-                            <div class="card shadow-2-strong grid-estadisticas grid-loading">
-                                <div class="title-estadisticas text-secondary shadow-2-strong">NIVELES DE INCIDENCIAS</div>
+                            <div class="card chart-contenedor chart-loading">
+                                <div class="chart-title text-secondary">NIVELES DE INCIDENCIAS</div>
                                 <div class="card-body">
+                                    <div class="chart-descripcion">Muestra la distribución del nivel de atención alcanzado.
+                                    </div>
                                     <div class="col-12">
                                         <div id="chart-niveles"></div>
                                     </div>
@@ -163,7 +192,7 @@
         <div>Guardar Imagen</div>
         <button class="capturar-btn btn-floating d-flex align-items-center justify-content-center"
             aria-label="Guardar Imagen de Graficos" title="Guardar Imagen de Graficos">
-            <i class="fas fa-camera fa-1x"></i>
+            <i class="fas fa-camera fa-1x text-white"></i>
         </button>
     </div>
 

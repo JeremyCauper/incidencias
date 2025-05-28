@@ -66,7 +66,7 @@ var myChart_problemas = new ChartMananger({
     id: '#chart-problemas',
     type: 'bar',
     config: {
-        xAxis:'value',
+        xAxis: 'value',
         yAxis: 'category'
     }
 });
@@ -79,21 +79,58 @@ var myChart_niveles = new ChartMananger({
 
 
 function capturar() {
-    $('.chart-container-title').addClass('chart-title').find('.logo_rci').removeClass('d-none');
-    setTimeout(() => {
-        var nodo = document.getElementById('chart-container');
-        domtoimage.toPng(nodo)
-            .then(async function (dataUrl) {
-                var enlace = document.createElement('a');
-                enlace.download = `ANALISIS DE INCIDENCIAS ${$('#dateRango').val()} - ${date('H:i:s')}.png`;
-                enlace.href = dataUrl;
-                enlace.click();
-                $('.chart-container-title').removeClass('chart-title').find('.logo_rci').addClass('d-none');
-            })
-            .catch(function (error) {
-                console.error('Error al generar imagen:', error);
+    $('.chart-container-header').addClass('chart-header').find('.logo_rci_white').removeClass('d-none');
+    $('.chart-container-body').find('.chart-info').removeClass('d-none');
+    
+    var nodo = document.getElementById('chart-container');
+    domtoimage.toPng(nodo)
+        .then(async function (dataUrl) {
+            var enlace = document.createElement('a');
+
+            const fecha = $('#dateRango').val();
+            const hora = new Date().toLocaleTimeString().replaceAll(':', '-');
+            const nombreArchivo = `ANALISIS DE INCIDENCIAS ${fecha} - ${hora}.png`;
+
+            enlace.download = nombreArchivo;
+            enlace.href = dataUrl;
+            enlace.click();
+            $('.chart-container-header').removeClass('chart-header').find('.logo_rci_white').addClass('d-none');
+            $('.chart-container-body').find('.chart-info').addClass('d-none');
+        })
+        .catch(function (error) {
+            console.error('Error al generar imagen:', error);
+        });
+}
+
+function generarPDF() {
+    var nodo = document.getElementById('chart-container');
+    $('.chart-container-header').addClass('chart-header').find('.logo_rci_white').removeClass('d-none');
+    $('.chart-container-body').find('.chart-info').removeClass('d-none');
+
+    domtoimage.toPng(nodo)
+        .then(function (dataUrl) {
+            const { jsPDF } = window.jspdf;
+            const pdf = new jsPDF({
+                orientation: 'landscape', // puedes cambiar a 'portrait'
+                unit: 'px',
+                format: [nodo.offsetWidth, nodo.offsetHeight]
             });
-    }, 100);
+
+            // Agregamos la imagen generada del gráfico
+            pdf.addImage(dataUrl, 'PNG', 0, 0, nodo.offsetWidth, nodo.offsetHeight);
+
+            const fecha = $('#dateRango').val();
+            const hora = new Date().toLocaleTimeString().replaceAll(':', '-');
+            const nombreArchivo = `ANALISIS DE INCIDENCIAS ${fecha} - ${hora}.pdf`;
+            $('.chart-container-header').addClass('chart-header').find('.logo_rci_white').removeClass('d-none');
+            $('.chart-container-body').find('.chart-info').removeClass('d-none');
+
+            // Guardamos el PDF
+            pdf.save(nombreArchivo);
+        })
+        .catch(function (error) {
+            console.error('Error al generar PDF:', error);
+        });
 }
 
 function filtroBusqueda() {
@@ -101,9 +138,14 @@ function filtroBusqueda() {
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
 
-    $('.grid-estadisticas').each(function () {
-        $(this).addClass('grid-loading');
+    $('.chart-contenedor').each(function () {
+        $(this).addClass('chart-loading');
     });
+
+    var container = $('.chart-container-body');
+    container.find('[aria-item="empresa"]').html(empresa ? `${empresas[empresa].ruc} - ${empresas[empresa].razon_social}` : 'Todas las empresas');
+    container.find('[aria-item="sucursal"]').html(sucursal ? sucursales[sucursal].nombre : 'Todas las sucursales');
+    container.find('[aria-item="fechas"]').html($('#dateRango').val());
 
     $.ajax({
         method: "GET",
@@ -123,8 +165,8 @@ function filtroBusqueda() {
             myChart_niveles.updateOption(response.data.niveles);
 
             setTimeout(() => {
-                $('.grid-estadisticas').each(function () {
-                    $(this).removeClass('grid-loading');
+                $('.chart-contenedor').each(function () {
+                    $(this).removeClass('chart-loading');
                 });
             }, 100);
         };
