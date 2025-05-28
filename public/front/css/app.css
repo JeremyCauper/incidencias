@@ -601,7 +601,7 @@ body {
     --bs-navbar-toggler-icon-bg: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba%28255, 255, 255, 0.55%29' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
 }
 
-.navbar-brand .logo_rci {
+.logo_rci {
     background: var(--root-logo-rci-bg);
     background-size: contain;
     width: 12rem;
@@ -611,7 +611,7 @@ body {
 }
 
 @media (max-width: 512px) {
-    .navbar-brand .logo_rci {
+    .logo_rci {
         width: 9rem;
         margin-left: 5px;
     }
@@ -2802,6 +2802,33 @@ tr .active-acciones {
 
     100% {
         opacity: 1;
+    }
+}
+
+.chart-container-title {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.chart-title {
+    position: relative;
+}
+
+@media only screen and (max-width: 900px) {
+    .chart-title h2 {
+        font-size: 1.25rem;
+    }
+}
+
+@media only screen and (max-width: 750px) {
+    .chart-title {
+        justify-content: end;
+    }
+
+    .chart-title h2 {
+        font-size: 1rem;
+        margin-right: 1rem;
     }
 }
 

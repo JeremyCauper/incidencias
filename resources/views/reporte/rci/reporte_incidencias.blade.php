@@ -66,25 +66,25 @@
                         </select>
                     </div>
                     <!-- <div class="col-md-4 col-6 my-1">
-                                                        <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
-                                                        <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
-                                                            @foreach ($data['tIncidencia'] as $v)
-                                                                <option value="{{ $v->id }}" selected>
-                                                                    {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-md-4 col-6 my-1">
-                                                        <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
-                                                        <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
-                                                            @foreach ($data['tSoporte'] as $v)
-                                                                <option value="{{ $v->id }}" selected>
-                                                                    {{ $v->descripcion }}
-                                                                </option>
-                                                            @endforeach
-                                                        </select>
-                                                    </div> -->
+                            <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
+                            <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
+                                @foreach ($data['tIncidencia'] as $v)
+                                    <option value="{{ $v->id }}" selected>
+                                        {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
+                        <div class="col-md-4 col-6 my-1">
+                            <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
+                            <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
+                                @foreach ($data['tSoporte'] as $v)
+                                    <option value="{{ $v->id }}" selected>
+                                        {{ $v->descripcion }}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div> -->
                     <div class="col-lg-2 col-sm-4 my-1">
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
@@ -103,8 +103,9 @@
 
     <div class="col-12" id="chart-container">
         <div class="card">
-            <div class="text-center mb-3 py-3 text-bg-primary rounded-top-2">
-                <h2 class="mb-0">ANALISIS DE INCIDENCIAS</h2>
+            <div class="mb-3 py-3 rounded-top-2 text-bg-primary chart-container-title"> <!-- chart-title -->
+                <div class="logo_rci position-absolute d-none" style="left: 0;"></div>
+                <h2 class="mb-0 text-nowrap">ANALISIS DE INCIDENCIAS</h2>
             </div>
             <div class="card-body pt-0">
                 <div class="col-12 mb-4">
@@ -169,5 +170,6 @@
 @endsection
 
 @section('scripts')
+    <script src="{{secure_asset('front/js/app/ChartMananger.js')}}"></script>
     <script src="{{secure_asset('front/js/reporte/rci/incidencias.js')}}?v={{ time() }}"></script>
 @endsection

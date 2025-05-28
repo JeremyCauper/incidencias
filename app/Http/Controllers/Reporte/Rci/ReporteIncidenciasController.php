@@ -47,7 +47,7 @@ class ReporteIncidenciasController extends Controller
      */
     public function index(Request $request)
     {
-        try {
+        // try {
             $ruc = $request->query('ruc');
             $sucursal = $request->query('sucursal');
             $fechaIni = $request->query('fechaIni') ?: now()->format('Y-m-01');
@@ -88,12 +88,15 @@ class ReporteIncidenciasController extends Controller
             });
             $data['estados'] = $estados;
 
-            $inc_asignadas = DB::table('tb_inc_asignadas')->select('id_usuario')->get()->groupBy('id_usuario');
-            $vis_asignadas = DB::table('tb_vis_asignadas')->select('id_usuario')->get()->groupBy('id_usuario');
+            $inc_asignadas = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->select('id_usuario')->get()->groupBy('id_usuario');
+            $vis_asignadas = DB::table('tb_vis_asignadas')->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])->select('id_usuario')->get()->groupBy('id_usuario');
             $data['personal'] = DB::table('tb_personal')->where(['id_area' => 1, 'estatus' => 1])->whereIn('tipo_acceso', [2, 3])->get()
                 ->map(function ($val) use ($inc_asignadas, $vis_asignadas) {
+                    $apellidos = $this->formatearNombre($val->apellidos);
+                    $nombres = $this->formatearNombre($val->nombres, $val->apellidos);
                     return [
-                        'name' => $val->ndoc_usuario,
+                        'name' => $apellidos,
+                        'text' => "$val->ndoc_usuario $nombres",
                         'series' => [
                             'incidencias' => isset($inc_asignadas[$val->id_usuario]) ? count($inc_asignadas[$val->id_usuario]) : 0,
                             'visitas' => isset($vis_asignadas[$val->id_usuario]) ? count($vis_asignadas[$val->id_usuario]) : 0
@@ -106,6 +109,7 @@ class ReporteIncidenciasController extends Controller
                 ->map(function ($items, $id) use ($problemas) {
                     return [
                         'name' => $problemas[$id]->codigo,
+                        'text' => $problemas[$id]->descripcion,
                         'series' => ['problemas' => count($items)],
                     ];
                 })
@@ -121,8 +125,8 @@ class ReporteIncidenciasController extends Controller
             $data['niveles'] = $niveles;
 
             return $this->message(data: ['data' => $data]);
-        } catch (Exception $e) {
-            return $this->message(message: "Ocurrió un error interno en el servidor.", data: ['error' => $e->getMessage(), 'linea' => $e->getLine()], status: 500);
-        }
+        // } catch (Exception $e) {
+        //     return $this->message(message: "Ocurrió un error interno en el servidor.", data: ['error' => $e->getMessage(), 'linea' => $e->getLine()], status: 500);
+        // }
     }
 }

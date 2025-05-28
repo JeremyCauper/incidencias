@@ -34,11 +34,12 @@
                 <div class="row">
                     <div class="col-lg-6 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
-                        <input type="text" class="form-control" value="{{ session('config_layout')->nombre_perfil }}" readonly role="button">
+                        <input type="text" class="form-control" value="{{ session('config_layout')->nombre_perfil }}"
+                            readonly role="button">
                     </div>
                     <div class="col-lg-4 col-sm-8 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
-                        <select id="sucursal" name="sucursal" class="select-search" disabled="true">
+                        <select id="sucursal" name="sucursal" class="select-search">
                             <option selected value="0">Todos</option>
                             @foreach ($data['scompany'] as $key => $val)
                                 <option value="{{$val->id}}">{{$val->nombre}}</option>
@@ -63,8 +64,9 @@
 
     <div class="col-12" id="chart-container">
         <div class="card">
-            <div class="text-center mb-3 py-3 text-bg-primary rounded-top-2">
-                <h2 class="mb-0">ANALISIS DE INCIDENCIAS</h2>
+            <div class="mb-3 py-3 rounded-top-2 text-bg-primary chart-container-title"> <!-- chart-title -->
+                <div class="logo_rci position-absolute d-none" style="left: 0;"></div>
+                <h2 class="mb-0 text-nowrap">ANALISIS DE INCIDENCIAS</h2>
             </div>
             <div class="card-body pt-0">
                 <div class="col-12 mb-4">
@@ -118,5 +120,6 @@
 @endsection
 
 @section('scripts')
+    <script src="{{secure_asset('front/js/app/ChartMananger.js')}}"></script>
     <script src="{{secure_asset('front/js/reporte/cliente/crincidencias.js')}}?v={{ time() }}"></script>
 @endsection
