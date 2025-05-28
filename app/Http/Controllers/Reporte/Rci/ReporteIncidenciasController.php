@@ -62,11 +62,22 @@ class ReporteIncidenciasController extends Controller
                 $whereInc['id_sucursal'] = intval($sucursal);
             }
 
+            $whereVis = [];
+            if (intval($sucursal)) {
+                $whereVis['id_sucursal'] = intval($sucursal);
+            }
+
             $incidencias = DB::table('tb_incidencias')
                 ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
                 ->where($whereInc)
                 ->get();
             $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
+
+            $visitas = DB::table('tb_visitas')
+                ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
+                ->where($whereVis)
+                ->get();
+            $id_visitas = $visitas->pluck('id')->toArray();
 
             $estados = [
                 ['name' => 'Sin Asignar', 'value' => 0, 'itemStyle' => ['color' => 'rgb(228, 161, 27)']], // 0
@@ -89,8 +100,9 @@ class ReporteIncidenciasController extends Controller
             $data['estados'] = $estados;
 
             $inc_asignadas = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->select('id_usuario')->get()->groupBy('id_usuario');
-            $vis_asignadas = DB::table('tb_vis_asignadas')->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])->select('id_usuario')->get()->groupBy('id_usuario');
-            $data['personal'] = DB::table('tb_personal')->where(['id_area' => 1, 'estatus' => 1])->whereIn('tipo_acceso', [2, 3])->get()
+            $vis_asignadas = DB::table('tb_vis_asignadas')->whereIn('id_visitas', $id_visitas)->select('id_usuario')->get()->groupBy('id_usuario');
+
+            $data['personal'] = DB::table('tb_personal')->where(['id_area' => 1, 'estatus' => 1])->whereIn('tipo_acceso', [2, 3, 4])->get()
                 ->map(function ($val) use ($inc_asignadas, $vis_asignadas) {
                     $apellidos = $this->formatearNombre($val->apellidos);
                     $nombres = $this->formatearNombre($val->nombres, $val->apellidos);
