@@ -20,6 +20,25 @@
     let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
     let usuarios = <?php echo json_encode($data['usuarios']); ?>;
 </script>
+
+<style>
+
+    .mi-animacion-modal .modal-dialog {
+        animation: aparecerDesdeAbajo 0.5s ease-out;
+    }
+
+    @keyframes aparecerDesdeAbajo {
+        from {
+            transform: translateY(-100%);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+</style>
 @endsection
 @section('content')
 
