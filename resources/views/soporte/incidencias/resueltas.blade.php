@@ -83,7 +83,8 @@
                                     <th>Sucursal</th>
                                     <th>Nivel Incidencia</th>
                                     <th>Soporte</th>
-                                    <th>Problema / Sub Problema</th>
+                                    <th>Problema</th>
+                                    <th>Sub Problema</th>
                                     <th>Iniciada</th>
                                     <th>Terminada</th>
                                     <th>Acciones</th>
@@ -94,6 +95,7 @@
                             const tb_orden = new DataTable('#tb_orden', {
                                 scrollX: true,
                                 scrollY: 400,
+                                // buttons: ['excel'],
                                 ajax: {
                                     url: `${__url}/soporte/incidencias/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
                                     dataSrc: function (json) {
@@ -127,7 +129,7 @@
                                     {
                                         data: 'tipo_incidencia', render: function (data, type, row) {
                                             let tipo = tipo_incidencia[data[data.length - 1]];
-                                            return `<label class="badge badge-${tipo.color} me-2" style="font-size: 0.75rem;">${tipo.tipo}</label>${tipo.descripcion}`;
+                                            return `<label class="badge badge-${tipo.color} me-2" style="font-size: 0.75rem;">${tipo.tipo}</label> ${tipo.descripcion}`;
                                         }
                                     },
                                     {
@@ -137,7 +139,12 @@
                                     },
                                     {
                                         data: 'problema', render: function (data, type, row) {
-                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
+                                            return obj_problem[data].descripcion;
+                                        }
+                                    },
+                                    {
+                                        data: 'subproblema', render: function (data, type, row) {
+                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_subproblem[data].descripcion}`;
                                         }
                                     },
                                     { data: 'iniciado' },
@@ -145,8 +152,8 @@
                                     { data: 'acciones' }
                                 ],
                                 createdRow: function (row, data, dataIndex) {
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(7), td:eq(9), td:eq(10), td:eq(11)').addClass('text-center');
-                                    $(row).find('td:eq(11)').addClass(`td-acciones`);
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(7), td:eq(10), td:eq(11), td:eq(12)').addClass('text-center');
+                                    $(row).find('td:eq(12)').addClass(`td-acciones`);
                                 },
                                 order: [[1, 'desc']],
                                 processing: true

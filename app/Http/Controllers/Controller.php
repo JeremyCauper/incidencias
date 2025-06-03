@@ -22,23 +22,23 @@ class Controller extends BaseController
         // Decodificar el JSON base64 recibido con los IDs a filtrar
         $jsonString = base64_decode($jsonBase64);
         $filteredIds = json_decode($jsonString, true);
-    
+
         // Definir los tipos de menú permitidos según el tipo de acceso
         $tipo_menu = [0];
         if ($tipo_acceso == 5) {
             array_push($tipo_menu, 1);
         }
-    
+
         // Obtener y filtrar los menús del JSON
         $menu = collect((new Menu())->all())
             ->filter(function ($item) use ($tipo_menu, $filteredIds) {
                 return $item->estatus == 1 &&
-                       in_array($item->sistema, $tipo_menu) &&
-                       array_key_exists($item->id, $filteredIds);
+                    in_array($item->sistema, $tipo_menu) &&
+                    array_key_exists($item->id, $filteredIds);
             })
             ->sortBy('orden')
             ->values();
-    
+
         // Obtener y filtrar los submenús del JSON
         $submenus = collect((new SubMenu())->all())
             ->filter(function ($item) use ($filteredIds) {
@@ -55,7 +55,7 @@ class Controller extends BaseController
                 return true;
             })
             ->groupBy('id_menu');
-    
+
         // Determinar la ruta principal
         $rutaPrincipal = null;
         if ($menu->isNotEmpty()) {
@@ -68,23 +68,23 @@ class Controller extends BaseController
                 $rutaPrincipal = $primerMenu->ruta;
             }
         }
-    
+
         // Combinar menús y submenús en la estructura deseada
         $menus = $menu->map(function ($item) use ($submenus, $filteredIds) {
             $menuId = $item->id;
-    
+
             // Si el JSON dice que este menú no tiene submenús, se deja la propiedad vacía
             if (empty($filteredIds[$menuId])) {
                 $item->submenu = [];
                 return $item;
             }
-    
+
             // Si existen submenús para este menú, agruparlos por categoría
             if ($submenus->has($menuId)) {
                 $groupedByCategory = $submenus[$menuId]->groupBy(function ($submenu) {
                     return $submenu->categoria ?: 'sin_categoria';
                 });
-    
+
                 // Se reasigna la propiedad "submenu" con los submenús agrupados y reindexados
                 $item->submenu = $groupedByCategory->map(function ($submenusList) {
                     return $submenusList->values();
@@ -94,20 +94,20 @@ class Controller extends BaseController
             }
             return $item;
         });
-    
+
         // Retornar la estructura con los menús y la ruta principal
-        return (object)[
+        return (object) [
             "menus" => $menus,
             "ruta" => $rutaPrincipal
         ];
     }
-    
+
 
     public function validarPermisos($menu, $submenu = "")
     {
         $arrayString = base64_decode(session('menu_usuario'));
         $modulos = json_decode($arrayString);
-    
+
         if (isset($modulos->$menu)) {
             if (!empty($modulos->$menu)) {
                 if (isset($modulos->$menu[$submenu])) {
@@ -118,18 +118,21 @@ class Controller extends BaseController
         }
         abort(403);
     }
-    
 
-    public function formatearNombre(...$args) {
+
+    public function formatearNombre(...$args)
+    {
         if (count($args) == 1) {
             // Si se pasa un solo argumento, separamos nombres y apellidos
             $partes = explode(" ", trim($args[0]));
             $cantidad = count($partes);
-    
-            if ($cantidad < 2) {
-                return ucfirst(strtolower($args[0])); // Si solo hay una palabra, la devuelve con formato
+
+            if ($cantidad < 3) {
+                $primero = ucfirst(strtolower($partes[0]));
+                $segundo = isset($partes[1]) ? strtoupper(substr($partes[1], 0, 1)) . '.' : '';
+                return trim("$primero $segundo");
             }
-    
+
             $apellidos = array_slice($partes, -2); // Últimos dos elementos como apellidos
             $nombres = array_slice($partes, 0, -2); // El resto como nombres
         } else {
@@ -137,14 +140,14 @@ class Controller extends BaseController
             $nombres = explode(" ", trim($args[0]));
             $apellidos = explode(" ", trim($args[1]));
         }
-    
+
         $primerNombre = ucfirst(strtolower($nombres[0])); // Primer nombre con mayúscula inicial
         $primerApellido = ucfirst(strtolower($apellidos[0])); // Primer apellido con mayúscula inicial
         $inicialSegundoApellido = isset($apellidos[1]) ? strtoupper(substr($apellidos[1], 0, 1)) . '.' : ''; // Inicial del segundo apellido
-    
+
         return trim("$primerNombre $primerApellido $inicialSegundoApellido");
     }
-    
+
 
     public function DropdownAcciones($arr_acciones)
     {
@@ -230,10 +233,10 @@ class Controller extends BaseController
             $imgFormat = getimagesizefromstring($imgInfo);
             $formato = '.' . explode('/', $imgFormat['mime'])[1];
             $filename = $name . $formato;
-    
+
             $path = public_path("front/images/$dir");
             $filePath = "$path/$filename";
-    
+
             if (file_put_contents($filePath, $imgInfo)) {
                 return ['success' => true, 'filename' => $filename];
             }
@@ -248,8 +251,8 @@ class Controller extends BaseController
         $statuses = [
             "success" => ["title" => "Éxito", "range" => range(200, 201)],
             "info" => ["title" => "Atención", "range" => range(202, 399)],
-            "warning"   => ["title" => "Proceso Fallido", "range" => range(400, 599)],
-            "error"  => ["title" => "Error interno del Servidor", "range" => range(500, 599)],
+            "warning" => ["title" => "Proceso Fallido", "range" => range(400, 599)],
+            "error" => ["title" => "Error interno del Servidor", "range" => range(500, 599)],
         ];
         if (!empty($data)) {
             foreach ($data as $clave => $value) {
@@ -263,7 +266,7 @@ class Controller extends BaseController
         foreach ($statuses as $icon => $info) {
             if (in_array($status, $info["range"])) {
                 $response["icon"] = $icon;
-                if (empty($title) ) {
+                if (empty($title)) {
                     $response["title"] = $info["title"];
                 }
                 break;
@@ -274,17 +277,17 @@ class Controller extends BaseController
                 case 500:
                     $response["message"] = "Ha ocurrido un error inesperado en el servidor.";
                     break;
-                
+
                 case 503:
                     $response["message"] = "El servidor está en mantenimiento o sobrecargado.";
                     break;
-                
+
                 case 422:
                     $response["title"] = "Datos inválidos (errores de validación).";
                     break;
             }
         }
-        return response()->json($response, (int)$status);
+        return response()->json($response, (int) $status);
     }
 
     public function validatorUnique($errorMessage, $data)
@@ -310,7 +313,7 @@ class Controller extends BaseController
             case 'change':
                 $respuesta = '<i class="fas fa-rotate me-2 text-' . $config['color'] . '"></i>Cambiar Estado';
                 break;
-            
+
             default:
                 $respuesta = '<label class="badge badge-' . $config['color'] . '" style="font-size: .7rem;">' . $config['text'] . '</label>';
                 break;

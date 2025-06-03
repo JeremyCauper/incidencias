@@ -42,6 +42,14 @@
   <script src="{{secure_asset('front/vendor/dataTable/jquery.dataTables.min.js')}}"></script>
   <script src="{{secure_asset('front/js/app.js')}}?v={{ time() }}"></script>
 
+  <!-- DataTables Buttons -- >
+  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
+
+  < !-- Excel export -- >
+  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> -->
+
   <link rel="stylesheet" href="{{secure_asset('front/css/tema.css')}}">
   <script src="{{secure_asset('front/js/app/ToggleTema.js')}}"></script>
 
@@ -137,13 +145,13 @@
       <nav class="sidebar sidebar-offcanvas" id="sidebar">
         <ul class="nav">
           <li class="nav-item menu-item text-center pb-1 menu-bar" tittle-menu>
-            <a class="nav-link menu-lateral" href="javascript:void(0)" role="button" id="expandir-menu">
+            <a class="nav-link menu-lateral py-0" href="javascript:void(0)" role="button" id="expandir-menu">
               <i class="fas fa-bars"></i>
               <span class="ms-2 menu-title">Menu</span>
             </a>
           </li>
           <li class="nav-item menu-item text-center" tittle-menu>
-            <div class="nav-link menu-perfil">
+            <div class="nav-link menu-perfil pt-0">
               <img class="rounded-circle" src="{{ session('config_layout')->foto_perfil }}">
               <span class="ms-2 menu-title">
                 <p class="fw-bold mb-1 nombre-personal">{{ session('config_layout')->nombre_perfil }}</p>

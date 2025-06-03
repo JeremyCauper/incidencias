@@ -34,12 +34,13 @@
                 <div class="row">
                     <div class="col-lg-6 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
-                        <input type="text" class="form-control" value="{{ session('config_layout')->nombre_perfil }}" readonly role="button">
+                        <input type="text" class="form-control" id="empresa"
+                            value="{{ session('config_layout')->nombre_perfil }}" readonly role="button">
                     </div>
                     <div class="col-lg-4 col-sm-8 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
-                        <select id="sucursal" name="sucursal" class="select-search" disabled="true">
-                            <option selected value="0">Todos</option>
+                        <select id="sucursal" name="sucursal" class="select-search">
+                            <option selected value="">Todos</option>
                             @foreach ($data['scompany'] as $key => $val)
                                 <option value="{{$val->id}}">{{$val->nombre}}</option>
                             @endforeach
@@ -63,16 +64,39 @@
 
     <div class="col-12" id="chart-container">
         <div class="card">
-            <div class="text-center mb-3 py-3 text-bg-primary rounded-top-2">
-                <h2 class="mb-0">ANALISIS DE INCIDENCIAS</h2>
+            <div class="mb-3 py-3 rounded-top-2 text-bg-primary chart-container-header"> <!-- chart-header -->
+                <div class="logo_rci_white position-absolute d-none" style="left: 0;"></div>
+                <h2 class="mb-0 text-nowrap">ANALISIS DE INCIDENCIAS</h2>
             </div>
-            <div class="card-body pt-0">
+            <div class="card-body pt-0 chart-container-body">
+                <div class="card chart-info d-none mb-4">
+                    <div class="card-body py-2">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div>
+                                    <label class="form-label me-2">Empresa: </label>
+                                    <span style="font-size: .75rem;" aria-item="empresa">...</span>
+                                </div>
+                                <div>
+                                    <label class="form-label me-2">Sucursal: </label>
+                                    <span style="font-size: .75rem;" aria-item="sucursal">...</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4 text-md-end">
+                                <label class="form-label me-2">Fecha: </label>
+                                <span style="font-size: .75rem;" aria-item="fechas">...</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
                 <div class="col-12 mb-4">
-                    <div class="row justify-content-center panel-view">
+                    <div class="row panel-view justify-content-center">
                         <div class="col-xl-6 grid-margin">
-                            <div class="card shadow-2-strong grid-estadisticas grid-loading">
-                                <div class="title-estadisticas text-secondary shadow-2-strong">ESTADO DE INCIDENCIAS</div>
+                            <div class="card chart-contenedor chart-loading">
+                                <div class="chart-title text-secondary">ESTADO DE INCIDENCIAS</div>
                                 <div class="card-body">
+                                    <div class="chart-descripcion">Muestra la distribución de las incidencias según su
+                                        estado.</div>
                                     <div class="col-12">
                                         <div id="chart-estado"></div>
                                     </div>
@@ -80,9 +104,11 @@
                             </div>
                         </div>
                         <div class="col-xl-6 grid-margin">
-                            <div class="card shadow-2-strong grid-estadisticas grid-loading">
-                                <div class="title-estadisticas text-secondary shadow-2-strong">NIVELES DE INCIDENCIAS</div>
+                            <div class="card chart-contenedor chart-loading">
+                                <div class="chart-title text-secondary">NIVELES DE INCIDENCIAS</div>
                                 <div class="card-body">
+                                    <div class="chart-descripcion">Muestra la distribución del nivel de atención alcanzado.
+                                    </div>
                                     <div class="col-12">
                                         <div id="chart-niveles"></div>
                                     </div>
@@ -90,10 +116,12 @@
                             </div>
                         </div>
                         <div class="col-xl-8 grid-margin">
-                            <div class="card shadow-2-strong grid-estadisticas grid-loading">
-                                <div class="title-estadisticas text-secondary shadow-2-strong">PROBLEMAS DE INCIDENCIAS
+                            <div class="card chart-contenedor chart-loading">
+                                <div class="chart-title text-secondary">PROBLEMAS DE INCIDENCIAS
                                 </div>
                                 <div class="card-body">
+                                    <div class="chart-descripcion">Muestra los 10 problemas más frecuentes registrados.
+                                    </div>
                                     <div class="col-12">
                                         <div id="chart-problemas"></div>
                                     </div>
@@ -111,12 +139,13 @@
         <div>Guardar Imagen</div>
         <button class="capturar-btn btn-floating d-flex align-items-center justify-content-center"
             aria-label="Guardar Imagen de Graficos" title="Guardar Imagen de Graficos">
-            <i class="fas fa-camera fa-1x"></i>
+            <i class="fas fa-camera fa-1x text-white"></i>
         </button>
     </div>
 
 @endsection
 
 @section('scripts')
+    <script src="{{secure_asset('front/js/app/ChartMananger.js')}}"></script>
     <script src="{{secure_asset('front/js/reporte/cliente/crincidencias.js')}}?v={{ time() }}"></script>
 @endsection

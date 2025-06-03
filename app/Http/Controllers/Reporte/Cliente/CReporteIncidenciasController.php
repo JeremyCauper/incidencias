@@ -57,8 +57,7 @@ class CReporteIncidenciasController extends Controller
             ['name' => 'Asignada', 'value' => 0, 'itemStyle' => ['color' => 'rgb(84, 180, 211)']], // 1
             ['name' => 'En Proceso', 'value' => 0, 'itemStyle' => ['color' => 'rgb(59, 113, 202)']], // 2
             ['name' => 'Finalizado', 'value' => 0, 'itemStyle' => ['color' => 'rgb(20, 164, 77)']], // 3
-            ['name' => 'Faltan Datos', 'value' => 0, 'itemStyle' => ['color' => 'rgb(220, 76, 100)']], // 4
-            ['name' => 'Cierre Sistema', 'value' => 0, 'itemStyle' => ['color' => 'rgb(159, 166, 178)']], // 5
+            ['name' => 'Faltan Datos', 'value' => 0, 'itemStyle' => ['color' => 'rgb(220, 76, 100)']], // 4 
         ];
 
         $niveles = [
@@ -76,8 +75,11 @@ class CReporteIncidenciasController extends Controller
         $vis_asignadas = DB::table('tb_vis_asignadas')->select('id_usuario')->get()->groupBy('id_usuario');
         $data['personal'] = DB::table('tb_personal')->where(['id_area' => 1, 'estatus' => 1])->whereIn('tipo_acceso', [2, 3])->get()
             ->map(function ($val) use ($inc_asignadas, $vis_asignadas) {
+                $apellidos = $this->formatearNombre($val->apellidos);
+                $nombres = $this->formatearNombre($val->nombres, $val->apellidos);
                 return [
-                    'name' => $val->ndoc_usuario,
+                    'name' => $apellidos,
+                    'text' => "$val->ndoc_usuario $nombres",
                     'series' => [
                         'incidencias' => isset($inc_asignadas[$val->id_usuario]) ? count($inc_asignadas[$val->id_usuario]) : 0,
                         'visitas' => isset($vis_asignadas[$val->id_usuario]) ? count($vis_asignadas[$val->id_usuario]) : 0
@@ -90,6 +92,7 @@ class CReporteIncidenciasController extends Controller
             ->map(function ($items, $id) use ($problemas) {
                 return [
                     'name' => $problemas[$id]->codigo,
+                    'text' => $problemas[$id]->descripcion,
                     'series' => ['problemas' => count($items)],
                 ];
             })

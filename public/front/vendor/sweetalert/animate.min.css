@@ -109,7 +109,7 @@
     animation-duration: calc(var(--animate-duration)*3)
 }
 
-@media (prefers-reduced-motion:reduce),print {
+/* @media (prefers-reduced-motion:reduce),print {
     .animate__animated {
         -webkit-animation-duration: 1ms!important;
         animation-duration: 1ms!important;
@@ -122,7 +122,7 @@
     .animate__animated[class*=Out] {
         opacity: 0
     }
-}
+} */
 
 @-webkit-keyframes bounce {
     0%,20%,53%,to {
