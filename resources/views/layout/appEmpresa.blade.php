@@ -134,13 +134,14 @@
             <nav class="sidebar sidebar-offcanvas" id="sidebar">
                 <ul class="nav">
                     <li class="nav-item menu-item text-center pb-1 menu-bar" tittle-menu>
-                        <a class="nav-link menu-lateral" href="javascript:void(0)" role="button" id="expandir-menu">
+                        <a class="nav-link menu-lateral py-0" href="javascript:void(0)" role="button"
+                            id="expandir-menu">
                             <i class="fas fa-bars"></i>
                             <span class="ms-2 menu-title">Menu</span>
                         </a>
                     </li>
                     <li class="nav-item menu-item text-center" tittle-menu>
-                        <div class="nav-link menu-perfil">
+                        <div class="nav-link menu-perfil pt-0">
                             <img class="rounded-circle" src="{{ session('config_layout')->foto_perfil }}">
                             <span class="ms-2 menu-title">
                                 <p class="fw-bold mb-1 nombre-personal">{{ session('config_layout')->nombre_perfil }}
@@ -156,7 +157,8 @@
                         </a>
                     </li>
                     <li class="nav-item menu-item">
-                        <a class="nav-link menu-link" data-mdb-ripple-init="" href="{{ url('/empresa/reportes/reporte-incidencias') }}">
+                        <a class="nav-link menu-link" data-mdb-ripple-init=""
+                            href="{{ url('/empresa/reportes/reporte-incidencias') }}">
                             <i class="fas fa-chart-column menu-icon"></i>
                             <span class="menu-title">Reporte Incidencias</span>
                         </a>
