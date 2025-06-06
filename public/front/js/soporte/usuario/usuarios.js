@@ -93,7 +93,6 @@ $(document).ready(function () {
 
             case "4":
                 permisos = null;
-                // $('#content-permisos').removeAttr('style');
                 break;
 
             // case "5":

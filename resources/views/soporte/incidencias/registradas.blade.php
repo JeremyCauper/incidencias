@@ -75,7 +75,7 @@
             <div class="col-lg-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-primary" data-mdb-ripple-init onclick="searchTable(3)">
-                        <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En
+                        <h6 class="card-title title-count mb-2"><i class="fas fa-hourglass-start"></i> Incidencias En
                             Proceso</h6>
                         <h4 class="subtitle-count"><b data-panel="tEnProceso">0</b></h4>
                     </div>
@@ -843,7 +843,7 @@
 <script>
     // 
 </script>
-<script src="{{secure_asset('front/js/app/SelectManeger.js')}}?v={{ time() }}"></script>
+<script src="{{secure_asset('front/js/app/SelectManeger.js')}}"></script>
 <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
 <script src="{{secure_asset('front/js/soporte/incidencia/registradas.js')}}?v={{ time() }}"></script>
 @endsection
