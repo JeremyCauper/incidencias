@@ -22,7 +22,6 @@
 </script>
 
 <style>
-
     .mi-animacion-modal .modal-dialog {
         animation: aparecerDesdeAbajo 0.5s ease-out;
     }
