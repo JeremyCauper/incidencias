@@ -401,34 +401,69 @@ const CS_sproblema = new CSelect(['#sproblema'], {
     ]
 });
 
-const cMaterial = new CTable('#createMaterial', {
-    thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
-    tbody: [
-        { data: 'id_material' },
-        { data: 'producto' },
-        { data: 'cantidad' }
-    ],
-    extract: ['id_material', 'cantidad']
+const cMaterial = new CTable('createMaterial', {
+    dataSet: materiales,
+    table: {
+        thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
+        tbody: [
+            { data: 'id_material' },
+            { data: 'producto' },
+            { data: 'cantidad' }
+        ]
+    },
+    extract: ['id_material', 'cantidad'],
+    select: {
+        value: "value",
+        text: "text",
+        validation: [
+            { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+            { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+        ]
+    }
 });
 
-const cPersonal = new CTable('#createPersonal', {
-    thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-    tbody: [
-        { data: 'id' },
-        { data: 'doc' },
-        { data: 'nombre' }
-    ],
-    extract: ['id']
+const cPersonal = new CTable('createPersonal', {
+    dataSet: usuarios,
+    table: {
+        thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
+        tbody: [
+            { data: 'id' },
+            { data: 'doc' },
+            { data: 'nombre' }
+        ]
+    },
+    extract: ['id'],
+    select: {
+        value: 'id',
+        text: function (data) {
+            return `${data.doc} - ${data.nombre}`;
+        },
+        validation: [
+            { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+            { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+        ]
+    }
 });
 
-const cPersonal1 = new CTable('#createPersonal1', {
-    thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-    tbody: [
-        { data: 'id' },
-        { data: 'doc' },
-        { data: 'nombre' }
-    ],
-    extract: ['id']
+const cPersonal1 = new CTable('createPersonal1', {
+    dataSet: usuarios,
+    table: {
+        thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
+        tbody: [
+            { data: 'id' },
+            { data: 'doc' },
+            { data: 'nombre' }
+        ]
+    },
+    extract: ['id'],
+    select: {
+        value: "value",
+        text: "text",
+        validation: [
+            { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+            { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+        ]
+    }
 });
 
 function updateTable() {
@@ -658,10 +693,8 @@ function ShowAssign(e, cod) {
             });
 
             fMananger.formModalLoding('modal_assign', 'hide');
-            (inc.personal_asig).forEach(element => {
-                const accion = inc.estado_informe == 2 ? false : true;
-                cPersonal1.fillTable(element.id, accion);
-            });
+            const accion = inc.estado_informe == 2 ? false : true;
+            cPersonal1.fillTable((inc.personal_asig).map(obj => obj.id), accion);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
