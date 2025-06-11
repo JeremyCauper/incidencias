@@ -19,7 +19,8 @@ use App\Http\Controllers\Soporte\Empresas\SucursalesController;
 use App\Http\Controllers\Soporte\Incidencias\RegistradasController;
 use App\Http\Controllers\Soporte\Incidencias\ResueltasController;
 use App\Http\Controllers\Soporte\Inicio\PanelController;
-use App\Http\Controllers\Soporte\Mantenimientos\MaterialesController;
+use App\Http\Controllers\Soporte\Inventario\InventarioTecnicoController;
+use App\Http\Controllers\Soporte\Inventario\MaterialesController;
 use App\Http\Controllers\Soporte\Mantenimientos\Menu\MenuController;
 use App\Http\Controllers\Soporte\Mantenimientos\Menu\SubMenuController;
 use App\Http\Controllers\Soporte\Mantenimientos\Problema\ProblemaController;
@@ -202,6 +203,10 @@ Route::post('/soporte/asignacion-turno/eliminar', [TurnoController::class, 'dest
 
 Route::get('/soporte/reportes/reporte-incidencias', [ReporteIncidenciasController::class, 'view'])->middleware('auth');
 Route::get('/soporte/reportes/reporte-incidencias/index', [ReporteIncidenciasController::class, 'index']);
+
+Route::get('/soporte/inventario/materiales', [MaterialesController::class, 'view'])->middleware('auth');
+Route::get('/soporte/inventario/materiales/index', [MaterialesController::class, 'index']);
+Route::get('/soporte/inventario/tecnicos/index', [InventarioTecnicoController::class, 'index']);
 
 
 
