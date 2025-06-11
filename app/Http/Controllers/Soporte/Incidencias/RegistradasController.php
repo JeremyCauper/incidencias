@@ -64,7 +64,10 @@ class RegistradasController extends Controller
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,
-                    'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
+                    'dValue' => base64_encode(json_encode([  'nombre' => $nombre])),
+
+                    'id' => $u->id_usuario,
+                    'doc' => $u->ndoc_usuario,
                     'text' => "{$u->ndoc_usuario} - {$nombre}",
                     'nombre' => $nombre,
                     'estatus' => $u->estatus,
