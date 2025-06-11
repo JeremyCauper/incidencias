@@ -7,6 +7,7 @@
 <script src="{{secure_asset('front/vendor/selectize/selectize.min.js')}}"></script>
 
 <script>
+    let personal = <?= session('id_usuario') ?>;
     let cod_incidencia = '<?= $data['cod_inc'] ?>';
     let cod_orden = '<?= $data['cod_orden'] ?>';
     let empresas = <?php echo json_encode($data['company']); ?>;
@@ -18,9 +19,10 @@
     let obj_problem = <?php echo json_encode($data['problema']); ?>;
     let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
     let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
+    let materiales = <?php echo json_encode($data['materiales']); ?>;
     let usuarios = <?php echo json_encode($data['usuarios']); ?>;
 </script>
-
+resources\views\soporte\incidencias\registradas.blade.php
 <style>
     .mi-animacion-modal .modal-dialog {
         animation: aparecerDesdeAbajo 0.5s ease-out;
@@ -394,24 +396,7 @@
                 <div id="contenedor-personal">
                     <h6 class="tittle text-primary">Asignar Personal
                     </h6>
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div class="input-group mt-2 mb-2">
-                                <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
-                                <select class="select-clear" id="createPersonal">
-                                    <option value=""></option>
-                                    @foreach ($data['usuarios'] as $u)
-                                    <option value="{{$u['value']}}"
-                                        data-value="{{$u['dValue']}}"
-                                        {{ $u['estatus'] != 1 || $u['eliminado'] == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{$u['text']}}
-                                        {{ $u['eliminado'] == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="createPersonal"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -541,24 +526,7 @@
                     <span aria-item="estado"></span>
                 </div>
                 <div class="p-3 pb-0 fieldset mb-3">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div class="input-group mt-2 mb-3">
-                                <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
-                                <select class="select-clear" id="createPersonal1">
-                                    <option value=""></option>
-                                    @foreach ($data['usuarios'] as $u)
-                                    <option value="{{$u['value']}}"
-                                        data-value="{{$u['dValue']}}"
-                                        {{ $u['estatus'] != 1 || $u['eliminado'] == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{$u['text']}}
-                                        {{ $u['eliminado'] == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="createPersonal1"></div>
                 </div>
             </div>
             <div class="modal-footer">
