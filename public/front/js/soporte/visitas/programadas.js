@@ -100,10 +100,8 @@ function ShowAssign(e, id) {
                 $('#fecha_visita_asign').val(visita.fecha);
                 fMananger.formModalLoding('modal_assign', 'hide');
                 const dt = data.data;
-                (dt.personal_asig).forEach(element => {
-                    const accion = dt.estado == 1 ? false : true;
-                    cPersonal1.fillTable(element.id, accion);
-                });
+                const accion = dt.estado == 1 ? false : true;
+                cPersonal1.fillTable((dt.personal_asig).map(obj => obj.id), accion);
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {
