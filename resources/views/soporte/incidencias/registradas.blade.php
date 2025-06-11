@@ -22,7 +22,7 @@
     let materiales = <?php echo json_encode($data['materiales']); ?>;
     let usuarios = <?php echo json_encode($data['usuarios']); ?>;
 </script>
-resources\views\soporte\incidencias\registradas.blade.php
+
 <style>
     .mi-animacion-modal .modal-dialog {
         animation: aparecerDesdeAbajo 0.5s ease-out;
