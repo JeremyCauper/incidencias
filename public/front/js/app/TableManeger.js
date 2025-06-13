@@ -50,7 +50,7 @@ class CTable {
         }).append($('<i>', { class: 'fas fa-plus', style: 'pointer-events: none;' }));
 
         this._contenedor.attr({ class: 'row', 'ctable-content': contenedor }).append(
-            $('<div>', { class: 'col-md-9' }).append(
+            $('<div>', { class: 'col-lg-8' }).append(
                 $('<div>', { class: 'input-group mt-2 mb-2', 'ctable-contentSelect': contenedor }).append(this._selector, this._btnCreate)
             ),
             $('<div>', { class: 'col-12' }).append(
@@ -92,8 +92,8 @@ class CTable {
     createRow(value = this._selector.val()) {
         if (!value) return false;
         const obj = (Array.isArray(this.dataSet) ? this.dataSet : Object.values(this.dataSet)).find(v => v[this._structure.table.tbody[0].data] == value);
-        if (!obj) return boxAlert.minbox({ i: 'info', h: 'El registro ya existe' });
-        this.createTable();
+        if (!obj) return false;
+        if ($(`tr[ctable-table-tr-id="${value}"]`).length) return boxAlert.minbox({ i: 'info', h: 'El registro ya existe' });
 
         const extract = this._structure.extract;
         const $id = obj[extract[0]];
@@ -119,10 +119,11 @@ class CTable {
             }
             $tr.append($td);
         });
-        const actionDelete = $('<td>', { class: 'text-center' }).append($('<i>', { class: "far fa-trash-can text-danger", type: "button", 'ctable-delete': this._idContenedor }));
+        const actionDelete = $('<td>', { class: 'text-center' }).append($('<i>', { class: "far fa-trash-can text-danger", type: "button", 'ctable-delete': this._idContenedor, value: $id }));
         const dontDelete = $('<td>', { class: 'text-center' }).append($('<i>', { class: "fas fa-ban text-primary" }));
         $tr.append(this.acciones ? actionDelete : dontDelete);
 
+        this.createTable();
         this._table.children('tbody').append($tr);
 
         $(`i[ctable-delete="${this._idContenedor}"]`).off('click').on('click', (event) => {
@@ -135,15 +136,14 @@ class CTable {
     }
 
     deleteRow($this) {
-        const $tr = $($this).parent().parent();
-        const $id = $tr.attr('ctable-table-tr-id');
-        if (this.data[$id].registro) {
-            delete this.data[$id];
+        const _id = $($this).attr('value');
+        if (this.data[_id].registro) {
+            delete this.data[_id];
         } else {
-            this.data[$id].eliminado = 1;
+            this.data[_id].eliminado = 1;
         }
-        $tr.remove();
-        this._selector.children(`option[value="${$id}"]`).attr('disabled', false);
+        $(`tr[ctable-table-tr-id="${_id}"]`).remove();
+        this._selector.children(`option[value="${_id}"]`).attr('disabled', false);
         if (!this._table.children('tbody').children('tr').length) {
             this.deleteTable();
         }
