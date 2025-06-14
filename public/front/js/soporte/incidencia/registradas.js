@@ -404,17 +404,17 @@ const CS_sproblema = new CSelect(['#sproblema'], {
 const cMaterial = new CTable('createMaterial', {
     dataSet: materiales,
     table: {
-        thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
+        thead: ['PRODUCTO / MATERIAL', 'CANTIDAD'],
         tbody: [
-            { data: 'id_material' },
             { data: 'producto' },
             { data: 'cantidad' }
         ]
     },
+    count: 'cantidad',
     extract: ['id_material', 'cantidad'],
     select: {
-        value: "value",
-        text: "text",
+        value: "id_material",
+        text: "producto",
         validation: [
             { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
             { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
@@ -422,14 +422,16 @@ const cMaterial = new CTable('createMaterial', {
     }
 });
 
-const cPersonal = new CTable('createPersonal', {
+const config_personal = {
     dataSet: usuarios,
     table: {
-        thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
+        thead: ['Tecnicos'],
         tbody: [
-            { data: 'id' },
-            { data: 'doc' },
-            { data: 'nombre' }
+            {
+                data: 'doc', render: function (data, type, row) {
+                    return `${data} - ${row.nombre}`;
+                }
+            }
         ]
     },
     extract: ['id'],
@@ -443,28 +445,10 @@ const cPersonal = new CTable('createPersonal', {
             { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
         ]
     }
-});
+}
 
-const cPersonal1 = new CTable('createPersonal1', {
-    dataSet: usuarios,
-    table: {
-        thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-        tbody: [
-            { data: 'id' },
-            { data: 'doc' },
-            { data: 'nombre' }
-        ]
-    },
-    extract: ['id'],
-    select: {
-        value: "value",
-        text: "text",
-        validation: [
-            { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
-            { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
-        ]
-    }
-});
+const cPersonal = new CTable('createPersonal', config_personal);
+const cPersonal1 = new CTable('createPersonal1', config_personal);
 
 function updateTable() {
     tb_incidencia.ajax.reload();

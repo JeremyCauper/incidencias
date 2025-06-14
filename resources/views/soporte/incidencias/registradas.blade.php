@@ -658,7 +658,8 @@
                     </div>
 
                     <div class="col-12">
-                        <div class="row" id="content-material">
+                        <div id="createMaterial"></div>
+                        <!-- <div class="row" id="content-material">
                             <div class="col-lg-9 my-1">
                                 <div class="input-group">
                                     <select class="select-clear" id="createMaterial">
@@ -691,7 +692,7 @@
                             <div class="col-lg-3 col-6 my-1 ps-0 d-none" id="content-codAviso">
                                 <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">

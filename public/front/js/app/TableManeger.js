@@ -3,13 +3,30 @@ class CTable {
     _idContenedor = null;
     _selector = null;
     _btnCreate = null;
+    _counter = null;
     _table = null;
     _structure = {
+        count: null,
         repit: false,
         table: {},
         extract: [],
         select: {}
     };
+    _dom = [
+        {
+            class: 'col-lg-8 col-11',
+            contenido: this._selector
+        },
+        {
+            class: 'col-1',
+            contenido: this._btnCreate
+        },
+        {
+            class: 'col-lg-3 col-6 ps-lg-0',
+            contenido: this._counter
+        }
+    ];
+    _dataCount = 1;
     static _accion = true;
     static _newRow = 1;
     static _data = {};
@@ -41,6 +58,7 @@ class CTable {
             class: 'select-clear',
             'ctable-select': contenedor
         });
+        this._dom[0].contenido = this._selector;
 
         this._btnCreate = $('<button>', {
             type: "button",
@@ -48,16 +66,32 @@ class CTable {
             'ctable-create': contenedor,
             'data-mdb-ripple-init': ''
         }).append($('<i>', { class: 'fas fa-plus', style: 'pointer-events: none;' }));
+        this._dom[1].contenido = this._btnCreate;
 
-        this._contenedor.attr({ class: 'row', 'ctable-content': contenedor }).append(
-            $('<div>', { class: 'col-lg-8' }).append(
-                $('<div>', { class: 'input-group mt-2 mb-2', 'ctable-contentSelect': contenedor }).append(this._selector, this._btnCreate)
-            ),
-            $('<div>', { class: 'col-12' }).append(
+        if (this._structure?.count) {
+            this._counter = $('<div>', { class: 'input-group disabled', style: 'max-width: 300px;', 'ctable-count-content': contenedor }).append(
+                $('<button>', { class: 'btn btn-secondary px-2', type: 'button', 'data-mdb-ripple-init': '', 'ctable-count-minus': contenedor }).append(
+                    $('<i>', { class: 'fas fa-minus', style: 'font-size: .75rem;' })
+                ),
+                $('<input>', { type: 'number', class: 'form-control', min: '1', value: '1', 'ctable-count-cant': contenedor }),
+                $('<button>', { class: 'btn btn-secondary px-2', type: 'button', 'data-mdb-ripple-init': '', 'ctable-count-plus': contenedor }).append(
+                    $('<i>', { class: 'fas fa-plus', style: 'font-size: .75rem;' })
+                )
+            );
+            this._dom[2].contenido = this._counter;
+        }
+
+        this._contenedor.attr({ class: 'row', 'ctable-content': contenedor });
+        this._dom.forEach(config => {
+            this._contenedor.append($('<div>', { class: config.class }).append(config.contenido));
+        });
+        this._contenedor.append(
+            $('<div>', { class: 'col-12 pt-3', style: 'overflow: auto;' }).append(
                 $('<div>', { 'ctable-contentTable': contenedor })
             )
         );
         this.fillSelect();
+        this.createCount();
 
         // Agregar el manejador de clics para el botón
         $(`button[ctable-create="${contenedor}"]`).on('click', () => {
@@ -91,11 +125,10 @@ class CTable {
 
     createRow(value = this._selector.val()) {
         if (!value) return false;
-        const obj = (Array.isArray(this.dataSet) ? this.dataSet : Object.values(this.dataSet)).find(v => v[this._structure.table.tbody[0].data] == value);
+        const extract = this._structure.extract;
+        const obj = (Array.isArray(this.dataSet) ? this.dataSet : Object.values(this.dataSet)).find(v => v[extract[0]] == value);
         if (!obj) return false;
         if ($(`tr[ctable-table-tr-id="${value}"]`).length) return boxAlert.minbox({ i: 'info', h: 'El registro ya existe' });
-
-        const extract = this._structure.extract;
         const $id = obj[extract[0]];
 
         if ($id in this.data) {
@@ -103,7 +136,9 @@ class CTable {
         } else {
             var obj_td = {};
             extract.forEach(e => {
-                obj_td[e] = obj[e];
+                let valor = obj[e];
+                if (this._structure?.count && this._structure?.count == e) valor = this._dataCount;
+                obj_td[e] = valor;
             });
             obj_td['eliminado'] = 0;
             obj_td['registro'] = this.newRow;
@@ -112,11 +147,11 @@ class CTable {
         const $tr = $('<tr>', { 'ctable-table-tr-id': $id, 'ctable-table-tr': this.acciones, 'ctable-table-rnew': this.newRow, 'ctable-repit': obj[this._structure.table.tbody[0].data] });
         this._structure.table.tbody.forEach(col => {
             const $td = $('<td>', { 'ctable-table-col': col.data });
-            if (col.render && typeof col.render === 'function') {
-                $td.html(col.render(obj[col.data]));
-            } else {
-                $td.html(obj[col.data]);
+            let valor = (col.render && typeof col.render === 'function') ? col.render(obj[col.data], typeof col.data, obj) : obj[col.data];
+            if (this._structure?.count == col.data) {
+                valor = this._dataCount;
             }
+            $td.html(valor);
             $tr.append($td);
         });
         const actionDelete = $('<td>', { class: 'text-center' }).append($('<i>', { class: "far fa-trash-can text-danger", type: "button", 'ctable-delete': this._idContenedor, value: $id }));
@@ -129,8 +164,8 @@ class CTable {
         $(`i[ctable-delete="${this._idContenedor}"]`).off('click').on('click', (event) => {
             this.deleteRow(event.currentTarget);
         });
-        this._selector.val('').trigger('change.select2')
-            .children(`option[value="${$id}"]`).attr('disabled', true);
+        this.fillSelect();
+        this.clearCount();
         this.acciones = true;
         this.newRow = 1;
     }
@@ -143,7 +178,7 @@ class CTable {
             this.data[_id].eliminado = 1;
         }
         $(`tr[ctable-table-tr-id="${_id}"]`).remove();
-        this._selector.children(`option[value="${_id}"]`).attr('disabled', false);
+        this.fillSelect();
         if (!this._table.children('tbody').children('tr').length) {
             this.deleteTable();
         }
@@ -152,7 +187,7 @@ class CTable {
     createTable() {
         if (this._table === null) {
             this._table = $('<table>', { class: 'table w-100 text-nowrap', 'ctable-table': this._idContenedor }).append(
-                $('<thead>').append($('<tr>').html(`<th>${(this._structure.table.thead).join('</th><th>')}</th><th class="text-center">Acciones</th>`)),
+                $('<thead>').append($('<tr>').html(`<th>${(this._structure.table.thead).join('</th><th>')}</th><th class="text-center" style="min-width: 50px;max-width: 120px;width: 120px;"></th>`)),
                 $('<tbody>')
             );
             $(`div[ctable-contentTable="${this._idContenedor}"]`).append(this._table);
@@ -162,6 +197,7 @@ class CTable {
     deleteTable() {
         this.data = {};
         if (this._table !== null) this._table.remove();
+        this.fillSelect();
         this._table = null;
     }
 
@@ -193,13 +229,19 @@ class CTable {
                 atributos['data-nosearch'] = true;
             }
 
+            const valid = this.data[value];
+            if (valid) {
+                atributos.disabled = true;
+            }
             this._selector.append(
                 $('<option>')
                     .val(value)
-                    .text(text + (hidden && badge ? ` <label class="badge badge-danger ms-2">${badge}</label>` : ''))
+                    .text(text +
+                        (hidden && badge ? ` <label class="badge badge-danger ms-2">${badge}</label>` : '') +
+                        (valid ? ' <label class="badge badge-info ms-2">En uso</label>' : '')
+                    )
                     .attr(atributos)
             );
-            // item['use'] = false;
         });
     }
 
@@ -210,6 +252,61 @@ class CTable {
             }
         }
         return { hidden: false, badge: '' };
+    }
+
+    createCount() {
+        if (!this._structure?.count) return false;
+        $('head').append(`<style>/* Ocultar flechas en Chrome, Safari, Edge */input[type=number].sin-flechas::-webkit-inner-spin-button,input[type=number].sin-flechas::-webkit-outer-spin-button {-webkit-appearance: none;margin: 0;}/* Ocultar flechas en Firefox */input[type=number].sin-flechas {-moz-appearance: textfield;}</style>`);
+        const $btnMas = $(`button[ctable-count-plus="${this._idContenedor}"]`);
+        const $input = $(`input[ctable-count-cant="${this._idContenedor}"]`);
+        const $btnMenos = $(`button[ctable-count-minus="${this._idContenedor}"]`);
+
+        $btnMas.off('click').on('click', () => this.updateValueCount(1));
+        $btnMenos.off('click').on('click', () => this.updateValueCount(-1));
+
+        // Prevenir pegar texto no numérico
+        $input.off('paste').on('paste', (event) => {
+            const pasted = event.originalEvent.clipboardData.getData('text');
+            if (!/^\d+$/.test(pasted)) {
+                event.preventDefault();
+            }
+        });
+
+        // Validar al cambiar el valor (manualmente o al salir)
+        $input.off('blur').on('blur', () => {
+            let valor = parseInt($input.val(), 10);
+            if (isNaN(valor) || valor < 1) {
+                this.updateValueCount();
+            }
+        });
+
+        this._selector.on('change', () => {
+            this.clearCount();
+        })
+    }
+
+    updateValueCount(delta = null) {
+        if (!this._structure?.count) return false;
+        const $input = $(`input[ctable-count-cant="${this._idContenedor}"]`);
+        if (!delta) $input.val(0);
+
+        let valor = parseInt($input.val(), 10);
+        if (isNaN(valor)) valor = 1;
+        valor = Math.max(1, valor + delta);
+        $input.val(valor);
+        this._dataCount = valor;
+    }
+
+    clearCount() {
+        if (!this._structure?.count) return false;
+        const countContent = $(`div[ctable-count-content="${this._idContenedor}"]`);
+
+        if (this._selector.val()) {
+            countContent.removeClass('disabled');
+        } else {
+            countContent.addClass('disabled');
+        }
+        this.updateValueCount();
     }
 
     extract() {
