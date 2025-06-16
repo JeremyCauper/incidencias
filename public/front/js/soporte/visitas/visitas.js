@@ -43,25 +43,33 @@ $(document).ready(function () {
     });
 });
 
-const cPersonal = new CTable('#createPersonal', {
-    thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-    tbody: [
-        { data: 'id' },
-        { data: 'doc' },
-        { data: 'nombre' }
-    ],
-    extract: ['id']
-});
+const config_personal = {
+    dataSet: usuarios,
+    table: {
+        thead: ['Tecnicos'],
+        tbody: [
+            {
+                data: 'doc', render: function (data, type, row) {
+                    return `${data} - ${row.nombre}`;
+                }
+            }
+        ]
+    },
+    extract: ['id'],
+    select: {
+        value: 'id',
+        text: function (data) {
+            return `${data.doc} - ${data.nombre}`;
+        },
+        validation: [
+            { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+            { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+        ]
+    }
+}
 
-const cPersonal1 = new CTable('#createPersonal1', {
-    thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-    tbody: [
-        { data: 'id' },
-        { data: 'doc' },
-        { data: 'nombre' }
-    ],
-    extract: ['id']
-});
+const cPersonal = new CTable('createPersonal', config_personal);
+const cPersonal1 = new CTable('createPersonal1', config_personal);
 
 function updateTableVisitas() {
     tb_visitas.ajax.reload();
@@ -130,8 +138,9 @@ function DetalleVisita(id) {
                     direccion: empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
+                    rDias: dt.diasVisitas + ' día' + ((dt.diasVisitas>0) ? 's' : ''),
                     vTotal: dt.totalVisitas,
-                    rDias: dt.diasVisitas,
+                    vRealizada: dt.vRealizadas,
                     mensaje: dt.message
                 });
 

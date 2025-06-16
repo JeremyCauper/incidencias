@@ -16,6 +16,7 @@
         let cod_ordenv = "{{$data['cod_ordenv']}}";
         let empresas = <?php echo json_encode($data['company']); ?>;
         let sucursales = <?php echo json_encode($data['scompany']); ?>;
+        let usuarios = <?php echo json_encode($data['usuarios']); ?>;
     </script>
 @endsection
 @section('content')
@@ -51,6 +52,12 @@
                             role="button">
                             <i class="fas fa-rotate-right"></i>
                         </button>
+                        <select id="filtroEstado">
+                            <option value="">Todos</option>
+                            <option value="0">Asignar</option>
+                            <option value="1">Asignada</option>
+                            <option value="2">Completada</option>
+                        </select>
                     </div>
                     <div class="row">
                         <div class="col-12">
@@ -100,7 +107,25 @@
                                     createdRow: function (row, data, dataIndex) {
                                         $(row).find('td:eq(0), td:eq(2), td:eq(3)').addClass('text-center');
                                     },
+                                    ordering: false,
                                     processing: true
+                                });
+
+                                // Filtro personalizado por data-estado
+                                $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
+                                    const filtro = $('#filtroEstado').val();
+                                    const estado = tb_visitas.row(dataIndex).data().estado;
+                                    console.log(estado);
+
+                                    if (!filtro || estado === filtro) {
+                                        return true;
+                                    }
+                                    return false;
+                                });
+
+                                // Disparar filtro cuando cambia el select
+                                $('#filtroEstado').on('change', function () {
+                                    tb_visitas.draw();
                                 });
                             </script>
                         </div>
@@ -230,33 +255,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="mt-2 p-3 pb-0 fieldset mb-2">
+                    <div class="fieldset">
                         <input type="hidden" id="idSucursal" name="idSucursal">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <label class="form-label mb-0" for="createPersonal">Asignar Personal</label>
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text border-0 ps-0"><i
-                                            class="fas fa-chalkboard-user"></i></span>
-                                    <select class="select-clear" id="createPersonal">
-                                        <option value=""></option>
-                                        @foreach ($data['usuarios'] as $u)
-                                            <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label mb-0" for="fecha_visita">Fecha Visita</label>
-                                <div class="input-group" role="button">
-                                    <label class="input-group-text ps-0 pe-1 border-0"><i
-                                            class="far fa-calendar"></i></label>
-                                    <input type="text" class="form-control rounded" id="fecha_visita" name="fecha_visita"
-                                        role="button" readonly>
-                                </div>
+                        <div class="col-md-4">
+                            <label class="form-label mb-0" for="fecha_visita">Fecha Visita</label>
+                            <div class="input-group" role="button">
+                                <label class="input-group-text ps-0 pe-1 border-0"><i class="far fa-calendar"></i></label>
+                                <input type="text" class="form-control rounded" id="fecha_visita" name="fecha_visita"
+                                    role="button" readonly>
                             </div>
                         </div>
+                        <label class="form-label mb-0">Asignar Personal</label>
+                        <div id="createPersonal"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -298,8 +308,8 @@
                             <div class="list-group-item">
                                 <div class="row col-12">
                                     <div class="col-md-3 col-6">
-                                        <label class="form-label me-2">Limitacion: </label><span style="font-size: .75rem;"
-                                            aria-item="rDias">0</span>
+                                        <label class="form-label me-2">Dias / Visitas: </label><span
+                                            style="font-size: .75rem;" aria-item="rDias">0</span>
                                     </div>
                                     <div class="col-md-3 col-6">
                                         <label class="form-label me-2">Visitas Totales: </label><span
@@ -416,30 +426,7 @@
                     </div>
                     <div class="p-3 pb-0 fieldset">
                         <input type="hidden" id="id_visitas_asign">
-                        <div class="row">
-                            <div class="col-md-8">
-                                <div class="input-group mb-3">
-                                    <span class="input-group-text border-0 ps-0"><i
-                                            class="fas fa-chalkboard-user"></i></span>
-                                    <select class="select-clear" id="createPersonal1">
-                                        <option value=""></option>
-                                        @foreach ($data['usuarios'] as $u)
-                                            <option value="{{$u['value']}}" data-value="{{$u['dValue']}}">{{$u['text']}}
-                                            </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label mb-0" for="fecha_visita_asign">Fecha Visita</label>
-                                <div class="input-group" role="button">
-                                    <label class="input-group-text ps-0 pe-1 border-0"><i
-                                            class="far fa-calendar"></i></label>
-                                    <input type="text" class="form-control rounded" id="fecha_visita_asign"
-                                        name="fecha_visita_asign" role="button" readonly>
-                                </div>
-                            </div>
-                        </div>
+                        <div id="createPersonal1"></div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -527,7 +514,8 @@
                             </div>
 
                             <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">BATERIAS UPS</label></div>
+                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label
+                                        class="item-isla">BATERIAS UPS</label></div>
                                 <div class="col-lg-9">
                                     <div class="input-group">
                                         <span class="input-group-text border-0 ps-0"><i
@@ -538,7 +526,8 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">SALIDA DE ENERGIA</label></div>
+                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label
+                                        class="item-isla">SALIDA DE ENERGIA</label></div>
                                 <div class="col-lg-9">
                                     <div class="input-group">
                                         <span class="input-group-text border-0 ps-0"><i
@@ -564,7 +553,8 @@
                             </div>
 
                             <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">INGRESO DE ENERGIA</label></div>
+                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label
+                                        class="item-isla">INGRESO DE ENERGIA</label></div>
                                 <div class="col-lg-9">
                                     <div class="input-group">
                                         <span class="input-group-text border-0 ps-0"><i
@@ -575,7 +565,8 @@
                                 </div>
                             </div>
                             <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">SALIDA DE ENERGIA</label></div>
+                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label
+                                        class="item-isla">SALIDA DE ENERGIA</label></div>
                                 <div class="col-lg-9">
                                     <div class="input-group">
                                         <span class="input-group-text border-0 ps-0"><i

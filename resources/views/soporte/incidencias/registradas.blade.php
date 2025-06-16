@@ -525,7 +525,7 @@
                     <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Asignar Personal</h6>
                     <span aria-item="estado"></span>
                 </div>
-                <div class="p-3 pb-0 fieldset mb-3">
+                <div class="fieldset">
                     <div id="createPersonal1"></div>
                 </div>
             </div>
@@ -657,6 +657,9 @@
                         <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
                     </div>
 
+                    <div class="col-md-4 col-6 my-1 ps-0 d-none" id="content-codAviso">
+                        <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
+                    </div>
                     <div class="col-12">
                         <div id="createMaterial"></div>
                         <!-- <div class="row" id="content-material">

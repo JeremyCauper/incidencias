@@ -126,6 +126,12 @@ $(document).ready(function () {
         CS_problema.selecionar($(this).val());
     });
 
+    $('#tIncidencia').on('change', function () {
+        if ($(this).val() == "1" ) {
+            cPersonal.fillTable(personal);
+        }
+    });
+
     $('#problema').on('change', function () {
         CS_sproblema.selecionar(() => { return obj_problem[$(this).val()]?.codigo ?? null; });
     });
@@ -245,10 +251,19 @@ $(document).ready(function () {
     });
 
     $('.modal').on('shown.bs.modal', function () {
-        $('#fecha_imforme').val(date('Y-m-d'));
-        $('#hora_informe').val(date('H:i:s'));
+        switch ($(this).attr('id')) {
+            case 'modal_incidencias':
+                $('#fecha_imforme').val(date('Y-m-d'));
+                $('#hora_informe').val(date('H:i:s'));
+                $('#tSoporte').val(1).trigger('change');
+                if ($('#tIncidencia').val() == "1" && $('#id_inc').val() == "0") {
+                    cPersonal.fillTable(personal);
+                }
+                break;
 
-        manCantidad();
+            default:
+                break;
+        }
     });
 
     $('.modal').on('hidden.bs.modal', function () {
@@ -268,8 +283,6 @@ $(document).ready(function () {
                 text: c.nombres
             })));
         }, 100);
-
-        $('#tSoporte').val(1).trigger('change');
         $('#contenedor-personal').removeClass('d-none');
         cPersonal.deleteTable();
         cPersonal1.deleteTable();
@@ -403,6 +416,7 @@ const CS_sproblema = new CSelect(['#sproblema'], {
 
 const cMaterial = new CTable('createMaterial', {
     dataSet: materiales,
+    dom: '<"row"<"col-lg-8"s><"col-lg-3 col-6"C><"col-1"B>>',
     table: {
         thead: ['PRODUCTO / MATERIAL', 'CANTIDAD'],
         tbody: [
