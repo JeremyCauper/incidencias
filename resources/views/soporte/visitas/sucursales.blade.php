@@ -11,6 +11,10 @@
             font-size: 12px;
             /* padding-top: ; */
         }
+
+        #tb_visitas_filter.dataTables_filter label {
+            width: 100% !important;
+        }
     </style>
     <script>
         let cod_ordenv = "{{$data['cod_ordenv']}}";
@@ -48,24 +52,17 @@
                         <strong>Visitas a Programar</strong>
                     </h6>
                     <div>
-                        <button class="btn btn-primary btn-sm px-1" onclick="updateTableVisitas()" data-mdb-ripple-init
+                        <button class="btn btn-primary px-2" onclick="updateTableVisitas()" data-mdb-ripple-init
                             role="button">
                             <i class="fas fa-rotate-right"></i>
                         </button>
-                        <select id="filtroEstado">
-                            <option value="">Todos</option>
-                            <option value="0">Asignar</option>
-                            <option value="1">Asignada</option>
-                            <option value="2">Completada</option>
-                        </select>
                     </div>
                     <div class="row">
                         <div class="col-12">
                             <table id="tb_visitas" class="table table-hover text-nowrap" style="width:100%">
                                 <thead>
                                     <tr class="text-bg-primary text-center">
-                                        <th>Ruc</th>
-                                        <th>Sucursal</th>
+                                        <th>Ruc - Sucursal</th>
                                         <th>Visitas Realizadas</th>
                                         <th>Acciones</th>
                                     </tr>
@@ -77,6 +74,16 @@
                                     scrollX: true,
                                     scrollY: 400,
                                     fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
+                                    dom: `<"row"
+                                                    <"col-lg-12 mb-2"B>>
+                                                <"row"
+                                                    <"col-sm-4 text-xsm-start text-center my-1"l>
+                                                    <"col-sm-3 col-xsm-4 text-xsm-end text-center my-1 selectFiltroEstado">
+                                                    <"col-sm-5 col-xsm-8 text-xsm-end text-center my-1"f>>
+                                                <"contenedor_tabla my-2"tr>
+                                                <"row"
+                                                    <"col-md-5 text-md-start text-center my-1"i>
+                                                    <"col-md-7 text-md-end text-center my-1"p>>`,
                                     ajax: {
                                         url: `${__url}/soporte/visitas/sucursales/index`,
                                         dataSrc: function (json) {
@@ -91,8 +98,11 @@
                                         }
                                     },
                                     columns: [
-                                        { data: 'ruc' },
-                                        { data: 'sucursal' },
+                                        {
+                                            data: 'ruc', render: function (data, type, row) {
+                                                return `${data} - ${row.sucursal}`;
+                                            }
+                                        },
                                         {
                                             data: 'visita', render: function (data, type, row) {
                                                 badgeOptions = data == 'completado'
@@ -105,27 +115,10 @@
                                         { data: 'acciones' }
                                     ],
                                     createdRow: function (row, data, dataIndex) {
-                                        $(row).find('td:eq(0), td:eq(2), td:eq(3)').addClass('text-center');
+                                        $(row).find('td:eq(1), td:eq(2)').addClass('text-center');
                                     },
                                     ordering: false,
                                     processing: true
-                                });
-
-                                // Filtro personalizado por data-estado
-                                $.fn.dataTable.ext.search.push(function (settings, data, dataIndex) {
-                                    const filtro = $('#filtroEstado').val();
-                                    const estado = tb_visitas.row(dataIndex).data().estado;
-                                    console.log(estado);
-
-                                    if (!filtro || estado === filtro) {
-                                        return true;
-                                    }
-                                    return false;
-                                });
-
-                                // Disparar filtro cuando cambia el select
-                                $('#filtroEstado').on('change', function () {
-                                    tb_visitas.draw();
                                 });
                             </script>
                         </div>
@@ -161,7 +154,7 @@
                         <strong>Visitas Programadas</strong>
                     </h6>
                     <div>
-                        <button class="btn btn-primary btn-sm px-1" onclick="updateTableVProgramadas()" data-mdb-ripple-init
+                        <button class="btn btn-primary px-2" onclick="updateTableVProgramadas()" data-mdb-ripple-init
                             role="button">
                             <i class="fas fa-rotate-right"></i>
                         </button>

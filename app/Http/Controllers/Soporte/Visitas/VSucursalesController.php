@@ -48,7 +48,7 @@ class VSucursalesController extends Controller
     {
         try {
             $empresas = DB::table('tb_empresas')->where('contrato', 1)->get()->keyBy('ruc');
-            $visitas = DB::table('tb_visitas')->where('eliminado', 0)->whereMonth('fecha', now()->month)->get()->groupBy('id_sucursal');
+            $visitas = DB::table('tb_visitas')->where('eliminado', 0)->whereMonth('fecha', now()->month)->get();
             $conteo = ['vSinAsignar' => 0, 'vAsignadas' => 0];
 
             $sucursales = DB::table('tb_sucursales')
@@ -57,13 +57,12 @@ class VSucursalesController extends Controller
                 ->filter(fn($s) => isset($empresas[$s->ruc])) // Si sigues con ruc
                 ->map(function ($s) use ($empresas, $visitas, &$conteo) {
                     $empresa = $empresas[$s->ruc];
-                    $visitasSucursal = $visitas[$s->id] ?? collect();
-                    $vRealizadas = $visitasSucursal->count();
+                    $visitasSucursal = $visitas->where('id_sucursal', $s->id);
+                    $vRealizadas = $visitasSucursal->where('estado', 2)->count();
+                    $vAsignadas = $visitasSucursal->whereIn('estado', [0, 1])->count();
                     $totalVisitas = $empresa->visitas;
 
-                    $badge = $vRealizadas == $totalVisitas && $totalVisitas > 0 ? 'completado' : ($vRealizadas > 0 ? $vRealizadas : 0);
-
-                    $estado = match (true) { $badge === 'completado' => 2, $badge > 0 => 1, default => 0};
+                    $estado = match (true) { ($totalVisitas == $vRealizadas && $vAsignadas == 0) => 2, $vAsignadas > 0 => 1, default => 0};
 
                     match ($estado) {
                         2 => null,
@@ -72,19 +71,19 @@ class VSucursalesController extends Controller
                     };
 
                     $acciones = [
-                        2 => ['color' => 'primary', 'fn' => "DetalleVisita($s->id)", 'icon' => 'check-double'],
-                        1 => ['color' => 'info', 'fn' => "DetalleVisita($s->id)", 'icon' => 'user-check'],
-                        0 => ['color' => 'secondary', 'fn' => "AsignarVisita($s->id)", 'icon' => 'user-gear'],
+                        2 => ['color' => 'success', 'fn' => "DetalleVisita($s->id)", 'icon' => 'check-double'],
+                        1 => ['color' => 'info', 'fn' => "DetalleVisita($s->id)", 'icon' => 'user-clock'],
+                        0 => ['color' => 'secondary', 'fn' => "AsignarVisita($s->id)", 'icon' => 'user-plus'],
                     ][$estado];
-                    $accion = '<button class="btn btn-' . ($acciones['color']) . ' btn-sm px-2" onclick="' . ($acciones['fn']) . '" data-estado="' . $estado . '" data-mdb-ripple-init><i class="fas fa-' . ($acciones['icon']) . '"></i></button>';
+                    $accion = '<span style="display:none;">' . $estado . '</span><button class="btn btn-' . ($acciones['color']) . ' btn-sm px-2" onclick="' . ($acciones['fn']) . '" data-mdb-ripple-init><i class="fas fa-' . ($acciones['icon']) . '"></i></button>';
 
                     return [
                         'id' => $s->id,
                         'ruc' => $s->ruc,
                         'sucursal' => $s->nombre,
-                        'visita' => $badge,
-                        'vRealizadas' => $vRealizadas,
+                        'visita' => $vRealizadas,
                         'totalVisitas' => $totalVisitas,
+                        'vRealizadas' => $vRealizadas,
                         'estado' => $estado,
                         'acciones' => $accion
                     ];
@@ -165,16 +164,16 @@ class VSucursalesController extends Controller
                 return $v;
             });
 
-            $vRealizadas = count($visitas ?? []);
             $totalVisitas = $empresa->visitas;
-            $diasVisitas = $empresa->dias_visita + 1;
+            $vRealizadas = collect($visitas ?? [])->where('estado', 2)->count();
+            $vPendientes = collect($visitas ?? [])->whereIn('estado', [0, 1])->count();
+            $diasVisitas = $empresa->dias_visita;
             $fechaVisita = now()->addMonth()->startOfMonth()->format('Y-m-d');
-            ;
-            if (count($visitas) && $totalVisitas > $vRealizadas) {
+
+            if (count($visitas) && $totalVisitas > ($vRealizadas + $vPendientes)) {
                 $ultimoElemento = $visitas[count($visitas) - 1];
                 $fechaVisita = date('Y-m-d', strtotime($ultimoElemento->fecha . " +$diasVisitas days"));
             }
-
 
             $result = [
                 'id' => $sucursal->id,
@@ -185,6 +184,7 @@ class VSucursalesController extends Controller
                 'contrato' => $empresa->contrato,
                 'totalVisitas' => $totalVisitas,
                 'vRealizadas' => $vRealizadas,
+                'vPendientes' => $vPendientes,
                 'diasVisitas' => $diasVisitas,
                 'visitas' => $visitas,
                 'message' => "Podrá asignar visitas desde el $fechaVisita."

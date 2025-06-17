@@ -12,6 +12,11 @@ $(document).ready(function () {
             placeholder: '-- Seleccione --',
             allowClear: true,
         },
+        "clear_nsearch": {
+            placeholder: '-- Seleccione --',
+            minimumResultsForSearch: Infinity,
+            allowClear: true,
+        },
         "tags": {
             placeholder: 'Buscar',
             allowClear: true,
@@ -102,6 +107,11 @@ $(document).ready(function () {
     // Allow clear selection
     $('.select-clear').each(function () {
         initializeSelect2($(this), config.clear);
+    });
+
+    // Allow clear selection
+    $('.select-clear-nsearch').each(function () {
+        initializeSelect2($(this), config.clear_nsearch);
     });
 
     // Allow tags selection

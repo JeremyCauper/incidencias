@@ -72,18 +72,15 @@ class ChartMananger {
             const trigger = this.type === 'bar' ? 'axis' : 'item';
             const barTooltip = this.type === 'bar' ? {
                 axisPointer: { type: 'shadow' },
-                formatter: (params) => {
+                formatter: this.config?.toolTip?.formatter || ((params) => {
                     let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
 
                     params.forEach(item => {
                         const value = item.data.value;
-                        const total = totals[item.seriesName.toLowerCase()];
-                        const percent = total > 0 ? ((value / total) * 100) : 0;
-
-                        result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value} (${percent.toFixed(1)}%)</b><br/>`;
+                        result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
                     });
                     return result;
-                }
+                })
             } : {};
 
             return { tooltip: { trigger, ...barTooltip } };
@@ -195,7 +192,8 @@ class ChartMananger {
                     emphasis: { focus: 'series' },
                     data: this.data.map(item => ({
                         value: item.series[key],
-                        text: item.text
+                        text: item.text,
+                        data: item
                     }))
                 }));
             }

@@ -41,6 +41,29 @@ $(document).ready(function () {
         tb_visitas.columns.adjust().draw();
         tb_vprogramadas.columns.adjust().draw();
     });
+
+    let cSelect_search = $('.selectFiltroEstado');
+    if (cSelect_search.length) {
+        let selector = $('<select>', { 'id': 'filtroEstado', class: 'select-clear-nsearch' }).html($('<option>', { value: '', text: '-- Seleccione --' }));
+        Object.entries({
+            0: 'Sin Asignar',
+            1: 'Asignada',
+            2: 'Completada'
+        }).forEach(([clave, valor]) => {
+            selector.append($('<option>').val(clave).text(valor));
+        });
+
+        cSelect_search.append(selector);
+        selector.select2({
+            placeholder: '-- Todos --',
+            minimumResultsForSearch: Infinity,
+            allowClear: true,
+        });
+        // Disparar filtro cuando cambia el select
+        $('#filtroEstado').on('change', function () {
+            tb_visitas.column(2).search($(this).val()).draw();
+        });
+    }
 });
 
 const config_personal = {
@@ -138,9 +161,10 @@ function DetalleVisita(id) {
                     direccion: empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
-                    rDias: dt.diasVisitas + ' día' + ((dt.diasVisitas>0) ? 's' : ''),
+                    rDias: dt.diasVisitas + ' día' + ((dt.diasVisitas > 0) ? 's' : ''),
                     vTotal: dt.totalVisitas,
                     vRealizada: dt.vRealizadas,
+                    vPendiente: dt.vPendientes,
                     mensaje: dt.message
                 });
 
