@@ -27,6 +27,9 @@ class VSucursalesController extends Controller
                 return [
                     'value' => $u->id_usuario,
                     'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
+                    'id' => $u->id_usuario,
+                    'doc' => $u->ndoc_usuario,
+                    'nombre' => $nombre,
                     'text' => "{$u->ndoc_usuario} - {$nombre}"
                 ];
             });
@@ -45,54 +48,48 @@ class VSucursalesController extends Controller
     {
         try {
             $empresas = DB::table('tb_empresas')->where('contrato', 1)->get()->keyBy('ruc');
-            $visitas = DB::table('tb_visitas')->whereNot('estado', 2)->where('eliminado', 0)->whereMonth('fecha', now()->format('m'))->get()->groupBy('id_sucursal')
-                ->map(function ($items) {
-                    return $items->mapWithKeys(function ($item) {
-                        return [
-                            $item->id => $item
-                        ];
-                    });
-                });
-            $conteo = [
-                "vSinAsignar" => 0,
-                "vAsignadas" => 0
-            ];
+            $visitas = DB::table('tb_visitas')->where('eliminado', 0)->whereMonth('fecha', now()->month)->get();
+            $conteo = ['vSinAsignar' => 0, 'vAsignadas' => 0];
 
-            $sucursales = DB::table('tb_sucursales')->where('v_visitas', 1)->get()
-                ->filter(fn($val) => isset($empresas[$val->ruc])) // Filtra solo las sucursales con empresas activas
-                ->map(function ($val) use ($empresas, $visitas, &$conteo) {
-                    $vRealizadas = count($visitas[$val->id] ?? []);
-                    $totalVisitas = $empresas[$val->ruc]->visitas;
-                    $badgeKey = $vRealizadas ? ($vRealizadas == $totalVisitas ? 'completado' : $vRealizadas) : 0;
+            $sucursales = DB::table('tb_sucursales')
+                ->where('v_visitas', 1)
+                ->get()
+                ->filter(fn($s) => isset($empresas[$s->ruc])) // Si sigues con ruc
+                ->map(function ($s) use ($empresas, $visitas, &$conteo) {
+                    $empresa = $empresas[$s->ruc];
+                    $visitasSucursal = $visitas->where('id_sucursal', $s->id);
+                    $vRealizadas = $visitasSucursal->where('estado', 2)->count();
+                    $vAsignadas = $visitasSucursal->whereIn('estado', [0, 1])->count();
+                    $totalVisitas = $empresa->visitas;
 
-                    if ($badgeKey == 'completado') {
-                        $acciones = '<button class="btn btn-primary btn-sm px-2" onclick="CompletadoVisita(' . $val->id . ')" data-mdb-ripple-init>
-                                        <i class="fas fa-check-double"></i> Completada
-                                    </button>';
-                    } else if ($badgeKey) {
-                        $acciones = '<button class="btn btn-info btn-sm px-2" onclick="DetalleVisita(' . $val->id . ')" data-mdb-ripple-init>
-                                        <i class="fas fa-user-check"></i> Asignada
-                                    </button>';
-                        $conteo['vAsignadas']++;
-                    } else {
-                        $acciones = '<button class="btn btn-secondary btn-sm px-2" onclick="AsignarVisita(' . $val->id . ')" data-mdb-ripple-init>
-                                        <i class="fas fa-user-gear"></i> Asignar
-                                    </button>';
-                        $conteo['vSinAsignar']++;
-                    }
+                    $estado = match (true) { ($totalVisitas == $vRealizadas && $vAsignadas == 0) => 2, $vAsignadas > 0 => 1, default => 0};
+
+                    match ($estado) {
+                        2 => null,
+                        1 => $conteo['vAsignadas']++,
+                        0 => $conteo['vSinAsignar']++,
+                    };
+
+                    $acciones = [
+                        2 => ['color' => 'success', 'fn' => "DetalleVisita($s->id)", 'icon' => 'check-double'],
+                        1 => ['color' => 'info', 'fn' => "DetalleVisita($s->id)", 'icon' => 'user-clock'],
+                        0 => ['color' => 'secondary', 'fn' => "AsignarVisita($s->id)", 'icon' => 'user-plus'],
+                    ][$estado];
+                    $accion = '<span style="display:none;">' . $estado . '</span><button class="btn btn-' . ($acciones['color']) . ' btn-sm px-2" onclick="' . ($acciones['fn']) . '" data-mdb-ripple-init><i class="fas fa-' . ($acciones['icon']) . '"></i></button>';
 
                     return [
-                        'id' => $val->id,
-                        'ruc' => $val->ruc,
-                        'sucursal' => $val->nombre,
-                        'visita' => $badgeKey,
-                        'vRealizadas' => $vRealizadas,
+                        'id' => $s->id,
+                        'ruc' => $s->ruc,
+                        'sucursal' => $s->nombre,
+                        'visita' => $vRealizadas,
                         'totalVisitas' => $totalVisitas,
-                        'acciones' => $acciones
+                        'vRealizadas' => $vRealizadas,
+                        'estado' => $estado,
+                        'acciones' => $accion
                     ];
-                })->values(); // Resetea las claves (opcional si no necesitas una colección indexada por ID)
+                })->sortBy('estado')->values();
 
-            return ["data" => $sucursales, "conteo" => $conteo];
+            return ['data' => $sucursales, 'conteo' => $conteo];
         } catch (Exception $e) {
             return $this->message(data: ['error' => $e->getMessage()], status: 500);
         }
@@ -167,14 +164,17 @@ class VSucursalesController extends Controller
                 return $v;
             });
 
-            $vRealizadas = count($visitas ?? []);
             $totalVisitas = $empresa->visitas;
+            $vRealizadas = collect($visitas ?? [])->where('estado', 2)->count();
+            $vPendientes = collect($visitas ?? [])->whereIn('estado', [0, 1])->count();
             $diasVisitas = $empresa->dias_visita;
-            $fechaSumada = null;
-            if (count($visitas)) {
+            $fechaVisita = now()->addMonth()->startOfMonth()->format('Y-m-d');
+
+            if (count($visitas) && $totalVisitas > ($vRealizadas + $vPendientes)) {
                 $ultimoElemento = $visitas[count($visitas) - 1];
-                $fechaSumada = date('Y-m-d', strtotime($ultimoElemento->fecha . " +$diasVisitas days"));
+                $fechaVisita = date('Y-m-d', strtotime($ultimoElemento->fecha . " +$diasVisitas days"));
             }
+
             $result = [
                 'id' => $sucursal->id,
                 'ruc' => $sucursal->ruc,
@@ -184,9 +184,10 @@ class VSucursalesController extends Controller
                 'contrato' => $empresa->contrato,
                 'totalVisitas' => $totalVisitas,
                 'vRealizadas' => $vRealizadas,
+                'vPendientes' => $vPendientes,
                 'diasVisitas' => $diasVisitas,
                 'visitas' => $visitas,
-                'message' => "Podrá asignar visitas después del $fechaSumada."
+                'message' => "Podrá asignar visitas desde el $fechaVisita."
             ];
 
             return $this->message(data: ['data' => $result]);

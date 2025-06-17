@@ -7,6 +7,7 @@
 <script src="{{secure_asset('front/vendor/selectize/selectize.min.js')}}"></script>
 
 <script>
+    let personal = <?= session('id_usuario') ?>;
     let cod_incidencia = '<?= $data['cod_inc'] ?>';
     let cod_orden = '<?= $data['cod_orden'] ?>';
     let empresas = <?php echo json_encode($data['company']); ?>;
@@ -18,11 +19,11 @@
     let obj_problem = <?php echo json_encode($data['problema']); ?>;
     let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
     let obj_eContactos = <?php echo json_encode($data['eContactos']); ?>;
+    let materiales = <?php echo json_encode($data['materiales']); ?>;
     let usuarios = <?php echo json_encode($data['usuarios']); ?>;
 </script>
 
 <style>
-
     .mi-animacion-modal .modal-dialog {
         animation: aparecerDesdeAbajo 0.5s ease-out;
     }
@@ -75,7 +76,7 @@
             <div class="col-lg-3 col-6 grid-margin">
                 <div class="card">
                     <div class="card-body text-primary" data-mdb-ripple-init onclick="searchTable(3)">
-                        <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Incidencias En
+                        <h6 class="card-title title-count mb-2"><i class="fas fa-hourglass-start"></i> Incidencias En
                             Proceso</h6>
                         <h4 class="subtitle-count"><b data-panel="tEnProceso">0</b></h4>
                     </div>
@@ -395,24 +396,7 @@
                 <div id="contenedor-personal">
                     <h6 class="tittle text-primary">Asignar Personal
                     </h6>
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div class="input-group mt-2 mb-2">
-                                <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
-                                <select class="select-clear" id="createPersonal">
-                                    <option value=""></option>
-                                    @foreach ($data['usuarios'] as $u)
-                                    <option value="{{$u['value']}}"
-                                        data-value="{{$u['dValue']}}"
-                                        {{ $u['estatus'] != 1 || $u['eliminado'] == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{$u['text']}}
-                                        {{ $u['eliminado'] == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                    <div id="createPersonal"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -541,25 +525,8 @@
                     <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Asignar Personal</h6>
                     <span aria-item="estado"></span>
                 </div>
-                <div class="p-3 pb-0 fieldset mb-3">
-                    <div class="row">
-                        <div class="col-md-9">
-                            <div class="input-group mt-2 mb-3">
-                                <span class="input-group-text border-0"><i class="fas fa-chalkboard-user"></i></span>
-                                <select class="select-clear" id="createPersonal1">
-                                    <option value=""></option>
-                                    @foreach ($data['usuarios'] as $u)
-                                    <option value="{{$u['value']}}"
-                                        data-value="{{$u['dValue']}}"
-                                        {{ $u['estatus'] != 1 || $u['eliminado'] == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                        {{$u['text']}}
-                                        {{ $u['eliminado'] == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($u['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
-                                    </option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
-                    </div>
+                <div class="fieldset">
+                    <div id="createPersonal1"></div>
                 </div>
             </div>
             <div class="modal-footer">
@@ -690,8 +657,12 @@
                         <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
                     </div>
 
+                    <div class="col-md-4 col-6 my-1 ps-0 d-none" id="content-codAviso">
+                        <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
+                    </div>
                     <div class="col-12">
-                        <div class="row" id="content-material">
+                        <div id="createMaterial"></div>
+                        <!-- <div class="row" id="content-material">
                             <div class="col-lg-9 my-1">
                                 <div class="input-group">
                                     <select class="select-clear" id="createMaterial">
@@ -724,7 +695,7 @@
                             <div class="col-lg-3 col-6 my-1 ps-0 d-none" id="content-codAviso">
                                 <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
                             </div>
-                        </div>
+                        </div> -->
                     </div>
 
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
@@ -843,7 +814,7 @@
 <script>
     // 
 </script>
-<script src="{{secure_asset('front/js/app/SelectManeger.js')}}?v={{ time() }}"></script>
+<script src="{{secure_asset('front/js/app/SelectManeger.js')}}"></script>
 <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
 <script src="{{secure_asset('front/js/soporte/incidencia/registradas.js')}}?v={{ time() }}"></script>
 @endsection

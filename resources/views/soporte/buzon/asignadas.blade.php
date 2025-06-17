@@ -7,8 +7,8 @@
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <style>
         /*////////////////////////////////////////
-                            /        SCRIPT CSS FIRMA DIGITAL        /
-                            ////////////////////////////////////////*/
+                                    /        SCRIPT CSS FIRMA DIGITAL        /
+                                    ////////////////////////////////////////*/
 
         .content-image {
             margin: auto;
@@ -109,8 +109,8 @@
         }
 
         /*////////////////////////////////////////
-                            /          SCRIPT CSS Doc Firma          /
-                            ////////////////////////////////////////*/
+                                    /          SCRIPT CSS Doc Firma          /
+                                    ////////////////////////////////////////*/
 
         .search_signature_group {
             flex-wrap: nowrap;
@@ -174,6 +174,7 @@
         let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
         let obj_problem = <?php echo json_encode($data['problema']); ?>;
         let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
+        let materiales = <?php echo json_encode($data['materiales']); ?>;
     </script>
 @endsection
 @section('content')
@@ -398,8 +399,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span
-                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -430,7 +431,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
+                            Incidencia</h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="fieldset" aria-item="contenedor-seguimiento">
@@ -493,14 +495,15 @@
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2">
                             <div class="list-group list-group-light">
                                 <div class="list-group-item">
-                                    <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                    <p aria-item="razon_social" class="font-weight-semibold mb-2"
+                                        style="font-size: .92rem;">
                                         20506467854 - CORPORACION JULCAN S.A.</p>
                                     <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
                                         N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                                 </div>
                                 <div class="list-group-item">
-                                    <label class="form-label me-2">Sucursal: </label><span
-                                        style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                    <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                        aria-item="sucursal">E/S INDEPENDENCIA</span>
                                 </div>
                                 <div class="list-group-item">
                                     <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -560,44 +563,45 @@
                             <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
                         </div>
 
+                        <div class="col-md-4 col-6 my-1 ps-0 d-none" id="content-codAviso">
+                            <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
+                        </div>
                         <div class="col-12">
-                            <div class="row" id="content-material">
-                                <div class="col-lg-9 my-1">
-                                    <div class="input-group">
-                                        <select class="select-clear" id="createMaterial">
-                                            <option value=""></option>
-                                            @foreach ($data['materiales'] as $m)
-                                                <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}
-                                                </option>
-                                            @endforeach
-                                        </select>
+                            <div id="createMaterial"></div>
+                            <!-- <div class="row" id="content-material">
+                                    <div class="col-lg-9 my-1">
+                                        <div class="input-group">
+                                            <select class="select-clear" id="createMaterial">
+                                                <option value=""></option>
+                                                @foreach ($data['materiales'] as $m)
+                                                    <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}
+                                                    </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-3 col-6 my-1 ps-lg-0">
-                                    <div class="input-group disabled" style="max-width: 300px;" id="content-cantidad">
-                                        <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                            onclick="manCantidad('-')">
-                                            <i class="fas fa-minus" style="font-size: .75rem;"></i>
-                                        </button>
-                                        <input type="number" class="form-control" input-cantidad=""
-                                            oninput="manCantidad('press')" />
-                                        <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                            onclick="manCantidad('+')">
-                                            <i class="fas fa-plus" style="font-size: .75rem;"></i>
-                                        </button>
+                                    <div class="col-lg-3 col-6 my-1 ps-lg-0">
+                                        <div class="input-group disabled" style="max-width: 300px;" id="content-cantidad">
+                                            <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
+                                                onclick="manCantidad('-')">
+                                                <i class="fas fa-minus" style="font-size: .75rem;"></i>
+                                            </button>
+                                            <input type="number" class="form-control" input-cantidad=""
+                                                oninput="manCantidad('press')" />
+                                            <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
+                                                onclick="manCantidad('+')">
+                                                <i class="fas fa-plus" style="font-size: .75rem;"></i>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-lg-3 col-6 my-1 ps-0 d-none" id="content-codAviso">
-                                    <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
-                                </div>
-                            </div>
+                                </div> -->
                         </div>
 
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
                             <div class="row justify-content-between firmas-orden">
                                 <div class="col-lg-5 text-center my-2">
-                                    <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : ''}} height="130"
-                                        width="160">
+                                    <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : ''}}
+                                        height="130" width="160">
                                     <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
                                         Firma Tecnico
                                     </p>
@@ -672,8 +676,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span
-                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -682,7 +686,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Grabar firma</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Grabar firma
+                        </h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="p-3 pb-0 fieldset">
@@ -729,7 +734,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Visita</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
+                            Visita</h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="fieldset" aria-item="contenedor-seguimiento">
@@ -779,7 +785,8 @@
                         <div class="col-12 mt-1 mb-3">
                             <div class="list-group list-group-light">
                                 <div class="list-group-item">
-                                    <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
+                                    <p aria-item="razon_social" class="font-weight-semibold mb-2"
+                                        style="font-size: .92rem;">
                                         20506467854 - CORPORACION JULCAN S.A.</p>
                                     <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
                                         N° 3689 MZ D LT 26 INDEPENDENCIA</p>

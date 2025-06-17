@@ -55,6 +55,8 @@ class RegistradasController extends Controller
                     'value' => $m->id_materiales,
                     'dValue' => base64_encode(json_encode(['id_material' => $m->id_materiales, 'producto' => $m->producto, 'cantidad' => 0])),
                     'text' => $m->producto,
+                    'id_material' => $m->id_materiales,
+                    'producto' => $m->producto,
                     'estatus' => $m->estatus,
                     'eliminado' => $m->eliminado
                 ];
@@ -64,7 +66,10 @@ class RegistradasController extends Controller
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
                     'value' => $u->id_usuario,
-                    'dValue' => base64_encode(json_encode(['id' => $u->id_usuario, 'doc' => $u->ndoc_usuario, 'nombre' => $nombre])),
+                    'dValue' => base64_encode(json_encode([  'nombre' => $nombre])),
+
+                    'id' => $u->id_usuario,
+                    'doc' => $u->ndoc_usuario,
                     'text' => "{$u->ndoc_usuario} - {$nombre}",
                     'nombre' => $nombre,
                     'estatus' => $u->estatus,

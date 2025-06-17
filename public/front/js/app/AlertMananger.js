@@ -17,13 +17,6 @@ class AlertMananger {
                   animate__faster
                 `
             },
-            hideClass: {
-                popup: `
-                  animate__animated
-                  animate__fadeOut
-                  animate__faster
-                `
-            }
         });
     }
 
@@ -42,17 +35,10 @@ class AlertMananger {
             showClass: {
                 popup: `
                   animate__animated
-                  animate__fadeInDown
+                  animate__fadeIn
                   animate__faster
                 `
             },
-            hideClass: {
-                popup: `
-                  animate__animated
-                  animate__fadeOutDown
-                  animate__faster
-                `
-            }
         })).isConfirmed)
             return false;
         return true;
@@ -72,20 +58,6 @@ class AlertMananger {
             ...op,
             confirmButtonColor: "#3085d6",
             confirmButtonText: "Aceptar",
-            showClass: {
-                popup: `
-                  animate__animated
-                  animate__fadeIn
-                  animate__faster
-                `
-            },
-            hideClass: {
-                popup: `
-                  animate__animated
-                  animate__fadeOut
-                  animate__faster
-                `
-            }
         });
     }
 
@@ -201,13 +173,6 @@ class AlertMananger {
                   animate__faster
                 `
             },
-            hideClass: {
-                popup: `
-                  animate__animated
-                  animate__fadeOut
-                  animate__faster
-                `
-            }
         }).then((result) => {
             if (result.isConfirmed && typeof funcion === "function") {
                 funcion();

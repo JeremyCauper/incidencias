@@ -1,175 +1,309 @@
 class CTable {
-    _this = null;
+    _contenedor = null;
+    _idContenedor = null;
     _selector = null;
-    $s = {
+    _btnCreate = null;
+    _counter = null;
+    _table = null;
+    _structure = {
+        count: null,
         repit: false,
-        thead: [],
-        tbody: [],
-        extract: []
+        table: {},
+        extract: [],
+        select: {}
     };
+    _dom = '<"row"<"col-lg-8 col-10"s><"col-2"B>>';
+    _dataCount = 1;
     static _accion = true;
     static _newRow = 1;
     static _data = {};
 
-    constructor(selector, options = {}) {
-        this._this = $(selector);
-        this._selector = selector;
-        this.$s = {
-            ...this.$s,
+    $operations = {
+        '===': (a, b) => a === b,
+        '!==': (a, b) => a !== b,
+        '>': (a, b) => a > b,
+        '<': (a, b) => a < b,
+        '>=': (a, b) => a >= b,
+        '<=': (a, b) => a <= b,
+    }
+
+    constructor(contenedor, options = {}) {
+        this._structure = {
+            ...this._structure,
             ...options
         };
+        this._idContenedor = contenedor;
+        this._contenedor = $('#' + contenedor);
+        this._dom = options.dom || this._dom;
+        this.dataSet = options.dataSet || [];
 
-        var $contentSelect = this._this.parent();
-        var $contentTable = this._this.parent().parent().parent();
+        if (!this._contenedor.length) return alert('Contenedor no existe.');
+        if (!this._structure.table?.thead?.length) return alert('thead no configurado.');
+        if (!this._structure.table?.tbody?.length) return alert('tbody no configurado.');
 
-        $contentSelect.attr('ctable-conselect', selector).append(
-            $('<button>', {
-                type: "button",
-                class: 'btn btn-primary px-2 ms-1 rounded',
-                "ctable-create": selector,
-                "data-mdb-ripple-init": ""
-            }).html('<i class="fas fa-plus" style="pointer-events: none;"></i>')
-        );
+        this._selector = $('<select>', {
+            class: 'select-clear',
+            'ctable-select': contenedor
+        });
 
-        $contentTable.attr('ctable-content', selector).append(
-            $('<div>', {
-                class: 'col-12',
-                "ctable-contable": selector,
-                css: { overflow: 'auto' }
-            })
-        );
+        this._btnCreate = $('<button>', {
+            type: "button",
+            class: 'btn btn-primary px-2 ms-1 rounded',
+            'ctable-create': contenedor,
+            'data-mdb-ripple-init': ''
+        }).append($('<i>', { class: 'fas fa-plus', style: 'pointer-events: none;' }));
 
-        // Agregar el manejador de clics para el botón
-        $(`button[ctable-create="${selector}"]`).on('click', () => {            
-            this.create();
+        if (this._structure?.count) {
+            this._counter = $('<div>', { class: 'input-group disabled', style: 'max-width: 300px;', 'ctable-count-content': contenedor }).append(
+                $('<button>', { class: 'btn btn-secondary px-2', type: 'button', 'ctable-count-minus': contenedor }).append(
+                    $('<i>', { class: 'fas fa-minus', style: 'font-size: .75rem;' })
+                ),
+                $('<input>', { type: 'number', class: 'form-control', min: '1', value: '1', 'ctable-count-cant': contenedor }),
+                $('<button>', { class: 'btn btn-secondary px-2', type: 'button', 'ctable-count-plus': contenedor }).append(
+                    $('<i>', { class: 'fas fa-plus', style: 'font-size: .75rem;' })
+                )
+            );
+        }
+
+        this._contenedor.empty().attr({ 'ctable-content': contenedor });
+        const layout = this._parseDOMString(this._dom);
+        this._contenedor.append(layout);
+
+        this.fillSelect();
+        this.createCount();
+
+        $(`button[ctable-create="${contenedor}"]`).on('click', () => {
+            this.createRow();
         });
     }
 
-    get acciones() {
-        return CTable._accion;
-    }
+    _parseDOMString(domString) {
+        const mapping = {
+            's': () => this._selector,
+            'B': () => this._btnCreate,
+            'C': () => this._counter,
+            't': () => this._createTableWrapper()
+        };
 
-    set acciones(bol) {
-        CTable._accion = bol;
-    }
+        const stack = [];
+        let current = $('<div>');
+        let inQuotes = false;
+        let className = '';
 
-    get newRow() {
-        return CTable._newRow;
-    }
+        for (let i = 0; i < domString.length; i++) {
+            const char = domString[i];
 
-    set newRow(nw) {
-        CTable._newRow = nw;
-    }
-
-    get data() {
-        return CTable._data;
-    }
-
-    set data(dt) {
-        CTable._data = dt;
-    }
-
-    create() {
-        const $selector = this._selector;
-        var $select = $($selector);
-        var $contentT = $(`[ctable-contable="${$selector}"]`);
-        var $table = $(`[ctable-table="${$selector}"]`);
-
-        if (!$select.val()) return false;
-        const $option = $select.children(`option[value="${$select.val()}"]`);
-        const obj = JSON.parse(atob($option.attr('data-value')));
-
-        if (!this.$s.repit) {
-            if ($table.children('tbody').children(`tr[ctable-repit="${obj[this.$s.tbody[0].data]}"]`).length)
-                return boxAlert.minbox({ i: 'info', h: 'El registro ya existe' });
-        }
-        if (!this.$s.thead.length) return alert('no se puede seguir thead no está configurado');
-        if (!this.$s.tbody.length) return alert('no se puede seguir tbody no está configurado');
-        if (!$table.length) {
-            const tabla = $('<table>',
-                {
-                    class: 'table w-100 text-nowrap',
-                    'ctable-table': $selector 
+            if (char === '"') {
+                inQuotes = !inQuotes;
+                if (!inQuotes && className) {
+                    current.addClass('my-1');
+                    current.addClass(className);
+                    className = '';
                 }
-            ).append($('<thead>').html($('<tr>').html(`<th>${(this.$s.thead).join('</th><th>')}</th><th class="text-center">Acciones</th>`))).append($('<tbody>'));
-            $contentT.html(tabla);
-            $table = $contentT.children('table');
+            } else if (inQuotes) {
+                className += char;
+            } else if (char === '<') {
+                const newDiv = $('<div>');
+                stack.push(current);
+                current.append(newDiv);
+                current = newDiv;
+            } else if (char === '>') {
+                current = stack.pop() || $('<div>');
+            } else if (/[a-zA-Z]/.test(char)) {
+                const el = mapping[char]?.();
+                if (el) current.append(el);
+            }
         }
-        const extract = this.$s.extract;
-        const $id = obj[extract[0]];
 
+        // Siempre agregar el contenedor de la tabla al final
+        current.append(this._createTableWrapper());
+        return current.children();
+    }
+
+    _createTableWrapper() {
+        return $('<div>', { class: 'col-12 pt-3', style: 'overflow: auto;' }).append(
+            $('<div>', { 'ctable-contentTable': this._idContenedor })
+        );
+    }
+
+    get acciones() { return CTable._accion; }
+    set acciones(bol) { CTable._accion = bol; }
+
+    get newRow() { return CTable._newRow; }
+    set newRow(nw) { CTable._newRow = nw; }
+
+    get data() { return CTable._data; }
+    set data(dt) { CTable._data = dt; }
+
+    createRow(value = this._selector.val()) {
+        if (!value) return false;
+        const extract = this._structure.extract;
+        const obj = (Array.isArray(this.dataSet) ? this.dataSet : Object.values(this.dataSet)).find(v => v[extract[0]] == value);
+        if (!obj) return false;
+        if ($(`tr[ctable-table-tr-id="${value}"]`).length) return boxAlert.minbox({ i: 'info', h: 'El registro ya existe' });
+
+        const $id = obj[extract[0]];
         if ($id in this.data) {
             this.data[$id].eliminado = 0;
         } else {
-            var obj_td = {};
+            const obj_td = {};
             extract.forEach(e => {
-                obj_td[e] = obj[e];
+                let valor = obj[e];
+                if (this._structure?.count && this._structure?.count == e) valor = this._dataCount;
+                obj_td[e] = valor;
             });
             obj_td['eliminado'] = 0;
             obj_td['registro'] = this.newRow;
             this.data[$id] = obj_td;
         }
 
-        const $tr = $('<tr>', { 'ctable-table-tr-id': $id, 'ctable-table-tr': this.acciones, 'ctable-table-rnew': this.newRow, 'ctable-repit': obj[this.$s.tbody[0].data] });
-        this.$s.tbody.forEach(col => {
+        const $tr = $('<tr>', { 'ctable-table-tr-id': $id, 'ctable-table-tr': this.acciones, 'ctable-table-rnew': this.newRow });
+        this._structure.table.tbody.forEach(col => {
             const $td = $('<td>', { 'ctable-table-col': col.data });
-            if (col.render && typeof col.render === 'function') {
-                $td.html(col.render(obj[col.data]));
-            } else {
-                $td.html(obj[col.data]);
-            }
+            let valor = (col.render && typeof col.render === 'function') ? col.render(obj[col.data], typeof col.data, obj) : obj[col.data];
+            if (this._structure?.count == col.data) valor = this._dataCount;
+            $td.html(valor);
             $tr.append($td);
         });
-        const actionDelete = $('<td>', { class: 'text-center'}).append($('<i>', { class: "far fa-trash-can text-danger", type: "button", onclick: "(new CTable()).delete(this)" }));
-        const dontDelete = $('<td>', { class: 'text-center'}).append($('<i>', { class: "fas fa-ban text-primary" }));
 
-        if (this.acciones)
-            $tr.append(actionDelete);
-        else
-            $tr.append(dontDelete);
+        const actionDelete = $('<td>', { class: 'text-center' }).append($('<i>', { class: "far fa-trash-can text-danger", type: "button", 'ctable-delete': this._idContenedor, value: $id }));
+        const dontDelete = $('<td>', { class: 'text-center' }).append($('<i>', { class: "fas fa-ban text-primary" }));
+        $tr.append(this.acciones ? actionDelete : dontDelete);
 
-        $table.children('tbody').append($tr);
-        $select.val('').trigger('change.select2');
+        this.createTable();
+        this._table.children('tbody').append($tr);
+
+        $(`i[ctable-delete="${this._idContenedor}"]`).off('click').on('click', (event) => {
+            const val = event.currentTarget.getAttribute('value');
+            this.deleteRow(val);
+        });
+
+        this.fillSelect();
+        this.clearCount();
         this.acciones = true;
         this.newRow = 1;
     }
 
-    delete($this) {
-        const $tr = $($this).parent().parent();
-        const $table = $tr.parent().parent();
-        const $id = $tr.attr('ctable-table-tr-id');
-        if (this.data[$id].registro) {
-            delete this.data[$id];
+    deleteRow(value) {
+        if (!value) return false;
+        if (this.data[value].registro) {
+            delete this.data[value];
         } else {
-            this.data[$id].eliminado = 1;
+            this.data[value].eliminado = 1;
         }
-        $tr.remove();
-        if (!$table.children('tbody').children('tr').length) {
-            $table.remove();
+        $(`tr[ctable-table-tr-id="${value}"]`).remove();
+        this.fillSelect();
+        if (!this._table.children('tbody').children('tr').length) this.deleteTable();
+    }
+
+    createTable() {
+        if (this._table === null) {
+            var style = "padding-top: 4px; padding-bottom: 4px;";
+            this._table = $('<table>', { class: 'table w-100 text-nowrap', 'ctable-table': this._idContenedor }).append(
+                $('<thead>').append($('<tr>', { style: 'border-bottom: 1px solid var(--mdb-primary);' }).html(`<th style="${style}">${(this._structure.table.thead).join(`</th><th style="${style}">`)}</th><th class="text-center" style="min-width: 50px;max-width: 120px;width: 120px;${style}"></th>`)),
+                $('<tbody>')
+            );
+            $(`div[ctable-contentTable="${this._idContenedor}"]`).append(this._table);
         }
     }
 
     deleteTable() {
-        const $table = $(`table[ctable-table="${this._selector}"]`);
         this.data = {};
-        $table.remove();
+        if (this._table !== null) this._table.remove();
+        this.fillSelect();
+        this._table = null;
     }
 
-    fillTable(val, Adel = true) {
+    fillTable(value, Adel = true) {
+        const valores = Array.isArray(value) ? value : [value];
         this.acciones = Adel;
         this.newRow = 0;
-        $(this._selector).val(val).trigger('change.select2');
-        this.create();
+        valores.forEach(v => this.createRow(v));
+    }
+
+    fillSelect(dataSet = this.dataSet) {
+        const items = Array.isArray(dataSet) ? dataSet : Object.values(dataSet);
+        const options = this._structure.select;
+        this._selector.html($('<option>', { value: '', text: '-- Seleccione --' }));
+
+        items.forEach(item => {
+            const text = typeof options.text === 'function' ? options.text(item) : (typeof item === 'string' ? item : item[options.text]);
+            const value = typeof item === 'string' ? item : item[options.value];
+
+            const { hidden, badge } = this._checkValidation(item);
+            const atributos = {};
+            if (hidden) {
+                atributos['data-hidden'] = true;
+                atributos['data-nosearch'] = true;
+            }
+            if (this.data[value]) atributos.disabled = true;
+
+            this._selector.append(
+                $('<option>')
+                    .val(value)
+                    .text(text +
+                        (hidden && badge ? ` <label class="badge badge-danger ms-2">${badge}</label>` : '') +
+                        (this.data[value] ? ' <label class="badge badge-info ms-2">En uso</label>' : '')
+                    )
+                    .attr(atributos)
+            );
+        });
+    }
+
+    _checkValidation(item) {
+        for (const { clave, operation, value, badge = '' } of this._structure.select.validation) {
+            if (clave in item && this.$operations[operation](item[clave], value)) {
+                return { hidden: true, badge };
+            }
+        }
+        return { hidden: false, badge: '' };
+    }
+
+    createCount() {
+        if (!this._structure?.count) return false;
+        const $btnMas = $(`button[ctable-count-plus="${this._idContenedor}"]`);
+        const $input = $(`input[ctable-count-cant="${this._idContenedor}"]`);
+        const $btnMenos = $(`button[ctable-count-minus="${this._idContenedor}"]`);
+
+        $btnMas.off('click').on('click', () => this.updateValueCount(1));
+        $btnMenos.off('click').on('click', () => this.updateValueCount(-1));
+        $input.off('paste').on('paste', (e) => {
+            const pasted = e.originalEvent.clipboardData.getData('text');
+            if (!/^\d+$/.test(pasted)) e.preventDefault();
+        });
+        $input.off('blur').on('blur', () => {
+            let valor = parseInt($input.val(), 10);
+            if (isNaN(valor) || valor < 1) this.updateValueCount();
+        });
+
+        this._selector.on('change', () => this.clearCount());
+    }
+
+    updateValueCount(delta = null) {
+        const $input = $(`input[ctable-count-cant="${this._idContenedor}"]`);
+        if (!delta) return $input.val(1);
+        let valor = parseInt($input.val(), 10);
+        if (isNaN(valor)) valor = 1;
+        valor = Math.max(1, valor + delta);
+        $input.val(valor);
+        this._dataCount = valor;
+    }
+
+    clearCount() {
+        const countContent = $(`div[ctable-count-content="${this._idContenedor}"]`);
+        if (this._selector.val()) {
+            countContent.removeClass('disabled');
+        } else {
+            countContent.addClass('disabled');
+        }
+        this.updateValueCount();
     }
 
     extract() {
-        const $selector = this._selector;
-        var $select = $($selector);
-        if ($select.val()) {
-            boxAlert.box({ i: 'warning', t: 'Advertencia!', h: "El selector aun tiene un valor por añadir" });
+        if (this._selector.val()) {
+            boxAlert.box({ i: 'warning', t: 'Advertencia', h: 'El selector aún tiene un valor por añadir.' });
             return false;
         }
         return this.data;
     }
 }
-const cTable = new CTable();

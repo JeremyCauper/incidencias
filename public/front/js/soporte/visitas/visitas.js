@@ -41,27 +41,58 @@ $(document).ready(function () {
         tb_visitas.columns.adjust().draw();
         tb_vprogramadas.columns.adjust().draw();
     });
+
+    let cSelect_search = $('.selectFiltroEstado');
+    if (cSelect_search.length) {
+        let selector = $('<select>', { 'id': 'filtroEstado', class: 'select-clear-nsearch' }).html($('<option>', { value: '', text: '-- Seleccione --' }));
+        Object.entries({
+            0: 'Sin Asignar',
+            1: 'Asignada',
+            2: 'Completada'
+        }).forEach(([clave, valor]) => {
+            selector.append($('<option>').val(clave).text(valor));
+        });
+
+        cSelect_search.append(selector);
+        selector.select2({
+            placeholder: '-- Todos --',
+            minimumResultsForSearch: Infinity,
+            allowClear: true,
+        });
+        // Disparar filtro cuando cambia el select
+        $('#filtroEstado').on('change', function () {
+            tb_visitas.column(2).search($(this).val()).draw();
+        });
+    }
 });
 
-const cPersonal = new CTable('#createPersonal', {
-    thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-    tbody: [
-        { data: 'id' },
-        { data: 'doc' },
-        { data: 'nombre' }
-    ],
-    extract: ['id']
-});
+const config_personal = {
+    dataSet: usuarios,
+    table: {
+        thead: ['Tecnicos'],
+        tbody: [
+            {
+                data: 'doc', render: function (data, type, row) {
+                    return `${data} - ${row.nombre}`;
+                }
+            }
+        ]
+    },
+    extract: ['id'],
+    select: {
+        value: 'id',
+        text: function (data) {
+            return `${data.doc} - ${data.nombre}`;
+        },
+        validation: [
+            { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+            { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+        ]
+    }
+}
 
-const cPersonal1 = new CTable('#createPersonal1', {
-    thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-    tbody: [
-        { data: 'id' },
-        { data: 'doc' },
-        { data: 'nombre' }
-    ],
-    extract: ['id']
-});
+const cPersonal = new CTable('createPersonal', config_personal);
+const cPersonal1 = new CTable('createPersonal1', config_personal);
 
 function updateTableVisitas() {
     tb_visitas.ajax.reload();
@@ -130,8 +161,10 @@ function DetalleVisita(id) {
                     direccion: empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
+                    rDias: dt.diasVisitas + ' día' + ((dt.diasVisitas > 0) ? 's' : ''),
                     vTotal: dt.totalVisitas,
-                    rDias: dt.diasVisitas,
+                    vRealizada: dt.vRealizadas,
+                    vPendiente: dt.vPendientes,
                     mensaje: dt.message
                 });
 

@@ -67,25 +67,25 @@
                         </select>
                     </div>
                     <!-- <div class="col-md-4 col-6 my-1">
-                                        <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
-                                        <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
-                                            @foreach ($data['tIncidencia'] as $v)
-                                                <option value="{{ $v->id }}" selected>
-                                                    {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                    <div class="col-md-4 col-6 my-1">
-                                        <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
-                                        <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
-                                            @foreach ($data['tSoporte'] as $v)
-                                                <option value="{{ $v->id }}" selected>
-                                                    {{ $v->descripcion }}
-                                                </option>
-                                            @endforeach
-                                        </select>
-                                    </div> -->
+                                                <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
+                                                <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
+                                                    @foreach ($data['tIncidencia'] as $v)
+                                                        <option value="{{ $v->id }}" selected>
+                                                            {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
+                                            <div class="col-md-4 col-6 my-1">
+                                                <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
+                                                <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
+                                                    @foreach ($data['tSoporte'] as $v)
+                                                        <option value="{{ $v->id }}" selected>
+                                                            {{ $v->descripcion }}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div> -->
                     <div class="col-lg-2 col-sm-4 my-1">
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>

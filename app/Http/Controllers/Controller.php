@@ -4,13 +4,14 @@ namespace App\Http\Controllers;
 
 use App\Helpers\Menu;
 use App\Helpers\SubMenu;
-use Exception as error;
+use Exception;
 use Illuminate\Foundation\Auth\Access\AuthorizesRequests;
 use Illuminate\Foundation\Validation\ValidatesRequests;
 use Illuminate\Routing\Controller as BaseController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
+use PhpParser\Node\Expr\Cast\Object_;
 
 class Controller extends BaseController
 {
@@ -153,15 +154,15 @@ class Controller extends BaseController
     {
         // Validaciones
         if (!is_array($arr_acciones)) {
-            throw new error("El parámetro enviado tiene que ser un array");
+            throw new Exception("El parámetro enviado tiene que ser un array");
         }
 
         if (empty($arr_acciones)) {
-            throw new error("El array no puede estar vacío");
+            throw new Exception("El array no puede estar vacío");
         }
 
         if (!array_key_exists('button', $arr_acciones)) {
-            throw new error("La clave 'button' no existe en el array.");
+            throw new Exception("La clave 'button' no existe en el array.");
         }
 
         // Título del dropdown
@@ -245,9 +246,9 @@ class Controller extends BaseController
         }
     }
 
-    public function message($title = "", $message = "", $data = null, $status = 200, $e = null)
+    public function message($title = "", $message = "", $data = null, $status = 200, $e = null): object
     {
-        $response = ["success" => $status == 200 ? true : false, "title" => $title, "message" => $message, "status" => $status];
+        $response = ["success" => $status == 200 ? true : false, "title" => $title, "message" => $message, "time" => now()->format('Y-m-d H:i:s'), "status" => $status];
         $statuses = [
             "success" => ["title" => "Éxito", "range" => range(200, 201)],
             "info" => ["title" => "Atención", "range" => range(202, 399)],
@@ -287,8 +288,69 @@ class Controller extends BaseController
                     break;
             }
         }
+        if ($e !== null) {
+            Log::error("[{$e->getCode()}] Error al listar materiales: {$e->getMessage()}\n{$e->getFile()}\n");
+        }
         return response()->json($response, (int) $status);
     }
+
+    public function message2(string $title = "", string $message = "", $data = null, int $status = 200, ?Exception $e = null): object
+    {
+        // Definir los rangos de status
+        $statusRanges = [
+            "success" => ["range" => range(200, 299), "title" => "Éxito", "message" => "Operación completada con éxito.", "icon" => "success"],
+            "info" => ["range" => range(300, 399), "title" => "Información", "message" => "Información adicional sobre la operación.", "icon" => "info"],
+            "warning" => ["range" => range(400, 499), "title" => "Advertencia", "message" => "La solicitud contiene errores o falta información.", "icon" => "warning"],
+            "error" => ["range" => range(500, 599), "title" => "Error interno del Servidor", "message" => "Ha ocurrido un error inesperado en el servidor.", "icon" => "error"],
+        ];
+
+        // Determinar el icono, título y mensaje basados en el rango de status
+        $responseTitle = $title;
+        $responseMessage = $message;
+        $responseIcon = "success"; // Valor por defecto
+
+        foreach ($statusRanges as $statusType => $info) {
+            if (in_array($status, $info['range'])) {
+                $responseTitle = $responseTitle ?: $info['title'];
+                $responseMessage = $responseMessage ?: $info['message'];
+                $responseIcon = $info['icon'];
+                break;
+            }
+        }
+
+        // Si hay una excepción, manejarla
+        if ($e !== null) {
+            $defaultMessages = [
+                500 => "Ha ocurrido un error inesperado en el servidor.",
+                503 => "El servidor está en mantenimiento o sobrecargado.",
+                404 => "El recurso solicitado no se encuentra disponible.",
+            ];
+
+            // Título y mensaje finales, si no se pasan, se asignan los predeterminados
+            $responseMessage = $defaultMessages[$status] ?? $responseMessage;
+            // Loguear el error con más detalles
+            Log::error("[{$e->getCode()}] {$responseMessage}: {$e->getMessage()}\n{$e->getFile()} en linea {$e->getLine()}\n");
+        }
+
+        // Inicializar la respuesta
+        $response = [
+            "success" => $status >= 200 && $status < 300, // Sólo verdadero si el status está en el rango 2xx
+            "title" => $responseTitle,
+            "message" => $responseMessage,
+            "time" => now()->format('Y-m-d H:i:s'),
+            "status" => $status,
+            "icon" => $responseIcon
+        ];
+
+        // Si hay datos adicionales, incluirlos en la respuesta
+        if ($data !== null) {
+            $response['data'] = $data;
+        }
+
+        // Devolver la respuesta como JSON
+        return response()->json($response, $status);
+    }
+
 
     public function validatorUnique($errorMessage, $data)
     {

@@ -58,9 +58,33 @@ var myChart_peronal = new ChartMananger({
     type: 'bar',
     config: {
         xAxis: 'category',
-        yAxis: 'value'
+        yAxis: 'value',
+        toolTip: {
+            formatter: (params) => {
+                let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
+
+                params.forEach(item => {
+                    const value = item.data.value;
+                    const data = item.data.data;
+                    result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
+                    
+                    if (item.seriesName == "INCIDENCIAS") {
+                        result += `<ul style="font-size:.7rem;">
+                            <li>N1 - REMOTO: ${data.niveles.n1}</li>
+                            <li>N2 - PRESENCIAL: ${data.niveles.n2}</li>
+                        </ul>`;
+                    }
+                });
+                return result;
+            }
+        }
     }
 });
+
+// myChart_peronal.chart.on('click', function (params) {
+//     let id = params.data.data.idTecnico;
+//     $('#modal_actividad_personal').modal('show');
+// });
 
 var myChart_problemas = new ChartMananger({
     id: '#chart-problemas',
@@ -81,7 +105,7 @@ var myChart_niveles = new ChartMananger({
 function capturar() {
     $('.chart-container-header').addClass('chart-header').find('.logo_rci_white').removeClass('d-none');
     $('.chart-container-body').find('.chart-info').removeClass('d-none');
-    
+
     var nodo = document.getElementById('chart-container');
     domtoimage.toPng(nodo)
         .then(async function (dataUrl) {

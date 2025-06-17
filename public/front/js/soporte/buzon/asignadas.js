@@ -78,14 +78,26 @@ function CheckCodOrden(check = true) {
     $('#n_orden').val(check ? cod_orden : "").attr('disabled', check);
 }
 
-const cMaterial = new CTable('#createMaterial', {
-    thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
-    tbody: [
-        { data: 'id_material' },
-        { data: 'producto' },
-        { data: 'cantidad' }
-    ],
-    extract: ['id_material', 'cantidad']
+const cMaterial = new CTable('createMaterial', {
+    dataSet: materiales,
+    dom: '<"row"<"col-lg-8"s><"col-lg-3 col-6"C><"col-1"B>>',
+    table: {
+        thead: ['PRODUCTO / MATERIAL', 'CANTIDAD'],
+        tbody: [
+            { data: 'producto' },
+            { data: 'cantidad' }
+        ]
+    },
+    count: 'cantidad',
+    extract: ['id_material', 'cantidad'],
+    select: {
+        value: "id_material",
+        text: "producto",
+        validation: [
+            { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+            { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+        ]
+    }
 });
 
 function updateTableInc() {

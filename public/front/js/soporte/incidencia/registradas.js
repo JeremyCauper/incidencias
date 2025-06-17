@@ -126,6 +126,12 @@ $(document).ready(function () {
         CS_problema.selecionar($(this).val());
     });
 
+    $('#tIncidencia').on('change', function () {
+        if ($(this).val() == "1" ) {
+            cPersonal.fillTable(personal);
+        }
+    });
+
     $('#problema').on('change', function () {
         CS_sproblema.selecionar(() => { return obj_problem[$(this).val()]?.codigo ?? null; });
     });
@@ -245,10 +251,19 @@ $(document).ready(function () {
     });
 
     $('.modal').on('shown.bs.modal', function () {
-        $('#fecha_imforme').val(date('Y-m-d'));
-        $('#hora_informe').val(date('H:i:s'));
+        switch ($(this).attr('id')) {
+            case 'modal_incidencias':
+                $('#fecha_imforme').val(date('Y-m-d'));
+                $('#hora_informe').val(date('H:i:s'));
+                $('#tSoporte').val(1).trigger('change');
+                if ($('#tIncidencia').val() == "1" && $('#id_inc').val() == "0") {
+                    cPersonal.fillTable(personal);
+                }
+                break;
 
-        manCantidad();
+            default:
+                break;
+        }
     });
 
     $('.modal').on('hidden.bs.modal', function () {
@@ -268,8 +283,6 @@ $(document).ready(function () {
                 text: c.nombres
             })));
         }, 100);
-
-        $('#tSoporte').val(1).trigger('change');
         $('#contenedor-personal').removeClass('d-none');
         cPersonal.deleteTable();
         cPersonal1.deleteTable();
@@ -401,35 +414,55 @@ const CS_sproblema = new CSelect(['#sproblema'], {
     ]
 });
 
-const cMaterial = new CTable('#createMaterial', {
-    thead: ['#', 'PRODUCTO / MATERIAL', 'CANTIDAD'],
-    tbody: [
-        { data: 'id_material' },
-        { data: 'producto' },
-        { data: 'cantidad' }
-    ],
-    extract: ['id_material', 'cantidad']
+const cMaterial = new CTable('createMaterial', {
+    dataSet: materiales,
+    dom: '<"row"<"col-lg-8"s><"col-lg-3 col-6"C><"col-1"B>>',
+    table: {
+        thead: ['PRODUCTO / MATERIAL', 'CANTIDAD'],
+        tbody: [
+            { data: 'producto' },
+            { data: 'cantidad' }
+        ]
+    },
+    count: 'cantidad',
+    extract: ['id_material', 'cantidad'],
+    select: {
+        value: "id_material",
+        text: "producto",
+        validation: [
+            { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+            { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+        ]
+    }
 });
 
-const cPersonal = new CTable('#createPersonal', {
-    thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-    tbody: [
-        { data: 'id' },
-        { data: 'doc' },
-        { data: 'nombre' }
-    ],
-    extract: ['id']
-});
+const config_personal = {
+    dataSet: usuarios,
+    table: {
+        thead: ['Tecnicos'],
+        tbody: [
+            {
+                data: 'doc', render: function (data, type, row) {
+                    return `${data} - ${row.nombre}`;
+                }
+            }
+        ]
+    },
+    extract: ['id'],
+    select: {
+        value: 'id',
+        text: function (data) {
+            return `${data.doc} - ${data.nombre}`;
+        },
+        validation: [
+            { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+            { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+        ]
+    }
+}
 
-const cPersonal1 = new CTable('#createPersonal1', {
-    thead: ['#', 'Nro. Documento', 'Nombres y Apellidos'],
-    tbody: [
-        { data: 'id' },
-        { data: 'doc' },
-        { data: 'nombre' }
-    ],
-    extract: ['id']
-});
+const cPersonal = new CTable('createPersonal', config_personal);
+const cPersonal1 = new CTable('createPersonal1', config_personal);
 
 function updateTable() {
     tb_incidencia.ajax.reload();
@@ -658,10 +691,8 @@ function ShowAssign(e, cod) {
             });
 
             fMananger.formModalLoding('modal_assign', 'hide');
-            (inc.personal_asig).forEach(element => {
-                const accion = inc.estado_informe == 2 ? false : true;
-                cPersonal1.fillTable(element.id, accion);
-            });
+            const accion = inc.estado_informe == 2 ? false : true;
+            cPersonal1.fillTable((inc.personal_asig).map(obj => obj.id), accion);
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
