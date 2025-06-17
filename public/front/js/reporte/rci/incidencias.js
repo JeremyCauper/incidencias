@@ -65,12 +65,13 @@ var myChart_peronal = new ChartMananger({
 
                 params.forEach(item => {
                     const value = item.data.value;
+                    const data = item.data.data;
                     result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
                     
                     if (item.seriesName == "INCIDENCIAS") {
                         result += `<ul style="font-size:.7rem;">
-                            <li>N1 - REMOTO</li>
-                            <li>N2 - PRESENCIAL</li>
+                            <li>N1 - REMOTO: ${data.niveles.n1}</li>
+                            <li>N2 - PRESENCIAL: ${data.niveles.n2}</li>
                         </ul>`;
                     }
                 });

@@ -99,23 +99,31 @@ class ReporteIncidenciasController extends Controller
         });
         $data['estados'] = $estados;
 
-        $inc_asignadas = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->select('cod_incidencia', 'id_usuario')->get()->groupBy('id_usuario');
-        $inc_tipo = DB::table('tb_inc_tipo')->select('cod_incidencia', 'id_tipo_inc')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
+        $inc_asignadas = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->select('cod_incidencia', 'id_usuario')->get();
+        $inc_tipo = DB::table('tb_inc_tipo')->select('cod_incidencia', 'id_tipo_inc', 'created_at')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia')
+            ->map(function ($items) {
+                return collect($items)->sortByDesc('created_at')->first();
+            })->values();
         $vis_asignadas = DB::table('tb_vis_asignadas')->whereIn('id_visitas', $id_visitas)->select('id_usuario')->get()->groupBy('id_usuario');
 
         $data['personal'] = DB::table('tb_personal')->where(['id_area' => 1, 'estatus' => 1])->whereIn('tipo_acceso', [2, 3, 4])->get()
-            ->map(function ($val) use ($inc_asignadas, $vis_asignadas) {
-                $niveles = $inc_tipo->
+            ->map(function ($val) use ($inc_asignadas, $vis_asignadas, $inc_tipo) {
+                $asignadas = $inc_asignadas->where('id_usuario', $val->id_usuario);
+                $tipo = $inc_tipo->whereIn('cod_incidencia', $asignadas->pluck('cod_incidencia')->toArray());
                 $apellidos = $this->formatearNombre($val->apellidos);
                 $nombres = $this->formatearNombre($val->nombres, $val->apellidos);
                 return [
                     'name' => $apellidos,
                     'text' => "$val->ndoc_usuario $nombres",
                     'series' => [
-                        'incidencias' => isset($inc_asignadas[$val->id_usuario]) ? count($inc_asignadas[$val->id_usuario]) : 0,
+                        'incidencias' => $asignadas->count(),
                         'visitas' => isset($vis_asignadas[$val->id_usuario]) ? count($vis_asignadas[$val->id_usuario]) : 0
                     ],
-                    'idTecnico' => $val->id_usuario
+                    'idTecnico' => $val->id_usuario,
+                    'niveles' => [
+                        'n1' => $tipo->where('id_tipo_inc', 1)->count(),
+                        'n2' => $tipo->where('id_tipo_inc', 2)->count(),
+                    ]
                 ];
             });
 
