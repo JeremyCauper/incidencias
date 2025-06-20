@@ -101,7 +101,7 @@ function ShowAssign(e, id) {
                 fMananger.formModalLoding('modal_assign', 'hide');
                 const dt = data.data;
                 const accion = dt.estado == 1 ? false : true;
-                cPersonal1.fillTable((dt.personal_asig).map(obj => obj.id), accion);
+                cPersonal1.fillTable((dt.personal_asig).map(obj => obj.id), { del: accion });
             }
         },
         error: function (jqXHR, textStatus, errorThrown) {

@@ -29,7 +29,8 @@
         #chart-estado,
         #chart-personal,
         #chart-problemas,
-        #chart-niveles {
+        #chart-niveles,
+        #chart-subproblemas {
             position: relative;
             height: 40vh;
             overflow: hidden;
@@ -67,25 +68,25 @@
                         </select>
                     </div>
                     <!-- <div class="col-md-4 col-6 my-1">
-                                                <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
-                                                <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
-                                                    @foreach ($data['tIncidencia'] as $v)
-                                                        <option value="{{ $v->id }}" selected>
-                                                            {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                            <div class="col-md-4 col-6 my-1">
-                                                <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
-                                                <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
-                                                    @foreach ($data['tSoporte'] as $v)
-                                                        <option value="{{ $v->id }}" selected>
-                                                            {{ $v->descripcion }}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div> -->
+                                                    <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
+                                                    <select id="tIncidencia" multiple="multiple" class="multiselect-select-all">
+                                                        @foreach ($data['tIncidencia'] as $v)
+                                                            <option value="{{ $v->id }}" selected>
+                                                                {{ '<span class="custom-control-label w-100"><label class="badge badge-' . $v->color . ' ms-2 me-1">' . $v->tipo . '</label><span>' . $v->descripcion . '</span>' }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div>
+                                                <div class="col-md-4 col-6 my-1">
+                                                    <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
+                                                    <select id="tSoporte" multiple="multiple" class="multiselect-select-all">
+                                                        @foreach ($data['tSoporte'] as $v)
+                                                            <option value="{{ $v->id }}" selected>
+                                                                {{ $v->descripcion }}
+                                                            </option>
+                                                        @endforeach
+                                                    </select>
+                                                </div> -->
                     <div class="col-lg-2 col-sm-4 my-1">
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
@@ -182,6 +183,34 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="d-none" data-mdb-modal-init data-mdb-target="#modal_subproblema"></button>
+    <div class="modal fade" id="modal_subproblema" aria-labelledby="modal_subproblema" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h6 class="modal-title">SUB PROBLEMAS DE INCIDENCIAS</h6>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card chart-contenedor chart-loading">
+                        <div class="chart-title text-secondary"></div>
+                        <div class="card-body">
+                            <div class="chart-descripcion"></div>
+                            <div class="col-12">
+                                <div id="chart-subproblemas"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-link " data-mdb-ripple-init
+                        data-mdb-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>

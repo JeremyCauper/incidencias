@@ -8,13 +8,12 @@ class ChartMananger {
         this.name = params.name ?? null;
         this.type = params.type ?? 'pie';
         this.data = params.data ?? [];
-        this.config = params.config ?? null;
+        this.config = params.config ?? {};
 
-        if (this.type === 'bar' && !this.config) {
-            this.config = {
-                xAxis: 'category',
-                yAxis: 'value'
-            };
+        if (this.type === 'bar') {
+            this.config.xAxis = this.config.xAxis ?? 'category';
+            this.config.yAxis = this.config.yAxis ?? 'value';
+            this.config.order = this.config.order ?? null; // 'asc' | 'desc' | null
         }
 
         if (!this.id) {
@@ -23,7 +22,7 @@ class ChartMananger {
         }
 
         if (!this.data.length) {
-            const valor = () => this.type === 'bar' ? { series: { sin_datos: 0 } } : { value: 0 }
+            const valor = () => this.type === 'bar' ? { series: { sin_datos: 0 } } : { value: 0 };
             this.data = [{
                 name: 'Sin Datos',
                 ...valor()
@@ -64,17 +63,16 @@ class ChartMananger {
             const totals = {};
             if (this.type == 'bar') {
                 const keys = Object.keys(this.data[0].series);
-                
                 keys.forEach(k => {
                     totals[k] = this.data.reduce((sum, item) => sum + item.series[k], 0);
                 });
             }
+
             const trigger = this.type === 'bar' ? 'axis' : 'item';
             const barTooltip = this.type === 'bar' ? {
                 axisPointer: { type: 'shadow' },
                 formatter: this.config?.toolTip?.formatter || ((params) => {
                     let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
-
                     params.forEach(item => {
                         const value = item.data.value;
                         result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
@@ -88,7 +86,6 @@ class ChartMananger {
 
         const buildLegend = () => {
             let legend = {};
-
             if (this.type === 'bar') {
                 legend.data = Object.keys(this.data[0].series).map(k => k.toUpperCase());
             } else if (this.type === 'pie') {
@@ -158,6 +155,17 @@ class ChartMananger {
             }]
         });
 
+        // Ordenar si es necesario
+        if (this.type === 'bar' && this.config?.order) {
+            const keys = Object.keys(this.data[0].series);
+            const sortKey = keys[0]; // Ordenar por la primera serie
+            this.data.sort((a, b) => {
+                const aVal = a.series[sortKey];
+                const bVal = b.series[sortKey];
+                return this.config.order === 'asc' ? aVal - bVal : bVal - aVal;
+            });
+        }
+
         const buildSeries = () => {
             if (this.type === 'bar') {
                 const keys = Object.keys(this.data[0].series);
@@ -183,7 +191,6 @@ class ChartMananger {
                             const value = params.value;
                             const total = totals[key];
                             const percent = ((value / total) * 100).toFixed(1);
-
                             return (value == 0) ? '' : `${value} (${percent}%)`;
                         },
                         fontSize: 10,
@@ -263,7 +270,7 @@ class ChartMananger {
     updateOption(data = this.data) {
         this.data = data;
         if (!this.data.length) {
-            const valor = () => this.type === 'bar' ? { series: { sin_datos: 0 } } : { value: 0 }
+            const valor = () => this.type === 'bar' ? { series: { sin_datos: 0 } } : { value: 0 };
             this.data = [{
                 name: 'Sin Datos',
                 ...valor()

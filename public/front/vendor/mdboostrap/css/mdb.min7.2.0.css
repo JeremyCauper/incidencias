@@ -6398,7 +6398,7 @@ fieldset:disabled .btn {
 
 .modal.fade .modal-dialog {
     transition: transform .3s ease-out;
-    transform: translateY(-500px) scale(0);
+    transform: translateY(50px) scale(0.95);
 }
 
 .modal.show .modal-dialog {

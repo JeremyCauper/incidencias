@@ -71,7 +71,11 @@ class ReporteIncidenciasController extends Controller
             ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
             ->where($whereInc)
             ->get();
+
+        $problema = JsonDB::table('problema')->select('id')->where('codigo', 'PS-0003')->first();
+
         $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
+        $cod_incidencias_mante = $incidencias->where('id_problema', $problema->id)->pluck('cod_incidencia')->toArray();
 
         $visitas = DB::table('tb_visitas')
             ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
@@ -100,24 +104,28 @@ class ReporteIncidenciasController extends Controller
         $data['estados'] = $estados;
 
         $inc_asignadas = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->select('cod_incidencia', 'id_usuario')->get();
+        $inc_mantenimiento = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias_mante)->select('cod_incidencia', 'id_usuario')->get();
         $inc_tipo = DB::table('tb_inc_tipo')->select('cod_incidencia', 'id_tipo_inc', 'created_at')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia')
             ->map(function ($items) {
                 return collect($items)->sortByDesc('created_at')->first();
             })->values();
-        $vis_asignadas = DB::table('tb_vis_asignadas')->whereIn('id_visitas', $id_visitas)->select('id_usuario')->get()->groupBy('id_usuario');
+        $vis_asignadas = DB::table('tb_vis_asignadas')->whereIn('id_visitas', $id_visitas)->select('id_usuario')->get();
 
         $data['personal'] = DB::table('tb_personal')->where(['id_area' => 1, 'estatus' => 1])->whereIn('tipo_acceso', [2, 3, 4])->get()
-            ->map(function ($val) use ($inc_asignadas, $vis_asignadas, $inc_tipo) {
-                $asignadas = $inc_asignadas->where('id_usuario', $val->id_usuario);
-                $tipo = $inc_tipo->whereIn('cod_incidencia', $asignadas->pluck('cod_incidencia')->toArray());
+            ->map(function ($val) use ($inc_asignadas, $vis_asignadas, $inc_tipo, $inc_mantenimiento) {
+                $incAsignadas = $inc_asignadas->where('id_usuario', $val->id_usuario);
+                $incAsignadasM = $inc_mantenimiento->where('id_usuario', $val->id_usuario);
+                $visAsignadas = $vis_asignadas->where('id_usuario', $val->id_usuario);
+                $tipo = $inc_tipo->whereIn('cod_incidencia', $incAsignadas->pluck('cod_incidencia')->toArray());
                 $apellidos = $this->formatearNombre($val->apellidos);
                 $nombres = $this->formatearNombre($val->nombres, $val->apellidos);
                 return [
                     'name' => $apellidos,
                     'text' => "$val->ndoc_usuario $nombres",
                     'series' => [
-                        'incidencias' => $asignadas->count(),
-                        'visitas' => isset($vis_asignadas[$val->id_usuario]) ? count($vis_asignadas[$val->id_usuario]) : 0
+                        'incidencias' => $incAsignadas->count(),
+                        'visitas' => $visAsignadas->count(),
+                        'mantenimientos' => $incAsignadasM->count()
                     ],
                     'idTecnico' => $val->id_usuario,
                     'niveles' => [
@@ -128,17 +136,28 @@ class ReporteIncidenciasController extends Controller
             });
 
         $problemas = JsonDB::table('problema')->get()->keyBy('id');
+        $subproblemas = JsonDB::table('sub_problema')->get()->keyBy('id');
         $data['problemas'] = $incidencias->groupBy('id_problema')
             ->map(function ($items, $id) use ($problemas) {
                 return [
                     'name' => $problemas[$id]->codigo,
-                    'text' => $problemas[$id]->descripcion,
+                    'text' => "{$problemas[$id]->codigo} - {$problemas[$id]->descripcion}",
                     'series' => ['problemas' => count($items)],
                 ];
             })
-            ->sortByDesc('total')
             ->take(10)
             ->values();
+
+        $data['subproblemas'] = collect($incidencias->groupBy('id_subproblema')
+            ->map(function ($items, $id) use ($subproblemas) {
+                return [
+                    'codigo' => $subproblemas[$id]->codigo_problema,
+                    'name' => $subproblemas[$id]->descripcion,
+                    'text' => "{$subproblemas[$id]->prioridad} - {$subproblemas[$id]->descripcion}",
+                    'series' => ['sub_problemas' => count($items)]
+                ];
+            })->toArray())->groupBy('codigo');
+
 
         DB::table('tb_inc_tipo')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia')
             ->map(function ($items, $id) use (&$niveles) {
