@@ -214,18 +214,20 @@ class RegistradasController extends Controller
             DB::beginTransaction();
 
             $idContact = $request->cod_contact;
-            $registro_contacto = [
-                'nro_doc' => $request->nro_doc ?: null,
-                'nombres' => $request->nom_contac ?: null,
-                'cargo' => $request->car_contac ?: null,
-                'correo' => $request->cor_contac ?: null,
-                'consultado' => $request->consultado_api ?: 0,
-                (empty($idContact) ? 'created_at' : 'updated_at') => now()->format('Y-m-d H:i:s')
-            ];
-            if (empty($idContact)) {
-                $idContact = DB::table('contactos_empresas')->insertGetId($registro_contacto);
-            } else {
-                DB::table('contactos_empresas')->where('id_contact', $idContact)->update($registro_contacto);
+            if (!empty($request->nro_doc) || !empty($request->nom_contac)) {
+                $registro_contacto = [
+                    'nro_doc' => $request->nro_doc ?: null,
+                    'nombres' => $request->nom_contac ?: null,
+                    'cargo' => $request->car_contac ?: null,
+                    'correo' => $request->cor_contac ?: null,
+                    'consultado' => $request->consultado_api ?: 0,
+                    (empty($idContact) ? 'created_at' : 'updated_at') => now()->format('Y-m-d H:i:s')
+                ];
+                if (empty($idContact)) {
+                    $idContact = DB::table('contactos_empresas')->insertGetId($registro_contacto);
+                } else {
+                    DB::table('contactos_empresas')->where('id_contact', $idContact)->update($registro_contacto);
+                }
             }
 
             $idTelefono = $request->tel_contac;
@@ -521,8 +523,6 @@ class RegistradasController extends Controller
             $estado_info = count($vPersonal) ? 1 : 0;
             if ($request->estado)
                 DB::table('tb_incidencias')->where('cod_incidencia', $request->cod_inc)->update(['estado_informe' => $estado_info]);
-
-            $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
             DB::commit();
 
             $message = "Cambios realizados con éxito";
@@ -533,7 +533,7 @@ class RegistradasController extends Controller
                 $message = "Personal desasignado con éxito";
             }
 
-            return $this->message(message: $message, data: ['data' => ['cod_inc' => $cod_inc, 'estado' => $request->estado ? $estado_info : 2, 'personal' => $vPersonal]]);
+            return $this->message(message: $message, data: ['data' => ['estado' => $request->estado ? $estado_info : 2, 'personal' => $vPersonal]]);
         } catch (QueryException $e) {
             DB::rollBack();
             $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());

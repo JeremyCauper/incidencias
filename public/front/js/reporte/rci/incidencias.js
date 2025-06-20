@@ -67,7 +67,7 @@ var myChart_peronal = new ChartMananger({
                     const value = item.data.value;
                     const data = item.data.data;
                     result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
-                    
+
                     if (item.seriesName == "INCIDENCIAS") {
                         result += `<ul style="font-size:.7rem;">
                             <li>N1 - REMOTO: ${data.niveles.n1}</li>
@@ -81,18 +81,32 @@ var myChart_peronal = new ChartMananger({
     }
 });
 
-// myChart_peronal.chart.on('click', function (params) {
-//     let id = params.data.data.idTecnico;
-//     $('#modal_actividad_personal').modal('show');
-// });
-
 var myChart_problemas = new ChartMananger({
     id: '#chart-problemas',
     type: 'bar',
     config: {
         xAxis: 'value',
-        yAxis: 'category'
+        yAxis: 'category',
+        order: 'asc'
     }
+});
+
+let subproblemas = {};
+myChart_problemas.chart.on('click', function (params) {
+    let codigo = params.name;
+    $('#modal_subproblema').modal('show').find('.chart-title').html(params.data.text);
+    setTimeout(() => {
+        var myChart_subproblemas = new ChartMananger({
+            id: '#chart-subproblemas',
+            type: 'bar',
+            config: {
+                xAxis: 'value',
+                yAxis: 'category',
+                order: 'asc'
+            }
+        });
+        myChart_subproblemas.updateOption(subproblemas[codigo]);
+    }, 200);
 });
 
 var myChart_niveles = new ChartMananger({
@@ -187,6 +201,7 @@ function filtroBusqueda() {
             myChart_peronal.updateOption(response.data.personal);
             myChart_problemas.updateOption(response.data.problemas);
             myChart_niveles.updateOption(response.data.niveles);
+            subproblemas = response.data.subproblemas;
 
             setTimeout(() => {
                 $('.chart-contenedor').each(function () {

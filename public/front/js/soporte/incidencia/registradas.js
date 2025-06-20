@@ -127,8 +127,10 @@ $(document).ready(function () {
     });
 
     $('#tIncidencia').on('change', function () {
-        if ($(this).val() == "1" ) {
-            cPersonal.fillTable(personal);
+        if ($(this).val() == "1") {
+            cPersonal.createRow(personal);
+        } else {
+            cPersonal.deleteRow(personal);
         }
     });
 
@@ -255,9 +257,8 @@ $(document).ready(function () {
             case 'modal_incidencias':
                 $('#fecha_imforme').val(date('Y-m-d'));
                 $('#hora_informe').val(date('H:i:s'));
-                $('#tSoporte').val(1).trigger('change');
-                if ($('#tIncidencia').val() == "1" && $('#id_inc').val() == "0") {
-                    cPersonal.fillTable(personal);
+                if ($('#tIncidencia').val() == "1" && $('#id_inc').val() == "") {
+                    cPersonal.createRow(personal);
                 }
                 break;
 
@@ -580,8 +581,6 @@ function ShowEdit(cod) {
         url: `${__url}/soporte/incidencias/registradas/${cod}`,
         contentType: 'application/json',
         success: function (data) {
-            console.log(data);
-
             if (!data.success) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
@@ -692,7 +691,7 @@ function ShowAssign(e, cod) {
 
             fMananger.formModalLoding('modal_assign', 'hide');
             const accion = inc.estado_informe == 2 ? false : true;
-            cPersonal1.fillTable((inc.personal_asig).map(obj => obj.id), accion);
+            cPersonal1.fillTable((inc.personal_asig).map(obj => obj.id), { del: accion });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
@@ -703,13 +702,11 @@ function ShowAssign(e, cod) {
 }
 
 async function AssignPer() {
-    if (!await boxAlert.confirm({ h: `Está apunto de asignar personal a la incidencia` })) return true;
+    if (!await boxAlert.confirm({ h: incidencia_temp.estado_informe == 2 ? 'Incidencia en Proceso, sí añade el personal no podrá revertir los cambios.' : `Está apunto de asignar personal a la incidencia.` })) return true;
     fMananger.formModalLoding('modal_assign', 'show');
 
     const personal = cPersonal1.extract();
-    if (!personal) {
-        return fMananger.formModalLoding('modal_assign', 'hide');
-    }
+    if (!personal) return fMananger.formModalLoding('modal_assign', 'hide');
 
     $.ajax({
         type: 'POST',
@@ -726,9 +723,9 @@ async function AssignPer() {
         success: function (data) {
             fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
-                cod_incidencia = data.data.cod_inc;
                 $(`#modal_assign [aria-item="estado"]`).html(getBadgeIncidencia(data.data.estado));
                 cPersonal1.data = data.data.personal;
+                cPersonal1.updateTable({ del: (data.data.estado == 2 ? false : true) });
                 updateTable();
             }
             boxAlert.box({ i: data.icon, t: data.title, h: data.message });

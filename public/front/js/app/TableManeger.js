@@ -14,9 +14,12 @@ class CTable {
     };
     _dom = '<"row"<"col-lg-8 col-10"s><"col-2"B>>';
     _dataCount = 1;
-    static _accion = true;
-    static _newRow = 1;
-    static _data = {};
+    // static _accion = true;
+    // static _newRow = 1;
+    // static _data = {};
+    acciones = true;
+    newRow = 1;
+    data = {};
 
     $operations = {
         '===': (a, b) => a === b,
@@ -126,14 +129,14 @@ class CTable {
         );
     }
 
-    get acciones() { return CTable._accion; }
-    set acciones(bol) { CTable._accion = bol; }
+    // get acciones() { return CTable._accion; }
+    // set acciones(bol) { CTable._accion = bol; }
 
-    get newRow() { return CTable._newRow; }
-    set newRow(nw) { CTable._newRow = nw; }
+    // get newRow() { return CTable._newRow; }
+    // set newRow(nw) { CTable._newRow = nw; }
 
-    get data() { return CTable._data; }
-    set data(dt) { CTable._data = dt; }
+    // get data() { return CTable._data; }
+    // set data(dt) { CTable._data = dt; }
 
     createRow(value = this._selector.val()) {
         if (!value) return false;
@@ -207,6 +210,11 @@ class CTable {
         }
     }
 
+    updateTable({ data = this.data, del = true, newR = 0 } = {}) {
+        this.deleteTable();
+        this.fillTable(Object.keys(data), { del: del, newR: newR });
+    }
+
     deleteTable() {
         this.data = {};
         if (this._table !== null) this._table.remove();
@@ -214,11 +222,13 @@ class CTable {
         this._table = null;
     }
 
-    fillTable(value, Adel = true) {
+    fillTable(value, { del = true, newR = 0 } = {}) {
         const valores = Array.isArray(value) ? value : [value];
-        this.acciones = Adel;
-        this.newRow = 0;
-        valores.forEach(v => this.createRow(v));
+        valores.forEach(v => {
+            this.acciones = del;
+            this.newRow = newR;
+            this.createRow(v);
+        });
     }
 
     fillSelect(dataSet = this.dataSet) {
