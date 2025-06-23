@@ -1155,7 +1155,7 @@ INSERT INTO `tb_submenu` VALUES (2, 3, 'Terminadas', NULL, '/visitas/terminadas'
 INSERT INTO `tb_submenu` VALUES (3, 4, 'Empresas', NULL, '/empresas/empresas', 0, 1, NULL, '2025-02-01 20:12:21');
 INSERT INTO `tb_submenu` VALUES (4, 4, 'Grupos Empresas', NULL, '/empresas/grupos', 0, 1, '2025-02-10 10:20:20', '2025-02-01 20:13:05');
 INSERT INTO `tb_submenu` VALUES (5, 4, 'Sucursales Empresas', NULL, '/empresas/sucursales', 0, 1, NULL, '2025-02-01 20:13:33');
-INSERT INTO `tb_submenu` VALUES (6, 5, 'Usuarios', NULL, '/control-de-usuario/usuarios', 0, 1, NULL, '2025-02-01 20:15:25');
+INSERT INTO `tb_submenu` VALUES (6, 5, 'Usuarios', NULL, '/control-de-usuario/personal-rci', 0, 1, NULL, '2025-02-01 20:15:25');
 INSERT INTO `tb_submenu` VALUES (7, 6, 'Problemas', 'Incidentes', '/mantenimiento/problemas/problemas', 0, 1, NULL, '2025-02-01 20:16:46');
 INSERT INTO `tb_submenu` VALUES (8, 6, 'Sub Problemas', 'Incidentes', '/mantenimiento/problemas/subproblemas', 0, 1, NULL, '2025-02-01 20:17:36');
 INSERT INTO `tb_submenu` VALUES (9, 7, 'Menu', 'Config. Menu', '/mantenimiento/menu/menu', 0, 1, '2025-02-10 15:15:29', '2025-02-01 20:18:53');

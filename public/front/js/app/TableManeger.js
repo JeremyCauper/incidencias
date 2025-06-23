@@ -306,6 +306,7 @@ class CTable {
         } else {
             countContent.addClass('disabled');
         }
+        this._dataCount = 1;
         this.updateValueCount();
     }
 

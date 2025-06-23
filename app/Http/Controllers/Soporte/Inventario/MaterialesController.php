@@ -23,6 +23,15 @@ class MaterialesController extends Controller
                     'text' => "{$u->ndoc_usuario} - {$nombre}"
                 ];
             });
+
+            $data['materiales'] = DB::table('tb_materiales')->where('eliminado', 0)->get()->map(function ($val) {
+                return [
+                    'id' => $val->id_materiales,
+                    'producto' => $val->producto,
+                    'cantidad' => $val->cantidad
+                ];
+            });
+
             return view('soporte.inventario.material', ['data' => $data]);
         } catch (Exception $e) {
             return $this->message2(e: $e, status: 500);

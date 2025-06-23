@@ -14,10 +14,10 @@
                 </h6>
                 <div class="mb-3">
                     <!-- <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
-                                                data-mdb-target="#modal_material">
-                                                <i class="fas fa-user-plus me-2"></i>
-                                                Nuevo Material
-                                            </button> -->
+                                                        data-mdb-target="#modal_material">
+                                                        <i class="fas fa-user-plus me-2"></i>
+                                                        Nuevo Material
+                                                    </button> -->
                     <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
                         data-mdb-target="#modal_asignar">
                         <i class="fas fa-user-plus me-2"></i>
@@ -98,34 +98,30 @@
                                         class="fas fa-magnifying-glass"></i></button>
                             </div>
                         </div>
+                        <div class="col-md-10 mb-4">
+                            <label class="form-label mb-0" for="materiales">Materiales</label>
+                            <div class="input-group">
+                                <select class="select-clear" id="materiales">
+                                    <option value=""></option>
+                                    @foreach ($data['materiales'] as $m)
+                                        <option value="{{$m['id']}}">{{$m['producto']}}</option>
+                                    @endforeach
+                                </select>
+                                <button class="btn btn-primary btn-sm px-2" type="button"><i
+                                        class="fas fa-plus"></i></button>
+                            </div>
+                        </div>
                         <div class="col-12">
-                            <table id="tb_material_asignado" class="table table-hover text-nowrap" style="width:100%">
-                                <thead>
-                                    <tr class="text-bg-primary text-center">
-                                        <th>Material</th>
-                                        <th>Cantidad</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <script>
-                                const tb_material_asignado = new DataTable('#tb_material_asignado', {
-                                    scrollX: true,
-                                    scrollY: 300,
-                                    ajax: {
-                                        url: `${__url}/soporte/inventario/tecnicos/index`,
-                                        dataSrc: "data",
-                                        error: function (xhr, error, thrown) {
-                                            boxAlert.table();
-                                            console.log('Respuesta del servidor:', xhr);
-                                        }
-                                    },
-                                    columns: [
-                                        { data: 'material' },
-                                        { data: 'cantidad' }
-                                    ],
-                                    processing: true
-                                });
-                            </script>
+                            <div class="overflow-auto">
+                                <table id="tb_material_asignado" class="table table-hover text-nowrap" style="width:100%">
+                                    <thead>
+                                        <tr class="text-bg-primary text-center">
+                                            <th>Material</th>
+                                            <th>Cantidad</th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -141,13 +137,16 @@
 
 @section('scripts')
     <script>
-        fObservador('.content-wrapper', () => {
-            tb_material_asignado.columns.adjust().draw();
-        });
+        $('.modal').on('shown.bs.modal', function () {
+            switch ($(this).attr('id')) {
+                case 'modal_asignar':
+                    // tb_material_asignado.columns.adjust().draw();
+                    break;
 
-        function updateTable() {
-            tb_material.ajax.reload();
-        }
+                default:
+                    break;
+            }
+        });
     </script>
     <!-- <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}?v={{ time() }}"></script> -->
 @endsection

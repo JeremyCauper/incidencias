@@ -29,10 +29,15 @@
         #chart-estado,
         #chart-personal,
         #chart-problemas,
-        #chart-niveles,
-        #chart-subproblemas {
+        #chart-niveles {
             position: relative;
             height: 40vh;
+            overflow: hidden;
+        }
+
+        #chart-subproblemas {
+            position: relative;
+            height: 60vh;
             overflow: hidden;
         }
     </style>

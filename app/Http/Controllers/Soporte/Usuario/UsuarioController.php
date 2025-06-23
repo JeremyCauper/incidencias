@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
@@ -156,6 +157,7 @@ class UsuarioController extends Controller
                 'contrasena' => 'required|string',
                 'foto_perfil' => 'nullable|string',
                 'firma_digital' => 'nullable|string',
+                'modo_transporte' => 'nullable|integer',
                 'tipo_acceso' => 'required|integer',
                 'permisos' => 'required|string'
             ]);
@@ -199,6 +201,7 @@ class UsuarioController extends Controller
                 'pass_view' => $request->contrasena,
                 'foto_perfil' => $filenameFP,
                 'firma_digital' => $filenameFD,
+                'transporte' => $request->modo_transporte,
                 'tipo_acceso' => $request->tipo_acceso,
                 'id_area' => $request->id_area,
                 'menu_usuario' => $request->permisos,
@@ -256,6 +259,7 @@ class UsuarioController extends Controller
                 'contrasena' => 'required|string',
                 'foto_perfil' => 'nullable|string',
                 'firma_digital' => 'nullable|string',
+                'modo_transporte' => 'nullable|integer',
                 'tipo_acceso' => 'required|integer',
                 'permisos' => 'required|string'
             ]);
@@ -276,6 +280,7 @@ class UsuarioController extends Controller
                 'usuario' => $request->usuario,
                 'contrasena' => Hash::make($request->contrasena),  // Encriptar la contraseña
                 'pass_view' => $request->contrasena,
+                'transporte' => $request->modo_transporte,
                 'tipo_acceso' => $request->tipo_acceso,
                 'id_area' => $request->id_area,
                 'menu_usuario' => $request->permisos,
@@ -301,6 +306,24 @@ class UsuarioController extends Controller
 
             DB::table('tb_personal')->where('id_usuario', $request->id)->update($update);
             DB::commit();
+
+            if ($request->id == Auth::user()->id_usuario) {
+                $menu_usuario = $update['menu_usuario'];
+                $modulos = $this->obtenerModulos($menu_usuario, Auth::user()->tipo_acceso);
+                $text_acceso = (new TipoUsuario())->show(Auth::user()->tipo_acceso)['descripcion'];
+                $nomPerfil = $this->formatearNombre($update['nombres'], $update['apellidos']);
+                $foto_perfil = !isset($update['foto_perfil']) ? 'user_auth.jpg' : $update['foto_perfil'];
+                session([
+                    'customModulos' => $modulos->menus,
+                    'rutaRedirect' => $modulos->ruta,
+                    'menu_usuario' => $menu_usuario,
+                    'config_layout' => (object) [
+                        'text_acceso' => $text_acceso ?? null,
+                        'nombre_perfil' => $nomPerfil ?? null,
+                        'foto_perfil' => secure_asset("front/images/auth/$foto_perfil"),
+                    ]
+                ]);
+            }
 
             return $this->message(message: "Registro actualizado exitosamente.");
         } catch (QueryException $e) {
