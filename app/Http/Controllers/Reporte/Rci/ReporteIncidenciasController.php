@@ -121,8 +121,8 @@ class ReporteIncidenciasController extends Controller
                 $nombres = $this->formatearNombre($val->nombres, $val->apellidos);
                 $transporte = [
                     'fas fa-laptop',
-                    'fas fa-person-hiking',
-                    'fas fa-motorcycle'
+                    'fas fa-person-hiking text-success',
+                    'fas fa-motorcycle text-danger'
                 ];
                 return [
                     'name' => $apellidos,
