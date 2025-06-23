@@ -201,7 +201,7 @@ class UsuarioController extends Controller
                 'pass_view' => $request->contrasena,
                 'foto_perfil' => $filenameFP,
                 'firma_digital' => $filenameFD,
-                'transporte' => $request->modo_transporte,
+                'transporte' => $request->modo_transporte || 0,
                 'tipo_acceso' => $request->tipo_acceso,
                 'id_area' => $request->id_area,
                 'menu_usuario' => $request->permisos,
@@ -280,7 +280,7 @@ class UsuarioController extends Controller
                 'usuario' => $request->usuario,
                 'contrasena' => Hash::make($request->contrasena),  // Encriptar la contraseña
                 'pass_view' => $request->contrasena,
-                'transporte' => $request->modo_transporte,
+                'transporte' => $request->modo_transporte || 0,
                 'tipo_acceso' => $request->tipo_acceso,
                 'id_area' => $request->id_area,
                 'menu_usuario' => $request->permisos,
