@@ -122,12 +122,12 @@ Route::post('/soporte/empresas/sucursales/registrar', [SucursalesController::cla
 Route::post('/soporte/empresas/sucursales/actualizar', [SucursalesController::class, 'update']);
 Route::post('/soporte/empresas/sucursales/cambiarEstado', [SucursalesController::class, 'changeStatus']);
 
-Route::get('/soporte/control-de-usuario/usuarios', [UsuarioController::class, 'view'])->middleware('auth');
-Route::get('/soporte/control-de-usuario/usuarios/index', [UsuarioController::class, 'index']);
-Route::get('/soporte/control-de-usuario/usuarios/{id}', [UsuarioController::class, 'show']);
-Route::post('/soporte/control-de-usuario/usuarios/registrar', [UsuarioController::class, 'create']);
-Route::post('/soporte/control-de-usuario/usuarios/actualizar', [UsuarioController::class, 'update']);
-Route::post('/soporte/control-de-usuario/usuarios/cambiarEstado', [UsuarioController::class, 'changeStatus']);
+Route::get('/soporte/control-de-usuario/personal-rci', [UsuarioController::class, 'view'])->middleware('auth');
+Route::get('/soporte/control-de-usuario/personal-rci/index', [UsuarioController::class, 'index']);
+Route::get('/soporte/control-de-usuario/personal-rci/{id}', [UsuarioController::class, 'show']);
+Route::post('/soporte/control-de-usuario/personal-rci/registrar', [UsuarioController::class, 'create']);
+Route::post('/soporte/control-de-usuario/personal-rci/actualizar', [UsuarioController::class, 'update']);
+Route::post('/soporte/control-de-usuario/personal-rci/cambiarEstado', [UsuarioController::class, 'changeStatus']);
 
 // Manenimiento Problemas
 Route::get('/soporte/mantenimiento/problemas/problemas', [ProblemaController::class, 'view'])->middleware('auth');

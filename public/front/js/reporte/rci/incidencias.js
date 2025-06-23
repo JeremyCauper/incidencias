@@ -61,7 +61,7 @@ var myChart_peronal = new ChartMananger({
         yAxis: 'value',
         toolTip: {
             formatter: (params) => {
-                let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
+                let result = `<strong style="font-size:.725rem;"><i class="${params[0].data.data.transporte}"></i> ${params[0].data.text}</strong><br>`;
 
                 params.forEach(item => {
                     const value = item.data.value;

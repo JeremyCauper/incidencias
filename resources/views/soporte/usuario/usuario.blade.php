@@ -42,7 +42,7 @@
                                 scrollX: true,
                                 scrollY: 300,
                                 ajax: {
-                                    url: `${__url}/soporte/control-de-usuario/usuarios/index`,
+                                    url: `${__url}/soporte/control-de-usuario/personal-rci/index`,
                                     dataSrc: "",
                                     error: function (xhr, error, thrown) {
                                         boxAlert.table();
@@ -89,7 +89,6 @@
                             (*)</span>
                     </div>
                     <div class="row">
-
                         <div class="col-xl-3 col-6 mb-3">
                             <input type="hidden" name="id" id="id">
                             <label class="form-label mb-0" for="id_area">Area</label>
@@ -161,7 +160,8 @@
                                     </div>
                                     <input type="file" class="d-none" id="foto_perfil">
                                     <input type="text" class="d-none" name="foto_perfil" id="txtFotoPerfil">
-                                    <img id="PreviFPerfil" src="{{secure_asset('front/images/auth/user_auth.jpg')}}?v={{ time() }}"
+                                    <img id="PreviFPerfil"
+                                        src="{{secure_asset('front/images/auth/user_auth.jpg')}}?v={{ time() }}"
                                         imageDefault="{{secure_asset('front/images/auth/user_auth.jpg')}}">
                                 </div>
                             </div>
@@ -180,20 +180,32 @@
                                     </div>
                                     <input type="file" class="d-none" id="firma_digital">
                                     <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
-                                    <img id="PreviFirma" src="{{secure_asset('front/images/firms/firm.png')}}?v={{ time() }}"
+                                    <img id="PreviFirma"
+                                        src="{{secure_asset('front/images/firms/firm.png')}}?v={{ time() }}"
                                         imageDefault="{{secure_asset('front/images/firms/firm.png')}}">
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="mb-3">
-                        <label class="form-label mb-0" for="tipo_acceso">Tipo Personal</label>
-                        <select class="select" id="tipo_acceso">
-                            <option value="">-- Seleccione --</option>
-                            @foreach ($tipoAcceso as $r)
-                                <option {{$r['id'] == 3 ? 'selected' : ''}} value="{{$r['id']}}">{{$r['descripcion']}}</option>
-                            @endforeach
-                        </select>
+                    <div class="row mb-3">
+                        <div class="col-4">
+                            <label class="form-label mb-0" for="modo_transporte">Modo de Transporte</label>
+                            <select class="select-clear-nsearch" id="modo_transporte">
+                                <option value="">-- Seleccione --</option>
+                                <option value="1">Sin vehículo</option>
+                                <option value="2">Motorizado</option>
+                            </select>
+                        </div>
+                        <div class="col-4">
+                            <label class="form-label mb-0" for="tipo_acceso">Tipo Personal</label>
+                            <select class="select" id="tipo_acceso">
+                                <option value="">-- Seleccione --</option>
+                                @foreach ($tipoAcceso as $r)
+                                    <option {{$r['id'] == 3 ? 'selected' : ''}} value="{{$r['id']}}">{{$r['descripcion']}}
+                                    </option>
+                                @endforeach
+                            </select>
+                        </div>
                     </div>
                     <div class="col-12">
                         <label class="form-label mb-0">Administrar Modulos del Sistema</label>

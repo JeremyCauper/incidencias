@@ -70,7 +70,9 @@ class ChartMananger {
 
             const trigger = this.type === 'bar' ? 'axis' : 'item';
             const barTooltip = this.type === 'bar' ? {
-                axisPointer: { type: 'shadow' },
+                axisPointer: {
+                    type: 'shadow',
+                },
                 formatter: this.config?.toolTip?.formatter || ((params) => {
                     let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
                     params.forEach(item => {
@@ -196,12 +198,13 @@ class ChartMananger {
                         fontSize: 10,
                         color: getColor('--mdb-surface-color')
                     },
-                    emphasis: { focus: 'series' },
+                    // emphasis: { focus: 'series' },
                     data: this.data.map(item => ({
                         value: item.series[key],
                         text: item.text,
                         data: item
-                    }))
+                    })),
+                    barMaxWidth: 30
                 }));
             }
 

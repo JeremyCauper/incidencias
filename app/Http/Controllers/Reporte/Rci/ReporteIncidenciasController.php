@@ -119,6 +119,11 @@ class ReporteIncidenciasController extends Controller
                 $tipo = $inc_tipo->whereIn('cod_incidencia', $incAsignadas->pluck('cod_incidencia')->toArray());
                 $apellidos = $this->formatearNombre($val->apellidos);
                 $nombres = $this->formatearNombre($val->nombres, $val->apellidos);
+                $transporte = [
+                    'fas fa-laptop',
+                    'fas fa-person-hiking',
+                    'fas fa-motorcycle'
+                ];
                 return [
                     'name' => $apellidos,
                     'text' => "$val->ndoc_usuario $nombres",
@@ -127,6 +132,7 @@ class ReporteIncidenciasController extends Controller
                         'visitas' => $visAsignadas->count(),
                         'mantenimientos' => $incAsignadasM->count()
                     ],
+                    'transporte' => $transporte[$val->transporte],
                     'idTecnico' => $val->id_usuario,
                     'niveles' => [
                         'n1' => $tipo->where('id_tipo_inc', 1)->count(),

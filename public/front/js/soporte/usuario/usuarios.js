@@ -52,6 +52,10 @@ $(document).ready(function () {
             }
         },
         {
+            control: '#modo_transporte',
+            config: {}
+        },
+        {
             control: '#tipo_acceso',
             config: {
                 require: true
@@ -130,7 +134,7 @@ document.getElementById('form-usuario').addEventListener('submit', function (eve
 
     $.ajax({
         type: 'POST',
-        url: `${__url}/soporte/control-de-usuario/usuarios/${ $('#id').val() ? 'actualizar' : 'registrar' }`,
+        url: `${__url}/soporte/control-de-usuario/personal-rci/${ $('#id').val() ? 'actualizar' : 'registrar' }`,
         contentType: 'application/json',
         headers: {
             'X-CSRF-TOKEN': __token,
@@ -171,7 +175,7 @@ function Editar(id) {
         fMananger.formModalLoding('modal_usuarios', 'show');
         $.ajax({
             type: 'GET',
-            url: `${__url}/soporte/control-de-usuario/usuarios/${id}`,
+            url: `${__url}/soporte/control-de-usuario/personal-rci/${id}`,
             contentType: 'application/json',
             success: function (data) {
                 if (!data.success) {
@@ -192,6 +196,7 @@ function Editar(id) {
                 $('#contrasena').val(json.pass_view);
                 $('#PreviFPerfil').attr('src', json.foto_perfil ? `${__asset}/images/auth/${json.foto_perfil}` : imgUserDefault);
                 $('#PreviFirma').attr('src', json.firma_digital ? `${__asset}/images/firms/${json.firma_digital}` : imgFirmDefault);
+                $('#modo_transporte').val(json.transporte).trigger('change.select2');
                 $('#tipo_acceso').val(json.tipo_acceso).trigger('change.select2');
                 /*if (json.tipo_acceso == 4 || json.tipo_acceso == 5) {
                     $('#content-permisos').removeAttr('style');
@@ -220,7 +225,7 @@ async function CambiarEstado(id, estado) {
 
         $.ajax({
             type: 'POST',
-            url: `${__url}/soporte/control-de-usuario/usuarios/cambiarEstado`,
+            url: `${__url}/soporte/control-de-usuario/personal-rci/cambiarEstado`,
             contentType: 'application/json',
             headers: {
                 'X-CSRF-TOKEN': __token,
