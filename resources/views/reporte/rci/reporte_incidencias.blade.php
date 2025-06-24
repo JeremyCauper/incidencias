@@ -195,7 +195,7 @@
 
     <button class="d-none" data-mdb-modal-init data-mdb-target="#modal_subproblema"></button>
     <div class="modal fade" id="modal_subproblema" aria-labelledby="modal_subproblema" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content">
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title">SUB PROBLEMAS DE INCIDENCIAS</h6>
