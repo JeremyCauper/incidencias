@@ -41,7 +41,7 @@
                         <script>
                             const tb_material = new DataTable('#tb_material', {
                                 scrollX: true,
-                                scrollY: 300,
+                                scrollY: 400,
                                 ajax: {
                                     url: `${__url}/soporte/inventario/materiales/index`,
                                     dataSrc: "data",
@@ -192,14 +192,19 @@
                         $('<td>').text(producto.producto),
                         $('<td>', { class: 'text-center' }).append(
                             $('<div>', { class: 'd-flex justify-content-center' }).append(
-                                $('<input>', { class: 'form-control', type: 'number', style: 'width: 100px' }),
-                                $('<button>', { class: 'btn btn-dark btn-sm' }).text('Guardar')
+                                $('<input>', { class: 'form-control', type: 'number', style: 'width: 100px', min: 1, value: 1 }),
+                                $('<button>', { class: 'btn btn-dark btn-sm ms-1' }).text('Guardar'),
+                                $('<button>', { class: 'btn btn-danger btn-sm ms-3', onclick: `eliminarTr(${idm})` }).html('<i class="fas fa-trash-can"></i>')
                             )
                         )
                     )
                 );
             });
         });
+
+        function eliminarTr(id) {
+            $(`#producto-${id}`).remove();
+        }
 
         const CS_materiales = new CSelect(['#materiales'], {
             dataSet: materiales,
