@@ -31,7 +31,11 @@ class BAsignadasController extends Controller
                 return [
                     'value' => $m->id_materiales,
                     'dValue' => base64_encode(json_encode(['id_material' => $m->id_materiales, 'producto' => $m->producto, 'cantidad' => 0])),
-                    'text' => $m->producto
+                    'text' => $m->producto,
+                    'id_material' => $m->id_materiales,
+                    'producto' => $m->producto,
+                    'estatus' => $m->estatus,
+                    'eliminado' => $m->eliminado
                 ];
             });
             $data['cod_orden'] = DB::select('CALL GetCodeOrds(?)', [date('y')])[0]->num_orden;
