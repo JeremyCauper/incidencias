@@ -3,6 +3,7 @@
 
 @section('cabecera')
     <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}?v={{ time() }}"> -->
+    <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
         let materiales = <?php echo json_encode($data['materiales']); ?>;
     </script>
@@ -121,7 +122,8 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Guardar</button>
+                    <button id="guardar_asignacion" type="button" class="btn btn-primary" disabled="true"
+                        data-mdb-ripple-init>Guardar</button>
                 </div>
             </div>
         </div>
@@ -130,21 +132,11 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/app/SelectManeger.js')}}"></script>
+    <script src="{{ secure_asset('front/js/app/SelectManeger.js') }}"></script>
     <script>
         $(document).ready(function () {
             formatSelect('modal_asignar');
 
-            $('.modal').on('shown.bs.modal', function () {
-                switch ($(this).attr('id')) {
-                    case 'modal_asignar':
-                        // tb_material_asignado.columns.adjust().draw();
-                        break;
-
-                    default:
-                        break;
-                }
-            });
             let ct_material_asignado = $('#ct_material_asignado');
             let tb_material_asignado = $('#tb_material_asignado');
             let select_tecnico = $('#tecnico');
@@ -152,58 +144,188 @@
 
             $('#buscar_tecnico').on('click', function () {
                 const id = select_tecnico.val();
-                if (id) {
-                    $.ajax({
-                        type: 'GET',
-                        url: `${__url}/soporte/inventario/tecnicos/index?id=${id}`,
-                        contentType: 'application/json',
-                        success: function (data) {
-                            console.log(data);
-                            if (data.success) {
-                                ct_material_asignado.removeClass('d-none');
-                                CS_materiales.llenar();
-                            }
-                        },
-                        error: function (jqXHR, textStatus, errorThrown) {
-                            console.log(jqXHR);
-                            const datae = jqXHR.responseJSON;
-                            boxAlert.box({ i: datae.icon, t: datae.title, h: datae.message });
-                        }
-                    });
-                } else {
+                if (!id) {
                     ct_material_asignado.addClass('d-none');
-                    tb_material_asignado.find('body').html('');
+                    tb_material_asignado.find('tbody').html('');
+                    return;
                 }
+
+                $.ajax({
+                    type: 'GET',
+                    url: `${__url}/soporte/inventario/tecnicos/index?id=${id}`,
+                    success: function (data) {
+                        if (data.success) {
+                            ct_material_asignado.removeClass('d-none');
+                            CS_materiales.llenar(materiales); // rellenamos el select de materiales disponibles
+
+                            tb_material_asignado.find('tbody').html('');
+                            data.data.forEach(e => {
+                                // Removemos del select si ya lo tiene
+                                select_materiales.find(`option[value="${e.id_material}"]`).remove();
+
+                                // Insertamos en la tabla como ya asignado
+                                llenarTabla({
+                                    id: e.id_material,
+                                    min: 0,
+                                    value: e.cantidad,
+                                    delet: true
+                                });
+                            });
+                        }
+                    },
+                    error: function (jqXHR) {
+                        const res = jqXHR.responseJSON;
+                        boxAlert.box({ i: res.icon, t: res.title, h: res.message });
+                    }
+                });
             });
 
             select_tecnico.on('change', function () {
-                const id = $(this).val();
-                if (!id) {
+                if (!$(this).val()) {
                     ct_material_asignado.addClass('d-none');
-                    tb_material_asignado.find('body').html('');
+                    tb_material_asignado.find('tbody').html('');
                 }
             });
 
             $('#agregar_material').on('click', function () {
                 const idm = select_materiales.val();
-                const producto = materiales.find(m => m.id == idm);
+                if (!idm) return;
+
+                if ($(`#producto-${idm}`).length) {
+                    return boxAlert.box({ i: 'info', t: 'Material ya agregado', h: 'Este material ya está en la lista' });
+                }
+                llenarTabla({ id: idm })
+
+                // ✅ Eliminar del select
+                select_materiales.find(`option[value="${idm}"]`).remove();
+                select_materiales.val('').trigger('change'); // limpia el selector
+            });
+
+            tb_material_asignado.on('click', '.eliminar-item', async function () {
+                if (!await boxAlert.confirm({ h: `Esta apunto de eliminar el material asignado.` })) return true;
+                const row = $(this).closest('tr');
+                const id_material = row.attr('id').replace('producto-', '');
+                const cantidadAnterior = parseInt(row.attr('data-anterior'));
+                const id_usuario = select_tecnico.val();
+
+                $.ajax({
+                    type: 'POST',
+                    url: `${__url}/soporte/inventario/tecnicos/asignar`,
+                    data: {
+                        id_usuario: id_usuario,
+                        id_material: id_material,
+                        cantidad: 0, // Esto indica eliminación
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (res) {
+                        boxAlert.box({ i: 'success', t: 'Eliminado', h: res.success });
+                        row.remove(); // ✅ 1. Eliminar la fila
+
+                        const producto = materiales.find(m => m.id == id_material); // ✅ 2. Agregar nuevamente al select
+                        if (producto) {
+                            select_materiales.append(
+                                $('<option>', {
+                                    value: producto.id,
+                                    text: producto.producto
+                                })
+                            );
+                            // Reordenar y refrescar si usas select2 u otro plugin
+                            select_materiales.trigger('change');
+                        }
+                        updateTable();
+                    },
+                    error: function (xhr) {
+                        const res = xhr.responseJSON;
+                        boxAlert.box({ i: 'error', t: 'Error', h: res?.error || 'Problema al eliminar' });
+                    }
+                });
+            });
+
+            tb_material_asignado.on('click', '.guardar-item', function () {
+                const row = $(this).closest('tr');
+                const id_material = row.attr('id').replace('producto-', '');
+                const cantidad = parseInt(row.find('input[type="number"]').val());
+                const cantidadAnterior = parseInt(row.attr('data-anterior'));
+                const id_usuario = select_tecnico.val();
+
+                if (!cantidad || cantidad <= 0) {
+                    return boxAlert.box({ i: 'warning', t: 'Cantidad inválida', h: 'Ingresa una cantidad válida' });
+                }
+
+                // Diferencia real que se va a descontar o devolver
+                const diferencia = cantidad - cantidadAnterior;
+
+                $.ajax({
+                    type: 'POST',
+                    url: `${__url}/soporte/inventario/tecnicos/asignar`,
+                    data: {
+                        id_usuario: id_usuario,
+                        id_material: id_material,
+                        cantidad: cantidad,
+                        _token: $('meta[name="csrf-token"]').attr('content')
+                    },
+                    success: function (res) {
+                        boxAlert.box({ i: 'success', t: 'Asignado', h: res.success });
+                        row.attr('data-anterior', cantidad);
+                        updateTable();
+                    },
+                    error: function (xhr) {
+                        const res = xhr.responseJSON;
+                        boxAlert.box({ i: 'error', t: 'Error', h: res?.error || 'Problema al asignar' });
+                    }
+                });
+            });
+
+            $('#guardar_asignacion').on('click', function () {
+                const id_usuario = select_tecnico.val();
+                const rows = tb_material_asignado.find('tbody tr:not(:has(:disabled))');
+
+                if (!id_usuario) {
+                    return boxAlert.box({ i: 'warning', t: 'Selecciona un técnico', h: 'No se seleccionó ningún técnico.' });
+                }
+                if (rows.length === 0) {
+                    return boxAlert.box({ i: 'warning', t: 'No hay materiales', h: 'Agrega al menos un material.' });
+                }
+
+                rows.each(function () {
+                    $(this).find('.guardar-item').click();
+                });
+
+                $('#modal_asignar').modal('hide');
+            });
+
+            function llenarTabla({ id, min = 1, value = 1, delet = true } = {}) {
+                const producto = materiales.find(m => m.id == id);
+                if (!producto) return;
+
                 tb_material_asignado.find('tbody').append(
-                    $('<tr>', { id: 'producto-' + idm }).append(
+                    $('<tr>', { id: 'producto-' + id, 'data-anterior': value }).append(
                         $('<td>').text(producto.producto),
                         $('<td>', { class: 'text-center' }).append(
                             $('<div>', { class: 'd-flex justify-content-center' }).append(
-                                $('<input>', { class: 'form-control', type: 'number', style: 'width: 100px', min: 1, value: 1 }),
-                                $('<button>', { class: 'btn btn-dark btn-sm ms-1' }).text('Guardar'),
-                                $('<button>', { class: 'btn btn-danger btn-sm ms-3', onclick: `eliminarTr(${idm})` }).html('<i class="fas fa-trash-can"></i>')
+                                $('<input>', {
+                                    class: 'form-control',
+                                    type: 'number',
+                                    style: 'width: 100px',
+                                    min: min,
+                                    value: value
+                                }),
+                                $('<button>', {
+                                    class: 'btn btn-dark btn-sm ms-1 px-2 guardar-item'
+                                }).html('<i class="fas fa-floppy-disk"></i>'),
+                                delet ? $('<button>', {
+                                    class: 'btn btn-danger btn-sm ms-1 px-2 eliminar-item',
+                                    'data-id': id
+                                }).html('<i class="fas fa-trash-can"></i>') : null
                             )
                         )
                     )
                 );
-            });
+            }
         });
 
-        function eliminarTr(id) {
-            $(`#producto-${id}`).remove();
+        function updateTable() {
+            tb_material.ajax.reload();
         }
 
         const CS_materiales = new CSelect(['#materiales'], {
@@ -212,5 +334,4 @@
             optionText: 'producto'
         });
     </script>
-    <!-- <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}?v={{ time() }}"></script> -->
 @endsection
