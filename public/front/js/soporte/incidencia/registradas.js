@@ -426,10 +426,12 @@ const cMaterial = new CTable('createMaterial', {
         ]
     },
     count: 'cantidad',
-    extract: ['id_material', 'cantidad'],
+    extract: ['id_material', 'id_usuario', 'cantidad'],
     select: {
         value: "id_material",
-        text: "producto",
+        text: function (data) {
+            return `${data.producto} <span class="badge badge-success ms-2">Cant. ${data.cantidad}</span>`;
+        },
         validation: [
             { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
             { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },

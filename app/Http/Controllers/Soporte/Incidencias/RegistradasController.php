@@ -50,27 +50,23 @@ class RegistradasController extends Controller
                     return $val;
                 });
 
-            $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
-                return [
-                    'value' => $m->id_materiales,
-                    'dValue' => base64_encode(json_encode(['id_material' => $m->id_materiales, 'producto' => $m->producto, 'cantidad' => 0])),
-                    'text' => $m->producto,
-                    'id_material' => $m->id_materiales,
-                    'producto' => $m->producto,
-                    'estatus' => $m->estatus,
-                    'eliminado' => $m->eliminado
-                ];
-            });
+            $materiales = db::table('tb_materiales')->select('id_materiales', 'producto', 'estatus', 'eliminado')->get();
+            $data['materiales'] = db::table('tb_inventario_tecnico')->where('id_usuario', Auth::user()->id_usuario)->get()
+                ->map(function ($m) use ($materiales) {
+                    $material = $materiales->where('id_materiales', $m->id_material)->first();
+
+                    $m->producto = $material->producto;
+                    $m->estatus = $material->estatus;
+                    $m->eliminado = $material->eliminado;
+
+                    return $m;
+                });
 
             $data['usuarios'] = db::table('tb_personal')->where(['id_area' => 1])->get()->keyBy('id_usuario')->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);
                 return [
-                    'value' => $u->id_usuario,
-                    'dValue' => base64_encode(json_encode([  'nombre' => $nombre])),
-
                     'id' => $u->id_usuario,
                     'doc' => $u->ndoc_usuario,
-                    'text' => "{$u->ndoc_usuario} - {$nombre}",
                     'nombre' => $nombre,
                     'estatus' => $u->estatus,
                     'eliminado' => $u->eliminado

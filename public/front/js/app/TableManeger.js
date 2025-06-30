@@ -14,12 +14,10 @@ class CTable {
     };
     _dom = '<"row"<"col-lg-8 col-10"s><"col-2"B>>';
     _dataCount = 1;
-    // static _accion = true;
-    // static _newRow = 1;
-    // static _data = {};
     acciones = true;
     newRow = 1;
     data = {};
+    _obj = null;
 
     $operations = {
         '===': (a, b) => a === b,
@@ -78,6 +76,17 @@ class CTable {
         $(`button[ctable-create="${contenedor}"]`).on('click', () => {
             this.createRow();
         });
+
+        this._selector.on('change', () => {
+            const count = this._structure?.count;
+            const val = this._selector.val();
+            this.fillObj(val);
+
+            if (count) {
+                this.clearCount();
+                if (val) $(`input[ctable-count-cant="${contenedor}"]`).attr({ max: this._obj[count] });
+            }
+        });
     }
 
     _parseDOMString(domString) {
@@ -129,29 +138,21 @@ class CTable {
         );
     }
 
-    // get acciones() { return CTable._accion; }
-    // set acciones(bol) { CTable._accion = bol; }
-
-    // get newRow() { return CTable._newRow; }
-    // set newRow(nw) { CTable._newRow = nw; }
-
-    // get data() { return CTable._data; }
-    // set data(dt) { CTable._data = dt; }
-
     createRow(value = this._selector.val()) {
         if (!value) return false;
         const extract = this._structure.extract;
-        const obj = (Array.isArray(this.dataSet) ? this.dataSet : Object.values(this.dataSet)).find(v => v[extract[0]] == value);
-        if (!obj) return false;
-        if ($(`tr[ctable-table-tr-id="${value}"]`).length) return boxAlert.minbox({ i: 'info', h: 'El registro ya existe' });
+        this.fillObj(value);
+        if (!this._obj) return false;
+        if ($(`tr[ctable-table-tr-id="${value}"]`).length) return boxAlert.minbox({ i: 'info', h: 'El registro ya existe.' });
 
-        const $id = obj[extract[0]];
+        const $id = this._obj[extract[0]];
         if ($id in this.data) {
             this.data[$id].eliminado = 0;
         } else {
             const obj_td = {};
+            if (this._structure?.count && this._obj[this._structure?.count] < this._dataCount) return boxAlert.box({ i: 'warning', h: 'La cantidad ingresada es menor a lo que se tiene registrado.' });
             extract.forEach(e => {
-                let valor = obj[e];
+                let valor = this._obj[e];
                 if (this._structure?.count && this._structure?.count == e) valor = this._dataCount;
                 obj_td[e] = valor;
             });
@@ -163,7 +164,7 @@ class CTable {
         const $tr = $('<tr>', { 'ctable-table-tr-id': $id, 'ctable-table-tr': this.acciones, 'ctable-table-rnew': this.newRow });
         this._structure.table.tbody.forEach(col => {
             const $td = $('<td>', { 'ctable-table-col': col.data });
-            let valor = (col.render && typeof col.render === 'function') ? col.render(obj[col.data], typeof col.data, obj) : obj[col.data];
+            let valor = (col.render && typeof col.render === 'function') ? col.render(this._obj[col.data], typeof col.data, this._obj) : this._obj[col.data];
             if (this._structure?.count == col.data) valor = this._dataCount;
             $td.html(valor);
             $tr.append($td);
@@ -285,8 +286,6 @@ class CTable {
             let valor = parseInt($input.val(), 10);
             if (isNaN(valor) || valor < 1) this.updateValueCount();
         });
-
-        this._selector.on('change', () => this.clearCount());
     }
 
     updateValueCount(delta = null) {
@@ -295,6 +294,8 @@ class CTable {
         let valor = parseInt($input.val(), 10);
         if (isNaN(valor)) valor = 1;
         valor = Math.max(1, valor + delta);
+        
+        if (valor > this._obj[this._structure?.count]) return;
         $input.val(valor);
         this._dataCount = valor;
     }
@@ -316,5 +317,9 @@ class CTable {
             return false;
         }
         return this.data;
+    }
+
+    fillObj(val) {
+        this._obj = val ? ((Array.isArray(this.dataSet) ? this.dataSet : Object.values(this.dataSet)).find(v => v[this._structure.extract[0]] == val)) : null;
     }
 }
