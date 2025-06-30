@@ -18,7 +18,7 @@ class InventarioTecnicoController extends Controller
         $id = $request->query('id');
         try {
             $materiales = DB::table('tb_materiales')->get()->keyBy('id_materiales');
-            $inventario = DB::table('tb_inventario_tecnico')->where('id_usuario', $id)->get()->map(function ($val) use($materiales) {
+            $inventario = DB::table('tb_inventario_tecnico')->where('id_usuario', $id)->get()->map(function ($val) use ($materiales) {
                 return [
                     'material' => $materiales[$val->id_material],
                     'cantidad' => $val->cantidad,
@@ -38,7 +38,7 @@ class InventarioTecnicoController extends Controller
         $validator = Validator::make($request->all(), [
             'id_usuario' => 'required|integer|exists:tb_personal,id_usuario',
             'id_material' => 'required|integer|exists:tb_materiales,id_materiales',
-            'cantidad' => 'required|integer|min:1'
+            'cantidad' => 'required|integer|min:0'
         ]);
 
         if ($validator->fails()) {
@@ -49,44 +49,85 @@ class InventarioTecnicoController extends Controller
             DB::beginTransaction();
 
             $central = DB::table('tb_materiales')->where('id_materiales', $request->id_material)->lockForUpdate()->first();
-            if (!$central || $central->cantidad < $request->cantidad) {
-                return response()->json(['error' => 'Stock insuficiente en almacén central'], 400);
+            if (!$central) {
+                return response()->json(['error' => 'Material no encontrado en almacén central'], 404);
             }
 
-            DB::table('tb_materiales')->where('id_materiales', $request->id_material)->decrement('cantidad', $request->cantidad);
-
+            // Buscar si ya está asignado al técnico
             $inventario = DB::table('tb_inventario_tecnico')
                 ->where('id_usuario', $request->id_usuario)
                 ->where('id_material', $request->id_material)
+                ->lockForUpdate()
                 ->first();
 
+            $cantidadActual = $inventario ? $inventario->cantidad : 0;
+            $cantidadNueva = (int) $request->cantidad;
+            $diferencia = $cantidadNueva - $cantidadActual;
+
+            // Validar stock solo si se requiere más material
+            if ($diferencia > 0 && $central->cantidad < $diferencia) {
+                return response()->json(['error' => 'Stock insuficiente en almacén central'], 400);
+            }
+
+            // Si se asigna 0, eliminar el registro
+            if ($cantidadNueva === 0 && $inventario) {
+                // Eliminar asignación
+                DB::table('tb_inventario_tecnico')
+                    ->where('id_usuario', $request->id_usuario)
+                    ->where('id_material', $request->id_material)
+                    ->delete();
+
+                // Devolver al almacén central
+                DB::table('tb_materiales')
+                    ->where('id_materiales', $request->id_material)
+                    ->update(['cantidad' => $central->cantidad + $cantidadActual]);
+
+                DB::commit();
+                return response()->json(['success' => 'Material eliminado del técnico y stock restaurado'], 200);
+            }
+
+            // Si ya existe la asignación, actualizar
             if ($inventario) {
                 DB::table('tb_inventario_tecnico')
                     ->where('id_usuario', $request->id_usuario)
                     ->where('id_material', $request->id_material)
-                    ->increment('cantidad', $request->cantidad);
+                    ->update([
+                        'cantidad' => $cantidadNueva,
+                        'updated_at' => now()->format('Y-m-d H:i:s')
+                    ]);
             } else {
                 DB::table('tb_inventario_tecnico')->insert([
                     'id_usuario' => $request->id_usuario,
                     'id_material' => $request->id_material,
-                    'cantidad' => $request->cantidad,
-                    'created_at' => now(),
+                    'cantidad' => $cantidadNueva,
+                    'created_at' => now()->format('Y-m-d H:i:s')
                 ]);
             }
 
+            // Actualizar stock del central
+            $nuevoStockCentral = $central->cantidad - $diferencia;
+            DB::table('tb_materiales')
+                ->where('id_materiales', $request->id_material)
+                ->update([
+                    'cantidad' => $nuevoStockCentral,
+                    'updated_at' => now()->format('Y-m-d H:i:s')
+                ]);
+
             DB::table('tb_movimientos_inventario')->insert([
-                'id_usuario_origen' => null,
-                'id_usuario_destino' => $request->id_usuario,
+                'tipo_movimiento' => $diferencia < 0 ? 'DEVOLUCION' : 'ASIGNACION',
                 'id_material' => $request->id_material,
-                'cantidad' => $request->cantidad,
-                'tipo_movimiento' => 'asignacion',
-                'created_at' => now(),
+                'cantidad' => abs($diferencia),
+                'id_usuario_origen' => $diferencia < 0 ? $request->id_usuario : null,
+                'id_usuario_destino' => $diferencia > 0 ? $request->id_usuario : null,
+                'motivo' => $diferencia < 0 ? 'Reducción de material asignado' : 'Asignación de nuevo material',
+                'created_at' => now()->format('Y-m-d H:i:s')
             ]);
+
 
             DB::commit();
 
             return response()->json(['success' => 'Material asignado correctamente'], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             DB::rollBack();
             Log::error('Error al asignar material: ' . $e->getMessage());
             return response()->json(['error' => 'Error interno del servidor'], 500);
@@ -115,7 +156,7 @@ class InventarioTecnicoController extends Controller
                     ],
                     [
                         'cantidad' => $request->nueva_cantidad,
-                        'updated_at' => now()
+                        'updated_at' => now()->format('Y-m-d H:i:s')
                     ]
                 );
 
@@ -125,11 +166,11 @@ class InventarioTecnicoController extends Controller
                 'id_usuario_destino' => $request->id_usuario,
                 'id_material' => $request->id_material,
                 'cantidad' => $request->nueva_cantidad,
-                'created_at' => now(),
+                'created_at' => now()->format('Y-m-d H:i:s'),
             ]);
 
             return response()->json(['message' => 'Inventario actualizado correctamente.'], 200);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error al actualizar inventario: ' . $e->getMessage());
             return response()->json(['error' => 'Error al actualizar el inventario.'], 500);
         }

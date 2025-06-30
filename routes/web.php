@@ -207,7 +207,7 @@ Route::get('/soporte/reportes/reporte-incidencias/index', [ReporteIncidenciasCon
 Route::get('/soporte/inventario/materiales', [MaterialesController::class, 'view'])->middleware('auth');
 Route::get('/soporte/inventario/materiales/index', [MaterialesController::class, 'index']);
 Route::get('/soporte/inventario/tecnicos/index', [InventarioTecnicoController::class, 'index']);
-
+Route::post('/soporte/inventario/tecnicos/asignar', [InventarioTecnicoController::class, 'asignarMaterial']);
 
 
 Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login.empresa')->middleware('guest:client');

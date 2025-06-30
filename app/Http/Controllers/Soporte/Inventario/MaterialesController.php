@@ -92,7 +92,7 @@ class MaterialesController extends Controller
             ]);
 
             return response()->json(['success' => true, 'message' => 'Material registrado correctamente.']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error al registrar material: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Error al registrar material.'], 500);
         }
@@ -130,7 +130,7 @@ class MaterialesController extends Controller
                 ]);
 
             return response()->json(['success' => true, 'message' => 'Material actualizado correctamente.']);
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             Log::error('Error al actualizar material: ' . $e->getMessage());
             return response()->json(['success' => false, 'message' => 'Error al actualizar material.'], 500);
         }

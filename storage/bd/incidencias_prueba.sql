@@ -11,7 +11,7 @@
  Target Server Version : 100432
  File Encoding         : 65001
 
- Date: 23/06/2025 01:02:05
+ Date: 26/06/2025 07:37:38
 */
 
 SET NAMES utf8mb4;
@@ -1305,7 +1305,7 @@ CREATE TABLE `tb_inc_seguimiento`  (
   INDEX `cod_incidencia_2`(`cod_incidencia`) USING BTREE,
   CONSTRAINT `tb_inc_seguimiento_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `tb_personal` (`id_usuario`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_inc_seguimiento_ibfk_2` FOREIGN KEY (`cod_incidencia`) REFERENCES `tb_incidencias` (`cod_incidencia`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 91 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 93 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_inc_seguimiento
@@ -1361,6 +1361,8 @@ INSERT INTO `tb_inc_seguimiento` VALUES (87, 1, 'INC-00000030', '2025-05-12', '1
 INSERT INTO `tb_inc_seguimiento` VALUES (88, 1, 'INC-00000034', '2025-05-24', '11:57:03', 0, NULL, '2025-05-24 11:57:03');
 INSERT INTO `tb_inc_seguimiento` VALUES (89, 1, 'INC-00000034', '2025-05-24', '11:57:15', 1, NULL, '2025-05-24 11:57:15');
 INSERT INTO `tb_inc_seguimiento` VALUES (90, 1, 'INC-00000032', '2025-05-30', '15:31:43', 0, NULL, '2025-05-30 15:31:43');
+INSERT INTO `tb_inc_seguimiento` VALUES (91, 1, 'INC-00000035', '2025-06-25', '11:20:39', 0, NULL, '2025-06-25 11:20:39');
+INSERT INTO `tb_inc_seguimiento` VALUES (92, 1, 'INC-00000035', '2025-06-25', '11:21:01', 1, NULL, '2025-06-25 11:21:01');
 
 -- ----------------------------
 -- Table structure for tb_inc_tipo
@@ -1419,7 +1421,7 @@ INSERT INTO `tb_inc_tipo` VALUES (66, 'INC-00000031', 1, 1, NULL, NULL, NULL, '2
 INSERT INTO `tb_inc_tipo` VALUES (67, 'INC-00000032', 1, 1, '2025-05-30', '15:31:43', NULL, '2025-05-19 14:24:38');
 INSERT INTO `tb_inc_tipo` VALUES (68, 'INC-00000033', 2, 6, NULL, NULL, NULL, '2025-05-21 17:57:32');
 INSERT INTO `tb_inc_tipo` VALUES (69, 'INC-00000034', 1, 1, '2025-05-24', '11:57:03', NULL, '2025-05-24 09:38:05');
-INSERT INTO `tb_inc_tipo` VALUES (70, 'INC-00000035', 1, 1, NULL, NULL, NULL, '2025-06-19 15:35:06');
+INSERT INTO `tb_inc_tipo` VALUES (70, 'INC-00000035', 1, 1, '2025-06-25', '11:20:39', NULL, '2025-06-19 15:35:06');
 
 -- ----------------------------
 -- Table structure for tb_incidencias
@@ -1493,7 +1495,7 @@ INSERT INTO `tb_incidencias` VALUES (64, 'INC-00000031', '20517103633', 163, 1, 
 INSERT INTO `tb_incidencias` VALUES (65, 'INC-00000032', '20603906790', 210, 1, 2, 11, 133, 10, 2, 'shhsfgh', '2025-06-19', '15:15:31', 2, 1, 1, '2025-06-19 15:15:48', '2025-05-19 14:24:38');
 INSERT INTO `tb_incidencias` VALUES (66, 'INC-00000033', '20603850913', 209, 1, 1, 2, 38, 690, 366, 'gfhthtrhrthtrh', '2025-06-20', '18:08:25', 1, 6, 1, '2025-06-20 18:08:36', '2025-05-21 17:57:32');
 INSERT INTO `tb_incidencias` VALUES (67, 'INC-00000034', '20345774042', 132, 1, 1, 1, 9, 10, 367, 'hfshfghfgh', '2025-05-24', '09:36:04', 3, 1, 1, NULL, '2025-05-24 09:38:05');
-INSERT INTO `tb_incidencias` VALUES (68, 'INC-00000035', '20513567139', 94, 1, 2, 11, 133, NULL, NULL, NULL, '2025-06-19', '15:25:49', 1, 1, 1, NULL, '2025-06-19 15:35:06');
+INSERT INTO `tb_incidencias` VALUES (68, 'INC-00000035', '20513567139', 94, 1, 2, 11, 133, NULL, NULL, NULL, '2025-06-19', '15:25:49', 3, 1, 1, NULL, '2025-06-19 15:35:06');
 
 -- ----------------------------
 -- Table structure for tb_inventario_tecnico
@@ -1511,11 +1513,12 @@ CREATE TABLE `tb_inventario_tecnico`  (
   INDEX `id_material`(`id_material`) USING BTREE,
   CONSTRAINT `tb_inventario_tecnico_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `tb_personal` (`id_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `tb_inventario_tecnico_ibfk_2` FOREIGN KEY (`id_material`) REFERENCES `tb_materiales` (`id_materiales`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_inventario_tecnico
 -- ----------------------------
+INSERT INTO `tb_inventario_tecnico` VALUES (4, 14, 3, 2, NULL, '2025-06-26 01:30:25');
 
 -- ----------------------------
 -- Table structure for tb_materiales
@@ -1537,8 +1540,8 @@ CREATE TABLE `tb_materiales`  (
 -- Records of tb_materiales
 -- ----------------------------
 INSERT INTO `tb_materiales` VALUES (1, NULL, 'Jack Tool', 200, 0, 1, NULL, '2024-08-12 14:47:29');
-INSERT INTO `tb_materiales` VALUES (2, NULL, 'Protector de Manguera Data (05 Mtrs)', 400, 0, 1, NULL, '2024-08-12 14:47:33');
-INSERT INTO `tb_materiales` VALUES (3, NULL, 'Cable Telefonico (07 Mtrs)', 230, 0, 1, NULL, '2024-08-12 14:47:38');
+INSERT INTO `tb_materiales` VALUES (2, NULL, 'Protector de Manguera Data (05 Mtrs)', 400, 0, 1, '2025-06-26 01:40:06', '2024-08-12 14:47:33');
+INSERT INTO `tb_materiales` VALUES (3, NULL, 'Cable Telefonico (07 Mtrs)', 228, 0, 1, '2025-06-26 01:30:25', '2024-08-12 14:47:38');
 INSERT INTO `tb_materiales` VALUES (4, NULL, 'RJ 45', 120, 0, 1, NULL, '2024-08-12 14:47:43');
 INSERT INTO `tb_materiales` VALUES (5, NULL, 'RJ 12', 140, 0, 1, NULL, '2024-08-12 14:47:51');
 INSERT INTO `tb_materiales` VALUES (6, NULL, 'RJ 11', 156, 0, 1, NULL, '2024-08-12 14:47:53');
@@ -1577,7 +1580,7 @@ CREATE TABLE `tb_materiales_usados`  (
   INDEX `id_material`(`id_material`) USING BTREE,
   CONSTRAINT `tb_materiales_usados_ibfk_2` FOREIGN KEY (`id_material`) REFERENCES `tb_materiales` (`id_materiales`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_materiales_usados_ibfk_3` FOREIGN KEY (`cod_ordens`) REFERENCES `tb_orden_servicio` (`cod_ordens`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 41 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 43 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_materiales_usados
@@ -1604,6 +1607,8 @@ INSERT INTO `tb_materiales_usados` VALUES (37, 'ST25-00000020', 2, 2, NULL, '202
 INSERT INTO `tb_materiales_usados` VALUES (38, 'OS24-015481', 1, 2, NULL, '2025-04-11 14:06:13');
 INSERT INTO `tb_materiales_usados` VALUES (39, 'ST25-00000021', 2, 1, NULL, '2025-04-11 14:14:56');
 INSERT INTO `tb_materiales_usados` VALUES (40, 'ST25-00000023', 1, 1, NULL, '2025-05-24 11:57:15');
+INSERT INTO `tb_materiales_usados` VALUES (41, 'ST25-00000024', 3, 2, NULL, '2025-06-25 11:21:01');
+INSERT INTO `tb_materiales_usados` VALUES (42, 'ST25-00000024', 6, 1, NULL, '2025-06-25 11:21:01');
 
 -- ----------------------------
 -- Table structure for tb_movimientos_inventario
@@ -1616,23 +1621,26 @@ CREATE TABLE `tb_movimientos_inventario`  (
   `cantidad` int(11) NOT NULL,
   `id_usuario_origen` int(11) NULL DEFAULT NULL,
   `id_usuario_destino` int(11) NULL DEFAULT NULL,
-  `cod_orden_servicio` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NOT NULL,
+  `cod_orden_servicio` varchar(20) CHARACTER SET utf8 COLLATE utf8_unicode_ci NULL DEFAULT NULL,
   `motivo` text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL,
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `id_material`(`id_material`) USING BTREE,
   INDEX `id_usuario_origen`(`id_usuario_origen`) USING BTREE,
   INDEX `id_usuario_destino`(`id_usuario_destino`) USING BTREE,
-  INDEX `cod_orden_servicio`(`cod_orden_servicio`) USING BTREE,
   CONSTRAINT `tb_movimientos_inventario_ibfk_1` FOREIGN KEY (`id_material`) REFERENCES `tb_materiales` (`id_materiales`) ON DELETE RESTRICT ON UPDATE RESTRICT,
   CONSTRAINT `tb_movimientos_inventario_ibfk_2` FOREIGN KEY (`id_usuario_origen`) REFERENCES `tb_personal` (`id_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `tb_movimientos_inventario_ibfk_3` FOREIGN KEY (`id_usuario_destino`) REFERENCES `tb_personal` (`id_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT,
-  CONSTRAINT `tb_movimientos_inventario_ibfk_4` FOREIGN KEY (`cod_orden_servicio`) REFERENCES `tb_orden_servicio` (`cod_ordens`) ON DELETE RESTRICT ON UPDATE RESTRICT
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+  CONSTRAINT `tb_movimientos_inventario_ibfk_3` FOREIGN KEY (`id_usuario_destino`) REFERENCES `tb_personal` (`id_usuario`) ON DELETE RESTRICT ON UPDATE RESTRICT
+) ENGINE = InnoDB AUTO_INCREMENT = 6 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
 
 -- ----------------------------
 -- Records of tb_movimientos_inventario
 -- ----------------------------
+INSERT INTO `tb_movimientos_inventario` VALUES (1, 'ASIGNACION', 2, 2, NULL, 14, NULL, 'Asignación de nuevo material', '2025-06-26 01:27:46');
+INSERT INTO `tb_movimientos_inventario` VALUES (2, 'DEVOLUCION', 2, 3, 14, NULL, NULL, 'Reducción de material asignado', '2025-06-26 01:28:14');
+INSERT INTO `tb_movimientos_inventario` VALUES (3, 'ASIGNACION', 3, 2, NULL, 14, NULL, 'Asignación de nuevo material', '2025-06-26 01:30:25');
+INSERT INTO `tb_movimientos_inventario` VALUES (4, 'ASIGNACION', 2, 0, NULL, NULL, NULL, 'Asignación de nuevo material', '2025-06-26 01:34:38');
+INSERT INTO `tb_movimientos_inventario` VALUES (5, 'ASIGNACION', 2, 1, NULL, 14, NULL, 'Asignación de nuevo material', '2025-06-26 01:40:06');
 
 -- ----------------------------
 -- Table structure for tb_orden_correlativo
@@ -1645,7 +1653,7 @@ CREATE TABLE `tb_orden_correlativo`  (
   `created_at` timestamp(0) NULL DEFAULT NULL,
   PRIMARY KEY (`id_cor`) USING BTREE,
   UNIQUE INDEX `num_orden`(`num_orden`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 25 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 26 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_correlativo
@@ -1673,6 +1681,7 @@ INSERT INTO `tb_orden_correlativo` VALUES (21, 'ST25-00000020', NULL, '2025-04-0
 INSERT INTO `tb_orden_correlativo` VALUES (22, 'ST25-00000021', NULL, '2025-04-11 14:14:56');
 INSERT INTO `tb_orden_correlativo` VALUES (23, 'ST25-00000022', NULL, '2025-05-12 12:49:48');
 INSERT INTO `tb_orden_correlativo` VALUES (24, 'ST25-00000023', NULL, '2025-05-24 11:57:15');
+INSERT INTO `tb_orden_correlativo` VALUES (25, 'ST25-00000024', NULL, '2025-06-25 11:21:01');
 
 -- ----------------------------
 -- Table structure for tb_orden_servicio
@@ -1697,7 +1706,7 @@ CREATE TABLE `tb_orden_servicio`  (
   INDEX `id_contacto`(`id_contacto`) USING BTREE,
   CONSTRAINT `tb_orden_servicio_ibfk_1` FOREIGN KEY (`cod_incidencia`) REFERENCES `tb_incidencias` (`cod_incidencia`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `tb_orden_servicio_ibfk_2` FOREIGN KEY (`id_contacto`) REFERENCES `tb_contac_ordens` (`id`) ON DELETE SET NULL ON UPDATE SET NULL
-) ENGINE = InnoDB AUTO_INCREMENT = 51 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
+) ENGINE = InnoDB AUTO_INCREMENT = 52 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = DYNAMIC;
 
 -- ----------------------------
 -- Records of tb_orden_servicio
@@ -1726,6 +1735,7 @@ INSERT INTO `tb_orden_servicio` VALUES (47, 'OS24-015481', 'INC-00000025', 'fdgs
 INSERT INTO `tb_orden_servicio` VALUES (48, 'ST25-00000021', 'INC-00000014', 'redgdf', 'hfghdfdfh', NULL, '2025-04-11', '14:14:56', '3', 1, NULL, '2025-04-11 14:14:56');
 INSERT INTO `tb_orden_servicio` VALUES (49, 'ST25-00000022', 'INC-00000030', 'e regtrsg', 'fdgsfxghg', NULL, '2025-05-12', '12:49:44', '3', 1, NULL, '2025-05-12 12:49:48');
 INSERT INTO `tb_orden_servicio` VALUES (50, 'ST25-00000023', 'INC-00000034', 'sfdsdaf', 'asdfasdf', NULL, '2025-05-24', '11:57:15', '3', 1, NULL, '2025-05-24 11:57:15');
+INSERT INTO `tb_orden_servicio` VALUES (51, 'ST25-00000024', 'INC-00000035', '<zdfsd', 'fasdfsdf', NULL, '2025-06-25', '11:21:01', '3', 1, NULL, '2025-06-25 11:21:01');
 
 -- ----------------------------
 -- Table structure for tb_orden_visita
