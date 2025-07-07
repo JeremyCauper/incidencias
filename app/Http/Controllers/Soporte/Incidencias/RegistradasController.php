@@ -50,17 +50,14 @@ class RegistradasController extends Controller
                     return $val;
                 });
 
-            $materiales = db::table('tb_materiales')->select('id_materiales', 'producto', 'estatus', 'eliminado')->get();
-            $data['materiales'] = db::table('tb_inventario_tecnico')->where('id_usuario', Auth::user()->id_usuario)->get()
-                ->map(function ($m) use ($materiales) {
-                    $material = $materiales->where('id_materiales', $m->id_material)->first();
-
-                    $m->producto = $material->producto;
-                    $m->estatus = $material->estatus;
-                    $m->eliminado = $material->eliminado;
-
-                    return $m;
-                });
+            $data['materiales'] = db::table('tb_materiales')->where('estatus', 1)->get()->map(function ($m) {
+                return [
+                    'id_material' => $m->id_materiales,
+                    'producto' => $m->producto,
+                    'estatus' => $m->estatus,
+                    'eliminado' => $m->eliminado
+                ];
+            });
 
             $data['usuarios'] = db::table('tb_personal')->where(['id_area' => 1])->get()->keyBy('id_usuario')->map(function ($u) {
                 $nombre = $this->formatearNombre($u->nombres, $u->apellidos);

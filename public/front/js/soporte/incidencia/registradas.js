@@ -445,7 +445,7 @@ const cMaterial = new CTable('createMaterial', {
     select: {
         value: "id_material",
         text: function (data) {
-            return `${data.producto} <span class="badge badge-success ms-2">Cant. ${data.cantidad}</span>`;
+            return `${data.producto}`; // <span class="badge badge-success ms-2">Cant. ${data.cantidad}</span>
         },
         validation: [
             { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
