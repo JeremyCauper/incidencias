@@ -127,10 +127,12 @@ $(document).ready(function () {
     });
 
     $('#tIncidencia').on('change', function () {
-        if ($(this).val() == "1") {
-            cPersonal.createRow(personal);
-        } else {
-            cPersonal.deleteRow(personal);
+        if (!$('#id_inc').val().length) {
+            if ($(this).val() == "1") {
+                cPersonal.createRow(personal);
+            } else {
+                cPersonal.deleteRow(personal);
+            }
         }
     });
 
@@ -164,17 +166,30 @@ $(document).ready(function () {
         }
 
         const contacto = obj_eContactos.find(c => c.nro_doc == valorActual);
-
         if (contacto) {
             $('#cod_contact').val(contacto.id_contact);
-            $('#consultado_api').val(contacto.consultado);
-            $(this).attr('disabled', eval(contacto.consultado) ? true : false);
-            ignorarCambio = true;
-            CS_nom_contac.setValue(contacto.nombres);
-            CS_nom_contac.enable();
             CS_tel_contac.llenar(contacto.telefonos);
+            $(this).val(contacto.nro_doc).attr('disabled', eval(contacto.consultado) ? true : false);
+            $('#consultado_api').val(contacto.consultado);
             $('#car_contac').val(contacto.cargo).trigger('change.select2');
             $('#cor_contac').val(contacto.correo);
+
+            valorAnterior = contacto.nro_doc;
+            if (!eval(contacto.consultado)) {
+                const datos = await consultarDniInput($(this));
+                if (datos?.success) {
+                    const nuevoTexto = datos.data.RazonSocialCliente;
+                    ignorarCambio = true;
+                    CS_nom_contac.addOption({ value: nuevoTexto, text: nuevoTexto });
+                    CS_nom_contac.setValue(nuevoTexto);
+                    $('#consultado_api').val(1);
+                    CS_nom_contac.disable();
+                }
+            } else {
+                $('[for="nro_doc"]')
+                    .removeClass('d-flex justify-content-between mt-1')
+                    .find('span[data-con="consulta"]').remove();
+            }
             return true;
         }
 
