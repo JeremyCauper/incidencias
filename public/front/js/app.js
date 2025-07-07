@@ -302,7 +302,7 @@ async function consultarDniInput($this) {
                 break;
 
             default:
-                consultar.html('Error Interno').attr('class', 'text-danger');
+                consultar.html('Servicio Inhabilitado').attr('class', 'text-danger');
                 break;
         }
         return datos;

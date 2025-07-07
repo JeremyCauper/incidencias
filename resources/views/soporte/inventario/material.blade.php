@@ -73,7 +73,7 @@
 
     <!-- Modal -->
     <div class="modal fade" id="modal_asignar" tabindex="-1" aria-labelledby="modal_asignarLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-xl">
             <div class="modal-content" id="form-asignar">
                 <div class="modal-header  bg-primary text-white">
                     <h6 class="modal-title" id="modal_asignarLabel">Asignar Material</h6>
@@ -81,7 +81,7 @@
                         aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <div class="col-12">
+                    <div class="col-md-9">
                         <label class="form-label mb-0" for="tecnico">Tecnicos</label>
                         <div class="input-group">
                             <select class="select-clear" id="tecnico">
@@ -96,7 +96,7 @@
                         </div>
                     </div>
                     <div class="row d-none" id="ct_material_asignado">
-                        <div class="col-md-10 mt-4 mb-2">
+                        <div class="col-md-9 mt-4 mb-2">
                             <label class="form-label mb-0" for="materiales">Materiales</label>
                             <div class="input-group">
                                 <select class="select-clear" id="materiales"></select>
@@ -275,14 +275,13 @@
                 const row = $(this).closest('tr');
                 const btn = $(this);
                 const id_material = row.attr('id').replace('producto-', '');
-                const cantidad = parseInt(row.find('input[type="number"]').val());
+                const cantidad = parseInt(row.find('input.input-asignado').val());
                 const cantidadAnterior = parseInt(row.attr('data-anterior'));
                 const id_usuario = select_tecnico.val();
 
                 if (!cantidad || cantidad <= 0) {
                     return boxAlert.box({ i: 'warning', t: 'Cantidad inválida', h: 'Ingresa una cantidad válida' });
                 }
-
                 const diferencia = cantidad - cantidadAnterior;
 
                 btn.html('<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>').prop('disabled', true);
@@ -299,6 +298,8 @@
                     success: function (res) {
                         boxAlert.box({ i: 'success', t: 'Asignado', h: res.success });
                         row.attr('data-anterior', cantidad);
+                        row.find('.guardar-item').addClass('d-none');
+                        row.find('.input-cantidad').addClass('d-none');
                         if (eval(row.attr('data-nuevo'))) {
                             row.find('label[data-badge="true"]').remove();
                             row.attr('data-nuevo', false);
@@ -312,6 +313,26 @@
                         boxAlert.box({ i: 'error', t: 'Error', h: res?.error || 'Problema al asignar' });
                     }
                 });
+            });
+
+            tb_material_asignado.on('input', 'input.input-asignado', function () {
+                const input = $(this);
+                const row = input.closest('tr');
+                const guardarBtn = row.find('.guardar-item');
+                const asignadoInput = row.find('.input-asignado');
+                const cantidadInput = row.find('.input-cantidad');
+
+                const valorInicial = parseInt(input.attr('data-inicial'));
+                const valorActual = parseInt(input.val());
+
+                if (valorInicial !== valorActual) {
+                    guardarBtn.removeClass('d-none');
+                    cantidadInput.removeClass('d-none');
+                    cantidadInput.val(asignadoInput.attr('max') - (valorActual - valorInicial));
+                } else {
+                    guardarBtn.addClass('d-none');
+                    cantidadInput.addClass('d-none');
+                }
             });
 
             btnGuardar.on('click', function () {
@@ -345,17 +366,26 @@
                 tb_material_asignado.find('tbody').append(
                     $('<tr>', { id: 'producto-' + id, 'data-anterior': value, 'data-nuevo': nuevo }).append(
                         $('<td>').append(producto.producto, nuevo ? '<label class="badge badge-info ms-2" data-badge="true" style="font-size: small;">Nuevo</label>' : ''),
-                        $('<td>', { class: 'text-center' }).append(
-                            $('<div>', { class: 'd-flex justify-content-center' }).append(
+                        $('<td>', { style: 'width: 280px;' }).append(
+                            $('<div>', { class: 'd-flex', style: 'width: 280px;' }).append(
                                 $('<input>', {
-                                    class: 'form-control',
+                                    class: 'form-control input-asignado',
                                     type: 'number',
                                     style: 'width: 100px',
                                     min: min,
+                                    max: producto.cantidad,
+                                    'data-inicial': value,
                                     value: value
                                 }),
+                                $('<input>', {
+                                    class: 'form-control input-cantidad d-none',
+                                    type: 'text',
+                                    style: 'width: 80px',
+                                    disabled: true,
+                                    value: producto.cantidad
+                                }),
                                 $('<button>', {
-                                    class: 'btn btn-dark btn-sm ms-1 px-2 guardar-item'
+                                    class: 'btn btn-dark btn-sm ms-1 px-2 guardar-item d-none'
                                 }).html('<i class="fas fa-floppy-disk"></i>'),
                                 delet ? $('<button>', {
                                     class: 'btn btn-danger btn-sm ms-1 px-2 eliminar-item',

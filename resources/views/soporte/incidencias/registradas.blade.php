@@ -662,40 +662,6 @@
                     </div>
                     <div class="col-12">
                         <div id="createMaterial"></div>
-                        <!-- <div class="row" id="content-material">
-                            <div class="col-lg-9 my-1">
-                                <div class="input-group">
-                                    <select class="select-clear" id="createMaterial">
-                                        <option value=""></option>
-                                        @foreach ($data['materiales'] as $m)
-                                        <option value="{{$m['value']}}"
-                                            data-value="{{$m['dValue']}}"
-                                            {{ $m['estatus'] != 1 || $m['eliminado'] == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
-                                            {{$m['text']}}
-                                            {{ $m['eliminado'] == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($m['estatus'] != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
-                                        </option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-6 my-1 ps-lg-0">
-                                <div class="input-group disabled" style="max-width: 300px;" id="content-cantidad">
-                                    <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                        onclick="manCantidad('-')">
-                                        <i class="fas fa-minus" style="font-size: .75rem;"></i>
-                                    </button>
-                                    <input type="number" class="form-control" input-cantidad=""
-                                        oninput="manCantidad('press')" />
-                                    <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                        onclick="manCantidad('+')">
-                                        <i class="fas fa-plus" style="font-size: .75rem;"></i>
-                                    </button>
-                                </div>
-                            </div>
-                            <div class="col-lg-3 col-6 my-1 ps-0 d-none" id="content-codAviso">
-                                <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
-                            </div>
-                        </div> -->
                     </div>
 
                     <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
