@@ -60,7 +60,8 @@
                                     { data: 'direccion' },
                                     {
                                         data: 'ubigeo', render: function (data, type, row) {
-                                            return objUbigeo[data].nombre;
+                                            const ubg = ubigeo.find(u => u.codigo == data);
+                                            return ubg.nombre;
                                         }
                                     },
                                     { data: 'created_at' },
