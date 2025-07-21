@@ -401,28 +401,30 @@ class RegistradasController extends Controller
             DB::beginTransaction();
 
             $idContact = $request->cod_contact;
-            $registro_contacto = [
-                'nro_doc' => $request->nro_doc ?: null,
-                'nombres' => $request->nom_contac ?: null,
-                'cargo' => $request->car_contac ?: null,
-                'correo' => $request->cor_contac ?: null,
-                'consultado' => $request->consultado_api ?: 0,
-                (empty($idContact) ? 'created_at' : 'updated_at') => now()->format('Y-m-d H:i:s')
-            ];
-            if (empty($idContact)) {
-                $idContact = DB::table('contactos_empresas')->insertGetId($registro_contacto);
-            } else {
-                DB::table('contactos_empresas')->where('id_contact', $idContact)->update($registro_contacto);
-            }
+            if ($request->nom_contac && $request->tel_contac && $request->car_contac) {
+                $registro_contacto = [
+                    'nro_doc' => $request->nro_doc ?: null,
+                    'nombres' => $request->nom_contac ?: null,
+                    'cargo' => $request->car_contac ?: null,
+                    'correo' => $request->cor_contac ?: null,
+                    'consultado' => $request->consultado_api ?: 0,
+                    (empty($idContact) ? 'created_at' : 'updated_at') => now()->format('Y-m-d H:i:s')
+                ];
+                if (empty($idContact)) {
+                    $idContact = DB::table('contactos_empresas')->insertGetId($registro_contacto);
+                } else {
+                    DB::table('contactos_empresas')->where('id_contact', $idContact)->update($registro_contacto);
+                }
 
-            $idTelefono = $request->tel_contac;
-            if (!empty($idTelefono) && str_starts_with($idTelefono, "nuevo:")) {
-                $newTelefono = substr($idTelefono, strlen("nuevo:"));
-                $idTelefono = DB::table('contactos_telefono_empresas')->insertGetId([
-                    'id_contact' => $idContact,
-                    'telefono' => $newTelefono,
-                    'created_at' => now()->format('Y-m-d H:i:s')
-                ]);
+                $idTelefono = $request->tel_contac;
+                if (!empty($idTelefono) && str_starts_with($idTelefono, "nuevo:")) {
+                    $newTelefono = substr($idTelefono, strlen("nuevo:"));
+                    $idTelefono = DB::table('contactos_telefono_empresas')->insertGetId([
+                        'id_contact' => $idContact,
+                        'telefono' => $newTelefono,
+                        'created_at' => now()->format('Y-m-d H:i:s')
+                    ]);
+                }
             }
 
             DB::table('tb_incidencias')->where('id_incidencia', $request->id_inc)->update([
@@ -461,10 +463,48 @@ class RegistradasController extends Controller
                 ]);
             }
 
-            $cod_inc = DB::select('CALL GetCodeInc()')[0]->cod_incidencia;
+
+            $estado_save = false;
+            $estado_dalete = false;
+            $vPersonal = $request->personal;
+            if (count($request->personal)) {
+                $arr_personal_new = [];
+                $indice_new = 0;
+                $arr_personal_del = [];
+                foreach ($vPersonal as $k => $val) {
+                    if (!$val['eliminado'] && $val['registro']) {
+                        $arr_personal_new[$indice_new]['cod_incidencia'] = $request->cod_inc;
+                        $arr_personal_new[$indice_new]['id_usuario'] = $val['id'];
+                        $arr_personal_new[$indice_new]['creador'] = Auth::user()->id_usuario;
+                        $arr_personal_new[$indice_new]['fecha'] = now()->format('Y-m-d');
+                        $arr_personal_new[$indice_new]['hora'] = now()->format('H:i:s');
+                        $arr_personal_new[$indice_new]['created_at'] = now()->format('Y-m-d H:i:s');
+                        $vPersonal[$val['id']]['registro'] = 0;
+                        $indice_new++;
+                    }
+                    if ($val['eliminado'] && !$val['registro']) {
+                        array_push($arr_personal_del, $val['id']);
+                        unset($vPersonal[$val['id']]);
+                    }
+                }
+            }
+
+            if (!empty($arr_personal_new)) {
+                DB::table('tb_inc_asignadas')->insert($arr_personal_new);
+                $estado_save = true;
+            }
+
+            if (!empty($arr_personal_del) && $request->estado_info != 2) {
+                DB::table('tb_inc_asignadas')->where('cod_incidencia', $request->cod_inc)->where('id_usuario', $arr_personal_del)->delete();
+                $estado_dalete = true;
+            }
+
+            $estado_info = count($vPersonal) ? 1 : 0;
+            if ($request->estado)
+                DB::table('tb_incidencias')->where('cod_incidencia', $request->cod_inc)->update(['estado_informe' => $estado_info]);
 
             DB::commit();
-            return $this->message(message: "Registro actualizado exitosamente.", data: ['data' => ['cod_inc' => $cod_inc]]);
+            return $this->message(message: "Registro actualizado exitosamente.", data: ['data' => []]);
         } catch (QueryException $e) {
             DB::rollBack();
             $sqlHelper = SqlStateHelper::getUserFriendlyMsg($e->getCode());

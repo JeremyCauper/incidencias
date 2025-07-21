@@ -190,6 +190,7 @@ class CTable {
 
     deleteRow(value) {
         if (!value) return false;
+        if (!this.data[value]) return false;
         if (this.data[value].registro) {
             delete this.data[value];
         } else {
