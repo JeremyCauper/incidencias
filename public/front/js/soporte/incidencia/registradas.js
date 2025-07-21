@@ -231,9 +231,11 @@ $(document).ready(function () {
                 text: c.nombres
             })));
             valorAnterior = '';
+            validContac(this);
 
             return false;
         }
+        validContac(this);
         const contacto = obj_eContactos.find(c => c.nombres == nombreSeleccionado);
 
         if (contacto) {
@@ -264,7 +266,6 @@ $(document).ready(function () {
                     .find('span[data-con="consulta"]').remove();
             }
         }
-        validContac(this);
     });
 
     $('.modal').on('shown.bs.modal', function () {
@@ -299,7 +300,7 @@ $(document).ready(function () {
                 text: c.nombres
             })));
         }, 100);
-        $('#contenedor-personal').removeClass('d-none');
+        // $('#contenedor-personal').removeClass('d-none');
         cPersonal.deleteTable();
         cPersonal1.deleteTable();
         cMaterial.deleteTable();
@@ -493,7 +494,7 @@ function searchTable(search) {
     tb_incidencia.column([1]).search(biblio[search]).draw();
 }
 
-document.getElementById('form-incidencias').addEventListener('submit', function (event) {
+document.getElementById('form-incidencias').addEventListener('submit', async function (event) {
     event.preventDefault();
     fMananger.formModalLoding('modal_incidencias', 'show');
     const url = $('#id_inc').val() ? `actualizar` : `registrar`;
@@ -508,6 +509,12 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
     }
     valid.data.data['personal'] = personal;
 
+    const hayRegistro = Object.values(personal).some(item => item.registro === 1);
+    if (hayRegistro && $('#estado_info').val() == '2' && !await boxAlert.confirm({
+        t: '¿Estas de suguro de guardar los cambios?',
+        h: 'La incidencia está en <b>proceso</b>, si añade el personal no se podrá revertir los cambios.'
+    })) return fMananger.formModalLoding('modal_incidencias', 'hide');
+
     $.ajax({
         type: 'POST',
         url: `${__url}/soporte/incidencias/registradas/${url}`,
@@ -517,11 +524,11 @@ document.getElementById('form-incidencias').addEventListener('submit', function 
         },
         data: JSON.stringify(valid.data.data),
         success: function (data) {
-            if (!data.success) {
+            if (!data.success)
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
-            }
             $('#modal_incidencias').modal('hide');
-            cod_incidencia = data.data.cod_inc;
+            if (data.data.hasOwnProperty('cod_inc'))
+                cod_incidencia = data.data.cod_inc;
             boxAlert.box({ i: data.icon, t: data.title, h: data.message })
             updateTable();
         },
@@ -590,7 +597,7 @@ function ShowDetail(e, cod) {
 
 function ShowEdit(cod) {
     $('#modal_incidencias').modal('show');
-    $('#contenedor-personal').addClass('d-none');
+    // $('#contenedor-personal').addClass('d-none');
     fMananger.formModalLoding('modal_incidencias', 'show', true);
 
     $.ajax({
@@ -651,6 +658,9 @@ function ShowEdit(cod) {
             $('#fecha_imforme').val(dt.fecha_informe);
             $('#hora_informe').val(dt.hora_informe);
             $('#observacion').val(dt.observacion);
+
+            const accion = dt.estado_informe == 2 ? false : true;
+            cPersonal.fillTable((dt.personal_asig).map(obj => obj.id), { del: accion });
         },
         error: function (jqXHR, textStatus, errorThrown) {
             console.log(jqXHR);
@@ -684,6 +694,8 @@ function ShowAssign(e, cod) {
         url: `${__url}/soporte/incidencias/registradas/${cod}`,
         contentType: 'application/json',
         success: function (data) {
+            console.log(data);
+
             if (!data.success) {
                 return boxAlert.box({ i: data.icon, t: data.title, h: data.message });
             }
