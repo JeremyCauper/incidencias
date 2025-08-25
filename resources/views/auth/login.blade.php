@@ -36,8 +36,9 @@
             </a>
             <div class="navbar-brand">
                 <span class="text-white me-0">
-                    SOPORTE | INCIDENCIAS - RC INGENIEROS SAC
+                    SOPORTE | INCIDENCIAS - RCI
                 </span>
+                <a class="btn btn-link btn-sm ms-2" href="{{secure_url('/empresa')}}">Empresa</a>
                 <div class="ms-2">
                     <input id="check" type="checkbox">
                     <label for="check" class="check-trail">

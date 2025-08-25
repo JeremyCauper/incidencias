@@ -36,8 +36,9 @@
             </a>
             <div class="navbar-brand">
                 <span class="text-white me-0">
-                    CLIENTES | INCIDENCIAS - RC INGENIEROS SAC
+                    EMPRESA | INCIDENCIAS - RCI
                 </span>
+                <a class="btn btn-link btn-sm ms-2" href="{{secure_url('/soporte')}}">Soporte</a>
                 <div class="ms-2">
                     <input id="check" type="checkbox">
                     <label for="check" class="check-trail">
@@ -72,8 +73,8 @@
                             <i class="fas fa-triangle-exclamation"></i> Usuario incorrecto
                         </div>
                         <!-- Usuario input -->
-                        <div class="form-icon icon-usuario my-4">
-                            <input type="text" name="usuario" id="usuario" class="form-control" placeholder="Usuario"
+                        <div class="form-icon icon-usuario_ruc my-4">
+                            <input type="text" name="usuario" id="usuario" class="form-control" placeholder="Cliente"
                                 autofocus require="usuario">
                         </div>
 
