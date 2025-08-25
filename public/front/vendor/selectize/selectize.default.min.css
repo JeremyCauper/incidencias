@@ -174,7 +174,7 @@
     position: relative;
     z-index: 1;
     box-sizing: border-box;
-    border-radius: inherit
+    border-radius: .15rem;
 }
 
 .selectize-control.multi .selectize-input.has-items {
@@ -201,7 +201,8 @@
 .selectize-input>* {
     vertical-align: baseline;
     display: inline-block;
-    zoom: 1
+    zoom: 1;
+    font-size: .75rem;
 }
 
 .selectize-input-clear {
@@ -446,8 +447,8 @@
 }
 
 .selectize-control .selectize-input.disabled {
-    opacity: .5;
-    background-color: #fafafa
+    opacity: 1;
+    background-color: var(--mdb-form-control-disabled-bg) !important;
 }
 
 .selectize-control.multi .selectize-input.has-items {
@@ -456,7 +457,7 @@
 }
 
 .selectize-control.multi .selectize-input.disabled [data-value] {
-    color: #999;
+    /* color: #999; */
     text-shadow: none;
     background: 0;
     box-shadow: none
@@ -488,6 +489,7 @@
 
 .selectize-control.single .selectize-input {
     background-color: var(--mdb-body-bg);
+    color: var(--mdb-surface-color) !important;
     background-repeat: repeat-x
 }
 

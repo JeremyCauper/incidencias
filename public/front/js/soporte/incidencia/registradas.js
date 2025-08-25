@@ -148,67 +148,31 @@ $(document).ready(function () {
         if (valorActual == valorAnterior) return false;
         cancelarConsultarDoc();
         valorAnterior = valorActual;
-
         // Si está vacío, reseteamos todo
         if (!valorActual) {
             const nombreContacto = await obj_eContactos.find(c => c.id_contact == $('#cod_contact').val());
-
             if ($('#cod_contact').val() && nombreContacto.nombres == $('#nom_contac').val()) {
                 return true;
             }
-            $('#cod_contact, #consultado_api, #car_contac, #cor_contac').val('').trigger('change.select2');
-
-            CS_tel_contac.llenar();
-            CS_nom_contac.setValue('');
-            CS_nom_contac.enable();
-
-            return false;
+            return setContacto();
         }
 
         const contacto = obj_eContactos.find(c => c.nro_doc == valorActual);
         if (contacto) {
-            $('#cod_contact').val(contacto.id_contact);
-            CS_tel_contac.llenar(contacto.telefonos);
-            $(this).val(contacto.nro_doc).attr('disabled', eval(contacto.consultado) ? true : false);
-            $('#consultado_api').val(contacto.consultado);
-            $('#car_contac').val(contacto.cargo).trigger('change.select2');
-            $('#cor_contac').val(contacto.correo);
-
+            setContacto({
+                id: contacto.id_contact,
+                consultado: contacto.consultado,
+                telefonos: contacto.telefonos,
+                cargo: contacto.cargo,
+                correo: contacto.correo,
+                nro_doc: contacto.nro_doc,
+                nom_contac: contacto.nombres
+            });
             valorAnterior = contacto.nro_doc;
-            if (!eval(contacto.consultado)) {
-                const datos = await consultarDniInput($(this));
-                if (datos?.success) {
-                    const nuevoTexto = datos.data.RazonSocialCliente;
-                    ignorarCambio = true;
-                    CS_nom_contac.addOption({ value: nuevoTexto, text: nuevoTexto });
-                    CS_nom_contac.setValue(nuevoTexto);
-                    $('#consultado_api').val(1);
-                    CS_nom_contac.disable();
-                }
-            } else {
-                $('[for="nro_doc"]')
-                    .removeClass('d-flex justify-content-between mt-1')
-                    .find('span[data-con="consulta"]').remove();
-            }
+            consultarApiSiNecesario(contacto.consultado, $this, () => { ignorarCambio = true; });
             return true;
         }
-
-        // Deshabilitamos mientras se consulta
-        if (valorActual.length === 8) {
-            setTimeout(() => CS_nom_contac.disable(), 100);
-        }
-
-        const datos = await consultarDniInput($this);
-
-        if (datos?.success) {
-            const nombre = datos.data.RazonSocialCliente;
-            CS_nom_contac.addOption({ value: nombre, text: nombre });
-            CS_nom_contac.setValue(nombre);
-        } else {
-            CS_nom_contac.setValue('');
-            CS_nom_contac.enable();
-        }
-        $('#consultado_api').val(datos?.success ? 1 : '');
+        consultarApiSiNecesario("0", $this);
     });
 
     // Evento cuando cambia el valor del select nom_contac
@@ -218,55 +182,64 @@ $(document).ready(function () {
         const nombreSeleccionado = $(this).val();
 
         if (!nombreSeleccionado) {
-            $('#cod_contact, #consultado_api, #car_contac, #cor_contac')
-                .val('')
-                .trigger('change.select2');
-
-            $('#nro_doc').val('').attr('disabled', false);
-            valorConsultado = '';
-            CS_tel_contac.llenar();
-
-            recargarSelectize('#nom_contac', obj_eContactos.map(c => ({
-                value: c.nombres,
-                text: c.nombres
-            })));
-            valorAnterior = '';
+            setContacto({
+                functionContacto: () => {
+                    recargarSelectize('#nom_contac', obj_eContactos.map(c => ({
+                        value: c.nombres,
+                        text: c.nombres
+                    })));
+                    valorAnterior = '';
+                }
+            });
             validContac(this);
-
             return false;
         }
         validContac(this);
         const contacto = obj_eContactos.find(c => c.nombres == nombreSeleccionado);
-
         if (contacto) {
-            $('#cod_contact').val(contacto.id_contact);
-            CS_tel_contac.llenar(contacto.telefonos);
-
-            const $dni = $('#nro_doc');
-            $dni.val(contacto.nro_doc).attr('disabled', eval(contacto.consultado) ? true : false);
-            $('#consultado_api').val(contacto.consultado);
-            $('#car_contac').val(contacto.cargo).trigger('change.select2');
-            $('#cor_contac').val(contacto.correo);
-
+            setContacto({
+                id: contacto.id_contact,
+                consultado: contacto.consultado,
+                telefonos: contacto.telefonos,
+                cargo: contacto.cargo,
+                correo: contacto.correo,
+                nro_doc: contacto.nro_doc,
+                nom_contac: contacto.nombres
+            });
             valorAnterior = contacto.nro_doc;
-            if (!eval(contacto.consultado)) {
-                const datos = await consultarDniInput($dni);
-
-                if (datos?.success) {
-                    const nuevoTexto = datos.data.RazonSocialCliente;
-                    CS_nom_contac.addOption({ value: nuevoTexto, text: nuevoTexto });
-                    CS_nom_contac.setValue(nuevoTexto);
-
-                    $('#consultado_api').val(1);
-                    CS_nom_contac.disable();
-                }
-            } else {
-                $('[for="nro_doc"]')
-                    .removeClass('d-flex justify-content-between mt-1')
-                    .find('span[data-con="consulta"]').remove();
-            }
+            consultarApiSiNecesario(contacto.consultado, $('#nro_doc'));
         }
     });
+
+    function setContacto(option = {}) {
+        $('#cod_contact').val(option.id || '');
+        $('#consultado_api').val(option.consultado || '');
+        $('#car_contac').val(option.cargo || '').trigger('change.select2');
+        $('#cor_contac').val(option.correo || '');
+        $('#nro_doc').val(option.nro_doc || '').attr('disabled', eval(option.consultado) ? true : false);
+        CS_tel_contac.llenar(option.telefonos || []);
+        CS_nom_contac.setValue(option.nom_contac || '');
+        // Callback opcional
+        option.functionContacto?.();
+    }
+
+    async function consultarApiSiNecesario(consultado, $dni, funcionCambio = null) {
+        if ($dni.val().length != 8) return false;
+        if (!eval(consultado)) {
+            const datos = await consultarDniInput($dni);
+            if (datos?.success) {
+                const nuevoTexto = datos.data.RazonSocialCliente;
+                funcionCambio?.();
+                CS_nom_contac.addOption({ value: nuevoTexto, text: nuevoTexto });
+                CS_nom_contac.setValue(nuevoTexto);
+                $('#consultado_api').val(1);
+                $('#nro_doc').attr('disabled', true);
+            }
+        } else {
+            $('[for="nro_doc"]').removeClass('d-flex justify-content-between mt-1')
+                .find('span[data-con="consulta"]').remove();
+        }
+    }
 
     $('.modal').on('shown.bs.modal', function () {
         switch ($(this).attr('id')) {
@@ -346,12 +319,10 @@ function CheckCodOrden(check = true) {
 
 function recargarSelectize(selector, opciones = []) {
     const selectize = $(selector)[0].selectize;
-
     if (!selectize) {
         console.warn(`No se encontró Selectize en "${selector}"`);
         return;
     }
-
     // Limpiar todo
     selectize.clear();
     selectize.clearOptions();

@@ -3,6 +3,11 @@ $(document).ready(function () {
         fillSelect(['#sucursal'], sucursales, 'ruc', $(this).val(), 'id', 'nombre', 'status');
     });
 
+    $('#fProblema').on('change', function () {
+        var problem = obj_problem[$(this).val()]?.codigo;
+        fillSelect(['#fSubProblema'], obj_subproblem, 'codigo_problema', problem, 'id', 'descripcion', 'estatus');
+    });
+
     $('#dateRango').daterangepicker({
         showDropdowns: true,
         startDate: date('Y-m-01'),
@@ -38,7 +43,9 @@ function filtroBusqueda() {
     var empresa = $(`#empresa`).val();
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
-    var nuevoUrl = `${__url}/soporte/incidencias/resueltas/index?ruc=${empresa}&sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
+    var fProblema = $('#fProblema').val();
+    var fSubProblema = $('#fSubProblema').val();
+    var nuevoUrl = `${__url}/soporte/incidencias/resueltas/index?ruc=${empresa}&sucursal=${sucursal}&fProblema=${fProblema}&fSubProblema=${fSubProblema}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
 
     tb_orden.ajax.url(nuevoUrl).load();
 }

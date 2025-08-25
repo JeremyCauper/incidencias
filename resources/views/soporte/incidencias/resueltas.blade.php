@@ -23,7 +23,7 @@
             <div class="card-body form-container">
                 <h6 class="text-primary">Filtros de Busqueda</h6>
                 <div class="row">
-                    <div class="col-xxl-5 my-1">
+                    <div class="col-xxl-6 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
                         <select id="empresa" name="empresa" class="select-clear">
                             <option value=""></option>
@@ -36,7 +36,7 @@
                             @endforeach
                         </select>
                     </div>
-                    <div class="col-xxl-3 col-md-8 my-1">
+                    <div class="col-xxl-4 col-md-8 my-1">
                         <label class="form-label mb-0" for="idGrupo">Sucursal</label>
                         <select id="sucursal" name="sucursal" class="select-clear" disabled="true">
                             <option value="">-- Seleccione --</option>
@@ -46,7 +46,24 @@
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
                     </div>
-                    <div class="align-items-end col-xxl-2 d-flex my-1 justify-content-end">
+                    
+                    <div class="col-md-6 my-1">
+                        <label class="form-label mb-0" for="fProblema">Problemas</label>
+                        <select id="fProblema" class="select-clear">
+                            <option value=""></option>
+                            @foreach ($data['problema'] as $v)
+                                <option value="{{$v['id']}}">{{ $data['tSoporte'][$v['tipo_soporte']]['descripcion'] }} - {{$v['descripcion']}}</option>
+                            @endforeach
+                        </select>
+                    </div>
+                    <div class="col-md-6 my-1">
+                        <label class="form-label mb-0" for="fSubProblema">Sub Problemas</label>
+                        <select id="fSubProblema" class="select-clear" disabled="true">
+                            <option value="">-- Seleccione --</option>
+                        </select>
+                    </div>
+
+                    <div class="align-items-end col-12 d-flex my-1 justify-content-end">
                         <div>
                             <button type="button" class="btn btn-primary" data-mdb-ripple-init onclick="filtroBusqueda()">
                                 <i class="fas fa-magnifying-glass"></i> Buscar

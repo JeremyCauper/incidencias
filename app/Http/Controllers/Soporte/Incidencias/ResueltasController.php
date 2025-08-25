@@ -59,6 +59,8 @@ class ResueltasController extends Controller
     {
         $ruc = $request->query('ruc');
         $sucursal = $request->query('sucursal');
+        $fProblema = $request->query('fProblema');
+        $fSubProblema = $request->query('fSubProblema');
         $fechaIni = $request->query('fechaIni') ?: now()->format('Y-m-01');
         $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
 
@@ -66,11 +68,19 @@ class ResueltasController extends Controller
         if ($ruc) {
             $whereInc['ruc_empresa'] = $ruc;
         }
+        if ($fProblema) {
+            $whereInc['id_problema'] = $fProblema;
+        }
+        if ($fSubProblema) {
+            $whereInc['id_subproblema'] = $fSubProblema;
+        }
         if (intval($sucursal)) {
             $whereInc['id_sucursal'] = intval($sucursal);
         }
 
-        $incidencias = DB::table('tb_incidencias')->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])->where($whereInc)->get();
+        $incidencias = DB::table('tb_incidencias')
+            ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
+            ->where($whereInc)->get();
         $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
 
         $seguimientos = DB::table('tb_inc_seguimiento')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');

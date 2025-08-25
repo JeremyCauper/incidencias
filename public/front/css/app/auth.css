@@ -140,12 +140,17 @@ body {
 }
 
 .form-icon.icon-usuario::after {
-    content: "\f2bd";
+    content: "\f4fe";
+    left: .75rem;
+}
+
+.form-icon.icon-usuario_ruc::after {
+    content: "\f1ad";
     left: .75rem;
 }
 
 .form-icon.icon-contrasena::after {
-    content: "\f084";
+    content: "\f023";
     left: .75rem;
 }
 

@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reporte\Cliente;
+namespace App\Http\Controllers\Dashboard\Empresa;
 
 use App\Http\Controllers\Controller;
 use App\Services\JsonDB;
@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
-class CReporteIncidenciasController extends Controller
+class EDashboardIncidenciasController extends Controller
 {
     public function view()
     {
@@ -18,7 +18,7 @@ class CReporteIncidenciasController extends Controller
             $data = [];
             $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->where('ruc', ((array) session('empresa'))['ruc'])->get()->keyBy('id');
 
-            return view('reporte.cliente.creporte_incidencias', ['data' => $data]);
+            return view('dashboard.empresa.dashboard_incidencias', ['data' => $data]);
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
@@ -88,6 +88,7 @@ class CReporteIncidenciasController extends Controller
             });
 
         $problemas = JsonDB::table('problema')->get()->keyBy('id');
+        $subproblemas = JsonDB::table('sub_problema')->get()->keyBy('id');
         $data['problemas'] = $incidencias->groupBy('id_problema')
             ->map(function ($items, $id) use ($problemas) {
                 return [
@@ -100,12 +101,36 @@ class CReporteIncidenciasController extends Controller
             ->take(10)
             ->values();
 
+        $data['subproblemas'] = collect($incidencias->groupBy('id_subproblema')
+            ->map(function ($items, $id) use ($subproblemas) {
+                return [
+                    'codigo' => $subproblemas[$id]->codigo_problema,
+                    'name' => $subproblemas[$id]->descripcion,
+                    'text' => "{$subproblemas[$id]->prioridad} - {$subproblemas[$id]->descripcion}",
+                    'series' => ['sub_problemas' => count($items)]
+                ];
+            })->toArray())->groupBy('codigo');
+
         DB::table('tb_inc_tipo')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia')
             ->map(function ($items, $id) use (&$niveles) {
                 $item = collect($items)->sortByDesc('created_at')->first();
                 $niveles[$item->id_tipo_inc - 1]['value']++;
             });
         $data['niveles'] = $niveles;
+
+        $infoData = DB::table('tb_sucursales')->select('id', 'ruc', 'nombre')->where('ruc', ((array) session('empresa'))['ruc'])->get()->keyBy('id');
+        $data['contable'] = $incidencias->groupBy('id_sucursal')
+            ->map(function ($items, $key) use ($infoData) {
+                $name = $infoData[$key]->nombre;
+                $text = $infoData[$key]->nombre;
+                return [
+                    'name' => $name,
+                    'text' => $text,
+                    'series' => ['sucursal' => $items->count()],
+                ];
+            })
+            ->values()
+            ->toArray();
 
         return $this->message(data: ['data' => $data]);
         // } catch (Exception $e) {
