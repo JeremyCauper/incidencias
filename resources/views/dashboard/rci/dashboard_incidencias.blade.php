@@ -29,7 +29,8 @@
         #chart-estado,
         #chart-personal,
         #chart-problemas,
-        #chart-niveles {
+        #chart-niveles,
+        #chart-contable {
             position: relative;
             height: 40vh;
             overflow: hidden;
@@ -136,7 +137,7 @@
                     </div>
                 </div>
                 <div class="col-12 mb-4">
-                    <div class="row panel-view">
+                    <div class="row panel-view justify-content-center">
                         <div class="col-xl-6 grid-margin">
                             <div class="card chart-contenedor chart-loading">
                                 <div class="chart-title text-secondary">ESTADO DE INCIDENCIAS</div>
@@ -183,6 +184,17 @@
                                     </div>
                                     <div class="col-12">
                                         <div id="chart-niveles"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xl-8 grid-margin">
+                            <div class="card chart-contenedor chart-loading">
+                                <div class="chart-title text-secondary" id="chart-title-contable">EMPRESAS</div>
+                                <div class="card-body">
+                                    <!-- <div class="chart-descripcion">Muestra la distribución del nivel de atención alcanzado.</div> -->
+                                    <div class="col-12">
+                                        <div id="chart-contable"></div>
                                     </div>
                                 </div>
                             </div>
@@ -234,5 +246,5 @@
 
 @section('scripts')
     <script src="{{secure_asset('front/js/app/ChartMananger.js')}}"></script>
-    <script src="{{secure_asset('front/js/reporte/rci/incidencias.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/dashboard/rci/dashboard_incidencias.js')}}?v={{ time() }}"></script>
 @endsection

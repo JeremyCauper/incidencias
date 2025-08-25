@@ -2695,7 +2695,8 @@ progress {
 }
 
 .form-control:disabled {
-    background-color: var(--mdb-secondary-bg);
+    /* color: #ccc; */
+    background-color: var(--mdb-form-control-disabled-bg);
     opacity: 1
 }
 

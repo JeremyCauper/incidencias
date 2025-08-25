@@ -1,8 +1,4 @@
 $(document).ready(function () {
-    $('#empresa').on('change', function () {
-        fillSelect(['#sucursal'], sucursales, 'ruc', $(this).val(), 'id', 'nombre', 'status');
-    });
-
     $('#dateRango').daterangepicker({
         showDropdowns: true,
         startDate: date('Y-m-01'),
@@ -27,21 +23,21 @@ $(document).ready(function () {
     $('.check-trail').on('click', function () {
         setTimeout(() => {
             myChart_estado.updateOption();
-            myChart_peronal.updateOption();
-            myChart_problemas.updateOption();
             myChart_niveles.updateOption();
+            myChart_problemas.updateOption();
+            myChart_contable.updateOption();
         }, 10);
     })
 
     fObservador('.content-wrapper', () => {
         myChart_estado.resize();
-        myChart_peronal.resize();
-        myChart_problemas.resize();
         myChart_niveles.resize();
+        myChart_problemas.resize();
+        myChart_contable.resize();
 
         myChart_estado.resizeGraphic(700);
-        myChart_peronal.resizeGraphic(700);
         myChart_niveles.resizeGraphic(700);
+        myChart_contable.resizeGraphic(700);
     });
 
     filtroBusqueda();
@@ -53,32 +49,10 @@ var myChart_estado = new ChartMananger({
     name: 'ESTADO'
 });
 
-var myChart_peronal = new ChartMananger({
-    id: '#chart-personal',
-    type: 'bar',
-    config: {
-        xAxis: 'category',
-        yAxis: 'value',
-        toolTip: {
-            formatter: (params) => {
-                let result = `<strong style="font-size:.725rem;"><i class="${params[0].data.data.transporte}"></i> ${params[0].data.text}</strong><br>`;
-
-                params.forEach(item => {
-                    const value = item.data.value;
-                    const data = item.data.data;
-                    result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
-
-                    if (item.seriesName == "INCIDENCIAS") {
-                        result += `<ul style="font-size:.7rem;">
-                            <li>N1 - REMOTO: ${data.niveles.n1}</li>
-                            <li>N2 - PRESENCIAL: ${data.niveles.n2}</li>
-                        </ul>`;
-                    }
-                });
-                return result;
-            }
-        }
-    }
+var myChart_niveles = new ChartMananger({
+    id: '#chart-niveles',
+    type: 'pie',
+    name: 'NIVEL'
 });
 
 var myChart_problemas = new ChartMananger({
@@ -109,17 +83,20 @@ myChart_problemas.chart.on('click', function (params) {
     }, 200);
 });
 
-var myChart_niveles = new ChartMananger({
-    id: '#chart-niveles',
-    type: 'pie',
-    name: 'NIVEL'
+var myChart_contable = new ChartMananger({
+    id: '#chart-contable',
+    type: 'bar',
+    config: {
+        xAxis: 'category',
+        yAxis: 'value',
+        // order: 'asc'
+    }
 });
-
 
 function capturar() {
     $('.chart-container-header').addClass('chart-header').find('.logo_rci_white').removeClass('d-none');
     $('.chart-container-body').find('.chart-info').removeClass('d-none');
-
+    
     var nodo = document.getElementById('chart-container');
     domtoimage.toPng(nodo)
         .then(async function (dataUrl) {
@@ -171,6 +148,7 @@ function generarPDF() {
         });
 }
 
+
 function filtroBusqueda() {
     var empresa = $('#empresa').val();
     var sucursal = $('#sucursal').val();
@@ -181,15 +159,14 @@ function filtroBusqueda() {
     });
 
     var container = $('.chart-container-body');
-    container.find('[aria-item="empresa"]').html(empresa ? `${empresas[empresa].ruc} - ${empresas[empresa].razon_social}` : 'Todas las empresas');
+    container.find('[aria-item="empresa"]').html(empresa);
     container.find('[aria-item="sucursal"]').html(sucursal ? sucursales[sucursal].nombre : 'Todas las sucursales');
     container.find('[aria-item="fechas"]').html($('#dateRango').val());
 
     $.ajax({
         method: "GET",
-        url: `${__url}/soporte/reportes/reporte-incidencias/index`,
+        url: `${__url}/empresa/dashboard/dashboard-incidencias/index`,
         data: {
-            ruc: empresa,
             sucursal: sucursal,
             fechaIni: fechas[0],
             fechaFin: fechas[1],
@@ -198,9 +175,9 @@ function filtroBusqueda() {
     }).done(function (response) {
         if (response.success) {
             myChart_estado.updateOption(response.data.estados);
-            myChart_peronal.updateOption(response.data.personal);
-            myChart_problemas.updateOption(response.data.problemas);
             myChart_niveles.updateOption(response.data.niveles);
+            myChart_problemas.updateOption(response.data.problemas);
+            myChart_contable.updateOption(response.data.contable);
             subproblemas = response.data.subproblemas;
 
             setTimeout(() => {

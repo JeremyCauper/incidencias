@@ -3,9 +3,9 @@
 use App\Helpers\TipoIncidencia;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LoginEmpresaController;
-use App\Http\Controllers\Cliente\Incidencias\CIncidenciasController;
-use App\Http\Controllers\Reporte\Cliente\CReporteIncidenciasController;
-use App\Http\Controllers\Reporte\Rci\ReporteIncidenciasController;
+use App\Http\Controllers\Empresas\Incidencias\EIncidenciasController;
+use App\Http\Controllers\Dashboard\Empresa\EDashboardIncidenciasController;
+use App\Http\Controllers\Dashboard\Rci\DashboardIncidenciasController;
 use App\Http\Controllers\Soporte\Buzon\BAsignadasController;
 use App\Http\Controllers\Soporte\Buzon\BResueltasController;
 use App\Http\Controllers\Soporte\Buzon\Resueltas\IncidenciaController as RIncidenciaController;
@@ -201,8 +201,8 @@ Route::post('/soporte/asignacion-turno/actualizar', [TurnoController::class, 'up
 Route::post('/soporte/asignacion-turno/eliminar', [TurnoController::class, 'destroy']);
 
 
-Route::get('/soporte/reportes/reporte-incidencias', [ReporteIncidenciasController::class, 'view'])->middleware('auth');
-Route::get('/soporte/reportes/reporte-incidencias/index', [ReporteIncidenciasController::class, 'index']);
+Route::get('/soporte/dashboard/dashboard-incidencias', [DashboardIncidenciasController::class, 'view'])->middleware('auth');
+Route::get('/soporte/dashboard/dashboard-incidencias/index', [DashboardIncidenciasController::class, 'index']);
 
 Route::get('/soporte/inventario/materiales', [MaterialesController::class, 'view'])->middleware('auth');
 Route::get('/soporte/inventario/materiales/index', [MaterialesController::class, 'index']);
@@ -214,11 +214,11 @@ Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login.emp
 Route::post('/empresa/iniciar', [LoginEmpresaController::class, 'loginClient']);
 Route::get('/empresa/logout', [LoginEmpresaController::class, 'logout'])->name('logout.empresa');
 
-Route::get('/empresa/incidencias', [CIncidenciasController::class, 'view'])->middleware('auth:client');
-Route::get('/empresa/incidencias/index', [CIncidenciasController::class, 'index']);
+Route::get('/empresa/incidencias', [EIncidenciasController::class, 'view'])->middleware('auth:client');
+Route::get('/empresa/incidencias/index', [EIncidenciasController::class, 'index']);
 
-Route::get('/empresa/reportes/reporte-incidencias', [CReporteIncidenciasController::class, 'view'])->middleware('auth:client');
-Route::get('/empresa/reportes/reporte-incidencias/index', [CReporteIncidenciasController::class, 'index']);
+Route::get('/empresa/dashboard/dashboard-incidencias', [EDashboardIncidenciasController::class, 'view'])->middleware('auth:client');
+Route::get('/empresa/dashboard/dashboard-incidencias/index', [EDashboardIncidenciasController::class, 'index']);
 
 // Apis
 Route::get('/listado/materiales-usados', [MaterialesController::class, 'MaterialesUsados']);

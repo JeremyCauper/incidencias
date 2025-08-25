@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Cliente\Incidencias;
+namespace App\Http\Controllers\Empresas\Incidencias;
 
 use App\Helpers\Problema;
 use App\Helpers\SubProblema;
@@ -12,7 +12,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class CIncidenciasController extends Controller
+class EIncidenciasController extends Controller
 {
     public function view()
     {

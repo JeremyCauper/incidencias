@@ -158,9 +158,9 @@
                     </li>
                     <li class="nav-item menu-item">
                         <a class="nav-link menu-link" data-mdb-ripple-init=""
-                            href="{{ url('/empresa/reportes/reporte-incidencias') }}">
+                            href="{{ url('/empresa/dashboard/dashboard-incidencias') }}">
                             <i class="fas fa-chart-column menu-icon"></i>
-                            <span class="menu-title">Reporte Incidencias</span>
+                            <span class="menu-title">Análisis Incidencias</span>
                         </a>
                     </li>
                 </ul>

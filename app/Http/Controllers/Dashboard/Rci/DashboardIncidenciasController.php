@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Reporte\Rci;
+namespace App\Http\Controllers\Dashboard\Rci;
 
 use App\Http\Controllers\Controller;
 use App\Services\JsonDB;
@@ -10,7 +10,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use PhpParser\ErrorHandler\Collecting;
 
-class ReporteIncidenciasController extends Controller
+class DashboardIncidenciasController extends Controller
 {
     public function view()
     {
@@ -35,7 +35,7 @@ class ReporteIncidenciasController extends Controller
                 ];
             });
 
-            return view('reporte.rci.reporte_incidencias', ['data' => $data]);
+            return view('dashboard.rci.dashboard_incidencias', ['data' => $data]);
         } catch (Exception $e) {
             Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
@@ -171,6 +171,24 @@ class ReporteIncidenciasController extends Controller
                 $niveles[$item->id_tipo_inc - 1]['value']++;
             });
         $data['niveles'] = $niveles;
+
+        if ($ruc) {
+            $infoData = DB::table('tb_sucursales')->select('id', 'ruc', 'nombre')->where('ruc', $ruc)->get()->keyBy('id');
+        } else {
+            $infoData = DB::table('tb_empresas')->select('ruc', 'razon_social')->get()->keyBy('ruc');
+        }
+        $data['contable'] = $incidencias->groupBy($ruc ? 'id_sucursal' : 'ruc_empresa')
+            ->map(function ($items, $key) use ($infoData, $ruc) {
+                $name = $ruc ? $infoData[$key]->nombre : $key;
+                $text = $ruc ? $infoData[$key]->nombre : "{$key} - {$infoData[$key]->razon_social}";
+                return [
+                    'name' => $name,
+                    'text' => $text,
+                    'series' => [($ruc ? 'sucursal' : 'empresa') => $items->count()],
+                ];
+            })
+            ->values()
+            ->toArray();
 
         return $this->message(data: ['data' => $data]);
         // } catch (Exception $e) {

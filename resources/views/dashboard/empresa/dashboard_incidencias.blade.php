@@ -18,9 +18,16 @@
     <style>
         #chart-estado,
         #chart-problemas,
-        #chart-niveles {
+        #chart-niveles,
+        #chart-contable {
             position: relative;
             height: 40vh;
+            overflow: hidden;
+        }
+
+        #chart-subproblemas {
+            position: relative;
+            height: 60vh;
             overflow: hidden;
         }
     </style>
@@ -128,7 +135,46 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-xl-8 grid-margin">
+                            <div class="card chart-contenedor chart-loading">
+                                <div class="chart-title text-secondary">SUCURSALES</div>
+                                <div class="card-body">
+                                    <!-- <div class="chart-descripcion">Muestra la distribución del nivel de atención alcanzado.</div> -->
+                                    <div class="col-12">
+                                        <div id="chart-contable"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button class="d-none" data-mdb-modal-init data-mdb-target="#modal_subproblema"></button>
+    <div class="modal fade" id="modal_subproblema" aria-labelledby="modal_subproblema" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h6 class="modal-title">SUB PROBLEMAS DE INCIDENCIAS</h6>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="card chart-contenedor chart-loading">
+                        <div class="chart-title text-secondary"></div>
+                        <div class="card-body">
+                            <div class="chart-descripcion"></div>
+                            <div class="col-12">
+                                <div id="chart-subproblemas"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-link " data-mdb-ripple-init
+                        data-mdb-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
@@ -147,5 +193,5 @@
 
 @section('scripts')
     <script src="{{secure_asset('front/js/app/ChartMananger.js')}}"></script>
-    <script src="{{secure_asset('front/js/reporte/cliente/crincidencias.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/dashboard/empresa/dashboard_incidencias.js')}}?v={{ time() }}"></script>
 @endsection

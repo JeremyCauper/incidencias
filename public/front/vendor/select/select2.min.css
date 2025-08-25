@@ -23,7 +23,7 @@
     -ms-user-select: none;
     user-select: none;
     transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-    border-radius: .25rem
+    border-radius: .15rem;
 }
 
 .select2-selection--single.select2-filled {
@@ -122,7 +122,7 @@
 
 .select2-container--disabled .select2-selection--single {
     cursor: default;
-    color: #ccc;
+    /* color: #ccc; */
     background-color: var(--mdb-form-control-disabled-bg);
     box-shadow: none;
 }
@@ -500,7 +500,8 @@
     border: var(--mdb-border-width) solid var(--mdb-border-color);
     outline: 0;
     width: 100%;
-    border-radius: .25rem
+    border-radius: .25rem;
+    font-size: .75rem;
 }
 
 .select2-search--dropdown .select2-search__field::-webkit-search-cancel-button {
