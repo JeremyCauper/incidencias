@@ -124,7 +124,7 @@ var myChart_contable = new ChartMananger({
     config: {
         xAxis: 'category',
         yAxis: 'value',
-        // order: 'asc'
+        order: 'desc'
     }
 });
 

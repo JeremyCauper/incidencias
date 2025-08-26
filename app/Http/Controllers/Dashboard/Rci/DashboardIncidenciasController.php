@@ -187,6 +187,7 @@ class DashboardIncidenciasController extends Controller
                     'series' => [($ruc ? 'sucursal' : 'empresa') => $items->count()],
                 ];
             })
+            ->take(10)
             ->values()
             ->toArray();
 
