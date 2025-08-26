@@ -149,10 +149,13 @@ class DashboardIncidenciasController extends Controller
                     'name' => $problemas[$id]->codigo,
                     'text' => "{$problemas[$id]->codigo} - {$problemas[$id]->descripcion}",
                     'series' => ['problemas' => count($items)],
+                    'total' => count($items), // opcional, más fácil para ordenar
                 ];
             })
+            ->sortByDesc('total') // ordenar de mayor a menor
             ->take(10)
             ->values();
+
 
         $data['subproblemas'] = collect($incidencias->groupBy('id_subproblema')
             ->map(function ($items, $id) use ($subproblemas) {
@@ -185,8 +188,10 @@ class DashboardIncidenciasController extends Controller
                     'name' => $name,
                     'text' => $text,
                     'series' => [($ruc ? 'sucursal' : 'empresa') => $items->count()],
+                    'total' => $items->count(), // opcional, más fácil para ordenar
                 ];
             })
+            ->sortByDesc('total') // ordenar de mayor a menor
             ->take(10)
             ->values()
             ->toArray();
