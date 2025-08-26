@@ -129,6 +129,7 @@ class EDashboardIncidenciasController extends Controller
                     'series' => ['sucursal' => $items->count()],
                 ];
             })
+            ->take(10)
             ->values()
             ->toArray();
 
