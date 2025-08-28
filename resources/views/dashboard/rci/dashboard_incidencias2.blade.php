@@ -31,6 +31,28 @@
             height: 6vh;
             overflow: hidden;
         }
+
+        .chart-estado-title {
+            font-size: .9rem;
+        }
+
+        @media (max-width: 1600px) {
+            .chart-estado-title {
+                font-size: .8rem;
+            }
+        }
+
+        @media (max-width: 550px) {
+            .chart-estado-title {
+                font-size: .6rem;
+            }
+        }
+
+        .chart-incidencias {
+            position: relative;
+            height: 40vh;
+            overflow: hidden;
+        }
     </style>
 
 @endsection
@@ -81,79 +103,79 @@
 
     <div class="col-12" id="chart-container">
         <div class="row">
-            <div class="col-lg-2">
+            <div class="col-xxl-2 col-md-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body row text-secondary">
                         <div class="col-7">
-                            <h6 class="card-title title-count mb-2">TOTAL</h6>
+                            <h6 class="card-title chart-estado-title mb-2">TOTAL</h6>
                             <h4 class="subtitle-count"><b data-panel="total">0</b></h4>
                         </div>
-                        <div class="col-5">
+                        <div class="col-5 p-0">
                             <div class="chart-estado" id="chart-estadot"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-xxl-2 col-md-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body row text-warning">
                         <div class="col-7">
-                            <h6 class="card-title title-count mb-2">SIN ASIGNAR</h6>
+                            <h6 class="card-title chart-estado-title mb-2">SIN ASIGNAR</h6>
                             <h4 class="subtitle-count"><b data-panel="sinasignar">0</b></h4>
                         </div>
-                        <div class="col-5">
+                        <div class="col-5 p-0">
                             <div class="chart-estado" id="chart-estado0"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-xxl-2 col-md-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body row text-info">
                         <div class="col-7">
-                            <h6 class="card-title title-count mb-2">ASIGNADOS</h6>
+                            <h6 class="card-title chart-estado-title mb-2">ASIGNADOS</h6>
                             <h4 class="subtitle-count"><b data-panel="asignados">0</b></h4>
                         </div>
-                        <div class="col-5">
+                        <div class="col-5 p-0">
                             <div class="chart-estado" id="chart-estado1"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-xxl-2 col-md-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body row text-primary">
                         <div class="col-7">
-                            <h6 class="card-title title-count mb-2">EN PROCESO</h6>
+                            <h6 class="card-title chart-estado-title mb-2">EN PROCESO</h6>
                             <h4 class="subtitle-count"><b data-panel="enproceso">0</b></h4>
                         </div>
-                        <div class="col-5">
+                        <div class="col-5 p-0">
                             <div class="chart-estado" id="chart-estado2"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-xxl-2 col-md-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body row text-success">
                         <div class="col-7">
-                            <h6 class="card-title title-count mb-2">FINALIZADOS</h6>
+                            <h6 class="card-title chart-estado-title mb-2">FINALIZADOS</h6>
                             <h4 class="subtitle-count"><b data-panel="finalizados">0</b></h4>
                         </div>
-                        <div class="col-5">
+                        <div class="col-5 p-0">
                             <div class="chart-estado" id="chart-estado3"></div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-2">
+            <div class="col-xxl-2 col-md-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body row text-danger">
                         <div class="col-7">
-                            <h6 class="card-title title-count mb-2">FALTAN DATOS</h6>
+                            <h6 class="card-title chart-estado-title mb-2">FALTAN DATOS</h6>
                             <h4 class="subtitle-count"><b data-panel="faltandatos">0</b></h4>
                         </div>
-                        <div class="col-5">
+                        <div class="col-5 p-0">
                             <div class="chart-estado" id="chart-estado4"></div>
                         </div>
                     </div>
@@ -161,10 +183,18 @@
             </div>
         </div>
     </div>
-
+    <div class="col-12">
+        <div class="row">
+            <div class="card">
+                <div class="card-body">
+                    <div class="chart-incidencias" id="chart-incidencias"></div>
+                </div>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/app/ChartMananger.js')}}"></script>
+    <script src="{{secure_asset('front/js/app/ChartMananger2.js')}}"></script>
     <script src="{{secure_asset('front/js/dashboard/rci/dashboard_incidencias2.js')}}?v={{ time() }}"></script>
 @endsection
