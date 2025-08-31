@@ -9,9 +9,11 @@ class ChartMananger {
 
         if (!this.id) return console.error('ChartManager: ID o datos no válidos.');
 
-        
+
         const container = document.getElementById(this.id);
         if (!container) return console.error(`ChartManager: No se encontró el contenedor con ID ${this.id}`);
+        let altura = this.config?.altura || 40;
+        container.style = `position: relative; height: ${altura}vh; overflow: hidden; width: 100%;`;
 
         this.chart = echarts.init(container, null, {
             renderer: 'canvas',
@@ -79,8 +81,8 @@ class ChartMananger {
                                 width: '50%',
                                 lineHeight: 30,
                                 borderRadius: 8,
-                                offsetCenter: [2, '-150%'],
-                                fontSize: 13,
+                                offsetCenter: [3.5, '-150%'],
+                                fontSize: 12,
                                 fontWeight: 'bolder',
                                 formatter: '{value} %',
                                 color: 'inherit'
@@ -95,10 +97,261 @@ class ChartMananger {
                 };
                 break;
 
-            default:
+            case 'actividades':
+                const buildSeries = () => {
+                    const keys = Object.keys(this.data[0].series);
+                    const totals = {};
+                    keys.forEach(k => {
+                        totals[k] = this.data.reduce((sum, item) => sum + item.series[k], 0);
+                    });
+
+                    return keys.map(key => ({
+                        name: key.toUpperCase(),
+                        type: "bar",
+                        barGap: 0,
+                        label: {
+                            show: false,
+                            position: "top",
+                            distance: 4,
+                            align: "center",
+                            // verticalAlign: "middle",
+                            fontSize: 10,
+                            color: "#fff",
+                            formatter: (params) => {
+                                const value = params.value;
+                                return (value == 0) ? '' : value;
+                            }
+                        },
+                        barMaxWidth: 30,
+                        data: this.data.map(item => ({
+                            value: item.series[key],
+                            text: item.text,
+                            data: item
+                        }))
+                    }));
+                }
+
+                option = {
+                    // title: {
+                    //     text: 'Cantidad de incidencias por fecha',
+                    //     // left: 'center',
+                    //     textStyle: {
+                    //         color: '#9fa6b2',
+                    //         fontFamily: 'Arial, sans-serif',
+                    //         fontSize: 14,
+                    //     }
+
+                    // },
+                    tooltip: {
+                        trigger: "axis",
+                        axisPointer: {
+                            type: "shadow"
+                        },
+                        formatter: (params) => {
+                            let result = `<strong style="font-size:.725rem;"><i class="${params[0].data.data.transporte}"></i> ${params[0].data.text}</strong><br>`;
+
+                            params.forEach(item => {
+                                const value = item.data.value;
+                                const data = item.data.data;
+                                result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
+
+                                if (item.seriesName == "INCIDENCIAS") {
+                                    result += `<ul style="font-size:.7rem;">
+                                        <li>N1 - REMOTO: ${data.niveles.n1}</li>
+                                        <li>N2 - PRESENCIAL: ${data.niveles.n2}</li>
+                                    </ul>`;
+                                }
+                            });
+                            return result;
+                        }
+                    },
+                    legend: {
+                        show: false,
+                    }
+                    ,
+                    grid: [
+                        {
+                            left: '5%',
+                            right: '4%',
+                            top: '5%',
+                            bottom: '20%'
+                        }
+                    ],
+                    xAxis: [
+                        {
+                            type: "category",
+                            axisTick: {
+                                show: false
+                            },
+                            data: this.data.map(item => item.name),
+                            axisLabel: {
+                                interval: 0,
+                                rotate: 30,
+                                textStyle: {
+                                    color: "#fff",
+                                    fontSize: 10.5,
+                                    fontWeight: "bold"
+                                }
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: "value",
+                            axisLine: {
+                                lineStyle: {
+                                    color: "#757575"
+                                }
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: "#757575",
+                                    width: 1,
+                                    type: "dotted"
+                                }
+                            }
+                        }
+                    ],
+                    series: buildSeries()
+                };
+                break;
+
+            case 'incidencia':
+                option = {
+                    title: {
+                        text: 'Cantidad de incidencias por fecha',
+                        // left: 'center',
+                        textStyle: {
+                            color: '#9fa6b2',
+                            fontFamily: 'Arial, sans-serif',
+                            fontSize: 14,
+                        }
+
+                    },
+                    tooltip: {
+                        trigger: 'axis',
+                        formatter: function (params) {
+                            const p = params[0];
+                            return `${p.axisValue} : ${p.data}`;
+                        },
+                        axisPointer: {
+                            animation: false
+                        }
+                    },
+                    grid: {
+                        left: '10%',
+                        right: '7%',
+                        top: '15%',
+                        bottom: '20%'
+                    },
+                    xAxis: {
+                        type: 'category', // 👈 seguimos con category
+                        data: this.data.fechas,
+                        axisLabel: {
+                            fontSize: 9,
+                            showMaxLabel: true,
+                            showMinLabel: true
+                        }
+                    },
+                    yAxis: {
+                        type: 'value',
+                        min: 'dataMin',
+                        splitLine: {
+                            lineStyle: {
+                                color: '#757575',
+                                width: 1,
+                                type: 'dotted'
+                            }
+                        }
+                    },
+                    dataZoom: [
+                        {
+                            type: 'inside'
+                        },
+                        {
+                            type: 'slider',
+                            top: '88%',
+                            left: '19%',
+                            right: '19%',
+                            textStyle: {
+                                fontSize: 10,
+                            },
+                        }
+                    ],
+                    series: [
+                        {
+                            type: 'line',
+                            symbolSize: 0,
+                            color: '#3b71ca',
+                            areaStyle: {
+                                color: '#3b72ca2a'
+                            },
+                            data: this.data.valores // 👈 solo valores
+                        }
+                    ]
+                };
+                break;
+
+            case 'tipo_incidencia':
+                option = {
+                    title: {
+                        text: 'Tipo de incidencias',
+                        textStyle: {
+                            color: '#9fa6b2',
+                            fontFamily: 'Arial, sans-serif',
+                            fontSize: 14,
+                        }
+
+                    },
+                    tooltip: {
+                        trigger: 'item'
+                    },
+                    visualMap: {
+                        show: false,
+                        min: 80,
+                        max: 700,
+                        inRange: {
+                            colorLightness: [0, 1.25]
+                        }
+                    },
+                    series: [
+                        {
+                            name: 'Access From',
+                            type: 'pie',
+                            radius: '50%',
+                            center: ['50%', '50%'],
+                            data: this.data.sort(function (a, b) {
+                                return a.value - b.value;
+                            }),
+                            roseType: 'area',
+                            label: {
+                                color: '#9fa6b2',
+                                alignTo: 'edge',
+                                minMargin: 5,
+                                edgeDistance: 10,
+                                lineHeight: 15,
+                            },
+                            labelLine: {
+                                smooth: 0.2,
+                                length: 10,
+                                length2: 20
+                            },
+                            itemStyle: {
+                                color: '#3b71ca',
+                                shadowColor: 'rgba(0, 0, 0, 0.5)',
+                                borderRadius: 3
+                            },
+                            animationType: 'scale',
+                            animationEasing: 'elasticOut',
+                            animationDelay: function (idx) {
+                                return Math.random() * 200;
+                            }
+                        }
+                    ]
+                };
                 break;
         }
-        
+
         return option;
     }
 

@@ -4,9 +4,9 @@ namespace App\Http\Controllers\Dashboard\Rci;
 
 use App\Http\Controllers\Controller;
 use App\Services\JsonDB;
-use DB;
 use Exception;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Log;
 
 class DashboardIncidenciasIIController extends Controller

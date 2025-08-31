@@ -26,32 +26,14 @@
         let usuarios = <?=json_encode($data['usuarios'])?>;
     </script>
     <style>
-        .chart-estado {
-            position: relative;
-            height: 6vh;
-            overflow: hidden;
-        }
-
         .chart-estado-title {
-            font-size: .9rem;
-        }
-
-        @media (max-width: 1600px) {
-            .chart-estado-title {
-                font-size: .8rem;
-            }
+            font-size: .75rem;
         }
 
         @media (max-width: 550px) {
             .chart-estado-title {
                 font-size: .6rem;
             }
-        }
-
-        .chart-incidencias {
-            position: relative;
-            height: 40vh;
-            overflow: hidden;
         }
     </style>
 
@@ -106,12 +88,9 @@
             <div class="col-xxl-2 col-md-4 col-6 mb-2">
                 <div class="card">
                     <div class="card-body row text-secondary">
-                        <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-2">TOTAL</h6>
+                        <div>
+                            <h6 class="card-title chart-estado-title mb-1">TOTAL INCIDENCIAS</h6>
                             <h4 class="subtitle-count"><b data-panel="total">0</b></h4>
-                        </div>
-                        <div class="col-5 p-0">
-                            <div class="chart-estado" id="chart-estadot"></div>
                         </div>
                     </div>
                 </div>
@@ -120,11 +99,11 @@
                 <div class="card">
                     <div class="card-body row text-warning">
                         <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-2">SIN ASIGNAR</h6>
+                            <h6 class="card-title chart-estado-title mb-1">SIN ASIGNAR</h6>
                             <h4 class="subtitle-count"><b data-panel="sinasignar">0</b></h4>
                         </div>
                         <div class="col-5 p-0">
-                            <div class="chart-estado" id="chart-estado0"></div>
+                            <div id="chart-estado0"></div>
                         </div>
                     </div>
                 </div>
@@ -133,11 +112,11 @@
                 <div class="card">
                     <div class="card-body row text-info">
                         <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-2">ASIGNADOS</h6>
+                            <h6 class="card-title chart-estado-title mb-1">ASIGNADOS</h6>
                             <h4 class="subtitle-count"><b data-panel="asignados">0</b></h4>
                         </div>
                         <div class="col-5 p-0">
-                            <div class="chart-estado" id="chart-estado1"></div>
+                            <div id="chart-estado1"></div>
                         </div>
                     </div>
                 </div>
@@ -146,11 +125,11 @@
                 <div class="card">
                     <div class="card-body row text-primary">
                         <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-2">EN PROCESO</h6>
+                            <h6 class="card-title chart-estado-title mb-1">EN PROCESO</h6>
                             <h4 class="subtitle-count"><b data-panel="enproceso">0</b></h4>
                         </div>
                         <div class="col-5 p-0">
-                            <div class="chart-estado" id="chart-estado2"></div>
+                            <div id="chart-estado2"></div>
                         </div>
                     </div>
                 </div>
@@ -159,11 +138,11 @@
                 <div class="card">
                     <div class="card-body row text-success">
                         <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-2">FINALIZADOS</h6>
+                            <h6 class="card-title chart-estado-title mb-1">FINALIZADOS</h6>
                             <h4 class="subtitle-count"><b data-panel="finalizados">0</b></h4>
                         </div>
                         <div class="col-5 p-0">
-                            <div class="chart-estado" id="chart-estado3"></div>
+                            <div id="chart-estado3"></div>
                         </div>
                     </div>
                 </div>
@@ -172,25 +151,59 @@
                 <div class="card">
                     <div class="card-body row text-danger">
                         <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-2">FALTAN DATOS</h6>
+                            <h6 class="card-title chart-estado-title mb-1">FALTAN DATOS</h6>
                             <h4 class="subtitle-count"><b data-panel="faltandatos">0</b></h4>
                         </div>
                         <div class="col-5 p-0">
-                            <div class="chart-estado" id="chart-estado4"></div>
+                            <div id="chart-estado4"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 mb-2">
+                <div class="card">
+                    <div class="card-body row">
+                        <div class="col-12" style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;">Cantidad de incidencias por fecha</div>
+                        <div class="col-xl-2 col-lg-3 align-content-center mb-2 py-2">
+                            <div type="button" class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-primary" data-mdb-ripple-init
+                                data-mdb-ripple-color="dark" onclick="toggleSeries('INCIDENCIAS', this)">
+                                <i class="fas fa-file-invoice me-1"></i>INCIDENCIAS
+                            </div>
+                            <div type="button" class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-success" data-mdb-ripple-init
+                                data-mdb-ripple-color="dark" onclick="toggleSeries('VISITAS', this)">
+                                <i class="fas fa-van-shuttle me-1"></i>VISITAS
+                            </div>
+                            <div type="button" class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-warning" data-mdb-ripple-init
+                                data-mdb-ripple-color="dark" onclick="toggleSeries('MANTENIMIENTOS', this)">
+                                <i class="fas fa-screwdriver-wrench me-1"></i>MANTENIMIENTOS
+                            </div>
+                        </div>
+                        <div class="col-xl-10 col-lg-9 mb-2">
+                            <div id="chart-actividades"></div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="col-12">
-        <div class="row">
+
+    <div class="row">
+        <div class="col-lg-8 mb-2">
             <div class="card">
                 <div class="card-body">
-                    <div class="chart-incidencias" id="chart-incidencias"></div>
+                    <div id="chart-incidencias"></div>
                 </div>
             </div>
         </div>
+        <div class="col-lg-4 mb-2">
+            <div class="card">
+                <div class="card-body">
+                    <div id="chart-tipo-incidencias"></div>
+                </div>
+            </div>
+        </div>
+    </div>
     </div>
 @endsection
 
