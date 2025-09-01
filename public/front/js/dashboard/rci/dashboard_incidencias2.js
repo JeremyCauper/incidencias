@@ -35,6 +35,8 @@ $(document).ready(function () {
 
         chartIncidencia.resize();
         chartTipoIncidencia.resize();
+
+        chartProblemas.resize();
     });
 });
 
@@ -266,14 +268,13 @@ function toggleSeries(name, event) {
     });
 
     let selected = chartActividades.chart.getOption().legend[0].selected;
-    if(selected[name]) {
+    if (selected[name]) {
         event.classList.add('text-bg-' + color[name]);
     } else {
         event.classList.remove('text-bg-' + color[name]);
     }
 
 }
-
 
 let chartEstado0 = new ChartMananger({ id: 'chart-estado0', config: { tipo: 'estado', altura: 5, bg: '#e4a11b' }, data: { total: 150, value: 28 } });
 let chartEstado1 = new ChartMananger({ id: 'chart-estado1', config: { tipo: 'estado', altura: 5, bg: '#54b4d3' }, data: { total: 150, value: 35 } });
@@ -304,8 +305,153 @@ let chartIncidencia = new ChartMananger({ id: 'chart-incidencias', config: { tip
 
 let chartTipoIncidencia = new ChartMananger({
     id: 'chart-tipo-incidencias', config: { tipo: 'tipo_incidencia', altura: 35 }, data: [
-        { value: 274, name: 'Union Ads' },
-        { value: 255, name: 'Video Ads' },
-        { value: 400, name: 'Search Engine' }
+        {
+            name: "N1 - REMOTO",
+            value: 31,
+        },
+        {
+            name: "N2 - PRESENCIAL",
+            value: 3,
+        },
+        {
+            name: "N3 - PROVEEDOR",
+            value: 1,
+        }
     ]
 });
+
+let chartProblemas = new ChartMananger({
+    id: 'chart-problemas', config: { tipo: 'problemas', altura: 40 }, data: [
+        {
+            "name": "PI-0001",
+            "text": "PI-0001 - PROBLEMA DE COMUNICACIÓN",
+            "tipo_soporte": 1,
+            "series": {
+                "problemas": 27
+            },
+            "total": 27
+        },
+        {
+            "name": "PI-0002",
+            "text": "PI-0002 - PROBLEMAS DE SISTEMA",
+            "tipo_soporte": 1,
+            "series": {
+                "problemas": 5
+            },
+            "total": 5
+        },
+        {
+            "name": "PS-0003",
+            "text": "PS-0003 - MANTENIMIENTO GENERAL",
+            "tipo_soporte": 2,
+            "series": {
+                "problemas": 2
+            },
+            "total": 2
+        },
+        {
+            "name": "PS-0002",
+            "text": "PS-0002 - ACTUALIZACION DE SISTEMA",
+            "tipo_soporte": 2,
+            "series": {
+                "problemas": 1
+            },
+            "total": 1
+        }
+    ]
+});
+
+
+let subproblemas = {
+    "PI-0001": [
+        {
+            "codigo": "PI-0001",
+            "name": "CONFLICTO DE PUERTOS",
+            "text": "P2 - CONFLICTO DE PUERTOS",
+            "series": {
+                "sub_problemas": 23
+            }
+        },
+        {
+            "codigo": "PI-0001",
+            "name": "PUERTO FANTASMAS",
+            "text": "P2 - PUERTO FANTASMAS",
+            "series": {
+                "sub_problemas": 2
+            }
+        },
+        {
+            "codigo": "PI-0001",
+            "name": "SURTIDOR APAGADO",
+            "text": "P3 - SURTIDOR APAGADO",
+            "series": {
+                "sub_problemas": 1
+            }
+        },
+        {
+            "codigo": "PI-0001",
+            "name": "INTERFACE AVERIADA",
+            "text": "P2 - INTERFACE AVERIADA",
+            "series": {
+                "sub_problemas": 1
+            }
+        }
+    ],
+    "PS-0002": [
+        {
+            "codigo": "PS-0002",
+            "name": "ACTUALIZACION CAMBIO DE SERIES / PREFIJOS",
+            "text": "P3 - ACTUALIZACION CAMBIO DE SERIES / PREFIJOS",
+            "series": {
+                "sub_problemas": 1
+            }
+        }
+    ],
+    "PI-0002": [
+        {
+            "codigo": "PI-0002",
+            "name": "EXCEPSIÓN DEL CDC ( CLUB PGN)",
+            "text": "P3 - EXCEPSIÓN DEL CDC ( CLUB PGN)",
+            "series": {
+                "sub_problemas": 1
+            }
+        },
+        {
+            "codigo": "PI-0002",
+            "name": "VENTA PERDIDA",
+            "text": "P3 - VENTA PERDIDA",
+            "series": {
+                "sub_problemas": 3
+            }
+        },
+        {
+            "codigo": "PI-0002",
+            "name": "PROBLEMAS CON SISTEMA OPERATIVO",
+            "text": "P2 - PROBLEMAS CON SISTEMA OPERATIVO",
+            "series": {
+                "sub_problemas": 1
+            }
+        }
+    ],
+    "PS-0003": [
+        {
+            "codigo": "PS-0003",
+            "name": "MANTENMIENTO GENERAL DE EESS",
+            "text": "P2 - MANTENMIENTO GENERAL DE EESS",
+            "series": {
+                "sub_problemas": 2
+            }
+        }
+    ]
+};
+chartProblemas.chart.on('click', function (params) {
+    let codigo = params.name;
+    $('#modal_subproblema').modal('show').find('.modal-title').html(params.data.text);
+    setTimeout(() => {
+        var chartSubProblemas = new ChartMananger({ id: 'chart-subproblemas', config: { tipo: 'subproblemas', altura: 60 } });
+        chartSubProblemas.updateOption(subproblemas[codigo]);
+    }, 200);
+});
+
+
+let chartNiveles = new ChartMananger({ id: 'chart-niveles', config: { tipo: 'niveles' } });

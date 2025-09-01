@@ -280,6 +280,8 @@ class ChartMananger {
             }];
         }
 
+        console.log(this._buildOption());
+        
         if (this.chart) {
             this.chart.setOption(this._buildOption(), true);
         }

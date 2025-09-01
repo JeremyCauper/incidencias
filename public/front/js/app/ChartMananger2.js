@@ -6,6 +6,7 @@ class ChartMananger {
         this.id = params.id ?? null;
         this.data = params.data ?? [];
         this.config = params.config ?? {};
+        this.config.order = params.config?.order ?? 'desc';
 
         if (!this.id) return console.error('ChartManager: ID o datos no válidos.');
 
@@ -308,8 +309,8 @@ class ChartMananger {
                     },
                     visualMap: {
                         show: false,
-                        min: 80,
-                        max: 700,
+                        min: 1,
+                        max: 80,
                         inRange: {
                             colorLightness: [0, 1.25]
                         }
@@ -349,6 +350,251 @@ class ChartMananger {
                         }
                     ]
                 };
+                break;
+
+            case 'niveles':
+                option = {
+                    title: {
+                        text: 'Distribución de incidencias (%)',
+                        left: 'center'
+                    },
+                    tooltip: {
+                        trigger: 'item',
+                        formatter: '{b}: {c} ({d}%)'
+                    },
+                    legend: {
+                        bottom: 0
+                    },
+                    series: [
+                        {
+                            name: 'Incidencias',
+                            type: 'pie',
+                            radius: '50%',
+                            data: result.map(item => ({
+                                name: item.group,
+                                value: item.value
+                            }))
+                        }
+                    ]
+                };
+                break;
+
+            case 'problemas':
+                var key = Object.keys(this.data[0].series);
+                this.data.sort((a, b) => {
+                    const aVal = a.series[key[0]];
+                    const bVal = b.series[key[0]];
+                    return this.config.order == 'asc' ? bVal - aVal : aVal - bVal;
+                });
+
+                option = {
+                    title: {
+                        text: 'Cantidad de incidencias por problemas',
+                        // left: 'center',
+                        textStyle: {
+                            color: '#9fa6b2',
+                            fontFamily: 'Arial, sans-serif',
+                            fontSize: 14,
+                        }
+
+                    },
+                    tooltip: {
+                        trigger: "axis",
+                        axisPointer: {
+                            type: "shadow"
+                        },
+                        formatter: (params) => {
+                            let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
+                            params.forEach(item => {
+                                const value = item.data.value;
+                                result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
+                            });
+                            return result;
+                        }
+                    },
+                    legend: {
+                        show: false,
+                    }
+                    ,
+                    grid: [
+                        {
+                            left: '10%',
+                            right: '4%',
+                            top: '15%',
+                            bottom: '20%'
+                        }
+                    ],
+                    xAxis: [
+                        {
+                            type: "value",
+                            axisLine: {
+                                lineStyle: {
+                                    color: "#757575"
+                                }
+                            },
+                            splitLine: {
+                                lineStyle: {
+                                    color: "#757575",
+                                    width: 1,
+                                    type: "dotted"
+                                }
+                            }
+                        }
+                    ],
+                    yAxis: [
+                        {
+                            type: "category",
+                            axisTick: {
+                                show: false
+                            },
+                            data: this.data.map(item => item.name),
+                            axisLabel: {
+                                interval: 0,
+                                textStyle: {
+                                    fontSize: 10.5,
+                                    fontWeight: "bold"
+                                }
+                            }
+                        }
+                    ],
+                    series: {
+                        name: key[0].toUpperCase(),
+                        type: "bar",
+                        barGap: 0,
+                        label: {
+                            show: false,
+                        },
+                        barMaxWidth: 30,
+                        data: this.data.map(item => ({
+                            value: item.series[key[0]],
+                            text: item.text,
+                            itemStyle: {
+                                color: item.tipo_soporte == 1 ? '#3498db' : '#7367f0' // 👈 aquí usas el color del dato
+                            }
+                        }))
+                    }
+                };
+                break;
+
+            case 'subproblemas':
+                if (!this.data.length) {
+                    option = {
+                        title: {
+                            text: 'Cantidad de incidencias por problemas',
+                            textStyle: {
+                                color: '#9fa6b2',
+                                fontFamily: 'Arial, sans-serif',
+                                fontSize: 14,
+                            }
+                        },
+                        graphic: {
+                            type: 'text',
+                            left: 'center',
+                            top: 'middle',
+                            style: {
+                                text: 'Sin datos disponibles',
+                                fill: '#aaa',
+                                fontSize: 16,
+                                fontWeight: 'bold'
+                            }
+                        }
+                    };
+                } else {
+                    var key = Object.keys(this.data[0].series);
+                    this.data.sort((a, b) => {
+                        const aVal = a.series[key[0]];
+                        const bVal = b.series[key[0]];
+                        return this.config.order == 'asc' ? bVal - aVal : aVal - bVal;
+                    });
+
+                    option = {
+                        title: {
+                            text: 'Cantidad de incidencias por problemas',
+                            // left: 'center',
+                            textStyle: {
+                                color: '#9fa6b2',
+                                fontFamily: 'Arial, sans-serif',
+                                fontSize: 14,
+                            }
+
+                        },
+                        tooltip: {
+                            trigger: "axis",
+                            axisPointer: {
+                                type: "shadow"
+                            },
+                            formatter: (params) => {
+                                let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
+                                params.forEach(item => {
+                                    const value = item.data.value;
+                                    result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
+                                });
+                                return result;
+                            }
+                        },
+                        legend: {
+                            show: false,
+                        }
+                        ,
+                        grid: [
+                            {
+                                left: '25%',
+                                right: '4%',
+                                top: '15%',
+                                bottom: '20%'
+                            }
+                        ],
+                        xAxis: [
+                            {
+                                type: "value",
+                                axisLine: {
+                                    lineStyle: {
+                                        color: "#757575"
+                                    }
+                                },
+                                splitLine: {
+                                    lineStyle: {
+                                        color: "#757575",
+                                        width: 1,
+                                        type: "dotted"
+                                    }
+                                }
+                            }
+                        ],
+                        yAxis: [
+                            {
+                                type: "category",
+                                axisTick: {
+                                    show: false
+                                },
+                                data: this.data.map(item => item.name),
+                                axisLabel: {
+                                    interval: 0,
+                                    textStyle: {
+                                        fontSize: 10.5,
+                                        fontWeight: "bold"
+                                    }
+                                }
+                            }
+                        ],
+                        series: {
+                            name: key[0].toUpperCase(),
+                            type: "bar",
+                            barGap: 0,
+                            label: {
+                                show: false,
+                            },
+                            barMaxWidth: 30,
+                            data: this.data.map(item => ({
+                                value: item.series[key[0]],
+                                text: item.text,
+                                itemStyle: {
+                                    color: '#e4a11b' // 👈 aquí usas el color del dato
+                                }
+                            }))
+                        }
+                    };
+                }
                 break;
         }
 

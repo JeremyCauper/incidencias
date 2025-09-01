@@ -148,6 +148,7 @@ class DashboardIncidenciasController extends Controller
                 return [
                     'name' => $problemas[$id]->codigo,
                     'text' => "{$problemas[$id]->codigo} - {$problemas[$id]->descripcion}",
+                    'tipo_soporte' => $problemas[$id]->tipo_soporte,
                     'series' => ['problemas' => count($items)],
                     'total' => count($items), // opcional, más fácil para ordenar
                 ];

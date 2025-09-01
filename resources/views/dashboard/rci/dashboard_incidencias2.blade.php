@@ -164,18 +164,25 @@
             <div class="col-12 mb-2">
                 <div class="card">
                     <div class="card-body row">
-                        <div class="col-12" style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;">Cantidad de incidencias por fecha</div>
+                        <div class="col-12"
+                            style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;">
+                            Cantidad de incidencias por fecha</div>
                         <div class="col-xl-2 col-lg-3 align-content-center mb-2 py-2">
-                            <div type="button" class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-primary" data-mdb-ripple-init
-                                data-mdb-ripple-color="dark" onclick="toggleSeries('INCIDENCIAS', this)">
+                            <div type="button"
+                                class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-primary"
+                                data-mdb-ripple-init data-mdb-ripple-color="dark"
+                                onclick="toggleSeries('INCIDENCIAS', this)">
                                 <i class="fas fa-file-invoice me-1"></i>INCIDENCIAS
                             </div>
-                            <div type="button" class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-success" data-mdb-ripple-init
-                                data-mdb-ripple-color="dark" onclick="toggleSeries('VISITAS', this)">
+                            <div type="button"
+                                class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-success"
+                                data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="toggleSeries('VISITAS', this)">
                                 <i class="fas fa-van-shuttle me-1"></i>VISITAS
                             </div>
-                            <div type="button" class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-warning" data-mdb-ripple-init
-                                data-mdb-ripple-color="dark" onclick="toggleSeries('MANTENIMIENTOS', this)">
+                            <div type="button"
+                                class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-warning"
+                                data-mdb-ripple-init data-mdb-ripple-color="dark"
+                                onclick="toggleSeries('MANTENIMIENTOS', this)">
                                 <i class="fas fa-screwdriver-wrench me-1"></i>MANTENIMIENTOS
                             </div>
                         </div>
@@ -185,25 +192,57 @@
                     </div>
                 </div>
             </div>
+
+            <div class="col-lg-8 mb-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chart-incidencias"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4 mb-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chart-tipo-incidencias"></div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-4 mb-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chart-niveles"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-8 mb-2">
+                <div class="card">
+                    <div class="card-body">
+                        <div id="chart-problemas"></div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col-lg-8 mb-2">
-            <div class="card">
-                <div class="card-body">
-                    <div id="chart-incidencias"></div>
+    <button class="d-none" data-mdb-modal-init data-mdb-target="#modal_subproblema"></button>
+    <div class="modal fade" id="modal_subproblema" aria-labelledby="modal_subproblema" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h6 class="modal-title">SUB PROBLEMAS DE INCIDENCIAS</h6>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div id="chart-subproblemas"></div>
+                </div>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-link " data-mdb-ripple-init
+                        data-mdb-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
-        <div class="col-lg-4 mb-2">
-            <div class="card">
-                <div class="card-body">
-                    <div id="chart-tipo-incidencias"></div>
-                </div>
-            </div>
-        </div>
-    </div>
     </div>
 @endsection
 
