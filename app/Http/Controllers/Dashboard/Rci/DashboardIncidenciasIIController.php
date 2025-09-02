@@ -39,4 +39,162 @@ class DashboardIncidenciasIIController extends Controller
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
         }
     }
+
+    public function index(Request $request)
+    {
+        // try {
+        $ruc = $request->query('ruc');
+        $sucursal = $request->query('sucursal');
+        $fechaIni = $request->query('fechaIni') ?: now()->format('Y-m-01');
+        $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
+        $data = [];
+
+        $whereInc = ['estatus' => 1];
+        if ($ruc) {
+            $whereInc['ruc_empresa'] = $ruc;
+        }
+        if (intval($sucursal)) {
+            $whereInc['id_sucursal'] = intval($sucursal);
+        }
+
+        $whereVis = [];
+        if (intval($sucursal)) {
+            $whereVis['id_sucursal'] = intval($sucursal);
+        }
+
+        $incidencias = DB::table('tb_incidencias')
+            ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
+            ->where($whereInc)
+            ->get();
+
+        $problema = JsonDB::table('problema')->select('id')->where('codigo', 'PS-0003')->first();
+
+        $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
+        $cod_incidencias_mante = $incidencias->where('id_problema', $problema->id)->pluck('cod_incidencia')->toArray();
+
+        $visitas = DB::table('tb_visitas')
+            ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
+            ->where($whereVis)
+            ->get();
+        $id_visitas = $visitas->pluck('id')->toArray();
+
+        $estados = [
+            ['name' => 'Sin Asignar', 'value' => 0], // 0
+            ['name' => 'Asignada', 'value' => 0], // 1
+            ['name' => 'En Proceso', 'value' => 0], // 2
+            ['name' => 'Finalizado', 'value' => 0], // 3
+            ['name' => 'Faltan Datos', 'value' => 0], // 4
+            ['name' => 'Cierre Sistema', 'value' => 0], // 5
+        ];
+
+        $niveles = [
+            ['name' => 'n1', 'value' => 0],
+            ['name' => 'n2', 'value' => 0],
+            ['name' => 'n3', 'value' => 0],
+        ];
+
+        $incidencias->map(function ($items) use (&$estados) {
+            $estados[$items->estado_informe]['value']++;
+        });
+        $data['estados'] = $estados;
+
+        $inc_asignadas = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias)->select('cod_incidencia', 'id_usuario')->get();
+        $inc_mantenimiento = DB::table('tb_inc_asignadas')->whereIn('cod_incidencia', $cod_incidencias_mante)->select('cod_incidencia', 'id_usuario')->get();
+        $inc_tipo = DB::table('tb_inc_tipo')->select('cod_incidencia', 'id_tipo_inc', 'created_at')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia')
+            ->map(function ($items) {
+                return collect($items)->sortByDesc('created_at')->first();
+            })->values();
+        $vis_asignadas = DB::table('tb_vis_asignadas')->whereIn('id_visitas', $id_visitas)->select('id_usuario')->get();
+
+        $data['personal'] = DB::table('tb_personal')->where(['id_area' => 1, 'estatus' => 1])->whereIn('tipo_acceso', [2, 3, 4])->get()
+            ->map(function ($val) use ($inc_asignadas, $vis_asignadas, $inc_tipo, $inc_mantenimiento) {
+                $incAsignadas = $inc_asignadas->where('id_usuario', $val->id_usuario);
+                $incAsignadasM = $inc_mantenimiento->where('id_usuario', $val->id_usuario);
+                $visAsignadas = $vis_asignadas->where('id_usuario', $val->id_usuario);
+                $tipo = $inc_tipo->whereIn('cod_incidencia', $incAsignadas->pluck('cod_incidencia')->toArray());
+                $apellidos = $this->formatearNombre($val->apellidos);
+                $nombres = $this->formatearNombre($val->nombres, $val->apellidos);
+                $transporte = [
+                    'fas fa-laptop',
+                    'fas fa-person-hiking text-success',
+                    'fas fa-motorcycle text-danger'
+                ];
+                return [
+                    'name' => $apellidos,
+                    'text' => "$val->ndoc_usuario $nombres",
+                    'series' => [
+                        'incidencias' => $incAsignadas->count(),
+                        'visitas' => $visAsignadas->count(),
+                        'mantenimientos' => $incAsignadasM->count()
+                    ],
+                    'transporte' => $transporte[$val->transporte],
+                    'idTecnico' => $val->id_usuario,
+                    'niveles' => [
+                        'n1' => $tipo->where('id_tipo_inc', 1)->count(),
+                        'n2' => $tipo->where('id_tipo_inc', 2)->count(),
+                    ]
+                ];
+            });
+
+        $problemas = JsonDB::table('problema')->get()->keyBy('id');
+        $subproblemas = JsonDB::table('sub_problema')->get()->keyBy('id');
+        $data['problemas'] = $incidencias->groupBy('id_problema')
+            ->map(function ($items, $id) use ($problemas) {
+                return [
+                    'name' => $problemas[$id]->codigo,
+                    'text' => "{$problemas[$id]->codigo} - {$problemas[$id]->descripcion}",
+                    'tipo_soporte' => $problemas[$id]->tipo_soporte,
+                    'series' => ['problemas' => count($items)],
+                    'total' => count($items), // opcional, más fácil para ordenar
+                ];
+            })
+            ->sortByDesc('total') // ordenar de mayor a menor
+            ->take(10)
+            ->values();
+
+
+        $data['subproblemas'] = collect($incidencias->groupBy('id_subproblema')
+            ->map(function ($items, $id) use ($subproblemas) {
+                return [
+                    'codigo' => $subproblemas[$id]->codigo_problema,
+                    'name' => $subproblemas[$id]->descripcion,
+                    'text' => "{$subproblemas[$id]->prioridad} - {$subproblemas[$id]->descripcion}",
+                    'series' => ['sub_problemas' => count($items)]
+                ];
+            })->toArray())->groupBy('codigo');
+
+
+        DB::table('tb_inc_tipo')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia')
+            ->map(function ($items, $id) use (&$niveles) {
+                $item = collect($items)->sortByDesc('created_at')->first();
+                $niveles[$item->id_tipo_inc - 1]['value']++;
+            });
+        $data['niveles'] = $niveles;
+
+        if ($ruc) {
+            $infoData = DB::table('tb_sucursales')->select('id', 'ruc', 'nombre')->where('ruc', $ruc)->get()->keyBy('id');
+        } else {
+            $infoData = DB::table('tb_empresas')->select('ruc', 'razon_social')->get()->keyBy('ruc');
+        }
+        $data['contable'] = $incidencias->groupBy($ruc ? 'id_sucursal' : 'ruc_empresa')
+            ->map(function ($items, $key) use ($infoData, $ruc) {
+                $name = $ruc ? $infoData[$key]->nombre : $key;
+                $text = $ruc ? $infoData[$key]->nombre : "{$key} - {$infoData[$key]->razon_social}";
+                return [
+                    'name' => $name,
+                    'text' => $text,
+                    'series' => [($ruc ? 'sucursal' : 'empresa') => $items->count()],
+                    'total' => $items->count(), // opcional, más fácil para ordenar
+                ];
+            })
+            ->sortByDesc('total') // ordenar de mayor a menor
+            ->take(10)
+            ->values()
+            ->toArray();
+
+        return $this->message(data: ['data' => $data]);
+        // } catch (Exception $e) {
+        //     return $this->message(message: "Ocurrió un error interno en el servidor.", data: ['error' => $e->getMessage(), 'linea' => $e->getLine()], status: 500);
+        // }
+    }
 }

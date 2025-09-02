@@ -193,29 +193,93 @@
                 </div>
             </div>
 
-            <div class="col-lg-8 mb-2">
+            <div class="col-xxl-8 col-xl-7 col-lg-6 mb-2">
                 <div class="card">
                     <div class="card-body">
-                        <div id="chart-incidencias"></div>
+                        <div id="chart-incidencias-fechas"></div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-4 mb-2">
+            <div class="col-xxl-4 col-xl-5 col-lg-6 mb-2">
                 <div class="card">
-                    <div class="card-body">
-                        <div id="chart-tipo-incidencias"></div>
+                    <div class="card-body row">
+                        <div class="col-12"
+                            style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;">
+                            Cantidad de incidencias por fecha</div>
+                        <div class="col-5 mb-2">
+                            <div class="mt-3 mb-5 mb-2">
+                                <h2 class="mb-0 text-body-secondary" id="total-niveles">164</h2>
+                                <p class="mb-0 text-body-secondary">Total de Niveles</p>
+                            </div>
+                            <ul class="p-0 m-0">
+                                <li class="d-flex align-items-start my-2 p-1 btn-niveles" type="button" data-nivel="n1">
+                                    <div class="flex-shrink-0">
+                                        <div class="p-2 text-bg-info rounded-4 icono-niveles">
+                                            N1
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0 text-body-secondary text-nowrap">REMOTO</h6>
+                                        <small class="text-body-secondary count-niveles">0</small>
+                                    </div>
+                                </li>
+                                <li class="d-flex align-items-start my-2 p-1 btn-niveles" type="button" data-nivel="n2">
+                                    <div class="flex-shrink-0">
+                                        <div class="p-2 text-bg-secondary rounded-4 icono-niveles">
+                                            N2
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0 text-body-secondary text-nowrap">PRESENCIAL</h6>
+                                        <small class="text-body-secondary count-niveles">0</small>
+                                    </div>
+                                </li>
+                                <li class="d-flex align-items-start my-2 p-1 btn-niveles" type="button" data-nivel="n3">
+                                    <div class="flex-shrink-0">
+                                        <div class="p-2 text-bg-dark rounded-4 icono-niveles">
+                                            N3
+                                        </div>
+                                    </div>
+                                    <div class="flex-grow-1 ms-3">
+                                        <h6 class="mb-0 text-body-secondary text-nowrap">PROVEEDOR</h6>
+                                        <small class="text-body-secondary count-niveles">0</small>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-7 mb-2">
+                            <div id="chart-niveles"></div>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="col-lg-4 mb-2">
+            <div class="col-lg-5 mb-2">
                 <div class="card">
                     <div class="card-body">
-                        <div id="chart-niveles"></div>
+                        <div class="col-12"
+                            style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;">
+                            Cantidad de incidencias por fecha</div>
+                        <div class="py-2" id="list-contable" style="height: 37.5vh;">
+                            <ul class="list-group list-group-light">
+                                <li class="list-group-item d-flex justify-content-between align-items-center">
+                                    <div class="d-flex align-items-center">
+                                        <div class="d-flex align-items-center justify-content-center text-bg-dark rounded-circle" style="width: 40px; height: 40px">
+                                            <i class="far fa-building"></i>
+                                        </div>
+                                        <div class="ms-3">
+                                            <p class="fw-bold mb-1">20548795682</p>
+                                            <p class="text-muted mb-0">john.doe@gmail.com</p>
+                                        </div>
+                                    </div>
+                                    <span class="badge rounded-pill badge-success">Active</span>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-8 mb-2">
+            <div class="col-lg-7 mb-2">
                 <div class="card">
                     <div class="card-body">
                         <div id="chart-problemas"></div>

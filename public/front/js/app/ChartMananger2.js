@@ -10,7 +10,6 @@ class ChartMananger {
 
         if (!this.id) return console.error('ChartManager: ID o datos no válidos.');
 
-
         const container = document.getElementById(this.id);
         if (!container) return console.error(`ChartManager: No se encontró el contenedor con ID ${this.id}`);
         let altura = this.config?.altura || 40;
@@ -115,7 +114,6 @@ class ChartMananger {
                             position: "top",
                             distance: 4,
                             align: "center",
-                            // verticalAlign: "middle",
                             fontSize: 10,
                             color: "#fff",
                             formatter: (params) => {
@@ -217,7 +215,7 @@ class ChartMananger {
                 };
                 break;
 
-            case 'incidencia':
+            case 'incidencia_fechas':
                 option = {
                     title: {
                         text: 'Cantidad de incidencias por fecha',
@@ -293,87 +291,67 @@ class ChartMananger {
                 };
                 break;
 
-            case 'tipo_incidencia':
-                option = {
-                    title: {
-                        text: 'Tipo de incidencias',
-                        textStyle: {
-                            color: '#9fa6b2',
-                            fontFamily: 'Arial, sans-serif',
-                            fontSize: 14,
-                        }
-
-                    },
-                    tooltip: {
-                        trigger: 'item'
-                    },
-                    visualMap: {
-                        show: false,
-                        min: 1,
-                        max: 80,
-                        inRange: {
-                            colorLightness: [0, 1.25]
-                        }
-                    },
-                    series: [
-                        {
-                            name: 'Access From',
-                            type: 'pie',
-                            radius: '50%',
-                            center: ['50%', '50%'],
-                            data: this.data.sort(function (a, b) {
-                                return a.value - b.value;
-                            }),
-                            roseType: 'area',
-                            label: {
-                                color: '#9fa6b2',
-                                alignTo: 'edge',
-                                minMargin: 5,
-                                edgeDistance: 10,
-                                lineHeight: 15,
-                            },
-                            labelLine: {
-                                smooth: 0.2,
-                                length: 10,
-                                length2: 20
-                            },
-                            itemStyle: {
-                                color: '#3b71ca',
-                                shadowColor: 'rgba(0, 0, 0, 0.5)',
-                                borderRadius: 3
-                            },
-                            animationType: 'scale',
-                            animationEasing: 'elasticOut',
-                            animationDelay: function (idx) {
-                                return Math.random() * 200;
-                            }
-                        }
-                    ]
-                };
-                break;
-
             case 'niveles':
+                var total = this.data.total;
+                var value = this.data.value;
+                this.data.porcentaje = (value / total) * 100;
+
                 option = {
-                    title: {
-                        text: 'Distribución de incidencias (%)',
-                        left: 'center'
-                    },
                     tooltip: {
-                        trigger: 'item',
-                        formatter: '{b}: {c} ({d}%)'
-                    },
-                    legend: {
-                        bottom: 0
+                        show: false
                     },
                     series: [
                         {
-                            name: 'Incidencias',
-                            type: 'pie',
-                            radius: '50%',
-                            data: result.map(item => ({
-                                name: item.group,
-                                value: item.value
-                            }))
+                            name: 'Pressure',
+                            type: 'gauge',
+                            startAngle: 225,
+                            endAngle: -135,
+                            min: 0,
+                            max: 100,
+                            itemStyle: {
+                                color: this.config.color,
+                                type: "dotted"
+                            },
+                            pointer: {
+                                show: false
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    width: 25,
+                                    color: [
+                                        [1, '#0000000c'] // Dark: '#4e4e4eff' | Light: '#ebebebff'
+                                    ]
+                                }
+                            },
+                            progress: {
+                                show: true,
+                                width: 25,
+                                roundCap: true,
+                            },
+                            axisTick: {
+                                show: false
+                            },
+                            splitLine: {
+                                show: false
+                            },
+                            axisLabel: {
+                                show: false
+                            },
+                            detail: {
+                                valueAnimation: true,
+                                width: '60%',
+                                offsetCenter: [0, 0],
+                                fontSize: 25,
+                                fontWeight: 'bolder',
+                                formatter: '{value} %',
+                                color: 'inherit'
+                            },
+                            data: [
+                                {
+                                    value: this.data.porcentaje.toFixed(2),
+                                    // name: 'Porcentaje Unificado'
+                                }
+                            ]
                         }
                     ]
                 };
@@ -418,7 +396,7 @@ class ChartMananger {
                     ,
                     grid: [
                         {
-                            left: '10%',
+                            left: '12%',
                             right: '4%',
                             top: '15%',
                             bottom: '20%'
@@ -601,8 +579,19 @@ class ChartMananger {
         return option;
     }
 
-    updateOption(data = this.data) {
-        this.data = data;
+    updateOption(params = {}) {
+        const deepMerge = (target, source) => {
+            for (let key in source) {
+                if (source[key] instanceof Object && key in target) {
+                    deepMerge(target[key], source[key]);
+                } else {
+                    target[key] = source[key];
+                }
+            }
+            return target;
+        };
+        deepMerge(this, params);
+
         if (this.chart) {
             this.chart.setOption(this._buildOptionEstado(), true);
         }
