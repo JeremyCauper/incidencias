@@ -422,7 +422,7 @@ class ChartMananger {
                                 left: '12%',
                                 right: '4%',
                                 top: '15%',
-                                bottom: '20%'
+                                bottom: '10%'
                             }
                         ],
                         xAxis: [
@@ -523,7 +523,7 @@ class ChartMananger {
                                 left: '25%',
                                 right: '4%',
                                 top: '15%',
-                                bottom: '20%'
+                                bottom: '10%'
                             }
                         ],
                         xAxis: [
