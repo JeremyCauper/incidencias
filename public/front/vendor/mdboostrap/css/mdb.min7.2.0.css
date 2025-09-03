@@ -540,6 +540,14 @@ button,
     -webkit-appearance: button
 }
 
+button i,
+[type=button] i,
+[type=reset] i,
+[type=submit] i {
+    min-width: 1.5em;
+    top: -1px;
+}
+
 button:not(:disabled),
 [type=button]:not(:disabled),
 [type=reset]:not(:disabled),

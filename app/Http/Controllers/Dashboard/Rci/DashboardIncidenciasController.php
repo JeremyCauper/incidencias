@@ -7,8 +7,7 @@ use App\Services\JsonDB;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Facades\Log;
-use PhpParser\ErrorHandler\Collecting;
+use Log;
 
 class DashboardIncidenciasController extends Controller
 {
@@ -37,20 +36,16 @@ class DashboardIncidenciasController extends Controller
 
             return view('dashboard.rci.dashboard_incidencias', ['data' => $data]);
         } catch (Exception $e) {
-            Log::error('Error inesperado: ' . $e->getMessage());
             return response()->json(['error' => 'Error inesperado: ' . $e->getMessage()], 500);
         }
     }
 
-    /**
-     * Display a listing of the resource.
-     */
     public function index(Request $request)
     {
         // try {
         $ruc = $request->query('ruc');
         $sucursal = $request->query('sucursal');
-        $fechaIni = $request->query('fechaIni') ?: now()->format('Y-m-01');
+        $fechaIni = $request->query('fechaIni') ?: now()->format('Y-01-01');
         $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
         $data = [];
 
@@ -84,19 +79,29 @@ class DashboardIncidenciasController extends Controller
         $id_visitas = $visitas->pluck('id')->toArray();
 
         $estados = [
-            ['name' => 'Sin Asignar', 'value' => 0, 'itemStyle' => ['color' => 'rgb(228, 161, 27)']], // 0
-            ['name' => 'Asignada', 'value' => 0, 'itemStyle' => ['color' => 'rgb(84, 180, 211)']], // 1
-            ['name' => 'En Proceso', 'value' => 0, 'itemStyle' => ['color' => 'rgb(59, 113, 202)']], // 2
-            ['name' => 'Finalizado', 'value' => 0, 'itemStyle' => ['color' => 'rgb(20, 164, 77)']], // 3
-            ['name' => 'Faltan Datos', 'value' => 0, 'itemStyle' => ['color' => 'rgb(220, 76, 100)']], // 4
-            ['name' => 'Cierre Sistema', 'value' => 0, 'itemStyle' => ['color' => 'rgb(159, 166, 178)']], // 5
+            ['name' => 'estado-sinasignar', 'value' => 0], // 0
+            ['name' => 'estado-asignados', 'value' => 0], // 1
+            ['name' => 'estado-enproceso', 'value' => 0], // 2
+            ['name' => 'estado-finalizados', 'value' => 0], // 3
+            ['name' => 'estado-faltandatos', 'value' => 0], // 4
+            // ['name' => 'Cierre Sistema', 'value' => 0], // 5
         ];
 
         $niveles = [
-            ['name' => 'N1 - REMOTO', 'value' => 0, 'itemStyle' => ['color' => 'rgb(159, 166, 178)']],
-            ['name' => 'N2 - PRESENCIAL', 'value' => 0, 'itemStyle' => ['color' => 'rgb(84, 180, 211)']],
-            ['name' => 'N3 - PROVEEDOR', 'value' => 0, 'itemStyle' => ['color' => 'rgb(51, 45, 45)']],
+            ['name' => 'n1', 'text' => 'REMOTO', 'color' => 'info', 'value' => 0],
+            ['name' => 'n2', 'text' => 'PRESENCIAL', 'color' => 'warning', 'value' => 0],
+            ['name' => 'n3', 'text' => 'PROVEEDOR', 'color' => 'purple', 'value' => 0],
         ];
+
+        $data['fechas'] = $incidencias->groupBy('fecha_informe')
+            ->map(function ($items, $fecha) {
+                return [
+                    'name' => $fecha,
+                    'total' => count($items), // opcional, más fácil para ordenar
+                ];
+            })
+            ->sortBy('name')
+            ->values();
 
         $incidencias->map(function ($items) use (&$estados) {
             $estados[$items->estado_informe]['value']++;
@@ -184,16 +189,14 @@ class DashboardIncidenciasController extends Controller
         $data['contable'] = $incidencias->groupBy($ruc ? 'id_sucursal' : 'ruc_empresa')
             ->map(function ($items, $key) use ($infoData, $ruc) {
                 $name = $ruc ? $infoData[$key]->nombre : $key;
-                $text = $ruc ? $infoData[$key]->nombre : "{$key} - {$infoData[$key]->razon_social}";
+                $text = $ruc ? $infoData[$key]->nombre : $infoData[$key]->razon_social;
                 return [
                     'name' => $name,
                     'text' => $text,
-                    'series' => [($ruc ? 'sucursal' : 'empresa') => $items->count()],
                     'total' => $items->count(), // opcional, más fácil para ordenar
                 ];
             })
             ->sortByDesc('total') // ordenar de mayor a menor
-            ->take(10)
             ->values()
             ->toArray();
 

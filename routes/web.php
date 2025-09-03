@@ -3,7 +3,6 @@
 use App\Helpers\TipoIncidencia;
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\LoginEmpresaController;
-use App\Http\Controllers\Dashboard\Rci\DashboardIncidenciasIIController;
 use App\Http\Controllers\Empresas\Incidencias\EIncidenciasController;
 use App\Http\Controllers\Dashboard\Empresa\EDashboardIncidenciasController;
 use App\Http\Controllers\Dashboard\Rci\DashboardIncidenciasController;
@@ -204,9 +203,6 @@ Route::post('/soporte/asignacion-turno/eliminar', [TurnoController::class, 'dest
 
 Route::get('/soporte/dashboard/dashboard-incidencias', [DashboardIncidenciasController::class, 'view'])->middleware('auth');
 Route::get('/soporte/dashboard/dashboard-incidencias/index', [DashboardIncidenciasController::class, 'index']);
-
-Route::get('/soporte/dashboard/dashboard-incidencias2', [DashboardIncidenciasIIController::class, 'view'])->middleware('auth');
-Route::get('/soporte/dashboard/dashboard-incidencias2/index', [DashboardIncidenciasIIController::class, 'index']);
 
 Route::get('/soporte/inventario/materiales', [MaterialesController::class, 'view'])->middleware('auth');
 Route::get('/soporte/inventario/materiales/index', [MaterialesController::class, 'index']);
