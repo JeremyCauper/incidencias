@@ -53,39 +53,34 @@ class EDashboardIncidenciasController extends Controller
         $cod_incidencias = $incidencias->pluck('cod_incidencia')->toArray();
 
         $estados = [
-            ['name' => 'Sin Asignar', 'value' => 0, 'itemStyle' => ['color' => 'rgb(228, 161, 27)']], // 0
-            ['name' => 'Asignada', 'value' => 0, 'itemStyle' => ['color' => 'rgb(84, 180, 211)']], // 1
-            ['name' => 'En Proceso', 'value' => 0, 'itemStyle' => ['color' => 'rgb(59, 113, 202)']], // 2
-            ['name' => 'Finalizado', 'value' => 0, 'itemStyle' => ['color' => 'rgb(20, 164, 77)']], // 3
-            ['name' => 'Faltan Datos', 'value' => 0, 'itemStyle' => ['color' => 'rgb(220, 76, 100)']], // 4 
+            ['name' => 'estado-sinasignar', 'value' => 0], // 0
+            ['name' => 'estado-asignados', 'value' => 0], // 1
+            ['name' => 'estado-enproceso', 'value' => 0], // 2
+            ['name' => 'estado-finalizados', 'value' => 0], // 3
+            ['name' => 'estado-faltandatos', 'value' => 0], // 4
+            // ['name' => 'Cierre Sistema', 'value' => 0], // 5
         ];
 
         $niveles = [
-            ['name' => 'N1 - REMOTO', 'value' => 0, 'itemStyle' => ['color' => 'rgb(159, 166, 178)']],
-            ['name' => 'N2 - PRESENCIAL', 'value' => 0, 'itemStyle' => ['color' => 'rgb(84, 180, 211)']],
-            ['name' => 'N3 - PROVEEDOR', 'value' => 0, 'itemStyle' => ['color' => 'rgb(51, 45, 45)']],
+            ['name' => 'n1', 'text' => 'REMOTO', 'color' => 'info', 'value' => 0],
+            ['name' => 'n2', 'text' => 'PRESENCIAL', 'color' => 'warning', 'value' => 0],
+            ['name' => 'n3', 'text' => 'PROVEEDOR', 'color' => 'purple', 'value' => 0],
         ];
+
+        $data['fechas'] = $incidencias->groupBy('fecha_informe')
+            ->map(function ($items, $fecha) {
+                return [
+                    'name' => $fecha,
+                    'total' => count($items), // opcional, más fácil para ordenar
+                ];
+            })
+            ->sortBy('name')
+            ->values();
 
         $incidencias->map(function ($items) use (&$estados) {
             $estados[$items->estado_informe]['value']++;
         });
         $data['estados'] = $estados;
-
-        $inc_asignadas = DB::table('tb_inc_asignadas')->select('id_usuario')->get()->groupBy('id_usuario');
-        $vis_asignadas = DB::table('tb_vis_asignadas')->select('id_usuario')->get()->groupBy('id_usuario');
-        $data['personal'] = DB::table('tb_personal')->where(['id_area' => 1, 'estatus' => 1])->whereIn('tipo_acceso', [2, 3])->get()
-            ->map(function ($val) use ($inc_asignadas, $vis_asignadas) {
-                $apellidos = $this->formatearNombre($val->apellidos);
-                $nombres = $this->formatearNombre($val->nombres, $val->apellidos);
-                return [
-                    'name' => $apellidos,
-                    'text' => "$val->ndoc_usuario $nombres",
-                    'series' => [
-                        'incidencias' => isset($inc_asignadas[$val->id_usuario]) ? count($inc_asignadas[$val->id_usuario]) : 0,
-                        'visitas' => isset($vis_asignadas[$val->id_usuario]) ? count($vis_asignadas[$val->id_usuario]) : 0
-                    ]
-                ];
-            });
 
         $problemas = JsonDB::table('problema')->get()->keyBy('id');
         $subproblemas = JsonDB::table('sub_problema')->get()->keyBy('id');
@@ -93,11 +88,13 @@ class EDashboardIncidenciasController extends Controller
             ->map(function ($items, $id) use ($problemas) {
                 return [
                     'name' => $problemas[$id]->codigo,
-                    'text' => $problemas[$id]->descripcion,
+                    'text' => "{$problemas[$id]->codigo} - {$problemas[$id]->descripcion}",
+                    'tipo_soporte' => $problemas[$id]->tipo_soporte,
                     'series' => ['problemas' => count($items)],
+                    'total' => count($items), // opcional, más fácil para ordenar
                 ];
             })
-            ->sortByDesc('total')
+            ->sortByDesc('total') // ordenar de mayor a menor
             ->take(10)
             ->values();
 

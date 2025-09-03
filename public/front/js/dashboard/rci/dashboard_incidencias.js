@@ -3,226 +3,344 @@ $(document).ready(function () {
         fillSelect(['#sucursal'], sucursales, 'ruc', $(this).val(), 'id', 'nombre', 'status');
     });
 
-    $('#dateRango').daterangepicker({
-        showDropdowns: true,
-        startDate: date('Y-m-01'),
-        endDate: date('Y-m-d'),
-        maxDate: date('Y-m-d'),
-        opens: "center",
-        cancelClass: "btn-link",
-        locale: {
-            format: 'YYYY-MM-DD',
-            separator: '  al  ',
-            applyLabel: 'Aplicar',
-            cancelLabel: 'Cerrar',
-            fromLabel: 'Desde',
-            toLabel: 'Hasta',
-            customRangeLabel: 'Rango personalizado',
-            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-            firstDay: 1 // Comienza la semana en lunes
-        }
-    });
-
-    $('.check-trail').on('click', function () {
-        setTimeout(() => {
-            myChart_estado.updateOption();
-            myChart_peronal.updateOption();
-            myChart_problemas.updateOption();
-            myChart_niveles.updateOption();
-            myChart_contable.updateOption();
-        }, 10);
-    })
-
     fObservador('.content-wrapper', () => {
-        myChart_estado.resize();
-        myChart_peronal.resize();
-        myChart_problemas.resize();
-        myChart_niveles.resize();
-        myChart_contable.resize();
+        chartActividades.resize();
 
-        myChart_estado.resizeGraphic(700);
-        myChart_peronal.resizeGraphic(700);
-        myChart_niveles.resizeGraphic(700);
-        myChart_contable.resizeGraphic(700);
+        incidencia_estados.forEach((e, i) => {
+            if (e.chart) e.chart.resize();
+        });
+
+        chartIncidenciaPorFechas.resize();
+
+        chartProblemas.resize();
+        chartNiveles.resize();
     });
 
-    filtroBusqueda();
-});
 
-var myChart_estado = new ChartMananger({
-    id: '#chart-estado',
-    type: 'pie',
-    name: 'ESTADO'
-});
+    function setEstados(obj_estado) {
+        let total = obj_estado.reduce((acc, item) => acc + item.value, 0);
+        $('#count-estado-total').text(total);
 
-var myChart_peronal = new ChartMananger({
-    id: '#chart-personal',
-    type: 'bar',
-    config: {
-        xAxis: 'category',
-        yAxis: 'value',
-        toolTip: {
-            formatter: (params) => {
-                let result = `<strong style="font-size:.725rem;"><i class="${params[0].data.data.transporte}"></i> ${params[0].data.text}</strong><br>`;
+        obj_estado.forEach((e, i) => {
+            $('#count-' + e.name).text(e.value);
+            let estado = incidencia_estados.find(ie => ie.name == e.name);
+            if (estado.chart)
+                estado.chart.updateOption({ data: { total: total, value: e.value } });
+        });
+    }
 
-                params.forEach(item => {
-                    const value = item.data.value;
-                    const data = item.data.data;
-                    result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
+    function setActividades(obj_actividades) {
+        chartActividades.updateOption({ data: obj_actividades });
+        incidencia_actividades.forEach((e, i) => {
+            let div_btn = document.querySelector(`[data-name="${e.name}"]`);
 
-                    if (item.seriesName == "INCIDENCIAS") {
-                        result += `<ul style="font-size:.7rem;">
-                            <li>N1 - REMOTO: ${data.niveles.n1}</li>
-                            <li>N2 - PRESENCIAL: ${data.niveles.n2}</li>
-                        </ul>`;
-                    }
-                });
-                return result;
+            let selected = chartActividades.chart.getOption().legend[0].selected;
+            if (selected[e.name.toUpperCase()]) {
+                div_btn.classList.add('text-bg-' + e.color);
+            } else {
+                div_btn.classList.remove('text-bg-' + e.color);
             }
+        });
+    }
+
+    function setNiveles(obj_niveles) {
+        let list_niveles = $('#list-niveles');
+        let total = obj_niveles.reduce((acc, item) => acc + item.value, 0);
+        const ul = $('<ul>', { class: 'p-0 m-0' });
+
+        list_niveles.html('').append(
+            $('<div>', { class: 'mt-3 mb-5 mb-2' }).append(
+                $('<h2>', { class: 'mb-0 text-body-secondary' }).text(total),
+                $('<p>', { class: 'mb-0 text-body-secondary' }).text('Total de Niveles'),
+            ),
+            ul
+        );
+
+        obj_niveles.forEach((n, i) => {
+            let li = $('<li>', { class: 'd-flex align-items-start py-1 no-sombrear btn-niveles', type: 'button' })
+                .append(
+                    $('<div>', { class: 'flex-shrink-0' }).append(
+                        $('<div>', { class: 'p-2 text-white rounded-4 icono-niveles', style: 'background-color:' + bliColor[n.color] }).text(n.name.toUpperCase())
+                    ),
+                    $('<div>', { class: 'flex-grow-1 ms-3' }).append(
+                        $('<h6>', { class: 'mb-0 text-body-secondary text-nowrap' }).text(n.text.toUpperCase()),
+                        $('<small>', { class: 'text-body-secondary' }).text(n.value))
+                );
+
+            const handlerEnter = () => {
+                chartNiveles.updateOption({ config: { color: bliColor[n.color] }, data: { total: total, value: n.value } });
+            };
+            const handlerLeave = () => {
+                chartNiveles.updateOption({ config: { color: bliColor[obj_niveles[0].color] }, data: { total: total, value: obj_niveles[0].value } });
+            };
+            li.get(0).removeEventListener('pointerenter', handlerEnter);
+            li.get(0).removeEventListener('pointerleave', handlerLeave);
+
+            li.get(0).addEventListener('pointerenter', handlerEnter);
+            li.get(0).addEventListener('pointerleave', handlerLeave);
+            ul.append(li);
+        });
+        chartNiveles.updateOption({ config: { color: bliColor[obj_niveles[0].color] }, data: { total: total, value: obj_niveles[0].value } });
+    }
+
+    function setContable(obj_contable) {
+        let empresa = $('#empresa').val();
+        let list_contable = $('#list-contable');
+
+        $('#title-contable').text(`Ranking de ${empresa ? 'sucursales' : 'empresas'} según total de incidencias`);
+        if (obj_contable.length) {
+            list_contable.removeClass('text-center py-4').addClass('overflow-auto')
+        } else {
+            list_contable.removeClass('overflow-auto').addClass('text-center py-4').html('<span>No hay datos disponibles</span>');
+            return false;
         }
-    }
-});
+        const ul = $('<ul>', { class: 'list-group list-group-light me-2' });
 
-var myChart_problemas = new ChartMananger({
-    id: '#chart-problemas',
-    type: 'bar',
-    config: {
-        xAxis: 'value',
-        yAxis: 'category',
-        order: 'asc'
-    }
-});
-
-let subproblemas = {};
-myChart_problemas.chart.on('click', function (params) {
-    let codigo = params.name;
-    $('#modal_subproblema').modal('show').find('.chart-title').html(params.data.text);
-    setTimeout(() => {
-        var myChart_subproblemas = new ChartMananger({
-            id: '#chart-subproblemas',
-            type: 'bar',
-            config: {
-                xAxis: 'value',
-                yAxis: 'category',
-                order: 'asc'
-            }
+        obj_contable.forEach(c => {
+            let li = $('<li>', { class: 'list-group-item d-flex justify-content-between align-items-center py-2' })
+                .append(
+                    $('<div>', { class: 'd-flex align-items-center' }).append(
+                        $('<div>', { class: 'd-grid align-content-center' })
+                            .append($('<i>', { class: (empresa ? 'fas fa-city' : 'far fa-building') + ' text-white' })),
+                        $('<div>', { class: 'ms-3' }).append(
+                            empresa ? null : $('<p>', { class: 'fw-bold mb-0', style: 'font-size: small;' }).text(c.name),
+                            $('<p>', { class: 'text-muted mb-0', style: 'font-size: smaller;' }).text(c.text))
+                    ),
+                    $('<span>', { class: 'badge badge-warning rounded' }).text(c.total)
+                );
+            ul.append(li);
         });
-        myChart_subproblemas.updateOption(subproblemas[codigo]);
-    }, 200);
-});
-
-var myChart_niveles = new ChartMananger({
-    id: '#chart-niveles',
-    type: 'pie',
-    name: 'NIVEL'
-});
-
-var myChart_contable = new ChartMananger({
-    id: '#chart-contable',
-    type: 'bar',
-    config: {
-        xAxis: 'category',
-        yAxis: 'value',
-        order: 'desc'
+        list_contable.html(ul);
     }
-});
 
-
-function capturar() {
-    $('.chart-container-header').addClass('chart-header').find('.logo_rci_white').removeClass('d-none');
-    $('.chart-container-body').find('.chart-info').removeClass('d-none');
-
-    var nodo = document.getElementById('chart-container');
-    domtoimage.toPng(nodo)
-        .then(async function (dataUrl) {
-            var enlace = document.createElement('a');
-
-            const fecha = $('#dateRango').val();
-            const hora = new Date().toLocaleTimeString().replaceAll(':', '-');
-            const nombreArchivo = `ANALISIS DE INCIDENCIAS ${fecha} - ${hora}.png`;
-
-            enlace.download = nombreArchivo;
-            enlace.href = dataUrl;
-            enlace.click();
-            $('.chart-container-header').removeClass('chart-header').find('.logo_rci_white').addClass('d-none');
-            $('.chart-container-body').find('.chart-info').addClass('d-none');
-        })
-        .catch(function (error) {
-            console.error('Error al generar imagen:', error);
-        });
-}
-
-function generarPDF() {
-    var nodo = document.getElementById('chart-container');
-    $('.chart-container-header').addClass('chart-header').find('.logo_rci_white').removeClass('d-none');
-    $('.chart-container-body').find('.chart-info').removeClass('d-none');
-
-    domtoimage.toPng(nodo)
-        .then(function (dataUrl) {
-            const { jsPDF } = window.jspdf;
-            const pdf = new jsPDF({
-                orientation: 'landscape', // puedes cambiar a 'portrait'
-                unit: 'px',
-                format: [nodo.offsetWidth, nodo.offsetHeight]
-            });
-
-            // Agregamos la imagen generada del gráfico
-            pdf.addImage(dataUrl, 'PNG', 0, 0, nodo.offsetWidth, nodo.offsetHeight);
-
-            const fecha = $('#dateRango').val();
-            const hora = new Date().toLocaleTimeString().replaceAll(':', '-');
-            const nombreArchivo = `ANALISIS DE INCIDENCIAS ${fecha} - ${hora}.pdf`;
-            $('.chart-container-header').addClass('chart-header').find('.logo_rci_white').removeClass('d-none');
-            $('.chart-container-body').find('.chart-info').removeClass('d-none');
-
-            // Guardamos el PDF
-            pdf.save(nombreArchivo);
-        })
-        .catch(function (error) {
-            console.error('Error al generar PDF:', error);
-        });
-}
-
-function filtroBusqueda() {
-    var empresa = $('#empresa').val();
-    var sucursal = $('#sucursal').val();
-    var fechas = $('#dateRango').val().split('  al  ');
-
-    $('.chart-contenedor').each(function () {
-        $(this).addClass('chart-loading');
+    $('#filterContable').on('input', function () {
+        if (!$(this).val()) return setContable(contable); // si está vacío, devuelve todo
+        const q = $(this).val().toString().toLowerCase();
+        setContable(contable.filter(item =>
+            item.name.toString().toLowerCase().includes(q) ||
+            item.text.toLowerCase().includes(q)
+        ));
     });
 
-    var container = $('.chart-container-body');
-    container.find('[aria-item="empresa"]').html(empresa ? `${empresas[empresa].ruc} - ${empresas[empresa].razon_social}` : 'Todas las empresas');
-    container.find('[aria-item="sucursal"]').html(sucursal ? sucursales[sucursal].nombre : 'Todas las sucursales');
-    container.find('[aria-item="fechas"]').html($('#dateRango').val());
+    let promise = null;
+    let controller = null;
+    let filterAvanzado = async () => {
+        const empresa = $('#empresa').val();
+        const sucursal = $('#sucursal').val();
+        const [fechaIni, fechaFin] = $('#dateRango').val().split(' a ');
 
-    $.ajax({
-        method: "GET",
-        url: `${__url}/soporte/dashboard/dashboard-incidencias/index`,
-        data: {
+        // Cancelar petición anterior si sigue activa
+        if (controller) controller.abort();
+
+        ({ promise, controller } = fetchDashboardIncidencias({
             ruc: empresa,
             sucursal: sucursal,
-            fechaIni: fechas[0],
-            fechaFin: fechas[1],
-        },
-        timeout: 0,
-    }).done(function (response) {
-        if (response.success) {
-            myChart_estado.updateOption(response.data.estados);
-            myChart_peronal.updateOption(response.data.personal);
-            myChart_problemas.updateOption(response.data.problemas);
-            myChart_niveles.updateOption(response.data.niveles);
-            myChart_contable.updateOption(response.data.contable);
-            subproblemas = response.data.subproblemas;
-            $('#chart-title-contable').html(empresa ? 'SUCURSALES' : 'EMPRESAS');
+            fechaIni: fechaIni,
+            fechaFin: fechaFin
+        }));
 
-            setTimeout(() => {
-                $('.chart-contenedor').each(function () {
-                    $(this).removeClass('chart-loading');
-                });
-            }, 100);
-        };
+        try {
+            const { data } = await promise;
+            // console.log("✅ Datos recibidos:", data);
+
+            // Mapear datos en un solo lugar
+            const acciones = {
+                estados: setEstados,
+                personal: setActividades,
+                fechas: (d) => chartIncidenciaPorFechas.updateOption({ data: d }),
+                niveles: setNiveles,
+                contable: (d) => { setContable(d); contable = d; },
+                problemas: (d) => chartProblemas.updateOption({ data: d }),
+                subproblemas: (d) => { subproblemas = d; }
+            };
+
+            Object.entries(acciones).forEach(([key, fn]) => {
+                if (data[key] !== undefined) fn(data[key]);
+            });
+
+        } catch (err) {
+            boxAlert.box({ i: 'error', t: 'Petición rechazada', h: 'Hubo un inconveniente al procesar los datos.' });
+            console.warn("⚠️ Promesa rechazada:", err);
+        }
+    }
+    // Eventos
+    $('#btnFiltroAvanzado').on('click', filterAvanzado);
+    filterAvanzado();
+
+    let intervalID = setInterval(filterAvanzado, 5 * 60 * 1000); // Ejecuta cada 5 min
+
+    document.addEventListener('visibilitychange', function () {
+        if (document.visibilityState === 'hidden') {
+            document.title = 'PROCESO EN PAUSA!!';
+            // Detener el intervalo
+            clearInterval(intervalID);
+        } else if (document.visibilityState === 'visible') {
+            document.title = 'ANALISIS DE INCIDENCIAS';
+            // Reanudar el intervalo
+            intervalID = setInterval(filterAvanzado, 5 * 60 * 1000);
+            // Si quieres que se ejecute inmediatamente al volver:
+            filterAvanzado();
+        }
     });
+});
+
+// --- Función para consultar el dashboard de incidencias ---
+function fetchDashboardIncidencias({ ruc = "", sucursal = "", fechaIni, fechaFin }) {
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    const baseUrl = `${__url}/soporte/dashboard/dashboard-incidencias/index`;
+    const params = new URLSearchParams({ ruc, sucursal, fechaIni, fechaFin });
+    const url = `${baseUrl}?${params}`;
+
+    const promise = (async () => {
+        try {
+            const response = await fetch(url, { signal });
+            if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+            return await response.json();
+        } catch (error) {
+            if (error.name === "AbortError") {
+                console.info("⚠️ Petición cancelada por el usuario");
+            } else {
+                console.error("🚨 Error en fetchDashboardIncidencias:", error);
+            }
+            throw error;
+        }
+    })();
+
+    return { promise, controller };
 }
+
+let bliColor = {
+    info: '#54b4d3',
+    warning: '#e4a11b',
+    purple: '#7367f0',
+    primary: '#3b71ca',
+    success: '#14a44d',
+    danger: '#dc4c64',
+    light: '#fbfbfb',
+    secondary: '#9fa6b2',
+    dark: '#332d2d',
+};
+let subproblemas = {};
+let contable = [];
+
+let incidencia_estados = [
+    {
+        name: "estado-total",
+        text: "TOTAL INCIDENCIAS",
+        color: "purple",
+        chart: false,
+    },
+    {
+        name: "estado-sinasignar",
+        text: "SIN ASIGNAR",
+        color: "warning",
+        chart: true,
+    },
+    {
+        name: "estado-asignados",
+        text: "ASIGNADOS",
+        color: "info",
+        chart: true,
+    },
+    {
+        name: "estado-enproceso",
+        text: "EN PROCESO",
+        color: "primary",
+        chart: true,
+    },
+    {
+        name: "estado-finalizados",
+        text: "FINALIZADOS",
+        color: "success",
+        chart: true,
+    },
+    {
+        name: "estado-faltandatos",
+        text: "FALTAN DATOS",
+        color: "danger",
+        chart: true,
+    },
+];
+
+let list_estado = $('#list-estado');
+incidencia_estados.forEach((e, i) => {
+    list_estado.append(
+        $('<div>', { class: 'col-xxl-2 col-md-4 col-6 mb-2' }).append(
+            $('<div>', { class: 'card', style: 'height: 100%;' }).append(
+                $('<div>', { class: 'card-body row', style: 'color: ' + bliColor[e.color] }).append(
+                    $('<div>', { class: e.chart ? 'col-7' : '' }).append(
+                        $('<h6>', { class: 'card-title chart-estado-title mb-1' }).text(e.text),
+                        $('<h4>', { class: 'subtitle-count', id: 'count-' + e.name }).text(0)
+                    ),
+                    e.chart ? $('<div>', { class: 'col-5' }).append($('<div>', { id: 'chart-' + e.name })) : null
+                )
+            )
+        )
+    );
+    if (e.chart) {
+        e.chart = new ChartMananger({ id: 'chart-' + e.name, config: { tipo: 'estado', altura: 5, bg: bliColor[e.color] }, data: { total: 100, value: 0 } });
+    }
+});
+
+let incidencia_actividades = [
+    {
+        name: "incidencias",
+        icon: "fas fa-file-invoice",
+        color: "primary",
+    },
+    {
+        name: "visitas",
+        icon: "fas fa-van-shuttle",
+        color: "success",
+    },
+    {
+        name: "mantenimientos",
+        icon: "fas fa-screwdriver-wrench",
+        color: "warning",
+    },
+];
+let list_actividades = $('#list-actividades');
+incidencia_actividades.forEach((e, i) => {
+    let div_btn = $('<div>', {
+        class: 'btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap', type: 'button', 'data-mdb-ripple-init': '', 'data-mdb-ripple-color': 'dark', 'data-name': e.name, 'data-color': e.color
+    }).append(
+        $('<i>', { class: e.icon + ' me-1' }),
+        e.name.toUpperCase()
+    )
+    div_btn.get(0).addEventListener('click', function () {
+        let dname = (this.getAttribute('data-name')).toUpperCase();
+        let dcolor = this.getAttribute('data-color');
+
+        chartActividades.chart.dispatchAction({
+            type: 'legendToggleSelect',
+            name: dname
+        });
+
+        let selected = chartActividades.chart.getOption().legend[0].selected;
+        if (selected[dname]) {
+            this.classList.add('text-bg-' + dcolor);
+        } else {
+            this.classList.remove('text-bg-' + dcolor);
+        }
+    });
+    list_actividades.append(div_btn);
+});
+
+let chartActividades = new ChartMananger({ id: 'chart-actividades', config: { tipo: 'actividades' } });
+let chartIncidenciaPorFechas = new ChartMananger({ id: 'chart-incidencias-fechas', config: { tipo: 'incidencia_fechas', altura: 35 } });
+let chartNiveles = new ChartMananger({ id: 'chart-niveles', config: { tipo: 'niveles', altura: 32.5 } });
+let chartProblemas = new ChartMananger({ id: 'chart-problemas', config: { tipo: 'problemas', altura: 40 } });
+chartProblemas.chart.on('click', function (params) {
+    let codigo = params.name;
+    var dom = document.getElementById('chart-subproblemas');
+    if (echarts.getInstanceByDom(dom)) {
+        echarts.dispose(dom);
+    }
+    $('#modal_subproblema').modal('show').find('.modal-title').html(params.data.text);
+    setTimeout(() => {
+        var chartSubProblemas = new ChartMananger({ id: 'chart-subproblemas', config: { tipo: 'subproblemas', altura: 60 } });
+        chartSubProblemas.updateOption({ data: subproblemas[codigo] ?? [] });
+    }, 200);
+});
