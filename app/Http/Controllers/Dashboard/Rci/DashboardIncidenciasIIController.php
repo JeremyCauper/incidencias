@@ -45,7 +45,7 @@ class DashboardIncidenciasIIController extends Controller
         // try {
         $ruc = $request->query('ruc');
         $sucursal = $request->query('sucursal');
-        $fechaIni = $request->query('fechaIni') ?: now()->format('Y-m-01');
+        $fechaIni = $request->query('fechaIni') ?: now()->format('Y-01-01');
         $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
         $data = [];
 
@@ -79,19 +79,29 @@ class DashboardIncidenciasIIController extends Controller
         $id_visitas = $visitas->pluck('id')->toArray();
 
         $estados = [
-            ['name' => 'Sin Asignar', 'value' => 0], // 0
-            ['name' => 'Asignada', 'value' => 0], // 1
-            ['name' => 'En Proceso', 'value' => 0], // 2
-            ['name' => 'Finalizado', 'value' => 0], // 3
-            ['name' => 'Faltan Datos', 'value' => 0], // 4
-            ['name' => 'Cierre Sistema', 'value' => 0], // 5
+            ['name' => 'estado-sinasignar', 'value' => 0], // 0
+            ['name' => 'estado-asignados', 'value' => 0], // 1
+            ['name' => 'estado-enproceso', 'value' => 0], // 2
+            ['name' => 'estado-finalizados', 'value' => 0], // 3
+            ['name' => 'estado-faltandatos', 'value' => 0], // 4
+            // ['name' => 'Cierre Sistema', 'value' => 0], // 5
         ];
 
         $niveles = [
-            ['name' => 'n1', 'value' => 0],
-            ['name' => 'n2', 'value' => 0],
-            ['name' => 'n3', 'value' => 0],
+            ['name' => 'n1', 'text' => 'REMOTO', 'color' => 'info', 'value' => 0],
+            ['name' => 'n2', 'text' => 'PRESENCIAL', 'color' => 'warning', 'value' => 0],
+            ['name' => 'n3', 'text' => 'PROVEEDOR', 'color' => 'purple', 'value' => 0],
         ];
+
+        $data['fechas'] = $incidencias->groupBy('fecha_informe')
+            ->map(function ($items, $fecha) {
+                return [
+                    'name' => $fecha,
+                    'total' => count($items), // opcional, más fácil para ordenar
+                ];
+            })
+            ->sortBy('name')
+            ->values();
 
         $incidencias->map(function ($items) use (&$estados) {
             $estados[$items->estado_informe]['value']++;
@@ -179,11 +189,10 @@ class DashboardIncidenciasIIController extends Controller
         $data['contable'] = $incidencias->groupBy($ruc ? 'id_sucursal' : 'ruc_empresa')
             ->map(function ($items, $key) use ($infoData, $ruc) {
                 $name = $ruc ? $infoData[$key]->nombre : $key;
-                $text = $ruc ? $infoData[$key]->nombre : "{$key} - {$infoData[$key]->razon_social}";
+                $text = $ruc ? $infoData[$key]->nombre : $infoData[$key]->razon_social;
                 return [
                     'name' => $name,
                     'text' => $text,
-                    'series' => [($ruc ? 'sucursal' : 'empresa') => $items->count()],
                     'total' => $items->count(), // opcional, más fácil para ordenar
                 ];
             })

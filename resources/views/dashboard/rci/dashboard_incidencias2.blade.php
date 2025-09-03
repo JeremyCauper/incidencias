@@ -35,6 +35,17 @@
                 font-size: .6rem;
             }
         }
+
+        .no-sombrear {
+            user-select: none;
+            /* estándar */
+            -webkit-user-select: none;
+            /* Safari */
+            -moz-user-select: none;
+            /* Firefox */
+            -ms-user-select: none;
+            /* IE/Edge */
+        }
     </style>
 
 @endsection
@@ -73,7 +84,7 @@
                     </div>
                     <div class="col-12 align-items-end d-flex my-1 justify-content-end">
                         <div>
-                            <button type="button" class="btn btn-primary" data-mdb-ripple-init onclick="filtroBusqueda()">
+                            <button type="button" class="btn btn-primary" data-mdb-ripple-init id="btnFiltroBusqueda">
                                 <i class="fas fa-magnifying-glass"></i> Buscar
                             </button>
                         </div>
@@ -84,107 +95,16 @@
     </div>
 
     <div class="col-12" id="chart-container">
+        <div class="row" id="list-estado">
+        </div>
         <div class="row">
-            <div class="col-xxl-2 col-md-4 col-6 mb-2">
-                <div class="card">
-                    <div class="card-body row text-secondary">
-                        <div>
-                            <h6 class="card-title chart-estado-title mb-1">TOTAL INCIDENCIAS</h6>
-                            <h4 class="subtitle-count"><b data-panel="total">0</b></h4>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-2 col-md-4 col-6 mb-2">
-                <div class="card">
-                    <div class="card-body row text-warning">
-                        <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-1">SIN ASIGNAR</h6>
-                            <h4 class="subtitle-count"><b data-panel="sinasignar">0</b></h4>
-                        </div>
-                        <div class="col-5 p-0">
-                            <div id="chart-estado0"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-2 col-md-4 col-6 mb-2">
-                <div class="card">
-                    <div class="card-body row text-info">
-                        <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-1">ASIGNADOS</h6>
-                            <h4 class="subtitle-count"><b data-panel="asignados">0</b></h4>
-                        </div>
-                        <div class="col-5 p-0">
-                            <div id="chart-estado1"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-2 col-md-4 col-6 mb-2">
-                <div class="card">
-                    <div class="card-body row text-primary">
-                        <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-1">EN PROCESO</h6>
-                            <h4 class="subtitle-count"><b data-panel="enproceso">0</b></h4>
-                        </div>
-                        <div class="col-5 p-0">
-                            <div id="chart-estado2"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-2 col-md-4 col-6 mb-2">
-                <div class="card">
-                    <div class="card-body row text-success">
-                        <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-1">FINALIZADOS</h6>
-                            <h4 class="subtitle-count"><b data-panel="finalizados">0</b></h4>
-                        </div>
-                        <div class="col-5 p-0">
-                            <div id="chart-estado3"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xxl-2 col-md-4 col-6 mb-2">
-                <div class="card">
-                    <div class="card-body row text-danger">
-                        <div class="col-7">
-                            <h6 class="card-title chart-estado-title mb-1">FALTAN DATOS</h6>
-                            <h4 class="subtitle-count"><b data-panel="faltandatos">0</b></h4>
-                        </div>
-                        <div class="col-5 p-0">
-                            <div id="chart-estado4"></div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
             <div class="col-12 mb-2">
                 <div class="card">
                     <div class="card-body row">
                         <div class="col-12"
                             style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;">
-                            Cantidad de incidencias por fecha</div>
-                        <div class="col-xl-2 col-lg-3 align-content-center mb-2 py-2">
-                            <div type="button"
-                                class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-primary"
-                                data-mdb-ripple-init data-mdb-ripple-color="dark"
-                                onclick="toggleSeries('INCIDENCIAS', this)">
-                                <i class="fas fa-file-invoice me-1"></i>INCIDENCIAS
-                            </div>
-                            <div type="button"
-                                class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-success"
-                                data-mdb-ripple-init data-mdb-ripple-color="dark" onclick="toggleSeries('VISITAS', this)">
-                                <i class="fas fa-van-shuttle me-1"></i>VISITAS
-                            </div>
-                            <div type="button"
-                                class="btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap text-bg-warning"
-                                data-mdb-ripple-init data-mdb-ripple-color="dark"
-                                onclick="toggleSeries('MANTENIMIENTOS', this)">
-                                <i class="fas fa-screwdriver-wrench me-1"></i>MANTENIMIENTOS
-                            </div>
+                            Actividades del personal por Tecnico</div>
+                        <div class="col-xl-2 col-lg-3 align-content-center mb-2 py-2" id="list-fechas">
                         </div>
                         <div class="col-xl-10 col-lg-9 mb-2">
                             <div id="chart-actividades"></div>
@@ -205,47 +125,8 @@
                     <div class="card-body row">
                         <div class="col-12"
                             style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;">
-                            Cantidad de incidencias por fecha</div>
-                        <div class="col-5 mb-2">
-                            <div class="mt-3 mb-5 mb-2">
-                                <h2 class="mb-0 text-body-secondary" id="total-niveles">164</h2>
-                                <p class="mb-0 text-body-secondary">Total de Niveles</p>
-                            </div>
-                            <ul class="p-0 m-0">
-                                <li class="d-flex align-items-start my-2 p-1 btn-niveles" type="button" data-nivel="n1">
-                                    <div class="flex-shrink-0">
-                                        <div class="p-2 text-bg-info rounded-4 icono-niveles">
-                                            N1
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-0 text-body-secondary text-nowrap">REMOTO</h6>
-                                        <small class="text-body-secondary count-niveles">0</small>
-                                    </div>
-                                </li>
-                                <li class="d-flex align-items-start my-2 p-1 btn-niveles" type="button" data-nivel="n2">
-                                    <div class="flex-shrink-0">
-                                        <div class="p-2 text-bg-secondary rounded-4 icono-niveles">
-                                            N2
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-0 text-body-secondary text-nowrap">PRESENCIAL</h6>
-                                        <small class="text-body-secondary count-niveles">0</small>
-                                    </div>
-                                </li>
-                                <li class="d-flex align-items-start my-2 p-1 btn-niveles" type="button" data-nivel="n3">
-                                    <div class="flex-shrink-0">
-                                        <div class="p-2 text-bg-dark rounded-4 icono-niveles">
-                                            N3
-                                        </div>
-                                    </div>
-                                    <div class="flex-grow-1 ms-3">
-                                        <h6 class="mb-0 text-body-secondary text-nowrap">PROVEEDOR</h6>
-                                        <small class="text-body-secondary count-niveles">0</small>
-                                    </div>
-                                </li>
-                            </ul>
+                            Niveles de incidencia y su frecuencia total</div>
+                        <div class="col-5 mb-2" id="list-niveles">
                         </div>
                         <div class="col-7 mb-2">
                             <div id="chart-niveles"></div>
@@ -255,26 +136,22 @@
             </div>
 
             <div class="col-lg-5 mb-2">
-                <div class="card">
+                <div class="card" style="height: 100%;">
                     <div class="card-body">
                         <div class="col-12"
-                            style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;">
-                            Cantidad de incidencias por fecha</div>
-                        <div class="py-2" id="list-contable" style="height: 37.5vh;">
-                            <ul class="list-group list-group-light">
-                                <li class="list-group-item d-flex justify-content-between align-items-center">
-                                    <div class="d-flex align-items-center">
-                                        <div class="d-flex align-items-center justify-content-center text-bg-dark rounded-circle" style="width: 40px; height: 40px">
-                                            <i class="far fa-building"></i>
-                                        </div>
-                                        <div class="ms-3">
-                                            <p class="fw-bold mb-1">20548795682</p>
-                                            <p class="text-muted mb-0">john.doe@gmail.com</p>
-                                        </div>
-                                    </div>
-                                    <span class="badge rounded-pill badge-success">Active</span>
-                                </li>
-                            </ul>
+                            style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;"
+                            id="title-contable"></div>
+                        <div style="height: 38.1vh;">
+                            <div class="col-xxl-7 col-xl-6 ms-auto pt-3 pb-2">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0" id="search-addon">
+                                        <i class="fas fa-search"></i>
+                                    </span>
+                                    <input class="form-control rounded" id="filterContable" type="search" placeholder="Buscar"
+                                        aria-label="Buscar" aria-describedby="search-addon">
+                                </div>
+                            </div>
+                            <div class="py-2" id="list-contable"></div>
                         </div>
                     </div>
                 </div>

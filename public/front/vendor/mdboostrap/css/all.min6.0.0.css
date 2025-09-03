@@ -25,13 +25,13 @@
     font-variant: normal;
     text-transform: none;
     line-height: 1;
-    min-width: 1.5em;
+    min-width: 1em;
     display: inline-block;
     text-align: center;
     font-size: 1rem;
     vertical-align: middle;
     position: relative;
-    top: -1px;
+    /* top: -1px; */
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale
 }

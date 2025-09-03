@@ -1,11 +1,25 @@
 $(document).ready(function () {
+    let bliColor = {
+        info: '#54b4d3',
+        warning: '#e4a11b',
+        purple: '#7367f0',
+        primary: '#3b71ca',
+        success: '#14a44d',
+        danger: '#dc4c64',
+        light: '#fbfbfb',
+        secondary: '#9fa6b2',
+        dark: '#332d2d',
+    };
+    let subproblemas = {};
+    let contable = [];
+
     $('#empresa').on('change', function () {
         fillSelect(['#sucursal'], sucursales, 'ruc', $(this).val(), 'id', 'nombre', 'status');
     });
 
     $('#dateRango').daterangepicker({
         showDropdowns: true,
-        startDate: date('2020-m-01'),
+        startDate: date('Y-m-01'),
         endDate: date('Y-m-d'),
         maxDate: date('Y-m-d'),
         opens: "center",
@@ -27,11 +41,9 @@ $(document).ready(function () {
     fObservador('.content-wrapper', () => {
         chartActividades.resize();
 
-        chartEstado0.resize();
-        chartEstado1.resize();
-        chartEstado2.resize();
-        chartEstado3.resize();
-        chartEstado4.resize();
+        incidencia_estados.forEach((e, i) => {
+            if (e.chart) e.chart.resize();
+        });
 
         chartIncidenciaPorFechas.resize();
 
@@ -39,503 +51,308 @@ $(document).ready(function () {
         chartNiveles.resize();
     });
 
-    let chartActividades = new ChartMananger({
-        id: 'chart-actividades', config: { tipo: 'actividades' }, data: [
-            {
-                "name": "Vigo M.",
-                "text": "72878242 Renzo Vigo M.",
-                "series": {
-                    "incidencias": 3,
-                    "visitas": 1,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 6,
-                "niveles": {
-                    "n1": 3,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Tecnico",
-                "text": "00000001 Soporte01 Tecnico",
-                "series": {
-                    "incidencias": 6,
-                    "visitas": 3,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 7,
-                "niveles": {
-                    "n1": 5,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Tecnico",
-                "text": "00000002 Soporte02 Tecnico",
-                "series": {
-                    "incidencias": 4,
-                    "visitas": 0,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 9,
-                "niveles": {
-                    "n1": 3,
-                    "n2": 1
-                }
-            },
-            {
-                "name": "Saenz Q.",
-                "text": "40778797 Omar Saenz Q.",
-                "series": {
-                    "incidencias": 16,
-                    "visitas": 5,
-                    "mantenimientos": 2
-                },
-                "transporte": "fas fa-motorcycle text-danger",
-                "idTecnico": 14,
-                "niveles": {
-                    "n1": 15,
-                    "n2": 1
-                }
-            },
-            {
-                "name": "Huerta",
-                "text": "72159292 Alvaro Huerta",
-                "series": {
-                    "incidencias": 3,
-                    "visitas": 2,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 15,
-                "niveles": {
-                    "n1": 3,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Vilcapoma",
-                "text": "77043291 Jherson Vilcapoma",
-                "series": {
-                    "incidencias": 3,
-                    "visitas": 2,
-                    "mantenimientos": 1
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 16,
-                "niveles": {
-                    "n1": 3,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Esteban",
-                "text": "47833900 Gianfranco Esteban",
-                "series": {
-                    "incidencias": 1,
-                    "visitas": 1,
-                    "mantenimientos": 1
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 17,
-                "niveles": {
-                    "n1": 1,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Canchari",
-                "text": "75530490 Khesnil Canchari",
-                "series": {
-                    "incidencias": 0,
-                    "visitas": 0,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 18,
-                "niveles": {
-                    "n1": 0,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Mendoza",
-                "text": "75005472 Daysi Mendoza",
-                "series": {
-                    "incidencias": 0,
-                    "visitas": 0,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 19,
-                "niveles": {
-                    "n1": 0,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Velarde F.",
-                "text": "45458303 Josue Velarde F.",
-                "series": {
-                    "incidencias": 0,
-                    "visitas": 1,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-person-hiking text-success",
-                "idTecnico": 20,
-                "niveles": {
-                    "n1": 0,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Alvarez",
-                "text": "73042819 Rodrigo Alvarez",
-                "series": {
-                    "incidencias": 0,
-                    "visitas": 0,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 23,
-                "niveles": {
-                    "n1": 0,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Trujillo",
-                "text": "71545548 Owen Trujillo",
-                "series": {
-                    "incidencias": 0,
-                    "visitas": 0,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 24,
-                "niveles": {
-                    "n1": 0,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Incio",
-                "text": "73206022 Sebastian Incio",
-                "series": {
-                    "incidencias": 0,
-                    "visitas": 0,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 25,
-                "niveles": {
-                    "n1": 0,
-                    "n2": 0
-                }
-            },
-            {
-                "name": "Escobar",
-                "text": "45716026 Eduardo Escobar",
-                "series": {
-                    "incidencias": 0,
-                    "visitas": 0,
-                    "mantenimientos": 0
-                },
-                "transporte": "fas fa-laptop",
-                "idTecnico": 28,
-                "niveles": {
-                    "n1": 0,
-                    "n2": 0
-                }
-            }
-        ]
+    let incidencia_estados = [
+        {
+            name: "estado-total",
+            text: "TOTAL INCIDENCIAS",
+            color: "purple",
+            chart: false,
+        },
+        {
+            name: "estado-sinasignar",
+            text: "SIN ASIGNAR",
+            color: "warning",
+            chart: true,
+        },
+        {
+            name: "estado-asignados",
+            text: "ASIGNADOS",
+            color: "info",
+            chart: true,
+        },
+        {
+            name: "estado-enproceso",
+            text: "EN PROCESO",
+            color: "primary",
+            chart: true,
+        },
+        {
+            name: "estado-finalizados",
+            text: "FINALIZADOS",
+            color: "success",
+            chart: true,
+        },
+        {
+            name: "estado-faltandatos",
+            text: "FALTAN DATOS",
+            color: "danger",
+            chart: true,
+        },
+    ];
+
+    let list_estado = $('#list-estado');
+    incidencia_estados.forEach((e, i) => {
+        list_estado.append(
+            $('<div>', { class: 'col-xxl-2 col-md-4 col-6 mb-2' }).append(
+                $('<div>', { class: 'card', style: 'height: 100%;' }).append(
+                    $('<div>', { class: 'card-body row', style: 'color: ' + bliColor[e.color] }).append(
+                        $('<div>', { class: e.chart ? 'col-7' : '' }).append(
+                            $('<h6>', { class: 'card-title chart-estado-title mb-1' }).text(e.text),
+                            $('<h4>', { class: 'subtitle-count', id: 'count-' + e.name }).text(0)
+                        ),
+                        e.chart ? $('<div>', { class: 'col-5' }).append($('<div>', { id: 'chart-' + e.name })) : null
+                    )
+                )
+            )
+        );
+        if (e.chart) {
+            e.chart = new ChartMananger({ id: 'chart-' + e.name, config: { tipo: 'estado', altura: 5, bg: bliColor[e.color] }, data: { total: 100, value: 0 } });
+        }
     });
 
-    window.toggleSeries = function (name, event) {
-        let color = {
-            INCIDENCIAS: 'primary',
-            VISITAS: 'success',
-            MANTENIMIENTOS: 'warning',
-        };
-        // simula el click sobre la leyenda
-        chartActividades.chart.dispatchAction({
-            type: 'legendToggleSelect',
-            name: name
+    let incidencia_fechas = [
+        {
+            name: "incidencias",
+            icon: "fas fa-file-invoice",
+            color: "primary",
+        },
+        {
+            name: "visitas",
+            icon: "fas fa-van-shuttle",
+            color: "success",
+        },
+        {
+            name: "mantenimientos",
+            icon: "fas fa-screwdriver-wrench",
+            color: "warning",
+        },
+    ];
+    let list_fechas = $('#list-fechas');
+    incidencia_fechas.forEach((e, i) => {
+        let div_btn = $('<div>', {
+            class: 'btn border text-lg-start d-lg-block my-2 py-lg-4 text-nowrap', type: 'button', 'data-mdb-ripple-init': '', 'data-mdb-ripple-color': 'dark', 'data-name': e.name, 'data-color': e.color
+        }).append(
+            $('<i>', { class: e.icon, style: 'min-width: 1.5em;' }),
+            e.name.toUpperCase()
+        )
+        div_btn.get(0).addEventListener('click', function () {
+            let dname = (this.getAttribute('data-name')).toUpperCase();
+            let dcolor = this.getAttribute('data-color');
+
+            chartActividades.chart.dispatchAction({
+                type: 'legendToggleSelect',
+                name: dname
+            });
+
+            let selected = chartActividades.chart.getOption().legend[0].selected;
+            if (selected[dname]) {
+                this.classList.add('text-bg-' + dcolor);
+            } else {
+                this.classList.remove('text-bg-' + dcolor);
+            }
         });
-
-        let selected = chartActividades.chart.getOption().legend[0].selected;
-        if (selected[name]) {
-            event.classList.add('text-bg-' + color[name]);
-        } else {
-            event.classList.remove('text-bg-' + color[name]);
-        }
-
-    }
-
-    let chartEstado0 = new ChartMananger({ id: 'chart-estado0', config: { tipo: 'estado', altura: 5, bg: '#e4a11b' }, data: { total: 150, value: 28 } });
-    let chartEstado1 = new ChartMananger({ id: 'chart-estado1', config: { tipo: 'estado', altura: 5, bg: '#54b4d3' }, data: { total: 150, value: 35 } });
-    let chartEstado2 = new ChartMananger({ id: 'chart-estado2', config: { tipo: 'estado', altura: 5, bg: '#3b71ca' }, data: { total: 150, value: 24 } });
-    let chartEstado3 = new ChartMananger({ id: 'chart-estado3', config: { tipo: 'estado', altura: 5, bg: '#14a44d' }, data: { total: 150, value: 36 } });
-    let chartEstado4 = new ChartMananger({ id: 'chart-estado4', config: { tipo: 'estado', altura: 5, bg: '#dc4c64' }, data: { total: 150, value: 75 } });
-
-    const generarFechasConMontosIncrementales = (inicio, totalDias) => {
-        const fechas = [];
-        const valores = [];
-        const fechaInicio = new Date(inicio);
-        let monto = 1;
-        for (let i = 0; i < totalDias; i++) {
-            const fechaActual = new Date(fechaInicio);
-            fechaActual.setDate(fechaInicio.getDate() + i);
-
-            const fechaFormateada = fechaActual.toISOString().split('T')[0]; // yyyy-mm-dd
-            fechas.push(fechaFormateada);
-
-            const incremento = Math.floor(Math.random() * 10 + Math.random() * 10 / Math.random() * 10 + Math.random() * 10) + 1;
-            monto += incremento;
-            valores.push(monto);
-        }
-        return { fechas, valores };
-    }
-    const { fechas, valores } = generarFechasConMontosIncrementales('2024-01-01', 1000);
-    let chartIncidenciaPorFechas = new ChartMananger({ id: 'chart-incidencias-fechas', config: { tipo: 'incidencia_fechas', altura: 35 }, data: { fechas: fechas, valores: valores } });
-
-
-    let chartProblemas = new ChartMananger({
-        id: 'chart-problemas', config: { tipo: 'problemas', altura: 40 }, data: [
-            {
-                "name": "PI-0001",
-                "text": "PI-0001 - PROBLEMA DE COMUNICACIÓN",
-                "tipo_soporte": 1,
-                "series": {
-                    "problemas": 27
-                },
-                "total": 27
-            },
-            {
-                "name": "PI-0002",
-                "text": "PI-0002 - PROBLEMAS DE SISTEMA",
-                "tipo_soporte": 1,
-                "series": {
-                    "problemas": 5
-                },
-                "total": 5
-            },
-            {
-                "name": "PS-0003",
-                "text": "PS-0003 - MANTENIMIENTO GENERAL",
-                "tipo_soporte": 2,
-                "series": {
-                    "problemas": 2
-                },
-                "total": 2
-            },
-            {
-                "name": "PS-0002",
-                "text": "PS-0002 - ACTUALIZACION DE SISTEMA",
-                "tipo_soporte": 2,
-                "series": {
-                    "problemas": 1
-                },
-                "total": 1
-            }
-        ]
+        list_fechas.append(div_btn);
     });
 
-    let subproblemas = {
-        "PI-0001": [
-            {
-                "codigo": "PI-0001",
-                "name": "CONFLICTO DE PUERTOS",
-                "text": "P2 - CONFLICTO DE PUERTOS",
-                "series": {
-                    "sub_problemas": 23
-                }
-            },
-            {
-                "codigo": "PI-0001",
-                "name": "PUERTO FANTASMAS",
-                "text": "P2 - PUERTO FANTASMAS",
-                "series": {
-                    "sub_problemas": 2
-                }
-            },
-            {
-                "codigo": "PI-0001",
-                "name": "SURTIDOR APAGADO",
-                "text": "P3 - SURTIDOR APAGADO",
-                "series": {
-                    "sub_problemas": 1
-                }
-            },
-            {
-                "codigo": "PI-0001",
-                "name": "INTERFACE AVERIADA",
-                "text": "P2 - INTERFACE AVERIADA",
-                "series": {
-                    "sub_problemas": 1
-                }
-            }
-        ],
-        "PS-0002": [
-            {
-                "codigo": "PS-0002",
-                "name": "ACTUALIZACION CAMBIO DE SERIES / PREFIJOS",
-                "text": "P3 - ACTUALIZACION CAMBIO DE SERIES / PREFIJOS",
-                "series": {
-                    "sub_problemas": 1
-                }
-            }
-        ],
-        "PI-0002": [
-            {
-                "codigo": "PI-0002",
-                "name": "EXCEPSIÓN DEL CDC ( CLUB PGN)",
-                "text": "P3 - EXCEPSIÓN DEL CDC ( CLUB PGN)",
-                "series": {
-                    "sub_problemas": 1
-                }
-            },
-            {
-                "codigo": "PI-0002",
-                "name": "VENTA PERDIDA",
-                "text": "P3 - VENTA PERDIDA",
-                "series": {
-                    "sub_problemas": 3
-                }
-            },
-            {
-                "codigo": "PI-0002",
-                "name": "PROBLEMAS CON SISTEMA OPERATIVO",
-                "text": "P2 - PROBLEMAS CON SISTEMA OPERATIVO",
-                "series": {
-                    "sub_problemas": 1
-                }
-            }
-        ],
-        "PS-0003": [
-            {
-                "codigo": "PS-0003",
-                "name": "MANTENMIENTO GENERAL DE EESS",
-                "text": "P2 - MANTENMIENTO GENERAL DE EESS",
-                "series": {
-                    "sub_problemas": 2
-                }
-            }
-        ]
-    };
+    let chartActividades = new ChartMananger({ id: 'chart-actividades', config: { tipo: 'actividades' } });
+    let chartIncidenciaPorFechas = new ChartMananger({ id: 'chart-incidencias-fechas', config: { tipo: 'incidencia_fechas', altura: 35 } });
+    let chartNiveles = new ChartMananger({ id: 'chart-niveles', config: { tipo: 'niveles', altura: 32.5 } });
+    let chartProblemas = new ChartMananger({ id: 'chart-problemas', config: { tipo: 'problemas', altura: 40 } });
     chartProblemas.chart.on('click', function (params) {
         let codigo = params.name;
+        var dom = document.getElementById('chart-subproblemas');
+        if (echarts.getInstanceByDom(dom)) {
+            echarts.dispose(dom);
+        }
         $('#modal_subproblema').modal('show').find('.modal-title').html(params.data.text);
         setTimeout(() => {
             var chartSubProblemas = new ChartMananger({ id: 'chart-subproblemas', config: { tipo: 'subproblemas', altura: 60 } });
-            chartSubProblemas.updateOption({ data: subproblemas[codigo] });
+            chartSubProblemas.updateOption({ data: subproblemas[codigo] ?? [] });
         }, 200);
     });
 
 
-    let chartNiveles = new ChartMananger({ id: 'chart-niveles', config: { tipo: 'niveles', altura: 32.5 }, data: { total: 100, value: 0 } });
-    function setNiveles(obj_niveles) {
-        const elementos = document.querySelectorAll('.btn-niveles');
-        let total = obj_niveles.reduce((acc, item) => acc + item.value, 0);
-        document.getElementById('total-niveles').innerHTML = total;
+    function setEstados(obj_estado) {
+        let total = obj_estado.reduce((acc, item) => acc + item.value, 0);
+        $('#count-estado-total').text(total);
 
-        elementos.forEach(el => {
-            var data = obj_niveles.find(n => n.name == el.getAttribute('data-nivel'));
-            el.querySelector('.count-niveles').innerHTML = data.value;
-
-            el.addEventListener('pointerenter', () => {
-                bColor = window.getComputedStyle(el.querySelector('.icono-niveles')).backgroundColor;
-                chartNiveles.updateOption({ config: { color: bColor }, data: { total: total, value: data.value } });
-            });
+        obj_estado.forEach((e, i) => {
+            $('#count-' + e.name).text(e.value);
+            let estado = incidencia_estados.find(ie => ie.name == e.name);
+            if (estado.chart)
+                estado.chart.updateOption({ data: { total: total, value: e.value } });
         });
-        chartNiveles.updateOption({ config: { color: window.getComputedStyle(elementos[0].querySelector('.icono-niveles')).backgroundColor }, data: { total: total, value: obj_niveles[0].value } });
     }
 
-    setNiveles([
-        {
-            "name": "n1",
-            "value": 31,
-        },
-        {
-            "name": "n2",
-            "value": 4,
-        },
-        {
-            "name": "n3",
-            "value": 1,
-        }
-    ]);
+    function setActividades(obj_actividades) {
+        chartActividades.updateOption({ data: obj_actividades });
+        incidencia_fechas.forEach((e, i) => {
+            let div_btn = document.querySelector(`[data-name="${e.name}"]`);
 
-    let contable = [
-        {
-            "name": 20345774042,
-            "text": "20345774042 - SERVICENTRO AGUKI S.A.",
-            "series": {
-                "empresa": 12
-            },
-            "total": 12
-        },
-        {
-            "name": 20127765279,
-            "text": "20127765279 - COESTI S.A.",
-            "series": {
-                "empresa": 9
-            },
-            "total": 9
-        },
-        {
-            "name": 20517103633,
-            "text": "20517103633 - AJ GROUP INVERGAS",
-            "series": {
-                "empresa": 7
-            },
-            "total": 7
-        },
-        {
-            "name": 20603850913,
-            "text": "20603850913 - A.J.C. NEGOCIOS E.I.R.L.",
-            "series": {
-                "empresa": 5
-            },
-            "total": 5
-        },
-        {
-            "name": 20603906790,
-            "text": "20603906790 - TRANSPORTES VALL E.I.R.L.",
-            "series": {
-                "empresa": 2
-            },
-            "total": 2
-        },
-        {
-            "name": 20513567139,
-            "text": "20513567139 - ALTA VIDDA GAS S.A.C.",
-            "series": {
-                "empresa": 1
-            },
-            "total": 1
-        }
-    ];
+            let selected = chartActividades.chart.getOption().legend[0].selected;
+            if (selected[e.name.toUpperCase()]) {
+                div_btn.classList.add('text-bg-' + e.color);
+            } else {
+                div_btn.classList.remove('text-bg-' + e.color);
+            }
+        });
+    }
+
+    function setNiveles(obj_niveles) {
+        let list_niveles = $('#list-niveles');
+        let total = obj_niveles.reduce((acc, item) => acc + item.value, 0);
+        const ul = $('<ul>', { class: 'p-0 m-0' });
+
+        list_niveles.html('').append(
+            $('<div>', { class: 'mt-3 mb-5 mb-2' }).append(
+                $('<h2>', { class: 'mb-0 text-body-secondary' }).text(total),
+                $('<p>', { class: 'mb-0 text-body-secondary' }).text('Total de Niveles'),
+            ),
+            ul
+        );
+
+        obj_niveles.forEach((n, i) => {
+            let li = $('<li>', { class: 'd-flex align-items-start py-1 no-sombrear btn-niveles', type: 'button' })
+                .append(
+                    $('<div>', { class: 'flex-shrink-0' }).append(
+                        $('<div>', { class: 'p-2 text-white rounded-4 icono-niveles', style: 'background-color:' + bliColor[n.color] }).text(n.name.toUpperCase())
+                    ),
+                    $('<div>', { class: 'flex-grow-1 ms-3' }).append(
+                        $('<h6>', { class: 'mb-0 text-body-secondary text-nowrap' }).text(n.text.toUpperCase()),
+                        $('<small>', { class: 'text-body-secondary' }).text(n.value))
+                );
+
+            const handlerEnter = () => {
+                chartNiveles.updateOption({ config: { color: bliColor[n.color] }, data: { total: total, value: n.value } });
+            };
+            const handlerLeave = () => {
+                chartNiveles.updateOption({ config: { color: bliColor[obj_niveles[0].color] }, data: { total: total, value: obj_niveles[0].value } });
+            };
+            li.get(0).removeEventListener('pointerenter', handlerEnter);
+            li.get(0).removeEventListener('pointerleave', handlerLeave);
+
+            li.get(0).addEventListener('pointerenter', handlerEnter);
+            li.get(0).addEventListener('pointerleave', handlerLeave);
+            ul.append(li);
+        });
+        chartNiveles.updateOption({ config: { color: bliColor[obj_niveles[0].color] }, data: { total: total, value: obj_niveles[0].value } });
+    }
 
     function setContable(obj_contable) {
+        let empresa = $('#empresa').val();
         let list_contable = $('#list-contable');
-        const ul = $('<ul>', { class: 'list-group list-group-light' });
+
+        $('#title-contable').text(`Ranking de ${empresa ? 'sucursales' : 'empresas'} según total de incidencias`);
+        if (obj_contable.length) {
+            list_contable.removeClass('text-center py-4').addClass('overflow-auto')
+        } else {
+            list_contable.removeClass('overflow-auto').addClass('text-center py-4').html('<span>No hay datos disponibles</span>');
+            return false;
+        }
+        const ul = $('<ul>', { class: 'list-group list-group-light me-2' });
 
         obj_contable.forEach(c => {
-            let li = $('<li>', { class: 'list-group-item d-flex justify-content-between align-items-center' })
+            let li = $('<li>', { class: 'list-group-item d-flex justify-content-between align-items-center py-2' })
                 .append(
                     $('<div>', { class: 'd-flex align-items-center' }).append(
-                        $('<div>', { class: 'd-flex align-items-center justify-content-center text-bg-dark rounded-circle', style: 'width: 40px; height: 40px' })
-                            .html('<i class="far fa-building"></i>'),
-                        $('<div>', { class: 'ms-3' }).html(`
-                            <p class="fw-bold mb-1">20548795682</p>
-                            <p class="text-muted mb-0">john.doe@gmail.com</p>`)
+                        $('<div>', { class: 'd-grid align-content-center' })
+                            .append($('<i>', { class: (empresa ? 'fas fa-city' : 'far fa-building') + ' text-white' })),
+                        $('<div>', { class: 'ms-3' }).append(
+                            empresa ? null : $('<p>', { class: 'fw-bold mb-0', style: 'font-size: small;' }).text(c.name),
+                            $('<p>', { class: 'text-muted mb-0', style: 'font-size: smaller;' }).text(c.text))
                     ),
-                    $('<span>', { class: 'badge rounded-pill badge-success' }).text(c.total)
+                    $('<span>', { class: 'badge badge-warning rounded' }).text(c.total)
                 );
+            ul.append(li);
         });
+        list_contable.html(ul);
     }
+
+    $('#filterContable').on('input', function () {
+        console.log(contable);
+        if (!$(this).val()) return setContable(contable); // si está vacío, devuelve todo
+        const q = $(this).val().toString().toLowerCase();
+        setContable(contable.filter(item =>
+            item.name.toString().toLowerCase().includes(q) ||
+            item.text.toLowerCase().includes(q)
+        ));
+    });
+
+    // --- Ejemplo de uso ---
+    let promise = null;
+    let controller = null;
+
+    const filtroBusqueda = async () => {
+        var empresa = $('#empresa').val();
+        var sucursal = $('#sucursal').val();
+        var fechas = $('#dateRango').val().split('  al  ');
+
+        // Cancelar la solicitud anterior si sigue en curso
+        if (controller) controller.abort();
+
+        ({ promise, controller } = fetchDashboardIncidencias({
+            ruc: empresa,
+            sucursal: sucursal,
+            fechaIni: fechas[0],
+            fechaFin: fechas[1]
+        }));
+
+        try {
+            const data = await promise; // o promise.then(...)
+            console.log("Datos recibidos:", data);
+            setEstados(data.data.estados);
+            setActividades(data.data.personal);
+            chartIncidenciaPorFechas.updateOption({ data: data.data.fechas });
+            setNiveles(data.data.niveles);
+            setContable(data.data.contable);
+            contable = data.data.contable;
+            chartProblemas.updateOption({ data: data.data.problemas });
+            subproblemas = data.data.subproblemas;
+            
+        } catch (err) {
+            console.warn("Promesa rechazada:", err);
+        }
+    }
+    filtroBusqueda();
+
+    $('#btnFiltroBusqueda').on('click', filtroBusqueda);
 });
+
+// --- Función para consultar el dashboard de incidencias ---
+function fetchDashboardIncidencias({ ruc = "", sucursal = "", fechaIni, fechaFin }) {
+    // Crear un AbortController para poder cancelar la petición
+    const controller = new AbortController();
+    const { signal } = controller;
+
+    // Construcción de la URL dinámicamente con parámetros
+    const baseUrl = "http://localhost/incidencias/public/soporte/dashboard/dashboard-incidencias2/index";
+    const params = new URLSearchParams({ ruc, sucursal, fechaIni, fechaFin });
+    const url = `${baseUrl}?${params.toString()}`;
+
+    // Devolver promesa y también el controlador para cancelar
+    const promise = new Promise(async (resolve, reject) => {
+        try {
+            const response = await fetch(url, { signal });
+
+            if (!response.ok) {
+                alert(`❌ Error en la petición: ${response.status} ${response.statusText}`);
+                return reject(new Error(`HTTP error: ${response.status}`));
+            }
+
+            const data = await response.json();
+            // alert("✅ Petición realizada con éxito");
+            resolve(data);
+
+        } catch (error) {
+            if (error.name === "AbortError") {
+                alert("⚠️ Petición cancelada por el usuario");
+            } else {
+                alert("🚨 Ocurrió un error en la petición");
+                console.error("Error en fetchDashboardIncidencias:", error);
+            }
+            reject(error);
+        }
+    });
+
+    return { promise, controller };
+}
