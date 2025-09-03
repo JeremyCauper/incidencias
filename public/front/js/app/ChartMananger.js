@@ -146,27 +146,37 @@ class ChartMananger {
                             axisPointer: {
                                 type: "shadow"
                             },
+                            extraCssText: `padding: 0 !important; background: transparent !important;`,
                             formatter: (params) => {
-                                let result = `<strong style="font-size:.725rem;"><i class="${params[0].data.data.transporte}"></i> ${params[0].data.text}</strong><br>`;
+                                let result = `
+                                <div class="card bg-white" style="width: 14rem; font-size:.725rem; margin:0; color: #86898eff;">
+                                    <div class="card-body" style="padding:.5rem;">
+                                        <strong>
+                                            <i class="${params[0].data.data.transporte}"></i> ${params[0].data.text}
+                                        </strong>`;
 
                                 params.forEach(item => {
                                     const value = item.data.value;
                                     const data = item.data.data;
-                                    result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
+                                    result += `
+                                    <div style="font-size:.7rem; margin:0px; padding:0;">
+                                        ${item.marker} <span>${item.seriesName}</span>: <b>${value}</b>
+                                    </div>`;
 
-                                    if (item.seriesName == "INCIDENCIAS") {
-                                        result += `<ul style="font-size:.7rem;">
-                                        <li>N1 - REMOTO: ${data.niveles.n1}</li>
-                                        <li>N2 - PRESENCIAL: ${data.niveles.n2}</li>
-                                    </ul>`;
+                                    if (item.seriesName === "INCIDENCIAS") {
+                                        result += `
+                                        <ul style="font-size:.7rem; margin:0px 0 0 32px; padding:0;">
+                                            <li style="margin:0px; padding:0;">N1 - REMOTO: ${data.niveles.n1}</li>
+                                            <li style="margin:0px; padding:0;">N2 - PRESENCIAL: ${data.niveles.n2}</li>
+                                        </ul>`;
                                     }
                                 });
+                                result += `</div></div>`;
+
                                 return result;
                             }
+                            ,
                         },
-                        // legend: {
-                        //     show: false,
-                        // },
                         grid: [
                             {
                                 left: '5%',
