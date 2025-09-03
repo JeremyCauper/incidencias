@@ -133,7 +133,7 @@
                                 $contentSelect.hide();
                                 $dateGroup.show();
                                 $select.val("1").trigger("change.select2");
-                                $dateInput.data('daterangepicker').setStartDate(date('Y-m-01'));
+                                $dateInput.data('daterangepicker').setStartDate(date('Y-01-01'));
                                 $dateInput.data('daterangepicker').setEndDate(date('Y-m-d'));
                             }
                             localStorage.setItem("estadoFecha", estado);
