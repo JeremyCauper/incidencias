@@ -340,7 +340,7 @@ chartProblemas.chart.on('click', function (params) {
     }
     $('#modal_subproblema').modal('show').find('.modal-title').html(params.data.text);
     setTimeout(() => {
-        var chartSubProblemas = new ChartMananger({ id: 'chart-subproblemas', config: { tipo: 'subproblemas', altura: 60 } });
+        var chartSubProblemas = new ChartMananger({ id: 'chart-subproblemas', config: { tipo: 'subproblemas', altura: 70 } });
         chartSubProblemas.updateOption({ data: subproblemas[codigo] ?? [] });
     }, 200);
 });

@@ -133,7 +133,7 @@
                                 $contentSelect.hide();
                                 $dateGroup.show();
                                 $select.val("1").trigger("change.select2");
-                                $dateInput.data('daterangepicker').setStartDate(date('Y-01-01'));
+                                $dateInput.data('daterangepicker').setStartDate(date('Y-m-01'));
                                 $dateInput.data('daterangepicker').setEndDate(date('Y-m-d'));
                             }
                             localStorage.setItem("estadoFecha", estado);
@@ -214,7 +214,7 @@
                         <div class="col-12"
                             style="color: #9fa6b2; font-family: Arial, sans-serif; font-size: 13.8px; font-weight: 700;"
                             id="title-contable">Ranking de empresas según total de incidencias</div>
-                        <div style="height: 38.1vh;">
+                        <div>
                             <div class="col-xxl-7 col-xl-6 ms-auto pt-3 pb-2">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0" id="search-addon">
@@ -224,7 +224,7 @@
                                         placeholder="Buscar" aria-label="Buscar" aria-describedby="search-addon">
                                 </div>
                             </div>
-                            <div class="py-2" id="list-contable"></div>
+                            <div class="py-2" id="list-contable" style="height: 31.9vh;"></div>
                         </div>
                     </div>
                 </div>
