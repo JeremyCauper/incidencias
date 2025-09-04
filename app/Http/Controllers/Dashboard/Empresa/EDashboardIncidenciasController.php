@@ -123,7 +123,7 @@ class EDashboardIncidenciasController extends Controller
                 return [
                     'name' => $name,
                     'text' => $text,
-                    'series' => ['sucursal' => $items->count()],
+                    'total' => $items->count(), // opcional, más fácil para ordenar
                 ];
             })
             ->take(10)
