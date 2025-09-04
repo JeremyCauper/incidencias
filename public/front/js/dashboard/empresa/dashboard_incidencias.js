@@ -85,7 +85,7 @@ $(document).ready(function () {
                 .append(
                     $('<div>', { class: 'd-flex align-items-center' }).append(
                         $('<div>', { class: 'd-grid align-content-center' })
-                            .append($('<i>', { class: (empresa ? 'fas fa-city' : 'far fa-building') + ' text-white' })),
+                            .append($('<i>', { class: (empresa ? 'fas fa-city' : 'far fa-building') })),
                         $('<div>', { class: 'ms-3' }).append(
                             empresa ? null : $('<p>', { class: 'fw-bold mb-0', style: 'font-size: small;' }).text(c.name),
                             $('<p>', { class: 'text-muted mb-0', style: 'font-size: smaller;' }).text(c.text))
