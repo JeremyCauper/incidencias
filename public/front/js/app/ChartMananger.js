@@ -128,6 +128,9 @@ class ChartMananger {
                                 }
                             },
                             barMaxWidth: 30,
+                            itemStyle: {
+                                borderRadius: [5, 5, 0, 0] // arriba-izq, arriba-der, abajo-der, abajo-izq
+                            },
                             data: this.data.map(item => ({
                                 value: item.series[key],
                                 text: item.text,
@@ -293,6 +296,7 @@ class ChartMananger {
                         series: [
                             {
                                 type: 'line',
+                                smooth: true,
                                 symbolSize: 0,
                                 color: '#3b71ca',
                                 areaStyle: {
@@ -408,7 +412,7 @@ class ChartMananger {
                                 let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
                                 params.forEach(item => {
                                     const value = item.data.value;
-                                    result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
+                                    result += `${item.marker} <span style="font-size:.7rem;">Total</span>: <b>${value}</b><br/>`;
                                 });
                                 return result;
                             }
@@ -420,7 +424,7 @@ class ChartMananger {
                         grid: [
                             {
                                 left: '12%',
-                                right: '4%',
+                                right: '12%',
                                 top: '15%',
                                 bottom: '10%'
                             }
@@ -466,6 +470,15 @@ class ChartMananger {
                                 show: false,
                             },
                             barMaxWidth: 30,
+                            itemStyle: {
+                                borderRadius: [0, 5, 5, 0] // arriba-izq, arriba-der, abajo-der, abajo-izq
+                            },
+                            label: {
+                                show: true,
+                                position: 'right',
+                                valueAnimation: true,
+                                color: '#948f8f'
+                            },
                             data: this.data.map(item => ({
                                 value: item.series[key[0]],
                                 text: item.text,
@@ -509,7 +522,7 @@ class ChartMananger {
                                 let result = `<strong style="font-size:.725rem;">${params[0].data.text}</strong><br>`;
                                 params.forEach(item => {
                                     const value = item.data.value;
-                                    result += `${item.marker} <span style="font-size:.7rem;">${item.seriesName}</span>: <b>${value}</b><br/>`;
+                                    result += `${item.marker} <span style="font-size:.7rem;">Total</span>: <b>${value}</b><br/>`;
                                 });
                                 return result;
                             }
@@ -520,8 +533,8 @@ class ChartMananger {
                         ,
                         grid: [
                             {
-                                left: '25%',
-                                right: '4%',
+                                left: '30%',
+                                right: '12%',
                                 top: '15%',
                                 bottom: '10%'
                             }
@@ -564,9 +577,15 @@ class ChartMananger {
                             type: "bar",
                             barGap: 0,
                             label: {
-                                show: false,
+                                show: true,
+                                position: 'right',
+                                valueAnimation: true,
+                                color: '#948f8f'
                             },
                             barMaxWidth: 30,
+                            itemStyle: {
+                                borderRadius: [0, 5, 5, 0] // arriba-izq, arriba-der, abajo-der, abajo-izq
+                            },
                             data: this.data.map(item => ({
                                 value: item.series[key[0]],
                                 text: item.text,
