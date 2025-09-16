@@ -108,12 +108,18 @@ $(document).ready(function () {
 
     let promise = null;
     let controller = null;
-    let filterAvanzado = async () => {
+    let intervalID;
+    let timeoutID;
+    const INTERVALO = 5 * 60 * 1000; // 5 minutos
+    let ultimaEjecucionFilterAvanzado;
+
+    // Función principal asincrónica
+    const filterAvanzado = async () => {
         const empresa = $('#empresa').val();
         const sucursal = $('#sucursal').val();
         const [fechaIni, fechaFin] = $('#dateRango').val().split(' a ');
 
-        // Cancelar petición anterior si sigue activa
+        // Cancelar petición anterior si aún no termina
         if (controller) controller.abort();
 
         ({ promise, controller } = fetchDashboardIncidencias({
@@ -125,11 +131,10 @@ $(document).ready(function () {
 
         try {
             const { data } = await promise;
-            // console.log("✅ Datos recibidos:", data);
 
-            // Mapear datos en un solo lugar
             const acciones = {
                 estados: setEstados,
+                personal: setActividades,
                 fechas: (d) => chartIncidenciaPorFechas.updateOption({ data: d }),
                 niveles: setNiveles,
                 contable: (d) => { setContable(d); contable = d; },
@@ -141,28 +146,49 @@ $(document).ready(function () {
                 if (data[key] !== undefined) fn(data[key]);
             });
 
+            ultimaEjecucionFilterAvanzado = Date.now();
+            console.log('ejecutado ' + date('Y-m-d H:i:s'));
         } catch (err) {
             boxAlert.box({ i: 'error', t: 'Petición rechazada', h: 'Hubo un inconveniente al procesar los datos.' });
             console.warn("⚠️ Promesa rechazada:", err);
         }
+    };
+
+    // Lógica del intervalo
+    function iniciarIntervalo() {
+        clearInterval(intervalID);
+        intervalID = setInterval(filterAvanzado, INTERVALO);
     }
-    // Eventos
-    $('#btnFiltroAvanzado').on('click', filterAvanzado);
-    filterAvanzado();
 
-    let intervalID = setInterval(filterAvanzado, 5 * 60 * 1000); // Ejecuta cada 5 min
+    // Iniciar el proceso automáticamente
+    filterAvanzado().then(iniciarIntervalo);
 
+    // Botón manual
+    $('#btnFiltroAvanzado').on('click', () => {
+        filterAvanzado().then(iniciarIntervalo);
+    });
+
+    // Visibilidad de pestaña
     document.addEventListener('visibilitychange', function () {
         if (document.visibilityState === 'hidden') {
             document.title = 'PROCESO EN PAUSA!!';
-            // Detener el intervalo
             clearInterval(intervalID);
         } else if (document.visibilityState === 'visible') {
             document.title = 'ANALISIS DE INCIDENCIAS';
-            // Reanudar el intervalo
-            intervalID = setInterval(filterAvanzado, 5 * 60 * 1000);
-            // Si quieres que se ejecute inmediatamente al volver:
-            filterAvanzado();
+
+            const ultimaEjecucion = ultimaEjecucionFilterAvanzado;
+            const ahora = Date.now();
+            const tiempoTranscurrido = ahora - ultimaEjecucion;
+
+            if (tiempoTranscurrido >= INTERVALO) {
+                filterAvanzado().then(iniciarIntervalo);
+            } else {
+                const tiempoRestante = INTERVALO - tiempoTranscurrido;
+                clearTimeout(timeoutID);
+                timeoutID = setTimeout(() => {
+                    filterAvanzado().then(iniciarIntervalo());
+                }, tiempoRestante);
+            }
         }
     });
 });
