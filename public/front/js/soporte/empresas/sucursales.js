@@ -127,7 +127,7 @@ document.getElementById('form-sucursal').addEventListener('submit', function (ev
 
 function Editar(id) {
     try {
-        $('#modal_sucursalesLabel').html('EDITAR EMPRESA');
+        $('#modal_sucursalesLabel').html('EDITAR SUCURSAL');
         $('#modal_sucursales').modal('show');
         fMananger.formModalLoding('modal_sucursales', 'show');
         $.ajax({
@@ -143,7 +143,7 @@ function Editar(id) {
                 $('#id').val(json.id);
                 $('#empresa').val(json.ruc).trigger('change');
                 $('#sucursal').val(json.nombre);
-                $('#cofide').val(json.cofide);
+                $('#codCofide').val(json.cofide);
                 $('#direccion').val(json.direccion);
                 $('#ubigeo').val(json.ubigeo).trigger('change');
                 $('#telefonoS').val(json.telefono);

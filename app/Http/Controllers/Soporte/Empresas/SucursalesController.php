@@ -75,7 +75,7 @@ class SucursalesController extends Controller
             $validator = Validator::make($request->all(), [
                 'empresa' => 'required|integer',
                 'sucursal' => 'required|string',
-                'cofide' => 'nullable|string',
+                'codCofide' => 'nullable|string',
                 'direccion' => 'required|string',
                 'ubigeo' => 'required|string',
                 'telefonoS' => 'nullable|string',
@@ -93,7 +93,7 @@ class SucursalesController extends Controller
             DB::table('tb_sucursales')->insert([
                 'ruc' => $request->empresa,
                 'nombre' => $request->sucursal,
-                'cofide' => $request->cofide,
+                'cofide' => $request->codCofide,
                 'direccion' => $request->direccion,
                 'ubigeo' => $request->ubigeo,
                 'telefono' => $request->telefonoS,
@@ -152,7 +152,7 @@ class SucursalesController extends Controller
                 'id' => 'required|integer',
                 'empresa' => 'required|integer',
                 'sucursal' => 'required|string',
-                'cofide' => 'nullable|string',
+                'codCofide' => 'nullable|string',
                 'direccion' => 'required|string',
                 'ubigeo' => 'required|string',
                 'telefonoS' => 'nullable|string',
@@ -170,7 +170,7 @@ class SucursalesController extends Controller
             DB::table('tb_sucursales')->where('id', $request->id)->update([
                 'ruc' => $request->empresa,
                 'nombre' => $request->sucursal,
-                'cofide' => $request->cofide,
+                'cofide' => $request->codCofide,
                 'direccion' => $request->direccion,
                 'ubigeo' => $request->ubigeo,
                 'telefono' => $request->telefonoS,
