@@ -13,7 +13,7 @@
     <script>
         const CORRECT_CODE = '4321';
         let acceso_lista = localStorage.getItem("acceso_lista");
-        const url_base = "{{ url('/') }}";
+        const url_base = "{{ secure_url('/') }}";
 
         // Verificar si han pasado más de 30 minutos (1800000 ms)
         let tiempoTranscurrido = new Date().getTime() - parseInt(acceso_lista);

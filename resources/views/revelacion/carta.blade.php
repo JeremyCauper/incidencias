@@ -14,10 +14,11 @@
 
 <body>
     <script>
+        const url_base = "{{ secure_url('/') }}";
         // Verificamos si tiene acceso
         if (localStorage.getItem("carta_acceso") !== "true") {
             // No tiene permiso, redirigimos al sobre
-            window.location.href = "{{ url('revelacion/sobre') }}";
+            window.location.href = "{{ secure_url('revelacion/sobre') }}";
         } else {
             // Tiene acceso, borramos el permiso para que no pueda recargar directo
             if (!localStorage.getItem("invitado")) {
@@ -44,7 +45,7 @@
                             </textPath>
                         </text>
                     </svg>
-                    <img src="{{ secure_asset('front/revelacion/img/carta/papas.jpeg') }}" alt="Papás">
+                    <img src="{{ secure_asset('front/revelacion/img/carta/papas.webp') }}" alt="Papás">
                 </div>
 
                 <div class="concepto">
@@ -56,7 +57,7 @@
                 </div>
 
                 <div class="presentacion-bebe">
-                    <img src="{{ secure_asset('front/revelacion/img/carta/bebe.jpeg') }}" alt="Bebé">
+                    <img src="{{ secure_asset('front/revelacion/img/carta/bebe.webp') }}" alt="Bebé">
                     <p>Hola, soy el bebé y muy pronto sabrás si estaré en el Team Niño o Team Niña 💕</p>
                 </div>
 
@@ -152,8 +153,8 @@
                 </div>
             </div>
         </div>
-        <img src="{{secure_asset('front/revelacion/img/carta/flores.png')}}" alt="" class="flores-carta">
-        <img src="{{secure_asset('front/revelacion/img/carta/osito.png')}}" alt="" class="osito-carta">
+        <img src="{{secure_asset('front/revelacion/img/carta/flores.webp')}}" alt="" class="flores-carta">
+        <img src="{{secure_asset('front/revelacion/img/carta/osito.webp')}}" alt="" class="osito-carta">
     </div>
 
     <!-- Modal Confirmacion -->

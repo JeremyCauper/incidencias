@@ -7,6 +7,20 @@ document.querySelectorAll('.team-box').forEach(box => {
     });
 });
 
+const nombres_input = document.getElementById("nombres");
+nombres_input.addEventListener("input", () => {
+    nombres_input.value = nombres_input.value
+        .toLowerCase()
+        .replace(/\b\w/g, letra => letra.toUpperCase());
+});
+
+const apellidos_input = document.getElementById("apellidos");
+apellidos_input.addEventListener("input", () => {
+    apellidos_input.value = apellidos_input.value
+        .toLowerCase()
+        .replace(/\b\w/g, letra => letra.toUpperCase());
+});
+
 document.querySelector(".btn-ubicacion").addEventListener("click", function () {
     // Opción 1: usando coordenadas
     // const lat = -12.091942299991093;
