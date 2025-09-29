@@ -222,3 +222,23 @@ Route::get('/empresa/dashboard/dashboard-incidencias/index', [EDashboardIncidenc
 
 // Apis
 Route::get('/listado/materiales-usados', [MaterialesController::class, 'MaterialesUsados']);
+
+
+
+
+
+Route::get('/revelacion', function () {
+    return redirect('/revelacion/sobre');
+});
+
+Route::get('/revelacion/sobre', function () {
+    return view('revelacion.sobre');
+});
+
+Route::get('/revelacion/carta-invitacion', function () {
+    return view('revelacion.carta');
+});
+
+Route::get('/revelacion/listado-invitados', function () {
+    return view('revelacion.listaInvitados');
+});
