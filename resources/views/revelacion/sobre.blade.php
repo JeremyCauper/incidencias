@@ -13,7 +13,7 @@
 <body>
   <div class="contenedor">
     <div class="sobre">
-      <img src="{{ secure_asset('front/revelacion/img/sobre/lazo.png') }}" alt="" class="lazo">
+      <img src="{{ secure_asset('front/revelacion/img/sobre/lazo.webp') }}" alt="" class="lazo">
       <div class="sobre-title">
         <h1>Niño</h1>
         <h1>o</h1>
@@ -22,12 +22,11 @@
       <div class="sobre-body">
         <div class="envelope-3d" id="btnIrCarta">
           <script>
-            const url_base = "{{ url('/') }}";
             document.getElementById("btnIrCarta").addEventListener("click", () => {
               // Marcamos en localStorage que ya pasó por aquí
               localStorage.setItem("carta_acceso", "true");
               // Redirigimos a carta.html
-              window.location.href = "{{ url('revelacion/carta-invitacion') }}";
+              window.location.href = "{{ secure_url('revelacion/carta-invitacion') }}";
             });
           </script>
           <div class="envelope-flap-top"></div>
