@@ -231,6 +231,44 @@ function date(format) {
     return format.replace(/[YmdHisjwnGaA]/g, (match) => map[match]);
 }
 
+/**
+ * Devuelve el saludo apropiado según la hora.
+ * @param {Object} options Opciones (opcionales)
+ * @param {Date}  options.date   Fecha/hora a evaluar (por defecto: ahora)
+ * @param {string} options.timeZone Time zone IANA (ej. "America/Lima"). Si no se especifica, usa la hora local.
+ * @param {Object} options.ranges  Rangos horarios opcionales { morningStart, afternoonStart, nightStart } en horas 0-23
+ * @returns {string} "Buenos días" | "Buenas tardes" | "Buenas noches"
+ */
+function saludoPorHora(options = {}) {
+    const { date = new Date(), timeZone, ranges } = options;
+
+    // rangos por defecto
+    const {
+        morningStart = 5,   // desde 05:00
+        afternoonStart = 12,// desde 12:00
+        nightStart = 20     // desde 20:00
+    } = ranges || {};
+
+    // obtener la hora en la zona especificada (o local si timeZone undefined)
+    let hour;
+    if (timeZone) {
+        // toLocaleString devuelve la hora como "07" o "19" según configuración
+        const parts = new Date(date).toLocaleString('en-US', {
+            timeZone,
+            hour: '2-digit',
+            hour12: false
+        });
+        hour = parseInt(parts, 10);
+    } else {
+        hour = new Date(date).getHours();
+    }
+
+    if (hour >= morningStart && hour < afternoonStart) return 'Buenos días';
+    if (hour >= afternoonStart && hour < nightStart) return 'Buenas tardes';
+    // resto -> noche (incluye 0..4 y >=20)
+    return 'Buenas noches';
+}
+
 let xhrConsultaDni = null;
 async function consultarDoc(dni) {
     if (xhrConsultaDni) {

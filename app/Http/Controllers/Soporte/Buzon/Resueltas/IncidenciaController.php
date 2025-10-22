@@ -37,6 +37,7 @@ class IncidenciaController extends Controller
                 })->map(function ($incidencia) use ($ordenes, $seguimientos) {
                     $orden = $ordenes->get($incidencia->cod_incidencia)?->first();
                     $seguimiento = $seguimientos[$incidencia->cod_incidencia] ?? collect();
+                    $tecnico = $this->formatearNombre(Auth::user()->nombres, Auth::user()->apellidos);
 
                     return [
                         'cod_inc' => $incidencia->cod_incidencia ?? null,
@@ -50,7 +51,8 @@ class IncidenciaController extends Controller
                             'button' => [
                                 ['funcion' => "ShowDetailInc(this, '$incidencia->cod_incidencia')", 'texto' => '<i class="fas fa-eye text-info me-2"></i> Ver Detalle'],
                                 ['funcion' => "OrdenPdfInc('$orden->cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
-                                ['funcion' => "OrdenTicketInc('$orden->cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket']
+                                ['funcion' => "OrdenTicketInc('$orden->cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket'],
+                                ['funcion' => "CompartirWhatsApp('$tecnico', '$orden->cod_ordens')", 'texto' => '<i class="fab fa-whatsapp text-success me-2"></i> Compartir WhatsApp'],
                             ]
                         ])
                     ];
