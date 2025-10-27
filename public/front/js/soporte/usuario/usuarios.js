@@ -1,71 +1,67 @@
 $(document).ready(function () {
-    const controles = [
-        // Formulario grupos
+    configControls([
         {
             control: '#id_area',
-            config: {
-                require: true
-            }
+            addLabel: 'Area',
+            requested: true
         },
         {
             control: '#n_doc',
-            config: {
-                "control-type": "int",
-                mnl: 8,
-                mxl: 20,
-                require: true,
-                errorMessage: "El numero de DNI es invalido.",
-                mask: { reg: "99999999999" }
-            }
+            addLabel: 'Dni/Carnet E.',
+            controlType: "ndoc",
+            requested: true,
         },
         {
-            control: ['#nom_usu', '#ape_usu'],
-            config: {
-                mxl: 100,
-                require: true
-            }
+            control: '#nom_usu',
+            addLabel: 'Nombres',
+            mxl: 100,
+            requested: true
         },
         {
-            control: ['#emailp_usu', '#emailc_usu'],
-            config: {
-                "control-type": "email",
-                mxl: 250
-            }
+            control: '#ape_usu',
+            addLabel: 'Apellidos',
+            mxl: 100,
+            requested: true
+        },
+        {
+            control: '#emailp_usu',
+            addLabel: 'Correo Personal',
+            controlType: "email",
+            mxl: 250
+        },
+        {
+            control: '#emailc_usu',
+            addLabel: 'Correo Corporativo',
+            controlType: "email",
+            mxl: 250
         },
         {
             control: '#fechan_usu',
-            config: {}
+            addLabel: 'Fecha de Nacimiento',
         },
         {
-            control: ['#telp_usu', '#telc_usu'],
-            config: {
-                "control-type": "int",
-                mxl: 9,
-                mask: { reg: "999999999" }
-            }
+            control: '#telp_usu',
+            addLabel: 'Tel. Personal',
+            controlType: "tel",
+        },
+        {
+            control: '#telc_usu',
+            addLabel: 'Tel. Corporativo',
+            controlType: "tel",
         },
         {
             control: ['#usuario', '#contrasena'],
-            config: {
-                mxl: 50,
-                require: true
-            }
+            mxl: 50,
+            requested: true
         },
         {
             control: '#modo_transporte',
-            config: {}
         },
         {
             control: '#tipo_acceso',
-            config: {
-                require: true
-            }
+            requested: true
         }
-    ];
-
-    controles.forEach(control => {
-        defineControllerAttributes(control.control, control.config);
-    });
+    ]);
 
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_usuariosLabel').html('REGISTRAR USUARIO');
@@ -134,7 +130,7 @@ document.getElementById('form-usuario').addEventListener('submit', function (eve
 
     $.ajax({
         type: 'POST',
-        url: `${__url}/soporte/control-de-usuario/personal-rci/${ $('#id').val() ? 'actualizar' : 'registrar' }`,
+        url: `${__url}/soporte/control-de-usuario/personal-rci/${$('#id').val() ? 'actualizar' : 'registrar'}`,
         contentType: 'application/json',
         headers: {
             'X-CSRF-TOKEN': __token,

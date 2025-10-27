@@ -115,36 +115,31 @@
                     <div class="row">
                         <input type="hidden" name="id" id="id">
                         <div class="col-lg-6 mb-2">
-                            <label class="form-label mb-0" for="descripcion">Descripcion</label>
                             <input class="form-control" id="descripcion">
                         </div>
                         <div class="col-lg-6 mb-2">
                             <label class="form-label mb-0" for="icono">Icono</label>
                             <div class="input-group">
                                 <span class="input-group-text rounded me-1 px-2"><i class="fas fa-question" aria-label="icono"></i></span>
-                                <input type="text" class="form-control rounded" id="icono">
+                                <input type="text" class="form-control rounded" id="icono" name="icono" requested="Icono">
                             </div>
                         </div>
                         <div class="col-lg-12 col-8 mb-2">
-                            <label class="form-label mb-0" for="ruta">Ruta</label>
                             <input class="form-control" id="ruta">
                         </div>
                         <div class="col-lg-4 col-4 mb-2">
-                            <label class="form-label mb-0" for="submenu">Sub Menu</label>
                             <select class="select" id="submenu">
                                 <option value="1">Sí</option>
                                 <option selected value="0">No</option>
                             </select>
                         </div>
                         <div class="col-lg-4 col-6 mb-2">
-                            <label class="form-label mb-0" for="desarrollo">En Desarrollo</label>
                             <select class="select" id="desarrollo">
                                 <option value="1">Sí</option>
                                 <option selected value="0">No</option>
                             </select>
                         </div>
                         <div class="col-lg-4 col-6 mb-2">
-                            <label class="form-label mb-0" for="estado">Estado</label>
                             <select class="select" id="estado">
                                 <option selected value="1">Activo</option>
                                 <option value="0">Inactivo</option>

@@ -2173,6 +2173,7 @@ label.custom-control {
     font-family: 'Arial';
     color: #888a8d;
     margin-bottom: .2rem;
+    text-transform: capitalize;
 }
 
 .contenedor_tabla {
@@ -2385,6 +2386,7 @@ label.custom-control {
 
 
 .dataTables_scrollHead {
+    background-color: var(--mdb-primary);
     height: 36px !important;
     border-radius: .35rem;
 }
@@ -2628,11 +2630,11 @@ label.custom-control {
     padding: .5rem 0;
 }
 
-.required {
+.requested {
     position: relative;
 }
 
-.required::before {
+.requested::before {
     content: '*';
     position: absolute;
     color: #dc4c64;

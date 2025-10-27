@@ -89,9 +89,8 @@
                             (*)</span>
                     </div>
                     <div class="row">
-                        <div class="col-xl-3 col-6 mb-3">
                             <input type="hidden" name="id" id="id">
-                            <label class="form-label mb-0" for="id_area">Area</label>
+                        <div class="col-xl-3 col-6 mb-3">
                             <select id="id_area" class="select">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($areas as $r)
@@ -100,47 +99,37 @@
                             </select>
                         </div>
                         <div class="col-xl-3 col-6 mb-3">
-                            <label class="form-label mb-0" for="n_doc">Dni/Carnet E.</label>
                             <input class="form-control" id="n_doc">
                         </div>
                         <div class="col-xl-3 col-6 mb-3">
-                            <label class="form-label mb-0" for="nom_usu">Nombres</label>
                             <input class="form-control" id="nom_usu">
                         </div>
                         <div class="col-xl-3 col-6 mb-3">
-                            <label class="form-label mb-0" for="ape_usu">Apellidos</label>
                             <input class="form-control" id="ape_usu">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-5 col-6 mb-3">
-                            <label class="form-label mb-0" for="emailp_usu">Correo Personal</label>
                             <input class="form-control" id="emailp_usu">
                         </div>
                         <div class="col-lg-5 col-6 mb-3">
-                            <label class="form-label mb-0" for="emailc_usu">Correo Corporativo</label>
                             <input class="form-control" id="emailc_usu">
                         </div>
                         <div class="col-lg-2 mb-3 form-date">
-                            <label class="form-label mb-0" for="fechan_usu">Fecha de Nacimiento</label>
                             <input class="form-control" id="fechan_usu">
                         </div>
                     </div>
                     <div class="row">
                         <div class="col-lg-3 col-6 mb-3">
-                            <label class="form-label mb-0" for="telp_usu">Tel. Personal</label>
                             <input class="form-control" id="telp_usu">
                         </div>
                         <div class="col-lg-3 col-6 mb-3">
-                            <label class="form-label mb-0" for="telc_usu">Tel. Corporativo</label>
                             <input class="form-control" id="telc_usu">
                         </div>
                         <div class="col-lg-3 col-6 mb-3">
-                            <label class="form-label mb-0" for="usuario">Usuario</label>
                             <input class="form-control" id="usuario">
                         </div>
                         <div class="col-lg-3 col-6 mb-3">
-                            <label class="form-label mb-0" for="contrasena">Contraseña</label>
                             <input class="form-control" id="contrasena">
                         </div>
                     </div>
@@ -189,7 +178,6 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-4">
-                            <label class="form-label mb-0" for="modo_transporte">Modo de Transporte</label>
                             <select class="select-clear-nsearch" id="modo_transporte">
                                 <option value="">-- Seleccione --</option>
                                 <option value="1">Sin vehículo</option>
@@ -197,7 +185,6 @@
                             </select>
                         </div>
                         <div class="col-4">
-                            <label class="form-label mb-0" for="tipo_acceso">Tipo Personal</label>
                             <select class="select" id="tipo_acceso">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($tipoAcceso as $r)

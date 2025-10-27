@@ -16,122 +16,112 @@ function fillSelect(selector, data, filterField, filterValue, optionValue, optio
     $(selector[0]).attr('disabled', false);
 }
 
-function configControls(selector, config) {
-    const configuracion = (control, config) => {
-        const input = $(control);
-        if (!input) return console.log(`El control "${control}" no existe`);
-        const { mxl: maxlength, mnl: minlength, mask } = config;
-        if (maxlength) input.attr('maxlength', maxlength);
-        if (minlength) input.attr('minlength', minlength);
-
-        if (mask) {
-            const { reg = "999999999", conf = {
-                placeholder: "0",
-                greedy: true,
-                casing: "upper",
-                jitMasking: true
-            }
-            } = mask;
-            Inputmask(reg, conf).mask(control);
-        }
-    }
-
-    if (typeof selector === "string") {
-        return configuracion(selector, config);
-    }
-    selector.forEach(e => {
-        configuracion(e, config);
-    });
-}
-
 // Función para manejar controladores y configurar atributos
-function defineControllerAttributes(selector, config) {
-    const configuracion = (control, config) => {
-        const idString = control.replaceAll('#', '');
-        const input = $(control);
-        const label = $(`[for="${idString}"]`);
+function configControls(controls) {
+    controls.forEach(formControl => {
+        const configuracion = (control, setting) => {
+            const idString = control.replaceAll('#', '');
+            const input = $(control);
 
-        if (input.length === 0) {
-            console.error(`El control "${idString}" no existe`);
-            return;
-        }
+            if (input.length === 0) {
+                console.error(`El control "${idString}" no existe`);
+                return;
+            }
 
-        let settings = {
-            name: config.name || idString,
-            type: config.type || "text",
-            value: config.val || false,
-            "control-type": config["control-type"] || "string",
-            require: config.require || false,
-            minLength: config.mnl || false,
-            maxLength: config.mxl || false,
-            disabled: config.disabled || false,
-            placeholder: config.pholder || "",
-            lengthMessage: config.lengthMessage || `El campo '${label.html()}' debe tener entre ${config.mnl || 0} y ${config.mxl || 0} dígitos.`,
-            errorMessage: config.errorMessage || false,
+            let labelText = (control.addLabel || idString).replaceAll('_', ' ');
+            let label = $('<label>', {
+                for: idString,
+                text: labelText,
+                class: 'form-label'
+            }).insertBefore(control);
+
+            let settings = {
+                name: setting.name || idString,
+                type: setting.type || false,
+                value: setting.val || false,
+                controlType: setting.controlType || false,
+                requested: setting.requested || false,
+                minLength: setting.mnl || false,
+                maxLength: setting.mxl || false,
+                disabled: setting.disabled || false,
+                placeholder: setting.pholder || "",
+                lengthMessage: setting.lengthMessage || `El campo '${labelText.toUpperCase()}' debe tener entre ${setting.mnl || 0} y ${setting.mxl || 0} dígitos.`,
+                errorMessage: setting.errorMessage || false,
+            };
+
+            if (input.is('input')) {
+                settings.type = settings.type || 'text';
+                settings.controlType = settings.controlType || "string";
+            } else if (input.is('button')) {
+                settings.type = 'button';
+            } else if (input.is('select')) {
+                settings.lengthMessage = false;
+            }
+
+            if (settings.controlType == 'tel') {
+                Inputmask("999999999", { placeholder: "0", greedy: true, casing: "upper", jitMasking: true }).mask(control);
+                settings.minLength = 9;
+                settings.maxLength = 9;
+            }
+
+            if (settings.controlType == 'dni') {
+                Inputmask("99999999", { placeholder: "0", greedy: true, casing: "upper", jitMasking: true }).mask(control);
+                settings.minLength = 8;
+                settings.maxLength = 8;
+            }
+
+            if (settings.controlType == 'ndoc') {
+                Inputmask("99999999999", { placeholder: "0", greedy: true, casing: "upper", jitMasking: true }).mask(control);
+                settings.minLength = 8;
+                settings.maxLength = 11;
+            }
+
+            for (let [key, value] of Object.entries(settings)) {
+                if (key == 'errorMessage' && !value) {
+                    value = {
+                        'ruc': 'El numero de RUC es invalido.',
+                        'dni': 'El numero de DNI es invalido.',
+                        'ndoc': 'El numero de DOCUMENTO es invalido.',
+                        'int': 'El dato ingresado debe ser un numero.',
+                        'float': 'El dato ingresado debe ser un numero decimal.',
+                        'date': 'El dato ingresado debe ser un numero.',
+                        'email': 'El correo electrónico ingresado no es válido.',
+                    }[settings.controlType] || '';
+                }
+
+                if (value) {
+                    if (key == 'requested') {
+                        value = labelText.toUpperCase();
+                        label.addClass('requested');
+                    }
+                    input.attr(key, value);
+                }
+            }
+
+            const { mask } = setting.mask || false;
+            if (mask) {
+                const { reg = "999999999", conf = { placeholder: "0", greedy: true, casing: "upper", jitMasking: true } } = mask;
+                Inputmask(reg, conf).mask(control);
+            }
         };
 
-        for (let [key, value] of Object.entries(settings)) {
-            if (key == 'errorMessage' && !value) {
-                switch (settings['control-type']) {
-                    case 'ruc':
-                        value = "El numero de RUC es invalido.";
-                        break;
-
-                    case 'int':
-                        value = "El dato ingresado debe ser un numero.";
-                        break;
-
-                    case 'float':
-                        value = "El dato ingresado debe ser un numero decimal.";
-                        break;
-
-                    case 'date':
-                        value = "El dato ingresado debe ser un numero.";
-                        break;
-
-                    case 'email':
-                        value = "El correo electrónico ingresado no es válido.";
-                        break;
-
-                    default:
-                        value = "";
-                        break;
-                }
-            }
-            if (value) {
-                if (key == 'require') {
-                    value = label.html();
-                    label.addClass('required');
-                }
-                input.attr(key, value);
-            }
+        if (typeof formControl.control === "string") {
+            return configuracion(formControl.control, formControl);
         }
-
-        const { mask } = config;
-        if (mask) {
-            const { reg = "999999999", conf = { placeholder: "0", greedy: true, casing: "upper", jitMasking: true } } = mask;
-            Inputmask(reg, conf).mask(control);
-        }
-    };
-
-    if (typeof selector === "string") {
-        return configuracion(selector, config);
-    }
-    selector.forEach(e => {
-        configuracion(e, config);
+        formControl.control.forEach(control => { configuracion(control, formControl) });
     });
 }
 
 function validFrom(_this) {
     var dat = _this.querySelectorAll('[name]');
-    var dataF = { success: true, data: { data: {}, require: [] } };
+    var dataF = { success: true, data: { data: {}, requested: [] } };
 
     for (let i = 0; i < dat.length; i++) {
         const e = dat[i];
-        if (e.value != "" && e.getAttribute("control-type")) {
+        if (e.value != "" && e.getAttribute("controlType")) {
 
         }
-        switch (e.getAttribute("control-type")) {
+        switch (e.getAttribute("controlType")) {
             case 'ruc':
                 var validRuc = /^(10|20)/.test(e.value);
                 if (!validRuc) {
@@ -155,19 +145,18 @@ function validFrom(_this) {
                 break;
         }
 
-        if (e.getAttribute("require") && e.value === "") {
-            dataF.data.require.push(`<li><b>${e.getAttribute("require")}</b></li>`);
+        if (e.getAttribute("requested") && e.value === "") {
+            dataF.data.requested.push(`<p class="mb-1" style="font-size:.85rem;"><b>${e.getAttribute("requested")}</b></p>`);
         }
         dataF.data.data[e.name] = e.value;
     }
 
-    if (dataF.data.require.length > 0) {
+    if (dataF.data.requested.length > 0) {
         dataF.success = false;
         boxAlert.box({
             i: 'info',
             t: 'Faltan datos',
-            h: `<h6 class="text-secondary">Los siguientes campos son requeridos</h6>
-                <ul style="font-size:.75rem;">${dataF.data.require.join('')}</ul>`
+            h: `<h6 class="text-secondary">Los siguientes campos son requeridos</h6>${dataF.data.requested.join('')}`
         });
     }
 

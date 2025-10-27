@@ -1,43 +1,29 @@
 $(document).ready(function () {
-    const controles = [
+    configControls([
         // Formulario problemas
         {
             control: '#menu',
-            config: {
-                require: true
-            }
+            requested: true
         },
         {
             control: '#categoria',
-            config: {
-                mxl: 50,
-            }
+            mxl: 50,
         },
         {
             control: '#descripcion',
-            config: {
-                mxl: 50,
-                require: true
-            }
+            mxl: 50,
+            requested: true
         },
         {
             control: '#ruta',
-            config: {
-                mxl: 255,
-                require: true
-            }
+            mxl: 255,
+            requested: true
         },
         {
             control: '#estado',
-            config: {
-                require: true
-            }
+            requested: true
         },
-    ];
-
-    controles.forEach(control => {
-        defineControllerAttributes(control.control, control.config);
-    });
+    ]);
 
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_submenuLabel').html('REGISTRAR SUB MENU');
@@ -88,7 +74,7 @@ document.getElementById('form-submenu').addEventListener('submit', function (eve
         },
         error: function (jqXHR) {
             console.log(jqXHR.responseJSON);
-            
+
             fMananger.formModalLoding('modal_submenu', 'hide');
             let mensaje = 'Hubo un problema al procesar la solicitud. Intenta nuevamente.';
 
@@ -121,19 +107,19 @@ function Editar(id) {
                 // Verificar si la respuesta indica un error
                 if (!data.success) {
                     console.log(data.message || "Error desconocido.");
-                    return boxAlert.box({ 
-                        i: 'error', 
-                        t: 'No pudimos obtener el problema', 
-                        h: data.message || 'Hubo un problema al recuperar la información. Intenta nuevamente.' 
+                    return boxAlert.box({
+                        i: 'error',
+                        t: 'No pudimos obtener el problema',
+                        h: data.message || 'Hubo un problema al recuperar la información. Intenta nuevamente.'
                     });
                 }
 
                 // Verificar si los datos existen
                 if (!data.data) {
-                    return boxAlert.box({ 
-                        i: 'error', 
-                        t: 'Problema no encontrado', 
-                        h: 'No se encontró información sobre el problema seleccionado. Es posible que haya sido eliminado.' 
+                    return boxAlert.box({
+                        i: 'error',
+                        t: 'Problema no encontrado',
+                        h: 'No se encontró información sobre el problema seleccionado. Es posible que haya sido eliminado.'
                     });
                 }
 
@@ -156,20 +142,20 @@ function Editar(id) {
                     mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
                 }
 
-                boxAlert.box({ 
-                    i: 'error', 
-                    t: 'Error al obtener los datos', 
-                    h: mensaje 
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Error al obtener los datos',
+                    h: mensaje
                 });
 
                 console.log("Error en AJAX:", jqXHR);
             }
         });
     } catch (error) {
-        boxAlert.box({ 
-            i: 'error', 
-            t: 'Error inesperado', 
-            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        boxAlert.box({
+            i: 'error',
+            t: 'Error inesperado',
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
         });
         console.log('Error producido: ', error);
     }
@@ -207,20 +193,20 @@ async function CambiarEstado(id, estado) {
                     mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
                 }
 
-                boxAlert.box({ 
-                    i: 'error', 
-                    t: 'Error al obtener los datos', 
-                    h: mensaje 
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Error al obtener los datos',
+                    h: mensaje
                 });
 
                 console.log("Error en AJAX:", jqXHR);
             }
         });
     } catch (error) {
-        boxAlert.box({ 
-            i: 'error', 
-            t: 'Error inesperado', 
-            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        boxAlert.box({
+            i: 'error',
+            t: 'Error inesperado',
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
         });
         console.log('Error producido: ', error);
     }
@@ -257,20 +243,20 @@ async function Eliminar(id) {
                     mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
                 }
 
-                boxAlert.box({ 
-                    i: 'error', 
-                    t: 'Error al obtener los datos', 
-                    h: mensaje 
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Error al obtener los datos',
+                    h: mensaje
                 });
 
                 console.log("Error en AJAX:", jqXHR);
             }
         });
     } catch (error) {
-        boxAlert.box({ 
-            i: 'error', 
-            t: 'Error inesperado', 
-            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        boxAlert.box({
+            i: 'error',
+            t: 'Error inesperado',
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
         });
         console.log('Error producido: ', error);
     }

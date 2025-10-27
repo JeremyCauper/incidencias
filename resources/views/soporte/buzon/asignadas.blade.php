@@ -469,7 +469,7 @@
                             <div class="col-lg-5 col-10">
                                 <label class="form-label" for="n_orden">N° de Orden </label>
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="n_orden" />
+                                    <input type="text" class="form-control" id="n_orden" name="n_orden" requested="N° de Orden"/>
                                     <button class="btn btn-secondary" type="button" id="button-cod-orden" check-cod="false"
                                         data-mdb-ripple-init data-mdb-ripple-color="dark">
                                         Cod. Tecnito
@@ -532,27 +532,23 @@
                             <div class="row justify-content-md-center">
                                 <div class="col-md-6">
                                     <div class="form-group pt-2">
-                                        <label class="form-label" for="observaciones">Observaciones</label>
                                         <textarea class="form-control" id="observaciones"
                                             style="height: 80px;resize: none;"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group pt-2">
-                                        <label class="form-label" for="recomendacion">Recomendaciones</label>
-                                        <textarea class="form-control" id="recomendacion" name="recomendacion"
-                                            style="height: 80px;resize: none;" require="Recomendaciones"></textarea>
+                                        <textarea class="form-control" id="recomendacion"
+                                            style="height: 80px;resize: none;"></textarea>
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6">
                                     <div class="form-group pt-2">
-                                        <label class="form-label" for="fecha_f">Fecha Fin </label>
                                         <input class="form-control form-control-sm" id="fecha_f">
                                     </div>
                                 </div>
                                 <div class="col-md-3 col-6">
                                     <div class="form-group pt-2">
-                                        <label class="form-label" for="hora_f">Hora Fin </label>
                                         <input class="form-control form-control-sm" id="hora_f">
                                     </div>
                                 </div>
@@ -694,7 +690,6 @@
                         <input type="hidden" id="cod_incidencia" name="cod_incidencia">
                         <input type="hidden" id="cod_orden_ser" name="cod_orden_ser">
                         <div class="col-md-6 mb-2">
-                            <label class="form-label mb-0" for="codigo_aviso">Codigo Aviso</label>
                             <input class="form-control" id="codigo_aviso">
                         </div>
                     </div>

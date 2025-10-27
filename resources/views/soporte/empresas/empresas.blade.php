@@ -89,7 +89,6 @@
                         <h6 class="tittle text-primary my-3">Datos Empresa</h6>
                         <input type="hidden" name="id" id="id">
                         <div class="col-lg-4 col-7 mb-2">
-                            <label class="form-label mb-0" for="idGrupo">Grupo</label>
                             <select id="idGrupo" class="select-clear">
                                 <option value=""></option>
                                 @foreach ($data['grupos'] as $key => $val)
@@ -100,27 +99,22 @@
                             </select>
                         </div>
                         <div class="col-lg-3 col-5 mb-2">
-                            <label class="form-label mb-0" for="ruc">Ruc</label>
                             <input class="form-control" id="ruc">
                         </div>
                         <div class="col-lg-5 col-12 mb-2">
-                            <label class="form-label mb-0" for="razonSocial">Razon Social</label>
                             <input class="form-control" id="razonSocial">
                         </div>
 
                         <div class="col-lg-7 mb-2">
-                            <label class="form-label mb-0" for="direccion">Dirección</label>
                             <input class="form-control" id="direccion">
                         </div>
                         <div class="col-lg-5 mb-2">
-                            <label class="form-label mb-0" for="ubigeo">Ubigeo</label>
                             <select id="ubigeo" class="select-clear">
                                 <option value=""></option>
                             </select>
                         </div>
 
                         <div class="col-lg-3 col-6 mb-2">
-                            <label class="form-label mb-0" for="contrato">Contrato</label>
                             <select id="contrato" class="select">
                                 <option value=""></option>
                                 <option value="1">Si</option>
@@ -128,7 +122,6 @@
                             </select>
                         </div>
                         <div class="col-lg-3 col-6 mb-2">
-                            <label class="form-label mb-0" for="facturacion">Facturacion</label>
                             <select id="facturacion" class="select">
                                 <option value=""></option>
                                 <option value="1">Si</option>
@@ -136,7 +129,6 @@
                             </select>
                         </div>
                         <div class="col-lg-3 col-6 mb-2">
-                            <label class="form-label mb-0" for="prico">Prico</label>
                             <select id="prico" class="select">
                                 <option value=""></option>
                                 <option value="1">Ose</option>
@@ -144,7 +136,6 @@
                             </select>
                         </div>
                         <div class="col-lg-3 col-6 mb-2">
-                            <label class="form-label mb-0" for="eds">Eds</label>
                             <select id="eds" class="select">
                                 <option value=""></option>
                                 <option selected value="1">Si</option>
@@ -153,31 +144,25 @@
                         </div>
 
                         <div class="col-lg-2 col-4 mb-2">
-                            <label class="form-label mb-0" for="idNube">Id Nube</label>
                             <input class="form-control" id="idNube" name="idNube">
                         </div>
 
                         <div class="col-lg-2 col-4 mb-2">
-                            <label class="form-label mb-0" for="visitas">Visitas</label>
                             <input class="form-control" id="visitas" name="visitas">
                         </div>
                         <div class="col-lg-2 col-4 mb-2">
-                            <label class="form-label mb-0" for="diasVisita">Dias Visita</label>
                             <input class="form-control" id="diasVisita" name="diasVisita">
                         </div>
                         <div class="col-lg-2 col-4 mb-2">
-                            <label class="form-label mb-0" for="mantenimientos">Mantenimientos</label>
                             <input class="form-control" id="mantenimientos" name="mantenimientos">
                         </div>
                         <div class="col-lg-2 col-4 mb-2">
-                            <label class="form-label mb-0" for="estado">Estado</label>
                             <select class="select" id="estado">
                                 <option selected value="1">Activo</option>
                                 <option value="0">Inactivo</option>
                             </select>
                         </div>
                         <div class="col-lg-2 col-4 mb-2">
-                            <label class="form-label mb-0" for="codVisita">Cod. Visita</label>
                             <select class="select" id="codVisita">
                                 <option selected value="0">No</option>
                                 <option value="1">Si</option>
@@ -187,7 +172,6 @@
                         <h6 class="tittle text-primary my-3">Datos Contacto</h6>
 
                         <div class="col-lg-3 mb-2">
-                            <label class="form-label mb-0" for="cargo">Cargo</label>
                             <select class="select-clear" id="cargo">
                                 <option value=""></option>
                                 @foreach ($data['cargos'] as $key => $val)
@@ -198,15 +182,12 @@
                             </select>
                         </div>
                         <div class="col-lg-3 mb-2">
-                            <label class="form-label mb-0" for="encargado">Encargado</label>
                             <input class="form-control" id="encargado">
                         </div>
                         <div class="col-lg-2 col-4 mb-2">
-                            <label class="form-label mb-0" for="telefono">Telefono</label>
                             <input class="form-control" id="telefono">
                         </div>
                         <div class="col-lg-4 col-8">
-                            <label class="form-label mb-0" for="correo">Correo</label>
                             <input class="form-control" id="correo">
                         </div>
 
