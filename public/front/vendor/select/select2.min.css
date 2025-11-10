@@ -4,16 +4,16 @@
     display: inline-block;
     vertical-align: middle;
     text-align: left;
-    border: var(--mdb-border-width) solid var(--mdb-border-color);
-    border-radius: .25rem;
+    /* border: var(--mdb-border-width) solid var(--mdb-border-color); */
+    /* border-radius: .25rem; */
 }
 
 .select2-selection--single {
     cursor: pointer;
     outline: 0;
     display: block;
-    padding: .5rem 0;
-    line-height: 1.5715;
+    padding: .5rem .75rem .45rem .75rem;
+    line-height: 1.6;
     color: var(--mdb-surface-color);
     background-color: var(--mdb-body-bg);
     position: relative;
@@ -23,7 +23,8 @@
     -ms-user-select: none;
     user-select: none;
     transition: background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out;
-    border-radius: .15rem;
+    border-radius: .5rem;
+    border: var(--mdb-border-width) solid rgb(var(--mdb-surface-color-rgb), .2);
 }
 
 .select2-selection--single.select2-filled {
@@ -40,25 +41,23 @@
 
 .select2-container--focus:not(.select2-container--disabled) .select2-selection--single:not(.select2-filled),
 .select2-container--open .select2-selection--single:not(.select2-filled) {
-    border-color: #3f51b5;
-    box-shadow: 0 0 0 1px #3f51b5 inset
+    border-color: #3b71ca;
+    box-shadow: 0 0 0 1px #3b71ca inset
 }
 
 .select2-container--focus:not(.select2-container--disabled) .select2-selection--single.select2-filled,
 .select2-container--open .select2-selection--single.select2-filled {
     background-color: #ddd;
-    border-bottom-color: #3f51b5;
-    box-shadow: 0 -1px 0 #3f51b5 inset
+    border-bottom-color: #3b71ca;
+    box-shadow: 0 -1px 0 #3b71ca inset
 }
 
 .select2-selection--single .select2-selection__rendered {
     display: block;
-    padding-left: 1rem;
     padding-right: 2.5rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
-    padding-top: .25rem;
     font-size: .75rem;
 }
 
@@ -190,7 +189,7 @@
 
 .select2-selection--multiple .select2-selection__choice:focus,
 .select2-selection--multiple .select2-selection__choice:hover {
-    background-color: #3f51b5;
+    background-color: #3b71ca;
     color: #fff
 }
 
@@ -313,8 +312,8 @@
 .select2-container--focus .select2-selection--multiple.select2-filled,
 .select2-container--open .select2-selection--multiple.select2-filled {
     background-color: #ddd;
-    border-bottom-color: #3f51b5;
-    box-shadow: 0 -1px 0 #3f51b5 inset
+    border-bottom-color: #3b71ca;
+    box-shadow: 0 -1px 0 #3b71ca inset
 }
 
 .select2-dropdown {
