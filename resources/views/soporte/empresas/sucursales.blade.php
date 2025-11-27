@@ -98,7 +98,6 @@
                         <h6 class="tittle text-primary my-3">Datos Sucursal</h6>
                         <input type="hidden" name="id" id="id">
                         <div class="col-lg-4 col-7 mb-2">
-                            <label class="form-label mb-0" for="empresa">Empresa</label>
                             <select class="select-clear" id="empresa">
                                 <option value=""></option>
                                 @foreach ($data['empresas'] as $key => $val)
@@ -109,50 +108,41 @@
                             </select>
                         </div>
                         <div class="col-lg-5 col-5 mb-2">
-                            <label class="form-label mb-0" for="sucursal">Sucursal</label>
                             <input class="form-control" id="sucursal">
                         </div>
                         <div class="col-lg-3 col-12 mb-2">
-                            <label class="form-label mb-0" for="codCofide">Cod. Cofide</label>
                             <input class="form-control" id="codCofide">
                         </div>
 
                         <div class="col-lg-7 mb-2">
-                            <label class="form-label mb-0" for="direccion">Dirección</label>
                             <input class="form-control" id="direccion">
                         </div>
                         <div class="col-lg-5 mb-2">
-                            <label class="form-label mb-0" for="ubigeo">Ubigeo</label>
                             <select class="select-clear" id="ubigeo">
                                 <option value=""></option>
                             </select>
                         </div>
 
                         <div class="col-lg-4 col-4 mb-2">
-                            <label class="form-label mb-0" for="telefonoS">Telefono Sucursal</label>
                             <input class="form-control" id="telefonoS">
                         </div>
                         <div class="col-lg-8 col-8 mb-2">
-                            <label class="form-label mb-0" for="correoS">Correo Sucursal</label>
                             <input class="form-control" id="correoS">
                         </div>
 
                         <div class="col-lg-4 col-4 mb-2">
-                            <label class="form-label mb-0" for="vVisitas">Tienes Visitas?</label>
                             <select class="select" id="vVisitas">
                                 <option selected value="0">No</option>
                                 <option value="1">Si</option>
                             </select>
                         </div>
                         <div class="col-lg-4 col-4 mb-2">
-                            <label class="form-label mb-0" for="vMantenimientos">Tiene Mantenimientos?</label>
                             <select class="select" id="vMantenimientos">
                                 <option selected value="0">No</option>
                                 <option value="1">Si</option>
                             </select>
                         </div>
                         <div class="col-lg-4 col-4 mb-2">
-                            <label class="form-label mb-0" for="estado">Estado</label>
                             <select class="select" id="estado">
                                 <option selected value="1">Activo</option>
                                 <option value="0">Inactivo</option>
@@ -160,7 +150,6 @@
                         </div>
 
                         <div class="col-12 mb-2">
-                            <label class="form-label mb-0" for="urlMapa">Url Mapa</label>
                             <input class="form-control" id="urlMapa">
                         </div>
                     </div>
@@ -178,5 +167,5 @@
 
 @section('scripts')
     <!-- jQuery Mask Plugin CDN -->
-    <script src="{{secure_asset('front/js/soporte/empresas/sucursales.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/empresas/sucursales.js')}}"></script>
 @endsection

@@ -1,41 +1,17 @@
 $(document).ready(function () {
-    const controles = [
+    configControls([
         // Formulario turno datos de la empresas
         {
-            control: [
-                '#sfechaIni',
-                '#sfechaFin',
-                '#afechaIni',
-                '#afechaFin'
-            ],
-            config: {
-                type: "date",
-                require: true
-            }
+            control: '#spersonal',
+            addLabel: 'Personal Semanal',
+            requested: true
         },
         {
-            control: [
-                '#shoraIni',
-                '#shoraFin',
-                '#ahoraIni',
-                '#ahoraFin'
-            ],
-            config: {
-                type: "time",
-                require: true
-            }
-        },
-        {
-            control: ['#spersonal', '#apersonal'],
-            config: {
-                require: true
-            }
+            control: '#apersonal',
+            addLabel: 'Personal de Apoyo',
+            requested: true
         }
-    ];
-
-    controles.forEach(control => {
-        defineControllerAttributes(control.control, control.config);
-    });
+    ]);
 
     formatSelect('modal_turno');
 

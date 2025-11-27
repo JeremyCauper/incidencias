@@ -245,7 +245,6 @@
                 <h6 class="tittle text-primary">Datos Empresa</h6>
                 <div class="row">
                     <div class="col-lg-8 mb-2">
-                        <label class="form-label mb-0" for="empresa">Empresa</label>
                         <select class="select-clear" id="empresa">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['company'] as $e)
@@ -258,7 +257,6 @@
                         </select>
                     </div>
                     <div class="col-lg-4 mb-2">
-                        <label class="form-label mb-0" for="sucursal">Sucursal</label>
                         <select class="select-clear" id="sucursal">
                             <option value="">-- Seleccione --</option>
                         </select>
@@ -270,11 +268,9 @@
                     <input type="hidden" name="cod_contact" id="cod_contact">
                     <input type="hidden" name="consultado_api" id="consultado_api">
                     <div class="col-lg-3 col-4 mb-2">
-                        <label class="form-label mb-0" for="nro_doc"><span class="texto">Dni</span></label>
                         <input class="form-control" id="nro_doc">
                     </div>
                     <div class="col-lg-5 col-8 mb-2">
-                        <label class="form-label mb-0" for="nom_contac">Nombre</label>
                         <select id="nom_contac">
                             <option value=""></option>
                             @foreach ($data['eContactos'] as $ct)
@@ -283,13 +279,11 @@
                         </select>
                     </div>
                     <div class="col-lg-4 col-5 mb-2">
-                        <label class="form-label mb-0" for="tel_contac">Telefono</label>
                         <select class="select-tags" id="tel_contac" minlength="9" maxlength="9" onchange="validContac(this)">
                             <option value=""></option>
                         </select>
                     </div>
                     <div class="col-lg-6 col-7 mb-2">
-                        <label class="form-label mb-0" for="car_contac">Cargo</label>
                         <select class="select-clear" id="car_contac" onchange="validContac(this)">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['CargoEstacion'] as $cc)
@@ -303,16 +297,13 @@
                         </select>
                     </div>
                     <div class="col-lg-6 col-12 mb-2">
-                        <label class="form-label mb-0" for="cor_contac">Correo</label>
-                        <input type="text" class="form-control" id="cor_contac" name="cor_contac"
-                            onkeyup="validContac(this)">
+                        <input class="form-control" id="cor_contac" onkeyup="validContac(this)">
                     </div>
                 </div>
 
                 <h6 class="tittle text-primary">Datos Incidencia</h6>
                 <div class="row">
                     <div class="col-lg-4 mb-2">
-                        <label class="form-label mb-0" for="tEstacion">Tipo Estación</label>
                         <select class="select-clear" id="tEstacion">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tEstacion'] as $k => $v)
@@ -326,7 +317,6 @@
                         </select>
                     </div>
                     <div class="col-lg-4 col-6 mb-2">
-                        <label class="form-label mb-0" for="tIncidencia">Nivel Incidencia</label>
                         <select class="select" id="tIncidencia">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tIncidencia'] as $v)
@@ -340,7 +330,6 @@
                         </select>
                     </div>
                     <div class="col-lg-4 col-6 mb-2">
-                        <label class="form-label mb-0" for="tSoporte">Tipo Soporte</label>
                         <select class="select" id="tSoporte">
                             <option value="">-- Seleccione --</option>
                             @foreach ($data['tSoporte'] as $v)
@@ -354,29 +343,24 @@
                     </div>
 
                     <div class="col-md-6 mb-2">
-                        <label class="form-label mb-0" for="problema">Problema</label>
                         <select class="select-clear" id="problema">
                         </select>
                     </div>
                     <div class="col-md-6 mb-2">
-                        <label class="form-label mb-0" for="sproblema">Sub Problema</label>
                         <select class="select-icons" id="sproblema">
                         </select>
                     </div>
                     <div class="col-sm-4">
                         <div class="row">
                             <div class="col-sm-12 col-6 mb-2">
-                                <label class="form-label mb-0" for="fecha_imforme">Fecha de Informe</label>
                                 <input class="form-control" id="fecha_imforme">
                             </div>
                             <div class="col-sm-12 col-6 mb-2">
-                                <label class="form-label mb-0" for="hora_informe">Hora de Informe</label>
                                 <input class="form-control" id="hora_informe" min="00:00" max="23:59" step="1">
                             </div>
                         </div>
                     </div>
                     <div class="col-sm-8 mb-2">
-                        <label class="form-label mb-0" for="observacion">Observacion</label>
                         <textarea class="form-control" id="observacion" style="height: 106px;resize: none;"></textarea>
                     </div>
                     <!-- <div class="col-12">
@@ -559,9 +543,9 @@
                     <div class="mb-1 cabecera-orden">
                         <input type="hidden" name="codInc" id="codInc">
                         <div class="col-lg-5 col-10">
-                            <label class="form-label" for="n_orden">N° de Orden </label>
+                            <label class="form-label" for="n_orden">N° de Orden</label>
                             <div class="input-group mb-3">
-                                <input type="text" class="form-control" id="n_orden">
+                                <input type="text" class="form-control" id="n_orden" name="n_orden" requested="N° de Orden">
                                 <button class="btn btn-secondary" type="button" id="button-cod-orden" check-cod="false"
                                     data-mdb-ripple-init data-mdb-ripple-color="dark">
                                     Cod. Tecnito
@@ -626,27 +610,23 @@
                         <div class="row justify-content-md-center">
                             <div class="col-md-6">
                                 <div class="form-group pt-2">
-                                    <label class="form-label" for="observaciones">Observaciones</label>
                                     <textarea class="form-control" id="observaciones"
                                         style="height: 80px;resize: none;"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group pt-2">
-                                    <label class="form-label" for="recomendacion">Recomendaciones</label>
-                                    <textarea class="form-control" id="recomendacion" name="recomendacion"
+                                    <textarea class="form-control" id="recomendacion"
                                         style="height: 80px;resize: none;" require="Recomendaciones"></textarea>
                                 </div>
                             </div>
                             <div class="col-md-3 col-6">
                                 <div class="form-group pt-2">
-                                    <label class="form-label" for="fecha_f">Fecha Fin </label>
                                     <input class="form-control form-control-sm" id="fecha_f">
                                 </div>
                             </div>
                             <div class="col-md-3 col-6">
                                 <div class="form-group pt-2">
-                                    <label class="form-label" for="hora_f">Hora Fin </label>
                                     <input class="form-control form-control-sm" id="hora_f">
                                 </div>
                             </div>
@@ -761,7 +741,6 @@
                     <input type="hidden" id="cod_orden_ser" name="cod_orden_ser">
                     <!-- <h6 class="tittle text-primary">Asignar Personal</h6> -->
                     <div class="col-md-6 mb-2">
-                        <label class="form-label mb-0" for="codigo_aviso">Codigo Aviso</label>
                         <input class="form-control" id="codigo_aviso">
                     </div>
                 </div>

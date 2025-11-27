@@ -87,7 +87,7 @@ class ConsultasController extends Controller
                 return $this->message(data: ['error' => 'Número de documento inválido'], status: 400);
             }
 
-            $ip = env('APP_ENV') == "local" ? "192.168.1.113" : "190.187.193.78";
+            $ip = env('APP_ENV') == "local" ? "192.168.1.113" : "38.250.184.10";
 
             $curl = curl_init();
             curl_setopt_array($curl, [

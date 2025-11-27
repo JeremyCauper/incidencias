@@ -92,8 +92,8 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="sfechaIniText"></span>
-                                    <input class="form-control" id="sfechaIni" />
-                                    <input class="form-control" id="shoraIni" />
+                                    <input type="date" class="form-control" id="sfechaIni" name="sfechaIni" requested/>
+                                    <input type="time" class="form-control" id="shoraIni" name="shoraIni" requested/>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -101,12 +101,11 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="sfechaFinText"></span>
-                                    <input class="form-control" id="sfechaFin" />
-                                    <input class="form-control" id="shoraFin" />
+                                    <input type="date" class="form-control" id="sfechaFin" name="sfechaFin" requested/>
+                                    <input type="time" class="form-control" id="shoraFin" name="shoraFin" requested/>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <label class="form-label mb-0" for="spersonal">Personal Semanal</label>
                                 <select class="select-clear" id="spersonal">
                                     <option value=""></option>
                                     @foreach ($data['usuarios'] as $u)
@@ -125,8 +124,8 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="afechaIniText"></span>
-                                    <input class="form-control" id="afechaIni" />
-                                    <input class="form-control" id="ahoraIni" />
+                                    <input type="date" class="form-control" id="afechaIni" name="afechaIni" requested/>
+                                    <input type="time" class="form-control" id="ahoraIni" name="ahoraIni" requested/>
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -134,12 +133,11 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="afechaFinText"></span>
-                                    <input class="form-control" id="afechaFin" />
-                                    <input class="form-control" id="ahoraFin" />
+                                    <input type="date" class="form-control" id="afechaFin" name="afechaFin" requested/>
+                                    <input type="time" class="form-control" id="ahoraFin" name="ahoraFin" requested/>
                                 </div>
                             </div>
                             <div class="col-12">
-                                <label class="form-label mb-0" for="apersonal">Personal de Apoyo</label>
                                 <select class="select-clear" id="apersonal">
                                     <option value=""></option>
                                     @foreach ($data['usuarios'] as $u)

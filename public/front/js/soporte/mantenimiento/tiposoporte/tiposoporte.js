@@ -1,29 +1,21 @@
 $(document).ready(function () {
-    const controles = [
+    configControls([
         // Formulario problemas
         {
             control: '#descripcion',
-            config: {
-                mxl: 50,
-                require: true
-            }
+            requested: true,
+            mxl: 50
         },
         {
             control: ['#estado'],
-            config: {
-                require: true
-            }
+            requested: true
         },
-    ];
-
-    controles.forEach(control => {
-        defineControllerAttributes(control.control, control.config);
-    });
+    ]);
 
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_tipo_soporteLabel').html('REGISTRAR TIPO SOPORTE');
         $('#id').val('');
-    }); 
+    });
 
     fObservador('.content-wrapper', () => {
         tb_tipo_soporte.columns.adjust().draw();
@@ -41,14 +33,13 @@ document.getElementById('form-tipo-soporte').addEventListener('submit', function
     fMananger.formModalLoding('modal_tipo_soporte', 'show');
 
     var valid = validFrom(this);
-
     if (!valid.success) {
         return fMananger.formModalLoding('modal_tipo_soporte', 'hide');
     }
 
     $.ajax({
         type: 'POST',
-        url: `${__url}/soporte/mantenimiento/tiposoporte/tiposoporte/${ $('#id').val() ? 'actualizar' : 'registrar' }`,
+        url: `${__url}/soporte/mantenimiento/tiposoporte/tiposoporte/${$('#id').val() ? 'actualizar' : 'registrar'}`,
         contentType: 'application/json',
         headers: {
             'X-CSRF-TOKEN': __token,
@@ -233,20 +224,20 @@ async function Eliminar(id) {
                     mensaje = 'Ocurrió un error interno en el servidor. Nuestro equipo está trabajando en ello.';
                 }
 
-                boxAlert.box({ 
-                    i: 'error', 
-                    t: 'Error al obtener los datos', 
-                    h: mensaje 
+                boxAlert.box({
+                    i: 'error',
+                    t: 'Error al obtener los datos',
+                    h: mensaje
                 });
 
                 console.log("Error en AJAX:", jqXHR);
             }
         });
     } catch (error) {
-        boxAlert.box({ 
-            i: 'error', 
-            t: 'Error inesperado', 
-            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.' 
+        boxAlert.box({
+            i: 'error',
+            t: 'Error inesperado',
+            h: 'Ocurrió un problema inesperado. Por favor, intenta nuevamente.'
         });
         console.log('Error producido: ', error);
     }

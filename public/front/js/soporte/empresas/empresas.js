@@ -1,93 +1,70 @@
 $(document).ready(function () {
-    const controles = [
+    configControls([
         // Formulario empresas datos de la empresas
         {
             control: '#idGrupo',
-            config: {
-                require: true
-            }
+            addLabel: 'Grupo',
+            requested: true
         },
         {
             control: '#ruc',
-            config: {
-                require: true,
-                "control-type": "ruc",
-                mnl: 11,
-                mxl: 11,
-                errorMessage: "El numero de ruc es invalido.",
-                mask: { reg: "99999999999" }
-            }
+            requested: true,
+            controlType: "ruc",
+            mnl: 11,
+            mxl: 11,
+            errorMessage: "El numero de ruc es invalido.",
+            mask: { reg: "99999999999" }
         },
         {
             control: '#razonSocial',
-            config: {
-                require: true,
-                "control-type": "string",
-                mxl: 400
-            }
+            addLabel: 'Razon social',
+            requested: true,
+            controlType: "string",
+            mxl: 400
         },
         {
             control: '#direccion',
-            config: {
-                require: true,
-                "control-type": "string",
-                mxl: 500
-            }
+            requested: true,
+            controlType: "string",
+            mxl: 500
         },
         {
             control: ['#ubigeo', '#contrato', '#facturacion', '#prico', '#eds'],
-            config: {
-                require: true
-            }
+            requested: true
         },
         {
             control: ['#idNube', '#visitas', '#diasVisita', '#mantenimientos'],
-            config: {
-                mxl: 11,
-                type: "number",
-                val: "0",
-                "control-type": "int",
-                mask: { reg: "99999999999" }
-            }
+            mxl: 11,
+            type: "number",
+            val: "0",
+            controlType: "int",
+            mask: { reg: "99999999999" }
         },
         {
             control: ['#estado', '#codVisita'],
-            config: {
-                require: true
-            }
+            requested: true
         },
         // Formulario empresas datos del contacto de la empresa
         {
-            control: '#cargo',
-            config: {}
+            control: '#cargo'
         },
         {
             control: '#encargado',
-            config: {
-                "control-type": "string",
-                mxl: 100
-            }
+            controlType: "string",
+            mxl: 100
         },
         {
             control: '#telefono',
-            config: {
-                "control-type": "int",
-                mxl: 9,
-                mask: { reg: "999999999" }
-            }
+            controlType: "int",
+            mxl: 9,
+            mask: { reg: "999999999" }
         },
         {
             control: '#correo',
-            config: {
-                "control-type": "email",
-                mxl: 250
-            }
+            controlType: "email",
+            mxl: 250
         }
-    ];
-
-    controles.forEach(control => {
-        defineControllerAttributes(control.control, control.config);
-    });
+    ]);
 
     formatSelect('modal_empresas');
 

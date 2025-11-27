@@ -91,7 +91,6 @@
                     <div class="row">
                         <input type="hidden" name="id" id="id">
                         <div class="col-lg-8 mb-2">
-                            <label class="form-label mb-0" for="problema">Problema</label>
                             <select class="select-clear" id="problema">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['problemas'] as $v)
@@ -104,7 +103,6 @@
                             </select>
                         </div>
                         <div class="col-md-4 mb-2">
-                            <label class="form-label mb-0" for="prioridad">Prioridad</label>
                             <select class="select" id="prioridad">
                                 <option value="">-- Seleccione --</option>
                                 <option value="P1">{{ '<label class="badge badge-dark me-2">P1</label>' }}CRITICA</option>
@@ -114,11 +112,9 @@
                             </select>
                         </div>
                         <div class="col-md-8 mb-2">
-                            <label class="form-label mb-0" for="descripcion">Descripcion</label>
                             <input class="form-control" id="descripcion">
                         </div>
                         <div class="col-lg-4 mb-2">
-                            <label class="form-label mb-0" for="estado">Estado</label>
                             <select class="select" id="estado">
                                 <option selected value="1">Activo</option>
                                 <option value="0">Inactivo</option>

@@ -1,34 +1,25 @@
 $(document).ready(function () {
-    const controles = [
+    configControls([
         //Formulario Orden
         {
-            control: '#n_orden',
-            config: {
-                require: true
-            }
-        },
-        {
             control: ['#observaciones', '#recomendacion'],
-            config: {
-                require: true
-            }
+            requested: true
         },
         {
-            control: ['#fecha_f', '#hora_f'],
-            config: {}
+            control: '#fecha_f',
+            addLabel: 'Fecha Fin'
+        },
+        {
+            control: '#hora_f',
+            addLabel: 'Hora Fin'
         },
         {
             control: '#codigo_aviso',
-            config: {
-                require: true,
-                mxl: 50,
-            }
+            addLabel: 'Codigo Aviso',
+            requested: true,
+            mxl: 50,
         },
-    ];
-
-    controles.forEach(control => {
-        defineControllerAttributes(control.control, control.config);
-    });
+    ]);
 
     formatSelect('modal_orden');
 
@@ -236,11 +227,18 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 
     fMananger.formModalLoding('modal_orden', 'show');
     var valid = validFrom(this);
-    valid.data.data.materiales = cMaterial.extract();
-
+    
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
     valid.data.data.cod_sistema = eval($('#button-cod-orden').attr('check-cod'));
+    valid.data.data.materiales = cMaterial.extract();
+
+    const data = valid.data.data;
+
+    if (data.firma_digital && !data.n_doc && !data.nom_cliente) {
+        fMananger.formModalLoding('modal_orden', 'hide');
+        return boxAlert.box({ i: 'warning', t: 'Atencion', h: 'Agregaste una firma del cliente, se necesita agregar los datos del cliente.' });
+    }
 
     $.ajax({
         type: 'POST',

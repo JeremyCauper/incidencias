@@ -104,6 +104,7 @@ class ResueltasController extends Controller
                 $contac_ordens = $contac_ordens->firstWhere('id', $orden->id_contacto);
                 $contac = !empty($contac_ordens->firma_digital) && !empty($contac_ordens->nro_doc) && !empty($contac_ordens->nombre_cliente);
             }
+            $tecnico = $this->formatearNombre(Auth::user()->nombres, Auth::user()->apellidos);
 
             return [
                 'cod_incidencia' => $incidencia->cod_incidencia,
@@ -125,7 +126,8 @@ class ResueltasController extends Controller
                         // ['funcion' => "OrdenDisplay(this, '$incidencia->cod_incidencia')", 'texto' => '<i class="far fa-file-lines text-primary me-2"></i> Ver Orden'],
                         ['funcion' => "OrdenPdf('$cod_ordens')", 'texto' => '<i class="far fa-file-pdf text-danger me-2"></i> Ver PDF'],
                         ['funcion' => "OrdenTicket('$cod_ordens')", 'texto' => '<i class="fas fa-ticket text-warning me-2"></i> Ver Ticket'],
-                        $contac ? null : ['funcion' => "AddSignature(this, '$cod_ordens')", 'texto' => '<i class="fas fa-signature text-secondary me-2"></i> Añadir Firma'],
+                        ['funcion' => "CompartirWhatsApp('$tecnico', '$cod_ordens')", 'texto' => '<i class="fab fa-whatsapp text-success me-2"></i> Compartir WhatsApp'],
+                        $contac ? null : ['funcion' => "AddSignature('$cod_ordens')", 'texto' => '<i class="fas fa-signature text-secondary me-2"></i> Añadir Firma'],
                     ]
                 ])
             ];

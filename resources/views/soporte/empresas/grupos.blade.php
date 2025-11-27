@@ -84,11 +84,9 @@
                     <div class="row">
                         <input type="hidden" name="id" id="id">
                         <div class="col-lg-8 col-sm-12 mb-2">
-                            <label class="form-label mb-0" for="grupo">Grupo</label>
                             <input class="form-control" id="grupo">
                         </div>
                         <div class="col-lg-4 col-sm-12 mb-2">
-                            <label class="form-label mb-0" for="estado">Estado</label>
                             <select class="select" id="estado">
                                 <option selected value="1">Activo</option>
                                 <option value="0">Inactivo</option>
@@ -107,5 +105,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/empresas/grupos.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/empresas/grupos.js')}}"></script>
 @endsection

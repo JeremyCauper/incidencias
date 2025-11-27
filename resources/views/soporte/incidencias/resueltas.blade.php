@@ -2,10 +2,10 @@
 @section('title', 'INC RESUELTAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ time() }}">
+    <script type="text/javascript" src="{{ secure_asset('front/vendor/daterangepicker/moment.min.js') }}"></script>
+    <script type="text/javascript" src="{{ secure_asset('front/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ secure_asset('front/vendor/daterangepicker/daterangepicker.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('front/css/app/incidencias/resueltas.css') }}?v={{ time() }}">
     <script>
         let empresas = <?php echo json_encode($data['company']); ?>;
         let sucursales = <?php echo json_encode($data['scompany']); ?>;
@@ -29,8 +29,8 @@
                             <option value=""></option>
                             @foreach ($data['company'] as $key => $val)
                                 @if ($val->status)
-                                    <option value="{{$val->ruc}}">
-                                        {{$val->ruc . ' - ' . $val->razon_social}}
+                                    <option value="{{ $val->ruc }}">
+                                        {{ $val->ruc . ' - ' . $val->razon_social }}
                                     </option>
                                 @endif
                             @endforeach
@@ -46,13 +46,15 @@
                         <label class="form-label mb-0" for="dateRango">Rango</label>
                         <input type="text" class="form-control" id="dateRango" name="dateRango" role="button" readonly>
                     </div>
-                    
+
                     <div class="col-md-6 my-1">
                         <label class="form-label mb-0" for="fProblema">Problemas</label>
                         <select id="fProblema" class="select-clear">
                             <option value=""></option>
                             @foreach ($data['problema'] as $v)
-                                <option value="{{$v['id']}}">{{ $data['tSoporte'][$v['tipo_soporte']]['descripcion'] }} - {{$v['descripcion']}}</option>
+                                <option value="{{ $v['id'] }}">
+                                    {{ $data['tSoporte'][$v['tipo_soporte']]['descripcion'] }} - {{ $v['descripcion'] }}
+                                </option>
                             @endforeach
                         </select>
                     </div>
@@ -115,64 +117,85 @@
                                 // buttons: ['excel'],
                                 ajax: {
                                     url: `${__url}/soporte/incidencias/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
-                                    dataSrc: function (json) {
+                                    dataSrc: function(json) {
                                         return json.data;
                                     },
-                                    error: function (xhr, error, thrown) {
+                                    error: function(xhr, error, thrown) {
                                         boxAlert.table();
                                         console.log('Respuesta del servidor:', xhr);
                                     }
                                 },
-                                columns: [
-                                    { data: 'cod_incidencia' },
-                                    { data: 'fecha_inc' },
-                                    { data: 'cod_orden' },
+                                columns: [{
+                                        data: 'cod_incidencia'
+                                    },
                                     {
-                                        data: 'asignados', render: function (data, type, row) {
+                                        data: 'fecha_inc'
+                                    },
+                                    {
+                                        data: 'cod_orden'
+                                    },
+                                    {
+                                        data: 'asignados',
+                                        render: function(data, type, row) {
                                             return (data.map(usu => usuarios[usu].nombre)).join(", ");
                                         }
                                     },
                                     {
-                                        data: 'empresa', render: function (data, type, row) {
+                                        data: 'empresa',
+                                        render: function(data, type, row) {
                                             let empresa = empresas[data];
                                             return `${empresa.ruc} - ${empresa.razon_social}`;
                                         }
                                     },
                                     {
-                                        data: 'sucursal', render: function (data, type, row) {
+                                        data: 'sucursal',
+                                        render: function(data, type, row) {
                                             return sucursales[data].nombre;
                                         }
                                     },
                                     {
-                                        data: 'tipo_incidencia', render: function (data, type, row) {
+                                        data: 'tipo_incidencia',
+                                        render: function(data, type, row) {
                                             let tipo = tipo_incidencia[data[data.length - 1]];
                                             return `<label class="badge badge-${tipo.color} me-2" style="font-size: 0.75rem;">${tipo.tipo}</label> ${tipo.descripcion}`;
                                         }
                                     },
                                     {
-                                        data: 'tipo_soporte', render: function (data, type, row) {
+                                        data: 'tipo_soporte',
+                                        render: function(data, type, row) {
                                             return tipo_soporte[data].descripcion;
                                         }
                                     },
                                     {
-                                        data: 'problema', render: function (data, type, row) {
+                                        data: 'problema',
+                                        render: function(data, type, row) {
                                             return obj_problem[data].descripcion;
                                         }
                                     },
                                     {
-                                        data: 'subproblema', render: function (data, type, row) {
+                                        data: 'subproblema',
+                                        render: function(data, type, row) {
                                             return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_subproblem[data].descripcion}`;
                                         }
                                     },
-                                    { data: 'iniciado' },
-                                    { data: 'finalizado' },
-                                    { data: 'acciones' }
+                                    {
+                                        data: 'iniciado'
+                                    },
+                                    {
+                                        data: 'finalizado'
+                                    },
+                                    {
+                                        data: 'acciones'
+                                    }
                                 ],
-                                createdRow: function (row, data, dataIndex) {
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(7), td:eq(10), td:eq(11), td:eq(12)').addClass('text-center');
+                                createdRow: function(row, data, dataIndex) {
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(7), td:eq(10), td:eq(11), td:eq(12)').addClass(
+                                        'text-center');
                                     $(row).find('td:eq(12)').addClass(`td-acciones`);
                                 },
-                                order: [[1, 'desc']],
+                                order: [
+                                    [1, 'desc']
+                                ],
                                 processing: true
                             });
                         </script>
@@ -188,7 +211,7 @@
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title">Detalle de incidencia
                         <span class="badge badge-success badge-lg" aria-item="codigo"></span>
-                        <span class="badge badge-info badge-lg" aria-item="codigo_orden"></span>
+                        <span class="badge badge-warning badge-lg" aria-item="codigo_orden"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
@@ -256,7 +279,7 @@
                 <div class="modal-header bg-primary text-white">
                     <h6 class="modal-title">ASIGNAR FIRMA
                         <span class="badge badge-success badge-lg" aria-item="codigo"></span>
-                        <span class="badge badge-info badge-lg" aria-item="codigo_orden"></span>
+                        <span class="badge badge-warning badge-lg" aria-item="codigo_orden"></span>
                     </h6>
                     <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                         aria-label="Close"></button>
@@ -279,7 +302,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Agregar firma
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Agregar
+                            firma
                         </h6>
                         <span aria-item="estado"></span>
                     </div>
@@ -316,7 +340,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-link" data-mdb-ripple-init
+                        data-mdb-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init>Guardar</button>
                 </div>
             </form>
@@ -326,5 +351,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ secure_asset('front/js/soporte/incidencia/resueltas.js')}}?v={{ time() }}"></script>
+    <script src="{{ secure_asset('front/vendor/signature/signature_pad.js') }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/resueltas.js') }}?v={{ time() }}"></script>
 @endsection

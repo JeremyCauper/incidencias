@@ -94,15 +94,12 @@
                     <div class="row">
                         <input type="hidden" name="id" id="id">
                         <div class="col-lg-4 mb-2">
-                            <label class="form-label mb-0" for="codigo">Codigo</label>
                             <input class="form-control" id="codigo">
                         </div>
                         <div class="col-lg-8 mb-2">
-                            <label class="form-label mb-0" for="descripcion">Descripcion</label>
                             <input class="form-control" id="descripcion">
                         </div>
                         <div class="col-6 mb-2">
-                            <label class="form-label mb-0" for="tipo">Tipo</label>
                             <select class="select" id="tipo">
                                 <option value="">-- Seleccione --</option>
                                 @foreach ($data['tSoporte'] as $v)
@@ -116,7 +113,6 @@
                             </select>
                         </div>
                         <div class="col-6 mb-2">
-                            <label class="form-label mb-0" for="estado">Estado</label>
                             <select class="select" id="estado">
                                 <option selected value="1">Activo</option>
                                 <option value="0">Inactivo</option>

@@ -113,7 +113,16 @@ function OrdenTicket(cod) {
     }
 }
 
-function AddSignature(e, cod) {
+function CompartirWhatsApp(tecnico, cod) {
+    const linkPdf = `${__url}/soporte/orden/exportar-documento?documento=whatsapp&codigo=${cod}`;
+    const saludo = saludoPorHora(); // o sin timeZone para hora local
+    let mensaje = `${saludo} 👋, le saluda *${tecnico}* de *RC Ingenieros SAC* 🛠️\nLe comparto el enlace para la descarga de su *Orden de Servicio* 📄:\n\n👉 ${linkPdf}\n\nQuedamos atentos a cualquier consulta 📞`;
+
+    const url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(mensaje);
+    window.open(url, "_blank");
+}
+
+function AddSignature(cod) {
     $('#modal_firmas').modal('show');
     fMananger.formModalLoding('modal_firmas', 'show', true);
     $('[name="cod_orden"]').val(cod);
@@ -170,15 +179,21 @@ document.getElementById('form-firmas').addEventListener('submit', async function
 
     if (!valid.success)
         return fMananger.formModalLoding('modal_firmas', 'hide');
+    const data = valid.data.data;
+
+    if (data.firma_digital && !data.n_doc && !data.nom_cliente) {
+        fMananger.formModalLoding('modal_firmas', 'hide');
+        return boxAlert.box({ i: 'warning', t: 'Atencion', h: 'Agregaste una firma del cliente, se necesita agregar los datos del cliente.' });
+    }
 
     $.ajax({
         type: 'POST',
-        url: __url + '/orden/addSignature',
+        url: __url + '/soporte/orden/addSignature',
         contentType: 'application/json',
         headers: {
             'X-CSRF-TOKEN': __token,
         },
-        data: JSON.stringify(valid.data.data),
+        data: JSON.stringify(data),
         success: function (data) {
 
             fMananger.formModalLoding('modal_firmas', 'hide');

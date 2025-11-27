@@ -1,31 +1,21 @@
 $(document).ready(function () {
-    const controles = [
+    configControls([
         // Formulario problemas
         {
             control: '#codigo',
-            config: {
-                mxl: 50,
-                require: true
-            }
+            mxl: 50,
+            requested: true
         },
         {
             control: '#descripcion',
-            config: {
-                mxl: 255,
-                require: true
-            }
+            mxl: 255,
+            requested: true
         },
         {
             control: ['#tipo', '#estado'],
-            config: {
-                require: true
-            }
+            requested: true
         },
-    ];
-
-    controles.forEach(control => {
-        defineControllerAttributes(control.control, control.config);
-    });
+    ]);
 
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_problemasLabel').html('REGISTRAR PROBLEMA');
