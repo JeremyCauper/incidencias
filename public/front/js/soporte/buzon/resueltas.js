@@ -56,7 +56,7 @@ function OrdenTicketInc(cod) {
 function CompartirWhatsApp(tecnico, cod) {
     const linkPdf = `${__url}/soporte/orden/exportar-documento?documento=whatsapp&codigo=${cod}`;
     const saludo = saludoPorHora(); // o sin timeZone para hora local
-    let mensaje = `${saludo} 👋, le saluda *${tecnico}* de *RC Ingenieros SAC* 🛠️\nLe comparto el enlace para la descarga de su *Orden de Servicio* 📄:\n👉 ${linkPdf}\n\nQuedamos atentos a cualquier consulta ✨📞`;
+    let mensaje = `${saludo} 👋, le saluda *${tecnico}* de *RC Ingenieros SAC* 🛠️\nLe comparto el enlace para la descarga de su *Orden de Servicio* 📄:\n\n👉 ${linkPdf}\n\nQuedamos atentos a cualquier consulta 📞`;
 
     const url = "https://api.whatsapp.com/send?text=" + encodeURIComponent(mensaje);
     window.open(url, "_blank");

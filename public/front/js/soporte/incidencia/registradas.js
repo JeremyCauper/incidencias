@@ -900,11 +900,16 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 
     fMananger.formModalLoding('modal_orden', 'show');
     var valid = validFrom(this);
-    valid.data.data.materiales = cMaterial.extract();
-
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
+    valid.data.data.materiales = cMaterial.extract();
     valid.data.data.cod_sistema = eval($('#button-cod-orden').attr('check-cod'));
+    const data = valid.data.data;
+
+    if (data.firma_digital && !data.n_doc && !data.nom_cliente) {
+        fMananger.formModalLoding('modal_orden', 'hide');
+        return boxAlert.box({ i: 'warning', t: 'Atencion', h: 'Agregaste una firma del cliente, se necesita agregar los datos del cliente.' });
+    }
 
     $.ajax({
         type: 'POST',
@@ -913,7 +918,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         headers: {
             'X-CSRF-TOKEN': __token,
         },
-        data: JSON.stringify(valid.data.data),
+        data: JSON.stringify(data),
         success: function (data) {
             let dt = data.data;
             console.log(data);

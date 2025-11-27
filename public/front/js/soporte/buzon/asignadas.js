@@ -227,11 +227,18 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 
     fMananger.formModalLoding('modal_orden', 'show');
     var valid = validFrom(this);
-    valid.data.data.materiales = cMaterial.extract();
-
+    
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
     valid.data.data.cod_sistema = eval($('#button-cod-orden').attr('check-cod'));
+    valid.data.data.materiales = cMaterial.extract();
+
+    const data = valid.data.data;
+
+    if (data.firma_digital && !data.n_doc && !data.nom_cliente) {
+        fMananger.formModalLoding('modal_orden', 'hide');
+        return boxAlert.box({ i: 'warning', t: 'Atencion', h: 'Agregaste una firma del cliente, se necesita agregar los datos del cliente.' });
+    }
 
     $.ajax({
         type: 'POST',
