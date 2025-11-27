@@ -781,11 +781,13 @@ class RegistradasController extends Controller
             $datos['nombre'] = $cliente->nombre_cliente;
             $datos['firma_digital'] = $cliente->firma_digital;
         } else {
-            $rs = (new ConsultasController())->ConsultaDni($dni);
+            $rs = (new ConsultasController())->ConsultaDoc(new Request([
+                'doc' => $dni
+            ]));
             $response = json_decode($rs->getContent(), true);
 
             if ($response['status'] == 200) {
-                $datos['nombre'] = $response['data']['completo'];
+                $datos['nombre'] = $response['data']['RazonSocialCliente'];
                 $datos['consulta'] = false;
             } else {
                 $data['success'] = false;
