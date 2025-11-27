@@ -911,6 +911,8 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         return boxAlert.box({ i: 'warning', t: 'Atencion', h: 'Agregaste una firma del cliente, se necesita agregar los datos del cliente.' });
     }
 
+    
+
     $.ajax({
         type: 'POST',
         url: `${__url}/soporte/orden/create`,
