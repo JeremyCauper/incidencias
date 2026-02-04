@@ -191,7 +191,8 @@ class ProblemaController extends Controller
             $reg_existe = JsonDB::table('problema')
                 ->where('codigo', $request->codigo)
                 ->where('descripcion', $request->descripcion)->first();
-            if ($reg_existe->id != $request->id) {
+
+            if (!empty($reg_existe) && $reg_existe?->id == $request->id) {
                 return response()->json(['success' => false, 'message' => $this->checks['descripcion']['message']], 409);
             }
     

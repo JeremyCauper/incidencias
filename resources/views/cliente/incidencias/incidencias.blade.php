@@ -100,6 +100,7 @@
                                     <th>Sucursal</th>
                                     <th>Nivel Incidencia</th>
                                     <th>Soporte</th>
+                                    <th>Prioridad</th>
                                     <th>Problema / Sub Problema</th>
                                     <th>Iniciada</th>
                                     <th>Terminada</th>
@@ -147,9 +148,10 @@
                                             return tipo_soporte[data].descripcion;
                                         }
                                     },
+                                    { data: 'subproblema', render: function (data, type, row) { return getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75) } },
                                     {
                                         data: 'problema', render: function (data, type, row) {
-                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
+                                            return `${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
                                         }
                                     },
                                     { data: 'iniciado' },
@@ -157,8 +159,9 @@
                                     { data: 'acciones' }
                                 ],
                                 createdRow: function (row, data, dataIndex) {
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(3), td:eq(7), td:eq(9), td:eq(10), td:eq(11)').addClass('text-center');
-                                    $(row).find('td:eq(11)').addClass(`td-acciones`);
+                                    $(row).find('td:eq(4), td:eq(5), td:eq(6), td:eq(8)').addClass('text-left');
+                                    $(row).addClass('text-center');
+                                    $(row).find('td:eq(12)').addClass(`td-acciones`);
                                 },
                                 order: [[2, 'desc']],
                                 processing: true

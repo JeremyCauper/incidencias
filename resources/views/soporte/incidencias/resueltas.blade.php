@@ -102,6 +102,7 @@
                                     <th>Sucursal</th>
                                     <th>Nivel Incidencia</th>
                                     <th>Soporte</th>
+                                    <th>Prioridad</th>
                                     <th>Problema</th>
                                     <th>Sub Problema</th>
                                     <th>Iniciada</th>
@@ -167,6 +168,12 @@
                                         }
                                     },
                                     {
+                                        data: 'subproblema',
+                                        render: function(data, type, row) {
+                                            return getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75);
+                                        }
+                                    },
+                                    {
                                         data: 'problema',
                                         render: function(data, type, row) {
                                             return obj_problem[data].descripcion;
@@ -175,7 +182,7 @@
                                     {
                                         data: 'subproblema',
                                         render: function(data, type, row) {
-                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_subproblem[data].descripcion}`;
+                                            return obj_subproblem[data].descripcion;
                                         }
                                     },
                                     {
@@ -189,9 +196,9 @@
                                     }
                                 ],
                                 createdRow: function(row, data, dataIndex) {
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(7), td:eq(10), td:eq(11), td:eq(12)').addClass(
-                                        'text-center');
-                                    $(row).find('td:eq(12)').addClass(`td-acciones`);
+                                    $(row).find('td:eq(3), td:eq(4), td:eq(5), td:eq(6)').addClass('text-left');
+                                    $(row).addClass('text-center');
+                                    $(row).find('td:eq(13)').addClass(`td-acciones`);
                                 },
                                 order: [
                                     [1, 'desc']
