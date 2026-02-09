@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Helpers\TipoUsuario;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\SettingsController;
 use App\Models\User;
 use Exception;
 use Illuminate\Http\Request;
@@ -51,20 +52,21 @@ class LoginController extends Controller
 
         $foto_perfil = empty(Auth::user()->foto_perfil) ? 'user_auth.jpg' : Auth::user()->foto_perfil;
 
-        session([
+        $request->session()->regenerate();
+        $data = [
             'customModulos' => $modulos->menus,
             'rutaRedirect' => $modulos->ruta,
             'id_usuario' => Auth::user()->id_usuario,
             'tipo_acceso' => Auth::user()->tipo_acceso,
             'menu_usuario' => $menu_usuario,
             'turno_fin' => $turno_fin,
-            'config_layout' => (object)[
-                'text_acceso' => $text_acceso ?? null,
+            'config' => (object)[
+                'acceso' => $text_acceso ?? null,
                 'nombre_perfil' => $nomPerfil ?? null,
                 'foto_perfil' => secure_asset("front/images/auth/$foto_perfil"),
             ]
-        ]);
-        $request->session()->regenerate();
+        ];
+        SettingsController::set($data);
 
         // Autenticación exitosa
         return response()->json(['success' => true, 'message' => '', 'data' => $modulos->ruta], 200);

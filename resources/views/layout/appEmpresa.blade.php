@@ -14,7 +14,7 @@
     <!-- Iconos -->
     <link href="{{ secure_asset('front/vendor/simple-icon/bootstrap-icons.css') }}" rel="stylesheet">
     <link href="{{ secure_asset('front/vendor/simple-icon/styles.min.css') }}" rel="stylesheet">
-    <link href="{{ secure_asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ secure_asset('front/vendor/customSelect2/customSelect2.css') }}" rel="stylesheet">
 
     <link rel="stylesheet" href="{{ secure_asset('front/vendor/flatpickr/flatpickr.min.css') }}">
 
@@ -32,7 +32,7 @@
     <!-- JQuery -->
     <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
     <script src="{{ secure_asset('front/vendor/sweetalert/sweetalert2@11.js') }}"></script>
-    <script src="{{ secure_asset('front/vendor/select/select2.min.js') }}"></script>
+    <script src="{{ secure_asset('front/vendor/customSelect2/jquery.customSelect2.js') }}"></script>
     <script src="{{ secure_asset('front/vendor/select/form_select2.js') }}"></script>
     <script src="{{ secure_asset('front/js/app/AlertMananger.js') }}"></script>
     <script src="{{ secure_asset('front/vendor/dataTable/jquery.dataTables.min.js') }}"></script>
@@ -89,9 +89,8 @@
                         <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
                             <li>
                                 <span class="dropdown-header text-center">
-                                    <img class="img-md rounded-circle"
-                                        src="{{ session('config_layout')->foto_perfil }}" alt="Profile image"
-                                        style="width: 90px; height: 90px;">
+                                    <img class="img-md rounded-circle" src="{{ session('config_layout')->foto_perfil }}"
+                                        alt="Profile image" style="width: 90px; height: 90px;">
                                     <p class="mb-1 mt-3 fw-semibold">
                                         {{ session('config_layout')->nombre_perfil }}
                                     </p>
@@ -118,8 +117,8 @@
                     body.addClass('sidebar-icon-only');
                 }
 
-                $(document).ready(function() {
-                    $('#expandir-menu i').on("click", function() {
+                $(document).ready(function () {
+                    $('#expandir-menu i').on("click", function () {
                         localStorage.sidebarIconOnly = false;
                         if (window.innerWidth > 992) {
                             body.toggleClass('sidebar-icon-only');
@@ -183,8 +182,8 @@
                                     <span class="badge badge-success badge-lg" aria-item="codigo"></span>
                                     <span class="badge badge-info badge-lg" aria-item="codigo_orden"></span>
                                 </h6>
-                                <button type="button" class="btn-close" data-mdb-ripple-init
-                                    data-mdb-dismiss="modal" aria-label="Close"></button>
+                                <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
                             <div class="modal-body p-0 position-relative">
                                 <iframe id="contenedor_doc" class="w-100" frameborder="0"></iframe>

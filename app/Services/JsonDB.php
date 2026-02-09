@@ -23,7 +23,13 @@ class JsonDB
     public static function table(string $table, array $structure = []): self
     {
         $instance = new self();
-        $instance->path = storage_path("config/jsons/{$table}.json");
+
+        $config_path = storage_path('config/jsons');
+        if (!file_exists($config_path)) {
+            mkdir($config_path, 0777, true); // crea carpetas recursivamente
+        }
+
+        $instance->path = "$config_path/{$table}.json";
 
         if (!empty($structure)) {
             self::$schemas[$table] = $structure;
@@ -147,6 +153,12 @@ class JsonDB
         return $this;
     }
 
+    public function whereIn(string $field, array $values): self
+    {
+        $this->wheres[] = [$field, 'in', $values];
+        return $this;
+    }
+
     public function orderBy(string $field, string $direction = 'asc'): self
     {
         $this->orderBy = [$field, strtolower($direction)];
@@ -216,6 +228,8 @@ class JsonDB
                 return $item[$field] >= $value;
             case '<=':
                 return $item[$field] <= $value;
+            case 'in':
+                return in_array($item[$field], (array) $value);
         }
         return false;
     }
@@ -282,6 +296,10 @@ class JsonDB
                     if ($item[$field] > $value)
                         return false;
                     break;
+                case 'in':
+                    if (!in_array($item[$field], (array) $value))
+                        return false;
+                    break;
             }
         }
         return true;
@@ -330,6 +348,9 @@ class JsonDB
                         break;
                     case 'float':
                         $value = (float) $value;
+                        break;
+                    case 'array':
+                        $value = (array) $value;
                         break;
                     case 'string':
                         $value = (string) $value;

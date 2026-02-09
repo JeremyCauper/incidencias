@@ -25,7 +25,8 @@
                             @foreach ($data['empresas'] as $key => $val)
                                 @if ($val->status)
                                     <option value="{{$val->ruc}}" id-empresa="{{$val->id}}">
-                                        {{$val->ruc . ' - ' . $val->razon_social}}</option>
+                                        {{$val->ruc . ' - ' . $val->razon_social}}
+                                    </option>
                                 @endif
                             @endforeach
                         </select>
@@ -33,7 +34,7 @@
                     <div class="col-xxl-3 col-md-8 my-1">
                         <label class="form-label mb-0" for="idGrupo">Sucursal</label>
                         <select id="sucursal" name="sucursal" class="select-clear" disabled="true">
-                            <option value="">-- Seleccione --</option>
+                            <option value="">Seleccione...</option>
                         </select>
                     </div>
                     <div class="col-xxl-2 col-md-4 my-1">

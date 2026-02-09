@@ -2,239 +2,255 @@
 <html lang="es" data-mdb-theme="light">
 
 <head>
-    <!-- Required meta tags -->
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
-    <meta http-equiv="Pragma" content="no-cache">
-    <meta http-equiv="Expires" content="0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <link rel="shortcut icon" href="{{ secure_asset($ft_img->icon) }}" />
 
-    <link rel="shortcut icon" href="{{ secure_asset('front/images/app/LogoRC.png') }}" />
+    <!-- PWA Meta Tags -->
+    <meta name="theme-color" content="#000000">
+
     <title>@yield('title')</title>
+
+    <!-- Para iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Asistencias">
+    <link rel="apple-touch-icon" href="{{ secure_asset($ft_img->icon_192) }}">
+
+    <!-- Para Windows -->
+    <meta name="msapplication-TileImage" content="{{ secure_asset($ft_img->icon_192) }}">
+    <meta name="msapplication-TileColor" content="#000000">
+
     <!-- Font Awesome -->
-    <link href="{{ secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css') }}" rel="stylesheet">
+    <link href="{{ secure_asset($ft_css->mdb_all_min6_0_0) }}" rel="stylesheet">
     <!-- MDB -->
-    <link href="{{ secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css') }}" rel="stylesheet">
-    <!-- Iconos -->
-    <link href="{{ secure_asset('front/vendor/simple-icon/bootstrap-icons.css') }}" rel="stylesheet">
-    <link href="{{ secure_asset('front/vendor/simple-icon/styles.min.css') }}" rel="stylesheet">
-    <link href="{{ secure_asset('front/vendor/select/select2.min.css') }}" rel="stylesheet">
+    <link href="{{ secure_asset($ft_css->mdb_min7_2_0) }}" rel="stylesheet">
 
-    <link rel="stylesheet" href="{{ secure_asset('front/vendor/flatpickr/flatpickr.min.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->customSelect2) }}">
 
-    <link rel="stylesheet" href="{{ secure_asset('front/vendor/sweetalert/animate.min.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('front/vendor/sweetalert/default.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->sweet_animate) }}">
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->sweet_default) }}">
     <!-- Google Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->fonts) }}" />
     <!-- Home -->
-    <link rel="stylesheet" href="{{ secure_asset('front/css/app.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->layout) }}">
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->app) }}">
     <script>
         const __url = "{{ secure_url('') }}";
-        const __asset = "{{ secure_asset('/front') }}";
-        const __token = "{{ csrf_token() }}";
+        const __asset = "{{ secure_asset('front/') }}";
+        const __token = "{{ csrf_token() }}";;
     </script>
     <!-- JQuery -->
-    <script src="{{ secure_asset('front/vendor/jquery/jquery.min.js') }}"></script>
-    <script src="{{ secure_asset('front/vendor/sweetalert/sweetalert2@11.js') }}"></script>
-    <script src="{{ secure_asset('front/vendor/select/select2.min.js') }}"></script>
-    <script src="{{ secure_asset('front/vendor/select/form_select2.js') }}"></script>
-    <script src="{{ secure_asset('front/js/app/AlertMananger.js') }}"></script>
-    <script src="{{ secure_asset('front/vendor/dataTable/jquery.dataTables.min.js') }}"></script>
-    <script src="{{ secure_asset('front/js/app.js') }}"></script>
-
-    <!-- DataTables Buttons -- >
-  <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.4.1/css/buttons.dataTables.min.css">
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/dataTables.buttons.min.js"></script>
-
-  < !-- Excel export -- >
-  <script src="https://cdn.datatables.net/buttons/2.4.1/js/buttons.html5.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script> -->
-
-    <link rel="stylesheet" href="{{ secure_asset('front/css/tema.css') }}">
-    <script src="{{ secure_asset('front/js/app/ToggleTema.js') }}"></script>
+    <script src="{{ secure_asset($ft_js->jquery) }}"></script>
+    <script src="{{ secure_asset($ft_js->sweet_sweetalert2) }}"></script>
+    <script src="{{ secure_asset($ft_js->customSelect2) }}"></script>
+    <script src="{{ secure_asset($ft_js->form_customSelect2) }}"></script>
+    <script src="{{ secure_asset($ft_js->AlertMananger) }}"></script>
+    <script src="{{ secure_asset($ft_js->CardTable) }}"></script>
+    <script src="{{ secure_asset($ft_js->jquery_dataTables) }}"></script>
+    <script src="{{ secure_asset($ft_js->app) }}"></script>
 
     @yield('cabecera')
 </head>
-<style>
 
-</style>
+<body>
+    <div class="layout-container">
+        <script>
+            const layout_Container = document.querySelector('.layout-container');
+            if (eval(localStorage.sidebarIconOnly_asistencias) && window.innerWidth > 767) {
+                layout_Container.classList.add('sidebar-only-icon');
+            } else {
+                layout_Container.classList.remove('sidebar-only-icon');
+            }
+        </script>
+        <div class="sidevar__overlay"></div>
 
-<body class="with-welcome-text"> <!-- sidebar-icon-only -->
-    <div class="container-scroller">
-        <!-- partial:partials/_navbar.html -->
-        <nav class="navbar default-layout col-lg-12 col-12 p-0 fixed-top">
-            <a class="navbar-brand" href="#">
-                <div class="logo_rci"></div>
-            </a>
-            <div class="navbar-menu-wrapper d-flex align-items-top">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <span id="tiempo_restante_head" class="me-3" style="font-size: small;"></span>
-                    </li>
-                    <div class="me-2">
-                        <input id="check" type="checkbox">
-                        <label for="check" class="check-trail">
-                            <span class="check-handler"></span>
-                        </label>
-                        <script>
-                            if (!localStorage.hasOwnProperty('data_mdb_theme') || !localStorage.data_mdb_theme) {
-                                localStorage.setItem('data_mdb_theme', 'light');
-                            }
-                            $('html').attr('data-mdb-theme', localStorage.data_mdb_theme);
+        <!-- SIDEBAR sidebar-only-icon-->
+        <aside class="sidebar">
 
-                            $('#check').prop('checked', localStorage.data_mdb_theme == 'light' ? true : false);
-                            if (!esCelularTema()) {
-                                $('.check-trail').append(`<span class="badge badge-secondary toltip-theme">
-                      <b class="fw-bold">Shift</b><i class="fas fa-plus fa-2xs text-white"></i> <b class="fw-bold">D</b>
-                  </span>`);
-                            }
-                        </script>
-                    </div>
-                    <!-- Avatar -->
-                    <div class="dropdown">
-                        <a data-mdb-dropdown-init
-                            class="dropdown-toggle d-flex align-items-center hidden-arrow rounded-circle" href="#"
-                            id="navbarDropdownMenuAvatar" role="button" aria-expanded="false" data-mdb-ripple-init>
-                            <img class="img-xs rounded-circle" src="{{ session('config_layout')->foto_perfil }}"
-                                alt="Profile image">
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuAvatar">
-                            <li>
-                                <span class="dropdown-header text-center">
-                                    <img class="img-md rounded-circle"
-                                        src="{{ session('config_layout')->foto_perfil }}" alt="Profile image"
-                                        style="width: 90px; height: 90px;">
-                                    <p class="mb-1 mt-3 fw-semibold">
-                                        {{ session('config_layout')->nombre_perfil }}
-                                    </p>
-                                    <p>{{ session('config_layout')->text_acceso }}</p>
-                                </span>
-                            </li>
-                            <li>
-                                <a class="dropdown-item" href="{{ secure_url('/soporte/logout') }}">
-                                    <i class="dropdown-item-icon fas fa-power-off text-primary me-2"></i>
-                                    Cerrar sesión
-                                </a>
-                            </li>
-                        </ul>
-                    </div>
-                </ul>
-                <button class="navbar-toggler navbar-toggler-right d-lg-none align-self-center" type="button"
-                    data-bs-toggle="offcanvas">
-                    <span class="fas fa-bars"></span>
+            <!-- Header -->
+            <nav class="sidebar__header sidebar__header-only-icon">
+                <button class="sidebar-close hover-layout" type="button" aria-label="Cerrar barra lateral">
+                    <i class="fas fa-bars" style="color: #8f8f8f;"></i>
                 </button>
-            </div>
-            <script>
-                var body = $('body');
-                if (eval(localStorage.sidebarIconOnly) && window.innerWidth > 992) {
-                    body.addClass('sidebar-icon-only');
-                }
 
-                $(document).ready(function() {
-                    $('#expandir-menu i').on("click", function() {
-                        localStorage.sidebarIconOnly = false;
-                        if (window.innerWidth > 992) {
-                            body.toggleClass('sidebar-icon-only');
-                            localStorage.sidebarIconOnly = body.hasClass('sidebar-icon-only') ? true : false;
-                        }
-                    });
-                })
-            </script>
-        </nav>
-        <!-- partial -->
-        <div class="container-fluid page-body-wrapper">
-            <div class="sidebar-content" role="button"></div>
-            <nav class="sidebar sidebar-offcanvas" id="sidebar">
-                <ul class="nav">
-                    <li class="nav-item menu-item text-center pb-1 menu-bar" tittle-menu>
-                        <a class="nav-link menu-lateral py-0" href="javascript:void(0)" role="button"
-                            id="expandir-menu">
-                            <i class="fas fa-bars"></i>
-                            <span class="ms-2 menu-title">Menu</span>
-                        </a>
-                    </li>
-                    <li class="nav-item menu-item text-center" tittle-menu>
-                        <div class="nav-link menu-perfil pt-0">
-                            <img class="rounded-circle" src="{{ session('config_layout')->foto_perfil }}">
-                            <span class="ms-2 menu-title">
-                                <p class="fw-bold mb-1 nombre-personal">{{ session('config_layout')->nombre_perfil }}
-                                </p>
-                                <p class="text-muted mb-0 tipo-personal">{{ session('config_layout')->text_acceso }}
-                                </p>
-                            </span>
-                        </div>
-                    </li>
-                    @foreach (session('customModulos') as $menu)
-                        <li class="nav-item menu-item">
-                            <a class="nav-link menu-link"
-                                {{ !empty($menu->submenu) ? (string) 'data-mdb-collapse-init role=button aria-expanded=false aria-controls=' . $menu->ruta : '' }}
-                                data-mdb-ripple-init
-                                href={{ !empty($menu->submenu) ? "#$menu->ruta" : url($menu->ruta) }}>
-                                <i class="{{ $menu->icon }} menu-icon"></i>
-                                <span class="menu-title">{{ $menu->descripcion }}</span>
-                                @if (!empty($menu->submenu))
-                                    <i class="menu-arrow"></i>
-                                @endif
-                            </a>
-                            @if (!empty($menu->submenu))
-                                <div class="collapse" id="{{ $menu->ruta }}">
-                                    <ul class="nav flex-column sub-menu">
-                                        @foreach ($menu->submenu as $categoria => $submenus)
-                                            @if ($categoria !== 'sin_categoria' || count($menu->submenu) > 1)
-                                                <li class="nav-category-item">
-                                                    {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
-                                                </li>
-                                            @endif
-                                            @foreach ($submenus as $submenu)
-                                                <li class="nav-item">
-                                                    <a class="nav-link"
-                                                        href="{{ secure_url($submenu->ruta) }}">{{ $submenu->descripcion }}</a>
-                                                </li>
-                                            @endforeach
-                                        @endforeach
-                                    </ul>
-                                </div>
-                            @endif
-                        </li>
-                    @endforeach
-                </ul>
+                <a class="sidebar-icon-logo hover-layout" href="/">
+                    <div></div>
+                </a>
             </nav>
 
-            <!-- partial -->
-            <div class="main-panel">
-                <div class="content-wrapper">
-                    @yield('content')
-                </div>
-                <!-- content-wrapper ends -->
+            <!-- Body -->
+            <div class="sidebar__body">
 
-                <div class="modal fade" id="modal_pdf" aria-labelledby="modal_pdf" aria-hidden="true">
-                    <div class="modal-dialog modal-fullscreen">
-                        <div class="modal-content">
-                            <div class="modal-header bg-primary text-white">
-                                <h6 class="modal-title">Visualización de PDF
-                                    <span class="badge badge-success badge-lg" aria-item="codigo"></span>
-                                    <span class="badge badge-info badge-lg" aria-item="codigo_orden"></span>
-                                </h6>
-                                <button type="button" class="btn-close" data-mdb-ripple-init
-                                    data-mdb-dismiss="modal" aria-label="Close"></button>
+                @foreach ($customModulos as $menu)
+                    <div class="sidebar__item" {{ !empty($menu['submenu']) ? 'data-collapse="false"' : '' }}>
+                        <a class="sidebar__link{{ !empty($menu['submenu']) ? ' sidebar__link-menu' : '' }}"
+                            {{ empty($menu['submenu']) ? 'data-mdb-ripple-init' : '' }}
+                            href="{{ !empty($menu['submenu']) ? 'javascript:void(0)' : secure_url($menu['ruta']) }}"
+                            @if (!empty($menu['submenu'])) data-menu="{{ $menu['ruta'] }}" @endif>
+                            <div class="sidebar__link-icon">
+                                <i class="{{ $menu['icon'] }}"></i>
                             </div>
-                            <div class="modal-body p-0 position-relative">
-                                <iframe id="contenedor_doc" class="w-100" frameborder="0"></iframe>
+                            <div class="sidebar__link-text">
+                                <div class="truncate">{{ $menu['descripcion'] }}</div>
                             </div>
-                            <div class="modal-footer border-top-0 pt-0 pb-1">
-                                <button type="button" class="btn btn-link " data-mdb-ripple-init
-                                    data-mdb-dismiss="modal">Cerrar</button>
+                        </a>
+
+                        @if (!empty($menu['submenu']))
+                            <ul class="sidebar__submenu">
+                                @foreach ($menu['submenu'] as $categoria => $submenus)
+                                    @if ($categoria !== 'sin_categoria' || count($menu['submenu']) > 1)
+                                        <li class="sidebar__submenu-title">
+                                            {{ $categoria === 'sin_categoria' ? 'Otros' : $categoria }}
+                                        </li>
+                                    @endif
+                                    @foreach ($submenus as $submenu)
+                                        <li class="sidebar__submenu-item">
+                                            <a class="sidebar__submenu-link" data-mdb-ripple-init
+                                                href="{{ secure_url($submenu['ruta']) }}"
+                                                data-ruta="{{ $menu['ruta'] }}">
+                                                {{ $submenu['descripcion'] }}
+                                            </a>
+                                        </li>
+                                    @endforeach
+                                @endforeach
+                            </ul>
+                        @endif
+                    </div>
+                @endforeach
+
+            </div>
+
+            <!-- Footer -->
+            <div class="sidebar__footer dropup">
+                <button class="sidebar__footer-user hover-layout" data-mdb-dropdown-init data-mdb-ripple-init
+                    aria-expanded="false" data-mdb-dropdown-animation="off">
+                    <div class="sidebar__footer-user-sigla image-user" style="background-image: url('{{ $config->foto_perfil }}');"></div>
+                    <div class="sidebar__footer-user-text">
+                        <h5>{{ $config->nombre_perfil }}</h5>
+                        <h6>{{ $config->acceso }}</h6>
+                    </div>
+                </button>
+                <ul class="dropdown-menu py-2 px-1" style="width: 15.25rem !important;">
+                    <li>
+                        <div class="dropdown-header align-items-center d-flex" style="user-select: none">
+                            <div class="align-items-center d-flex justify-content-center rounded-circle text-white image-user"
+                                style="width: 2rem; height: 2rem; background-image: url('{{ $config->foto_perfil }}');"></div>
+                            <div class="dropdown-header__text ms-2">
+                                <span>{{ $config->nombre_perfil }}</span>
+                                <p class="fw-bold mb-0 mt-2 text-secondary">{{ $config->acceso }}</p>
                             </div>
                         </div>
+                        <hr class="mx-2 mt-0 mb-1">
+                    </li>
+                    <li>
+                        <a class="dropdown-item py-3 rounded" href="{{ secure_url('/logout') }}"
+                            onclick="boxAlert.loading()">
+                            <i class="fas fa-arrow-right-from-bracket me-2"></i> Cerrar sesión
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </aside>
+        <!-- MAIN CONTENT -->
+        <main class="content-full flex-grow-1">
+            <!-- Navbar -->
+            <nav class="navbar pe-3" style="padding-left: 16px;">
+                <div class="navbar-brand mb-0 p-0">
+                    <div class="logo_rci"></div>
+                </div>
+                <div class="navbar-brand mb-0 p-0">
+                    {{-- Switch Layout --}}
+                    @include('layout.partials.swicth_layout')
+                    {{-- Notifications --}}
+                    {{-- <div class="ms-1">
+                        <div class="dropdown" id="contenedor-notificaciones">
+                            <button data-mdb-dropdown-init class="btn-notification hover-layout" role="button"
+                                data-mdb-auto-close="outside" aria-expanded="false">
+                                <i class="fas fa-bell"></i>
+                                <span class="badge rounded-pill bg-danger" badge-notification></span>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right p-0 pb-1">
+                                <div class="dropdown-header d-flex align-items-center justify-content-between px-2">
+                                    <h6 class="mb-0" style="user-select: none">Notificaciones</h6>
+                                    <button class="btn btn-sm px-2" noti-btn="reload" data-mdb-ripple-init><i
+                                            class="fas fa-rotate"></i></button>
+                                </div>
+                                <div class="dropdown-body rounded px-2">
+                                    <div class="dropdown-text text-center text-muted py-3">
+                                        Sin notificaciones
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div> --}}
+                    <div class="ms-1">
+                        <div class="dropdown" id="contenedor-sigla">
+                            <button class="btn-notification hover-layout" data-mdb-dropdown-init data-mdb-ripple-init
+                                aria-expanded="false" data-mdb-dropdown-animation="off">
+                                <div class="sigla image-user" style="background-image: url('{{ $config->foto_perfil }}');"></div>
+                            </button>
+                            <ul class="dropdown-menu pt-1 pb-2 px-1">
+                                <li class="p-2">
+                                    <div class="dropdown-header p-0" style="user-select: none">
+                                        <div class="text-center rounded py-3 px-2">
+                                            <div class="align-items-center d-flex justify-content-center rounded-circle text-white mx-auto image-user"
+                                                style="width: 3.5rem; height: 3.5rem; font-size: 1.5rem; background-image: url('{{ $config->foto_perfil }}');"></div>
+                                            <p class="fw-bold mb-0 mt-2 text-secondary">{{ $config->nombre_perfil }}
+                                            </p>
+                                            <small>{{ $config->acceso }}</small>
+                                        </div>
+                                    </div>
+                                </li>
+                                <li class="px-2">
+                                    <a class="dropdown-item py-3 rounded" href="{{ secure_url('/logout') }}"
+                                        onclick="boxAlert.loading()">
+                                        <i class="fas fa-arrow-right-from-bracket me-2"></i> Cerrar sesión
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="ms-1">
+                        <button class="sidebar-close__navbar hover-layout" type="button"
+                            aria-label="Cerrar barra lateral">
+                            <i class="fas fa-bars"></i>
+                        </button>
                     </div>
                 </div>
-            </div>
-            <!-- main-panel ends -->
-        </div>
-        <!-- page-body-wrapper ends -->
-    </div>
-    <!-- container-scroller -->
+            </nav>
 
+            <!-- Content Wrapper -->
+            <div class="content-wrapper p-3">
+                @yield('content')
+            </div>
+
+        </main>
+        <script src="{{ secure_asset($ft_js->toggle_template) }}"></script>
+    </div>
+
+    <button hidden data-mdb-modal-init data-mdb-target="#modal_pdf"></button>
+    <div class="modal fade" id="modal_pdf" aria-labelledby="modal_pdf" aria-hidden="true">
+        <div class="modal-dialog modal-fullscreen">
+            <div class="modal-content">
+                <div class="modal-header bg-primary text-white">
+                    <h6 class="modal-title">Visualización de PDF
+                        <span class="badge badge-success badge-lg" aria-item="codigo"></span>
+                        <span class="badge badge-info badge-lg" aria-item="codigo_orden"></span>
+                    </h6>
+                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                        aria-label="Close"></button>
+                </div>
+                <div class="modal-body p-0 position-relative">
+                    <iframe id="contenedor_doc" class="w-100" frameborder="0"></iframe>
+                </div>
+                <div class="modal-footer border-top-0 pt-0 pb-1">
+                    <button type="button" class="btn btn-link " data-mdb-ripple-init
+                        data-mdb-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <script>
         const intervalToken = setInterval(() => {
@@ -296,15 +312,12 @@
         }, 1000);
     </script>
     <!-- MDB -->
-    <script type="text/javascript" src="{{ secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js') }}"></script>
-    <script src="{{ secure_asset('front/js/layout/template.js') }}"></script>
-    <script src="{{ secure_asset('front/js/layout/hoverable-collapse.js') }}"></script>
-    <script src="{{ secure_asset('front/js/layout/off-canvas.js') }}"></script>
-    <script src="{{ secure_asset('front/vendor/inputmask/jquery.inputmask.bundle.min.js') }}"></script>
-    <script src="{{ secure_asset('front/vendor/flatpickr/flatpickr.js') }}"></script>
-    <script src="{{ secure_asset('front/js/app/TableManeger.js') }}"></script>
-    <script src="{{ secure_asset('front/js/app/FormMananger.js') }}"></script>
-    <!-- plugins:js -->
+    <script type="text/javascript" src="{{ secure_asset($ft_js->mdb_umd_min7_2_0) }}"></script>
+    <script src="{{ secure_asset($ft_js->template) }}"></script>
+    <script src="{{ secure_asset($ft_js->inputmask) }}"></script>
+    <script src="{{ secure_asset($ft_js->TableManeger) }}"></script>
+    <script src="{{ secure_asset($ft_js->FormMananger) }}"></script>
+
     @yield('scripts')
 </body>
 

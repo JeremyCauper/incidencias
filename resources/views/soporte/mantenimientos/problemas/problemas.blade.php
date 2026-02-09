@@ -101,7 +101,7 @@
                         </div>
                         <div class="col-6 mb-2">
                             <select class="select" id="tipo">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 @foreach ($data['tSoporte'] as $v)
                                     <option value="{{ $v->id }}"
                                         {{ ($v->selected == 1 && $v->estatus == 1) ? 'selected' : '' }}

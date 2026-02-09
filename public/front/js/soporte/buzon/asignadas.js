@@ -21,8 +21,6 @@ $(document).ready(function () {
         },
     ]);
 
-    formatSelect('modal_orden');
-
     $('.modal').on('shown.bs.modal', function () {
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));

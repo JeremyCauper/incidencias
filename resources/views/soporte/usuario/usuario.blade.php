@@ -89,10 +89,10 @@
                             (*)</span>
                     </div>
                     <div class="row">
-                            <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="id" id="id">
                         <div class="col-xl-3 col-6 mb-3">
                             <select id="id_area" class="select">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 @foreach ($areas as $r)
                                     <option value="{{$r['id']}}">{{$r['descripcion']}}</option>
                                 @endforeach
@@ -178,15 +178,15 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-4">
-                            <select class="select-clear-nsearch" id="modo_transporte">
-                                <option value="">-- Seleccione --</option>
+                            <select class="select-clear-simple" id="modo_transporte">
+                                <option value="">Seleccione...</option>
                                 <option value="1">Sin vehículo</option>
                                 <option value="2">Motorizado</option>
                             </select>
                         </div>
                         <div class="col-4">
                             <select class="select" id="tipo_acceso">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 @foreach ($tipoAcceso as $r)
                                     <option {{$r['id'] == 3 ? 'selected' : ''}} value="{{$r['id']}}">{{$r['descripcion']}}
                                     </option>

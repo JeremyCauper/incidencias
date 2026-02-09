@@ -66,7 +66,7 @@ $(document).ready(function () {
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_usuariosLabel').html('REGISTRAR USUARIO');
         setCheckedFromJson('eyI4IjpbIjExIiwiMTIiXX0=');
-        $('#tipo_acceso').val(3).trigger('change.select2');
+        $('#tipo_acceso').val(3).trigger('change');
         // $('#content-permisos').attr({ 'style': 'opacity: .55; pointer-events: none;' });
         $('#id').val('');
     });
@@ -179,7 +179,7 @@ function Editar(id) {
                 }
                 var json = data.data;
                 $('#id').val(id);
-                $('#id_area').val(json.id_area).trigger('change.select2');
+                $('#id_area').val(json.id_area).trigger('change');
                 $('#n_doc').val(json.ndoc_usuario);
                 $('#nom_usu').val(json.nombres);
                 $('#ape_usu').val(json.apellidos);
@@ -192,8 +192,8 @@ function Editar(id) {
                 $('#contrasena').val(json.pass_view);
                 $('#PreviFPerfil').attr('src', json.foto_perfil ? `${__asset}/images/auth/${json.foto_perfil}` : imgUserDefault);
                 $('#PreviFirma').attr('src', json.firma_digital ? `${__asset}/images/firms/${json.firma_digital}` : imgFirmDefault);
-                $('#modo_transporte').val(json.transporte).trigger('change.select2');
-                $('#tipo_acceso').val(json.tipo_acceso).trigger('change.select2');
+                $('#modo_transporte').val(json.transporte).trigger('change');
+                $('#tipo_acceso').val(json.tipo_acceso).trigger('change');
                 /*if (json.tipo_acceso == 4 || json.tipo_acceso == 5) {
                     $('#content-permisos').removeAttr('style');
                 } else {

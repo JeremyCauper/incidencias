@@ -66,8 +66,6 @@ $(document).ready(function () {
         }
     ]);
 
-    formatSelect('modal_empresas');
-
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_empresasLabel').html('REGISTRAR EMPRESA');
         $('#id').val('');

@@ -126,13 +126,13 @@
                             if (estado === "0") { // Hoy
                                 $contentSelect.show();
                                 $dateGroup.hide();
-                                $select.val("0").trigger("change.select2");
+                                $select.val("0").trigger("change");
                                 $dateInput.data('daterangepicker').setStartDate(date('Y-m-d'));
                                 $dateInput.data('daterangepicker').setEndDate(date('Y-m-d'));
                             } else if (estado === "1") { // Avanzado
                                 $contentSelect.hide();
                                 $dateGroup.show();
-                                $select.val("1").trigger("change.select2");
+                                $select.val("1").trigger("change");
                                 $dateInput.data('daterangepicker').setStartDate(date('Y-m-01'));
                                 $dateInput.data('daterangepicker').setEndDate(date('Y-m-d'));
                             }

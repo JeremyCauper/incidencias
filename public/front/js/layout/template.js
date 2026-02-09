@@ -176,9 +176,9 @@
       var val = "";
       if ($(this).find('option[selected]').attr('value')) {
         val = $(this).find('option[selected]').attr('value');
-        $(this).val(val).trigger('change.select2');
+        $(this).val(val).trigger('change');
       } else {
-        $(this).val(val).trigger('change.select2');
+        $(this).val(val).trigger('change');
       }
     });
     form.find('button').each(function () {

@@ -1,6 +1,4 @@
 $(document).ready(function () {
-    formatSelect('modal_visitas');
-
     $('.modal').on('shown.bs.modal', function () {
         $('#fecha_visita').val(date('Y-m-d'));
         changeCodOrdenV();
@@ -44,7 +42,7 @@ $(document).ready(function () {
 
     let cSelect_search = $('.selectFiltroEstado');
     if (cSelect_search.length) {
-        let selector = $('<select>', { 'id': 'filtroEstado', class: 'select-clear-nsearch' }).html($('<option>', { value: '', text: '-- Seleccione --' }));
+        let selector = $('<select>', { 'id': 'filtroEstado', class: 'select-clear-simple' }).html($('<option>', { value: '', text: 'Seleccione...' }));
         Object.entries({
             0: 'Sin Asignar',
             1: 'Asignada',

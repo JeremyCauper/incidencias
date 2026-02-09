@@ -54,7 +54,8 @@
                                 },
                                 columns: [
                                     { data: 'codigo_problema' },
-                                    { data: 'prioridad', render: function (data, type, row) {
+                                    {
+                                        data: 'prioridad', render: function (data, type, row) {
                                             return getBadgePrioridad(data, .75);
                                         }
                                     },
@@ -92,10 +93,9 @@
                         <input type="hidden" name="id" id="id">
                         <div class="col-lg-8 mb-2">
                             <select class="select-clear" id="problema">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 @foreach ($data['problemas'] as $v)
-                                    <option value="{{ $v->codigo }}"
-                                        {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                    <option value="{{ $v->codigo }}" {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
                                         {{$v->codigo}} - {{ $v->descripcion }}
                                         {{ $v->eliminado == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
                                     </option>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-md-4 mb-2">
                             <select class="select" id="prioridad">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 <option value="P1">{{ '<label class="badge badge-dark me-2">P1</label>' }}CRITICA</option>
                                 <option value="P2">{{ '<label class="badge badge-danger me-2">P2</label>' }}ALTA</option>
                                 <option value="P3">{{ '<label class="badge badge-warning me-2">P3</label>' }}MEDIA</option>

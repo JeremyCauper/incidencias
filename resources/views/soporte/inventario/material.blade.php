@@ -135,8 +135,6 @@
     <script src="{{ secure_asset('front/js/app/SelectManeger.js') }}"></script>
     <script>
         $(document).ready(function () {
-            formatSelect('modal_asignar');
-
             let ct_material_asignado = $('#ct_material_asignado');
             let tb_material_asignado = $('#tb_material_asignado');
             let select_tecnico = $('#tecnico');

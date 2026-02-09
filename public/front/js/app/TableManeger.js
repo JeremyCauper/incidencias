@@ -87,6 +87,7 @@ class CTable {
                 if (val) $(`input[ctable-count-cant="${contenedor}"]`).attr({ max: this._obj[count] });
             }
         });
+        this._selector.customSelect2('update');
     }
 
     _parseDOMString(domString) {
@@ -186,6 +187,7 @@ class CTable {
         this.clearCount();
         this.acciones = true;
         this.newRow = 1;
+        this._selector.val('').trigger('change');
     }
 
     deleteRow(value) {
@@ -236,7 +238,7 @@ class CTable {
     fillSelect(dataSet = this.dataSet) {
         const items = Array.isArray(dataSet) ? dataSet : Object.values(dataSet);
         const options = this._structure.select;
-        this._selector.html($('<option>', { value: '', text: '-- Seleccione --' }));
+        this._selector.html($('<option>', { value: '', text: 'Seleccione...' }));
 
         items.forEach(item => {
             const text = typeof options.text === 'function' ? options.text(item) : (typeof item === 'string' ? item : item[options.text]);
@@ -260,6 +262,7 @@ class CTable {
                     .attr(atributos)
             );
         });
+        this._selector.customSelect2('update');
     }
 
     _checkValidation(item) {
@@ -295,7 +298,7 @@ class CTable {
         let valor = parseInt($input.val(), 10);
         if (isNaN(valor)) valor = 1;
         valor = Math.max(1, valor + delta);
-        
+
         if (valor > this._obj[this._structure?.count]) return;
         $input.val(valor);
         this._dataCount = valor;

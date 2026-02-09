@@ -38,7 +38,7 @@
                     <div class="col-xxl-3 col-md-8 my-1">
                         <label class="form-label mb-0" for="idGrupo">Sucursal</label>
                         <select id="sucursal" name="sucursal" class="select-clear" disabled="true">
-                            <option value="">-- Seleccione --</option>
+                            <option value="">Seleccione...</option>
                         </select>
                     </div>
                     <div class="col-xxl-2 col-md-4 my-1">
@@ -248,7 +248,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Visita</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
+                            Visita</h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="fieldset" aria-item="contenedor-seguimiento">
@@ -282,8 +283,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span
-                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -314,7 +315,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
+                            Incidencia</h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="fieldset" aria-item="contenedor-seguimiento">

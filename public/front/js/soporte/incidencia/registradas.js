@@ -98,10 +98,6 @@ $(document).ready(function () {
         },
     ]);
 
-    formatSelect('modal_incidencias');
-    formatSelect('modal_assign');
-    formatSelect('modal_orden');
-
     $('#empresa').on('change', function () {
         const empresa = empresas[$(this).val()] ?? "";
         if ($(this).val()) {
@@ -206,7 +202,7 @@ $(document).ready(function () {
     function setContacto(option = {}) {
         $('#cod_contact').val(option.id || '');
         $('#consultado_api').val(option.consultado || '');
-        $('#car_contac').val(option.cargo || '').trigger('change.select2');
+        $('#car_contac').val(option.cargo || '').trigger('change');
         $('#cor_contac').val(option.correo || '');
         $('#nro_doc').val(option.nro_doc || '').attr('disabled', eval(option.consultado) ? true : false);
         CS_tel_contac.llenar(option.telefonos || []);
@@ -331,15 +327,6 @@ const CS_nom_contac = $('#nom_contac').selectize({
     createOnBlur: true,
     openOnFocus: false,
     plugins: ["clear_button"],
-    onFocus: function () {
-        $('.select2-container--open').each(function () {
-            const select = $(this).prev('select');
-            if (select.length) {
-                select.select2('close');
-                $(this).removeClass('select2-container--focus');
-            }
-        });
-    }
 })[0].selectize;
 
 const CS_sucursal = new CSelect(['#sucursal'], {
@@ -534,7 +521,7 @@ function ShowDetail(e, cod) {
 
             llenarInfoModal('modal_detalle', {
                 codigo: inc.cod_incidencia,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                 direccion: empresa.direccion,
                 sucursal: sucursal.nombre,
@@ -542,7 +529,7 @@ function ShowDetail(e, cod) {
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
                 problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
                 subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                observacion: inc.observacion,
+                observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
@@ -634,15 +621,15 @@ function ShowEdit(cod) {
 }
 
 function habilitarCodAviso(accion) {
-    var selector_material = $('#createMaterial').parent().parent();
+    // var selector_material = $('#createMaterial').parent().parent();
     var content_cantidad = $('#content-codAviso');
     var codAviso = $('#codAviso');
     if (accion) {
-        selector_material.addClass('col-lg-6').removeClass('col-lg-9');
+        // selector_material.addClass('col-lg-6').removeClass('col-lg-9');
         content_cantidad.removeClass('d-none');
         return codAviso.attr('name', 'codAviso');
     }
-    selector_material.addClass('col-lg-9').removeClass('col-lg-6');
+    // selector_material.addClass('col-lg-9').removeClass('col-lg-6');
     content_cantidad.addClass('d-none');
     codAviso.removeAttr('name');
 }
@@ -670,7 +657,7 @@ function ShowAssign(e, cod) {
 
             llenarInfoModal('modal_assign', {
                 codigo: inc.cod_incidencia,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                 direccion: empresa.direccion,
                 sucursal: sucursal.nombre,
@@ -678,7 +665,7 @@ function ShowAssign(e, cod) {
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
                 problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
                 subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                observacion: inc.observacion,
+                observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
             });
 
             fMananger.formModalLoding('modal_assign', 'hide');
@@ -842,7 +829,8 @@ async function OrdenDetail(e, cod) {
                 llenarInfoModal('modal_orden', {
                     codigo: inc.cod_incidencia,
                     registrado: inc.created_at,
-                    tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'),
+                    tecnicos: personal.map(persona => `<span class="badge bg-light px-3 ms-2 rounded-pill" style="border: 1px solid rgb(50 68 93 / 70%);color: rgb(50 68 93);">${persona.tecnicos}</span>`).join(''),
+                    // tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                     direccion: empresa.direccion,
                     sucursal: sucursal.nombre,
@@ -850,7 +838,7 @@ async function OrdenDetail(e, cod) {
                     soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
                     problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
                     subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                    observacion: inc.observacion,
+                    observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
                     empresaFooter: `${empresa.ruc} - ${empresa.razon_social}`
                 });
             }
@@ -911,7 +899,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         return boxAlert.box({ i: 'warning', t: 'Atencion', h: 'Agregaste una firma del cliente, se necesita agregar los datos del cliente.' });
     }
 
-    
+
 
     $.ajax({
         type: 'POST',
