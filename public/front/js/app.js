@@ -366,24 +366,23 @@ function llenarInfoTipoInc(id_modal, data) {
             }
         }
         return `
-            <div class="col-lg-4 col-md-6 mt-2">
+            <div class="mt-2 px-3 py-2 rounded-7" style="background-color: rgb(123 126 255 / 19%);">
                 <div class="d-flex align-items-center">
-                    <label class="badge badge-${tipoInc.color}">${tipoInc.tipo}</label>
+                    <label class="badge badge-${tipoInc.color} p-2 rounded-pill">${tipoInc.tipo}</label>
                     <div class="ms-2 w-100">
-                        <p class="d-flex justify-content-between mb-0 pe-lg-5 col-5 col-md-12" style="font-weight: 500;font-size: small;">${tipoInc.descripcion}<span>${calcularDuracion(fecha_ini, fecha_fin)}</span></p>
-                        <p class="text-muted mb-0" style="font-size: .675rem;"><b style="letter-spacing: 0.1em;">I: </b>${fecha_ini}</p>
-                        <p class="text-muted mb-0 ${dnone}" style="font-size: .675rem;"><b>F: </b>${fecha_fin}</p>
+                        <p class="align-items-center d-flex justify-content-between mb-1" style="font-weight: 500;font-size: .9rem;">
+                            ${tipoInc.descripcion}
+                            <span style="font-size: .68rem;">${calcularDuracion(fecha_ini, fecha_fin)}</span>
+                        </p>
+                        <p class="text-muted mb-0" style="font-size: .7rem;"><b style="letter-spacing: 0.1em;">I: </b>${fecha_ini}</p>
+                        <p class="text-muted mb-0 ${dnone}" style="font-size: .7rem;"><b>F: </b>${fecha_fin}</p>
                     </div>
                 </div>
             </div>
         `;
     }).join('');
 
-    $(`#${id_modal} [aria-item="incidencia"]`).html(`
-        <div class="row">
-            ${resultado}
-        </div>
-    `);
+    $(`#${id_modal} [aria-item="incidencia"]`).html(resultado);
 }
 
 function llenarInfoSeguimientoInc(id_modal, data) {
@@ -508,75 +507,122 @@ function llenarInfoSeguimientoInc(id_modal, data) {
 
 function llenarInfoSeguimientoVis(id_modal, data) {
     const acciones = {
-        'registro': '<i class="fas fa-folder-open text-warning"></i> Registro de Visita',
-        'asignado': '<i class="fas fa-user-clock text-info"></i> Asignaciones',
-        'inicio': '<i class="fas fa-hourglass-start text-primary"></i> Inició la Visita',
-        'final': '<i class="fas fa-check-double text-success"></i> Finalizó la Visita',
+        registro: {
+            icon: {
+                icon: '<i class="fas fa-folder-open text-warning"></i>',
+                bg: 'rgb(228 161 27 / 15%)',
+            },
+            text: 'Registro de la Visita',
+        },
+        asignado: {
+            icon: {
+                icon: '<i class="fas fa-user-clock text-info"></i>',
+                bg: 'rgb(84 180 211 / 15%)',
+            },
+            text: 'Asignaciones',
+        },
+        inicio: {
+            icon: {
+                icon: '<i class="far fa-circle-play text-primary"></i>',
+                bg: 'rgb(59 113 202 / 30%)',
+            },
+            text: 'Inició la Visita',
+        },
+        final: {
+            icon: {
+                icon: '<i class="fas fa-check text-success"></i>',
+                bg: 'rgb(20 164 77 / 15%)',
+            },
+            text: 'Finalizó la Visita',
+        },
     };
 
+    let total_acciones = Object.entries(data).length;
+    let acciones_realizadas = 0;
     let seguimiento = Object.entries(data).map(([key, e]) => {
+        acciones_realizadas++;
         let bodySeguimiento = "";
         if (key === "asignado") {
             if (!data["asignado"].length) return;
         }
 
         const contactoTemplate = (persona) => `
-            <div class="d-flex align-items-center mt-2">
-                <img src="${persona.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                <div class="ms-3">
-                    <p class="fw-bold mb-1">${persona.nombre}</p>
-                    <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
-                        <i class="fab fa-whatsapp text-success"></i> ${persona.telefono} / <i class="far fa-envelope text-danger"></i> ${persona.email}
-                    </p>
+            <div class="align-items-center d-flex gap-3 pt-3">
+                <img alt="Avatar" class="img-fluid rounded-circle" src="${persona.img}" style="width: 40px;height: 40px;">
+                <div>
+                    <p class="fw-bold mb-0" style="font-size: 0.875rem;">${persona.nombre}</p>
+                    <div class="align-items-center d-flex gap-3 mt-1">
+                        <a class="" href="${persona.telefono ? `https://wa.me/${persona.telefono}` : 'javascript:void(0)'}"
+                            style="color: rgb(16 185 129 / 1);font-size: 11px;line-height: 1rem;">
+                            <span class="fa-whatsapp fab me-1"></span>${persona.telefono || '--'}
+                        </a>
+                        <a class="" href="${persona.email ? `mailto:${persona.email}` : 'javascript:void(0)'}"
+                            style="font-size: 11px;">
+                            <span class="fa-envelope far me-1"></span>${persona.email || '--'}
+                        </a>
+                    </div>
                 </div>
             </div>
         `;
 
         if (key === "asignado") {
             bodySeguimiento = e.map(asignacion => {
-                const tecnicos = asignacion.tecnicos.map(tecnico => `
-                    <label class="p-1 rounded text-nowrap" role="button" data-mdb-ripple-init title="${tecnico.date}">
-                        <img src="${tecnico.img}" alt="" style="width: 24px; height: 24px" class="rounded-circle" />
-                        <span>${tecnico.nombre}</span>
-                    </label>
+                const asignados = asignacion.tecnicos.map(tecnico => `
+                    <div class="align-items-center d-flex gap-3 pt-3">
+                        <img alt="Avatar" class="img-fluid rounded-circle"
+                            src="${tecnico.img}"
+                            style="width: 30px;height: 30px;">
+                        <div>
+                            <p class="fw-bold mb-0" style="font-size: 0.875rem;">${tecnico.nombre}</p>
+                            <div class="align-items-center d-flex gap-3 mt-1">
+                                <span style="font-size: 11px;">${tecnico.date}</span>
+                                <!--<a class="" href="https://wa.me/954213548"
+                                    style="color: rgb(16 185 129 / 1);font-size: 11px;line-height: 1rem;">
+                                    <span class="fa-whatsapp fab me-1"></span>
+                                    954213548
+                                </a>
+                                <a class="" href="mailto:jcauper@email.com"
+                                    style="font-size: 11px;">
+                                    <span class="fa-envelope far me-1"></span>
+                                    jcauper@email.com
+                                </a>-->
+                            </div>
+                        </div>
+                    </div>
                 `).join('');
 
                 return `
-                    <div class="d-flex align-items-center mt-2">
-                        <img src="${asignacion.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                        <div class="ms-3">
-                            <p class="fw-bold mb-1">${asignacion.nombre}</p>
-                            <p class="text-muted mb-1" style="font-size: .73rem;">Asignó la visita a:</p>
-                            <div class="mb-0 ms-2" style="font-size: .73rem;">${tecnicos}</div>
-                            <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
-                                <i class="fab fa-whatsapp text-success"></i> ${asignacion.telefono} / <i class="far fa-envelope text-danger"></i> ${asignacion.email}
-                            </p>
-                        </div>
-                    </div>
-                `;
+                    ${contactoTemplate(asignacion)}
+                    <div class="ms-4 mt-3 p-3 rounded-7" style="background-color: rgb(148 163 184 / 12%);">
+                        <h3 class="fw-bold mb-0 text-uppercase" style="letter-spacing: .05em;font-size: 12px;color: rgb(148 163 184 / 1);">
+                            Asignó la visita a:
+                        </h3>
+                        ${asignados}
+                    </div>`;
             }).join('');
         } else {
             bodySeguimiento = contactoTemplate(e);
         }
 
         return `
-            <li class="list-group-item border-0">
-                <div class="p-3 rounded-5 shadow-4-strong">
-                    <div class="d-flex justify-content-between align-items-center title-seguimiento">
-                        <span class="tt-upper font-weight-semibold">${acciones[key]}</span>
-                        <span class="font-weight-semibold">${e.date ?? ""}</span>
-                    </div>
-                    <div>${bodySeguimiento}</div>
+            <div class="position-relative card_seguimiento ${acciones_realizadas < total_acciones ? 'line_seguimiento' : ''} pb-4">
+                <div class="align-items-center d-flex justify-content-center position-absolute rounded-pill shadow-2-strong start-0 top-0"
+                    style="background-color: ${acciones[key].icon.bg};width: 3rem;height: 3rem;z-index: 2;">
+                    ${acciones[key].icon.icon}
                 </div>
-            </li>
+                <div class="detalle_body">
+                    <div class="align-items-start d-flex justify-content-between">
+                        <h3 class="fw-bold mb-0 text-uppercase"
+                            style="letter-spacing: .05em;font-size: 12px;">${acciones[key].text}</h3>
+                        ${e.date ? `<time class="px-2 py-1 rounded-pill" style="font-size: 10px;color: rgb(148 163 184 / 1);background-color: rgb(148 163 184 / 12%);">${e.date}</time>` : ''}
+                    </div>
+                    ${bodySeguimiento}
+                </div>
+            </div>
         `;
     }).join('');
 
-    $(`#${id_modal} [aria-item="contenedor-seguimiento"]`).html(`
-        <ul class="list-group list-group-light">
-            ${seguimiento}
-        </ul>
-    `);
+    $(`#${id_modal} [aria-item="contenedor-seguimiento"]`).html(seguimiento);
 }
 
 /**

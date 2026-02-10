@@ -4,7 +4,7 @@
  * @author Claude
  * @license MIT
  */
-;(function($, window, document, undefined) {
+; (function ($, window, document, undefined) {
     'use strict';
 
     // Configuración por defecto
@@ -14,9 +14,9 @@
         searchPlaceholder: 'Buscar...',
         allowClear: false,
         minimumResultsForSearch: 10,
-        openDelay: 150,
-        closeDelay: 100,
-        debounceDelay: 300,
+        openDelay: 10,
+        closeDelay: 10,
+        debounceDelay: 20,
         width: '100%',
         dropdownParent: null,
         ajax: null,
@@ -64,14 +64,14 @@
         this.selectedValue = null;
         this.focusedIndex = -1;
         this.isMobile = this._isMobileDevice();
-        
+
         this._init();
     }
 
     CustomSelect2.prototype = {
         constructor: CustomSelect2,
 
-        _init: function() {
+        _init: function () {
             if (this.$element.data('customSelect2')) {
                 return;
             }
@@ -83,6 +83,12 @@
             }
 
             this.isSearchMode = this._shouldUseSearchMode();
+
+            // Sincronizar estado disabled inicial
+            if (this.$element.prop('disabled')) {
+                this.options.disabled = true;
+            }
+
             this.$element.hide();
             this._createContainer();
             this._createSelection();
@@ -92,13 +98,13 @@
             this._trigger('init');
         },
 
-        _shouldUseSearchMode: function() {
+        _shouldUseSearchMode: function () {
             // Verificar data-nosearch (desactivar búsqueda forzosamente)
             var dataNoSearch = this.$element.data('nosearch');
             if (dataNoSearch === true || dataNoSearch === 'true') {
                 return false;
             }
-            
+
             // Verificar atributo data
             var dataSearch = this.$element.data('search');
             if (dataSearch !== undefined) {
@@ -115,8 +121,8 @@
             return optionCount >= this.options.minimumResultsForSearch;
         },
 
-        _createContainer: function() {
-            var containerClass = 'custom-select2-container' + 
+        _createContainer: function () {
+            var containerClass = 'custom-select2-container' +
                 (this.isSearchMode ? ' custom-select2-container--search' : '') +
                 (this.options.theme !== 'default' ? ' custom-select2-container--' + this.options.theme : '');
 
@@ -132,9 +138,9 @@
             this.$element.after(this.$container);
         },
 
-        _createSelection: function() {
+        _createSelection: function () {
             this.$selection = $('<div>', {
-                'class': 'custom-select2-selection',
+                'class': 'custom-select2-selection' + (this.options.disabled ? ' custom-select2-selection--disabled' : ''),
                 'role': 'combobox',
                 'aria-haspopup': 'listbox',
                 'aria-expanded': 'false',
@@ -147,7 +153,7 @@
 
             var selectedOption = this.$element.find('option:selected');
             var text = selectedOption.length ? selectedOption.text() : this.options.placeholder;
-            
+
             $rendered.append(text);
 
             if (!selectedOption.length || !selectedOption.val()) {
@@ -175,12 +181,12 @@
             this.$container.append(this.$selection);
         },
 
-        _createDropdown: function() {
+        _createDropdown: function () {
             if (this.$dropdown) {
                 return;
             }
 
-            var dropdownClass = 'custom-select2-dropdown' + 
+            var dropdownClass = 'custom-select2-dropdown' +
                 (this.isSearchMode ? ' custom-select2-dropdown--search' : '');
 
             this.$dropdown = $('<div>', {
@@ -206,7 +212,7 @@
             }
         },
 
-        _createSearchInput: function() {
+        _createSearchInput: function () {
             var $searchContainer = $('<div>', {
                 'class': 'custom-select2-search'
             });
@@ -226,7 +232,7 @@
             this.$dropdown.prepend($searchContainer);
         },
 
-        _createBackdrop: function() {
+        _createBackdrop: function () {
             this.$backdrop = $('<div>', {
                 'class': 'custom-select2-backdrop'
             });
@@ -235,7 +241,7 @@
             $parent.append(this.$backdrop);
         },
 
-        _getDropdownParent: function() {
+        _getDropdownParent: function () {
             if (this.options.dropdownParent) {
                 return $(this.options.dropdownParent);
             }
@@ -248,7 +254,7 @@
             return $('body');
         },
 
-        _loadInitialData: function() {
+        _loadInitialData: function () {
             if (this.options.data && Array.isArray(this.options.data)) {
                 this.results = this.options.data;
                 this.filteredResults = this.results.slice();
@@ -257,22 +263,22 @@
             }
         },
 
-        _loadFromSelect: function() {
+        _loadFromSelect: function () {
             var self = this;
             this.results = [];
 
-            this.$element.find('option').each(function() {
+            this.$element.find('option').each(function () {
                 var $option = $(this);
-                
+
                 // Verificar si la opción está oculta
                 var isHidden = $option.data('hidden');
                 if (isHidden === true || isHidden === 'true') {
                     return; // Skip esta opción
                 }
-                
+
                 // Verificar si la opción no debe aparecer en búsqueda
                 var noSearch = $option.data('nosearch');
-                
+
                 self.results.push({
                     id: $option.val(),
                     text: $option.text(),
@@ -286,10 +292,26 @@
             this.filteredResults = this.results.slice();
         },
 
-        _bindEvents: function() {
+        _bindEvents: function () {
             var self = this;
 
-            this.$selection.on('click.customSelect2', function(e) {
+            // Observer para cambios en atributos (disabled)
+            if (window.MutationObserver) {
+                this.observer = new MutationObserver(function (mutations) {
+                    mutations.forEach(function (mutation) {
+                        if (mutation.attributeName === 'disabled') {
+                            self.enable(!self.$element.prop('disabled'));
+                        }
+                    });
+                });
+
+                this.observer.observe(this.$element[0], {
+                    attributes: true,
+                    attributeFilter: ['disabled']
+                });
+            }
+
+            this.$selection.on('click.customSelect2', function (e) {
                 if ($(e.target).hasClass('custom-select2-selection__clear')) {
                     self._handleClear(e);
                 } else {
@@ -297,12 +319,12 @@
                 }
             });
 
-            this.$selection.on('keydown.customSelect2', function(e) {
+            this.$selection.on('keydown.customSelect2', function (e) {
                 self._handleSelectionKeydown(e);
             });
 
-            $(document).on('click.customSelect2.' + this.id, function(e) {
-                if (!self.$container.is(e.target) && 
+            $(document).on('click.customSelect2.' + this.id, function (e) {
+                if (!self.$container.is(e.target) &&
                     self.$container.has(e.target).length === 0 &&
                     (!self.$dropdown || !self.$dropdown.is(e.target)) &&
                     (!self.$dropdown || self.$dropdown.has(e.target).length === 0) &&
@@ -311,46 +333,46 @@
                 }
             });
 
-            this.$element.on('change.customSelect2', function() {
+            this.$element.on('change.customSelect2', function () {
                 self._updateSelection();
             });
         },
 
-        _bindDropdownEvents: function() {
+        _bindDropdownEvents: function () {
             var self = this;
 
             if (this.$search) {
-                this.$search.on('input.customSelect2', function() {
+                this.$search.on('input.customSelect2', function () {
                     self._handleSearch();
                 });
 
-                this.$search.on('keydown.customSelect2', function(e) {
+                this.$search.on('keydown.customSelect2', function (e) {
                     self._handleSearchKeydown(e);
                 });
 
-                this.$search.on('keydown.customSelect2 keyup.customSelect2', function(e) {
+                this.$search.on('keydown.customSelect2 keyup.customSelect2', function (e) {
                     e.stopPropagation();
                 });
             }
 
-            this.$results.on('click.customSelect2', '.custom-select2-results__option', function(e) {
+            this.$results.on('click.customSelect2', '.custom-select2-results__option', function (e) {
                 e.preventDefault();
                 e.stopPropagation();
-                
+
                 if (!$(this).hasClass('custom-select2-results__option--disabled')) {
                     var index = $(this).data('index');
                     self._selectResult(index);
                 }
             });
 
-            this.$results.on('mouseenter.customSelect2', '.custom-select2-results__option', function() {
+            this.$results.on('mouseenter.customSelect2', '.custom-select2-results__option', function () {
                 if (!$(this).hasClass('custom-select2-results__option--disabled')) {
                     self._setFocusedResult($(this).data('index'));
                 }
             });
 
             if (this.$backdrop) {
-                this.$backdrop.on('click.customSelect2', function() {
+                this.$backdrop.on('click.customSelect2', function () {
                     self.close();
                 });
             }
@@ -361,11 +383,11 @@
             }
         },
 
-        _bindScrollEvents: function() {
+        _bindScrollEvents: function () {
             var self = this;
-            
+
             // Listener para scroll en window
-            $(window).on('scroll.customSelect2.' + this.id, function() {
+            $(window).on('scroll.customSelect2.' + this.id, function () {
                 if (self.isOpen && !self.isSearchMode) {
                     self._updateDropdownPosition();
                 }
@@ -373,15 +395,15 @@
 
             // Listener para scroll en contenedores scrolleables
             // Buscar todos los padres scrolleables
-            this.$element.parents().each(function() {
+            this.$element.parents().each(function () {
                 var $parent = $(this);
                 // Verificar si el elemento tiene scroll
-                if ($parent.css('overflow') === 'auto' || 
-                    $parent.css('overflow') === 'scroll' || 
-                    $parent.css('overflow-y') === 'auto' || 
+                if ($parent.css('overflow') === 'auto' ||
+                    $parent.css('overflow') === 'scroll' ||
+                    $parent.css('overflow-y') === 'auto' ||
                     $parent.css('overflow-y') === 'scroll') {
-                    
-                    $parent.on('scroll.customSelect2.' + self.id, function() {
+
+                    $parent.on('scroll.customSelect2.' + self.id, function () {
                         if (self.isOpen && !self.isSearchMode) {
                             self._updateDropdownPosition();
                         }
@@ -390,21 +412,21 @@
             });
 
             // Listener para resize de window
-            $(window).on('resize.customSelect2.' + this.id, function() {
+            $(window).on('resize.customSelect2.' + this.id, function () {
                 if (self.isOpen && !self.isSearchMode) {
                     self._updateDropdownPosition();
                 }
             });
         },
 
-        _unbindScrollEvents: function() {
+        _unbindScrollEvents: function () {
             // Limpiar todos los listeners de scroll y resize
             $(window).off('scroll.customSelect2.' + this.id);
             $(window).off('resize.customSelect2.' + this.id);
             this.$element.parents().off('scroll.customSelect2.' + this.id);
         },
 
-        open: function() {
+        open: function () {
             var self = this;
 
             if (this.isOpen || this.options.disabled || this.$element.prop('disabled')) {
@@ -413,12 +435,12 @@
 
             this._trigger('beforeOpen');
 
-            setTimeout(function() {
+            setTimeout(function () {
                 self._createDropdown();
-                
+
                 // Posicionar ANTES de mostrar para evitar saltos
                 self._positionDropdown();
-                
+
                 // Renderizar contenido
                 self._renderResults();
                 self._bindDropdownEvents();
@@ -428,7 +450,7 @@
 
                 // Ahora sí, mostrar con animación
                 self.$dropdown.addClass('custom-select2-dropdown--open');
-                
+
                 if (self.$backdrop) {
                     self.$backdrop.addClass('custom-select2-backdrop--open');
                 }
@@ -437,7 +459,7 @@
                 self.isOpen = true;
 
                 if (self.$search) {
-                    setTimeout(function() {
+                    setTimeout(function () {
                         self.$search.focus();
                     }, 50);
                 }
@@ -446,7 +468,7 @@
             }, this.options.openDelay);
         },
 
-        _updateDropdownPosition: function() {
+        _updateDropdownPosition: function () {
             if (!this.$dropdown || this.isSearchMode) {
                 return;
             }
@@ -454,7 +476,7 @@
             // Verificar si el select sigue visible en el viewport
             var selectRect = this.$selection[0].getBoundingClientRect();
             var windowHeight = $(window).height();
-            
+
             // Si el select se salió completamente del viewport, cerrar el dropdown
             if (selectRect.bottom < 0 || selectRect.top > windowHeight) {
                 this.close();
@@ -465,7 +487,7 @@
             this._positionNormalDropdown();
         },
 
-        close: function() {
+        close: function () {
             var self = this;
 
             if (!this.isOpen) {
@@ -477,7 +499,7 @@
             // Limpiar listeners de scroll
             this._unbindScrollEvents();
 
-            setTimeout(function() {
+            setTimeout(function () {
                 if (self.$dropdown) {
                     self.$dropdown.removeClass('custom-select2-dropdown--open');
                 }
@@ -499,7 +521,7 @@
 
                 self._trigger('close');
 
-                setTimeout(function() {
+                setTimeout(function () {
                     if (self.$dropdown) {
                         self.$dropdown.remove();
                         self.$dropdown = null;
@@ -512,7 +534,7 @@
             }, this.options.closeDelay);
         },
 
-        toggle: function() {
+        toggle: function () {
             if (this.isOpen) {
                 this.close();
             } else {
@@ -520,7 +542,7 @@
             }
         },
 
-        _positionDropdown: function() {
+        _positionDropdown: function () {
             if (this.isSearchMode) {
                 this._positionSearchDropdown();
             } else {
@@ -528,36 +550,35 @@
             }
         },
 
-        _positionNormalDropdown: function() {
+        _positionNormalDropdown: function () {
             var $parent = this._getDropdownParent();
             var isInModal = $parent.hasClass('modal') || $parent.closest('.modal').length > 0;
-            
+
             if (isInModal) {
                 // Posicionamiento relativo al modal
                 var $actualModal = $parent.hasClass('modal') ? $parent : $parent.closest('.modal');
                 var modalOffset = $actualModal.offset();
-                var modalScrollTop = $actualModal.find('.modal-body').scrollTop() || 0;
                 var selectionOffset = this.$selection.offset();
-                
+
                 var height = this.$selection.outerHeight();
                 var width = this.$selection.outerWidth();
-                
+
                 // Calcular posición relativa al modal
-                var topPosition = selectionOffset.top - modalOffset.top + modalScrollTop + height;
+                var topPosition = selectionOffset.top - modalOffset.top + height;
                 var leftPosition = selectionOffset.left - modalOffset.left;
-                
+
                 this.$dropdown.css({
                     position: 'absolute',
                     top: topPosition + 'px',
                     left: leftPosition + 'px',
                     width: width + 'px'
                 });
-                
+
                 // Verificar si cabe abajo o debe ir arriba
                 var dropdownHeight = this.$dropdown.outerHeight();
                 var modalBodyHeight = $actualModal.find('.modal-body').height() || $actualModal.height();
                 var spaceBelow = modalBodyHeight - topPosition;
-                
+
                 if (spaceBelow < dropdownHeight && topPosition > dropdownHeight) {
                     // Mostrar arriba
                     this.$dropdown.css('top', (topPosition - height - dropdownHeight) + 'px');
@@ -587,14 +608,14 @@
             }
         },
 
-        _positionSearchDropdown: function() {
+        _positionSearchDropdown: function () {
             if (this.isMobile && this.options.fullscreenOnMobile) {
                 this.$dropdown.addClass('custom-select2-dropdown--fullscreen');
             }
             // El CSS ya posiciona el dropdown centrado, no necesitamos JS adicional
         },
 
-        _renderResults: function() {
+        _renderResults: function () {
             var self = this;
             var $list = $('<ul>', {
                 'class': 'custom-select2-results__options',
@@ -607,7 +628,7 @@
                 }).text(this.options.language.noResults);
                 $list.append($noResults);
             } else {
-                $.each(this.filteredResults, function(index, item) {
+                $.each(this.filteredResults, function (index, item) {
                     var $option = self._renderResult(item, index);
                     $list.append($option);
                 });
@@ -624,7 +645,7 @@
             }
         },
 
-        _renderResult: function(item, index) {
+        _renderResult: function (item, index) {
             var isSelected = this.$element.val() == item.id;
             var isDisabled = item.disabled;
             var isNewTag = item.newTag || item.newOption;
@@ -640,7 +661,7 @@
             });
 
             var content = item.html || item.text;
-            
+
             // Decodificar HTML si viene escapado de PHP
             if (content && content.indexOf('&lt;') !== -1) {
                 content = this._decodeHTML(content);
@@ -672,19 +693,19 @@
             return $option;
         },
 
-        _highlightSearch: function(text, search) {
+        _highlightSearch: function (text, search) {
             var regex = new RegExp('(' + this._escapeRegex(search) + ')', 'gi');
             return text.replace(regex, '<mark>$1</mark>');
         },
 
-        _highlightSearchInHTML: function(html, search) {
+        _highlightSearchInHTML: function (html, search) {
             // Crear un elemento temporal para manipular el HTML
             var $temp = $('<div>').html(html);
             var regex = new RegExp('(' + this._escapeRegex(search) + ')', 'gi');
-            
+
             // Función recursiva para hacer highlight solo en nodos de texto
-            var highlightTextNodes = function($element) {
-                $element.contents().each(function() {
+            var highlightTextNodes = function ($element) {
+                $element.contents().each(function () {
                     if (this.nodeType === 3) { // Nodo de texto
                         var text = $(this).text();
                         if (regex.test(text)) {
@@ -696,34 +717,34 @@
                     }
                 });
             };
-            
+
             highlightTextNodes($temp);
             return $temp.html();
         },
 
-        _escapeRegex: function(text) {
+        _escapeRegex: function (text) {
             return text.replace(/[-[\]{}()*+?.,\\^$|#\s]/g, '\\$&');
         },
 
-        _decodeHTML: function(html) {
+        _decodeHTML: function (html) {
             // Crear un textarea temporal para decodificar entidades HTML
             var txt = document.createElement('textarea');
             txt.innerHTML = html;
             return txt.value;
         },
 
-        _handleSearch: function() {
+        _handleSearch: function () {
             var self = this;
             var query = this.$search.val();
 
             clearTimeout(this.searchTimeout);
 
-            this.searchTimeout = setTimeout(function() {
+            this.searchTimeout = setTimeout(function () {
                 self._performSearch(query);
             }, this.options.debounceDelay);
         },
 
-        _performSearch: function(query) {
+        _performSearch: function (query) {
             if (this.options.ajax) {
                 this._performAjaxSearch(query);
             } else {
@@ -731,17 +752,17 @@
             }
         },
 
-        _performLocalSearch: function(query) {
+        _performLocalSearch: function (query) {
             var self = this;
 
             if (!query) {
                 this.filteredResults = this.results.slice();
             } else {
                 var matcher = this.options.matcher || this._defaultMatcher;
-                this.filteredResults = this.results.filter(function(item) {
+                this.filteredResults = this.results.filter(function (item) {
                     return matcher.call(self, query, item);
                 });
-                
+
                 // Si tags está habilitado, permitir crear
                 if (this.options.tags && query.trim()) {
                     // Crear tag usando createTag si existe, o crear uno por defecto
@@ -756,7 +777,7 @@
                             newTag: true
                         };
                     }
-                    
+
                     // Agregar al inicio de los resultados filtrados
                     if (newTag) {
                         this.filteredResults.unshift(newTag);
@@ -767,18 +788,18 @@
             this._renderResults();
         },
 
-        _defaultMatcher: function(query, item) {
+        _defaultMatcher: function (query, item) {
             // Si la opción tiene nosearch=true, no debe aparecer en búsqueda
             if (item.nosearch) {
                 return false;
             }
-            
+
             var text = item.text.toLowerCase();
             var search = query.toLowerCase();
             return text.indexOf(search) >= 0;
         },
 
-        _performAjaxSearch: function(query) {
+        _performAjaxSearch: function (query) {
             var self = this;
 
             if (this.ajaxRequest) {
@@ -792,7 +813,7 @@
 
             // Procesar datos si hay función
             if (ajaxOptions.data && typeof ajaxOptions.data === 'function') {
-                ajaxOptions.data = ajaxOptions.data({term: query});
+                ajaxOptions.data = ajaxOptions.data({ term: query });
             }
 
             // Guardar processResults si existe
@@ -800,7 +821,7 @@
             delete ajaxOptions.processResults;
 
             this.ajaxRequest = $.ajax(ajaxOptions)
-                .done(function(data) {
+                .done(function (data) {
                     if (processResults && typeof processResults === 'function') {
                         var processed = processResults(data);
                         self.filteredResults = processed.results || [];
@@ -809,17 +830,17 @@
                     }
                     self._renderResults();
                 })
-                .fail(function(xhr) {
+                .fail(function (xhr) {
                     if (xhr.statusText !== 'abort') {
                         self._showError();
                     }
                 })
-                .always(function() {
+                .always(function () {
                     self.ajaxRequest = null;
                 });
         },
 
-        _showLoading: function() {
+        _showLoading: function () {
             var $loading = $('<li>', {
                 'class': 'custom-select2-results__option custom-select2-results__message'
             }).text(this.options.language.searching);
@@ -827,7 +848,7 @@
             this.$results.empty().append($('<ul>').append($loading));
         },
 
-        _showError: function() {
+        _showError: function () {
             var $error = $('<li>', {
                 'class': 'custom-select2-results__option custom-select2-results__message custom-select2-results__message--error'
             }).text(this.options.language.errorLoading);
@@ -835,7 +856,7 @@
             this.$results.empty().append($('<ul>').append($error));
         },
 
-        _selectResult: function(index) {
+        _selectResult: function (index) {
             if (index < 0 || index >= this.filteredResults.length) {
                 return;
             }
@@ -847,29 +868,29 @@
             // Si es un nuevo tag, crear la opción en el select
             if (item.newTag || item.newOption) {
                 var $existingOption = this.$element.find('option[value="' + item.id + '"]');
-                
+
                 if ($existingOption.length === 0) {
                     var $newOption = $('<option>', {
                         value: item.id,
                         selected: true
                     });
-                    
+
                     // Usar HTML si existe, sino usar text
                     if (item.html && item.html !== item.text) {
                         $newOption.html(item.html);
                     } else {
                         $newOption.text(item.text);
                     }
-                    
+
                     // Agregar data attributes si existen
                     if (item.data) {
-                        $.each(item.data, function(key, value) {
+                        $.each(item.data, function (key, value) {
                             $newOption.attr('data-' + key, value);
                         });
                     }
-                    
+
                     this.$element.append($newOption);
-                    
+
                     // Agregar a la lista de resultados permanentes
                     this.results.push({
                         id: item.id,
@@ -891,7 +912,7 @@
             }
         },
 
-        _updateSelection: function() {
+        _updateSelection: function () {
             var selectedOption = this.$element.find('option:selected');
             var $rendered = this.$selection.find('.custom-select2-selection__rendered');
 
@@ -911,7 +932,7 @@
                 } else {
                     // Decodificar entidades HTML si es necesario (viene de PHP como texto)
                     var decodedHTML = this._decodeHTML(html);
-                    
+
                     // Verificar si realmente contiene HTML
                     if (decodedHTML !== text && (decodedHTML.indexOf('<') !== -1 || html.indexOf('&lt;') !== -1)) {
                         $rendered.html(decodedHTML).removeClass('custom-select2-selection__placeholder');
@@ -924,7 +945,7 @@
             }
         },
 
-        _handleClear: function(e) {
+        _handleClear: function (e) {
             e.preventDefault();
             e.stopPropagation();
 
@@ -933,8 +954,8 @@
             this._trigger('clear');
         },
 
-        _handleSelectionKeydown: function(e) {
-            switch(e.which) {
+        _handleSelectionKeydown: function (e) {
+            switch (e.which) {
                 case 13: // Enter
                 case 32: // Space
                     e.preventDefault();
@@ -960,8 +981,8 @@
             }
         },
 
-        _handleSearchKeydown: function(e) {
-            switch(e.which) {
+        _handleSearchKeydown: function (e) {
+            switch (e.which) {
                 case 13: // Enter
                     e.preventDefault();
                     if (this.focusedIndex >= 0) {
@@ -983,7 +1004,7 @@
             }
         },
 
-        _moveFocus: function(direction) {
+        _moveFocus: function (direction) {
             var newIndex = this.focusedIndex + direction;
 
             if (newIndex < 0 || newIndex >= this.filteredResults.length) {
@@ -993,7 +1014,7 @@
             this._setFocusedResult(newIndex);
         },
 
-        _setFocusedResult: function(index) {
+        _setFocusedResult: function (index) {
             this.focusedIndex = index;
 
             this.$results.find('.custom-select2-results__option')
@@ -1005,7 +1026,7 @@
             this._scrollToResult($focused);
         },
 
-        _scrollToResult: function($result) {
+        _scrollToResult: function ($result) {
             if (!$result.length) return;
 
             var container = this.$results[0];
@@ -1024,7 +1045,7 @@
             }
         },
 
-        _findResultIndex: function(id) {
+        _findResultIndex: function (id) {
             for (var i = 0; i < this.filteredResults.length; i++) {
                 if (this.filteredResults[i].id == id) {
                     return i;
@@ -1033,28 +1054,33 @@
             return -1;
         },
 
-        _isMobileDevice: function() {
+        _isMobileDevice: function () {
             return /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
         },
 
-        _generateId: function() {
+        _generateId: function () {
             return 'custom-select2-' + Math.random().toString(36).substr(2, 9);
         },
 
-        _trigger: function(eventName, data) {
+        _trigger: function (eventName, data) {
             var event = $.Event('customSelect2:' + eventName);
             this.$element.trigger(event, data);
             return event;
         },
 
-        destroy: function() {
+        destroy: function () {
             this.close();
-            
+
+            if (this.observer) {
+                this.observer.disconnect();
+                this.observer = null;
+            }
+
             $(document).off('.customSelect2.' + this.id);
-            
+
             // Limpiar listeners de scroll
             this._unbindScrollEvents();
-            
+
             if (this.$selection) {
                 this.$selection.off('.customSelect2');
             }
@@ -1066,7 +1092,7 @@
             this.$element.show().removeData('customSelect2');
         },
 
-        update: function(data) {
+        update: function (data) {
             if (data && Array.isArray(data)) {
                 this.results = data;
                 this.filteredResults = data.slice();
@@ -1079,15 +1105,15 @@
             }
         },
 
-        enable: function(enabled) {
+        enable: function (enabled) {
             this.options.disabled = !enabled;
             this.$selection.toggleClass('custom-select2-selection--disabled', !enabled);
         },
 
-        data: function() {
+        data: function () {
             var value = this.$element.val();
             var text = this.$element.find('option:selected').text();
-            
+
             return {
                 id: value,
                 text: text
@@ -1096,10 +1122,10 @@
     };
 
     // Plugin jQuery
-    $.fn.customSelect2 = function(options) {
+    $.fn.customSelect2 = function (options) {
         var args = Array.prototype.slice.call(arguments, 1);
 
-        return this.each(function() {
+        return this.each(function () {
             var $element = $(this);
             var instance = $element.data('customSelect2');
 

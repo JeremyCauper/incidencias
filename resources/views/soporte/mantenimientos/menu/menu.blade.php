@@ -41,7 +41,7 @@
                     <div class="col-12">
                         <table id="tb_menu" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>#</th>
                                     <th>Descripcion</th>
                                     <th>Icono</th>
@@ -120,7 +120,8 @@
                         <div class="col-lg-6 mb-2">
                             <label class="form-label mb-0" for="icono">Icono</label>
                             <div class="input-group">
-                                <span class="input-group-text rounded me-1 px-2"><i class="fas fa-question" aria-label="icono"></i></span>
+                                <span class="input-group-text rounded me-1 px-2"><i class="fas fa-question"
+                                        aria-label="icono"></i></span>
                                 <input type="text" class="form-control rounded" id="icono" name="icono" requested="Icono">
                             </div>
                         </div>

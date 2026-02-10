@@ -7,11 +7,6 @@
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
     <style>
-        #tb_visitas thead tr * {
-            font-size: 12px;
-            /* padding-top: ; */
-        }
-
         #tb_visitas_filter.dataTables_filter label {
             width: 100% !important;
         }
@@ -27,21 +22,38 @@
 
     <div class="row ">
         <div class="col-xl-6 mb-4">
-            <div class="row panel-view">
-                <div class="col-6 grid-margin">
-                    <div class="card">
-                        <div class="card-body text-danger">
-                            <h6 class="card-title title-count mb-2"><i class="fas fa-xmark"></i></i> Visitas Sin Asignar
-                            </h6>
-                            <h4 class="subtitle-count"><b data-panel="vSinAsignar">0</b></h4>
+            <div class="row">
+                <div class="col-6 mb-2">
+                    <div class="card" style="cursor: pointer;">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="card-icon rounded-7" style="background-color: #dc4c6440;">
+                                        <i class="fa-solid fa-xmark fa-fw fs-4 text-danger"></i>
+                                    </div>
+                                </div>
+                                <div class="content-text flex-grow-1 ms-2">
+                                    <p class="text-muted text-nowrap text-secondary fw-bold mb-1">Sin Asignar</p>
+                                    <p class="fw-bold mb-0 fs-4" data-panel="vSinAsignar">0</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 grid-margin">
-                    <div class="card">
-                        <div class="card-body text-info">
-                            <h6 class="card-title title-count mb-2"><i class="fas fa-clock"></i> Visitas Asignadas</h6>
-                            <h4 class="subtitle-count"><b data-panel="vAsignadas">0</b></h4>
+                <div class="col-6 mb-2">
+                    <div class="card" style="cursor: pointer;">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="card-icon rounded-7" style="background-color: #54b4d340;">
+                                        <i class="fa-solid fa-clock fa-fw fs-4 text-info"></i>
+                                    </div>
+                                </div>
+                                <div class="content-text flex-grow-1 ms-2">
+                                    <p class="text-muted text-nowrap text-secondary fw-bold mb-1">Asignadas</p>
+                                    <p class="fw-bold mb-0 fs-4" data-panel="vAsignadas">0</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -61,7 +73,7 @@
                         <div class="col-12">
                             <table id="tb_visitas" class="table table-hover text-nowrap" style="width:100%">
                                 <thead>
-                                    <tr class="text-bg-primary text-center">
+                                    <tr class="text-center">
                                         <th>Ruc - Sucursal</th>
                                         <th>Visitas Realizadas</th>
                                         <th>Acciones</th>
@@ -75,15 +87,15 @@
                                     scrollY: 400,
                                     fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
                                     dom: `<"row"
-                                                    <"col-lg-12 mb-2"B>>
-                                                <"row"
-                                                    <"col-sm-4 text-xsm-start text-center my-1"l>
-                                                    <"col-sm-3 col-xsm-4 text-xsm-end text-center my-1 selectFiltroEstado">
-                                                    <"col-sm-5 col-xsm-8 text-xsm-end text-center my-1"f>>
-                                                <"contenedor_tabla my-2"tr>
-                                                <"row"
-                                                    <"col-md-5 text-md-start text-center my-1"i>
-                                                    <"col-md-7 text-md-end text-center my-1"p>>`,
+                                                                                                                    <"col-lg-12 mb-2"B>>
+                                                                                                                <"row"
+                                                                                                                    <"col-sm-4 text-xsm-start text-center my-1"l>
+                                                                                                                    <"col-sm-3 col-xsm-4 text-xsm-end text-center my-1 selectFiltroEstado">
+                                                                                                                    <"col-sm-5 col-xsm-8 text-xsm-end text-center my-1"f>>
+                                                                                                                <"contenedor_tabla my-2"tr>
+                                                                                                                <"row"
+                                                                                                                    <"col-md-5 text-md-start text-center my-1"i>
+                                                                                                                    <"col-md-7 text-md-end text-center my-1"p>>`,
                                     ajax: {
                                         url: `${__url}/soporte/visitas/sucursales/index`,
                                         dataSrc: function (json) {
@@ -129,21 +141,38 @@
 
         <div class="col-xl-6 mb-3">
             <div class="row panel-view">
-                <div class="col-6 grid-margin">
-                    <div class="card">
-                        <div class="card-body text-primary">
-                            <h6 class="card-title title-count mb-2"><i class="fas fa-business-time"></i> Visitas En Proceso
-                            </h6>
-                            <h4 class="subtitle-count"><b data-panel="vEnProceso">0</b></h4>
+                <div class="col-6 mb-2">
+                    <div class="card" style="cursor: pointer;">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="card-icon rounded-7" style="background-color: #3b71ca40;">
+                                        <i class="fa-solid fa-business-time fa-fw fs-4 text-primary"></i>
+                                    </div>
+                                </div>
+                                <div class="content-text flex-grow-1 ms-2">
+                                    <p class="text-muted text-nowrap text-secondary fw-bold mb-1">En Proceso</p>
+                                    <p class="fw-bold mb-0 fs-4" data-panel="vEnProceso">0</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="col-6 grid-margin">
-                    <div class="card">
-                        <div class="card-body text-warning">
-                            <h6 class="card-title title-count mb-2"><i class="fas fa-clipboard-check"></i> Visitas Sin
-                                Iniciar</h6>
-                            <h4 class="subtitle-count"><b data-panel="vSinIniciar">0</b></h4>
+
+                <div class="col-6 mb-2">
+                    <div class="card" style="cursor: pointer;">
+                        <div class="card-body p-3">
+                            <div class="d-flex align-items-start">
+                                <div class="flex-shrink-0">
+                                    <div class="card-icon rounded-7" style="background-color: #e4a11b40;">
+                                        <i class="fa-solid fa-clipboard-check fa-fw fs-4 text-warning"></i>
+                                    </div>
+                                </div>
+                                <div class="content-text flex-grow-1 ms-2">
+                                    <p class="text-muted text-nowrap text-secondary fw-bold mb-1">Sin Iniciar</p>
+                                    <p class="fw-bold mb-0 fs-4" data-panel="vSinIniciar">0</p>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -163,7 +192,7 @@
                         <div class="col-12">
                             <table id="tb_vprogramadas" class="table table-hover text-nowrap" style="width:100%">
                                 <thead>
-                                    <tr class="text-bg-primary text-center">
+                                    <tr class="text-center">
                                         <th>Estado</th>
                                         <th>Sucursal</th>
                                         <th>Técnico</th>
@@ -222,33 +251,32 @@
     <div class="modal fade" id="modal_visitas" tabindex="-1" aria-labelledby="modal_visitasLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-visita">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title" id="modal_visitasLabel">Asignar Personal Visita
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title" id="modal_visitasLabel">Asignar Personal Visita
                         <span aria-item="contrato"></span>
-                    </h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                    </h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
-                                    20506467854 - CORPORACION JULCAN S.A.</p>
-                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
+                    <div class="detalle_body mb-2">
+                        <div class="border-bottom mb-4">
+                            <h5><span aria-item="razon_social"></span></h5>
+                            <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                            <p class="detalle_text" aria-item="sucursal"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                Sucursal</p>
+                            <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
                         </div>
                     </div>
-                    <div class="fieldset">
+                    <div class="mt-3">
                         <input type="hidden" id="idSucursal" name="idSucursal">
                         <div class="col-md-4">
                             <label class="form-label mb-0" for="fecha_visita">Fecha Visita</label>
@@ -274,70 +302,93 @@
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h6 class="modal-title" id="modal_detalle_visitasLabel">Asignar Personal Visita
                         <span aria-item="contrato"></span>
                     </h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                    <div class="align-items-center d-flex gap-2">
+                        <span aria-item="estado"></span>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                        <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
-                                    20506467854 - CORPORACION JULCAN S.A.</p>
-                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
+                    <div class="detalle_body mb-2">
+                        <div class="border-bottom mb-4">
+                            <h5><span aria-item="razon_social"></span></h5>
+                            <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                            <p class="detalle_text" aria-item="sucursal"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                Sucursal</p>
+                            <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-3 col-6">
+                            <div class="detalle_body mb-2">
+                                <p class="form-label text-nowrap mb-2 me-2">Dias / Visitas</p>
+                                <p class="mb-0 fw-bold" style="font-size: .95rem;">
+                                    <span aria-item="rDias">0</span>
+                                </p>
                             </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="detalle_body mb-2">
+                                <p class="form-label text-nowrap mb-2 me-2">Visitas Totales</p>
+                                <p class="mb-0 fw-bold" style="font-size: .95rem;">
+                                    <i class="fas fa-list-check text-primary me-2"></i>
+                                    <span aria-item="vTotal">0</span>
+                                </p>
                             </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="detalle_body mb-2">
+                                <p class="form-label text-nowrap mb-2 me-2">Visitas Realizadas</p>
+                                <p class="mb-0 fw-bold" style="font-size: .95rem;">
+                                    <i class="far fa-circle-check text-success me-2"></i>
+                                    <span aria-item="vRealizada">0</span>
+                                </p>
                             </div>
-                            <div class="list-group-item">
-                                <div class="row col-12">
-                                    <div class="col-md-3 col-6">
-                                        <label class="form-label me-2">Dias / Visitas: </label><span
-                                            style="font-size: .75rem;" aria-item="rDias">0</span>
-                                    </div>
-                                    <div class="col-md-3 col-6">
-                                        <label class="form-label me-2">Visitas Totales: </label><span
-                                            style="font-size: .75rem;" aria-item="vTotal">0</span>
-                                    </div>
-                                    <div class="col-md-3 col-6 text-center">
-                                        <label class="form-label me-2">Visitas Realizadas: </label><span
-                                            style="font-size: .75rem;" aria-item="vRealizada">0</span>
-                                    </div>
-                                    <div class="col-md-3 col-6 text-end">
-                                        <label class="form-label me-2">Visitas Pendientes: </label><span
-                                            style="font-size: .75rem;" aria-item="vPendiente">0</span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="list-group-item">
-                                <table class="table mb-0 d-none" id="tb_visitas_asignadas">
-                                    <thead>
-                                        <tr class="text-bg-primary">
-                                            <th>Asignado Por</th>
-                                            <th class="text-center">Fecha Visita</th>
-                                            <th class="text-center">Registrado</th>
-                                            <th class="text-center">Estado</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody></tbody>
-                                </table>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2 text-danger">Nota: </label><span style="font-size: .75rem;"
-                                    aria-item="mensaje"></span>
+                        </div>
+                        <div class="col-md-3 col-6">
+                            <div class="detalle_body mb-2">
+                                <p class="form-label text-nowrap mb-2 me-2">Visitas Pendientes</p>
+                                <p class="mb-0 fw-bold" style="font-size: .95rem;">
+                                    <i class="fas fa-clock text-warning me-2"></i>
+                                    <span aria-item="vPendiente">0</span>
+                                </p>
                             </div>
                         </div>
                     </div>
+
+                    <div class="detalle_body mb-2 d-none">
+                        <table class="table mb-0" id="tb_visitas_asignadas">
+                            <thead>
+                                <tr class="text-bg-primary">
+                                    <th>Asignado Por</th>
+                                    <th class="text-center">Fecha Visita</th>
+                                    <th class="text-center">Registrado</th>
+                                    <th class="text-center">Estado</th>
+                                </tr>
+                            </thead>
+                            <tbody></tbody>
+                        </table>
+                    </div>
+
+                    <div class="detalle_body"
+                        style="background-color: rgb(255 0 0 / 6%);border: 1px solid rgb(255 0 0 / 30%);">
+                        <p class="form-label mb-2 me-2 text-danger"><i class="fas fa-circle-exclamation me-3"></i>Nota
+                            Importante</p>
+                        <p class="mb-0" style="font-size: .75rem;color: rgb(255 0 0 / 70%);" aria-item="mensaje"></p>
+                    </div>
                 </div>
+
                 <div class="modal-footer">
                     <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
                 </div>
@@ -346,36 +397,49 @@
     </div>
 
     <div class="modal fade" id="modal_seguimiento_visitasp" aria-labelledby="modal_detalle" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Seguimiento de la visita</h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">Detalle de la visita</h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="list-group list-group-light">
-                        <div class="list-group-item">
-                            <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
-                                20506467854 - CORPORACION JULCAN S.A.</p>
-                            <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                N° 3689 MZ D LT 26 INDEPENDENCIA</p>
+                <div class="modal-body modal-body-scrollable px-1 p-0">
+                    <div class="row">
+                        <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
+                            style="background-color: rgb(29 49 69 / 5%);">
+                            <h6 class="text-uppercase mt-2 mb-4 title_detalle">
+                                <i class="fas fa-city me-2"></i> Información del Cliente
+                            </h6>
+                            <div class="detalle_body mb-2">
+                                <div class="border-bottom mb-4">
+                                    <h5><span aria-item="razon_social"></span></h5>
+                                    <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
+                                </div>
+                                <div>
+                                    <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                                    <p class="detalle_text" aria-item="sucursal"></p>
+                                </div>
+                                <div>
+                                    <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                        Sucursal</p>
+                                    <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
+                                </div>
+                            </div>
                         </div>
-                        <div class="list-group-item">
-                            <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                aria-item="sucursal">E/S INDEPENDENCIA</span>
+                        <div class="col-lg-7 p-4 modal-col-scrollable personalized-scroll">
+                            <div class="align-items-center d-flex mt-2 mb-4">
+                                <h4 class="mb-0 text-nowrap text-uppercase title_detalle">
+                                    <i class="fas fa-clock-rotate-left" style="color: rgb(99 102 241 / 1)"></i>
+                                    SEGUIMIENTO VISITA
+                                </h4>
+                                <div class="ms-2 rounded-pill"
+                                    style="height: .35rem;width: 100%;background-color: rgb(148 163 184 / 11%)"></div>
+                            </div>
+                            <div class="content_seguimiento" aria-item="contenedor-seguimiento"></div>
                         </div>
-                        <div class="list-group-item">
-                            <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
-                            Visita</h6>
-                        <span aria-item="estado"></span>
-                    </div>
-                    <div class="fieldset" aria-item="contenedor-seguimiento">
                     </div>
                 </div>
                 <div class="modal-footer border-top-0">
@@ -389,35 +453,33 @@
     <div class="modal fade" id="modal_assign" aria-labelledby="modal_assign" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Asignar Personal
-                    </h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">Asignar</h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <div class="list-group list-group-light">
-                        <div class="list-group-item">
-                            <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
-                                20506467854 - CORPORACION JULCAN S.A.</p>
-                            <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                N° 3689 MZ D LT 26 INDEPENDENCIA</p>
+                    <div class="detalle_body mb-2">
+                        <div class="border-bottom mb-4">
+                            <h5><span aria-item="razon_social"></span></h5>
+                            <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
                         </div>
-                        <div class="list-group-item">
-                            <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                aria-item="sucursal">E/S INDEPENDENCIA</span>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                            <p class="detalle_text" aria-item="sucursal"></p>
                         </div>
-                        <div class="list-group-item">
-                            <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                Sucursal</p>
+                            <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Asignar
-                            Personal</h6>
-                        <span aria-item="estado"></span>
-                    </div>
-                    <div class="p-3 pb-0 fieldset">
+
+                    <h6 class="text-uppercase mt-4 title_detalle text-primary" style="font-size: 14px"><i
+                            class="fas fa-user-plus me-2"></i>Asignar Personal</h6>
+                    <div class="">
                         <input type="hidden" id="id_visitas_asign">
                         <div id="createPersonal1"></div>
                     </div>
@@ -432,277 +494,261 @@
     </div>
 
     <div class="modal fade" id="modal_orden" aria-labelledby="modal_orden" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl" style="display: flex;">
+        <div class="modal-dialog modal-fullscreen-md-down modal-dialog-scrollable modal-xl">
             <form class="modal-content" id="form-orden">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">ORDEN DE SERVICIO <span class="badge badge-success badge-lg"
-                            aria-item="codigo">{{$data['cod_ordenv']}}</span></h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">ORDEN DE SERVICIO
+                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                            aria-item="codigo">{{$data['cod_ordenv']}}</span>
+                    </h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <div class="col-12">
-                        <!-- INICIO CABECERA -->
-                        <div class="text-end cabecera-orden">
-                            <div>
-                                <label class="form-label me-2">Fecha Inicio: </label>
-                                <span style="font-size: small;" aria-item="registrado"></span>
-                            </div>
+                    <!-- INICIO CABECERA -->
+                    <div class="text-end cabecera-orden">
+                        <div style="color: rgb(148 163 184 / 1)">
+                            <label class="form-label me-2">Fecha Inicio: </label>
+                            <span style="font-size: small;" aria-item="registrado"></span>
                         </div>
+                    </div>
 
-                        <!-- TER CABECERA -->
-                        <div class="col-12 mt-2">
-                            <h6 class="tittle text-primary"> TECNICOS</h6>
+                    <!-- TER CABECERA -->
+                    <h6 class="text-uppercase mb-3 title_detalle">
+                        <i class="fas fa-user-gear"></i> Tecnicos
+                    </h6>
+
+                    <div class="mb-3">
+                        <span aria-item="tecnicos"></span>
+                    </div>
+
+
+                    <h6 class="text-uppercase mb-3 title_detalle">
+                        <i class="fas fa-city me-2"></i> Información del Cliente
+                    </h6>
+                    <div class="detalle_body mb-2">
+                        <div class="border-bottom mb-4">
+                            <h5><span aria-item="razon_social"></span></h5>
+                            <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
                         </div>
-
-                        <div class="col-12 mt-1 mb-3">
-                            <span aria-item="tecnicos"></span>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                            <p class="detalle_text" aria-item="sucursal"></p>
                         </div>
-
-
-                        <div class="col-12 mt-2">
-                            <h6 class="tittle text-primary"> DATOS DEL CLIENTE </h6>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                Sucursal</p>
+                            <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
                         </div>
+                    </div>
 
-                        <div class="col-12 mt-1 mb-3">
-                            <div class="list-group list-group-light">
-                                <div class="list-group-item">
-                                    <p aria-item="razon_social" class="font-weight-semibold mb-2"
-                                        style="font-size: .92rem;">
-                                        20506467854 - CORPORACION JULCAN S.A.</p>
-                                    <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                        N° 3689 MZ D LT 26 INDEPENDENCIA</p>
-                                </div>
-                                <div class="list-group-item">
-                                    <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                        aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                </div>
-                                <div class="list-group-item">
-                                    <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                        aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                                </div>
+
+                    <h6 class="text-uppercase mt-4 mb-3 title_detalle">
+                        <i class="fas fa-server me-2"></i> Revisión del gabinete
+                    </h6>
+
+                    <input type="hidden" name="cod_ordenv" value="{{$data['cod_ordenv']}}">
+                    <input type="hidden" name="id_visita_orden">
+
+                    <div class="detalle_body mb-2" id="contendor-filas">
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>UPS</strong>
                             </div>
-                        </div>
-
-                        <div class="col-12 mt-2">
-                            <h6 class="tittle text-primary"> REVISION DEL GABINETE </h6>
-                        </div>
-
-                        <input type="hidden" name="cod_ordenv" value="{{$data['cod_ordenv']}}">
-                        <input type="hidden" name="id_visita_orden">
-
-                        <div id="contendor-filas">
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>UPS</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des1" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label
-                                        class="item-isla">BATERIAS UPS</label></div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des2" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label
-                                        class="item-isla">SALIDA DE ENERGIA</label></div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des3" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>ESTABILIZADOR</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des4" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label
-                                        class="item-isla">INGRESO DE ENERGIA</label></div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des5" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="row mb-2">
-                                <div class="col-lg-3" style="font-size: 11px; color: #757575"><label
-                                        class="item-isla">SALIDA DE ENERGIA</label></div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des6" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>INTERFACE</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des7" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>MONITOR</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des8" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>TARJETA MULTIPUERTOS</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des9" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>SWITCH</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des10" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="col-12 mt-3">
-                                <h6 class="tittle text-primary"> REVISION DEL SERVIDOR</h6>
-                            </div>
-
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>SISTEMA OPERATIVO</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des11" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>VENCIMIENTO DE ANTIVIRUS</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des12" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>DISCO DURO</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des13" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
-                                </div>
-                            </div>
-
-                            <div class="row my-2">
-                                <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
-                                    <strong>REALIZAR BACKUP</strong>
-                                </div>
-                                <div class="col-lg-9">
-                                    <div class="input-group">
-                                        <span class="input-group-text border-0 ps-0"><i
-                                                class="fas fa-circle-check"></i></span>
-                                        <input type="text" name="des14" class="form-control rounded"
-                                            onchange="changeCheck(this)">
-                                    </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des1" class="form-control rounded"
+                                        onchange="changeCheck(this)">
                                 </div>
                             </div>
                         </div>
 
-                        <div class="row mt-3">
-                            <div class="col-lg-10 my-1">
-                                <h6 class="tittle text-primary"> REVISION DEL POS, LECTORES, JACK TOOLS IMPRESORAS Y
-                                    CONEXIONES </h6>
+                        <div class="row mb-2">
+                            <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">BATERIAS
+                                    UPS</label></div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des2" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
                             </div>
-                            <div class="col-lg-2 my-1 d-flex align-items-center justify-content-end">
-                                <button type="button" class="btn btn-danger btn-sm px-2 me-2 text-nowrap"
-                                    onclick="MRevision.deleteAll()">Limpiar Islas</button>
-                                <strong class="me-2" style="white-space: nowrap;" id="conteo-islas">Cant. 1</strong>
-                                <button type="button" class="btn btn-secondary btn-sm px-1" onclick="MRevision.create()"><i
-                                        class="far fa-square-plus"></i></button>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">SALIDA DE
+                                    ENERGIA</label></div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des3" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
                             </div>
                         </div>
 
-                        <div id="content-islas" class="mt-3">
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>ESTABILIZADOR</strong>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des4" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
                         </div>
+
+                        <div class="row mb-2">
+                            <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">INGRESO
+                                    DE ENERGIA</label></div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des5" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row mb-2">
+                            <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">SALIDA DE
+                                    ENERGIA</label></div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des6" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>INTERFACE</strong>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des7" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>MONITOR</strong>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des8" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>TARJETA MULTIPUERTOS</strong>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des9" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>SWITCH</strong>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des10" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-12 mt-3">
+                            <h6 class="tittle text-primary"> REVISION DEL SERVIDOR</h6>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>SISTEMA OPERATIVO</strong>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des11" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>VENCIMIENTO DE ANTIVIRUS</strong>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des12" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>DISCO DURO</strong>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des13" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row my-2">
+                            <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
+                                <strong>REALIZAR BACKUP</strong>
+                            </div>
+                            <div class="col-lg-9">
+                                <div class="input-group">
+                                    <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
+                                    <input type="text" name="des14" class="form-control rounded"
+                                        onchange="changeCheck(this)">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="detalle_body row mb-2 mt-3">
+                        <div class="col-lg-10 my-1">
+                            <h6 class="tittle text-primary"> REVISION DEL POS, LECTORES, JACK TOOLS IMPRESORAS Y
+                                CONEXIONES </h6>
+                        </div>
+                        <div class="col-lg-2 my-1 d-flex align-items-center justify-content-end">
+                            <button type="button" class="btn btn-danger btn-sm px-2 me-2 text-nowrap"
+                                onclick="MRevision.deleteAll()">Limpiar Islas</button>
+                            <strong class="me-2" style="white-space: nowrap;" id="conteo-islas">Cant. 1</strong>
+                            <button type="button" class="btn btn-secondary btn-sm px-1" onclick="MRevision.create()"><i
+                                    class="far fa-square-plus"></i></button>
+                        </div>
+                    </div>
+
+                    <div id="content-islas" class="detalle_body mb-2 mt-3">
                     </div>
                 </div>
                 <div class="modal-footer">

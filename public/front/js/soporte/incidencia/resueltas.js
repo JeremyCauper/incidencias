@@ -94,7 +94,7 @@ function ShowDetail(e, cod) {
                 codigo_orden: inc.cod_orden,
                 estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
@@ -173,7 +173,7 @@ function AddSignature(cod) {
                     codigo_orden: cod,
                     estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });

@@ -26,7 +26,7 @@
                     <div class="col-12">
                         <table id="tb_sucursales" class="table text-nowrap" style="width: 100%;">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Grupo</th>
                                     <th>Cofide</th>
                                     <th>Ruc</th>

@@ -30,7 +30,7 @@
                     <div class="col-12">
                         <table id="tb_material" class="table text-nowrap" style="width: 100%;">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Codigo</th>
                                     <th>Producto</th>
                                     <th>Cantidad</th>
@@ -109,7 +109,7 @@
                             <div class="overflow-auto">
                                 <table id="tb_material_asignado" class="table table-hover text-nowrap" style="width:100%">
                                     <thead>
-                                        <tr class="text-bg-primary text-center">
+                                        <tr class="text-center">
                                             <th>Material</th>
                                             <th>Cantidad</th>
                                         </tr>

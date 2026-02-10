@@ -91,7 +91,7 @@
                             <div class="col-12">
                                 <table id="tb_incidencias" class="table table-hover text-nowrap w-100">
                                     <thead>
-                                        <tr class="text-bg-primary text-center">
+                                        <tr class="text-center">
                                             <th>Incidencia</th>
                                             <th>Fecha Incidencia</th>
                                             <th>N° Orden</th>
@@ -159,7 +159,7 @@
                             <div class="col-12">
                                 <table id="tb_visitas" class="table table-hover text-nowrap" style="width:100%">
                                     <thead>
-                                        <tr class="text-bg-primary text-center">
+                                        <tr class="text-center">
                                             <th>N° Orden</th>
                                             <th>Fecha Visita</th>
                                             <th>Empresa</th>

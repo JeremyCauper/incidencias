@@ -119,7 +119,7 @@
     --mdb-border-style: solid;
     --mdb-border-color: #dcdcdc;
     --mdb-border-color-translucent: rgba(79, 79, 79, .25);
-    --mdb-border-radius: .5rem;
+    --mdb-border-radius: .75rem;
     --mdb-border-radius-sm: 0.25rem;
     --mdb-border-radius-lg: 0.75rem;
     --mdb-border-radius-xl: 1rem;
@@ -218,7 +218,7 @@
     --mdb-form-control-bg: #ffffff;
     --mdb-form-control-border-color: #bdbdbd;
     --mdb-form-control-label-color: #757575;
-    --mdb-form-control-disabled-bg: #e0e0e0;
+    --mdb-form-control-disabled-bg: #e5e7eb;
     --mdb-box-shadow-color: #000;
     --mdb-box-shadow-color-rgb: 0, 0, 0;
     --mdb-stepper-mobile-bg: #eeeeee;
@@ -247,7 +247,7 @@
     --mdb-form-control-bg: #1f222b;
     --mdb-form-control-border-color: rgba(255, 255, 255, 0.7);
     --mdb-form-control-label-color: #bdbdbd;
-    --mdb-form-control-disabled-bg: #616161;
+    --mdb-form-control-disabled-bg: #374151;
     --mdb-box-shadow-color: #000;
     --mdb-box-shadow-color-rgb: 0, 0, 0;
     --mdb-stepper-mobile-bg: #1f222b;
@@ -2767,9 +2767,9 @@ progress {
 }
 
 .form-control:disabled {
-    /* color: #ccc; */
     background-color: var(--mdb-form-control-disabled-bg);
-    opacity: 1
+    cursor: not-allowed;
+    opacity: 0.6;
 }
 
 .form-control::file-selector-button {
@@ -5723,8 +5723,8 @@ fieldset:disabled .btn {
 }
 
 .badge {
-    --mdb-badge-padding-x: 0.65em;
-    --mdb-badge-padding-y: 0.35em;
+    --mdb-badge-padding-x: .65em;
+    --mdb-badge-padding-y: .225em;
     --mdb-badge-font-size: smaller;
     --mdb-badge-font-weight: 500;
     --mdb-badge-color: #fff;

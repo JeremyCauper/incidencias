@@ -28,7 +28,8 @@
                 <div class="row">
                     <div class="col-lg-7 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
-                        <input type="text" class="form-control" value="{{ session('config_layout')->nombre_perfil }}" readonly role="button">
+                        <input type="text" class="form-control" value="{{ session('config_layout')->nombre_perfil }}"
+                            readonly role="button">
                     </div>
                     <div class="col-lg-5 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
@@ -90,7 +91,7 @@
                     <div class="col-12">
                         <table id="tb_orden" class="table table-hover text-nowrap w-100">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Incidencia</th>
                                     <th>Estado</th>
                                     <th>Fecha Incidencia</th>
@@ -193,8 +194,8 @@
                                     N° 3689 MZ D LT 26 INDEPENDENCIA</p>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span
-                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
                                 <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
@@ -225,7 +226,8 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento Incidencia</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
+                            Incidencia</h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="fieldset" aria-item="contenedor-seguimiento">
@@ -260,13 +262,14 @@
                                     aria-item="direccion">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
                             </div>
                             <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span
-                                    style="font-size: .75rem;" aria-item="sucursal">E/S INDEPENDENCIA</span>
+                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
+                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
                             </div>
                         </div>
                     </div>
                     <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Agregar firma</h6>
+                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Agregar firma
+                        </h6>
                         <span aria-item="estado"></span>
                     </div>
                     <div class="col-12 fieldset text-center">

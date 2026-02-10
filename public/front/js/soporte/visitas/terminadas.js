@@ -69,7 +69,7 @@ function ShowDetail(e, id) {
                 llenarInfoModal('modal_seguimiento_visitasp', {
                     estado: getBadgeVisita(visita.estado),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });

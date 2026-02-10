@@ -26,7 +26,7 @@
                     <div class="col-12">
                         <table id="tb_usuario" class="table text-nowrap" style="width: 100%;">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Nro. Documento</th>
                                     <th>Nombre Personal</th>
                                     <th>Tipo Usuario</th>

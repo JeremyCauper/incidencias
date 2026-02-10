@@ -17,7 +17,8 @@
                     <strong>Listado de Tipo Soportes</strong>
                 </h6>
                 <div>
-                    <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_tipo_soporte">
+                    <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
+                        data-mdb-target="#modal_tipo_soporte">
                         <i class="fas fa-plus"></i>
                         Nuevo Tipo Soporte
                     </button>
@@ -29,7 +30,7 @@
                     <div class="col-12">
                         <table id="tb_tipo_soporte" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Descripcion</th>
                                     <th>Registrado</th>
                                     <th>Actualizado</th>
@@ -75,7 +76,8 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modal_tipo_soporte" tabindex="-1" aria-labelledby="modal_tipo_soporteLabel" aria-hidden="true">
+    <div class="modal fade" id="modal_tipo_soporte" tabindex="-1" aria-labelledby="modal_tipo_soporteLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-tipo-soporte">
                 <div class="modal-header  bg-primary text-white">

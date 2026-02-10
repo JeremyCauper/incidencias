@@ -52,9 +52,8 @@ $(document).ready(function () {
         });
 
         cSelect_search.append(selector);
-        selector.select2({
-            placeholder: '-- Todos --',
-            minimumResultsForSearch: Infinity,
+        selector.customSelect2({
+            placeholder: 'Seleccione...',
             allowClear: true,
         });
         // Disparar filtro cuando cambia el select
@@ -117,7 +116,7 @@ function AsignarVisita(id) {
             llenarInfoModal('modal_visitas', {
                 contrato: getBadgeContrato(dt.contrato),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
             });
@@ -137,7 +136,8 @@ function DetalleVisita(id) {
     try {
         $('#modal_detalle_visitas').modal('show');
         fMananger.formModalLoding('modal_detalle_visitas', 'show', true);
-        $('#tb_visitas_asignadas').addClass('d-none').find('tbody').html('');
+        $('#tb_visitas_asignadas').parent().addClass('d-none');
+        $('#tb_visitas_asignadas').find('tbody').html('');
         $('#modal_detalle_visitas [aria-item="mensaje"]').html('');
 
         $.ajax({
@@ -156,7 +156,7 @@ function DetalleVisita(id) {
                 llenarInfoModal('modal_detalle_visitas', {
                     contrato: getBadgeContrato(dt.contrato),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                     rDias: dt.diasVisitas + ' día' + ((dt.diasVisitas > 0) ? 's' : ''),
@@ -175,7 +175,7 @@ function DetalleVisita(id) {
                             <td class="text-center">${getBadgeVisita(e.estado, .7)}</td>
                         </tr>`);
                     });
-                    $('#tb_visitas_asignadas').removeClass('d-none');
+                    $('#tb_visitas_asignadas').parent().removeClass('d-none');
                 }
                 fMananger.formModalLoding('modal_detalle_visitas', 'hide');
             },

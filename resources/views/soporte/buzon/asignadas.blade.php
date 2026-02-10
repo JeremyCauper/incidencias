@@ -7,8 +7,8 @@
     <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
     <style>
         /*////////////////////////////////////////
-                                    /        SCRIPT CSS FIRMA DIGITAL        /
-                                    ////////////////////////////////////////*/
+                                        /        SCRIPT CSS FIRMA DIGITAL        /
+                                        ////////////////////////////////////////*/
 
         .content-image {
             margin: auto;
@@ -109,8 +109,8 @@
         }
 
         /*////////////////////////////////////////
-                                    /          SCRIPT CSS Doc Firma          /
-                                    ////////////////////////////////////////*/
+                                        /          SCRIPT CSS Doc Firma          /
+                                        ////////////////////////////////////////*/
 
         .search_signature_group {
             flex-wrap: nowrap;
@@ -218,7 +218,7 @@
                             <div class="col-12">
                                 <table id="tb_incidencias" class="table table-hover text-nowrap" style="width:100%">
                                     <thead>
-                                        <tr class="text-bg-primary text-center">
+                                        <tr class="text-center">
                                             <th>Incidencia</th>
                                             <th>Estado</th>
                                             <th>Registrado</th>
@@ -316,7 +316,7 @@
                             <div class="col-12">
                                 <table id="tb_visitas" class="table table-hover text-nowrap" style="width:100%">
                                     <thead>
-                                        <tr class="text-bg-primary text-center">
+                                        <tr class="text-center">
                                             <th>Estado</th>
                                             <th>Registrado</th>
                                             <th>Empresa</th>
@@ -469,7 +469,8 @@
                             <div class="col-lg-5 col-10">
                                 <label class="form-label" for="n_orden">N° de Orden </label>
                                 <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="n_orden" name="n_orden" requested="N° de Orden"/>
+                                    <input type="text" class="form-control" id="n_orden" name="n_orden"
+                                        requested="N° de Orden" />
                                     <button class="btn btn-secondary" type="button" id="button-cod-orden" check-cod="false"
                                         data-mdb-ripple-init data-mdb-ripple-color="dark">
                                         Cod. Tecnito
@@ -565,32 +566,32 @@
                         <div class="col-12">
                             <div id="createMaterial"></div>
                             <!-- <div class="row" id="content-material">
-                                    <div class="col-lg-9 my-1">
-                                        <div class="input-group">
-                                            <select class="select-clear" id="createMaterial">
-                                                <option value=""></option>
-                                                @foreach ($data['materiales'] as $m)
-                                                    <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}
-                                                    </option>
-                                                @endforeach
-                                            </select>
+                                        <div class="col-lg-9 my-1">
+                                            <div class="input-group">
+                                                <select class="select-clear" id="createMaterial">
+                                                    <option value=""></option>
+                                                    @foreach ($data['materiales'] as $m)
+                                                        <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-lg-3 col-6 my-1 ps-lg-0">
-                                        <div class="input-group disabled" style="max-width: 300px;" id="content-cantidad">
-                                            <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                                onclick="manCantidad('-')">
-                                                <i class="fas fa-minus" style="font-size: .75rem;"></i>
-                                            </button>
-                                            <input type="number" class="form-control" input-cantidad=""
-                                                oninput="manCantidad('press')" />
-                                            <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                                onclick="manCantidad('+')">
-                                                <i class="fas fa-plus" style="font-size: .75rem;"></i>
-                                            </button>
+                                        <div class="col-lg-3 col-6 my-1 ps-lg-0">
+                                            <div class="input-group disabled" style="max-width: 300px;" id="content-cantidad">
+                                                <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
+                                                    onclick="manCantidad('-')">
+                                                    <i class="fas fa-minus" style="font-size: .75rem;"></i>
+                                                </button>
+                                                <input type="number" class="form-control" input-cantidad=""
+                                                    oninput="manCantidad('press')" />
+                                                <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
+                                                    onclick="manCantidad('+')">
+                                                    <i class="fas fa-plus" style="font-size: .75rem;"></i>
+                                                </button>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div> -->
+                                    </div> -->
                         </div>
 
                         <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">

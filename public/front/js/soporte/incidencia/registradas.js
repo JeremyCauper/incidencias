@@ -283,6 +283,16 @@ $(document).ready(function () {
         manCantidad();
     });
 
+    $('[ctable-create="createPersonal"]').on('click', function () {
+        // 1. Buscamos el ancestro más cercano con la clase .modal-body
+        var $modalBody = $(this).closest('.modal-body');
+
+        // 2. Animamos el scroll hasta el final del contenedor
+        $modalBody.animate({
+            scrollTop: $modalBody.prop("scrollHeight")
+        }, 500); // 500ms es la velocidad de la animación
+    });
+
     $('#button-cod-orden').on('click', function () {
         const check = eval($(this).attr('check-cod')) ? false : true;
         CheckCodOrden(check);
@@ -523,7 +533,7 @@ function ShowDetail(e, cod) {
                 codigo: inc.cod_incidencia,
                 estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
@@ -659,7 +669,7 @@ function ShowAssign(e, cod) {
                 codigo: inc.cod_incidencia,
                 estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
@@ -832,7 +842,7 @@ async function OrdenDetail(e, cod) {
                     tecnicos: personal.map(persona => `<span class="badge bg-light px-3 ms-2 rounded-pill" style="border: 1px solid rgb(50 68 93 / 70%);color: rgb(50 68 93);">${persona.tecnicos}</span>`).join(''),
                     // tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                     soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
@@ -970,7 +980,7 @@ function AddCodAviso(e, cod) {
                 codigo: inc.cod_incidencia,
                 estado: getBadgeIncidencia(inc.estado_informe),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
             });

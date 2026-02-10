@@ -115,7 +115,7 @@ function ShowDetailInc(e, cod) {
                 codigo: inc.cod_incidencia,
                 estado: getBadgeIncidencia(inc.estado_informe),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
@@ -193,7 +193,7 @@ async function OrdenDetail(e, cod) {
                     registrado: inc.created_at,
                     tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                     soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
@@ -225,7 +225,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 
     fMananger.formModalLoding('modal_orden', 'show');
     var valid = validFrom(this);
-    
+
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
     valid.data.data.cod_sistema = eval($('#button-cod-orden').attr('check-cod'));
@@ -307,7 +307,7 @@ function AddCodAviso(e, cod) {
                 codigo: inc.cod_incidencia,
                 estado: getBadgeIncidencia(inc.estado_informe),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
             });
@@ -649,7 +649,7 @@ function ShowDetailVis(e, id) {
                 llenarInfoModal('modal_seguimiento_visitasp', {
                     estado: getBadgeVisita(visita.estado),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });
@@ -736,7 +736,7 @@ function OrdenVisita(e, id) {
                 llenarInfoModal('modal_orden_visita', {
                     registrado: visita.seguimiento[0].created_at,
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                     tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>')

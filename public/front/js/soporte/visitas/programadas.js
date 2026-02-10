@@ -21,7 +21,7 @@ function ShowDetail(e, id) {
                 llenarInfoModal('modal_seguimiento_visitasp', {
                     estado: getBadgeVisita(visita.estado),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });
@@ -91,7 +91,7 @@ function ShowAssign(e, id) {
                 llenarInfoModal('modal_assign', {
                     estado: getBadgeVisita(visita.estado),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });
@@ -219,7 +219,7 @@ function OrdenVisita(e, id) {
                 llenarInfoModal('modal_orden', {
                     registrado: visita.seguimiento[0].created_at,
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                     tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>')

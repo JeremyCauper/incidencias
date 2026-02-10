@@ -27,7 +27,7 @@
                     <div class="col-12">
                         <table id="tb_subproblemas" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Cod. Problema</th>
                                     <th>Prioridad</th>
                                     <th>Descripcion</th>

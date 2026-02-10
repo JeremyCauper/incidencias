@@ -1,19 +1,19 @@
 @extends('layout.app')
-@section('title', 'INC RESUELTAS')
+@section('title', 'Incidencias Resueltas')
 
 @section('cabecera')
     <script type="text/javascript" src="{{ secure_asset('front/vendor/daterangepicker/moment.min.js') }}"></script>
     <script type="text/javascript" src="{{ secure_asset('front/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ secure_asset('front/vendor/daterangepicker/daterangepicker.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('front/css/app/incidencias/resueltas.css') }}?v={{ time() }}">
+    <link rel="stylesheet" href="{{ secure_asset('front/css/app/incidencias/resueltas.css') }}">
     <script>
-        let empresas = <?php echo json_encode($data['company']); ?>;
-        let sucursales = <?php echo json_encode($data['scompany']); ?>;
-        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
-        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
-        let obj_problem = <?php echo json_encode($data['problema']); ?>;
-        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
-        let usuarios = <?php echo json_encode($data['usuarios']); ?>;
+        let empresas = @json($data['company']);
+        let sucursales = @json($data['scompany']);
+        let tipo_soporte = @json($data['tSoporte']);
+        let tipo_incidencia = @json($data['tIncidencia']);
+        let obj_problem = @json($data['problema']);
+        let obj_subproblem = @json($data['sproblema']);
+        let usuarios = @json($data['usuarios']);
     </script>
 @endsection
 @section('content')
@@ -26,7 +26,7 @@
                     <div class="col-xxl-6 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
                         <select id="empresa" name="empresa" class="select-clear">
-                            <option value=""></option>
+                            <option value="">Seleccione...</option>
                             @foreach ($data['company'] as $key => $val)
                                 @if ($val->status)
                                     <option value="{{ $val->ruc }}">
@@ -50,7 +50,7 @@
                     <div class="col-md-6 my-1">
                         <label class="form-label mb-0" for="fProblema">Problemas</label>
                         <select id="fProblema" class="select-clear">
-                            <option value=""></option>
+                            <option value="">Seleccione...</option>
                             @foreach ($data['problema'] as $v)
                                 <option value="{{ $v['id'] }}">
                                     {{ $data['tSoporte'][$v['tipo_soporte']]['descripcion'] }} - {{ $v['descripcion'] }}
@@ -93,7 +93,7 @@
                     <div class="col-12">
                         <table id="tb_orden" class="table table-hover text-nowrap w-100">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Incidencia</th>
                                     <th>Fecha Incidencia</th>
                                     <th>N° Orden</th>
@@ -229,9 +229,10 @@
                             aria-label="Close"></button>
                     </div>
                 </div>
-                <div class="modal-body modal-body-scrollable px-1 p-0" style="background-color: rgb(29 49 69 / 5%);">
+                <div class="modal-body modal-body-scrollable px-1 p-0">
                     <div class="row">
-                        <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll" style="background-color: rgb(29 49 69 / 5%);">
+                        <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
+                            style="background-color: rgb(29 49 69 / 5%);">
                             <h6 class="text-uppercase mt-2 mb-4 title_detalle">
                                 <i class="fas fa-city me-2"></i> Información del Cliente
                             </h6>
@@ -329,7 +330,7 @@
                         </div>
                     </div>
 
-                    <h6 class="text-uppercase my-4 title_detalle text-primary" style="font-size: 14px"><i
+                    <h6 class="text-uppercase mt-4 mb-3 title_detalle text-primary" style="font-size: 14px"><i
                             class="fas fa-user-plus"></i>Agregar firma</h6>
 
                     <div class="col-12 text-center">

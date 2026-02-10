@@ -30,7 +30,7 @@
                     <div class="col-12">
                         <table id="tb_submenu" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Menu</th>
                                     <th>Categoria</th>
                                     <th>Descripcion</th>
@@ -57,7 +57,8 @@
                                     }
                                 },
                                 columns: [
-                                    { data: 'menu', render: function (data, type, row) {
+                                    {
+                                        data: 'menu', render: function (data, type, row) {
                                             let menu = menus.find(menu => menu.id == data);
                                             return `<i class="${menu.icon} me-2"></i>${menu.descripcion}`;
                                         }
@@ -99,8 +100,7 @@
                             <select class="select-icons" id="menu">
                                 <option value=""></option>
                                 @foreach ($data['menus'] as $v)
-                                    <option value="{{ $v->id }}"
-                                        {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                    <option value="{{ $v->id }}" {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
                                         {{ (string) '<i class="' . $v->icon . ' me-2"></i>' }} {{ $v->descripcion }}
                                         {{ $v->eliminado == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
                                     </option>

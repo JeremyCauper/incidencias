@@ -258,18 +258,21 @@
     </div>
 
     <div class="modal fade" id="modal_incidencias" aria-labelledby="modal_incidencias" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-fullscreen-md-down modal-xl">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <form class="modal-content" id="form-incidencias" style="position: relative;">
                 <input type="hidden" name="id_inc" id="id_inc">
                 <input type="hidden" name="estado_info" id="estado_info">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">
-                        NUEVA INCIDENCIA
-                        <span class="mx-2 badge badge-success badge-lg" id="cod_inc_text">{{ $data['cod_inc'] }}</span>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">NUEVA INCIDENCIA
+                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                            id="cod_inc_text">{{ $data['cod_inc'] }}</span>
                         <span class="badge badge-lg" aria-item="contrato"></span>
-                    </h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                    </h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <span aria-item="estado"></span>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
                     <input type="text" class="d-none" name="cod_inc" id="cod_inc" value="{{ $data['cod_inc'] }}">
@@ -277,8 +280,8 @@
                         <span style="font-size: 12.5px; color:#9FA6B2;">Completar todos los campos obligatorios
                             (<span class="text-danger">*</span>)</span>
                     </div>
-                    <h6 class="tittle text-primary">Datos Empresa</h6>
-                    <div class="row">
+                    <h6 class="text-uppercase mt-4 mb-2 title_detalle"><i class="fas fa-city me-2"></i>Datos Empresa</h6>
+                    <div class="row detalle_body">
                         <div class="col-lg-8 mb-2">
                             <select class="select-clear" id="empresa">
                                 <option value="">Seleccione...</option>
@@ -298,8 +301,8 @@
                         </div>
                     </div>
 
-                    <h6 class="tittle text-primary">Datos Contacto</h6>
-                    <div class="row">
+                    <h6 class="text-uppercase mt-4 mb-2 title_detalle"><i class="far fa-address-book me-2"></i>Datos Contacto</h6>
+                    <div class="row detalle_body">
                         <input type="hidden" name="cod_contact" id="cod_contact">
                         <input type="hidden" name="consultado_api" id="consultado_api">
                         <div class="col-lg-3 col-4 mb-2">
@@ -337,8 +340,8 @@
                         </div>
                     </div>
 
-                    <h6 class="tittle text-primary">Datos Incidencia</h6>
-                    <div class="row">
+                    <h6 class="text-uppercase mt-4 mb-2 title_detalle"><i class="fas fa-book-skull me-2"></i>Datos Incidencia</h6>
+                    <div class="row detalle_body">
                         <div class="col-lg-4 mb-2">
                             <select class="select-clear" id="tEstacion">
                                 <option value="">Seleccione...</option>
@@ -404,7 +407,7 @@
                     </div>
 
                     <div id="contenedor-personal">
-                        <h6 class="tittle text-primary">Asignar Personal
+                        <h6 class="tittle text-primary mt-4"><i class="fas fa-user-plus me-2"></i>Asignar Personal
                         </h6>
                         <div id="createPersonal"></div>
                     </div>
@@ -514,7 +517,7 @@
                             aria-label="Close"></button>
                     </div>
                 </div>
-                <div class="modal-body" style="background-color: rgb(29 49 69 / 5%);">
+                <div class="modal-body">
                     <div class="detalle_body mb-2">
                         <div class="border-bottom mb-4">
                             <h5><span aria-item="razon_social"></span></h5>
@@ -545,7 +548,7 @@
                     <div class="detalle_body datalle_observacion" aria-item="observacion"></div>
 
                     <h6 class="text-uppercase mt-4 title_detalle text-primary" style="font-size: 14px"><i
-                            class="fas fa-user-plus"></i>Asignar Personal</h6>
+                            class="fas fa-user-plus ms-2"></i>Asignar Personal</h6>
 
                     <div class="">
                         <div id="createPersonal1"></div>
@@ -565,7 +568,7 @@
         <div class="modal-dialog modal-fullscreen-md-down modal-dialog-scrollable modal-xl" style="display: flex;">
             <form class="modal-content" id="form-orden">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
-                    <h5 class="modal-title">Asignar
+                    <h5 class="modal-title">ORDEN DE SERVICIO 
                         <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
                     </h5>
@@ -574,7 +577,7 @@
                             aria-label="Close"></button>
                     </div>
                 </div>
-                <div class="modal-body" style="background-color: rgb(29 49 69 / 5%);">
+                <div class="modal-body">
                     <div class="text-end cabecera-orden">
                         <div style="color: rgb(148 163 184 / 1)">
                             <label class="form-label me-2">Fecha Inicio: </label>
