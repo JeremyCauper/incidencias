@@ -4,7 +4,7 @@
 @section('cabecera')
     <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
     <script>
-        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
+        let tipo_soporte = @json($data['tSoporte']);
     </script>
 @endsection
 @section('content')
@@ -22,7 +22,7 @@
                         <i class="fas fa-plus"></i>
                         Nuevo Problema
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -131,5 +131,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/problemas/problemas.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/problemas/problemas.js')}}"></script>
 @endsection

@@ -2,10 +2,10 @@
 @section('title', 'Panel de Control')
 
 @section('cabecera')
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}">
     <link rel="stylesheet" href="{{secure_asset('front/vendor/selectize/selectize.default.min.css')}}">
     <script src="{{secure_asset('front/vendor/selectize/selectize.min.js')}}"></script>
-    
+
     <script src="{{secure_asset('front/vendor/echartjs/echarts.min.js')}}"></script>
 
     <script>
@@ -162,7 +162,7 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/app/ChartMananger.js')}}"></script>
+    <script src="{{secure_asset($ft_js->ChartMananger)}}"></script>
     <script>
         var myChart_peronal = new ChartMananger({
             id: '#chart-line-tasks',
@@ -173,5 +173,5 @@
             }
         });
     </script>
-    <!-- <script src="{{secure_asset('front/js/soporte/incidencia/registradas.js')}}?v={{ time() }}"></script> -->
+    <!-- <script src="{{secure_asset('front/js/soporte/incidencia/registradas.js')}}"></script> -->
 @endsection

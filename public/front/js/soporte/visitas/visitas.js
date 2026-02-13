@@ -1,11 +1,10 @@
 $(document).ready(function () {
     $('.modal').on('shown.bs.modal', function () {
-        $('#fecha_visita').val(date('Y-m-d'));
         changeCodOrdenV();
     });
 
     $('.modal').on('hidden.bs.modal', function () {
-        // $('#contenedor-personal').addClass('d-none');
+        fecha_visita.val(date('Y-m-d'));
         cPersonal.deleteTable();
         cPersonal1.deleteTable();
         MRevision.deleteAll();
@@ -13,26 +12,6 @@ $(document).ready(function () {
         $('#contendor-filas').find('.input-group .input-group-text i').each(function () {
             $(this).attr({ 'class': 'fas fa-circle-check' });
         });
-    });
-
-    $('#fecha_visita, #fecha_visita_asign').daterangepicker({
-        singleDatePicker: true,
-        startDate: date('Y-m-d'),
-        minDate: date('Y-m-d'),
-        opens: "center",
-        cancelClass: "btn-link",
-        locale: {
-            format: 'YYYY-MM-DD',
-            separator: '  al  ',
-            applyLabel: 'Aplicar',
-            cancelLabel: 'Cerrar',
-            fromLabel: 'Desde',
-            toLabel: 'Hasta',
-            customRangeLabel: 'Rango personalizado',
-            daysOfWeek: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
-            monthNames: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
-            firstDay: 1 // Comienza la semana en lunes
-        }
     });
 
     fObservador('.content-wrapper', () => {

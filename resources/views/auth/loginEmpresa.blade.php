@@ -5,13 +5,13 @@
     <!-- Requiredd meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ time() }}" />
+    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}" />
     <title>RC Incidencias | Inicio</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}">
     <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}">
     <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/auth.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/auth.css')}}">
 
     <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}"></script>
 
@@ -114,7 +114,7 @@
         const __url = "{{secure_url('')}}";
         const __token = "{{ csrf_token() }}";
     </script>
-    <script src="{{secure_asset('front/js/auth/authEmpresa.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/auth/authEmpresa.js')}}"></script>
 </body>
 
 </html>

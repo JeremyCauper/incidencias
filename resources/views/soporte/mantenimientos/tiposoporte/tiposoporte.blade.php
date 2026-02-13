@@ -22,7 +22,7 @@
                         <i class="fas fa-plus"></i>
                         Nuevo Tipo Soporte
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -112,5 +112,5 @@
 @section('scripts')
     <script>
     </script>
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/tiposoporte/tiposoporte.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/tiposoporte/tiposoporte.js')}}"></script>
 @endsection

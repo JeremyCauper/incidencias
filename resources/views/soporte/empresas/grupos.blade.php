@@ -19,7 +19,7 @@
                         <i class="fas fa-plus me-1"></i>
                         Nuevo Grupo
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>

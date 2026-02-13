@@ -9,7 +9,6 @@ $(document).ready(function () {
         endDate: date('Y-m-d'),
         maxDate: date('Y-m-d'),
         opens: "center",
-        cancelClass: "btn-link",
         locale: {
             format: 'YYYY-MM-DD',
             separator: '  al  ',
@@ -67,7 +66,7 @@ function ShowDetail(e, id) {
                 empresa = empresas[sucursal.ruc];
 
                 llenarInfoModal('modal_seguimiento_visitasp', {
-                    estado: getBadgeVisita(visita.estado),
+                    estado: getBadgeVisita(visita.estado, .75, true, true),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                     direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,

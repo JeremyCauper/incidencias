@@ -2,13 +2,13 @@
 @section('title', 'INC RESUELTAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker_moment)}}"></script>
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker)}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset($ft_css->daterangepicker)}}">
     <style>
         /*////////////////////////////////////////
-                                        /        SCRIPT CSS FIRMA DIGITAL        /
-                                        ////////////////////////////////////////*/
+                                                                            /        SCRIPT CSS FIRMA DIGITAL        /
+                                                                            ////////////////////////////////////////*/
 
         .content-image {
             margin: auto;
@@ -109,8 +109,8 @@
         }
 
         /*////////////////////////////////////////
-                                        /          SCRIPT CSS Doc Firma          /
-                                        ////////////////////////////////////////*/
+                                                                            /          SCRIPT CSS Doc Firma          /
+                                                                            ////////////////////////////////////////*/
 
         .search_signature_group {
             flex-wrap: nowrap;
@@ -166,15 +166,15 @@
     </style>
     <script>
         let cod_ordenv = "{{$data['cod_ordenv']}}";
-        let cod_orden = '<?= $data['cod_orden'] ?>';
-        let empresas = <?php echo json_encode($data['empresas']); ?>;
-        let sucursales = <?php echo json_encode($data['sucursales']); ?>;
-        let tipo_estacion = <?php echo json_encode($data['tEstacion']); ?>;
-        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
-        let tipo_incidencia = <?php echo json_encode($data['tIncidencia']); ?>;
-        let obj_problem = <?php echo json_encode($data['problema']); ?>;
-        let obj_subproblem = <?php echo json_encode($data['sproblema']); ?>;
-        let materiales = <?php echo json_encode($data['materiales']); ?>;
+        let cod_orden = "{{$data['cod_orden']}}";
+        let empresas = @json($data['empresas']);
+        let sucursales = @json($data['sucursales']);
+        let tipo_estacion = @json($data['tEstacion']);
+        let tipo_soporte = @json($data['tSoporte']);
+        let tipo_incidencia = @json($data['tIncidencia']);
+        let obj_problem = @json($data['problema']);
+        let obj_subproblem = @json($data['sproblema']);
+        let materiales = @json($data['materiales']);
     </script>
 @endsection
 @section('content')
@@ -209,8 +209,7 @@
                 <div class="tab-content" id="myTabContent0">
                     <div class="tab-pane fade show active" id="home0" role="tabpanel" aria-labelledby="home-tab0">
                         <div>
-                            <button class="btn btn-primary px-2" onclick="updateTableInc()" data-mdb-ripple-init
-                                role="button">
+                            <button class="btn btn-primary" onclick="updateTableInc()" data-mdb-ripple-init role="button">
                                 <i class="fas fa-rotate-right"></i>
                             </button>
                         </div>
@@ -301,14 +300,18 @@
                                         order: [[2, 'desc']],
                                         processing: true,
                                     });
+
+                                    function updateTableInc() {
+                                        tb_incidencias.ajax.reload();
+                                    }
+                                    mostrar_acciones(tb_incidencias);
                                 </script>
                             </div>
                         </div>
                     </div>
                     <div class="tab-pane fade" id="profile0" role="tabpanel" aria-labelledby="profile-tab0">
                         <div>
-                            <button class="btn btn-primary px-2" onclick="updateTableVis()" data-mdb-ripple-init
-                                role="button">
+                            <button class="btn btn-primary" onclick="updateTableVis()" data-mdb-ripple-init role="button">
                                 <i class="fas fa-rotate-right"></i>
                             </button>
                         </div>
@@ -368,6 +371,11 @@
                                         },
                                         processing: true
                                     });
+
+                                    function updateTableVis() {
+                                        tb_visitas.ajax.reload();
+                                    }
+                                    mostrar_acciones(tb_visitas);
                                 </script>
                             </div>
                         </div>
@@ -380,65 +388,80 @@
     <!-- Modals Para Incidencias -->
     <button class="d-none" data-mdb-modal-init data-mdb-target="#modal_detalle"></button>
     <div class="modal fade" id="modal_detalle" aria-labelledby="modal_detalle" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Detalle de incidencia
-                        <span class="ms-2 badge badge-success badge-lg" aria-item="codigo"></span>
-                    </h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">Detalle de incidencia
+                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                            aria-item="codigo"></span>
+                    </h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <span aria-item="estado"></span>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
-                                    20506467854 - CORPORACION JULCAN S.A.</p>
-                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <div>
-                                    <label class="form-label me-2">Tipo Soporte:</label>
-                                    <span style="font-size: .75rem;" aria-item="soporte"></span>
+                <div class="modal-body modal-body-scrollable px-1 p-0">
+                    <div class="row">
+                        <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
+                            style="background-color: rgb(29 49 69 / 5%);">
+                            <h6 class="text-uppercase mt-2 mb-4 title_detalle">
+                                <i class="fas fa-city me-2"></i> Información del Cliente
+                            </h6>
+                            <div class="detalle_body mb-2">
+                                <div class="border-bottom mb-4">
+                                    <h5><span aria-item="razon_social"></span></h5>
+                                    <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
                                 </div>
                                 <div>
-                                    <label class="form-label me-2">Problema:</label>
-                                    <span style="font-size: .75rem;" aria-item="problema"></span>
+                                    <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                                    <p class="detalle_text" aria-item="sucursal"></p>
                                 </div>
                                 <div>
-                                    <label class="form-label me-2">Sub Problema:</label>
-                                    <span style="font-size: .75rem;" aria-item="subproblema"></span>
+                                    <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                        Sucursal</p>
+                                    <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
                                 </div>
                             </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Nivel Incidencia:</label>
+
+                            <h6 class="text-uppercase my-4 title_detalle">
+                                <i class="fas fa-circle-exclamation me-2"></i> Detalles del Soporte
+                            </h6>
+                            <div class="detalle_body d-flex align-items-center justify-content-between mb-3">
+                                <span class="detalle_text mb-0">Tipo Soporte</span>
+                                <span class="detalle_text text-uppercase fw-bolder mb-0" aria-item="soporte"></span>
+                            </div>
+                            <div class="detalle_body mb-3">
+                                <p class="detalle_label mb-1 text-uppercase fw-bolder text-muted">Problema Reportado</p>
+                                <p class="detalle_text fw-bold mb-0" aria-item="problema"></p>
+                                <p class="detalle_text text-muted fst-italic mb-0 mt-2" aria-item="subproblema"></p>
+                            </div>
+
+                            <div class="detalle_body"
+                                style="background-color: rgb(123 126 255 / 19%);border-color: rgb(99 102 241 / 0.1);">
+                                <label class="form-label text-uppercase me-2" style="color: rgb(99 102 241 / 1);"><i
+                                        class="fas fa-stopwatch"></i> Nivel de Incidencia:</label>
                                 <div aria-item="incidencia"></div>
                             </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Observación:</label>
-                                <span style="font-size: .75rem;" aria-item="observacion"></span>
+
+                            <h6 class="text-uppercase mt-4 mb-2 title_detalle">Observación</h6>
+                            <div class="detalle_body datalle_observacion" aria-item="observacion">
                             </div>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
-                            Incidencia</h6>
-                        <span aria-item="estado"></span>
-                    </div>
-                    <div class="fieldset" aria-item="contenedor-seguimiento">
+                        <div class="col-lg-7 p-4 modal-col-scrollable personalized-scroll">
+                            <div class="align-items-center d-flex mt-2 mb-4">
+                                <h4 class="mb-0 text-nowrap text-uppercase title_detalle">
+                                    <i class="fas fa-clock-rotate-left" style="color: rgb(99 102 241 / 1)"></i>
+                                    SEGUIMIENTO INCIDENCIA
+                                </h4>
+                                <div class="ms-2 rounded-pill"
+                                    style="height: .35rem;width: 100%;background-color: rgb(148 163 184 / 11%)"></div>
+                            </div>
+                            <div class="content_seguimiento" aria-item="contenedor-seguimiento"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer border-top-0">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-link " data-mdb-ripple-init
                         data-mdb-dismiss="modal">Cerrar</button>
                 </div>
@@ -447,200 +470,165 @@
     </div>
 
     <div class="modal fade" id="modal_orden" aria-labelledby="modal_orden" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg" style="display: flex;">
+        <div class="modal-dialog modal-fullscreen-md-down modal-dialog-scrollable modal-xl">
             <form class="modal-content" id="form-orden">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">ORDEN DE SERVICIO <span class="badge badge-success badge-lg"
-                            aria-item="codigo"></span></h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">ORDEN DE SERVICIO
+                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                            aria-item="codigo"></span>
+                    </h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 col-lg-12 col-xs-12">
-                        <!-- INICIO CABECERA -->
-                        <div class="text-end cabecera-orden">
-                            <div>
-                                <label class="form-label me-2">Fecha Inicio: </label>
-                                <span style="font-size: small;" aria-item="registrado"></span>
+                    <div class="text-end cabecera-orden">
+                        <div style="color: rgb(148 163 184 / 1)">
+                            <label class="form-label me-2">Fecha Inicio: </label>
+                            <span style="font-size: small;" aria-item="registrado"></span>
+                        </div>
+                    </div>
+                    <div class="mb-1 cabecera-orden">
+                        <input type="hidden" name="codInc" id="codInc">
+                        <div class="col-lg-5 col-10">
+                            <label class="form-label" style="color: rgb(148 163 184 / 1)" for="n_orden">N° de Orden</label>
+                            <div class="input-group mb-3">
+                                <input type="text" class="form-control" id="n_orden" name="n_orden" requested="N° de Orden">
+                                <button class="btn btn-secondary" type="button" id="button-cod-orden" check-cod="false"
+                                    data-mdb-ripple-init data-mdb-ripple-color="dark">
+                                    Cod. Tecnito
+                                </button>
                             </div>
                         </div>
-                        <div class="mb-1 cabecera-orden">
-                            <input type="hidden" name="codInc" id="codInc">
-                            <div class="col-lg-5 col-10">
-                                <label class="form-label" for="n_orden">N° de Orden </label>
-                                <div class="input-group mb-3">
-                                    <input type="text" class="form-control" id="n_orden" name="n_orden"
-                                        requested="N° de Orden" />
-                                    <button class="btn btn-secondary" type="button" id="button-cod-orden" check-cod="false"
-                                        data-mdb-ripple-init data-mdb-ripple-color="dark">
-                                        Cod. Tecnito
-                                    </button>
-                                </div>
+                    </div>
+
+                    <!-- TER CABECERA -->
+                    <h6 class="text-uppercase mb-3 title_detalle">
+                        <i class="fas fa-user-gear"></i> Tecnicos
+                    </h6>
+
+                    <div class="mb-3">
+                        <span aria-item="tecnicos"></span>
+                    </div>
+
+                    <h6 class="text-uppercase mb-3 title_detalle">
+                        <i class="fas fa-city me-2"></i> Información del Cliente
+                    </h6>
+                    <div class="detalle_body mb-2">
+                        <div class="border-bottom mb-4">
+                            <h5><span aria-item="razon_social"></span></h5>
+                            <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                            <p class="detalle_text" aria-item="sucursal"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                Sucursal</p>
+                            <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
+                        </div>
+                    </div>
+
+                    <h6 class="text-uppercase my-3 title_detalle">
+                        <i class="fas fa-circle-exclamation me-2"></i> Detalles del Soporte
+                    </h6>
+                    <div class="detalle_body d-flex align-items-center justify-content-between mb-3">
+                        <span class="detalle_text mb-0">Tipo Soporte</span>
+                        <span class="detalle_text text-uppercase fw-bolder mb-0" aria-item="soporte"></span>
+                    </div>
+                    <div class="detalle_body mb-3">
+                        <p class="detalle_label mb-1 text-uppercase fw-bolder text-muted">Problema Reportado</p>
+                        <p class="detalle_text fw-bold mb-0" aria-item="problema"></p>
+                        <p class="detalle_text text-muted fst-italic mb-0 mt-2" aria-item="subproblema"></p>
+                    </div>
+
+                    <h6 class="text-uppercase mt-4 mb-2 title_detalle">Observación</h6>
+                    <div class="detalle_body datalle_observacion" aria-item="observacion">
+                    </div>
+
+                    <div class="row justify-content-md-center">
+                        <div class="col-md-6">
+                            <div class="form-group pt-2">
+                                <textarea class="form-control" id="observaciones"
+                                    style="height: 80px;resize: none;"></textarea>
                             </div>
                         </div>
-
-                        <!-- TER CABECERA -->
-                        <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                            <h6 class="tittle text-primary"> TECNICOS</h6>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                            <span aria-item="tecnicos"></span>
-                        </div>
-
-
-                        <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                            <h6 class="tittle text-primary"> DATOS DEL CLIENTE </h6>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                            <div class="list-group list-group-light">
-                                <div class="list-group-item">
-                                    <p aria-item="razon_social" class="font-weight-semibold mb-2"
-                                        style="font-size: .92rem;">
-                                        20506467854 - CORPORACION JULCAN S.A.</p>
-                                    <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                        N° 3689 MZ D LT 26 INDEPENDENCIA</p>
-                                </div>
-                                <div class="list-group-item">
-                                    <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                        aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                </div>
-                                <div class="list-group-item">
-                                    <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                        aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                                </div>
+                        <div class="col-md-6">
+                            <div class="form-group pt-2">
+                                <textarea class="form-control" id="recomendacion" style="height: 80px;resize: none;"
+                                    require="Recomendaciones"></textarea>
                             </div>
                         </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                            <h6 class="tittle text-primary"> TRABAJO REALIZADO </h6>
+                        <div class="col-md-3 col-6">
+                            <div class="form-group pt-2">
+                                <input class="form-control form-control-sm" id="fecha_f">
+                            </div>
                         </div>
+                        <div class="col-md-3 col-6">
+                            <div class="form-group pt-2">
+                                <input class="form-control form-control-sm" id="hora_f">
+                            </div>
+                        </div>
+                    </div>
 
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2">
-                            <div class="col-md-12">
-                                <label class="form-label me-2">Problema:</label>
-                                <span style="font-size: .75rem;" aria-item="problema"></span>
+                    <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
+                        <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
+                    </div>
+
+                    <div class="col-md-4 col-6 my-1 ps-0 d-none" id="content-codAviso">
+                        <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
+                    </div>
+                    <div class="col-12">
+                        <div id="createMaterial"></div>
+                    </div>
+
+                    <div class="col-12 my-2 px-4">
+                        <div class="row justify-content-between firmas-orden">
+                            <div class="col-sm-5 text-center my-2">
+                                <img class="border rounded-1" {{ Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : '' }}
+                                    height="130" width="160">
+                                <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
+                                    Firma Tecnico
+                                </p>
+                                <p class="mb-1" style="font-size: 13.4px;">RICARDO CALDERON INGENIEROS SAC</p>
+                                <p class="mb-0" style="font-size: 12.5px;">
+                                    {{ Auth::user()->ndoc_usuario . ' - ' . Auth::user()->nombres . ' ' . Auth::user()->apellidos }}
+                                </p>
                             </div>
-                            <div class="col-md-12">
-                                <label class="form-label me-2">Sub Problema:</label>
-                                <span style="font-size: .75rem;" aria-item="subproblema"></span>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label me-2">Obersevaciones Incidencia:</label>
-                                <span style="font-size: .75rem;" aria-item="observacion"></span>
-                            </div>
-                            <div class="row justify-content-md-center">
-                                <div class="col-md-6">
-                                    <div class="form-group pt-2">
-                                        <textarea class="form-control" id="observaciones"
-                                            style="height: 80px;resize: none;"></textarea>
+
+                            <div class="col-sm-5 text-center my-2">
+                                <div class="text-center content-image">
+                                    <div class="overlay">
+                                        <button class="btn-img removeImgButton" style="display: none;" id="removeImgFirma"
+                                            type="button" button-reset><i class="fas fa-xmark"></i></button>
+                                        <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma" type="button"><i
+                                                class="fas fa-arrow-up-from-bracket"></i></button>
+                                        <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i
+                                                class="fas fa-pencil"></i></button>
+                                        <button class="btn-img expandImgButton" type="button"
+                                            onclick="PreviImagenes(PreviFirma.src);"><i class="fas fa-expand"></i></button>
                                     </div>
+                                    <input type="file" class="d-none" id="firma_digital">
+                                    <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
+                                    <img id="PreviFirma" class="visually-hidden" height="130" width="160">
                                 </div>
-                                <div class="col-md-6">
-                                    <div class="form-group pt-2">
-                                        <textarea class="form-control" id="recomendacion"
-                                            style="height: 80px;resize: none;"></textarea>
-                                    </div>
+                                <!-- <img class="border rounded-1" id="" alt="" > -->
+                                <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma
+                                    Cliente</p>
+                                <p class="mb-1" style="font-size: 13.4px;" aria-item="empresaFooter">COESTI S.A.
+                                </p>
+                                <div class="search_signature_group">
+                                    <input type="text" id="search_signature" placeholder="Buscar cliente">
+                                    <span class="search_signature_text rounded" type="button" data-mdb-ripple-init>
+                                        <i class="fas fa-magnifying-glass"></i>
+                                    </span>
                                 </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="form-group pt-2">
-                                        <input class="form-control form-control-sm" id="fecha_f">
-                                    </div>
-                                </div>
-                                <div class="col-md-3 col-6">
-                                    <div class="form-group pt-2">
-                                        <input class="form-control form-control-sm" id="hora_f">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12 cabeceras">
-                            <h6 class="tittle text-primary">MATERIALES UTILIZADOS</h2>
-                        </div>
-
-                        <div class="col-md-4 col-6 my-1 ps-0 d-none" id="content-codAviso">
-                            <input type="text" class="form-control" id="codAviso" placeholder="Cod. Aviso">
-                        </div>
-                        <div class="col-12">
-                            <div id="createMaterial"></div>
-                            <!-- <div class="row" id="content-material">
-                                        <div class="col-lg-9 my-1">
-                                            <div class="input-group">
-                                                <select class="select-clear" id="createMaterial">
-                                                    <option value=""></option>
-                                                    @foreach ($data['materiales'] as $m)
-                                                        <option value="{{$m['value']}}" data-value="{{$m['dValue']}}">{{$m['text']}}
-                                                        </option>
-                                                    @endforeach
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="col-lg-3 col-6 my-1 ps-lg-0">
-                                            <div class="input-group disabled" style="max-width: 300px;" id="content-cantidad">
-                                                <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                                    onclick="manCantidad('-')">
-                                                    <i class="fas fa-minus" style="font-size: .75rem;"></i>
-                                                </button>
-                                                <input type="number" class="form-control" input-cantidad=""
-                                                    oninput="manCantidad('press')" />
-                                                <button class="btn btn-secondary px-2" type="button" data-mdb-ripple-init
-                                                    onclick="manCantidad('+')">
-                                                    <i class="fas fa-plus" style="font-size: .75rem;"></i>
-                                                </button>
-                                            </div>
-                                        </div>
-                                    </div> -->
-                        </div>
-
-                        <div class="col-md-12 col-sm-12 col-xs-12 my-2 px-4">
-                            <div class="row justify-content-between firmas-orden">
-                                <div class="col-lg-5 text-center my-2">
-                                    <img class="border rounded-1" {{Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : ''}}
-                                        height="130" width="160">
-                                    <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
-                                        Firma Tecnico
-                                    </p>
-                                    <p class="mb-1" style="font-size: 13.4px;">RICARDO CALDERON INGENIEROS SAC</p>
-                                    <p class="mb-0" style="font-size: 12.5px;">
-                                        {{Auth::user()->ndoc_usuario . ' - ' . Auth::user()->nombres . ' ' . Auth::user()->apellidos}}
-                                    </p>
-                                </div>
-
-                                <div class="col-lg-5 text-center my-2">
-                                    <div class="text-center content-image">
-                                        <div class="overlay">
-                                            <button class="btn-img removeImgButton" style="display: none;"
-                                                id="removeImgFirma" type="button" button-reset><i
-                                                    class="fas fa-xmark"></i></button>
-                                            <button class="btn-img mx-1 uploadImgButton" id="uploadImgFirma"
-                                                type="button"><i class="fas fa-arrow-up-from-bracket"></i></button>
-                                            <button class="btn-img mx-1 uploadImgButton" id="createFirma" type="button"><i
-                                                    class="fas fa-pencil"></i></button>
-                                            <button class="btn-img expandImgButton" type="button"
-                                                onclick="PreviImagenes(PreviFirma.src);"><i
-                                                    class="fas fa-expand"></i></button>
-                                        </div>
-                                        <input type="file" class="d-none" id="firma_digital">
-                                        <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
-                                        <img id="PreviFirma" class="visually-hidden" height="130" width="160">
-                                    </div>
-                                    <!-- <img class="border rounded-1" id="" alt="" > -->
-                                    <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">Firma
-                                        Cliente</p>
-                                    <p class="mb-1" style="font-size: 13.4px;" aria-item="empresaFooter">COESTI S.A.</p>
-                                    <div class="search_signature_group">
-                                        <input type="text" id="search_signature" placeholder="Buscar cliente">
-                                        <span class="search_signature_text rounded" type="button" data-mdb-ripple-init>
-                                            <i class="fas fa-magnifying-glass"></i>
-                                        </span>
-                                    </div>
-                                    <input type="hidden" name="id_firmador" id="id_firmador">
-                                    <input type="hidden" name="nomFirmaDigital" id="nomFirmaDigital">
-                                    <input type="hidden" name="n_doc" id="n_doc">
-                                    <input type="hidden" name="nom_cliente" id="nom_cliente">
-                                </div>
+                                <input type="hidden" name="id_firmador" id="id_firmador">
+                                <input type="hidden" name="nomFirmaDigital" id="nomFirmaDigital">
+                                <input type="hidden" name="n_doc" id="n_doc">
+                                <input type="hidden" name="nom_cliente" id="nom_cliente">
                             </div>
                         </div>
                     </div>
@@ -656,38 +644,40 @@
     <div class="modal fade" id="modal_addcod" aria-labelledby="modal_addcod" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-addcod">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Añadir Codigo Aviso
-                        <span class="badge badge-success badge-lg" aria-item="codigo"></span>
-                    </h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">Añadir Codigo Aviso
+                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                            aria-item="codigo"></span>
+                    </h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <span aria-item="estado"></span>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
-                                    20506467854 - CORPORACION JULCAN S.A.</p>
-                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
+                    <div class="detalle_body mb-2">
+                        <div class="border-bottom mb-4">
+                            <h5><span aria-item="razon_social"></span></h5>
+                            <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                            <p class="detalle_text" aria-item="sucursal"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                Sucursal</p>
+                            <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Grabar firma
-                        </h6>
-                        <span aria-item="estado"></span>
-                    </div>
-                    <div class="p-3 pb-0 fieldset">
+
+
+                    <h6 class="text-uppercase mt-4 title_detalle text-primary" style="font-size: 14px">
+                        <i class="fas fa-laptop-code me-2"></i>INGRESAR CODIGO AVISO
+                    </h6>
+
+                    <div>
                         <input type="hidden" id="cod_incidencia" name="cod_incidencia">
                         <input type="hidden" id="cod_orden_ser" name="cod_orden_ser">
                         <div class="col-md-6 mb-2">
@@ -705,36 +695,50 @@
 
     <!-- Modals Para Visitas -->
     <div class="modal fade" id="modal_seguimiento_visitasp" aria-labelledby="modal_detalle" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Seguimiento de la visita</h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="list-group list-group-light">
-                        <div class="list-group-item">
-                            <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
-                                20506467854 - CORPORACION JULCAN S.A.</p>
-                            <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                N° 3689 MZ D LT 26 INDEPENDENCIA</p>
-                        </div>
-                        <div class="list-group-item">
-                            <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                aria-item="sucursal">E/S INDEPENDENCIA</span>
-                        </div>
-                        <div class="list-group-item">
-                            <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                        </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
-                            Visita</h6>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">Detalle de la visita</h5>
+                    <div class="align-items-center d-flex gap-2">
                         <span aria-item="estado"></span>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
                     </div>
-                    <div class="fieldset" aria-item="contenedor-seguimiento">
+                </div>
+                <div class="modal-body modal-body-scrollable px-1 p-0">
+                    <div class="row">
+                        <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
+                            style="background-color: rgb(29 49 69 / 5%);">
+                            <h6 class="text-uppercase mt-2 mb-4 title_detalle">
+                                <i class="fas fa-city me-2"></i> Información del Cliente
+                            </h6>
+                            <div class="detalle_body mb-2">
+                                <div class="border-bottom mb-4">
+                                    <h5><span aria-item="razon_social"></span></h5>
+                                    <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
+                                </div>
+                                <div>
+                                    <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                                    <p class="detalle_text" aria-item="sucursal"></p>
+                                </div>
+                                <div>
+                                    <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                        Sucursal</p>
+                                    <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-7 p-4 modal-col-scrollable personalized-scroll">
+                            <div class="align-items-center d-flex mt-2 mb-4">
+                                <h4 class="mb-0 text-nowrap text-uppercase title_detalle">
+                                    <i class="fas fa-clock-rotate-left" style="color: rgb(99 102 241 / 1)"></i>
+                                    SEGUIMIENTO VISITA
+                                </h4>
+                                <div class="ms-2 rounded-pill"
+                                    style="height: .35rem;width: 100%;background-color: rgb(148 163 184 / 11%)"></div>
+                            </div>
+                            <div class="content_seguimiento" aria-item="contenedor-seguimiento"></div>
+                        </div>
                     </div>
                 </div>
                 <div class="modal-footer border-top-0">
@@ -746,65 +750,65 @@
     </div>
 
     <div class="modal fade" id="modal_orden_visita" aria-labelledby="modal_orden_visita" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-xl" style="display: flex;">
+        <div class="modal-dialog modal-fullscreen-md-down modal-dialog-scrollable modal-xl">
             <form class="modal-content" id="form-orden-visita">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">ORDEN DE SERVICIO <span class="badge badge-success badge-lg"
-                            aria-item="codigo">{{$data['cod_ordenv']}}</span></h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">ORDEN DE SERVICIO
+                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                            aria-item="codigo">{{$data['cod_ordenv']}}</span>
+                    </h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <div class="col-12">
-                        <!-- INICIO CABECERA -->
-                        <div class="text-end cabecera-orden">
-                            <div>
-                                <label class="form-label me-2">Fecha Inicio: </label>
-                                <span style="font-size: small;" aria-item="registrado"></span>
-                            </div>
+                    <!-- INICIO CABECERA -->
+                    <div class="text-end cabecera-orden">
+                        <div style="color: rgb(148 163 184 / 1)">
+                            <label class="form-label me-2">Fecha Inicio: </label>
+                            <span style="font-size: small;" aria-item="registrado"></span>
                         </div>
+                    </div>
 
-                        <!-- TER CABECERA -->
-                        <div class="col-12 mt-2">
-                            <h6 class="tittle text-primary"> TECNICOS</h6>
+                    <!-- TER CABECERA -->
+                    <h6 class="text-uppercase mb-3 title_detalle">
+                        <i class="fas fa-user-gear"></i> Tecnicos
+                    </h6>
+
+                    <div class="mb-3">
+                        <span aria-item="tecnicos"></span>
+                    </div>
+
+
+                    <h6 class="text-uppercase mb-3 title_detalle">
+                        <i class="fas fa-city me-2"></i> Información del Cliente
+                    </h6>
+                    <div class="detalle_body mb-2">
+                        <div class="border-bottom mb-4">
+                            <h5><span aria-item="razon_social"></span></h5>
+                            <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
                         </div>
-
-                        <div class="col-12 mt-1 mb-3">
-                            <span aria-item="tecnicos"></span>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                            <p class="detalle_text" aria-item="sucursal"></p>
                         </div>
-
-
-                        <div class="col-12 mt-2">
-                            <h6 class="tittle text-primary"> DATOS DEL CLIENTE </h6>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                Sucursal</p>
+                            <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
                         </div>
+                    </div>
 
-                        <div class="col-12 mt-1 mb-3">
-                            <div class="list-group list-group-light">
-                                <div class="list-group-item">
-                                    <p aria-item="razon_social" class="font-weight-semibold mb-2"
-                                        style="font-size: .92rem;">
-                                        20506467854 - CORPORACION JULCAN S.A.</p>
-                                    <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                        N° 3689 MZ D LT 26 INDEPENDENCIA</p>
-                                </div>
-                                <div class="list-group-item">
-                                    <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                        aria-item="sucursal">E/S INDEPENDENCIA</span>
-                                </div>
-                                <div class="list-group-item">
-                                    <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                        aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                                </div>
-                            </div>
-                        </div>
 
-                        <div class="col-12 mt-2">
-                            <h6 class="tittle text-primary"> REVISION DEL GABINETE </h6>
-                        </div>
+                    <h6 class="text-uppercase mt-4 mb-3 title_detalle">
+                        <i class="fas fa-boxes-stacked me-2"></i> Revisión del gabinete
+                    </h6>
 
-                        <input type="hidden" name="cod_ordenv" value="{{$data['cod_ordenv']}}">
-                        <input type="hidden" name="id_visita_orden">
+                    <input type="hidden" name="cod_ordenv" value="{{$data['cod_ordenv']}}">
+                    <input type="hidden" name="id_visita_orden">
 
+                    <div class="detalle_body mb-2" id="contendor-filas">
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
                                 <strong>UPS</strong>
@@ -819,7 +823,8 @@
                         </div>
 
                         <div class="row mb-2">
-                            <div class="col-lg-3" style="font-size: 11px;"><label>• BATERIAS UPS</label></div>
+                            <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">BATERIAS
+                                    UPS</label></div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -829,7 +834,8 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
+                            <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">SALIDA DE
+                                    ENERGIA</label></div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -853,7 +859,8 @@
                         </div>
 
                         <div class="row mb-2">
-                            <div class="col-lg-3" style="font-size: 11px;"><label>• INGRESO DE ENERGIA</label></div>
+                            <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">INGRESO
+                                    DE ENERGIA</label></div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -863,7 +870,8 @@
                             </div>
                         </div>
                         <div class="row mb-2">
-                            <div class="col-lg-3" style="font-size: 11px;"><label>• SALIDA DE ENERGIA</label></div>
+                            <div class="col-lg-3" style="font-size: 11px; color: #757575"><label class="item-isla">SALIDA DE
+                                    ENERGIA</label></div>
                             <div class="col-lg-9">
                                 <div class="input-group">
                                     <span class="input-group-text border-0 ps-0"><i class="fas fa-circle-check"></i></span>
@@ -924,11 +932,13 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-12 mt-3">
-                            <h6 class="tittle text-primary"> REVISION DEL SERVIDOR</h6>
-                        </div>
+                    <h6 class="text-uppercase mt-4 mb-3 title_detalle">
+                        <i class="fas fa-server me-2"></i> Revisión del servidor
+                    </h6>
 
+                    <div class="detalle_body mb-2">
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
                                 <strong>SISTEMA OPERATIVO</strong>
@@ -980,25 +990,22 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="row mt-3">
-                            <div class="col-lg-10 my-1">
-                                <h6 class="tittle text-primary"> REVISION DEL POS, LECTORES, JACK TOOLS IMPRESORAS Y
-                                    CONEXIONES </h6>
-                            </div>
-                            <div class="col-lg-2 my-1 d-flex align-items-center justify-content-end">
-                                <strong class="me-2" style="white-space: nowrap;" id="conteo-islas">Cant. 1</strong>
-                                <button type="button" class="btn btn-secondary px-2" onclick="MRevision.create()"><i
-                                        class="far fa-square-plus"></i></button>
-                            </div>
-                        </div>
-
-                        <div id="content-islas" class="mt-3"></div>
-
-                        <div class="text-end">
-                            <button type="button" class="btn btn-secondary px-2" onclick="MRevision.create()"><i
+                    <div class="d-flex align-items-center justify-content-between mt-5 mb-3">
+                        <h6 class="text-uppercase title_detalle mb-0">
+                            Revisión de equipos
+                        </h6>
+                        <div class="d-flex align-items-center justify-content-end">
+                            <button type="button" class="btn btn-danger btn-sm px-2 me-2 text-nowrap"
+                                onclick="MRevision.deleteAll()">Limpiar Islas</button>
+                            <strong class="me-2" style="white-space: nowrap;" id="conteo-islas">Cant. 1</strong>
+                            <button type="button" class="btn btn-secondary btn-sm px-1" onclick="MRevision.create()"><i
                                     class="far fa-square-plus"></i></button>
                         </div>
+                    </div>
+
+                    <div id="content-islas" class="detalle_body mb-2 mt-3">
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -1011,7 +1018,7 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/app/RevisionMananger.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset($ft_js->RevisionMananger)}}"></script>
     <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/buzon/asignadas.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/buzon/asignadas.js')}}"></script>
 @endsection

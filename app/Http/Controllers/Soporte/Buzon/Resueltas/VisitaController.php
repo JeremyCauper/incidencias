@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Soporte\Buzon\Resueltas;
 
 use App\Http\Controllers\Controller;
+use Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -20,7 +21,7 @@ class VisitaController extends Controller
                 $whereVis['id_sucursal'] = intval($sucursal);
             }
 
-            $id_visitas = DB::table('tb_vis_asignadas')->where('id_usuario', session('id_usuario'))->pluck('id_visitas')->toArray();
+            $id_visitas = DB::table('tb_vis_asignadas')->where('id_usuario', Auth::user()->id_usuario)->pluck('id_visitas')->toArray();
             $seguimientos = DB::table('tb_vis_seguimiento')->whereIn('id_visitas', $id_visitas)->get()->groupBy('id_visitas');
             $ordenes = DB::table('tb_orden_visita')->select('id', 'cod_orden_visita', 'id_visita', 'created_at')
                 ->whereIn('id_visita', $id_visitas)->get()->groupBy('id_visita');
@@ -29,7 +30,7 @@ class VisitaController extends Controller
                 ->whereBetween('created_at', ["$fechaIni 00:00:00", "$fechaFin 23:59:59"])
                 ->where($whereVis)->get()->filter(function ($vis) use ($ordenes) {
                     return $ordenes->has($vis->id); // Verifica si hay una orden para esta incidencia
-                })->map(function ($vis) use($ordenes, $seguimientos) {
+                })->map(function ($vis) use ($ordenes, $seguimientos) {
                     $id = $vis->id;
                     $orden = $ordenes->get($id)?->first();
                     $seguimiento = $seguimientos[$id] ?? collect();
@@ -48,7 +49,7 @@ class VisitaController extends Controller
                             ],
                         ])
                     ];
-            })->values();
+                })->values();
 
             return $visitas;
         } catch (Exception $e) {

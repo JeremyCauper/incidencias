@@ -605,7 +605,7 @@ button i,
 [type=button] i,
 [type=reset] i,
 [type=submit] i {
-    min-width: 1.5em;
+    /* min-width: 1.5em; */
     top: -1px;
 }
 
@@ -3633,7 +3633,7 @@ textarea.form-control.is-invalid {
     --mdb-btn-bg: transparent;
     --mdb-btn-border-width: 2px;
     --mdb-btn-border-color: transparent;
-    --mdb-btn-border-radius: .5rem;
+    --mdb-btn-border-radius: .75rem;
     --mdb-btn-hover-border-color: transparent;
     --mdb-btn-box-shadow: 0 4px 9px -4px rgba(var(--mdb-box-shadow-color-rgb), 0.35);
     --mdb-btn-disabled-opacity: 0.65;
@@ -3654,6 +3654,25 @@ textarea.form-control.is-invalid {
     background-color: var(--mdb-btn-bg);
     box-shadow: var(--mdb-btn-box-shadow);
     /* transition: color .15s ease-in-out, background-color .15s ease-in-out, border-color .15s ease-in-out, box-shadow .15s ease-in-out */
+}
+
+.btn {
+    --mdb-btn-padding-top: 0.563rem;
+    --mdb-btn-padding-bottom: 0.563rem;
+    --mdb-btn-padding-left: 0.625rem;
+    --mdb-btn-padding-right: 0.625rem;
+    --mdb-btn-border-width: 0;
+    --mdb-btn-border-color: none;
+    --mdb-btn-hover-box-shadow: 0 8px 9px -4px rgba(var(--mdb-box-shadow-color-rgb), 0.15), 0 4px 18px 0 rgba(var(--mdb-box-shadow-color-rgb), 0.1);
+    --mdb-btn-focus-box-shadow: 0 8px 9px -4px rgba(var(--mdb-box-shadow-color-rgb), 0.15), 0 4px 18px 0 rgba(var(--mdb-box-shadow-color-rgb), 0.1);
+    --mdb-btn-active-box-shadow: 0 8px 9px -4px rgba(var(--mdb-box-shadow-color-rgb), 0.15), 0 4px 18px 0 rgba(var(--mdb-box-shadow-color-rgb), 0.1);
+    padding-top: var(--mdb-btn-padding-top);
+    padding-bottom: var(--mdb-btn-padding-bottom);
+    padding-left: var(--mdb-btn-padding-left);
+    padding-right: var(--mdb-btn-padding-right);
+    text-transform: uppercase;
+    vertical-align: bottom;
+    border: 0;
 }
 
 @media(prefers-reduced-motion: reduce) {
@@ -19082,25 +19101,6 @@ input[type=file].form-control.is-invalid:focus-within~.form-file-label .form-fil
 
 .table-divider-color {
     border-top-color: var(--mdb-table-divider-color)
-}
-
-.btn {
-    --mdb-btn-padding-top: 0.625rem;
-    --mdb-btn-padding-bottom: 0.5rem;
-    --mdb-btn-border-width: 0;
-    --mdb-btn-border-color: none;
-    --mdb-btn-border-radius: .5rem;
-    --mdb-btn-box-shadow: 0 4px 9px -4px rgba(var(--mdb-box-shadow-color-rgb), 0.35);
-    --mdb-btn-hover-box-shadow: 0 8px 9px -4px rgba(var(--mdb-box-shadow-color-rgb), 0.15), 0 4px 18px 0 rgba(var(--mdb-box-shadow-color-rgb), 0.1);
-    --mdb-btn-focus-box-shadow: 0 8px 9px -4px rgba(var(--mdb-box-shadow-color-rgb), 0.15), 0 4px 18px 0 rgba(var(--mdb-box-shadow-color-rgb), 0.1);
-    --mdb-btn-active-box-shadow: 0 8px 9px -4px rgba(var(--mdb-box-shadow-color-rgb), 0.15), 0 4px 18px 0 rgba(var(--mdb-box-shadow-color-rgb), 0.1);
-    padding-top: var(--mdb-btn-padding-top);
-    padding-bottom: var(--mdb-btn-padding-bottom);
-    text-transform: uppercase;
-    vertical-align: bottom;
-    border: 0;
-    border-radius: var(--mdb-btn-border-radius);
-    box-shadow: var(--mdb-btn-box-shadow)
 }
 
 :not(.btn-check)+.btn:hover,

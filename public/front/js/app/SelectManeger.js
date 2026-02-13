@@ -61,7 +61,8 @@ class CSelect {
         const val = typeof filterValue === 'function' ? filterValue() : filterValue;
         this.$select
             .html($('<option>', { value: '', text: 'Seleccione...' }))
-            .attr('disabled', true);
+            .attr('disabled', true)
+            .val('').trigger('change');
 
         if (!val) return false;
 
@@ -101,7 +102,8 @@ class CSelect {
         // Permite iterar sobre dataSet tanto si es arreglo como si es objeto
         const items = Array.isArray(dataSet) ? dataSet : Object.values(dataSet);
 
-        this.$select.html($('<option>', { value: '', text: 'Seleccione...' }));
+        this.$select.html($('<option>', { value: '', text: 'Seleccione...' }))
+            .val('').trigger('change');
         items.forEach(item => {
             // Se obtiene el texto, ya sea mediante función o propiedad directa
             const text = typeof this.optionText === 'function' ? this.optionText(item) : (typeof item === 'string' ? item : item[this.optionText]);

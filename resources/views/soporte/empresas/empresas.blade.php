@@ -18,7 +18,7 @@
                         <i class="fas fa-plus me-1"></i>
                         Nueva Empresa
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()">
+                    <button class="btn btn-primary" onclick="updateTable()">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -206,5 +206,5 @@
 
 @section('scripts')
     <!-- jQuery Mask Plugin CDN -->
-    <script src="{{secure_asset('front/js/soporte/empresas/empresas.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/empresas/empresas.js')}}"></script>
 @endsection

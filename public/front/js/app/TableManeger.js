@@ -49,18 +49,18 @@ class CTable {
 
         this._btnCreate = $('<button>', {
             type: "button",
-            class: 'btn btn-primary px-2 ms-1 rounded',
+            class: 'btn btn-primary ms-1 rounded',
             'ctable-create': contenedor,
             'data-mdb-ripple-init': ''
         }).append($('<i>', { class: 'fas fa-plus', style: 'pointer-events: none;' }));
 
         if (this._structure?.count) {
             this._counter = $('<div>', { class: 'input-group disabled', style: 'max-width: 300px;', 'ctable-count-content': contenedor }).append(
-                $('<button>', { class: 'btn btn-secondary px-2', type: 'button', 'ctable-count-minus': contenedor }).append(
+                $('<button>', { class: 'btn btn-secondary', type: 'button', 'ctable-count-minus': contenedor }).append(
                     $('<i>', { class: 'fas fa-minus', style: 'font-size: .75rem;' })
                 ),
                 $('<input>', { type: 'number', class: 'form-control', min: '1', value: '1', 'ctable-count-cant': contenedor }),
-                $('<button>', { class: 'btn btn-secondary px-2', type: 'button', 'ctable-count-plus': contenedor }).append(
+                $('<button>', { class: 'btn btn-secondary', type: 'button', 'ctable-count-plus': contenedor }).append(
                     $('<i>', { class: 'fas fa-plus', style: 'font-size: .75rem;' })
                 )
             );
@@ -220,7 +220,6 @@ class CTable {
     }
 
     deleteTable() {
-        this.data = {};
         if (this._table !== null) this._table.remove();
         this.fillSelect();
         this._table = null;

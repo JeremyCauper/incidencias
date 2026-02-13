@@ -2,10 +2,12 @@
 @section('title', 'Visitas')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
-    <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->mdtp) }}">
+    <script src="{{ secure_asset($ft_js->mdtp) }}"></script>
+
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker_moment)}}"></script>
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker)}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset($ft_css->daterangepicker)}}">
     <style>
         #tb_visitas_filter.dataTables_filter label {
             width: 100% !important;
@@ -64,8 +66,7 @@
                         <strong>Visitas a Programar</strong>
                     </h6>
                     <div>
-                        <button class="btn btn-primary px-2" onclick="updateTableVisitas()" data-mdb-ripple-init
-                            role="button">
+                        <button class="btn btn-primary" onclick="updateTableVisitas()" data-mdb-ripple-init role="button">
                             <i class="fas fa-rotate-right"></i>
                         </button>
                     </div>
@@ -87,15 +88,15 @@
                                     scrollY: 400,
                                     fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
                                     dom: `<"row"
-                                                                                                                    <"col-lg-12 mb-2"B>>
-                                                                                                                <"row"
-                                                                                                                    <"col-sm-4 text-xsm-start text-center my-1"l>
-                                                                                                                    <"col-sm-3 col-xsm-4 text-xsm-end text-center my-1 selectFiltroEstado">
-                                                                                                                    <"col-sm-5 col-xsm-8 text-xsm-end text-center my-1"f>>
-                                                                                                                <"contenedor_tabla my-2"tr>
-                                                                                                                <"row"
-                                                                                                                    <"col-md-5 text-md-start text-center my-1"i>
-                                                                                                                    <"col-md-7 text-md-end text-center my-1"p>>`,
+                                                                                                                                                                <"col-lg-12 mb-2"B>>
+                                                                                                                                                            <"row"
+                                                                                                                                                                <"col-sm-4 text-xsm-start text-center my-1"l>
+                                                                                                                                                                <"col-sm-3 col-xsm-4 text-xsm-end text-center my-1 selectFiltroEstado">
+                                                                                                                                                                <"col-sm-5 col-xsm-8 text-xsm-end text-center my-1"f>>
+                                                                                                                                                            <"contenedor_tabla my-2"tr>
+                                                                                                                                                            <"row"
+                                                                                                                                                                <"col-md-5 text-md-start text-center my-1"i>
+                                                                                                                                                                <"col-md-7 text-md-end text-center my-1"p>>`,
                                     ajax: {
                                         url: `${__url}/soporte/visitas/sucursales/index`,
                                         dataSrc: function (json) {
@@ -183,7 +184,7 @@
                         <strong>Visitas Programadas</strong>
                     </h6>
                     <div>
-                        <button class="btn btn-primary px-2" onclick="updateTableVProgramadas()" data-mdb-ripple-init
+                        <button class="btn btn-primary" onclick="updateTableVProgramadas()" data-mdb-ripple-init
                             role="button">
                             <i class="fas fa-rotate-right"></i>
                         </button>
@@ -285,6 +286,14 @@
                                 <input type="text" class="form-control rounded" id="fecha_visita" name="fecha_visita"
                                     role="button" readonly>
                             </div>
+                            <script>
+                                const fecha_visita = new MaterialDateTimePicker({
+                                    inputId: 'fecha_visita',
+                                    mode: 'date',
+                                    format: 'MMMM DD de YYYY'
+                                });
+                                fecha_visita.val("{{ date('Y-m-d') }}");
+                            </script>
                         </div>
                         <label class="form-label mb-0">Asignar Personal</label>
                         <div id="createPersonal"></div>
@@ -402,6 +411,7 @@
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">Detalle de la visita</h5>
                     <div class="align-items-center d-flex gap-2">
+                        <span aria-item="estado"></span>
                         <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
                             aria-label="Close"></button>
                     </div>
@@ -546,7 +556,7 @@
 
 
                     <h6 class="text-uppercase mt-4 mb-3 title_detalle">
-                        <i class="fas fa-server me-2"></i> Revisión del gabinete
+                        <i class="fas fa-boxes-stacked me-2"></i> Revisión del gabinete
                     </h6>
 
                     <input type="hidden" name="cod_ordenv" value="{{$data['cod_ordenv']}}">
@@ -676,11 +686,13 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
 
-                        <div class="col-12 mt-3">
-                            <h6 class="tittle text-primary"> REVISION DEL SERVIDOR</h6>
-                        </div>
+                    <h6 class="text-uppercase mt-4 mb-3 title_detalle">
+                        <i class="fas fa-server me-2"></i> Revisión del servidor
+                    </h6>
 
+                    <div class="detalle_body mb-2">
                         <div class="row my-2">
                             <div class="col-lg-3 d-flex align-items-center" style="font-size: 11px; color: #757575">
                                 <strong>SISTEMA OPERATIVO</strong>
@@ -734,12 +746,11 @@
                         </div>
                     </div>
 
-                    <div class="detalle_body row mb-2 mt-3">
-                        <div class="col-lg-10 my-1">
-                            <h6 class="tittle text-primary"> REVISION DEL POS, LECTORES, JACK TOOLS IMPRESORAS Y
-                                CONEXIONES </h6>
-                        </div>
-                        <div class="col-lg-2 my-1 d-flex align-items-center justify-content-end">
+                    <div class="d-flex align-items-center justify-content-between mt-5 mb-3">
+                        <h6 class="text-uppercase title_detalle mb-0">
+                            Revisión de equipos
+                        </h6>
+                        <div class="d-flex align-items-center justify-content-end">
                             <button type="button" class="btn btn-danger btn-sm px-2 me-2 text-nowrap"
                                 onclick="MRevision.deleteAll()">Limpiar Islas</button>
                             <strong class="me-2" style="white-space: nowrap;" id="conteo-islas">Cant. 1</strong>
@@ -762,7 +773,7 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/app/RevisionMananger.js')}}?v={{ time() }}"></script>
-    <script src="{{secure_asset('front/js/soporte/visitas/visitas.js')}}?v={{ time() }}"></script>
-    <script src="{{secure_asset('front/js/soporte/visitas/programadas.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset($ft_js->RevisionMananger)}}"></script>
+    <script src="{{secure_asset('front/js/soporte/visitas/visitas.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/visitas/programadas.js')}}"></script>
 @endsection

@@ -2,7 +2,7 @@
 @section('title', 'Panel de Control')
 
 @section('cabecera')
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}">
 @endsection
 @section('content')
 
@@ -18,7 +18,7 @@
                         <i class="fas fa-user-plus me-2"></i>
                         Nuevo Usuario
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -149,8 +149,7 @@
                                     </div>
                                     <input type="file" class="d-none" id="foto_perfil">
                                     <input type="text" class="d-none" name="foto_perfil" id="txtFotoPerfil">
-                                    <img id="PreviFPerfil"
-                                        src="{{secure_asset('front/images/auth/user_auth.jpg')}}?v={{ time() }}"
+                                    <img id="PreviFPerfil" src="{{secure_asset('front/images/auth/user_auth.jpg')}}"
                                         imageDefault="{{secure_asset('front/images/auth/user_auth.jpg')}}">
                                 </div>
                             </div>
@@ -169,8 +168,7 @@
                                     </div>
                                     <input type="file" class="d-none" id="firma_digital">
                                     <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
-                                    <img id="PreviFirma"
-                                        src="{{secure_asset('front/images/firms/firm.png')}}?v={{ time() }}"
+                                    <img id="PreviFirma" src="{{secure_asset('front/images/firms/firm.png')}}"
                                         imageDefault="{{secure_asset('front/images/firms/firm.png')}}">
                                 </div>
                             </div>
@@ -255,9 +253,9 @@
 @section('scripts')
     <script>
         let tipoAcceso = <?=$tipoAcceso?>;
-        const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}?v={{ time() }}";
-        const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}?v={{ time() }}";
+        const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}";
+        const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}";
     </script>
     <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}"></script>
 @endsection

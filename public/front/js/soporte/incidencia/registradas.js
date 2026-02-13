@@ -62,12 +62,10 @@ $(document).ready(function () {
         },
         {
             control: '#fecha_imforme',
-            type: "date",
             requested: true
         },
         {
             control: '#hora_informe',
-            type: "time",
             requested: true
         },
         {
@@ -232,8 +230,8 @@ $(document).ready(function () {
     $('.modal').on('shown.bs.modal', function () {
         switch ($(this).attr('id')) {
             case 'modal_incidencias':
-                $('#fecha_imforme').val(date('Y-m-d'));
-                $('#hora_informe').val(date('H:i:s'));
+                fecha_imforme.val(date('Y-m-d'));
+                hora_informe.val(date('H:i'));
                 if ($('#tIncidencia').val() == "1" && $('#id_inc').val() == "") {
                     cPersonal.createRow(personal);
                 }
@@ -615,8 +613,10 @@ function ShowEdit(cod) {
             $('#problema').val(dt.id_problema).trigger('change');
             CS_sproblema.selecionar(() => { return obj_problem[dt.id_problema]?.codigo ?? null; });
             $('#sproblema').val(dt.id_subproblema).trigger('change');
-            $('#fecha_imforme').val(dt.fecha_informe);
-            $('#hora_informe').val(dt.hora_informe);
+            setTimeout(() => {
+                fecha_imforme.val(dt.fecha_informe);
+                hora_informe.val(dt.hora_informe);
+            }, 300);
             $('#observacion').val(dt.observacion);
 
             const accion = dt.estado_informe == 2 ? false : true;
@@ -712,7 +712,9 @@ async function AssignPer() {
         success: function (data) {
             fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
-                $(`#modal_assign [aria-item="estado"]`).html(getBadgeIncidencia(data.data.estado));
+                llenarInfoModal('modal_assign', {
+                    estado: getBadgeIncidencia(data.data.estado, '.75', true, true),
+                });
                 cPersonal1.data = data.data.personal;
                 cPersonal1.updateTable({ del: (data.data.estado == 2 ? false : true) });
                 updateTable();
@@ -840,7 +842,6 @@ async function OrdenDetail(e, cod) {
                     codigo: inc.cod_incidencia,
                     registrado: inc.created_at,
                     tecnicos: personal.map(persona => `<span class="badge bg-light px-3 ms-2 rounded-pill" style="border: 1px solid rgb(50 68 93 / 70%);color: rgb(50 68 93);">${persona.tecnicos}</span>`).join(''),
-                    // tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                     direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
@@ -978,7 +979,7 @@ function AddCodAviso(e, cod) {
 
             llenarInfoModal('modal_addcod', {
                 codigo: inc.cod_incidencia,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                 direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,

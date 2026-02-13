@@ -144,7 +144,7 @@
                         <hr class="mx-2 mt-0 mb-1">
                     </li>
                     <li>
-                        <a class="dropdown-item py-3 rounded" href="{{ secure_url('/logout') }}"
+                        <a class="dropdown-item py-3 rounded" href="{{ secure_url('/soporte/logout') }}"
                             onclick="boxAlert.loading()">
                             <i class="fas fa-arrow-right-from-bracket me-2"></i> Cerrar sesión
                         </a>
@@ -203,7 +203,7 @@
                                     </div>
                                 </li>
                                 <li class="px-2">
-                                    <a class="dropdown-item py-3 rounded" href="{{ secure_url('/logout') }}"
+                                    <a class="dropdown-item py-3 rounded" href="{{ secure_url('/soporte/logout') }}"
                                         onclick="boxAlert.loading()">
                                         <i class="fas fa-arrow-right-from-bracket me-2"></i> Cerrar sesión
                                     </a>

@@ -3,20 +3,19 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\SettingsEmpresaController;
 
-class LoadUserSettings
+class LoadEmpresaSettings
 {
     public function handle($request, Closure $next)
     {
-        $settings = SettingsController::get();
+        $settings = SettingsEmpresaController::get();
 
         if ($settings) {
             config([
-                'ajustes.customModulos' => (object) $settings['customModulos'] ?? [],
-                'ajustes.tipo_acceso' => $settings['tipo_acceso'] ?? 0,
+                'ajustes.id_cliente' => $settings['id_cliente'] ?? 0,
+                'ajustes.empresa' => $settings['empresa'] ?? '',
                 'ajustes.config' => (object) $settings['config'] ?? [],
-                'ajustes.menu_usuario' => $settings['menu_usuario'] ?? '',
                 'ajustes.rutaRedirect' => $settings['rutaRedirect'] ?? '/',
             ]);
         }

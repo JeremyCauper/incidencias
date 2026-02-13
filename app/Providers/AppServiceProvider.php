@@ -29,7 +29,7 @@ class AppServiceProvider extends ServiceProvider
 
         View::composer('*', function ($view) {
             $view->with('customModulos', config('ajustes.customModulos'));
-            $view->with('tipo_sistema', config('ajustes.tipo_sistema'));
+            $view->with('tipo_acceso', config('ajustes.tipo_acceso'));
             $view->with('config', config('ajustes.config'));
             $view->with('rutaRedirect', config('ajustes.rutaRedirect'));
         });

@@ -199,25 +199,35 @@ function formatUnique(data) {
     return `<ul style="font-size:.75rem;">${result}</ul>`;
 }
 
-function date(format) {
-    const now = new Date();
+function date(format, strtime = null) {
+    const baseDate = strtime ? new Date(strtime) : new Date();
+
+    // Intentar extraer año y mes del format si existen
+    const yearMatch = format.match(/(\d{4})/);
+    const monthMatch = format.match(/-(\d{2})-/);
+
+    const year = yearMatch ? Number(yearMatch[1]) : baseDate.getFullYear();
+    const month = monthMatch ? Number(monthMatch[1]) : baseDate.getMonth() + 1;
+
+    const lastDay = new Date(year, month, 0).getDate();
 
     const map = {
-        'Y': now.getFullYear(),                // Año completo (2024)
-        'm': String(now.getMonth() + 1).padStart(2, '0'),  // Mes (01-12)
-        'd': String(now.getDate()).padStart(2, '0'),       // Día del mes (01-31)
-        'H': String(now.getHours()).padStart(2, '0'),      // Horas (00-23)
-        'i': String(now.getMinutes()).padStart(2, '0'),    // Minutos (00-59)
-        's': String(now.getSeconds()).padStart(2, '0'),    // Segundos (00-59)
-        'j': now.getDate(),                                // Día del mes sin ceros iniciales (1-31)
-        'n': now.getMonth() + 1,                           // Mes sin ceros iniciales (1-12)
-        'w': now.getDay(),                                 // Día de la semana (0 = domingo, 6 = sábado)
-        'G': now.getHours(),                               // Horas sin ceros iniciales (0-23)
-        'a': now.getHours() >= 12 ? 'pm' : 'am',           // am o pm
-        'A': now.getHours() >= 12 ? 'PM' : 'AM'            // AM o PM en mayúsculas
+        'Y': year,
+        'm': String(month).padStart(2, '0'),
+        'd': String(baseDate.getDate()).padStart(2, '0'),
+        'H': String(baseDate.getHours()).padStart(2, '0'),
+        'i': String(baseDate.getMinutes()).padStart(2, '0'),
+        's': String(baseDate.getSeconds()).padStart(2, '0'),
+        't': String(lastDay).padStart(2, '0'),
+        'j': baseDate.getDate(),
+        'n': month,
+        'w': baseDate.getDay(),
+        'G': baseDate.getHours(),
+        'a': baseDate.getHours() >= 12 ? 'pm' : 'am',
+        'A': baseDate.getHours() >= 12 ? 'PM' : 'AM'
     };
 
-    return format.replace(/[YmdHisjwnGaA]/g, (match) => map[match]);
+    return format.replace(/[YmdHistjwnGaA]/g, match => map[match]);
 }
 
 /**
@@ -676,7 +686,7 @@ function getBadgeIncidencia(estado, size = '.7', pill = false, icon = false) {
     let icono = icon ? `<i class="fa ${estadoInforme.icon} text-white me-2" style="font-size: ${size}rem;"></i>` : '';
     let tsize = `style="font-size: ${size}rem; line-height: 1.5em;"` ?? null;
 
-    return `<label class="badge badge-${estadoInforme.color} ${pill ? 'rounded-pill px-3' : ''}" ${tsize}>${icono + estadoInforme.text}</label>`;
+    return `<label class="badge badge-${estadoInforme.color} ${pill ? 'rounded-pill' : ''}" ${tsize}>${icono + estadoInforme.text}</label>`;
 }
 
 function getBadgeTIncidencia(estado, size = '.7') {
@@ -690,16 +700,17 @@ function getBadgeTIncidencia(estado, size = '.7') {
     return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
 }
 
-function getBadgeVisita(estado, size = null) {
+function getBadgeVisita(estado, size = '.7', pill = false, icon = false) {
     estadoInforme = {
-        "0": { 'color': 'warning', 'text': 'Sin Iniciar' },
-        "1": { 'color': 'primary', 'text': 'En Proceso' },
-        "2": { 'color': 'success', 'text': 'Finalizado' },
-        "4": { 'color': 'danger', 'text': 'Faltan Datos' },
-    };
-    let tsize = `style="font-size: ${size}rem;"` ?? null;
+        "0": { 'color': 'warning', 'text': 'Sin Iniciar', 'icon': 'fa-user-xmark' },
+        "1": { 'color': 'primary', 'text': 'En Proceso', 'icon': 'fa-user-check' },
+        "2": { 'color': 'success', 'text': 'Finalizado', 'icon': 'far fa-check-circle' },
+        "4": { 'color': 'danger', 'text': 'Faltan Datos', 'icon': 'fa-circle-exclamation' },
+    }[estado || 0];
+    let icono = icon ? `<i class="fa ${estadoInforme.icon} text-white me-2" style="font-size: ${size}rem;"></i>` : '';
+    let tsize = `style="font-size: ${size}rem; line-height: 1.5em;"` ?? null;
 
-    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+    return `<label class="badge badge-${estadoInforme.color} ${pill ? 'rounded-pill' : ''}" ${tsize}>${icono + estadoInforme.text}</label>`;
 }
 
 function getBadgeContrato(estado, size = null) {
@@ -732,7 +743,6 @@ function mostrar_acciones(table = null) {
     const dataTables_scrollBody = $(`${idTabla ? `#${idTabla}_wrapper` : '.dataTables_wrapper'} .dataTables_scrollBody`);
     let filaAccionActivo = null;
     let filaAccionOld = null;
-    // let openOnCkick = false;
 
     const animateProperty = (element, property, start, end, duration, fps, callback = null) => {
         let current = start;
@@ -775,8 +785,9 @@ function mostrar_acciones(table = null) {
     table.off("draw.dt").on('draw.dt', function () {
         let nuevaPagina = table.page();
 
-        $("tr:has(.td-acciones)").off();
-        $("tr:has(.td-acciones)").each(function () {
+        const $tableBody = $(table.table().body());
+        $tableBody.find("tr:has(.td-acciones)").off();
+        $tableBody.find("tr:has(.td-acciones)").each(function () {
             const tdAcciones = $(this).find(".td-acciones");
             if (!tdAcciones.length) return;
 

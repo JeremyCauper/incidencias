@@ -881,9 +881,13 @@ label.custom-control {
     }
 }
 
+.dataTables_scrollBody {
+    border-radius: .5rem;
+}
+
 .dataTables_scrollHead {
     height: 36px !important;
-    border-radius: .5rem;
+    border-radius: .75rem;
     background-color: var(--root-dt-scrollHead-bg);
 }
 

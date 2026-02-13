@@ -2,10 +2,10 @@
 @section('title', 'Materiales')
 
 @section('cabecera')
-    <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}?v={{ time() }}"> -->
+    <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}"> -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
-        let materiales = <?php echo json_encode($data['materiales']); ?>;
+        let materiales = @json($data['materiales']);
     </script>
 @endsection
 @section('content')
@@ -22,7 +22,7 @@
                         <i class="far fa-square-plus me-2"></i>
                         Asignar Material
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -132,7 +132,7 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ secure_asset('front/js/app/SelectManeger.js') }}"></script>
+    <script src="{{ secure_asset($ft_js->SelectManeger) }}"></script>
     <script>
         $(document).ready(function () {
             let ct_material_asignado = $('#ct_material_asignado');

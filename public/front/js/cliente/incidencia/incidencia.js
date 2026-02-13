@@ -9,7 +9,6 @@ $(document).ready(function () {
         endDate: date('Y-m-d'),
         maxDate: date('Y-m-d'),
         opens: "center",
-        cancelClass: "btn-link",
         locale: {
             format: 'YYYY-MM-DD',
             separator: '  al  ',

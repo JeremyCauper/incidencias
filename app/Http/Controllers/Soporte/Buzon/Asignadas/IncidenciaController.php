@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Soporte\Buzon\Asignadas;
 
 use App\Http\Controllers\Controller;
+use Auth;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -12,8 +13,8 @@ class IncidenciaController extends Controller
     public function index(Request $request)
     {
         try {
-            $cod_incidencias = DB::table('tb_inc_asignadas')->where('id_usuario', session('id_usuario'))->pluck('cod_incidencia')->toArray();
-            $asignadas = DB::table('tb_inc_asignadas')->where('id_usuario', session('id_usuario'))->get();
+            $cod_incidencias = DB::table('tb_inc_asignadas')->where('id_usuario', Auth::user()->id_usuario)->pluck('cod_incidencia')->toArray();
+            $asignadas = DB::table('tb_inc_asignadas')->where('id_usuario', Auth::user()->id_usuario)->get();
             $inc_tipo = DB::table('tb_inc_tipo')->select('cod_incidencia', 'id_tipo_inc')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
             
             $count_asig = 0;

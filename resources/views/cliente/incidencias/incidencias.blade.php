@@ -1,22 +1,23 @@
 @extends('layout.appEmpresa')
-@section('title', 'INC RESUELTAS')
+@section('title', 'Incidencias Resueltas')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ time() }}">
-    <script src="{{secure_asset('front/vendor/multiselect/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/multiselect/bootstrap_multiselect.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker_moment)}}"></script>
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker)}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset($ft_css->daterangepicker)}}">
+    <script src="{{secure_asset($ft_js->bootstrap_bundle)}}"></script>
+    <script src="{{secure_asset($ft_js->bootstrap_multiselect)}}"></script>
+    <script src="{{secure_asset($ft_js->form_multiselect)}}"></script>
+    
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
     <script>
-        let empresa = <?php echo json_encode(session('empresa')); ?>;
-        let sucursales = <?=json_encode($data['scompany'])?>;
-        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
-        let tipo_incidencia = <?=json_encode($data['tIncidencia'])?>;
-        let obj_problem = <?=json_encode($data['problema'])?>;
-        let obj_subproblem = <?=json_encode($data['sproblema'])?>;
-        let usuarios = <?=json_encode($data['usuarios'])?>;
+        let empresa = @json(session('empresa'));
+        let sucursales = @json($data['scompany']);
+        let tipo_soporte = @json($data['tSoporte']);
+        let tipo_incidencia = @json($data['tIncidencia']);
+        let obj_problem = @json($data['problema']);
+        let obj_subproblem = @json($data['sproblema']);
+        let usuarios = @json($data['usuarios']);
     </script>
 @endsection
 @section('content')
@@ -83,7 +84,7 @@
                 </h6>
                 <div>
                     <button type="button" class="d-none" data-mdb-modal-init data-mdb-target="#modal_detalle"></button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -97,7 +98,6 @@
                                     <th>Fecha Incidencia</th>
                                     <th>N° Orden</th>
                                     <th>Tecnico</th>
-                                    <!-- <th>Empresa</th> -->
                                     <th>Sucursal</th>
                                     <th>Nivel Incidencia</th>
                                     <th>Soporte</th>
@@ -315,5 +315,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/cliente/incidencia/incidencia.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/cliente/incidencia/incidencia.js')}}"></script>
 @endsection

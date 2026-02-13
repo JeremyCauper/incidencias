@@ -130,7 +130,7 @@
 .daterangepicker .calendar-table .next span,
 .daterangepicker .calendar-table .prev span {
   color: #fff;
-  border: solid #202020;
+  border: solid #ffffff;
   border-width: 0 2px 2px 0;
   border-radius: 0;
   display: inline-block;
@@ -180,6 +180,7 @@
   background-color: rgb(var(--mdb-body-color-rgb), .15);
   border-color: transparent;
   color: inherit;
+  border-radius: .75rem;
 }
 
 .daterangepicker td.week,
@@ -242,6 +243,11 @@
 
 .daterangepicker td.end-date:after {
   border-radius: 0 50% 50% 0 !important;
+}
+
+.daterangepicker td.start-date:last-child::after,
+.daterangepicker td.end-date:first-child::after {
+  border-radius: 50% !important;
 }
 
 .daterangepicker td.active,
@@ -358,6 +364,7 @@
   font-weight: bold;
   padding: 9px 20px;
   box-shadow: none;
+  border-radius: .75rem;
 }
 
 .daterangepicker.show-ranges.single.rtl .drp-calendar.left {
@@ -533,10 +540,31 @@
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, .6);
+  backdrop-filter: blur(2px);
   z-index: 9998;
   display: none;
 }
 
 .content-daterangepicker.show-daterangepicker {
   display: block;
+}
+
+.applyBtn,
+.cancelBtn {
+  font-weight: 500;
+  border-radius: .75rem;
+  border: 2px solid #357ebd !important;
+  color: #357ebd;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.applyBtn {
+  color: #ffffff;
+}
+
+.cancelBtn:hover {
+  background: rgba(59, 113, 202, 0.08);
+  color: #357ebd;
 }

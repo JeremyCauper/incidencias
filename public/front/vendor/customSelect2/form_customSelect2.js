@@ -59,26 +59,6 @@ $(document).ready(function () {
         });
     }
 
-    /*function matchCustom(params, data) {
-        // Si no hay término de búsqueda, retorna el dato para mostrarlo
-        if ($.trim(params.term) === '') {
-            return data;
-        }
-
-        // Excluir la opción si tiene data-nosearch="true"
-        if ($(data.element).data('nosearch')) {
-            return null;
-        }
-
-        // Búsqueda estándar: si el texto de la opción coincide, la retorna
-        if (data.text.toLowerCase().indexOf(params.term.toLowerCase()) > -1) {
-            return data;
-        }
-
-        // No coincide, excluir la opción
-        return null;
-    }*/
-
     // Inicialización por defecto
     $('.select').each(function () {
         initializeSelect2($(this), config.select);

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\SettingsEmpresaController;
 use App\Models\UsuarioEmpresa;
 use Exception;
 use Illuminate\Http\Request;
@@ -46,19 +47,19 @@ class LoginEmpresaController extends Controller
         $client = Auth::guard('client')->user();
         $empresa = DB::table('tb_empresas')->select(['id', 'ruc', 'razon_social', 'direccion', 'contrato', 'codigo_aviso', 'status'])->where('ruc', $client->ruc_empresa)->first();
 
+        $request->session()->regenerate();
         // Aquí puedes establecer la sesión o cualquier otra lógica que necesites para el cliente
-        session([
+        $data = [
             'rutaRedirect' => '/empresa/incidencias',
             'id_cliente' => $client->id,
             'empresa' => $empresa,
-            'config_layout' => (object) [
-                'text_acceso' => "Cliente" ?? null,
+            'config' => (object) [
+                'acceso' => "Cliente" ?? null,
                 'nombre_perfil' => "$empresa->ruc - $empresa->razon_social" ?? null,
                 'foto_perfil' => secure_asset('front/images/auth/user_auth.jpg'),
             ]
-        ]);
-
-        $request->session()->regenerate();
+        ];
+        SettingsEmpresaController::set($data);
 
         // Autenticación exitosa
         return response()->json(['success' => true, 'message' => '', 'data' => '/empresa/incidencias'], 200);
@@ -69,7 +70,6 @@ class LoginEmpresaController extends Controller
         Auth::guard('client')->logout(); // O el nombre del guard que uses para UsuarioEmpresa
         $request->session()->invalidate();
         $request->session()->regenerateToken();
-        session()->forget(['customModulos', 'rutaRedirect', 'empresa', 'config_layout']);
         return redirect('/empresa');
     }
 

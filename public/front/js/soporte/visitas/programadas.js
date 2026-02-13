@@ -19,7 +19,7 @@ function ShowDetail(e, id) {
                 empresa = empresas[sucursal.ruc];
 
                 llenarInfoModal('modal_seguimiento_visitasp', {
-                    estado: getBadgeVisita(visita.estado),
+                    estado: getBadgeVisita(visita.estado, .75, true, true),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                     direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
@@ -89,7 +89,7 @@ function ShowAssign(e, id) {
                 visita_tmp = visita;
 
                 llenarInfoModal('modal_assign', {
-                    estado: getBadgeVisita(visita.estado),
+                    estado: getBadgeVisita(visita.estado, .75, true, true),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                     direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
@@ -97,7 +97,6 @@ function ShowAssign(e, id) {
                 });
 
                 $('#id_visitas_asign').val(visita.id);
-                $('#fecha_visita_asign').val(visita.fecha);
                 fMananger.formModalLoding('modal_assign', 'hide');
                 const dt = data.data;
                 const accion = dt.estado == 1 ? false : true;
@@ -222,7 +221,7 @@ function OrdenVisita(e, id) {
                     direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
-                    tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>')
+                    tecnicos: visita.personal_asig.map(persona => `<span class="badge bg-light px-3 ms-2 rounded-pill" style="border: 1px solid rgb(50 68 93 / 70%);color: rgb(50 68 93);">${persona.tecnicos}</span>`).join(''),
                 });
 
                 $('[name="id_visita_orden"]').val(id);

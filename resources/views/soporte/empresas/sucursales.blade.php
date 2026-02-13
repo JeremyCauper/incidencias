@@ -18,7 +18,7 @@
                         <i class="fas fa-plus me-1"></i>
                         Nueva Sucursal
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()">
+                    <button class="btn btn-primary" onclick="updateTable()">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>

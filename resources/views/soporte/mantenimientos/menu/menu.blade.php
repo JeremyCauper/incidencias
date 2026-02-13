@@ -33,7 +33,7 @@
                         <i class="fas fa-arrow-right-arrow-left" style="transform: rotate(90deg);"></i>
                         Ordenar Menu
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -282,5 +282,5 @@
             return datos;
         }
     </script>
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/menu.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/menu.js')}}"></script>
 @endsection

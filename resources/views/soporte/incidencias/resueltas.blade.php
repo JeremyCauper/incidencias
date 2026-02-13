@@ -2,9 +2,9 @@
 @section('title', 'Incidencias Resueltas')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{ secure_asset('front/vendor/daterangepicker/moment.min.js') }}"></script>
-    <script type="text/javascript" src="{{ secure_asset('front/vendor/daterangepicker/daterangepicker.min.js') }}"></script>
-    <link rel="stylesheet" type="text/css" href="{{ secure_asset('front/vendor/daterangepicker/daterangepicker.css') }}">
+    <script type="text/javascript" src="{{ secure_asset($ft_js->daterangepicker_moment) }}"></script>
+    <script type="text/javascript" src="{{ secure_asset($ft_js->daterangepicker) }}"></script>
+    <link rel="stylesheet" type="text/css" href="{{ secure_asset($ft_css->daterangepicker) }}">
     <link rel="stylesheet" href="{{ secure_asset('front/css/app/incidencias/resueltas.css') }}">
     <script>
         let empresas = @json($data['company']);
@@ -85,7 +85,7 @@
                 </h6>
                 <div>
                     <button type="button" class="d-none" data-mdb-modal-init data-mdb-target="#modal_detalle"></button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -378,5 +378,5 @@
 @section('scripts')
     <script src="{{ secure_asset('front/js/app/SelectManeger.js') }}"></script>
     <script src="{{ secure_asset('front/vendor/signature/signature_pad.js') }}"></script>
-    <script src="{{ secure_asset('front/js/soporte/incidencia/resueltas.js') }}?v={{ time() }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/resueltas.js') }}"></script>
 @endsection

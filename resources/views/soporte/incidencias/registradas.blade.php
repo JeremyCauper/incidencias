@@ -2,6 +2,9 @@
 @section('title', 'Panel de Control')
 
 @section('cabecera')
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->mdtp) }}">
+    <script src="{{ secure_asset($ft_js->mdtp) }}"></script>
+
     <link rel="stylesheet" href="{{ secure_asset('front/css/app/incidencias/registradas.css') }}">
     <link rel="stylesheet" href="{{ secure_asset('front/vendor/selectize/selectize.default.min.css') }}">
     <script src="{{ secure_asset('front/vendor/selectize/selectize.min.js') }}"></script>
@@ -131,7 +134,7 @@
                             <i class="fas fa-book-medical"></i>
                             Nueva Incidencia
                         </button>
-                        <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                        <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                             <i class="fas fa-rotate-right"></i>
                         </button>
                     </div>
@@ -396,8 +399,7 @@
                                     <input class="form-control" id="fecha_imforme">
                                 </div>
                                 <div class="col-sm-12 col-6 mb-2">
-                                    <input class="form-control" id="hora_informe" min="00:00" max="23:59"
-                                        step="1">
+                                    <input class="form-control" id="hora_informe">
                                 </div>
                             </div>
                         </div>
@@ -405,6 +407,22 @@
                             <textarea class="form-control" id="observacion" style="height: 106px;resize: none;"></textarea>
                         </div>
                     </div>
+                    <script>
+                        const fecha_imforme = new MaterialDateTimePicker({
+                            inputId: 'fecha_imforme',
+                            mode: 'date',
+                            format: 'MMMM DD de YYYY'
+                        });
+                        fecha_imforme.val("{{ date('Y-m-d') }}");
+
+                        const hora_informe = new MaterialDateTimePicker({
+                            inputId: 'hora_informe',
+                            mode: 'time',
+                            format: 'HH:mm',
+                            format24h: true,
+                        });
+                        hora_informe.val("{{ date('H:i') }}");
+                    </script>
 
                     <div id="contenedor-personal">
                         <h6 class="tittle text-primary mt-4"><i class="fas fa-user-plus me-2"></i>Asignar Personal
@@ -743,49 +761,49 @@
     <div class="modal fade" id="modal_addcod" aria-labelledby="modal_addcod" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-addcod">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Añadir Codigo Aviso
-                        <span class="badge badge-success badge-lg" aria-item="codigo"></span>
-                    </h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">Añadir Codigo Aviso
+                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                            aria-item="codigo"></span>
+                    </h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <span aria-item="estado"></span>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
                 <div class="modal-body">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
-                                    20506467854 - CORPORACION JULCAN S.A.</p>
-                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
+                    <div class="detalle_body mb-2">
+                        <div class="border-bottom mb-4">
+                            <h5><span aria-item="razon_social"></span></h5>
+                            <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                            <p class="detalle_text" aria-item="sucursal"></p>
+                        </div>
+                        <div>
+                            <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                Sucursal</p>
+                            <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Agregar
-                            codigo aviso</h6>
-                        <span aria-item="estado"></span>
-                    </div>
-                    <div class="p-3 pb-0 fieldset mb-3">
+
+
+                    <h6 class="text-uppercase mt-4 title_detalle text-primary" style="font-size: 14px">
+                        <i class="fas fa-laptop-code me-2"></i>INGRESAR CODIGO AVISO
+                    </h6>
+
+                    <div>
                         <input type="hidden" id="cod_incidencia" name="cod_incidencia">
                         <input type="hidden" id="cod_orden_ser" name="cod_orden_ser">
-                        <!-- <h6 class="tittle text-primary">Asignar Personal</h6> -->
                         <div class="col-md-6 mb-2">
                             <input class="form-control" id="codigo_aviso">
                         </div>
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-link" data-mdb-ripple-init
-                        data-mdb-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-link" data-mdb-ripple-init data-mdb-dismiss="modal">Cerrar</button>
                     <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init>Guardar</button>
                 </div>
             </form>
@@ -798,7 +816,7 @@
     <script>
         // 
     </script>
-    <script src="{{ secure_asset('front/js/app/SelectManeger.js') }}"></script>
+    <script src="{{ secure_asset($ft_js->SelectManeger) }}"></script>
     <script src="{{ secure_asset('front/vendor/signature/signature_pad.js') }}"></script>
-    <script src="{{ secure_asset('front/js/soporte/incidencia/registradas.js') }}?v={{ time() }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/registradas.js') }}"></script>
 @endsection

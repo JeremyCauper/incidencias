@@ -4,7 +4,7 @@
 @section('cabecera')
     <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
     <script>
-        let menus = <?php echo json_encode($data['menus']); ?>;
+        let menus = @json($data['menus']);
     </script>
 @endsection
 @section('content')
@@ -22,7 +22,7 @@
                         <i class="fas fa-plus"></i>
                         Nuevo Sub Menu
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -135,5 +135,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/submenu.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/submenu.js')}}"></script>
 @endsection
