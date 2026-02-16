@@ -7,7 +7,7 @@ let getUrlListarIncidenciasResueltas = () => generateUrl(`${__url}/soporte/buzon
     fechaFin: $('#dateRango').val().split('  al  ')[1]
 });
 let dataSetIncidenciasResueltas = (json) => {
-    return json.data;
+    return json;
 }
 
 
@@ -109,7 +109,7 @@ if (esCelular()) {
         }
     });
 
-    $('.botones-accion').append(acciones_incidencias);
+    $('#listado_orden_incidencias .botones-accion').append(acciones_incidencias);
 } else {
     contenedor_registros_incidencias.append($('<div>', { class: 'card' })
         .append($('<div>', { class: 'card-body' })
