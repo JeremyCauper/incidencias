@@ -108,7 +108,7 @@ class ResueltasController extends Controller
 
             return [
                 'cod_incidencia' => $incidencia->cod_incidencia,
-                'cod_orden' => (string) '<label class="badge badge-info" style="font-size: .7rem;">' . $orden->cod_ordens . '</label>' ?? null,
+                'cod_orden' => (string) '<label class="badge badge-info rounded-pill" style="font-size: .7rem;">' . $orden->cod_ordens . '</label>' ?? null,
                 'fecha_inc' => $incidencia->created_at ?? null,
                 'asignados' => $asignados,
                 'empresa' => $incidencia->ruc_empresa,

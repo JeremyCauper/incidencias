@@ -61,15 +61,16 @@ function ShowDetail(e, id) {
 
             llenarInfoModal('modal_detalle', {
                 codigo: inc.cod_incidencia,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                codigo_orden: inc.cod_orden,
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
                 direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
-                problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
+                problema: obj_problem[inc.id_problema].descripcion,
                 subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                observacion: inc.observacion,
+                observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');

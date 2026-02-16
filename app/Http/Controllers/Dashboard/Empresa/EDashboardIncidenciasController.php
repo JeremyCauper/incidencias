@@ -16,7 +16,7 @@ class EDashboardIncidenciasController extends Controller
         // $this->validarPermisos(6, 7);
         try {
             $data = [];
-            $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->where('ruc', ((array) session('empresa'))['ruc'])->get()->keyBy('id');
+            $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->where('ruc', ((array) config('ajustes.empresa'))['ruc'])->get()->keyBy('id');
 
             return view('dashboard.empresa.dashboard_incidencias', ['data' => $data]);
         } catch (Exception $e) {
@@ -37,7 +37,7 @@ class EDashboardIncidenciasController extends Controller
         $data = [];
 
         $whereInc = [
-            'ruc_empresa' => ((array) session('empresa'))['ruc'],
+            'ruc_empresa' => ((array) config('ajustes.empresa'))['ruc'],
             'estatus' => 1
         ];
 
@@ -115,7 +115,7 @@ class EDashboardIncidenciasController extends Controller
             });
         $data['niveles'] = $niveles;
 
-        $infoData = DB::table('tb_sucursales')->select('id', 'ruc', 'nombre')->where('ruc', ((array) session('empresa'))['ruc'])->get()->keyBy('id');
+        $infoData = DB::table('tb_sucursales')->select('id', 'ruc', 'nombre')->where('ruc', ((array) config('ajustes.empresa'))['ruc'])->get()->keyBy('id');
         $data['contable'] = $incidencias->groupBy('id_sucursal')
             ->map(function ($items, $key) use ($infoData) {
                 $name = $infoData[$key]->nombre;

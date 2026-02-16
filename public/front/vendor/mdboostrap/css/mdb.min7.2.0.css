@@ -3657,8 +3657,8 @@ textarea.form-control.is-invalid {
 }
 
 .btn {
-    --mdb-btn-padding-top: 0.563rem;
-    --mdb-btn-padding-bottom: 0.563rem;
+    --mdb-btn-padding-top: 0.628rem;
+    --mdb-btn-padding-bottom: 0.5rem;
     --mdb-btn-padding-left: 0.625rem;
     --mdb-btn-padding-right: 0.625rem;
     --mdb-btn-border-width: 0;

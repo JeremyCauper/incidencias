@@ -8,11 +8,11 @@
     <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
 
     <!-- <script src=""></script> -->
-    <script src="{{secure_asset($ft_js->echartjs)}}"></script>
+    <script src="{{secure_asset($ft_js->echarts)}}"></script>
     <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}"></script>
 
     <script>
-        let empresa = @json(session('empresa'));
+        let empresa = @json(config('ajustes.empresa'));
         let sucursales = @json($data['scompany']);
     </script>
     <style>
@@ -48,7 +48,7 @@
                     <div class="col-lg-6 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
                         <input type="text" class="form-control" id="empresa"
-                            value="{{ session('config_layout')->nombre_perfil }}" readonly role="button">
+                            value="{{ config('ajustes.config')->nombre_perfil }}" readonly role="button">
                     </div>
                     <div class="col-xxl-4 col-lg-3 col-sm-8 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>

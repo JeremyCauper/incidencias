@@ -60,84 +60,9 @@
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title col-form-label-sm text-primary mb-3">
-                        <strong>Visitas a Programar</strong>
-                    </h6>
-                    <div>
-                        <button class="btn btn-primary" onclick="updateTableVisitas()" data-mdb-ripple-init role="button">
-                            <i class="fas fa-rotate-right"></i>
-                        </button>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <table id="tb_visitas" class="table table-hover text-nowrap" style="width:100%">
-                                <thead>
-                                    <tr class="text-center">
-                                        <th>Ruc - Sucursal</th>
-                                        <th>Visitas Realizadas</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <script>
-                                const tb_visitas = new DataTable('#tb_visitas', {
-                                    autoWidth: true,
-                                    scrollX: true,
-                                    scrollY: 400,
-                                    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-                                    dom: `<"row"
-                                                                                                                                                                <"col-lg-12 mb-2"B>>
-                                                                                                                                                            <"row"
-                                                                                                                                                                <"col-sm-4 text-xsm-start text-center my-1"l>
-                                                                                                                                                                <"col-sm-3 col-xsm-4 text-xsm-end text-center my-1 selectFiltroEstado">
-                                                                                                                                                                <"col-sm-5 col-xsm-8 text-xsm-end text-center my-1"f>>
-                                                                                                                                                            <"contenedor_tabla my-2"tr>
-                                                                                                                                                            <"row"
-                                                                                                                                                                <"col-md-5 text-md-start text-center my-1"i>
-                                                                                                                                                                <"col-md-7 text-md-end text-center my-1"p>>`,
-                                    ajax: {
-                                        url: `${__url}/soporte/visitas/sucursales/index`,
-                                        dataSrc: function (json) {
-                                            $.each(json.conteo, function (panel, count) {
-                                                $(`b[data-panel="${panel}"]`).html(count);
-                                            });
-                                            return json.data;
-                                        },
-                                        error: function (xhr, error, thrown) {
-                                            boxAlert.table(updateTableVisitas);
-                                            console.log('Respuesta del servidor:', xhr);
-                                        }
-                                    },
-                                    columns: [
-                                        {
-                                            data: 'ruc', render: function (data, type, row) {
-                                                return `${data} - ${row.sucursal}`;
-                                            }
-                                        },
-                                        {
-                                            data: 'visita', render: function (data, type, row) {
-                                                badgeOptions = data == 'completado'
-                                                    ? { t: 'Completado', c: 'primary' }
-                                                    : (data ? { 'c': 'info', 't': `${data} Visita${(data > 1) ? 's' : ''}` } : { 'c': 'warning', 't': 'Sin Visitas' });
 
-                                                return `<label class="badge badge-${badgeOptions.c}" style="font-size: .7rem;">${badgeOptions.t}</label>`;
-                                            }
-                                        },
-                                        { data: 'acciones' }
-                                    ],
-                                    createdRow: function (row, data, dataIndex) {
-                                        $(row).find('td:eq(1), td:eq(2)').addClass('text-center');
-                                    },
-                                    ordering: false,
-                                    processing: true
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <div class="col-12" id="contenedor_registros"></div>
+            <script src="{{ secure_asset('front/js/soporte/visitas/vista-registros-visitas.js') }}"></script>
         </div>
 
         <div class="col-xl-6 mb-3">
@@ -178,72 +103,9 @@
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <div class="card-body">
-                    <h6 class="card-title col-form-label-sm text-primary mb-3">
-                        <strong>Visitas Programadas</strong>
-                    </h6>
-                    <div>
-                        <button class="btn btn-primary" onclick="updateTableVProgramadas()" data-mdb-ripple-init
-                            role="button">
-                            <i class="fas fa-rotate-right"></i>
-                        </button>
-                    </div>
-                    <div class="row">
-                        <div class="col-12">
-                            <table id="tb_vprogramadas" class="table table-hover text-nowrap" style="width:100%">
-                                <thead>
-                                    <tr class="text-center">
-                                        <th>Estado</th>
-                                        <th>Sucursal</th>
-                                        <th>Técnico</th>
-                                        <th>Fecha Visita</th>
-                                        <th>Acciones</th>
-                                    </tr>
-                                </thead>
-                            </table>
-                            <script>
-                                const tb_vprogramadas = new DataTable('#tb_vprogramadas', {
-                                    autoWidth: true,
-                                    scrollX: true,
-                                    scrollY: 400,
-                                    fixedHeader: true, // Para fijar el encabezado al hacer scroll vertical
-                                    ajax: {
-                                        url: `${__url}/soporte/visitas/programadas/index`,
-                                        dataSrc: function (json) {
-                                            $.each(json.conteo, function (panel, count) {
-                                                $(`b[data-panel="${panel}"]`).html(count);
-                                            });
-                                            return json.data;
-                                        },
-                                        error: function (xhr, error, thrown) {
-                                            boxAlert.table(updateTableVProgramadas);
-                                            console.log('Respuesta del servidor:', xhr);
-                                        }
-                                    },
-                                    columns: [
-                                        { data: 'estado' },
-                                        {
-                                            data: 'sucursal', render: function (data, type, row) {
-                                                let sucursal = sucursales[data];
-                                                return `${sucursal.ruc} - ${sucursal.nombre}`;
-                                            }
-                                        },
-                                        { data: 'tecnicos' },
-                                        { data: 'fecha' },
-                                        { data: 'acciones' }
-                                    ],
-                                    createdRow: function (row, data, dataIndex) {
-                                        $(row).find('td:eq(0), td:eq(3), td:eq(4)').addClass('text-center');
-                                        $(row).find('td:eq(4)').addClass(`td-acciones`);
-                                    },
-                                    processing: true
-                                });
-                            </script>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
+            <div class="col-12" id="contenedor_registros_programadas"></div>
+            <script src="{{ secure_asset('front/js/soporte/visitas/vista-registros-programadas.js') }}"></script>
         </div>
     </div>
 
@@ -508,7 +370,7 @@
             <form class="modal-content" id="form-orden">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">ORDEN DE SERVICIO
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                        <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo">{{$data['cod_ordenv']}}</span>
                     </h5>
                     <div class="align-items-center d-flex gap-2">

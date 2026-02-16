@@ -77,151 +77,20 @@
         </div>
     </div>
 
-    <div class="col-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
-                    <strong>Incidencias Resueltas</strong>
-                </h6>
-                <div>
-                    <button type="button" class="d-none" data-mdb-modal-init data-mdb-target="#modal_detalle"></button>
-                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
-                        <i class="fas fa-rotate-right"></i>
-                    </button>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <table id="tb_orden" class="table table-hover text-nowrap w-100">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>Incidencia</th>
-                                    <th>Fecha Incidencia</th>
-                                    <th>N° Orden</th>
-                                    <th>Tecnico</th>
-                                    <th>Empresa</th>
-                                    <th>Sucursal</th>
-                                    <th>Nivel Incidencia</th>
-                                    <th>Soporte</th>
-                                    <th>Prioridad</th>
-                                    <th>Problema</th>
-                                    <th>Sub Problema</th>
-                                    <th>Iniciada</th>
-                                    <th>Terminada</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <script>
-                            const tb_orden = new DataTable('#tb_orden', {
-                                scrollX: true,
-                                scrollY: 400,
-                                // buttons: ['excel'],
-                                ajax: {
-                                    url: `${__url}/soporte/incidencias/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
-                                    dataSrc: function (json) {
-                                        return json.data;
-                                    },
-                                    error: function (xhr, error, thrown) {
-                                        boxAlert.table();
-                                        console.log('Respuesta del servidor:', xhr);
-                                    }
-                                },
-                                columns: [{
-                                    data: 'cod_incidencia'
-                                },
-                                {
-                                    data: 'fecha_inc'
-                                },
-                                {
-                                    data: 'cod_orden'
-                                },
-                                {
-                                    data: 'asignados',
-                                    render: function (data, type, row) {
-                                        return (data.map(usu => usuarios[usu].nombre)).join(", ");
-                                    }
-                                },
-                                {
-                                    data: 'empresa',
-                                    render: function (data, type, row) {
-                                        let empresa = empresas[data];
-                                        return `${empresa.ruc} - ${empresa.razon_social}`;
-                                    }
-                                },
-                                {
-                                    data: 'sucursal',
-                                    render: function (data, type, row) {
-                                        return sucursales[data].nombre;
-                                    }
-                                },
-                                {
-                                    data: 'tipo_incidencia',
-                                    render: function (data, type, row) {
-                                        let tipo = tipo_incidencia[data[data.length - 1]];
-                                        return `<label class="badge badge-${tipo.color} me-2" style="font-size: 0.75rem;">${tipo.tipo}</label> ${tipo.descripcion}`;
-                                    }
-                                },
-                                {
-                                    data: 'tipo_soporte',
-                                    render: function (data, type, row) {
-                                        return tipo_soporte[data].descripcion;
-                                    }
-                                },
-                                {
-                                    data: 'subproblema',
-                                    render: function (data, type, row) {
-                                        return getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75);
-                                    }
-                                },
-                                {
-                                    data: 'problema',
-                                    render: function (data, type, row) {
-                                        return obj_problem[data].descripcion;
-                                    }
-                                },
-                                {
-                                    data: 'subproblema',
-                                    render: function (data, type, row) {
-                                        return obj_subproblem[data].descripcion;
-                                    }
-                                },
-                                {
-                                    data: 'iniciado'
-                                },
-                                {
-                                    data: 'finalizado'
-                                },
-                                {
-                                    data: 'acciones'
-                                }
-                                ],
-                                createdRow: function (row, data, dataIndex) {
-                                    $(row).find('td:eq(3), td:eq(4), td:eq(5), td:eq(6)').addClass('text-left');
-                                    $(row).addClass('text-center');
-                                    $(row).find('td:eq(13)').addClass(`td-acciones`);
-                                },
-                                order: [
-                                    [1, 'desc']
-                                ],
-                                processing: true
-                            });
-                        </script>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
+    <div class="col-12" id="contenedor_registros"></div>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/vista-registros-resueltas.js') }}"></script>
 
     <div class="modal fade" id="modal_detalle" aria-labelledby="modal_detalle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">Detalle de incidencia
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
-                            aria-item="codigo"></span>
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
-                            aria-item="codigo_orden"></span>
+                        <span class="text-nowrap">
+                            <span class="badge badge-lg rounded-pill" style="background-color: #5a8bdb"
+                                aria-item="codigo"></span>
+                            <span class="badge badge-lg rounded-pill ms-1" style="background-color: #5a8bdb"
+                                aria-item="codigo_orden"></span>
+                        </span>
                     </h5>
                     <div class="align-items-center d-flex gap-2">
                         <span aria-item="estado"></span>
@@ -302,9 +171,9 @@
             <form class="modal-content" id="form-firmas">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">Subir Firma
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                        <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                        <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo_orden"></span>
                     </h5>
                     <div class="align-items-center d-flex gap-2">

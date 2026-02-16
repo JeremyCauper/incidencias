@@ -54,8 +54,7 @@ $(document).ready(function () {
     });
 
     fObservador('.content-wrapper', () => {
-        tb_incidencias.columns.adjust().draw();
-        tb_visitas.columns.adjust().draw();
+        resetTable();
     });
 });
 let sucursal = null;
@@ -815,6 +814,8 @@ function changeCodOrdenV(val = cod_ordenv) {
 }
 
 function resetTable() {
-    tb_incidencias.columns.adjust().draw();
-    tb_visitas.columns.adjust().draw();
+    if (!esCelular()) {
+        listado_incidencia.columns.adjust().draw();
+        listado_visitas.columns.adjust().draw();
+    }
 }

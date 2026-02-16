@@ -298,7 +298,7 @@ $(document).ready(function () {
 
     $('#tSoporte').val(1).trigger('change');
     fObservador('.content-wrapper', () => {
-        tb_incidencia.columns.adjust().draw();
+        if (!esCelular()) listado_incidencia.columns.adjust().draw();
     });
 });
 
@@ -440,17 +440,6 @@ const config_personal = {
 
 const cPersonal = new CTable('createPersonal', config_personal);
 const cPersonal1 = new CTable('createPersonal1', config_personal);
-
-function updateTable() {
-    tb_incidencia.ajax.reload();
-}
-mostrar_acciones(tb_incidencia);
-
-
-function searchTable(search) {
-    const biblio = ['', 'asignada', 'sin asignar', 'en proceso'];
-    tb_incidencia.column([1]).search(biblio[search]).draw();
-}
 
 document.getElementById('form-incidencias').addEventListener('submit', async function (event) {
     event.preventDefault();

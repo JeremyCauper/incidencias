@@ -30,7 +30,7 @@ return [
         'CardTable' => 'front/js/app/CardTable.js?v=' . $version,
         'TableManeger' => 'front/js/app/TableManeger.js?v=' . $version,
         'SelectManeger' => 'front/js/app/SelectManeger.js?v=' . $version,
-        'RevisionMananger' => 'front/js/app/RevisionManeger.js?v=' . $version,
+        'RevisionMananger' => 'front/js/app/RevisionMananger.js?v=' . $version,
 
         'swicth_layout' => 'front/layout/swicth_layout.js?v=' . $version,
         'toggle_template' => 'front/layout/toggle_template.js?v=' . $version,

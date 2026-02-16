@@ -11,7 +11,7 @@
     <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
 
     <!-- <script src=""></script> -->
-    <script src="{{secure_asset($ft_js->echartjs)}}"></script>
+    <script src="{{secure_asset($ft_js->echarts)}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}"></script>
 

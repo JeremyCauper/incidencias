@@ -24,15 +24,12 @@ $(document).ready(function () {
     });
 
     fObservador('.content-wrapper', () => {
-        tb_incidencias.columns.adjust().draw();
-        tb_visitas.columns.adjust().draw();
+        if (!esCelular()) {
+            listado_orden_incidencias.columns.adjust().draw();
+            listado_orden_visitas.columns.adjust().draw();
+        }
     });
 });
-
-function updateTableInc() {
-    tb_incidencias.ajax.reload();
-}
-mostrar_acciones(tb_incidencias);
 
 function OrdenPdfInc(cod) {
     const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${cod}`;
@@ -105,11 +102,6 @@ function ShowDetailInc(e, id) {
     });
 }
 
-function updateTableVis() {
-    tb_visitas.ajax.reload();
-}
-mostrar_acciones(tb_visitas);
-
 function OrdenPdfVis(cod) {
     const url = `${__url}/soporte/orden-visita/exportar-documento?documento=pdf&codigo=${cod}`;
     if (esCelular()) {
@@ -161,8 +153,10 @@ async function resetTable(chang) {
     $('#dateRango').data('daterangepicker').setStartDate(date('Y-m-01'));
     $('#dateRango').data('daterangepicker').setEndDate(date('Y-m-d'));
 
-    tb_incidencias.columns.adjust().draw();
-    tb_visitas.columns.adjust().draw();
+    if (!esCelular()) {
+        listado_orden_incidencias.columns.adjust().draw();
+        listado_orden_visitas.columns.adjust().draw();
+    }
     valorChange = chang;
 }
 
@@ -170,11 +164,16 @@ async function filtroBusqueda() {
     var empresa = $('#empresa').val();
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
-    var nuevoUrl = `${__url}/soporte/buzon-personal/${valorChange ? 'visitas' : 'incidencias'}/resueltas/index?ruc=${empresa}&sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
+    var nuevoUrl = generateUrl(`${__url}/soporte/buzon-personal/${valorChange ? 'visitas' : 'incidencias'}/resueltas/index`, {
+        ruc: empresa,
+        sucursal: sucursal,
+        fechaIni: fechas[0],
+        fechaFin: fechas[1]
+    });
 
     if (valorChange) {
-        tb_visitas.ajax.url(nuevoUrl).load();
+        listado_orden_visitas.ajax.url(nuevoUrl).load();
     } else {
-        tb_incidencias.ajax.url(nuevoUrl).load();
+        listado_orden_incidencias.ajax.url(nuevoUrl).load();
     }
 }

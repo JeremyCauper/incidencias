@@ -1445,7 +1445,7 @@ tr .active-acciones {
 }
 
 .cardtable-container .cardtable-wrapper .card {
-    box-shadow: 0px 0px 12px -5px rgba(0, 0, 0, 1) !important;
+    box-shadow: 0px 0px 0px 1px rgba(0 0 0 / 8%) !important;
 }
 
 .cardtable-container .cardtable-wrapper .card .card-body .btn-acciones-movil .dropdown .dropdown-toggle::after {

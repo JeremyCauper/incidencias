@@ -120,145 +120,18 @@
             </div>
         </div>
     </section>
+    <script>
+        function fillSelectContac(data) {
+            $('#tel_contac').html('<option value=""></option>');
+            Object.entries(data).forEach(([key, e]) => {
+                $('#tel_contac').append($('<option>').val(e.telefono).text(e.telefono));
+            });
+            obj_eContactos = data;
+        }
+    </script>
 
-    <div class="col-12">
-        <div class="card">
-            <div class="card-body px-0">
-                <div class="mx-3">
-                    <h6 class="card-title col-form-label-sm text-primary mb-3">
-                        <strong>Incidencias Registradas</strong>
-                    </h6>
-                    <div>
-                        <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
-                            data-mdb-target="#modal_incidencias">
-                            <i class="fas fa-book-medical"></i>
-                            Nueva Incidencia
-                        </button>
-                        <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
-                            <i class="fas fa-rotate-right"></i>
-                        </button>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-12">
-                        <table id="tb_incidencia" class="table table-hover text-nowrap" style="width:100%">
-                            <thead>
-                                <tr class="text-center">
-                                    <th>Codigo</th>
-                                    <th>Estado</th>
-                                    <th>Tecnicos</th>
-                                    <th>Empresa</th>
-                                    <th>Sucursal</th>
-                                    <th>Registrado</th>
-                                    <th>Estacion</th>
-                                    <th>Nivel Incidencia</th>
-                                    <th>Soporte</th>
-                                    <th>Problema / Sub Problema</th>
-                                    <th>Acciones</th>
-                                </tr>
-                            </thead>
-                        </table>
-                        <script>
-                            function fillSelectContac(data) {
-                                $('#tel_contac').html('<option value=""></option>');
-                                Object.entries(data).forEach(([key, e]) => {
-                                    $('#tel_contac').append($('<option>').val(e.telefono).text(e.telefono));
-                                });
-                                obj_eContactos = data;
-                            }
-                            const tb_incidencia = new DataTable('#tb_incidencia', {
-                                scrollX: true,
-                                scrollY: 400,
-                                ajax: {
-                                    url: `${__url}/soporte/incidencias/registradas/index`,
-                                    dataSrc: function(json) {
-                                        $.each(json.conteo_data, function(panel, count) {
-                                            $(`p[data-panel="${panel}"]`).html(count);
-                                        });
-                                        fillSelectContac(json.contact);
-                                        return json.data;
-                                    },
-                                    error: function(xhr, error, thrown) {
-                                        boxAlert.table();
-                                        console.log('Respuesta del servidor:', xhr);
-                                    }
-                                },
-                                columns: [{
-                                        data: 'incidencia'
-                                    },
-                                    {
-                                        data: 'estado'
-                                    },
-                                    {
-                                        data: 'tecnicos',
-                                        render: function(data, type, row) {
-                                            return (data.map(usu => usuarios[usu].nombre)).join(", ");
-                                        }
-                                    },
-                                    {
-                                        data: 'empresa',
-                                        render: function(data, type, row) {
-                                            let empresa = empresas[data];
-                                            return `${empresa.ruc} - ${empresa.razon_social}`;
-                                        }
-                                    },
-                                    {
-                                        data: 'sucursal',
-                                        render: function(data, type, row) {
-                                            return sucursales[data].nombre;
-                                        }
-                                    },
-                                    {
-                                        data: 'registrado'
-                                    },
-                                    {
-                                        data: 'tipo_estacion',
-                                        render: function(data, type, row) {
-                                            return tipo_estacion[data].descripcion;
-                                        }
-                                    },
-                                    {
-                                        data: 'tipo_incidencia',
-                                        render: function(data, type, row) {
-                                            let tipo = tipo_incidencia[data[data.length - 1]];
-                                            return `<label class="badge badge-${tipo.color} me-2" style="font-size: 0.75rem;">${tipo.tipo}</label>${tipo.descripcion}`;
-                                        }
-                                    },
-                                    {
-                                        data: 'tipo_soporte',
-                                        render: function(data, type, row) {
-                                            return tipo_soporte[data].descripcion;
-                                        }
-                                    },
-                                    {
-                                        data: 'problema',
-                                        render: function(data, type, row) {
-                                            return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
-                                            // return `${getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75)} ${data} / ${row.subproblema}`;
-                                        }
-                                    },
-                                    {
-                                        data: 'acciones'
-                                    }
-                                ],
-                                order: [
-                                    [5, 'desc']
-                                ],
-                                createdRow: function(row, data, dataIndex) {
-                                    const row_bg = ['row-warning', 'row-info', 'row-primary', '', 'row-danger'];
-                                    $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6), td:eq(10)').addClass(
-                                        'text-center');
-                                    $(row).find('td:eq(10)').addClass(`td-acciones`);
-                                    $(row).addClass('row-bg ' + row_bg[data.estado_informe]);
-                                },
-                                processing: true
-                            });
-                        </script>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div class="col-12" id="contenedor_registros"></div>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/vista-registros-registradas.js') }}"></script>
 
     <div class="modal fade" id="modal_incidencias" aria-labelledby="modal_incidencias" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
@@ -267,7 +140,7 @@
                 <input type="hidden" name="estado_info" id="estado_info">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">NUEVA INCIDENCIA
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                        <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             id="cod_inc_text">{{ $data['cod_inc'] }}</span>
                         <span class="badge badge-lg" aria-item="contrato"></span>
                     </h5>
@@ -444,7 +317,7 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">Detalle de incidencia
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                        <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
                     </h5>
                     <div class="align-items-center d-flex gap-2">
@@ -526,7 +399,7 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">Asignar
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                        <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
                     </h5>
                     <div class="align-items-center d-flex gap-2">
@@ -587,7 +460,7 @@
             <form class="modal-content" id="form-orden">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">ORDEN DE SERVICIO 
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                        <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
                     </h5>
                     <div class="align-items-center d-flex gap-2">
@@ -763,7 +636,7 @@
             <form class="modal-content" id="form-addcod">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">Añadir Codigo Aviso
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
+                        <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
                     </h5>
                     <div class="align-items-center d-flex gap-2">

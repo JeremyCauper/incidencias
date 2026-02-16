@@ -15,31 +15,11 @@ $(document).ready(function () {
     });
 
     fObservador('.content-wrapper', () => {
-        tb_visitas.columns.adjust().draw();
-        tb_vprogramadas.columns.adjust().draw();
+        if (!esCelular()) {
+            listado_visitas.columns.adjust().draw();
+            listado_vprogramadas.columns.adjust().draw();
+        }
     });
-
-    let cSelect_search = $('.selectFiltroEstado');
-    if (cSelect_search.length) {
-        let selector = $('<select>', { 'id': 'filtroEstado', class: 'select-clear-simple' }).html($('<option>', { value: '', text: 'Seleccione...' }));
-        Object.entries({
-            0: 'Sin Asignar',
-            1: 'Asignada',
-            2: 'Completada'
-        }).forEach(([clave, valor]) => {
-            selector.append($('<option>').val(clave).text(valor));
-        });
-
-        cSelect_search.append(selector);
-        selector.customSelect2({
-            placeholder: 'Seleccione...',
-            allowClear: true,
-        });
-        // Disparar filtro cuando cambia el select
-        $('#filtroEstado').on('change', function () {
-            tb_visitas.column(2).search($(this).val()).draw();
-        });
-    }
 });
 
 const config_personal = {

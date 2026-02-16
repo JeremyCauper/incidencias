@@ -19,7 +19,7 @@ class EIncidenciasController extends Controller
         try {
             $data = [];
             // Obtener información externa de la API
-            $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->where('ruc', ((array) session('empresa'))['ruc'])->get()->keyBy('id');
+            $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->where('ruc', ((array) config('ajustes.empresa'))['ruc'])->get()->keyBy('id');
 
             // Obtener información de base de datos local
             $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
@@ -54,7 +54,7 @@ class EIncidenciasController extends Controller
             $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
 
             $whereInc = [
-                'ruc_empresa' => ((array) session('empresa'))['ruc'],
+                'ruc_empresa' => ((array) config('ajustes.empresa'))['ruc'],
                 'estatus' => 1
             ];
 

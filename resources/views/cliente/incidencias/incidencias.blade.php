@@ -8,10 +8,10 @@
     <script src="{{secure_asset($ft_js->bootstrap_bundle)}}"></script>
     <script src="{{secure_asset($ft_js->bootstrap_multiselect)}}"></script>
     <script src="{{secure_asset($ft_js->form_multiselect)}}"></script>
-    
+
     <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
     <script>
-        let empresa = @json(session('empresa'));
+        let empresa = @json(config('ajustes.empresa'));
         let sucursales = @json($data['scompany']);
         let tipo_soporte = @json($data['tSoporte']);
         let tipo_incidencia = @json($data['tIncidencia']);
@@ -29,7 +29,7 @@
                 <div class="row">
                     <div class="col-lg-7 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
-                        <input type="text" class="form-control" value="{{ session('config_layout')->nombre_perfil }}"
+                        <input type="text" class="form-control" value="{{ config('ajustes.config')->nombre_perfil }}"
                             readonly role="button">
                     </div>
                     <div class="col-lg-5 my-1">
@@ -175,65 +175,82 @@
     </div>
 
     <div class="modal fade" id="modal_detalle" aria-labelledby="modal_detalle" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+        <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h6 class="modal-title">Detalle de incidencia -
-                        <span class="badge badge-success badge-lg" aria-item="codigo"></span>
-                    </h6>
-                    <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
-                        aria-label="Close"></button>
+                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                    <h5 class="modal-title">Detalle de incidencia
+                        <span class="text-nowrap">
+                            <span class="badge badge-lg rounded-pill" style="background-color: #5a8bdb" aria-item="codigo"></span>
+                            <span class="badge badge-lg rounded-pill ms-1" style="background-color: #5a8bdb" aria-item="codigo_orden"></span>
+                        </span>
+                    </h5>
+                    <div class="align-items-center d-flex gap-2">
+                        <span aria-item="estado"></span>
+                        <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
                 </div>
-                <div class="modal-body">
-                    <div class="col-md-12 col-sm-12 col-xs-12">
-                        <div class="list-group list-group-light">
-                            <div class="list-group-item">
-                                <p aria-item="razon_social" class="font-weight-semibold mb-2" style="font-size: .92rem;">
-                                    20506467854 - CORPORACION JULCAN S.A.</p>
-                                <p class="mb-0" style="font-size: .75rem;" aria-item="direccion">AV. GERARDO UNGER
-                                    N° 3689 MZ D LT 26 INDEPENDENCIA</p>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="sucursal">E/S INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Dir. Sucursal: </label><span style="font-size: .75rem;"
-                                    aria-item="dir_sucursal">AV. GERARDO UNGER N° 3689 MZ D LT 26 INDEPENDENCIA</span>
-                            </div>
-                            <div class="list-group-item">
-                                <div>
-                                    <label class="form-label me-2">Tipo Soporte:</label>
-                                    <span style="font-size: .75rem;" aria-item="soporte"></span>
+                <div class="modal-body modal-body-scrollable px-1 p-0">
+                    <div class="row">
+                        <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
+                            style="background-color: rgb(29 49 69 / 5%);">
+                            <h6 class="text-uppercase mt-2 mb-4 title_detalle">
+                                <i class="fas fa-city me-2"></i> Información del Cliente
+                            </h6>
+                            <div class="detalle_body mb-2">
+                                <div class="border-bottom mb-4">
+                                    <h5><span aria-item="razon_social"></span></h5>
+                                    <p class="detalle_text text-muted mb-3" aria-item="direccion"></p>
                                 </div>
                                 <div>
-                                    <label class="form-label me-2">Problema:</label>
-                                    <span style="font-size: .75rem;" aria-item="problema"></span>
+                                    <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Sucursal</p>
+                                    <p class="detalle_text" aria-item="sucursal"></p>
                                 </div>
                                 <div>
-                                    <label class="form-label me-2">Sub Problema:</label>
-                                    <span style="font-size: .75rem;" aria-item="subproblema"></span>
+                                    <p class="detalle_label mb-0 text-uppercase fw-bolder text-muted">Dirección
+                                        Sucursal</p>
+                                    <p class="detalle_text mb-0" aria-item="dir_sucursal"></p>
                                 </div>
                             </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Nivel Incidencia:</label>
+
+                            <h6 class="text-uppercase my-4 title_detalle">
+                                <i class="fas fa-circle-exclamation me-2"></i> Detalles del Soporte
+                            </h6>
+                            <div class="detalle_body d-flex align-items-center justify-content-between mb-3">
+                                <span class="detalle_text mb-0">Tipo Soporte</span>
+                                <span class="detalle_text text-uppercase fw-bolder mb-0" aria-item="soporte"></span>
+                            </div>
+                            <div class="detalle_body mb-3">
+                                <p class="detalle_label mb-1 text-uppercase fw-bolder text-muted">Problema Reportado</p>
+                                <p class="detalle_text fw-bold mb-0" aria-item="problema"></p>
+                                <p class="detalle_text text-muted fst-italic mb-0 mt-2" aria-item="subproblema"></p>
+                            </div>
+
+                            <div class="detalle_body"
+                                style="background-color: rgb(123 126 255 / 19%);border-color: rgb(99 102 241 / 0.1);">
+                                <label class="form-label text-uppercase me-2" style="color: rgb(99 102 241 / 1);"><i
+                                        class="fas fa-stopwatch"></i> Nivel de Incidencia:</label>
                                 <div aria-item="incidencia"></div>
                             </div>
-                            <div class="list-group-item">
-                                <label class="form-label me-2">Observación:</label>
-                                <span style="font-size: .75rem;" aria-item="observacion"></span>
+
+                            <h6 class="text-uppercase mt-4 mb-2 title_detalle">Observación</h6>
+                            <div class="detalle_body datalle_observacion" aria-item="observacion">
                             </div>
                         </div>
-                    </div>
-                    <div class="d-flex justify-content-between align-items-center my-2">
-                        <h6 class="font-weight-semibold text-primary tt-upper m-0" style="font-size: smaller;">Seguimiento
-                            Incidencia</h6>
-                        <span aria-item="estado"></span>
-                    </div>
-                    <div class="fieldset" aria-item="contenedor-seguimiento">
+                        <div class="col-lg-7 p-4 modal-col-scrollable personalized-scroll">
+                            <div class="align-items-center d-flex mt-2 mb-4">
+                                <h4 class="mb-0 text-nowrap text-uppercase title_detalle">
+                                    <i class="fas fa-clock-rotate-left" style="color: rgb(99 102 241 / 1)"></i>
+                                    SEGUIMIENTO INCIDENCIA
+                                </h4>
+                                <div class="ms-2 rounded-pill"
+                                    style="height: .35rem;width: 100%;background-color: rgb(148 163 184 / 11%)"></div>
+                            </div>
+                            <div class="content_seguimiento" aria-item="contenedor-seguimiento"></div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer border-top-0">
+                <div class="modal-footer">
                     <button type="button" class="btn btn-link " data-mdb-ripple-init
                         data-mdb-dismiss="modal">Cerrar</button>
                 </div>

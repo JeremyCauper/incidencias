@@ -29,7 +29,9 @@ $(document).ready(function () {
     });
 
     fObservador('.content-wrapper', () => {
-        tb_orden.columns.adjust().draw();
+        if (!esCelular()) {
+            listado_orden.columns.adjust().draw();
+        }
     });
 });
 
@@ -53,23 +55,6 @@ const CS_subproblema = new CSelect(['#fSubProblema'], {
         { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
     ]
 });
-
-function updateTable() {
-    tb_orden.ajax.reload();
-}
-mostrar_acciones(tb_orden);
-
-function filtroBusqueda() {
-    var empresa = $(`#empresa`).val();
-    var sucursal = $('#sucursal').val();
-    var fechas = $('#dateRango').val().split('  al  ');
-    var fProblema = $('#fProblema').val();
-    var fSubProblema = $('#fSubProblema').val();
-    var nuevoUrl = `${__url}/soporte/incidencias/resueltas/index?ruc=${empresa}&sucursal=${sucursal}&fProblema=${fProblema}&fSubProblema=${fSubProblema}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
-
-    tb_orden.ajax.url(nuevoUrl).load();
-}
-
 
 function ShowDetail(e, cod) {
     $('#modal_detalle').modal('show');

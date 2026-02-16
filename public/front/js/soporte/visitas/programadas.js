@@ -1,7 +1,3 @@
-function updateTableVProgramadas() {
-    tb_vprogramadas.ajax.reload();
-}
-mostrar_acciones(tb_vprogramadas);
 let visita_tmp = null;
 
 function ShowDetail(e, id) {

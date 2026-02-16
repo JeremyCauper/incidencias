@@ -7,6 +7,7 @@ use App\Helpers\SubMenu;
 use App\Helpers\TipoArea;
 use App\Helpers\TipoUsuario;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\SettingsController;
 use Exception;
 use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
@@ -34,7 +35,7 @@ class UsuarioController extends Controller
             $data = [];
             $areas = collect((new TipoArea())->all())->select('id', 'descripcion', 'estatus');
             $tipo_acceso = collect((new TipoUsuario())->all())->select('id', 'descripcion', 'color', 'estatus')->where('estatus', 1);
-            if (session('tipo_acceso') != 5) {
+            if (config('ajustes.tipo_acceso') != 5) {
                 $tipo_acceso = $tipo_acceso->reject(fn($item) => $item['id'] == 5);
                 $areas = $areas->reject(fn($item) => $item['id'] == 5);
             }
@@ -42,7 +43,7 @@ class UsuarioController extends Controller
             $data['areas'] = $areas->keyBy('id');
 
             $tipo_menu = [0];
-            if (session('tipo_acceso') == 5) {
+            if (config('ajustes.tipo_acceso') == 5) {
                 array_push($tipo_menu, 1);
             }
 
@@ -110,7 +111,7 @@ class UsuarioController extends Controller
             $personal = DB::table('tb_personal')
                 ->select('ndoc_usuario', 'id_usuario', 'nombres', 'apellidos', 'usuario', 'pass_view', 'estatus', 'tipo_acceso')
                 ->where('eliminado', 0)
-                ->when(session('tipo_acceso') != 5, function ($query) {
+                ->when(config('ajustes.tipo_acceso') != 5, function ($query) {
                     return $query->whereNot('tipo_acceso', 5);
                 })
                 ->get()->map(function ($usu) {
@@ -313,16 +314,17 @@ class UsuarioController extends Controller
                 $text_acceso = (new TipoUsuario())->show(Auth::user()->tipo_acceso)['descripcion'];
                 $nomPerfil = $this->formatearNombre($update['nombres'], $update['apellidos']);
                 $foto_perfil = !isset($update['foto_perfil']) ? 'user_auth.jpg' : $update['foto_perfil'];
-                session([
+                $data = [
                     'customModulos' => $modulos->menus,
                     'rutaRedirect' => $modulos->ruta,
                     'menu_usuario' => $menu_usuario,
-                    'config_layout' => (object) [
+                    'config' => (object) [
                         'text_acceso' => $text_acceso ?? null,
                         'nombre_perfil' => $nomPerfil ?? null,
                         'foto_perfil' => secure_asset("front/images/auth/$foto_perfil"),
                     ]
-                ]);
+                ];
+                SettingsController::set($data);
             }
 
             return $this->message(message: "Registro actualizado exitosamente.");

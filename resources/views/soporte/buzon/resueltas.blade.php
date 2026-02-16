@@ -57,163 +57,160 @@
         </div>
     </div>
 
-    <div class="col-12 grid-margin">
-        <div class="card">
-            <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
-                    <strong>Incidencias / Visitas Resueltas</strong>
-                </h6>
-                <ul class="nav nav-tabs mb-3" id="myTab0" role="tablist">
-                    <li class="nav-item" role="presentation">
-                        <button data-mdb-tab-init class="nav-link position-relative rounded-top-1 active" id="home-tab0"
-                            data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true"
-                            data-mdb-ripple-init onclick="resetTable(false)">
-                            Incidencias
-                        </button>
-                    </li>
-                    <li class="nav-item" role="presentation">
-                        <button data-mdb-tab-init class="nav-link position-relative rounded-top-1" id="profile-tab0"
-                            data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile"
-                            aria-selected="false" data-mdb-ripple-init onclick="resetTable(true)">
-                            Visitas
-                        </button>
-                    </li>
-                </ul>
-                <div class="tab-content" id="myTabContent0">
-                    <div class="tab-pane fade show active" id="home0" role="tabpanel" aria-labelledby="home-tab0">
-                        <div>
-                            <button class="btn btn-primary" onclick="updateTableInc()" data-mdb-ripple-init role="button">
-                                <i class="fas fa-rotate-right"></i>
-                            </button>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <table id="tb_incidencias" class="table table-hover text-nowrap w-100">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>Incidencia</th>
-                                            <th>Fecha Incidencia</th>
-                                            <th>N° Orden</th>
-                                            <th>Empresa</th>
-                                            <th>Sucursal</th>
-                                            <th>Iniciada</th>
-                                            <th>Terminada</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                                <script>
-                                    const tb_incidencias = new DataTable('#tb_incidencias', {
-                                        autoWidth: true,
-                                        scrollX: true,
-                                        scrollY: 400,
-                                        ajax: {
-                                            url: `${__url}/soporte/buzon-personal/incidencias/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
-                                            dataSrc: function (json) {
-                                                return json;
-                                            },
-                                            error: function (xhr, error, thrown) {
-                                                boxAlert.table(updateTableInc);
-                                                console.log('Respuesta del servidor:', xhr);
-                                            }
-                                        },
-                                        columns: [
-                                            { data: 'cod_inc' },
-                                            { data: 'fecha_inc' },
-                                            { data: 'cod_orden' },
-                                            {
-                                                data: 'id_sucursal', render: function (data, type, row) {
-                                                    var ruc = sucursales[data].ruc;
-                                                    return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
-                                                }
-                                            },
-                                            {
-                                                data: 'id_sucursal', render: function (data, type, row) {
-                                                    return sucursales[data].nombre;
-                                                }
-                                            },
-                                            { data: 'iniciado' },
-                                            { data: 'finalizado' },
-                                            { data: 'acciones' }
-                                        ],
-                                        order: [[1, 'desc']],
-                                        createdRow: function (row, data, dataIndex) {
-                                            $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(5), td:eq(6), td:eq(7)').addClass('text-center');
-                                            $(row).find('td:eq(7)').addClass(`td-acciones`);
-                                        },
-                                        processing: true
-                                    });
-                                </script>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="tab-pane fade" id="profile0" role="tabpanel" aria-labelledby="profile-tab0">
-                        <div>
-                            <button class="btn btn-primary" onclick="updateTableVis()" data-mdb-ripple-init role="button">
-                                <i class="fas fa-rotate-right"></i>
-                            </button>
-                        </div>
-                        <div class="row">
-                            <div class="col-12">
-                                <table id="tb_visitas" class="table table-hover text-nowrap" style="width:100%">
-                                    <thead>
-                                        <tr class="text-center">
-                                            <th>N° Orden</th>
-                                            <th>Fecha Visita</th>
-                                            <th>Empresa</th>
-                                            <th>Sucursal</th>
-                                            <th>Iniciada</th>
-                                            <th>Terminada</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                    </thead>
-                                </table>
-                                <script>
-                                    const tb_visitas = new DataTable('#tb_visitas', {
-                                        autoWidth: true,
-                                        scrollX: true,
-                                        scrollY: 400,
-                                        ajax: {
-                                            url: `${__url}/soporte/buzon-personal/visitas/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
-                                            dataSrc: function (json) {
-                                                return json;
-                                            },
-                                            error: function (xhr, error, thrown) {
-                                                boxAlert.table(updateTableVis);
-                                                console.log('Respuesta del servidor:', xhr);
-                                            }
-                                        },
-                                        columns: [
-                                            { data: 'cod_orden' },
-                                            { data: 'fecha_vis' },
-                                            {
-                                                data: 'id_sucursal', render: function (data, type, row) {
-                                                    var ruc = sucursales[data].ruc;
-                                                    return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
-                                                }
-                                            },
-                                            {
-                                                data: 'id_sucursal', render: function (data, type, row) {
-                                                    return sucursales[data].nombre;
-                                                }
-                                            },
-                                            { data: 'iniciado' },
-                                            { data: 'finalizado' },
-                                            { data: 'acciones' }
-                                        ],
-                                        order: [[1, 'desc']],
-                                        createdRow: function (row, data, dataIndex) {
-                                            $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6)').addClass('text-center');
-                                            $(row).find('td:eq(6)').addClass(`td-acciones`);
-                                        },
-                                        processing: true
-                                    });
-                                </script>
-                            </div>
-                        </div>
-                    </div>
+
+    <div class="nav nav-tabs my-3 gap-2" id="myTab0" role="tablist">
+        <div class="nav-item" role="presentation">
+            <button data-mdb-tab-init class="nav-link position-relative rounded-top-1 active" id="home-tab0"
+                data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true"
+                data-mdb-ripple-init onclick="resetTable(false)">
+                Incidencias
+            </button>
+        </div>
+        <div class="nav-item" role="presentation">
+            <button data-mdb-tab-init class="nav-link position-relative rounded-top-1" id="profile-tab0"
+                data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile" aria-selected="false"
+                data-mdb-ripple-init onclick="resetTable(true)">
+                Visitas
+            </button>
+        </div>
+    </div>
+
+    <div class="tab-content" id="myTabContent0">
+        <div class="tab-pane fade show active" id="home0" role="tabpanel" aria-labelledby="home-tab0">
+            <div id="contenedor_registros_incidencias"></div>
+            <script src="{{ secure_asset('front/js/soporte/buzon/vista-registros-resueltas-incidencias.js') }}"></script>
+            <!-- <div>
+                    <button class="btn btn-primary" onclick="updateTableInc()" data-mdb-ripple-init role="button">
+                        <i class="fas fa-rotate-right"></i>
+                    </button>
                 </div>
-            </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tb_incidencias" class="table table-hover text-nowrap w-100">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>Incidencia</th>
+                                    <th>Fecha Incidencia</th>
+                                    <th>N° Orden</th>
+                                    <th>Empresa</th>
+                                    <th>Sucursal</th>
+                                    <th>Iniciada</th>
+                                    <th>Terminada</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <script>
+                            const tb_incidencias = new DataTable('#tb_incidencias', {
+                                autoWidth: true,
+                                scrollX: true,
+                                scrollY: 400,
+                                ajax: {
+                                    url: `${__url}/soporte/buzon-personal/incidencias/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
+                                    dataSrc: function (json) {
+                                        return json;
+                                    },
+                                    error: function (xhr, error, thrown) {
+                                        boxAlert.table(updateTableInc);
+                                        console.log('Respuesta del servidor:', xhr);
+                                    }
+                                },
+                                columns: [
+                                    { data: 'cod_inc' },
+                                    { data: 'fecha_inc' },
+                                    { data: 'cod_orden' },
+                                    {
+                                        data: 'id_sucursal', render: function (data, type, row) {
+                                            var ruc = sucursales[data].ruc;
+                                            return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
+                                        }
+                                    },
+                                    {
+                                        data: 'id_sucursal', render: function (data, type, row) {
+                                            return sucursales[data].nombre;
+                                        }
+                                    },
+                                    { data: 'iniciado' },
+                                    { data: 'finalizado' },
+                                    { data: 'acciones' }
+                                ],
+                                order: [[1, 'desc']],
+                                createdRow: function (row, data, dataIndex) {
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(2), td:eq(5), td:eq(6), td:eq(7)').addClass('text-center');
+                                    $(row).find('td:eq(7)').addClass(`td-acciones`);
+                                },
+                                processing: true
+                            });
+                        </script>
+                    </div>
+                </div> -->
+        </div>
+        <div class="tab-pane fade" id="profile0" role="tabpanel" aria-labelledby="profile-tab0">
+            <div id="contenedor_registros_visitas"></div>
+            <script src="{{ secure_asset('front/js/soporte/buzon/vista-registros-resueltas-visitas.js') }}"></script>
+            <!-- <div>
+                    <button class="btn btn-primary" onclick="updateTableVis()" data-mdb-ripple-init role="button">
+                        <i class="fas fa-rotate-right"></i>
+                    </button>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <table id="tb_visitas" class="table table-hover text-nowrap" style="width:100%">
+                            <thead>
+                                <tr class="text-center">
+                                    <th>N° Orden</th>
+                                    <th>Fecha Visita</th>
+                                    <th>Empresa</th>
+                                    <th>Sucursal</th>
+                                    <th>Iniciada</th>
+                                    <th>Terminada</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                        </table>
+                        <script>
+                            const tb_visitas = new DataTable('#tb_visitas', {
+                                autoWidth: true,
+                                scrollX: true,
+                                scrollY: 400,
+                                ajax: {
+                                    url: `${__url}/soporte/buzon-personal/visitas/resueltas/index?ruc=&sucursal=&fechaIni=${date('Y-m-01')}&fechaFin=${date('Y-m-d')}`,
+                                    dataSrc: function (json) {
+                                        return json;
+                                    },
+                                    error: function (xhr, error, thrown) {
+                                        boxAlert.table(updateTableVis);
+                                        console.log('Respuesta del servidor:', xhr);
+                                    }
+                                },
+                                columns: [
+                                    { data: 'cod_orden' },
+                                    { data: 'fecha_vis' },
+                                    {
+                                        data: 'id_sucursal', render: function (data, type, row) {
+                                            var ruc = sucursales[data].ruc;
+                                            return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
+                                        }
+                                    },
+                                    {
+                                        data: 'id_sucursal', render: function (data, type, row) {
+                                            return sucursales[data].nombre;
+                                        }
+                                    },
+                                    { data: 'iniciado' },
+                                    { data: 'finalizado' },
+                                    { data: 'acciones' }
+                                ],
+                                order: [[1, 'desc']],
+                                createdRow: function (row, data, dataIndex) {
+                                    $(row).find('td:eq(0), td:eq(1), td:eq(4), td:eq(5), td:eq(6)').addClass('text-center');
+                                    $(row).find('td:eq(6)').addClass(`td-acciones`);
+                                },
+                                processing: true
+                            });
+                        </script>
+                    </div>
+                </div> -->
         </div>
     </div>
 
@@ -278,10 +275,12 @@
             <div class="modal-content">
                 <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
                     <h5 class="modal-title">Detalle de incidencia
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
-                            aria-item="codigo"></span>
-                        <span class="ms-2 badge badge-lg rounded-pill px-3" style="background-color: #5a8bdb"
-                            aria-item="codigo_orden"></span>
+                        <span class="text-nowrap">
+                            <span class="badge badge-lg rounded-pill" style="background-color: #5a8bdb"
+                                aria-item="codigo"></span>
+                            <span class="badge badge-lg rounded-pill ms-1" style="background-color: #5a8bdb"
+                                aria-item="codigo_orden"></span>
+                        </span>
                     </h5>
                     <div class="align-items-center d-flex gap-2">
                         <span aria-item="estado"></span>
