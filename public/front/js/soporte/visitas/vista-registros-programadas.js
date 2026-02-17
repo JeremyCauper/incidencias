@@ -18,8 +18,14 @@ let acciones_programadas = $('<div>').append(
     }).append($('<i>', { class: 'fas fa-rotate-right' })),
 );
 
+let cabecera_programadas = $('<div>', { class: 'col-12 d-flex align-items-center justify-content-between my-3' })
+    .append(
+        $('<h6>', { class: 'card-title text-primary mb-0' }).append($('<strong>').text('Visitas Programadas')),
+        acciones_programadas
+    );
+
 if (esCelular()) {
-    contenedor_registros_programadas.append($('<div>', { id: 'listado_vprogramadas' }));
+    contenedor_registros_programadas.append(cabecera_programadas, $('<div>', { id: 'listado_vprogramadas' }));
 
     listado_vprogramadas = new CardTable('listado_vprogramadas', {
         ajax: {
@@ -75,13 +81,11 @@ if (esCelular()) {
         }
     });
 
-    $('#listado_vprogramadas .botones-accion').append(acciones_programadas);
 } else {
     contenedor_registros_programadas.append($('<div>', { class: 'card' })
         .append($('<div>', { class: 'card-body' })
             .append(
-                $('<h6>', { class: 'card-title col-form-label-sm text-primary mb-3' }).append($('<strong>').text('Visitas a Programar')),
-                acciones_programadas,
+                cabecera_programadas,
                 $('<div>', { class: 'row' })
                     .append($('<div>', { class: 'col-12' })
                         .append(

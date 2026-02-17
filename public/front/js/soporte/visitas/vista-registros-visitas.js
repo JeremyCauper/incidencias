@@ -9,7 +9,7 @@ let dataSet = (json) => {
 }
 
 
-let acciones = $('<div>').append(
+let acciones_visitas = $('<div>').append(
     $('<button>', {
         class: 'btn btn-primary',
         onclick: 'updateTableVisitas()',
@@ -17,6 +17,12 @@ let acciones = $('<div>').append(
         role: 'button'
     }).append($('<i>', { class: 'fas fa-rotate-right' })),
 );
+
+let cabecera_visitas = $('<div>', { class: 'col-12 d-flex align-items-center justify-content-between my-3' })
+    .append(
+        $('<h6>', { class: 'card-title text-primary mb-0' }).append($('<strong>').text('Visitas Registradas')),
+        acciones_visitas
+    );
 
 let selector = $('<select>', { 'id': 'filtroEstado', class: 'select-clear-simple' }).html($('<option>', { value: '', text: 'Seleccione...' }));
 Object.entries({
@@ -28,7 +34,7 @@ Object.entries({
 });
 
 if (esCelular()) {
-    contenedor_registros.append($('<div>', { id: 'listado_visitas' }));
+    contenedor_registros.append(cabecera_visitas, $('<div>', { id: 'listado_visitas' }));
 
     listado_visitas = new CardTable('listado_visitas', {
         ajax: {
@@ -77,9 +83,7 @@ if (esCelular()) {
         }
     });
 
-    acciones.append(selector);
-    acciones.addClass('d-flex gap-2');
-    $('#listado_visitas .botones-accion').append(acciones);
+    $('#listado_visitas .botones-accion').append(selector);
     // Disparar filtro cuando cambia el select
     $('#filtroEstado').on('change', function () {
         listado_visitas.search('visita', $(this).val()).draw();
@@ -88,8 +92,7 @@ if (esCelular()) {
     contenedor_registros.append($('<div>', { class: 'card' })
         .append($('<div>', { class: 'card-body' })
             .append(
-                $('<h6>', { class: 'card-title col-form-label-sm text-primary mb-3' }).append($('<strong>').text('Visitas a Programar')),
-                acciones,
+                cabecera_visitas,
                 $('<div>', { class: 'row' })
                     .append($('<div>', { class: 'col-12' })
                         .append(

@@ -24,24 +24,11 @@ $(document).ready(function () {
     });
 
     fObservador('.content-wrapper', () => {
-        tb_orden.columns.adjust().draw();
+        if (!esCelular()) {
+            listado_orden.columns.adjust().draw();
+        }
     });
 });
-
-function updateTable() {
-    tb_orden.ajax.reload();
-}
-mostrar_acciones(tb_orden);
-
-function filtroBusqueda() {
-    var sucursal = $('#sucursal').val();
-    var fechas = $('#dateRango').val().split('  al  ');
-    var tEstado = $('#tEstado').val();
-    var tSop = $('#tSoporte').val();
-    var nuevoUrl = `${__url}/empresa/incidencias/index?sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}&tSoporte=${tSop}&tEstado=${tEstado}`;
-
-    tb_orden.ajax.url(nuevoUrl).load();
-}
 
 function ShowDetail(e, id) {
     $('#modal_detalle').modal('show');

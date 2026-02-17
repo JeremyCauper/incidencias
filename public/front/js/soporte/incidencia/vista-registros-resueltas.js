@@ -22,8 +22,14 @@ let acciones = $('<div>').append(
     }).append($('<i>', { class: 'fas fa-rotate-right' })),
 );
 
+let cabecera = $('<div>', { class: 'col-12 d-flex align-items-center justify-content-between my-3' })
+    .append(
+        $('<h6>', { class: 'card-title text-primary mb-0' }).append($('<strong>').text('Incidencias Resueltas')),
+        acciones
+    );
+
 if (esCelular()) {
-    contenedor_registros.append($('<div>', { id: 'listado_orden' }));
+    contenedor_registros.append(cabecera, $('<div>', { id: 'listado_orden' }));
 
     listado_orden = new CardTable('listado_orden', {
         ajax: {
@@ -111,13 +117,11 @@ if (esCelular()) {
         }
     });
 
-    $('.botones-accion').append(acciones);
 } else {
     contenedor_registros.append($('<div>', { class: 'card' })
         .append($('<div>', { class: 'card-body' })
             .append(
-                $('<h6>', { class: 'card-title col-form-label-sm text-primary mb-3' }).append($('<strong>').text('Incidencias Registradas')),
-                acciones,
+                cabecera,
                 $('<div>', { class: 'row' })
                     .append($('<div>', { class: 'col-12' })
                         .append(

@@ -17,7 +17,7 @@ let dataSet_incidencia = (json) => {
     });
 }
 
-let acciones = $('<div>').append(
+let acciones_incidencia = $('<div>').append(
     $('<button>', {
         class: 'btn btn-primary',
         onclick: 'updateTableInc()',
@@ -26,8 +26,14 @@ let acciones = $('<div>').append(
     }).append($('<i>', { class: 'fas fa-rotate-right' })),
 );
 
+let cabecera_incidencias = $('<div>', { class: 'col-12 d-flex align-items-center justify-content-between my-3' })
+    .append(
+        $('<h6>', { class: 'card-title text-primary mb-0' }).append($('<strong>').text('Incidencias Asignadas')),
+        acciones_incidencia
+    );
+
 if (esCelular()) {
-    contenedor_registros_incidencias.append($('<div>', { id: 'listado_incidencia' }));
+    contenedor_registros_incidencias.append(cabecera_incidencias, $('<div>', { id: 'listado_incidencia' }));
 
     listado_incidencia = new CardTable('listado_incidencia', {
         ajax: {
@@ -110,14 +116,11 @@ if (esCelular()) {
             }
         }
     });
-
-    $('#listado_incidencia .botones-accion').append(acciones);
 } else {
     contenedor_registros_incidencias.append($('<div>', { class: 'card' })
         .append($('<div>', { class: 'card-body' })
             .append(
-                $('<h6>', { class: 'card-title col-form-label-sm text-primary mb-3' }).append($('<strong>').text('Incidencias Registradas')),
-                acciones,
+                cabecera_incidencias,
                 $('<div>', { class: 'row' })
                     .append($('<div>', { class: 'col-12' })
                         .append(

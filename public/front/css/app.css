@@ -1641,3 +1641,18 @@ tr .active-acciones {
 .modal-body {
     background-color: rgb(29 49 69 / 5%);
 }
+
+/* @media (max-width: 526px) {
+    .contenedor-filtro {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        z-index: 9991;
+        margin: 0 !important;
+        padding: 1rem;
+        backdrop-filter: blur(2px);
+        background-color: rgb(0 0 0 / 10%);
+    }
+} */

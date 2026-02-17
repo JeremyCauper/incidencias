@@ -5,7 +5,7 @@
     --root-layout-bg: #ffffff;
     --root-layout-color: #6a7282;
     --root-container-bg: rgb(59 113 202 / 6%);
-    --root-border-color: rgb(79, 79, 79, .25);
+    --root-border-color: rgb(79 79 79 / 15%);
 
     --root-is-active-bg: rgb(29 115 255);
 
@@ -18,7 +18,7 @@
     --root-layout-bg: #16181f;
     --root-layout-color: #99a1af;
     --root-container-bg: #0f1117;
-    --root-border-color: rgb(255, 255, 255, .5);
+    --root-border-color: rgb(255 255 255 / 12%);
 
     --root-is-active-bg: rgb(63 103 169);
 

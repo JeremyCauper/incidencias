@@ -221,7 +221,7 @@ class CardTable {
 
     renderControls() {
         const controls = document.createElement('div');
-        controls.className = 'cardtable-controls mb-2 m-3 row';
+        controls.className = 'cardtable-controls mb-2 mt-3 row';
 
         const btnAccion = document.createElement('div');
         btnAccion.className = 'botones-accion text-center';
@@ -564,16 +564,31 @@ class CardTable {
     }
 
     applyFilters() {
-        this.filteredData = this.options.data.filter(item => {
-            // Búsqueda general de texto en todos los campos
+        // Elemento temporal para extraer texto (optimización)
+        const tempDiv = document.createElement('div');
+
+        this.filteredData = this.options.data.filter((item, index) => {
+            // Búsqueda general de texto en el contenido de la card HTML
             if (this.searchTerm) {
                 const searchTerms = this.searchTerm.split(' ').filter(term => term.length > 0);
 
+                // Generar el contenido HTML como si se fuera a renderizar
+                let cardContent = '';
+                if (this.options.cardTemplate) {
+                    cardContent = this.options.cardTemplate(item, index);
+                } else {
+                    cardContent = this.defaultTemplate(item);
+                }
+
+                // Aplicar el wrapper
+                const finalHtml = this.options.cardWrapper.replace(':content', cardContent);
+
+                // Extraer solo texto
+                tempDiv.innerHTML = finalHtml;
+                const cardText = tempDiv.textContent.toLowerCase();
+
                 const searchMatch = searchTerms.every(term => {
-                    return this.options.columns.some(col => {
-                        const value = this.getNestedValue(item, col.data);
-                        return String(value).toLowerCase().includes(term);
-                    });
+                    return cardText.includes(term);
                 });
 
                 if (!searchMatch) return false;

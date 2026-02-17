@@ -107,7 +107,7 @@ class EIncidenciasController extends Controller
                     "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
                     "5" => ['c' => 'danger', 't' => 'Cierre Sistema']
                 ];
-                $badge_informe = '<label class="badge badge-' . $estadoInforme[$incidencia->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$incidencia->estado_informe]['t'] . '</label>';
+                $badge_informe = '<label class="badge badge-' . $estadoInforme[$incidencia->estado_informe]['c'] . '" style="font-size: .75rem;">' . $estadoInforme[$incidencia->estado_informe]['t'] . '</label>';
 
                 return [
                     'cod_incidencia' => $incidencia->cod_incidencia,

@@ -222,3 +222,6 @@ Route::get('/empresa/dashboard/dashboard-incidencias/index', [EDashboardIncidenc
 
 // Apis
 Route::get('/listado/materiales-usados', [MaterialesController::class, 'MaterialesUsados']);
+Route::get('/session', function () {
+    return view('login');
+});

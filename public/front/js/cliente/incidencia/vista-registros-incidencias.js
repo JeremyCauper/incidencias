@@ -1,38 +1,39 @@
-let contenedor_registros_incidencias = $('#contenedor_registros_incidencias');
-let listado_orden_incidencias;
-let getUrlListarIncidenciasResueltas = () => generateUrl(`${__url}/soporte/buzon-personal/incidencias/resueltas/index`, {
-    ruc: $('#empresa').val(),
+let contenedor_registros = $('#contenedor_registros');
+let listado_orden;
+let getUrlListar = () => generateUrl(`${__url}/empresa/incidencias/index`, {
     sucursal: $('#sucursal').val(),
     fechaIni: $('#dateRango').val().split('  al  ')[0],
-    fechaFin: $('#dateRango').val().split('  al  ')[1]
+    fechaFin: $('#dateRango').val().split('  al  ')[1],
+    tEstado: $('#tEstado').val(),
+    tSoporte: $('#tSoporte').val()
 });
-let dataSetIncidenciasResueltas = (json) => {
-    return json;
+let dataSet = (json) => {
+    return json.data;
 }
 
 
-let acciones_incidencias = $('<div>').append(
+let acciones = $('<div>').append(
     $('<button>', {
         class: 'btn btn-primary',
-        onclick: 'updateTableInc()',
+        onclick: 'updateTable()',
         'data-mdb-ripple-init': '',
         role: 'button'
     }).append($('<i>', { class: 'fas fa-rotate-right' })),
 );
 
-let cabecera_incidencias = $('<div>', { class: 'col-12 d-flex align-items-center justify-content-between my-3' })
+let cabecera = $('<div>', { class: 'col-12 d-flex align-items-center justify-content-between my-3' })
     .append(
-        $('<h6>', { class: 'card-title text-primary mb-0' }).append($('<strong>').text('Incidencias Resueltas')),
-        acciones_incidencias
+        $('<h6>', { class: 'card-title text-primary mb-0' }).append($('<strong>').text('Listado de Incidencias')),
+        acciones
     );
 
 if (esCelular()) {
-    contenedor_registros_incidencias.append(cabecera_incidencias, $('<div>', { id: 'listado_orden_incidencias' }));
+    contenedor_registros.append(cabecera, $('<div>', { id: 'listado_orden' }));
 
-    listado_orden_incidencias = new CardTable('listado_orden_incidencias', {
+    listado_orden = new CardTable('listado_orden', {
         ajax: {
-            url: getUrlListarIncidenciasResueltas(),
-            dataSrc: dataSetIncidenciasResueltas,
+            url: getUrlListar(),
+            dataSrc: dataSet,
             error: function (xhr, error, thrown) {
                 boxAlert.table();
                 console.log('Respuesta del servidor:', xhr);
@@ -40,6 +41,7 @@ if (esCelular()) {
         },
         columns: [
             { data: 'cod_incidencia', title: 'Codigo' },
+            { data: 'estado', title: 'Estado' },
             { data: 'fecha_inc', title: 'Fecha Incidencia' },
             { data: 'cod_orden', title: 'Codigo Orden' },
             { data: 'asignados', title: 'Asignados' },
@@ -53,8 +55,6 @@ if (esCelular()) {
             { data: 'finalizado', title: 'Finalizado' }
         ],
         cardTemplate: (data, index) => {
-            let empresa = empresas[data.empresa];
-            let empresa_nombre = `${empresa.ruc} - ${empresa.razon_social}`;
             let tipoIncidencia = tipo_incidencia[data.tipo_incidencia[data.tipo_incidencia.length - 1]];
 
             return $('<div>').append(
@@ -66,10 +66,7 @@ if (esCelular()) {
                     ),
                     $('<div>', { class: 'btn-acciones-movil' }).append(data.acciones)
                 ),
-                $('<div>', { class: 'mb-3' }).append(
-                    $('<div>', { style: 'font-size: 3.25vw;' }).html('<i class="fas fa-building me-1"></i>' + empresa_nombre),
-                    $('<div>', { class: 'text-muted mt-2', style: 'font-size: 2.5vw;' }).html(sucursales[data.sucursal].nombre),
-                ),
+                $('<div>', { class: 'mb-3', style: 'font-size: 3.25vw;' }).html(sucursales[data.sucursal].nombre),
                 $('<div>', { class: 'mb-2' + (data.asignados.length ? '' : ' text-muted'), style: 'font-size: 2.75vw;' }).html(
                     data.asignados.length ?
                         '<i class="fas fa-user me-1"></i>' + (data.asignados.map(usu => usuarios[usu].nombre)).join(", ") :
@@ -91,6 +88,7 @@ if (esCelular()) {
                         $('<p>', { class: 'mb-1 text-uppercase fw-bolder text-muted', style: 'font-size: 1.7vw;' }).text('Soporte'),
                         $('<p>', { class: 'fw-bold mb-1', style: 'font-size: 2.2vw;' }).html(tipo_soporte[data.tipo_soporte].descripcion),
                     ),
+                    data.estado
                 ),
                 $('<div>', { class: 'd-flex align-items-center justify-content-between pt-1' }).append(
                     `<span style="font-size: 2.85vw;color: #909090;"><i class="fas fa-clock me-2"></i>${data.fecha_inc}</span>`,
@@ -114,23 +112,27 @@ if (esCelular()) {
             }
         }
     });
-
 } else {
-    contenedor_registros_incidencias.append($('<div>', { class: 'card' })
+    contenedor_registros.append($('<div>', { class: 'card' })
         .append($('<div>', { class: 'card-body' })
             .append(
-                cabecera_incidencias,
+                cabecera,
                 $('<div>', { class: 'row' })
                     .append($('<div>', { class: 'col-12' })
                         .append(
-                            $('<table>', { class: 'table table-hover text-nowrap', id: 'listado_orden_incidencias', style: 'width: 100%' })
+                            $('<table>', { class: 'table table-hover text-nowrap', id: 'listado_orden', style: 'width: 100%' })
                                 .append($('<thead>', { class: 'text-center' })
                                     .append($('<tr>')
                                         .append($('<th>').text('Incidencia'))
+                                        .append($('<th>').text('Estado'))
                                         .append($('<th>').text('Fecha Incidencia'))
                                         .append($('<th>').text('N° Orden'))
-                                        .append($('<th>').text('Empresa'))
+                                        .append($('<th>').text('Tecnico'))
                                         .append($('<th>').text('Sucursal'))
+                                        .append($('<th>').text('Nivel Incidencia'))
+                                        .append($('<th>').text('Soporte'))
+                                        .append($('<th>').text('Prioridad'))
+                                        .append($('<th>').text('Problema / Sub Problema'))
                                         .append($('<th>').text('Iniciada'))
                                         .append($('<th>').text('Terminada'))
                                         .append($('<th>').text('Acciones'))
@@ -143,58 +145,75 @@ if (esCelular()) {
         )
     );
 
-    listado_orden_incidencias = new DataTable('#listado_orden_incidencias', {
-        autoWidth: true,
+    listado_orden = new DataTable('#listado_orden', {
         scrollX: true,
         scrollY: 400,
         ajax: {
-            url: getUrlListarIncidenciasResueltas(),
-            dataSrc: dataSetIncidenciasResueltas,
+            url: getUrlListar(),
+            dataSrc: dataSet,
             error: function (xhr, error, thrown) {
-                boxAlert.table(updateTableInc);
+                boxAlert.table();
                 console.log('Respuesta del servidor:', xhr);
             }
         },
         columns: [
-            { data: 'cod_inc' },
+            { data: 'cod_incidencia' },
+            { data: 'estado' },
             { data: 'fecha_inc' },
             { data: 'cod_orden' },
             {
-                data: 'id_sucursal', render: function (data, type, row) {
-                    var ruc = sucursales[data].ruc;
-                    return `${empresas[ruc].ruc} - ${empresas[ruc].razon_social}`;
+                data: 'asignados', render: function (data, type, row) {
+                    return (data.map(usu => usuarios[usu].nombre)).join(", ");
                 }
             },
             {
-                data: 'id_sucursal', render: function (data, type, row) {
+                data: 'sucursal', render: function (data, type, row) {
                     return sucursales[data].nombre;
+                }
+            },
+            {
+                data: 'tipo_incidencia', render: function (data, type, row) {
+                    let tipo = tipo_incidencia[data[data.length - 1]];
+                    return `<label class="badge badge-${tipo.color} me-2" style="font-size: 0.75rem;">${tipo.tipo}</label>${tipo.descripcion}`;
+                }
+            },
+            {
+                data: 'tipo_soporte', render: function (data, type, row) {
+                    return tipo_soporte[data].descripcion;
+                }
+            },
+            { data: 'subproblema', render: function (data, type, row) { return getBadgePrioridad(obj_subproblem[row.subproblema].prioridad, .75) } },
+            {
+                data: 'problema', render: function (data, type, row) {
+                    return `${obj_problem[data].descripcion} / ${obj_subproblem[row.subproblema].descripcion}`;
                 }
             },
             { data: 'iniciado' },
             { data: 'finalizado' },
             { data: 'acciones' }
         ],
-        order: [[1, 'desc']],
         createdRow: function (row, data, dataIndex) {
-            $(row).find('td:eq(3), td:eq(4)').addClass('text-left');
-            $(row).find('td:eq(7)').addClass(`td-acciones`);
+            $(row).find('td:eq(4), td:eq(5), td:eq(6), td:eq(8)').addClass('text-left');
+            $(row).addClass('text-center');
+            $(row).find('td:eq(12)').addClass(`td-acciones`);
         },
+        order: [[2, 'desc']],
         processing: true
     });
-    mostrar_acciones(listado_orden_incidencias);
+    mostrar_acciones(listado_orden);
 }
 
-function updateTableInc() {
+function updateTable() {
     if (esCelular()) {
-        return listado_orden_incidencias.reload();
+        return listado_orden.reload();
     }
-    listado_orden_incidencias.ajax.reload();
+    listado_orden.ajax.reload();
 }
 
 function filtroBusqueda() {
-    const nuevoUrl = getUrlListarIncidenciasResueltas();
-    listado_orden_incidencias.ajax.url(nuevoUrl).load();
+    const nuevoUrl = getUrlListar();
+    listado_orden.ajax.url(nuevoUrl).load();
     if (!esCelular()) {
-        listado_orden_incidencias.column([4]).search('').draw();
+        listado_orden.column([4]).search('').draw();
     }
 }

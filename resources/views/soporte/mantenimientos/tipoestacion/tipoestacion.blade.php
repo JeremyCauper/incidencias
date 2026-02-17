@@ -13,7 +13,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Listado de Tipo Estaciones</strong>
                 </h6>
                 <div>

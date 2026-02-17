@@ -5,10 +5,10 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
     <style>
         /* .fc .fc-daygrid-day-frame {
-                                                            min-height: 100% !important;
-                                                            height: 80px !important;
-                                                            position: relative !important;
-                                                        } */
+                                                                min-height: 100% !important;
+                                                                height: 80px !important;
+                                                                position: relative !important;
+                                                            } */
         .fc .fc-toolbar-title {
             text-transform: capitalize;
         }
@@ -20,7 +20,7 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Cronograma Mensual Turno Semanal / Apoyo</strong>
                 </h6>
                 <div>

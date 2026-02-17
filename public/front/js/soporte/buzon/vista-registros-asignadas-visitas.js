@@ -23,8 +23,14 @@ let acciones_visitas_asignadas = $('<div>').append(
     }).append($('<i>', { class: 'fas fa-rotate-right' })),
 );
 
+let cabecera_visitas_asignadas = $('<div>', { class: 'col-12 d-flex align-items-center justify-content-between my-3' })
+    .append(
+        $('<h6>', { class: 'card-title text-primary mb-0' }).append($('<strong>').text('Visitas Asignadas')),
+        acciones_visitas_asignadas
+    );
+
 if (esCelular()) {
-    contenedor_registros_visitas.append($('<div>', { id: 'listado_visitas' }));
+    contenedor_registros_visitas.append(cabecera_visitas_asignadas, $('<div>', { id: 'listado_visitas' }));
 
     listado_visitas = new CardTable('listado_visitas', {
         ajax: {
@@ -80,14 +86,11 @@ if (esCelular()) {
             }
         }
     });
-
-    $('#listado_visitas .botones-accion').append(acciones_visitas_asignadas);
 } else {
     contenedor_registros_visitas.append($('<div>', { class: 'card' })
         .append($('<div>', { class: 'card-body' })
             .append(
-                $('<h6>', { class: 'card-title col-form-label-sm text-primary mb-3' }).append($('<strong>').text('Visitas Asignadas')),
-                acciones_visitas_asignadas,
+                cabecera_visitas_asignadas,
                 $('<div>', { class: 'row' })
                     .append($('<div>', { class: 'col-12' })
                         .append(
