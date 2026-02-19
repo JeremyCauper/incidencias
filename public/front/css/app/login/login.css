@@ -1,0 +1,343 @@
+:root,
+[data-mdb-theme=light] {
+    --color-slate-700: rgb(69 85 108);
+    --color-slate-800: rgb(29 41 61);
+    --color-slate-900: rgb(15 23 43);
+    --slots: to bottom right in oklab, oklch(.208 .042 265.755) 0%, oklch(.279 .041 260.031) 50%, oklch(.208 .042 265.755) 100%;
+}
+
+[data-mdb-theme=dark] {
+    --color-slate-700: rgb(69 85 108);
+    --color-slate-800: rgb(29 41 61);
+    --color-slate-900: rgb(15 23 43);
+}
+/* --- Keyframes --- */
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translate3d(0, -5%, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translate3d(0, 5%, 0);
+    }
+
+    to {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+@keyframes fadeInLeft {
+    0% {
+        opacity: 0;
+        transform: translate3d(-5%, 0, 0);
+    }
+
+    80% {
+        transform: translate3d(0.25%, 0, 0);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translate3d(0, 0, 0);
+    }
+}
+
+/* --- Clases para aplicar --- */
+.fade-in-down {
+    animation-fill-mode: both;
+    animation-name: fadeInDown;
+}
+
+.fade-in-up {
+    animation-fill-mode: both;
+    animation-name: fadeInUp;
+}
+
+.fade-in-left {
+    animation-fill-mode: both;
+    animation-name: fadeInLeft;
+}
+
+.to-slate-900 {
+    --tw-gradient-to: var(--color-slate-900);
+    --tw-gradient-stops: var(--slots);
+}
+
+.via-slate-800 {
+    --tw-gradient-via: var(--color-slate-800);
+    --tw-gradient-via-stops: var(--slots);
+    --tw-gradient-stops: var(--slots);
+}
+
+.from-slate-900 {
+    --tw-gradient-from: var(--color-slate-900);
+    --tw-gradient-stops: var(--slots);
+}
+
+.bg-gradient-to-br {
+    --tw-gradient-position: to bottom right in oklab;
+    background-image: linear-gradient(var(--slots));
+}
+
+.contenedor-imagen {
+    width: 60%;
+}
+
+.img-wrapper {
+    overflow: hidden;
+    inset: 0;
+}
+
+.bg-img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    filter: blur(2px);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+}
+
+.bg-img.active {
+    opacity: 0.2;
+}
+
+
+.contenedor-login {
+    width: 40%;
+}
+
+.contenedor-login .logo-login {
+    display: none;
+    margin-bottom: 2rem;
+}
+
+.contenedor-login .logo-login img {
+    height: 2.75rem;
+}
+
+@media screen and (max-width: 1370px) {
+
+    .contenedor-imagen,
+    .contenedor-login {
+        width: 50%;
+    }
+}
+
+@media screen and (max-width: 1025px) {
+    .contenedor-imagen {
+        display: none;
+    }
+
+    .contenedor-login {
+        width: 100%;
+    }
+
+    .contenedor-login .logo-login {
+        display: block;
+    }
+
+    @keyframes fadeInUp {
+        from {
+            opacity: 0;
+            transform: translate3d(0, -5%, 0);
+        }
+
+        to {
+            opacity: 1;
+            transform: translate3d(0, 0, 0);
+        }
+    }
+}
+
+.contenedor-modo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    background-color: rgb(176 216 255 / 20%);
+    border-radius: calc(.625rem + 4px);
+    padding: .385rem;
+}
+
+.botones-modo {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    padding: .925rem .75rem;
+    border: 0;
+    border-radius: inherit;
+    color: rgb(29 41 61 / 60%);
+    background-color: transparent;
+    font-size: .75rem;
+    flex: 1 0 0%;
+    transition: all .35s ease-in-out;
+}
+
+.botones-modo.active {
+    color: rgb(29 41 61);
+    background-color: white;
+    box-shadow: 2px 2px 11px -6px rgb(0 0 0 / 80%);
+    transition: all .35s ease-in-out;
+}
+
+.informacion-modo {
+    display: flex;
+    gap: 1rem;
+    background-color: rgb(55 132 229 / 15%);
+    opacity: 1;
+    transform: none;
+    border-radius: .65rem;
+    padding: .75rem 1.25rem;
+    border: 1px solid rgb(134 187 255 / 20%);
+    margin-top: calc(.25rem * 3);
+    margin-bottom: calc(.25rem * 8);
+    animation-duration: .65s;
+}
+
+.informacion-modo svg {
+    color: rgb(59 113 202);
+    width: calc(.25rem * 5);
+    height: calc(.25rem * 5);
+}
+
+.informacion-modo div p {
+    margin: 0;
+}
+
+.informacion-modo div p:first-child {
+    font-weight: bold;
+    color: rgb(29 41 61);
+    font-size: .9rem;
+}
+
+.informacion-modo div p:last-child {
+    color: rgb(69 85 108);
+    font-size: .75rem;
+}
+
+/* Configuración base */
+.custom-alert {
+    opacity: 0;
+    transform: translateY(20px);
+    /* Empieza 20px abajo */
+    transition: all 0.5s ease;
+    /* Controla la suavidad */
+}
+
+/* Estado cuando la alerta está visible */
+.custom-alert.show-alert {
+    display: block !important;
+    opacity: 1;
+    transform: translateY(0);
+    /* Sube a su posición original */
+}
+
+/* Estado cuando se va (vuelve a bajar) */
+.custom-alert.hide-alert {
+    opacity: 0;
+    transform: translateY(20px);
+    /* Baja mientras se desvanece */
+}
+
+.form-login div {
+    margin-bottom: calc(.25rem * 5);
+}
+
+.form-login div label {
+    color: rgb(49 65 88);
+    font-weight: bold;
+    font-size: .875rem;
+    margin-bottom: calc(.25rem * 2);
+}
+
+.form-login div div .form-control {
+    padding-left: calc(.25rem * 12);
+    border-radius: calc(.625rem + 4px);
+    border-width: 2px;
+    border-color: rgb(226 232 240);
+}
+
+.form-login div div .form-control::placeholder {
+    color: rgb(144 161 185);
+    opacity: 1;
+}
+
+.form-login div div .form-control:focus {
+    border-color: #3b71ca;
+}
+
+.form-login div div .form-icon {
+    position: absolute;
+    left: calc(.25rem * 4);
+    top: 50%;
+    transform: translateY(-50%);
+    color: rgb(144 161 185);
+    width: calc(.25rem * 5);
+    height: calc(.25rem * 5);
+}
+
+.form-login div div .button-password {
+    position: absolute;
+    right: calc(.25rem * 4);
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: transparent;
+    color: rgb(144 161 185);
+    width: calc(.25rem * 5);
+    height: calc(.25rem * 5);
+    border: 0;
+    padding: 0;
+    line-height: 1;
+}
+
+.form-login div div .button-password svg {
+    width: calc(.25rem * 5);
+    height: calc(.25rem * 5);
+}
+
+.informacion-title-acceso {
+    margin-block: calc(.25rem * 8);
+    position: relative;
+}
+
+.informacion-title-acceso div:last-child span {
+    color: rgb(98 116 142);
+    padding-inline: calc(.25rem * 4);
+    background-color: rgb(255 255 255);
+    font-size: .875rem;
+    z-index: 1;
+}
+
+.informacion-acceso {
+    text-align: center;
+    padding: calc(.25rem * 4);
+    background-color: rgb(252 249 250);
+    border-radius: calc(.625rem + 4px);
+    border: 1px solid rgb(226 232 240);
+}
+
+.informacion-acceso svg {
+    color: rgb(144 161 185);
+    margin-bottom: calc(.25rem * 2);
+}
+
+.informacion-acceso p {
+    margin: 0;
+    color: rgb(69 85 108);
+    font-size: .75rem;
+    line-height: calc(1 / .75);
+}

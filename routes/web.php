@@ -2,7 +2,6 @@
 
 use App\Helpers\TipoIncidencia;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LoginEmpresaController;
 use App\Http\Controllers\Empresas\Incidencias\EIncidenciasController;
 use App\Http\Controllers\Dashboard\Empresa\EDashboardIncidenciasController;
 use App\Http\Controllers\Dashboard\Rci\DashboardIncidenciasController;
@@ -51,10 +50,14 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/api/ConsultaDni/{dni}', [ConsultasController::class, 'ConsultaDni']);
 Route::get('/api/ConsultaDoc/Consulta', [ConsultasController::class, 'ConsultaDoc']);
 
-Route::redirect('/', url('/soporte'));
-Route::get('/soporte', [LoginController::class, 'view'])->name('login')->middleware('guest:web');
-Route::post('/soporte/iniciar', [LoginController::class, 'login']);
-Route::get('/soporte/logout', [LoginController::class, 'logout'])->name('logout');;
+Route::redirect('/', url('/login'));
+Route::get('/login', [LoginController::class, 'view'])->name('login')->middleware('guest:web');
+Route::post('/soporte/iniciar', [LoginController::class, 'loginSoporte']);
+Route::get('/soporte/logout', [LoginController::class, 'logoutSoporte'])->name('logout.soporte');
+
+Route::post('/empresa/iniciar', [LoginController::class, 'loginCliente']);
+Route::get('/empresa/logout', [LoginController::class, 'logoutCliente'])->name('logout.cliente');
+
 Route::get('/validarTurno/{id}', [LoginController::class, 'validarTurno']);
 
 Route::get('/soporte/panel', [PanelController::class, 'view'])->middleware('auth');
@@ -210,10 +213,6 @@ Route::get('/soporte/inventario/tecnicos/index', [InventarioTecnicoController::c
 Route::post('/soporte/inventario/tecnicos/asignar', [InventarioTecnicoController::class, 'asignarMaterial']);
 
 
-Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login.empresa')->middleware('guest:client');
-Route::post('/empresa/iniciar', [LoginEmpresaController::class, 'loginClient']);
-Route::get('/empresa/logout', [LoginEmpresaController::class, 'logout'])->name('logout.empresa');
-
 Route::get('/empresa/incidencias', [EIncidenciasController::class, 'view'])->middleware('auth:client');
 Route::get('/empresa/incidencias/index', [EIncidenciasController::class, 'index']);
 
@@ -222,6 +221,3 @@ Route::get('/empresa/dashboard/dashboard-incidencias/index', [EDashboardIncidenc
 
 // Apis
 Route::get('/listado/materiales-usados', [MaterialesController::class, 'MaterialesUsados']);
-Route::get('/session', function () {
-    return view('login');
-});
