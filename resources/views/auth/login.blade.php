@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html lang="es" class="h-100" data-mdb-theme="light">
+<!-- <html lang="es" class="h-100" data-mdb-theme="light"> -->
+<html lang="es" class="h-100" data-mdb-theme="dark">
 
 <head>
     <!-- Requiredd meta tags -->
