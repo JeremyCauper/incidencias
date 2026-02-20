@@ -19,6 +19,7 @@
 
     <script src="{{secure_asset('front/js/app/ToggleTema.js')}}"></script>
     <script>
+        $('html').attr('data-mdb-theme', localStorage.data_mdb_theme == 'dark' ? 'dark' : 'light');
         const intervalToken = setInterval(() => {
             if (!document.cookie.includes('XSRF-TOKEN')) {
                 clearInterval(intervalToken);
@@ -67,18 +68,17 @@
         </div>
     </div>
 
-    <div class="contenedor-login d-flex justify-content-center overflow-hidden px-4 py-3"
-        style="height: 100vh;">
+    <div class="contenedor-login d-flex justify-content-center overflow-hidden px-4 py-3" style="height: 100vh;">
         <div class="fade-in-up" style="max-width: 28rem;animation-duration: .45s;">
             <div class="logo-login">
                 <img src="{{ secure_asset('../public/front/images/app/LogoRC_WNormal.webp') }}" alt="">
             </div>
-            <div style="opacity: 1; transform: none;">
+            <div style="opacity: 1; transform: none;padding-bottom: 2rem;">
                 <div class="mb-3">
                     <h2 class="fw-bold"
-                        style="font-size: 1.875rem;color: var(--color-slate-800);margin-bottom: .25rem;">Iniciar Sesión
+                        style="font-size: 1.875rem;color: var(--color-slate-900);margin-bottom: .25rem;">Iniciar Sesión
                     </h2>
-                    <p class="mb-0" style="color: var(--color-slate-700);">Accede al portal de incidencias
+                    <p class="mb-0" style="color: var(--color-slate-800);">Accede al portal de incidencias
                     </p>
                 </div>
                 <div class="mb-4">
@@ -125,22 +125,29 @@
                         <span class="ms-2"></span>
                     </div>
                     <div>
-                        <label class="form-label-usuario"></label>
+                        <label class="form-label-usuario d-flex justify-content-between">
+                            <span data-text></span>
+                            <span class="text-warning pt-1" data-error-message="usuario" style="font-size: 0.7rem;display: none;">
+                                <i class="fas fa-circle-info" style="font-size: 0.75rem"></i>
+                                <span></span>
+                            </span>
+                        </label>
                         <div class="position-relative">
                             <svg xmlns="http://www.w3.org/2000/svg" class="form-icon form-icon-usuario" width="24"
                                 height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
                                 stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                             </svg>
                             <input class="form-control form-control-lg" type="text" name="usuario" id="usuario">
-                            <span class="position-absolute text-warning" data-error-message="usuario"
-                                style="bottom: -20px; left: 3px; font-size: 0.7rem;display: none;">
-                                <i class="fas fa-circle-info" style="font-size: 0.75rem"></i>
-                                <span></span>
-                            </span>
+
                         </div>
                     </div>
                     <div>
-                        <label class="form-label-password">Contraseña</label>
+                        <label class="form-label-password d-flex justify-content-between">Contraseña
+                            <span class="text-warning pt-1" data-error-message="password" style="font-size: 0.7rem;display: none;">
+                                <i class="fas fa-circle-info" style="font-size: 0.75rem"></i>
+                                <span></span>
+                            </span>
+                        </label>
                         <div class="position-relative">
                             <svg xmlns="http://www.w3.org/2000/svg" class="form-icon" width="24" height="24"
                                 viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -150,11 +157,7 @@
                             </svg>
                             <input class="form-control form-control-lg" type="password" placeholder="••••••••"
                                 name="password" id="password">
-                            <span class="position-absolute text-warning" data-error-message="password"
-                                style="bottom: -20px; left: 3px; font-size: 0.7rem;display: none;">
-                                <i class="fas fa-circle-info" style="font-size: 0.75rem"></i>
-                                <span></span>
-                            </span>
+
                             <button type="button" class="button-password">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                     fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -173,7 +176,7 @@
                 </form>
                 <div class="informacion-title-acceso">
                     <div class="position-absolute d-flex align-items-center" style="inset: calc(.25rem * 0);">
-                        <div class="w-100" style="border: 1px solid rgb(226 232 240);"></div>
+                        <div class="w-100" style="border: 1px solid rgb(98 116 142 / 20%);"></div>
                     </div>
                     <div class="d-flex align-items-center justify-content-center"><span>Información de acceso</span>
                     </div>

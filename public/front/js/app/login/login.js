@@ -66,7 +66,7 @@ function cambiarModo(modo) {
     $(`[data-imagen="${modo}"]`).addClass('active');
 
     $('.informacion-modo svg, .form-icon-usuario').html(config.svg);
-    $('.form-label-usuario').text(config.form.label);
+    $('.form-label-usuario span[data-text]').text(config.form.label);
     $('#usuario').attr('placeholder', config.form.placeholder_input);
 
     $('[data-modo="titulo"]').text(config.modo.titulo);

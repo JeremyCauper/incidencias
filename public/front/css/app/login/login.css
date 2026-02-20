@@ -3,14 +3,27 @@
     --color-slate-700: rgb(69 85 108);
     --color-slate-800: rgb(29 41 61);
     --color-slate-900: rgb(15 23 43);
+    --color-slate-inverted-900: rgb(255, 255, 255);
+    --bg-body: rgb(255, 255, 255);
+
+    --border-color-form-login: rgb(226 232 240);
+    --color-form-login: rgb(144 161 185);
+
     --slots: to bottom right in oklab, oklch(.208 .042 265.755) 0%, oklch(.279 .041 260.031) 50%, oklch(.208 .042 265.755) 100%;
 }
 
 [data-mdb-theme=dark] {
-    --color-slate-700: rgb(69 85 108);
-    --color-slate-800: rgb(29 41 61);
-    --color-slate-900: rgb(15 23 43);
+    --color-slate-700: rgb(150, 150, 150);
+    --color-slate-800: rgb(195, 195, 195);
+    --color-slate-900: rgb(255 255 255);
+    --color-slate-inverted-900: rgb(15, 23, 43);
+
+    --bg-body: rgb(15 17 23);
+
+    --border-color-form-login: rgb(32 39 51);
+    --color-form-login: rgb(77 92 117);
 }
+
 /* --- Keyframes --- */
 
 @keyframes fadeInDown {
@@ -117,6 +130,8 @@
 
 .contenedor-login {
     width: 40%;
+    background-color: var(--bg-body);
+    align-items: center;
 }
 
 .contenedor-login .logo-login {
@@ -143,6 +158,8 @@
 
     .contenedor-login {
         width: 100%;
+        align-items: inherit;
+        padding-top: 2rem !important;
     }
 
     .contenedor-login .logo-login {
@@ -159,6 +176,12 @@
             opacity: 1;
             transform: translate3d(0, 0, 0);
         }
+    }
+}
+
+@media screen and (max-height: 745px) {
+    .contenedor-login {
+        align-items: unset;
     }
 }
 
@@ -180,7 +203,8 @@
     padding: .925rem .75rem;
     border: 0;
     border-radius: inherit;
-    color: rgb(29 41 61 / 60%);
+    color: var(--color-slate-900);
+    opacity: 0.5;
     background-color: transparent;
     font-size: .75rem;
     flex: 1 0 0%;
@@ -188,8 +212,8 @@
 }
 
 .botones-modo.active {
-    color: rgb(29 41 61);
-    background-color: white;
+    opacity: 1;
+    background-color: var(--color-slate-inverted-900);
     box-shadow: 2px 2px 11px -6px rgb(0 0 0 / 80%);
     transition: all .35s ease-in-out;
 }
@@ -220,37 +244,30 @@
 
 .informacion-modo div p:first-child {
     font-weight: bold;
-    color: rgb(29 41 61);
+    color: var(--color-slate-900);
     font-size: .9rem;
 }
 
 .informacion-modo div p:last-child {
-    color: rgb(69 85 108);
+    color: var(--color-slate-700);
     font-size: .75rem;
 }
 
-/* Configuración base */
 .custom-alert {
     opacity: 0;
     transform: translateY(20px);
-    /* Empieza 20px abajo */
     transition: all 0.5s ease;
-    /* Controla la suavidad */
 }
 
-/* Estado cuando la alerta está visible */
 .custom-alert.show-alert {
     display: block !important;
     opacity: 1;
     transform: translateY(0);
-    /* Sube a su posición original */
 }
 
-/* Estado cuando se va (vuelve a bajar) */
 .custom-alert.hide-alert {
     opacity: 0;
     transform: translateY(20px);
-    /* Baja mientras se desvanece */
 }
 
 .form-login div {
@@ -258,7 +275,7 @@
 }
 
 .form-login div label {
-    color: rgb(49 65 88);
+    color: var(--color-slate-800);
     font-weight: bold;
     font-size: .875rem;
     margin-bottom: calc(.25rem * 2);
@@ -268,11 +285,13 @@
     padding-left: calc(.25rem * 12);
     border-radius: calc(.625rem + 4px);
     border-width: 2px;
-    border-color: rgb(226 232 240);
+    border-color: var(--border-color-form-login);
+    background-color: var(--bg-body);
+    color: var(--color-slate-800);
 }
 
 .form-login div div .form-control::placeholder {
-    color: rgb(144 161 185);
+    color: var(--color-form-login);
     opacity: 1;
 }
 
@@ -285,7 +304,7 @@
     left: calc(.25rem * 4);
     top: 50%;
     transform: translateY(-50%);
-    color: rgb(144 161 185);
+    color: var(--color-form-login);
     width: calc(.25rem * 5);
     height: calc(.25rem * 5);
 }
@@ -296,7 +315,7 @@
     top: 50%;
     transform: translateY(-50%);
     background-color: transparent;
-    color: rgb(144 161 185);
+    color: var(--color-form-login);
     width: calc(.25rem * 5);
     height: calc(.25rem * 5);
     border: 0;
@@ -317,7 +336,7 @@
 .informacion-title-acceso div:last-child span {
     color: rgb(98 116 142);
     padding-inline: calc(.25rem * 4);
-    background-color: rgb(255 255 255);
+    background-color: var(--bg-body);
     font-size: .875rem;
     z-index: 1;
 }
@@ -325,13 +344,13 @@
 .informacion-acceso {
     text-align: center;
     padding: calc(.25rem * 4);
-    background-color: rgb(252 249 250);
+    background-color: rgb(255 218 218 / 5%);
     border-radius: calc(.625rem + 4px);
-    border: 1px solid rgb(226 232 240);
+    border: 1px solid rgb(98 116 142 / 15%);
 }
 
 .informacion-acceso svg {
-    color: rgb(144 161 185);
+    color: var(--border-color-form-login);
     margin-bottom: calc(.25rem * 2);
 }
 
