@@ -8,7 +8,7 @@
 }
 
 [data-mdb-theme=dark] {
-    --bg-trail: #0f1117;
+    --bg-trail: #11131c;
     --bg-handler: #2e3034;
     --color-before: #ffffff;
     --root-border-check-color: rgb(255, 255, 255, .35);

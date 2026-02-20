@@ -11,6 +11,7 @@ const configuracion = {
         },
         form: {
             label: "Usuario tecnico",
+            svg: `<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle>`,
             placeholder_input: "Ingrese su usuario",
             require: {
                 usuario: "Tiene que ingresar su usuario",
@@ -28,6 +29,7 @@ const configuracion = {
         },
         form: {
             label: "Usuario cliente",
+            svg: `<path d="M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z"></path><path d="M14 2v5a1 1 0 0 0 1 1h5"></path><path d="M10 9H8"></path><path d="M16 13H8"></path><path d="M16 17H8"></path>`,
             placeholder_input: "Ingrese su numero de ruc",
             require: {
                 usuario: "Tiene que ingresar su numero de ruc",
@@ -59,19 +61,23 @@ function cambiarModo(modo) {
     url_base_login = configuracion[modo].url_login;
     form_require = configuracion[modo].form.require;
     botones_modo.removeClass('active');
+    $('.indicador').css('margin-left', `${(modo == 'cliente' ? 53 : 1.25)}%`);
+
     $(`.botones-modo[data-tipo-modo="${modo}"]`).addClass('active');
 
     const config = configuracion[modo];
     $('[data-imagen').removeClass('active');
     $(`[data-imagen="${modo}"]`).addClass('active');
 
-    $('.informacion-modo svg, .form-icon-usuario').html(config.svg);
+    $('.informacion-modo svg, .form-icon-usuario').html(config.form.svg);
     $('.form-label-usuario span[data-text]').text(config.form.label);
     $('#usuario').attr('placeholder', config.form.placeholder_input);
 
     $('[data-modo="titulo"]').text(config.modo.titulo);
     $('[data-modo="descripcion"]').text(config.modo.descripcion);
-    $('[data-acceso]').text(config.acceso);
+
+    let contactar = `<br><br><a class="text-success mt-2" href="https://wa.me/51995910188?text=Hola,%20quiero%20solicitar%20acceso%20al%20portal%20de%20cliente" target="_blank"><i class="fab fa-whatsapp me-2"></i>Contactar</a>`;
+    $('[data-acceso]').html(config.acceso + (modo == 'cliente' ? contactar : ''));
 }
 
 cambiarModo('soporte');

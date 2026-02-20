@@ -19,7 +19,6 @@
 
     <script src="{{secure_asset('front/js/app/ToggleTema.js')}}"></script>
     <script>
-        $('html').attr('data-mdb-theme', localStorage.data_mdb_theme == 'dark' ? 'dark' : 'light');
         const intervalToken = setInterval(() => {
             if (!document.cookie.includes('XSRF-TOKEN')) {
                 clearInterval(intervalToken);
@@ -74,15 +73,45 @@
                 <img src="{{ secure_asset('../public/front/images/app/LogoRC_WNormal.webp') }}" alt="">
             </div>
             <div style="opacity: 1; transform: none;padding-bottom: 2rem;">
-                <div class="mb-3">
-                    <h2 class="fw-bold"
-                        style="font-size: 1.875rem;color: var(--color-slate-900);margin-bottom: .25rem;">Iniciar Sesión
-                    </h2>
-                    <p class="mb-0" style="color: var(--color-slate-800);">Accede al portal de incidencias
-                    </p>
+                <div class="header-login d-flex justify-content-between mb-3">
+                    <div>
+                        <h2 class="header-login-title fw-bold">Iniciar Sesión</h2>
+                        <p class="header-login-subtitle mb-0">Accede al portal de incidencias</p>
+                    </div>
+                    <button class="rounded-6" id="toggleTema" data-theme="light">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"
+                            class="lucide lucide-moon w-5 h-5" aria-hidden="true">
+                            <path
+                                d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401">
+                            </path>
+                        </svg>
+                    </button>
+                    <script>
+                        const toggle_tema = (tema) => {
+                            let toggleTema = $('#toggleTema');
+                            let tema_cambio = tema == 'light' ? 'dark' : 'light';
+                            let icon = {
+                                light: '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2"></path><path d="M12 20v2"></path><path d="m4.93 4.93 1.41 1.41"></path><path d="m17.66 17.66 1.41 1.41"></path><path d="M2 12h2"></path><path d="M20 12h2"></path><path d="m6.34 17.66-1.41 1.41"></path><path d="m19.07 4.93-1.41 1.41"></path>',
+                                dark: '<path d="M20.985 12.486a9 9 0 1 1-9.473-9.472c.405-.022.617.46.402.803a6 6 0 0 0 8.268 8.268c.344-.215.825-.004.803.401"></path>'
+                            }
+
+                            toggleTema.attr('data-theme', tema_cambio).find('svg').html(icon[tema_cambio]);
+                            localStorage.data_mdb_theme = tema;
+                            $('html').attr('data-mdb-theme', tema);
+                        };
+
+                        $('#toggleTema').click(function () {
+                            let tema = $(this).attr('data-theme');
+                            toggle_tema(tema);
+                        });
+
+                        toggle_tema(localStorage.data_mdb_theme);
+                    </script>
                 </div>
                 <div class="mb-4">
                     <div class="contenedor-modo">
+                        <div class="indicador"></div>
                         <button class="botones-modo" data-tipo-modo="soporte">
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                 fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
@@ -127,7 +156,8 @@
                     <div>
                         <label class="form-label-usuario d-flex justify-content-between">
                             <span data-text></span>
-                            <span class="text-warning pt-1" data-error-message="usuario" style="font-size: 0.7rem;display: none;">
+                            <span class="text-warning pt-1" data-error-message="usuario"
+                                style="font-size: 0.7rem;display: none;">
                                 <i class="fas fa-circle-info" style="font-size: 0.75rem"></i>
                                 <span></span>
                             </span>
@@ -143,7 +173,8 @@
                     </div>
                     <div>
                         <label class="form-label-password d-flex justify-content-between">Contraseña
-                            <span class="text-warning pt-1" data-error-message="password" style="font-size: 0.7rem;display: none;">
+                            <span class="text-warning pt-1" data-error-message="password"
+                                style="font-size: 0.7rem;display: none;">
                                 <i class="fas fa-circle-info" style="font-size: 0.75rem"></i>
                                 <span></span>
                             </span>
@@ -176,7 +207,7 @@
                 </form>
                 <div class="informacion-title-acceso">
                     <div class="position-absolute d-flex align-items-center" style="inset: calc(.25rem * 0);">
-                        <div class="w-100" style="border: 1px solid rgb(98 116 142 / 20%);"></div>
+                        <div class="w-100"></div>
                     </div>
                     <div class="d-flex align-items-center justify-content-center"><span>Información de acceso</span>
                     </div>
@@ -189,9 +220,7 @@
                             d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1.17 1.17 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z">
                         </path>
                     </svg>
-                    <p data-acceso>El acceso al portal de soporte está restringido al personal autorizado. Contacta al
-                        administrador
-                        del sistema para obtener credenciales.</p>
+                    <p data-acceso></p>
                 </div>
             </div>
         </div>

@@ -1,27 +1,71 @@
 :root,
 [data-mdb-theme=light] {
-    --color-slate-700: rgb(69 85 108);
+    --color-blue-50: rgb(239 246 255);
+    --color-blue-100: rgb(219 234 254);
+    --color-blue-300: rgb(142 197 255);
+    --color-blue-400: rgb(81 162 255);
+    --color-blue-500: rgb(43 127 255);
+    --color-blue-600: rgb(21 93 251);
+    --color-blue-700: rgb(20 71 230);
+    --color-blue-800: rgb(25 60 184);
+    --color-blue-900: rgb(28 57 142);
+    --color-slate-0: rgb(255 255 255);
+    --color-slate-50: rgb(248 250 252);
+    --color-slate-100: rgb(241 245 249);
+    --color-slate-200: rgb(226 232 240);
+    --color-slate-300: rgb(202 213 226);
+    --color-slate-400: rgb(144 161 185);
+    --color-slate-500: rgb(98 116 142);
+    --color-slate-600: rgb(69 85 108);
+    --color-slate-700: rgb(49 65 88);
     --color-slate-800: rgb(29 41 61);
     --color-slate-900: rgb(15 23 43);
-    --color-slate-inverted-900: rgb(255, 255, 255);
-    --bg-body: rgb(255, 255, 255);
-
-    --border-color-form-login: rgb(226 232 240);
-    --color-form-login: rgb(144 161 185);
-
+    --color-slate-inverted-900: rgb(255 255 255);
     --slots: to bottom right in oklab, oklch(.208 .042 265.755) 0%, oklch(.279 .041 260.031) 50%, oklch(.208 .042 265.755) 100%;
+
+    --bg-body: rgb(255 255 255);
+    --color-header-login-title: var(--color-slate-900);
+    --color-header-login-subtitle: var(--color-slate-400);
+    --bg-toggleTema: var(--color-slate-100);
+    --color-toggleTema-svg: var(--color-slate-700);
+    --bg-contenedor-modo: var(--color-slate-100);
+    --bg-botones-modo: var(--color-slate-0);
+    --bg-informacion-modo: var(--color-blue-50);
+    --border-informacion-modo: 1px solid var(--color-blue-100);
+    --color-data-modo-svg: var(--color-blue-600);
+    --color-data-modo-titulo: var(--color-slate-800);
+    --color-data-modo-descripcion: var(--color-slate-600);
+    --color-form-login-label: var(--color-slate-700);
+    --border-color-form-control: var(--color-slate-200);
+    --color-form-control: var(--color-slate-400);
+    --bg-informacion-acceso: var(--color-slate-50);
+    --border-informacion-acceso: var(--color-slate-200);
+    --color-informacion-acceso-svg: var(--color-slate-400);
+    --color-informacion-acceso-p: var(--color-slate-600);
 }
 
 [data-mdb-theme=dark] {
-    --color-slate-700: rgb(150, 150, 150);
-    --color-slate-800: rgb(195, 195, 195);
-    --color-slate-900: rgb(255 255 255);
-    --color-slate-inverted-900: rgb(15, 23, 43);
+    --color-slate-inverted-900: rgb(15 23 43);
 
-    --bg-body: rgb(15 17 23);
-
-    --border-color-form-login: rgb(32 39 51);
-    --color-form-login: rgb(77 92 117);
+    --bg-body: rgb(15 23 43);
+    --color-header-login-title: var(--color-slate-0);
+    --color-header-login-subtitle: var(--color-slate-600);
+    --bg-toggleTema: var(--color-slate-800);
+    --color-toggleTema-svg: var(--color-slate-0);
+    --bg-contenedor-modo: var(--color-slate-800);
+    --bg-botones-modo: var(--color-slate-700);
+    --bg-informacion-modo: rgb(0 43 81);
+    --border-informacion-modo: 1px solid rgb(25 60 184);
+    --color-data-modo-svg: var(--color-blue-400);
+    --color-data-modo-titulo: var(--color-slate-0);
+    --color-data-modo-descripcion: var(--color-slate-400);
+    --color-form-login-label: var(--color-slate-300);
+    --border-color-form-control: var(--color-slate-700);
+    --color-form-control: var(--color-slate-500);
+    --bg-informacion-acceso: var(--color-slate-800);
+    --border-informacion-acceso: var(--color-slate-700);
+    --color-informacion-acceso-svg: var(--color-slate-500);
+    --color-informacion-acceso-p: var(--color-slate-400);
 }
 
 /* --- Keyframes --- */
@@ -143,6 +187,20 @@
     height: 2.75rem;
 }
 
+.header-login {
+    margin-bottom: 2rem;
+}
+
+.header-login-title {
+    font-size: 1.875rem;
+    color: var(--color-header-login-title);
+    margin-bottom: .25rem;
+}
+
+.header-login-subtitle {
+    color: var(--color-header-login-subtitle);
+}
+
 @media screen and (max-width: 1370px) {
 
     .contenedor-imagen,
@@ -190,50 +248,68 @@
     justify-content: center;
     align-items: center;
     gap: 1rem;
-    background-color: rgb(176 216 255 / 20%);
+    background-color: var(--bg-contenedor-modo);
     border-radius: calc(.625rem + 4px);
-    padding: .385rem;
+    padding: 0;
+    position: relative;
+    overflow: hidden;
 }
 
 .botones-modo {
+    position: relative;
+    z-index: 2;
+    flex: 1;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 1rem;
-    padding: .925rem .75rem;
+    gap: .6rem;
+    padding: 1.4rem 1rem;
+    letter-spacing: 1px;
     border: 0;
     border-radius: inherit;
-    color: var(--color-slate-900);
-    opacity: 0.5;
-    background-color: transparent;
+    background: transparent;
     font-size: .75rem;
-    flex: 1 0 0%;
-    transition: all .35s ease-in-out;
+    opacity: .6;
+    transition: opacity .3s ease;
+}
+
+.botones-modo span {
+    line-height: 1.5;
 }
 
 .botones-modo.active {
     opacity: 1;
-    background-color: var(--color-slate-inverted-900);
+}
+
+.indicador {
+    position: absolute;
+    top: .385rem;
+    left: 0;
+    height: calc(100% - .77rem);
+    width: 45.5%;
+    background-color: var(--bg-botones-modo);
+    border-radius: inherit;
     box-shadow: 2px 2px 11px -6px rgb(0 0 0 / 80%);
-    transition: all .35s ease-in-out;
+    transition: margin-left .35s cubic-bezier(.4, 0, .2, 1);
+    z-index: 1;
 }
 
 .informacion-modo {
     display: flex;
     gap: 1rem;
-    background-color: rgb(55 132 229 / 15%);
+    background-color: var(--bg-informacion-modo);
     opacity: 1;
     transform: none;
     border-radius: .65rem;
     padding: .75rem 1.25rem;
-    border: 1px solid rgb(134 187 255 / 20%);
+    border: var(--border-informacion-modo);
     margin-top: calc(.25rem * 3);
     margin-bottom: calc(.25rem * 8);
     animation-duration: .65s;
 }
 
 .informacion-modo svg {
-    color: rgb(59 113 202);
+    color: var(--color-data-modo-svg);
     width: calc(.25rem * 5);
     height: calc(.25rem * 5);
 }
@@ -242,14 +318,14 @@
     margin: 0;
 }
 
-.informacion-modo div p:first-child {
+.informacion-modo div p[data-modo="titulo"] {
     font-weight: bold;
-    color: var(--color-slate-900);
+    color: var(--color-data-modo-titulo);
     font-size: .9rem;
 }
 
-.informacion-modo div p:last-child {
-    color: var(--color-slate-700);
+.informacion-modo div p[data-modo="descripcion"] {
+    color: var(--color-data-modo-descripcion);
     font-size: .75rem;
 }
 
@@ -275,7 +351,7 @@
 }
 
 .form-login div label {
-    color: var(--color-slate-800);
+    color: var(--color-form-login-label);
     font-weight: bold;
     font-size: .875rem;
     margin-bottom: calc(.25rem * 2);
@@ -285,13 +361,12 @@
     padding-left: calc(.25rem * 12);
     border-radius: calc(.625rem + 4px);
     border-width: 2px;
-    border-color: var(--border-color-form-login);
+    border-color: var(--border-color-form-control);
     background-color: var(--bg-body);
-    color: var(--color-slate-800);
 }
 
 .form-login div div .form-control::placeholder {
-    color: var(--color-form-login);
+    color: var(--color-form-control);
     opacity: 1;
 }
 
@@ -304,7 +379,7 @@
     left: calc(.25rem * 4);
     top: 50%;
     transform: translateY(-50%);
-    color: var(--color-form-login);
+    color: var(--color-form-control);
     width: calc(.25rem * 5);
     height: calc(.25rem * 5);
 }
@@ -315,7 +390,7 @@
     top: 50%;
     transform: translateY(-50%);
     background-color: transparent;
-    color: var(--color-form-login);
+    color: var(--color-form-control);
     width: calc(.25rem * 5);
     height: calc(.25rem * 5);
     border: 0;
@@ -333,8 +408,12 @@
     position: relative;
 }
 
+.informacion-title-acceso div:first-child div {
+    border: 1px solid var(--border-color-form-control);
+}
+
 .informacion-title-acceso div:last-child span {
-    color: rgb(98 116 142);
+    color: var(--color-slate-500);
     padding-inline: calc(.25rem * 4);
     background-color: var(--bg-body);
     font-size: .875rem;
@@ -344,19 +423,36 @@
 .informacion-acceso {
     text-align: center;
     padding: calc(.25rem * 4);
-    background-color: rgb(255 218 218 / 5%);
+    background-color: var(--bg-informacion-acceso);
     border-radius: calc(.625rem + 4px);
-    border: 1px solid rgb(98 116 142 / 15%);
+    border: 1px solid var(--border-informacion-acceso);
 }
 
 .informacion-acceso svg {
-    color: var(--border-color-form-login);
+    color: var(--color-informacion-acceso-svg);
     margin-bottom: calc(.25rem * 2);
 }
 
 .informacion-acceso p {
     margin: 0;
-    color: rgb(69 85 108);
+    color: var(--color-informacion-acceso-p);
     font-size: .75rem;
     line-height: calc(1 / .75);
+}
+
+#toggleTema {
+    background-color: var(--bg-toggleTema);
+    height: min-content;
+    padding: .4668rem .65rem;
+    border: 0;
+    transition: all .35s ease-in-out;
+}
+
+#toggleTema svg {
+    color: var(--color-toggleTema-svg);
+    width: 20px;
+}
+
+#toggleTema:hover {
+    background-color: rgb(176 216 255 / 40%);
 }

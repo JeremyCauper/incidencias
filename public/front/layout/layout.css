@@ -17,12 +17,12 @@
     --root-logo-rci-bg: url(../../front/images/app/LogoRC_TBlanco.webp) no-repeat center center;
     --root-layout-bg: #16181f;
     --root-layout-color: #99a1af;
-    --root-container-bg: #0f1117;
+    --root-container-bg: #11131c;
     --root-border-color: rgb(255 255 255 / 12%);
 
     --root-is-active-bg: rgb(63 103 169);
 
-    --navbar-sigla-container-bg: #0f1117;
+    --navbar-sigla-container-bg: #11131c;
     --navbar-dropdown-item-hover-bg: #20232e;
 }
 
