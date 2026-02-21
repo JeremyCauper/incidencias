@@ -6,18 +6,15 @@
     <!-- Requiredd meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}" />
+    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ config('app.version') }}" />
     <title>RC Incidencias | Inicio</title>
     <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}">
-    <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/auth.css')}}"> -->
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/login/login.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}?v={{ config('app.version') }}">
+    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}?v={{ config('app.version') }}">
+    <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}?v={{ config('app.version') }}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/login/login.css')}}?v={{ config('app.version') }}">
 
-    <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}"></script>
-
-    <script src="{{secure_asset('front/js/app/ToggleTema.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}?v={{ config('app.version') }}"></script>
     <script>
         const intervalToken = setInterval(() => {
             if (!document.cookie.includes('XSRF-TOKEN')) {
@@ -30,15 +27,15 @@
 
 <body class="d-flex" style="min-height: 100vh;">
     <div
-        class="contenedor-imagen position-relative overflow-hidden bg-gradient-to-br from-slate-900 to-slate-900 via-slate-800">
+        class="contenedor-imagen position-relative overflow-hidden">
         <div class="position-absolute" style="inset: calc(.25rem * 0);">
             <div class="img-wrapper position-absolute">
                 <img data-imagen="cliente" class="bg-img active"
-                    src="{{ secure_asset('../public/front/images/app/fondo_login_cliente.png') }}"
+                    src="{{ secure_asset('../public/front/images/app/fondo_login_cliente.webp') }}"
                     alt="Modern workspace">
 
                 <img data-imagen="soporte" class="bg-img"
-                    src="{{ secure_asset('../public/front/images/app/fondo_login_soporte.png') }}"
+                    src="{{ secure_asset('../public/front/images/app/fondo_login_soporte.webp') }}"
                     alt="Modern workspace">
             </div>
         </div>
@@ -69,9 +66,7 @@
 
     <div class="contenedor-login d-flex justify-content-center overflow-hidden px-4 py-3" style="height: 100vh;">
         <div class="fade-in-up" style="max-width: 28rem;animation-duration: .45s;">
-            <div class="logo-login">
-                <img src="{{ secure_asset('../public/front/images/app/LogoRC_WNormal.webp') }}" alt="">
-            </div>
+            <div class="logo-login"></div>
             <div style="opacity: 1; transform: none;padding-bottom: 2rem;">
                 <div class="header-login d-flex justify-content-between mb-3">
                     <div>
@@ -226,15 +221,15 @@
         </div>
     </div>
 
-    <script src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}"></script>
-    <script src="{{secure_asset('front/js/app/AlertMananger.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}?v={{ config('app.version') }}"></script>
+    <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}?v={{ config('app.version') }}"></script>
+    <script src="{{secure_asset('front/js/app/AlertMananger.js')}}?v={{ config('app.version') }}"></script>
     <script>
         const __url = "{{secure_url('')}}";
         const __token = "{{ csrf_token() }}";
     </script>
 
-    <script src="{{secure_asset('front/js/app/login/login.js')}}"></script>
+    <script src="{{secure_asset('front/js/app/login/login.js')}}?v={{ config('app.version') }}"></script>
 </body>
 
 </html>

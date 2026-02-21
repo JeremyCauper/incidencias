@@ -23,6 +23,7 @@
     --color-slate-inverted-900: rgb(255 255 255);
     --slots: to bottom right in oklab, oklch(.208 .042 265.755) 0%, oklch(.279 .041 260.031) 50%, oklch(.208 .042 265.755) 100%;
 
+    --logo-mini-login: url(../../../images/app/LogoRC_WNormal.webp);
     --bg-body: rgb(255 255 255);
     --color-header-login-title: var(--color-slate-900);
     --color-header-login-subtitle: var(--color-slate-400);
@@ -47,6 +48,7 @@
 [data-mdb-theme=dark] {
     --color-slate-inverted-900: rgb(15 23 43);
 
+    --logo-mini-login: url(../../../images/app/LogoRC_WBlanco.webp);
     --bg-body: rgb(15 23 43);
     --color-header-login-title: var(--color-slate-0);
     --color-header-login-subtitle: var(--color-slate-600);
@@ -126,29 +128,9 @@
     animation-name: fadeInLeft;
 }
 
-.to-slate-900 {
-    --tw-gradient-to: var(--color-slate-900);
-    --tw-gradient-stops: var(--slots);
-}
-
-.via-slate-800 {
-    --tw-gradient-via: var(--color-slate-800);
-    --tw-gradient-via-stops: var(--slots);
-    --tw-gradient-stops: var(--slots);
-}
-
-.from-slate-900 {
-    --tw-gradient-from: var(--color-slate-900);
-    --tw-gradient-stops: var(--slots);
-}
-
-.bg-gradient-to-br {
-    --tw-gradient-position: to bottom right in oklab;
-    background-image: linear-gradient(var(--slots));
-}
-
 .contenedor-imagen {
     width: 60%;
+    background: linear-gradient(137deg,rgba(15, 23, 43, 1) 0%, rgba(18, 43, 61, 1) 52%, rgba(15, 23, 43, 1) 98%);
 }
 
 .img-wrapper {
@@ -168,7 +150,7 @@
 }
 
 .bg-img.active {
-    opacity: 0.2;
+    opacity: 0.12;
 }
 
 
@@ -181,9 +163,9 @@
 .contenedor-login .logo-login {
     display: none;
     margin-bottom: 2rem;
-}
-
-.contenedor-login .logo-login img {
+    background-image: var(--logo-mini-login);
+    background-size: contain;
+    background-repeat: no-repeat;
     height: 2.75rem;
 }
 

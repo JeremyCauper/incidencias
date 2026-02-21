@@ -9,7 +9,7 @@
     <script src="{{secure_asset($ft_js->bootstrap_multiselect)}}"></script>
     <script src="{{secure_asset($ft_js->form_multiselect)}}"></script>
 
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ config('app.version') }}">
     <script>
         let empresa = @json(config('ajustes.empresa'));
         let sucursales = @json($data['scompany']);
@@ -77,7 +77,7 @@
     </div>
 
     <div id="contenedor_registros"></div>
-    <script src="{{secure_asset('front/js/cliente/incidencia/vista-registros-incidencias.js')}}"></script>
+    <script src="{{secure_asset('front/js/cliente/incidencia/vista-registros-incidencias.js')}}?v={{ config('app.version') }}"></script>
 
     <div class="modal fade" id="modal_detalle" aria-labelledby="modal_detalle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
@@ -237,5 +237,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/cliente/incidencia/incidencia.js')}}"></script>
+    <script src="{{secure_asset('front/js/cliente/incidencia/incidencia.js')}}?v={{ config('app.version') }}"></script>
 @endsection

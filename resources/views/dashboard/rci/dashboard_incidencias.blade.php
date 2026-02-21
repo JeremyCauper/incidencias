@@ -8,12 +8,12 @@
     <script src="{{secure_asset($ft_js->bootstrap_bundle)}}"></script>
     <script src="{{secure_asset($ft_js->bootstrap_multiselect)}}"></script>
     <script src="{{secure_asset($ft_js->form_multiselect)}}"></script>
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ config('app.version') }}">
 
     <!-- <script src=""></script> -->
     <script src="{{secure_asset($ft_js->echarts)}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}?v={{ config('app.version') }}"></script>
 
 
     <script>
@@ -260,5 +260,5 @@
 
 @section('scripts')
     <script src="{{secure_asset($ft_js->ChartMananger)}}"></script>
-    <script src="{{secure_asset('front/js/dashboard/rci/dashboard_incidencias.js')}}"></script>
+    <script src="{{secure_asset('front/js/dashboard/rci/dashboard_incidencias.js')}}?v={{ config('app.version') }}"></script>
 @endsection

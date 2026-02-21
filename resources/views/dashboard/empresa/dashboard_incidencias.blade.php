@@ -5,11 +5,11 @@
     <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker_moment)}}"></script>
     <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker)}}"></script>
     <link rel="stylesheet" type="text/css" href="{{secure_asset($ft_css->daterangepicker)}}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ config('app.version') }}">
 
     <!-- <script src=""></script> -->
     <script src="{{secure_asset($ft_js->echarts)}}"></script>
-    <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}?v={{ config('app.version') }}"></script>
 
     <script>
         let empresa = @json(config('ajustes.empresa'));
@@ -227,5 +227,5 @@
 
 @section('scripts')
     <script src="{{secure_asset($ft_js->ChartMananger)}}"></script>
-    <script src="{{secure_asset('front/js/dashboard/empresa/dashboard_incidencias.js')}}"></script>
+    <script src="{{secure_asset('front/js/dashboard/empresa/dashboard_incidencias.js')}}?v={{ config('app.version') }}"></script>
 @endsection
