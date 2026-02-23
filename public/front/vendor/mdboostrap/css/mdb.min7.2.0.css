@@ -6584,7 +6584,7 @@ fieldset:disabled .btn {
 
 .modal-backdrop {
     --mdb-backdrop-zindex: 1050;
-    --mdb-backdrop-bg: rgba(0, 0, 0, 0.3);
+    --mdb-backdrop-bg: rgba(0, 0, 0, 0.45);
     --mdb-backdrop-opacity: 1;
     position: fixed;
     top: 0;
@@ -6593,8 +6593,8 @@ fieldset:disabled .btn {
     width: 100vw;
     height: 100vh;
     background-color: var(--mdb-backdrop-bg);
-    backdrop-filter: blur(2px);
-    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(5px);
+    -webkit-backdrop-filter: blur(5px);
 }
 
 .modal-backdrop.fade {

@@ -431,7 +431,7 @@
     right: 0;
     bottom: 0;
     background-color: var(--cs2-backdrop);
-    backdrop-filter: blur(2px);
+    backdrop-filter: blur(5px);
     z-index: var(--cs2-z-backdrop);
     opacity: 0;
     transition: opacity 0.2s ease;
