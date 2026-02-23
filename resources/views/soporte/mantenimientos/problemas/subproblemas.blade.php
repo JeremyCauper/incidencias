@@ -10,7 +10,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Listado de Sub Problemas</strong>
                 </h6>
                 <div>
@@ -19,7 +19,7 @@
                         <i class="fas fa-plus"></i>
                         Nuevo Sub Problema
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -27,7 +27,7 @@
                     <div class="col-12">
                         <table id="tb_subproblemas" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Cod. Problema</th>
                                     <th>Prioridad</th>
                                     <th>Descripcion</th>
@@ -54,7 +54,8 @@
                                 },
                                 columns: [
                                     { data: 'codigo_problema' },
-                                    { data: 'prioridad', render: function (data, type, row) {
+                                    {
+                                        data: 'prioridad', render: function (data, type, row) {
                                             return getBadgePrioridad(data, .75);
                                         }
                                     },
@@ -92,10 +93,9 @@
                         <input type="hidden" name="id" id="id">
                         <div class="col-lg-8 mb-2">
                             <select class="select-clear" id="problema">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 @foreach ($data['problemas'] as $v)
-                                    <option value="{{ $v->codigo }}"
-                                        {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                    <option value="{{ $v->codigo }}" {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
                                         {{$v->codigo}} - {{ $v->descripcion }}
                                         {{ $v->eliminado == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
                                     </option>
@@ -104,7 +104,7 @@
                         </div>
                         <div class="col-md-4 mb-2">
                             <select class="select" id="prioridad">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 <option value="P1">{{ '<label class="badge badge-dark me-2">P1</label>' }}CRITICA</option>
                                 <option value="P2">{{ '<label class="badge badge-danger me-2">P2</label>' }}ALTA</option>
                                 <option value="P3">{{ '<label class="badge badge-warning me-2">P3</label>' }}MEDIA</option>
@@ -133,5 +133,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/problemas/subproblemas.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/problemas/subproblemas.js')}}?v={{ config('app.version') }}"></script>
 @endsection

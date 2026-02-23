@@ -27,6 +27,20 @@ $(document).ready(function () {
         });
     }
 
+    function setActividades(obj_actividades) {
+        chartActividades.updateOption({ data: obj_actividades });
+        incidencia_actividades.forEach((e, i) => {
+            let div_btn = document.querySelector(`[data-name="${e.name}"]`);
+
+            let selected = chartActividades.chart.getOption().legend[0].selected;
+            if (selected[e.name.toUpperCase()]) {
+                div_btn.classList.add('text-bg-' + e.color);
+            } else {
+                div_btn.classList.remove('text-bg-' + e.color);
+            }
+        });
+    }
+
     function setNiveles(obj_niveles) {
         let list_niveles = $('#list-niveles');
         let total = obj_niveles.reduce((acc, item) => acc + item.value, 0);

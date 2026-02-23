@@ -2,14 +2,14 @@
 @section('title', 'Panel de Control')
 
 @section('cabecera')
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}?v={{ time() }}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}?v={{ config('app.version') }}">
 @endsection
 @section('content')
 
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Listado de Usuarios</strong>
                 </h6>
                 <div class="mb-3">
@@ -18,7 +18,7 @@
                         <i class="fas fa-user-plus me-2"></i>
                         Nuevo Usuario
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -26,7 +26,7 @@
                     <div class="col-12">
                         <table id="tb_usuario" class="table text-nowrap" style="width: 100%;">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Nro. Documento</th>
                                     <th>Nombre Personal</th>
                                     <th>Tipo Usuario</th>
@@ -89,10 +89,10 @@
                             (*)</span>
                     </div>
                     <div class="row">
-                            <input type="hidden" name="id" id="id">
+                        <input type="hidden" name="id" id="id">
                         <div class="col-xl-3 col-6 mb-3">
                             <select id="id_area" class="select">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 @foreach ($areas as $r)
                                     <option value="{{$r['id']}}">{{$r['descripcion']}}</option>
                                 @endforeach
@@ -149,8 +149,7 @@
                                     </div>
                                     <input type="file" class="d-none" id="foto_perfil">
                                     <input type="text" class="d-none" name="foto_perfil" id="txtFotoPerfil">
-                                    <img id="PreviFPerfil"
-                                        src="{{secure_asset('front/images/auth/user_auth.jpg')}}?v={{ time() }}"
+                                    <img id="PreviFPerfil" src="{{secure_asset('front/images/auth/user_auth.jpg')}}"
                                         imageDefault="{{secure_asset('front/images/auth/user_auth.jpg')}}">
                                 </div>
                             </div>
@@ -169,8 +168,7 @@
                                     </div>
                                     <input type="file" class="d-none" id="firma_digital">
                                     <input type="text" class="d-none" name="firma_digital" id="textFirmaDigital">
-                                    <img id="PreviFirma"
-                                        src="{{secure_asset('front/images/firms/firm.png')}}?v={{ time() }}"
+                                    <img id="PreviFirma" src="{{secure_asset('front/images/firms/firm.png')}}"
                                         imageDefault="{{secure_asset('front/images/firms/firm.png')}}">
                                 </div>
                             </div>
@@ -178,15 +176,15 @@
                     </div>
                     <div class="row mb-3">
                         <div class="col-4">
-                            <select class="select-clear-nsearch" id="modo_transporte">
-                                <option value="">-- Seleccione --</option>
+                            <select class="select-clear-simple" id="modo_transporte">
+                                <option value="">Seleccione...</option>
                                 <option value="1">Sin vehículo</option>
                                 <option value="2">Motorizado</option>
                             </select>
                         </div>
                         <div class="col-4">
                             <select class="select" id="tipo_acceso">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 @foreach ($tipoAcceso as $r)
                                     <option {{$r['id'] == 3 ? 'selected' : ''}} value="{{$r['id']}}">{{$r['descripcion']}}
                                     </option>
@@ -255,9 +253,9 @@
 @section('scripts')
     <script>
         let tipoAcceso = <?=$tipoAcceso?>;
-        const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}?v={{ time() }}";
-        const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}?v={{ time() }}";
+        const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}";
+        const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}";
     </script>
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ config('app.version') }}"></script>
+    <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}?v={{ config('app.version') }}"></script>
 @endsection

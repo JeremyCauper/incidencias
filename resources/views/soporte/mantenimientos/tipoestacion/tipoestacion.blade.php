@@ -13,15 +13,16 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Listado de Tipo Estaciones</strong>
                 </h6>
                 <div>
-                    <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init data-mdb-target="#modal_tipo_estacion">
+                    <button class="btn btn-primary" data-mdb-ripple-init data-mdb-modal-init
+                        data-mdb-target="#modal_tipo_estacion">
                         <i class="fas fa-plus"></i>
                         Nuevo Tipo Estacion
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -29,7 +30,7 @@
                     <div class="col-12">
                         <table id="tb_tipo_estacion" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Descripcion</th>
                                     <th>Registrado</th>
                                     <th>Actualizado</th>
@@ -75,7 +76,8 @@
     </div>
 
     <!-- Modal -->
-    <div class="modal fade" id="modal_tipo_estacion" tabindex="-1" aria-labelledby="modal_tipo_estacionLabel" aria-hidden="true">
+    <div class="modal fade" id="modal_tipo_estacion" tabindex="-1" aria-labelledby="modal_tipo_estacionLabel"
+        aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-tipo-estacion">
                 <div class="modal-header  bg-primary text-white">
@@ -110,5 +112,5 @@
 @section('scripts')
     <script>
     </script>
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/tipoestacion/tipoestacion.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/tipoestacion/tipoestacion.js')}}?v={{ config('app.version') }}"></script>
 @endsection

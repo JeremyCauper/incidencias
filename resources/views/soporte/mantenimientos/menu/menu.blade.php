@@ -20,7 +20,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Listado de Menu</strong>
                 </h6>
                 <div>
@@ -33,7 +33,7 @@
                         <i class="fas fa-arrow-right-arrow-left" style="transform: rotate(90deg);"></i>
                         Ordenar Menu
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -41,7 +41,7 @@
                     <div class="col-12">
                         <table id="tb_menu" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>#</th>
                                     <th>Descripcion</th>
                                     <th>Icono</th>
@@ -120,7 +120,8 @@
                         <div class="col-lg-6 mb-2">
                             <label class="form-label mb-0" for="icono">Icono</label>
                             <div class="input-group">
-                                <span class="input-group-text rounded me-1 px-2"><i class="fas fa-question" aria-label="icono"></i></span>
+                                <span class="input-group-text rounded me-1 px-2"><i class="fas fa-question"
+                                        aria-label="icono"></i></span>
                                 <input type="text" class="form-control rounded" id="icono" name="icono" requested="Icono">
                             </div>
                         </div>
@@ -281,5 +282,5 @@
             return datos;
         }
     </script>
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/menu.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/menu.js')}}"></script>
 @endsection

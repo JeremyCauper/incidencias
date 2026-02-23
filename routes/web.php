@@ -2,7 +2,6 @@
 
 use App\Helpers\TipoIncidencia;
 use App\Http\Controllers\Auth\LoginController;
-use App\Http\Controllers\Auth\LoginEmpresaController;
 use App\Http\Controllers\Empresas\Incidencias\EIncidenciasController;
 use App\Http\Controllers\Dashboard\Empresa\EDashboardIncidenciasController;
 use App\Http\Controllers\Dashboard\Rci\DashboardIncidenciasController;
@@ -18,7 +17,6 @@ use App\Http\Controllers\Soporte\Empresas\GruposController;
 use App\Http\Controllers\Soporte\Empresas\SucursalesController;
 use App\Http\Controllers\Soporte\Incidencias\RegistradasController;
 use App\Http\Controllers\Soporte\Incidencias\ResueltasController;
-use App\Http\Controllers\Soporte\Inicio\PanelController;
 use App\Http\Controllers\Soporte\Inventario\InventarioTecnicoController;
 use App\Http\Controllers\Soporte\Inventario\MaterialesController;
 use App\Http\Controllers\Soporte\Mantenimientos\Menu\MenuController;
@@ -51,13 +49,15 @@ use Illuminate\Support\Facades\Route;
 // Route::get('/api/ConsultaDni/{dni}', [ConsultasController::class, 'ConsultaDni']);
 Route::get('/api/ConsultaDoc/Consulta', [ConsultasController::class, 'ConsultaDoc']);
 
-Route::redirect('/', url('/soporte'));
-Route::get('/soporte', [LoginController::class, 'view'])->name('login')->middleware('guest:web');
-Route::post('/soporte/iniciar', [LoginController::class, 'login']);
-Route::get('/soporte/logout', [LoginController::class, 'logout'])->name('logout');;
-Route::get('/validarTurno/{id}', [LoginController::class, 'validarTurno']);
+Route::redirect('/', url('/login'));
+Route::get('/login', [LoginController::class, 'view'])->name('login')->middleware('guest:web');
+Route::post('/soporte/iniciar', [LoginController::class, 'loginSoporte']);
+Route::get('/soporte/logout', [LoginController::class, 'logoutSoporte'])->name('logout.soporte');
 
-Route::get('/soporte/panel', [PanelController::class, 'view'])->middleware('auth');
+Route::post('/empresa/iniciar', [LoginController::class, 'loginCliente']);
+Route::get('/empresa/logout', [LoginController::class, 'logoutCliente'])->name('logout.cliente');
+
+Route::get('/validarTurno/{id}', [LoginController::class, 'validarTurno']);
 
 Route::get('/soporte/incidencias/registradas', [RegistradasController::class, 'view'])->middleware('auth');
 Route::get('/soporte/incidencias/registradas/index', [RegistradasController::class, 'index']);
@@ -210,10 +210,6 @@ Route::get('/soporte/inventario/tecnicos/index', [InventarioTecnicoController::c
 Route::post('/soporte/inventario/tecnicos/asignar', [InventarioTecnicoController::class, 'asignarMaterial']);
 
 
-Route::get('/empresa', [LoginEmpresaController::class, 'view'])->name('login.empresa')->middleware('guest:client');
-Route::post('/empresa/iniciar', [LoginEmpresaController::class, 'loginClient']);
-Route::get('/empresa/logout', [LoginEmpresaController::class, 'logout'])->name('logout.empresa');
-
 Route::get('/empresa/incidencias', [EIncidenciasController::class, 'view'])->middleware('auth:client');
 Route::get('/empresa/incidencias/index', [EIncidenciasController::class, 'index']);
 
@@ -222,23 +218,3 @@ Route::get('/empresa/dashboard/dashboard-incidencias/index', [EDashboardIncidenc
 
 // Apis
 Route::get('/listado/materiales-usados', [MaterialesController::class, 'MaterialesUsados']);
-
-
-
-
-
-Route::get('/revelacion', function () {
-    return redirect('/revelacion/sobre');
-});
-
-Route::get('/revelacion/sobre', function () {
-    return view('revelacion.sobre');
-});
-
-Route::get('/revelacion/carta-invitacion', function () {
-    return view('revelacion.carta');
-});
-
-Route::get('/revelacion/listado-invitados', function () {
-    return view('revelacion.listaInvitados');
-});

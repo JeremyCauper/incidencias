@@ -131,7 +131,7 @@ class RegistradasController extends Controller
                     "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
                     "5" => ['c' => 'danger', 't' => 'Cierre Sistema'],
                 ];
-                $badge_informe = '<label class="badge badge-' . $estadoInforme[$val->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
+                $badge_informe = '<label class="badge rounded-pill" style="font-size: .75rem; color: rgb(var(--mdb-' . $estadoInforme[$val->estado_informe]['c'] . '-rgb)); border: 2px solid;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
 
                 switch ($val->estado_informe) {
                     case 0:
@@ -416,7 +416,7 @@ class RegistradasController extends Controller
                     DB::table('contactos_empresas')->where('id_contact', $idContact)->update($registro_contacto);
                 }
 
-                $idTelefono = $request->tel_contac;
+                $idTelefono = $request?->tel_contac;
                 if (!empty($idTelefono) && str_starts_with($idTelefono, "nuevo:")) {
                     $newTelefono = substr($idTelefono, strlen("nuevo:"));
                     $idTelefono = DB::table('contactos_telefono_empresas')->insertGetId([
@@ -435,8 +435,8 @@ class RegistradasController extends Controller
                 'id_tipo_soporte' => $request->tSoporte,
                 'id_problema' => $request->problema,
                 'id_subproblema' => $request->sproblema,
-                'id_contacto' => $idContact ?: null,
-                'id_telefono' => $idTelefono ?: null,
+                'id_contacto' => $idContact ?? null,
+                'id_telefono' => $idTelefono ?? null,
                 'observacion' => $request->observacion,
                 'fecha_informe' => $request->fecha_imforme,
                 'hora_informe' => $request->hora_informe,

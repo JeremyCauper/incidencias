@@ -4,7 +4,7 @@
 @section('cabecera')
     <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
     <script>
-        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
+        let tipo_soporte = @json($data['tSoporte']);
     </script>
 @endsection
 @section('content')
@@ -13,7 +13,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Listado de Problemas</strong>
                 </h6>
                 <div>
@@ -22,7 +22,7 @@
                         <i class="fas fa-plus"></i>
                         Nuevo Problema
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -30,7 +30,7 @@
                     <div class="col-12">
                         <table id="tb_problemas" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Codigo</th>
                                     <th>Descripcion</th>
                                     <th>Tipo</th>
@@ -101,7 +101,7 @@
                         </div>
                         <div class="col-6 mb-2">
                             <select class="select" id="tipo">
-                                <option value="">-- Seleccione --</option>
+                                <option value="">Seleccione...</option>
                                 @foreach ($data['tSoporte'] as $v)
                                     <option value="{{ $v->id }}"
                                         {{ ($v->selected == 1 && $v->estatus == 1) ? 'selected' : '' }}
@@ -131,5 +131,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/problemas/problemas.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/problemas/problemas.js')}}?v={{ config('app.version') }}"></script>
 @endsection

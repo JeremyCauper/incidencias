@@ -5,7 +5,7 @@
     <!-- Requiredd meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ time() }}" />
+    <link rel="shortcut icon" href="{{secure_asset('front/images/app/icons/icon.webp')}}" />
     <title>RC Incidencias | Login</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}">
@@ -17,7 +17,8 @@
     <nav class="navbar bg-dark-subtle fixed-top">
         <div class="container-fluid py-1 mx-2">
             <a class="navbar-brand" href="{{url('/soporte')}}">
-                <img src="{{secure_asset('front/images/app/LogoRC_WBlanco.webp')}}?v={{ time() }}" height="34" alt="RC Logo" loading="lazy" style="margin-top: -1px;">
+                <img src="{{secure_asset('front/images/app/LogoRC_WBlanco.webp')}}" height="34" alt="RC Logo"
+                    loading="lazy" style="margin-top: -1px;">
             </a>
             <span class="navbar-brand text-white me-0" style="font-size: smaller;">
                 INCIDENCIAS - RICARDO CALDERON INGENIEROS SAC
@@ -30,7 +31,8 @@
 
         <div class="row">
             <div class="col-md-12 text-center float-md-none mx-auto">
-                <img src="{{secure_asset('front/images/errors/403_mdb.webp')}}?v={{ time() }}" alt="error 403" class="img-fluid wow fadeIn">
+                <img src="{{secure_asset('front/images/errors/403_mdb.webp')}}" alt="error 403"
+                    class="img-fluid wow fadeIn">
             </div>
         </div>
 
@@ -45,7 +47,8 @@
                 </h2>
                 <p class="wow fadeIn" data-wow-delay="0.4s" style="font-size:1.25rem;">
                     <font style="vertical-align: inherit;">
-                        <font style="vertical-align: inherit;">Por favor, háganos saber cómo llegó hasta aquí y utilice el siguiente enlace para regresar al puerto seguro.</font>
+                        <font style="vertical-align: inherit;">Por favor, háganos saber cómo llegó hasta aquí y utilice
+                            el siguiente enlace para regresar al puerto seguro.</font>
                     </font>
                 </p>
                 <a class="btn btn-primary btn-sm" href="javascript:void(0);" onclick="history.back();">REGRESEMOS</a>

@@ -161,10 +161,10 @@
             margin: 0;
             padding: 0;
             border-bottom: 2px solid black;
-            border-left:  2px solid black;
+            border-left: 2px solid black;
             transform: rotate(-45deg);
         }
-        
+
         .icon-child {
             padding-left: 20px;
         }
@@ -188,7 +188,7 @@
         <tr>
             <td class="w-50">
                 <div>
-                    <img src="{{public_path() . '/front/images/app/LogoRC.png'}}" alt="Logo" width="60">
+                    <img src="{{public_path() . '/front/images/app/icons/icon.webp'}}" alt="Logo" width="60">
                     <img src="{{public_path() . '/front/images/app/LogoRC_TNegro.png'}}" alt="Logo" width="210">
                 </div>
                 <div class="card">
@@ -210,15 +210,23 @@
                 <table>
                     <tbody>
                         <tr>
-                            <td><h5>Tecnico(s) :</h5></td>
-                            <td style="text-align: right;"><h5>Fecha de Servicio: {{ $fecha_visita }}</h5></td>
+                            <td>
+                                <h5>Tecnico(s) :</h5>
+                            </td>
+                            <td style="text-align: right;">
+                                <h5>Fecha de Servicio: {{ $fecha_visita }}</h5>
+                            </td>
                         </tr>
                         <tr>
                             <td colspan="2">{{ implode(", ", $asignados) }}</td>
                         </tr>
                         <tr>
-                            <td><h5>Hora Inicio: {{ $horaIni }}</h5></td>
-                            <td><h5>Hora Fin: {{ $horaFin }}</h5></td>
+                            <td>
+                                <h5>Hora Inicio: {{ $horaIni }}</h5>
+                            </td>
+                            <td>
+                                <h5>Hora Fin: {{ $horaFin }}</h5>
+                            </td>
                         </tr>
                     </tbody>
                 </table>
@@ -260,13 +268,13 @@
         </tr>
         @foreach ($ordenv_filas as $fila)
             @if ($fila->posicion == 11)
-            <tr>
-                <td colspan="8">
-                    <div class="card bg-primary mt-1">
-                        <h5> REVISION DEL SERVIDOR</h5>
-                    </div>
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="8">
+                        <div class="card bg-primary mt-1">
+                            <h5> REVISION DEL SERVIDOR</h5>
+                        </div>
+                    </td>
+                </tr>
             @endif
             <tr>
                 <td colspan="3">
@@ -294,7 +302,9 @@
             </td>
         </tr>
         @foreach ($ordenv_islas as $isla)
-            <tr><td colspan="8" style="padding-top: 1.25rem;"></td></tr>
+            <tr>
+                <td colspan="8" style="padding-top: 1.25rem;"></td>
+            </tr>
             <tr>
                 <td colspan="2">
                     <span class="fw-bold">ISLA :</span> {{$isla->isla}}
@@ -305,21 +315,22 @@
                 <td colspan="4"></td>
             </tr>
             @foreach ($config_islas as $config)
-            <tr>
-                <td colspan="3">
-                    <span class="fw-bold {{ $config->child ? "icon-child" : "" }}" style="position: relative;">{{ $config->text }}</span>
-                </td>
-                <td colspan="1">
-                    <div class="div-checked">
-                        @if ($isla->{$config->checked})
-                            <div class="fa-check"></div>
-                        @endif
-                    </div>
-                </td>
-                <td colspan="4">
-                    {{ $isla->{$config->descripcion} }}
-                </td>
-            </tr>
+                <tr>
+                    <td colspan="3">
+                        <span class="fw-bold {{ $config->child ? "icon-child" : "" }}"
+                            style="position: relative;">{{ $config->text }}</span>
+                    </td>
+                    <td colspan="1">
+                        <div class="div-checked">
+                            @if ($isla->{$config->checked})
+                                <div class="fa-check"></div>
+                            @endif
+                        </div>
+                    </td>
+                    <td colspan="4">
+                        {{ $isla->{$config->descripcion} }}
+                    </td>
+                </tr>
             @endforeach
         @endforeach
     </table>

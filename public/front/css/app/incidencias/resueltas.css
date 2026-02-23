@@ -133,7 +133,7 @@
 #search_signature {
     display: block;
     width: calc(100% - 28px);
-    padding: .2rem .4rem;
+    padding: .65rem;
     font-size: .65rem;
     height: auto;
     font-weight: 400;

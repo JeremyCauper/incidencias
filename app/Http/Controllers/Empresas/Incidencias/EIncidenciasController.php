@@ -19,7 +19,7 @@ class EIncidenciasController extends Controller
         try {
             $data = [];
             // Obtener información externa de la API
-            $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->where('ruc', ((array) session('empresa'))['ruc'])->get()->keyBy('id');
+            $data['scompany'] = DB::table('tb_sucursales')->select(['id', 'ruc', 'nombre', 'direccion', 'status'])->where('ruc', ((array) config('ajustes.empresa'))['ruc'])->get()->keyBy('id');
 
             // Obtener información de base de datos local
             $data['tEstacion'] = collect((new TipoEstacion())->all())->select('id', 'descripcion', 'selected', 'estatus', 'eliminado')->keyBy('id');
@@ -54,7 +54,7 @@ class EIncidenciasController extends Controller
             $fechaFin = $request->query('fechaFin') ?: now()->format('Y-m-d');
 
             $whereInc = [
-                'ruc_empresa' => ((array) session('empresa'))['ruc'],
+                'ruc_empresa' => ((array) config('ajustes.empresa'))['ruc'],
                 'estatus' => 1
             ];
 
@@ -107,7 +107,7 @@ class EIncidenciasController extends Controller
                     "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
                     "5" => ['c' => 'danger', 't' => 'Cierre Sistema']
                 ];
-                $badge_informe = '<label class="badge badge-' . $estadoInforme[$incidencia->estado_informe]['c'] . '" style="font-size: .7rem;">' . $estadoInforme[$incidencia->estado_informe]['t'] . '</label>';
+                $badge_informe = '<label class="badge rounded-pill" style="font-size: .75rem; color: rgb(var(--mdb-' . $estadoInforme[$incidencia->estado_informe]['c'] . '-rgb)); border: 2px solid;">' . $estadoInforme[$incidencia->estado_informe]['t'] . '</label>';
 
                 return [
                     'cod_incidencia' => $incidencia->cod_incidencia,

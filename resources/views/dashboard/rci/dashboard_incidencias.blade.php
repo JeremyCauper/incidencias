@@ -2,28 +2,28 @@
 @section('title', 'ANALISIS DE INCIDENCIAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ time() }}">
-    <script src="{{secure_asset('front/vendor/multiselect/bootstrap.bundle.min.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/multiselect/bootstrap_multiselect.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/multiselect/form_multiselect.js')}}"></script>
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker_moment)}}"></script>
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker)}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset($ft_css->daterangepicker)}}">
+    <script src="{{secure_asset($ft_js->bootstrap_bundle)}}"></script>
+    <script src="{{secure_asset($ft_js->bootstrap_multiselect)}}"></script>
+    <script src="{{secure_asset($ft_js->form_multiselect)}}"></script>
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ config('app.version') }}">
 
     <!-- <script src=""></script> -->
-    <script src="{{secure_asset('front/vendor/echartjs/echarts.min.js')}}"></script>
+    <script src="{{secure_asset($ft_js->echarts)}}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}?v={{ config('app.version') }}"></script>
 
 
     <script>
-        let empresas = <?php echo json_encode($data['company']); ?>;
-        let sucursales = <?=json_encode($data['scompany'])?>;
-        let tipo_soporte = <?php echo json_encode($data['tSoporte']); ?>;
-        let tipo_incidencia = <?=json_encode($data['tIncidencia'])?>;
-        let obj_problem = <?=json_encode($data['problema'])?>;
-        let obj_subproblem = <?=json_encode($data['sproblema'])?>;
-        let usuarios = <?=json_encode($data['usuarios'])?>;
+        let empresas = @json($data['company']);
+        let sucursales = @json($data['scompany']);
+        let tipo_soporte = @json($data['tSoporte']);
+        let tipo_incidencia = @json($data['tIncidencia']);
+        let obj_problem = @json($data['problema']);
+        let obj_subproblem = @json($data['sproblema']);
+        let usuarios = @json($data['usuarios']);
     </script>
     <style>
         .chart-estado-title {
@@ -106,7 +106,6 @@
                             endDate: date('Y-m-d'),
                             maxDate: date('Y-m-d'),
                             opens: "center",
-                            cancelClass: "btn-link",
                             locale: {
                                 format: 'YYYY-MM-DD',
                                 separator: ' a ',
@@ -126,13 +125,12 @@
                             if (estado === "0") { // Hoy
                                 $contentSelect.show();
                                 $dateGroup.hide();
-                                $select.val("0").trigger("change.select2");
+                                $select.val("0").trigger("change");
                                 $dateInput.data('daterangepicker').setStartDate(date('Y-m-d'));
                                 $dateInput.data('daterangepicker').setEndDate(date('Y-m-d'));
                             } else if (estado === "1") { // Avanzado
                                 $contentSelect.hide();
                                 $dateGroup.show();
-                                $select.val("1").trigger("change.select2");
                                 $dateInput.data('daterangepicker').setStartDate(date('Y-m-01'));
                                 $dateInput.data('daterangepicker').setEndDate(date('Y-m-d'));
                             }
@@ -141,7 +139,7 @@
 
                         // Evento cambio select
                         $select.on('change', function () {
-                            aplicarEstado($(this).val());
+                            if ($(this).val() === "1") aplicarEstado("1");
                         });
 
                         // Evento botón "X"
@@ -261,6 +259,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/app/ChartMananger.js')}}"></script>
-    <script src="{{secure_asset('front/js/dashboard/rci/dashboard_incidencias.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset($ft_js->ChartMananger)}}"></script>
+    <script src="{{secure_asset('front/js/dashboard/rci/dashboard_incidencias.js')}}?v={{ config('app.version') }}"></script>
 @endsection

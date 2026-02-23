@@ -2,18 +2,18 @@
 @section('title', 'ANALISIS DE INCIDENCIAS')
 
 @section('cabecera')
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/moment.min.js')}}"></script>
-    <script type="text/javascript" src="{{secure_asset('front/vendor/daterangepicker/daterangepicker.min.js')}}"></script>
-    <link rel="stylesheet" type="text/css" href="{{secure_asset('front/vendor/daterangepicker/daterangepicker.css')}}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ time() }}">
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker_moment)}}"></script>
+    <script type="text/javascript" src="{{secure_asset($ft_js->daterangepicker)}}"></script>
+    <link rel="stylesheet" type="text/css" href="{{secure_asset($ft_css->daterangepicker)}}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/resueltas.css')}}?v={{ config('app.version') }}">
 
     <!-- <script src=""></script> -->
-    <script src="{{secure_asset('front/vendor/echartjs/echarts.min.js')}}"></script>
-    <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}"></script>
+    <script src="{{secure_asset($ft_js->echarts)}}"></script>
+    <script src="{{secure_asset('front/vendor/dom-to-image/dom-to-image.min.js')}}?v={{ config('app.version') }}"></script>
 
     <script>
-        let empresa = <?php echo json_encode(session('empresa')); ?>;
-        let sucursales = <?=json_encode($data['scompany'])?>;
+        let empresa = @json(config('ajustes.empresa'));
+        let sucursales = @json($data['scompany']);
     </script>
     <style>
         .chart-estado-title {
@@ -48,7 +48,7 @@
                     <div class="col-lg-6 my-1">
                         <label class="form-label mb-0" for="empresa">Empresa</label>
                         <input type="text" class="form-control" id="empresa"
-                            value="{{ session('config_layout')->nombre_perfil }}" readonly role="button">
+                            value="{{ config('ajustes.config')->nombre_perfil }}" readonly role="button">
                     </div>
                     <div class="col-xxl-4 col-lg-3 col-sm-8 my-1">
                         <label class="form-label mb-0" for="sucursal">Sucursal</label>
@@ -87,7 +87,6 @@
                             endDate: date('Y-m-d'),
                             maxDate: date('Y-m-d'),
                             opens: "center",
-                            cancelClass: "btn-link",
                             locale: {
                                 format: 'YYYY-MM-DD',
                                 separator: ' a ',
@@ -107,13 +106,12 @@
                             if (estado === "0") { // Hoy
                                 $contentSelect.show();
                                 $dateGroup.hide();
-                                $select.val("0").trigger("change.select2");
+                                $select.val("0").trigger("change");
                                 $dateInput.data('daterangepicker').setStartDate(date('Y-m-d'));
                                 $dateInput.data('daterangepicker').setEndDate(date('Y-m-d'));
                             } else if (estado === "1") { // Avanzado
                                 $contentSelect.hide();
                                 $dateGroup.show();
-                                $select.val("1").trigger("change.select2");
                                 $dateInput.data('daterangepicker').setStartDate(date('Y-m-01'));
                                 $dateInput.data('daterangepicker').setEndDate(date('Y-m-d'));
                             }
@@ -122,7 +120,7 @@
 
                         // Evento cambio select
                         $select.on('change', function () {
-                            aplicarEstado($(this).val());
+                            if ($(this).val() === "1") aplicarEstado("1");
                         });
 
                         // Evento botón "X"
@@ -228,6 +226,6 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/app/ChartMananger.js')}}"></script>
-    <script src="{{secure_asset('front/js/dashboard/empresa/dashboard_incidencias.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset($ft_js->ChartMananger)}}"></script>
+    <script src="{{secure_asset('front/js/dashboard/empresa/dashboard_incidencias.js')}}?v={{ config('app.version') }}"></script>
 @endsection

@@ -106,7 +106,7 @@ class Controller extends BaseController
 
     public function validarPermisos($menu, $submenu = "")
     {
-        $arrayString = base64_decode(session('menu_usuario'));
+        $arrayString = base64_decode(config('ajustes.menu_usuario'));
         $modulos = json_decode($arrayString);
 
         if (isset($modulos->$menu)) {
@@ -125,12 +125,13 @@ class Controller extends BaseController
     {
         if (count($args) == 1) {
             // Si se pasa un solo argumento, separamos nombres y apellidos
-            $partes = explode(" ", trim($args[0]));
+            $partes = explode(' ', trim($args[0]));
             $cantidad = count($partes);
 
             if ($cantidad < 3) {
                 $primero = ucfirst(strtolower($partes[0]));
                 $segundo = isset($partes[1]) ? strtoupper(substr($partes[1], 0, 1)) . '.' : '';
+
                 return trim("$primero $segundo");
             }
 
@@ -138,8 +139,8 @@ class Controller extends BaseController
             $nombres = array_slice($partes, 0, -2); // El resto como nombres
         } else {
             // Si se pasan nombres y apellidos por separado
-            $nombres = explode(" ", trim($args[0]));
-            $apellidos = explode(" ", trim($args[1]));
+            $nombres = explode(' ', trim($args[0]));
+            $apellidos = explode(' ', trim($args[1]));
         }
 
         $primerNombre = ucfirst(strtolower($nombres[0])); // Primer nombre con mayúscula inicial
@@ -149,8 +150,7 @@ class Controller extends BaseController
         return trim("$primerNombre $primerApellido $inicialSegundoApellido");
     }
 
-
-    public function DropdownAcciones($arr_acciones)
+    public function DropdownAcciones($arr_acciones, $notificacion = false)
     {
         // Validaciones
         if (!is_array($arr_acciones)) {
@@ -164,21 +164,23 @@ class Controller extends BaseController
         if (!array_key_exists('button', $arr_acciones)) {
             throw new Exception("La clave 'button' no existe en el array.");
         }
+        $sinAcciones = empty($arr_acciones['button']);
 
         // Título del dropdown
         $str_title = '<h6 class="dropdown-header text-secondary d-flex justify-content-between align-items-center">:titulo <i class="fas fa-gear"></i></h6>';
         $tittle = str_replace(":titulo", $arr_acciones['tittle'] ?? "Acciones", $str_title);
 
         // Botones del dropdown
-        $str_button = '<button class="dropdown-item py-2 :claseb" onclick=":funcion">:texto</button>';
+        $str_button = '<button class="dropdown-item :clase" style="padding-top: .8rem !important;padding-bottom: .8rem !important;" :funcion :attr>:texto</button>';
         $button = '';
 
         foreach ($arr_acciones['button'] as $val) {
             if ($val) {
                 $arr_btn = [
-                    ':claseb' => $val['claseb'] ?? '',
-                    ':funcion' => $val['funcion'] ?? "alert('prueba de alerta')",
-                    ':texto' => $val['texto'] ?? 'Alerta',
+                    ':clase' => $val['clase'] ?? '',
+                    ':funcion' => array_key_exists('funcion', $val) ? ('onclick="' . ($val['funcion'] ?? "alert('prueba de alerta')") . '"') : '',
+                    ':texto' => $val['texto'] ?? 'Prueba',
+                    ':attr' => $val['attr'] ?? '',
                 ];
                 $button .= str_replace(array_keys($arr_btn), array_values($arr_btn), $str_button);
             }
@@ -187,9 +189,25 @@ class Controller extends BaseController
         // Estructura del dropdown
         $dropDown = '
             <div class="btn-group dropdown shadow-0">
+                ' . ($notificacion ? '
+                       <span class="position-absolute" style="
+                                width: 1.15rem;
+                                height: 1.15rem;
+                                color: #ff5454;
+                                background-color: #ffc9c9;
+                                border-radius: 5px;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                top: -6.5px;
+                                left: -18px;
+                                z-index: 9;">
+                            <i class="fas fa-bell" style="font-size: .7rem;min-width: .5em;"></i>
+                            <span class="visually-hidden">Nuevas alertas</span>
+                        </span>' : '') . '
                 <button
                     type="button"
-                    class="btn btn-tertiary hover-btn btn-sm px-2 shadow-0"
+                    class="' . ($sinAcciones ? 'disabled' : 'dropdown-toggle hover-btn') . ' btn btn-sm p-1 shadow-0"
                     data-mdb-ripple-init
                     aria-expanded="false"
                     data-mdb-dropdown-init
@@ -197,9 +215,9 @@ class Controller extends BaseController
                     data-mdb-parent=".dataTables_scrollBody"
                     data-mdb-dropdown-animation="off"
                     data-mdb-dropdown-initialized="true">
-                    <b><i class="icon-menu9"></i></b>
+                    <i class="fas fa-' . ($sinAcciones ? 'ban' : 'bars') . '" style="font-size: 1.125em;' . ($sinAcciones ? 'visibility: hidden;' : '') . '"></i>
                 </button>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu rounded-7">
                     ' . $tittle . $button . '
                 </div>
             </div>';

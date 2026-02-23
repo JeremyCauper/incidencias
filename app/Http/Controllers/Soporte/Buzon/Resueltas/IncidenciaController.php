@@ -25,7 +25,7 @@ class IncidenciaController extends Controller
                 $whereInc['id_sucursal'] = intval($sucursal);
             }
 
-            $cod_incidencias = DB::table('tb_inc_asignadas')->where('id_usuario', session('id_usuario'))->pluck('cod_incidencia')->toArray();
+            $cod_incidencias = DB::table('tb_inc_asignadas')->where('id_usuario', Auth::user()->id_usuario)->pluck('cod_incidencia')->toArray();
             $seguimientos = DB::table('tb_inc_seguimiento')->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
             $ordenes = DB::table('tb_orden_servicio')
                 ->whereIn('cod_incidencia', $cod_incidencias)->get()->groupBy('cod_incidencia');
@@ -56,7 +56,7 @@ class IncidenciaController extends Controller
                             ]
                         ])
                     ];
-            })->values();
+                })->values();
 
             return $incidencia;
         } catch (Exception $e) {

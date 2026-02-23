@@ -4,7 +4,7 @@
 @section('cabecera')
     <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/incidencias/registradas.css')}}"> -->
     <script>
-        let menus = <?php echo json_encode($data['menus']); ?>;
+        let menus = @json($data['menus']);
     </script>
 @endsection
 @section('content')
@@ -13,7 +13,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Listado de Sub Menu</strong>
                 </h6>
                 <div>
@@ -22,7 +22,7 @@
                         <i class="fas fa-plus"></i>
                         Nuevo Sub Menu
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -30,7 +30,7 @@
                     <div class="col-12">
                         <table id="tb_submenu" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Menu</th>
                                     <th>Categoria</th>
                                     <th>Descripcion</th>
@@ -57,7 +57,8 @@
                                     }
                                 },
                                 columns: [
-                                    { data: 'menu', render: function (data, type, row) {
+                                    {
+                                        data: 'menu', render: function (data, type, row) {
                                             let menu = menus.find(menu => menu.id == data);
                                             return `<i class="${menu.icon} me-2"></i>${menu.descripcion}`;
                                         }
@@ -99,8 +100,7 @@
                             <select class="select-icons" id="menu">
                                 <option value=""></option>
                                 @foreach ($data['menus'] as $v)
-                                    <option value="{{ $v->id }}"
-                                        {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
+                                    <option value="{{ $v->id }}" {{ $v->estatus != 1 || $v->eliminado == 1 ? 'data-hidden="true" data-nosearch="true"' : '' }}>
                                         {{ (string) '<i class="' . $v->icon . ' me-2"></i>' }} {{ $v->descripcion }}
                                         {{ $v->eliminado == 1 ? '<label class="badge badge-danger ms-2">Elim.</label>' : ($v->estatus != 1 ? '<label class="badge badge-danger ms-2">Inac.</label>' : '') }}
                                     </option>
@@ -135,5 +135,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/submenu.js')}}?v={{ time() }}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/menu/submenu.js')}}"></script>
 @endsection

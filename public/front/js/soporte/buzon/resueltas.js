@@ -9,7 +9,6 @@ $(document).ready(function () {
         endDate: date('Y-m-d'),
         maxDate: date('Y-m-d'),
         opens: "center",
-        cancelClass: "btn-link",
         locale: {
             format: 'YYYY-MM-DD',
             separator: '  al  ',
@@ -25,15 +24,12 @@ $(document).ready(function () {
     });
 
     fObservador('.content-wrapper', () => {
-        tb_incidencias.columns.adjust().draw();
-        tb_visitas.columns.adjust().draw();
+        if (!esCelular()) {
+            listado_orden_incidencias.columns.adjust().draw();
+            listado_orden_visitas.columns.adjust().draw();
+        }
     });
 });
-
-function updateTableInc() {
-    tb_incidencias.ajax.reload();
-}
-mostrar_acciones(tb_incidencias);
 
 function OrdenPdfInc(cod) {
     const url = `${__url}/soporte/orden/exportar-documento?documento=pdf&codigo=${cod}`;
@@ -81,15 +77,16 @@ function ShowDetailInc(e, id) {
 
                 llenarInfoModal('modal_detalle', {
                     codigo: inc.cod_incidencia,
-                    estado: getBadgeIncidencia(inc.estado_informe),
+                    codigo_orden: inc.cod_orden,
+                    estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                     soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
                     problema: obj_problem[inc.id_problema].descripcion,
                     subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                    observacion: inc.observacion,
+                    observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
                 });
 
                 fMananger.formModalLoding('modal_detalle', 'hide');
@@ -104,11 +101,6 @@ function ShowDetailInc(e, id) {
         }
     });
 }
-
-function updateTableVis() {
-    tb_visitas.ajax.reload();
-}
-mostrar_acciones(tb_visitas);
 
 function OrdenPdfVis(cod) {
     const url = `${__url}/soporte/orden-visita/exportar-documento?documento=pdf&codigo=${cod}`;
@@ -134,9 +126,9 @@ function ShowDetailVis(e, id) {
                 empresa = empresas[sucursal.ruc];
 
                 llenarInfoModal('modal_seguimiento_visitasp', {
-                    estado: getBadgeVisita(visita.estado),
+                    estado: getBadgeVisita(visita.estado, .75, true, true),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });
@@ -161,8 +153,10 @@ async function resetTable(chang) {
     $('#dateRango').data('daterangepicker').setStartDate(date('Y-m-01'));
     $('#dateRango').data('daterangepicker').setEndDate(date('Y-m-d'));
 
-    tb_incidencias.columns.adjust().draw();
-    tb_visitas.columns.adjust().draw();
+    if (!esCelular()) {
+        listado_orden_incidencias.columns.adjust().draw();
+        listado_orden_visitas.columns.adjust().draw();
+    }
     valorChange = chang;
 }
 
@@ -170,11 +164,16 @@ async function filtroBusqueda() {
     var empresa = $('#empresa').val();
     var sucursal = $('#sucursal').val();
     var fechas = $('#dateRango').val().split('  al  ');
-    var nuevoUrl = `${__url}/soporte/buzon-personal/${valorChange ? 'visitas' : 'incidencias'}/resueltas/index?ruc=${empresa}&sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
+    var nuevoUrl = generateUrl(`${__url}/soporte/buzon-personal/${valorChange ? 'visitas' : 'incidencias'}/resueltas/index`, {
+        ruc: empresa,
+        sucursal: sucursal,
+        fechaIni: fechas[0],
+        fechaFin: fechas[1]
+    });
 
     if (valorChange) {
-        tb_visitas.ajax.url(nuevoUrl).load();
+        listado_orden_visitas.ajax.url(nuevoUrl).load();
     } else {
-        tb_incidencias.ajax.url(nuevoUrl).load();
+        listado_orden_incidencias.ajax.url(nuevoUrl).load();
     }
 }

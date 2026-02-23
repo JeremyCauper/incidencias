@@ -10,7 +10,7 @@
     <div class="col-12">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Listado de Grupos</strong>
                 </h6>
                 <div>
@@ -19,7 +19,7 @@
                         <i class="fas fa-plus me-1"></i>
                         Nuevo Grupo
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -27,7 +27,7 @@
                     <div class="col-12">
                         <table id="tb_grupos" class="table table-hover text-nowrap" style="width:100%">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Grupo</th>
                                     <th>Registrado</th>
                                     <th>Actualizado</th>
@@ -105,5 +105,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/empresas/grupos.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/empresas/grupos.js')}}?v={{ config('app.version') }}"></script>
 @endsection

@@ -54,8 +54,6 @@ $(document).ready(function () {
         },
     ]);
 
-    formatSelect('modal_sucursales');
-
     $('.modal').on('hidden.bs.modal', function () {
         $('#modal_sucursalesLabel').html('REGISTRAR EMPRESA');
         $('#id').val('');

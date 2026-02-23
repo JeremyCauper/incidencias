@@ -1,11 +1,11 @@
 $(document).ready(function () {
     $('#empresa').on('change', function () {
-        fillSelect(['#sucursal'], sucursales, 'ruc', $(this).val(), 'id', 'nombre', 'status');
+        CS_sucursal.selecionar($(this).val());
     });
 
     $('#fProblema').on('change', function () {
         var problem = obj_problem[$(this).val()]?.codigo;
-        fillSelect(['#fSubProblema'], obj_subproblem, 'codigo_problema', problem, 'id', 'descripcion', 'estatus');
+        CS_subproblema.selecionar(problem);
     });
 
     $('#dateRango').daterangepicker({
@@ -14,7 +14,6 @@ $(document).ready(function () {
         endDate: date('Y-m-d'),
         maxDate: date('Y-m-d'),
         opens: "center",
-        cancelClass: "btn-link",
         locale: {
             format: 'YYYY-MM-DD',
             separator: '  al  ',
@@ -30,26 +29,32 @@ $(document).ready(function () {
     });
 
     fObservador('.content-wrapper', () => {
-        tb_orden.columns.adjust().draw();
+        if (!esCelular()) {
+            listado_orden.columns.adjust().draw();
+        }
     });
 });
 
-function updateTable() {
-    tb_orden.ajax.reload();
-}
-mostrar_acciones(tb_orden);
+const CS_sucursal = new CSelect(['#sucursal'], {
+    dataSet: sucursales,
+    filterField: 'ruc',
+    optionText: 'nombre',
+    optionValidation: [
+        { clave: 'status', operation: '===', value: 0, badge: 'Inac.' },
+    ]
+});
 
-function filtroBusqueda() {
-    var empresa = $(`#empresa`).val();
-    var sucursal = $('#sucursal').val();
-    var fechas = $('#dateRango').val().split('  al  ');
-    var fProblema = $('#fProblema').val();
-    var fSubProblema = $('#fSubProblema').val();
-    var nuevoUrl = `${__url}/soporte/incidencias/resueltas/index?ruc=${empresa}&sucursal=${sucursal}&fProblema=${fProblema}&fSubProblema=${fSubProblema}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
-
-    tb_orden.ajax.url(nuevoUrl).load();
-}
-
+const CS_subproblema = new CSelect(['#fSubProblema'], {
+    dataSet: obj_subproblem,
+    filterField: 'codigo_problema',
+    optionText: function (data) {
+        return `${getBadgePrioridad(data.prioridad)} ${data.descripcion}`;
+    },
+    optionValidation: [
+        { clave: 'estatus', operation: '===', value: 0, badge: 'Inac.' },
+        { clave: 'eliminado', operation: '===', value: 1, badge: 'Elim.' },
+    ]
+});
 
 function ShowDetail(e, cod) {
     $('#modal_detalle').modal('show');
@@ -71,15 +76,15 @@ function ShowDetail(e, cod) {
             llenarInfoModal('modal_detalle', {
                 codigo: inc.cod_incidencia,
                 codigo_orden: inc.cod_orden,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
                 problema: obj_problem[inc.id_problema].descripcion,
                 subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                observacion: inc.observacion,
+                observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
@@ -150,9 +155,9 @@ function AddSignature(cod) {
                 llenarInfoModal('modal_firmas', {
                     codigo: inc.cod_incidencia,
                     codigo_orden: cod,
-                    estado: getBadgeIncidencia(inc.estado_informe),
+                    estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });

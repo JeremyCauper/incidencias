@@ -5,26 +5,26 @@
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css"> -->
     <style>
         /* .fc .fc-daygrid-day-frame {
-                                                min-height: 100% !important;
-                                                height: 80px !important;
-                                                position: relative !important;
-                                            } */
+                                                                min-height: 100% !important;
+                                                                height: 80px !important;
+                                                                position: relative !important;
+                                                            } */
         .fc .fc-toolbar-title {
             text-transform: capitalize;
         }
     </style>
-    <script src="{{ secure_asset('front/vendor/full-calendar/index.global.min.js') }}"></script>
+    <script src="{{ secure_asset('front/vendor/full-calendar/full-calendar.min.js') }}?v={{ config('app.version') }}"></script>
 @endsection
 @section('content')
 
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Cronograma Mensual Turno Semanal / Apoyo</strong>
                 </h6>
                 <div>
-                    <button class="btn btn-primary px-2" onclick="cargarEventosApi()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="cargarEventosApi()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -92,8 +92,8 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="sfechaIniText"></span>
-                                    <input type="date" class="form-control" id="sfechaIni" name="sfechaIni" requested/>
-                                    <input type="time" class="form-control" id="shoraIni" name="shoraIni" requested/>
+                                    <input type="date" class="form-control" id="sfechaIni" name="sfechaIni" requested />
+                                    <input type="time" class="form-control" id="shoraIni" name="shoraIni" requested />
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -101,8 +101,8 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="sfechaFinText"></span>
-                                    <input type="date" class="form-control" id="sfechaFin" name="sfechaFin" requested/>
-                                    <input type="time" class="form-control" id="shoraFin" name="shoraFin" requested/>
+                                    <input type="date" class="form-control" id="sfechaFin" name="sfechaFin" requested />
+                                    <input type="time" class="form-control" id="shoraFin" name="shoraFin" requested />
                                 </div>
                             </div>
                             <div class="col-12">
@@ -124,8 +124,8 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="afechaIniText"></span>
-                                    <input type="date" class="form-control" id="afechaIni" name="afechaIni" requested/>
-                                    <input type="time" class="form-control" id="ahoraIni" name="ahoraIni" requested/>
+                                    <input type="date" class="form-control" id="afechaIni" name="afechaIni" requested />
+                                    <input type="time" class="form-control" id="ahoraIni" name="ahoraIni" requested />
                                 </div>
                             </div>
                             <div class="col-lg-6">
@@ -133,8 +133,8 @@
                                 <div class="input-group mb-3">
                                     <span class="input-group-text" style="font-size: .75rem; width: 80px !important;"
                                         id="afechaFinText"></span>
-                                    <input type="date" class="form-control" id="afechaFin" name="afechaFin" requested/>
-                                    <input type="time" class="form-control" id="ahoraFin" name="ahoraFin" requested/>
+                                    <input type="date" class="form-control" id="afechaFin" name="afechaFin" requested />
+                                    <input type="time" class="form-control" id="ahoraFin" name="ahoraFin" requested />
                                 </div>
                             </div>
                             <div class="col-12">
@@ -173,8 +173,8 @@
                     <div class="text-end">
                         <button type="button" class="btn btn-danger px-2 me-2" data-mdb-ripple-init
                             id="btn-eliminar-turno"><i class="far fa-trash-can"></i></button>
-                        <button type="button" class="btn btn-primary px-2 me-2" data-mdb-ripple-init
-                            id="btn-editar-turno"><i class="far fa-pen-to-square"></i></button>
+                        <button type="button" class="btn btn-primary me-2" data-mdb-ripple-init id="btn-editar-turno"><i
+                                class="far fa-pen-to-square"></i></button>
                         <button type="button" class="btn btn-link" data-mdb-ripple-init
                             data-mdb-dismiss="modal">Cerrar</button>
                     </div>
@@ -189,5 +189,5 @@
     <script>
         let usuarios = <?=$data['usuarios']?>;
     </script>
-    <script src="{{ secure_asset('front/js/soporte/turno/turno.js') }}?v={{ time() }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/turno/turno.js') }}?v={{ config('app.version') }}"></script>
 @endsection

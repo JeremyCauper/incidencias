@@ -2,10 +2,10 @@
 @section('title', 'Materiales')
 
 @section('cabecera')
-    <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}?v={{ time() }}"> -->
+    <!-- <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}"> -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <script>
-        let materiales = <?php echo json_encode($data['materiales']); ?>;
+        let materiales = @json($data['materiales']);
     </script>
 @endsection
 @section('content')
@@ -13,7 +13,7 @@
     <div class="col-12 grid-margin">
         <div class="card">
             <div class="card-body">
-                <h6 class="card-title col-form-label-sm text-primary mb-3">
+                <h6 class="card-title text-primary mb-3">
                     <strong>Listado de Usuarios</strong>
                 </h6>
                 <div class="mb-3">
@@ -22,7 +22,7 @@
                         <i class="far fa-square-plus me-2"></i>
                         Asignar Material
                     </button>
-                    <button class="btn btn-primary px-2" onclick="updateTable()" data-mdb-ripple-init role="button">
+                    <button class="btn btn-primary" onclick="updateTable()" data-mdb-ripple-init role="button">
                         <i class="fas fa-rotate-right"></i>
                     </button>
                 </div>
@@ -30,7 +30,7 @@
                     <div class="col-12">
                         <table id="tb_material" class="table text-nowrap" style="width: 100%;">
                             <thead>
-                                <tr class="text-bg-primary text-center">
+                                <tr class="text-center">
                                     <th>Codigo</th>
                                     <th>Producto</th>
                                     <th>Cantidad</th>
@@ -109,7 +109,7 @@
                             <div class="overflow-auto">
                                 <table id="tb_material_asignado" class="table table-hover text-nowrap" style="width:100%">
                                     <thead>
-                                        <tr class="text-bg-primary text-center">
+                                        <tr class="text-center">
                                             <th>Material</th>
                                             <th>Cantidad</th>
                                         </tr>
@@ -132,11 +132,9 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ secure_asset('front/js/app/SelectManeger.js') }}"></script>
+    <script src="{{ secure_asset($ft_js->SelectManeger) }}"></script>
     <script>
         $(document).ready(function () {
-            formatSelect('modal_asignar');
-
             let ct_material_asignado = $('#ct_material_asignado');
             let tb_material_asignado = $('#tb_material_asignado');
             let select_tecnico = $('#tecnico');

@@ -13,8 +13,6 @@ $(document).ready(function () {
         }
     ]);
 
-    formatSelect('modal_turno');
-
     $('#sfechaIni').on('change', function () {
     });
 

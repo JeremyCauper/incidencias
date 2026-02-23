@@ -9,7 +9,6 @@ $(document).ready(function () {
         endDate: date('Y-m-d'),
         maxDate: date('Y-m-d'),
         opens: "center",
-        cancelClass: "btn-link",
         locale: {
             format: 'YYYY-MM-DD',
             separator: '  al  ',
@@ -25,23 +24,11 @@ $(document).ready(function () {
     });
 
     fObservador('.content-wrapper', () => {
-        tb_vterminadas.columns.adjust().draw();
+        if (!esCelular()) {
+            listado_vterminadas.columns.adjust().draw();
+        }
     });
 });
-
-function updateTable() {
-    tb_vterminadas.ajax.reload();
-}
-mostrar_acciones(tb_vterminadas);
-
-function filtroBusqueda() {
-    var sucursal = $('#sucursal').val();
-    var fechas = $('#dateRango').val().split('  al  ');
-    var nuevoUrl = `${__url}/soporte/visitas/terminadas/index?sucursal=${sucursal}&fechaIni=${fechas[0]}&fechaFin=${fechas[1]}`;
-
-    tb_vterminadas.ajax.url(nuevoUrl).load();
-}
-
 
 function OrdenPdf(cod) {
     const url = `${__url}/soporte/orden-visita/exportar-documento?documento=pdf&codigo=${cod}`;
@@ -67,9 +54,9 @@ function ShowDetail(e, id) {
                 empresa = empresas[sucursal.ruc];
 
                 llenarInfoModal('modal_seguimiento_visitasp', {
-                    estado: getBadgeVisita(visita.estado),
+                    estado: getBadgeVisita(visita.estado, .75, true, true),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });

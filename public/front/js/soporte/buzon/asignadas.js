@@ -21,8 +21,6 @@ $(document).ready(function () {
         },
     ]);
 
-    formatSelect('modal_orden');
-
     $('.modal').on('shown.bs.modal', function () {
         $('#fecha_imforme').val(date('Y-m-d'));
         $('#hora_informe').val(date('H:i:s'));
@@ -56,8 +54,7 @@ $(document).ready(function () {
     });
 
     fObservador('.content-wrapper', () => {
-        tb_incidencias.columns.adjust().draw();
-        tb_visitas.columns.adjust().draw();
+        resetTable();
     });
 });
 let sucursal = null;
@@ -91,11 +88,6 @@ const cMaterial = new CTable('createMaterial', {
     }
 });
 
-function updateTableInc() {
-    tb_incidencias.ajax.reload();
-}
-mostrar_acciones(tb_incidencias);
-
 function ShowDetailInc(e, cod) {
     $('#modal_detalle').modal('show');
     fMananger.formModalLoding('modal_detalle', 'show', true);
@@ -115,15 +107,15 @@ function ShowDetailInc(e, cod) {
 
             llenarInfoModal('modal_detalle', {
                 codigo: inc.cod_incidencia,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
-                problema: obj_problem[inc.id_problema].descripcion,
+                problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
                 subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                observacion: inc.observacion,
+                observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
@@ -144,11 +136,9 @@ function habilitarCodAviso(accion) {
     var content_cantidad = $('#content-codAviso');
     var codAviso = $('#codAviso');
     if (accion) {
-        selector_material.addClass('col-lg-6').removeClass('col-lg-9');
         content_cantidad.removeClass('d-none');
         return codAviso.attr('name', 'codAviso');
     }
-    selector_material.addClass('col-lg-9').removeClass('col-lg-6');
     content_cantidad.addClass('d-none');
     codAviso.removeAttr('name');
 }
@@ -193,15 +183,15 @@ async function OrdenDetail(e, cod) {
                 llenarInfoModal('modal_orden', {
                     codigo: inc.cod_incidencia,
                     registrado: inc.created_at,
-                    tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'),
+                    tecnicos: personal.map(persona => `<span class="badge bg-light px-3 ms-2 rounded-pill" style="border: 1px solid rgb(50 68 93 / 70%);color: rgb(50 68 93);">${persona.tecnicos}</span>`).join(''),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                     soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
-                    problema: obj_problem[inc.id_problema].descripcion,
+                    problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
                     subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                    observacion: inc.observacion,
+                    observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
                     empresaFooter: `${empresa.ruc} - ${empresa.razon_social}`
                 });
             }
@@ -227,7 +217,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
 
     fMananger.formModalLoding('modal_orden', 'show');
     var valid = validFrom(this);
-    
+
     if (!valid.success)
         return fMananger.formModalLoding('modal_orden', 'hide');
     valid.data.data.cod_sistema = eval($('#button-cod-orden').attr('check-cod'));
@@ -307,9 +297,9 @@ function AddCodAviso(e, cod) {
 
             llenarInfoModal('modal_addcod', {
                 codigo: inc.cod_incidencia,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
             });
@@ -629,11 +619,6 @@ function removeClienteDataFirm() {
     }
 }
 
-function updateTableVis() {
-    tb_visitas.ajax.reload();
-}
-mostrar_acciones(tb_visitas);
-
 function ShowDetailVis(e, id) {
     $('#modal_seguimiento_visitasp').modal('show');
     fMananger.formModalLoding('modal_seguimiento_visitasp', 'show');
@@ -649,9 +634,9 @@ function ShowDetailVis(e, id) {
                 empresa = empresas[sucursal.ruc];
 
                 llenarInfoModal('modal_seguimiento_visitasp', {
-                    estado: getBadgeVisita(visita.estado),
+                    estado: getBadgeVisita(visita.estado, .75, true, true),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                 });
@@ -738,10 +723,10 @@ function OrdenVisita(e, id) {
                 llenarInfoModal('modal_orden_visita', {
                     registrado: visita.seguimiento[0].created_at,
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
-                    tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>')
+                    tecnicos: tecnicos.map(persona => `<span class="badge bg-light px-3 ms-2 rounded-pill" style="border: 1px solid rgb(50 68 93 / 70%);color: rgb(50 68 93);">${persona}</span>`).join('')
                 });
 
                 $('[name="id_visita_orden"]').val(id);
@@ -829,6 +814,8 @@ function changeCodOrdenV(val = cod_ordenv) {
 }
 
 function resetTable() {
-    tb_incidencias.columns.adjust().draw();
-    tb_visitas.columns.adjust().draw();
+    if (!esCelular()) {
+        listado_incidencia.columns.adjust().draw();
+        listado_visitas.columns.adjust().draw();
+    }
 }

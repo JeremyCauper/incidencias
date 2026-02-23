@@ -62,12 +62,10 @@ $(document).ready(function () {
         },
         {
             control: '#fecha_imforme',
-            type: "date",
             requested: true
         },
         {
             control: '#hora_informe',
-            type: "time",
             requested: true
         },
         {
@@ -97,10 +95,6 @@ $(document).ready(function () {
             mxl: 50,
         },
     ]);
-
-    formatSelect('modal_incidencias');
-    formatSelect('modal_assign');
-    formatSelect('modal_orden');
 
     $('#empresa').on('change', function () {
         const empresa = empresas[$(this).val()] ?? "";
@@ -206,7 +200,7 @@ $(document).ready(function () {
     function setContacto(option = {}) {
         $('#cod_contact').val(option.id || '');
         $('#consultado_api').val(option.consultado || '');
-        $('#car_contac').val(option.cargo || '').trigger('change.select2');
+        $('#car_contac').val(option.cargo || '').trigger('change');
         $('#cor_contac').val(option.correo || '');
         $('#nro_doc').val(option.nro_doc || '').attr('disabled', eval(option.consultado) ? true : false);
         CS_tel_contac.llenar(option.telefonos || []);
@@ -236,8 +230,8 @@ $(document).ready(function () {
     $('.modal').on('shown.bs.modal', function () {
         switch ($(this).attr('id')) {
             case 'modal_incidencias':
-                $('#fecha_imforme').val(date('Y-m-d'));
-                $('#hora_informe').val(date('H:i:s'));
+                fecha_imforme.val(date('Y-m-d'));
+                hora_informe.val(date('H:i'));
                 if ($('#tIncidencia').val() == "1" && $('#id_inc').val() == "") {
                     cPersonal.createRow(personal);
                 }
@@ -287,6 +281,16 @@ $(document).ready(function () {
         manCantidad();
     });
 
+    $('[ctable-create="createPersonal"]').on('click', function () {
+        // 1. Buscamos el ancestro más cercano con la clase .modal-body
+        var $modalBody = $(this).closest('.modal-body');
+
+        // 2. Animamos el scroll hasta el final del contenedor
+        $modalBody.animate({
+            scrollTop: $modalBody.prop("scrollHeight")
+        }, 500); // 500ms es la velocidad de la animación
+    });
+
     $('#button-cod-orden').on('click', function () {
         const check = eval($(this).attr('check-cod')) ? false : true;
         CheckCodOrden(check);
@@ -294,7 +298,7 @@ $(document).ready(function () {
 
     $('#tSoporte').val(1).trigger('change');
     fObservador('.content-wrapper', () => {
-        tb_incidencia.columns.adjust().draw();
+        if (!esCelular()) listado_incidencia.columns.adjust().draw();
     });
 });
 
@@ -331,15 +335,6 @@ const CS_nom_contac = $('#nom_contac').selectize({
     createOnBlur: true,
     openOnFocus: false,
     plugins: ["clear_button"],
-    onFocus: function () {
-        $('.select2-container--open').each(function () {
-            const select = $(this).prev('select');
-            if (select.length) {
-                select.select2('close');
-                $(this).removeClass('select2-container--focus');
-            }
-        });
-    }
 })[0].selectize;
 
 const CS_sucursal = new CSelect(['#sucursal'], {
@@ -446,17 +441,6 @@ const config_personal = {
 const cPersonal = new CTable('createPersonal', config_personal);
 const cPersonal1 = new CTable('createPersonal1', config_personal);
 
-function updateTable() {
-    tb_incidencia.ajax.reload();
-}
-mostrar_acciones(tb_incidencia);
-
-
-function searchTable(search) {
-    const biblio = ['', 'asignada', 'sin asignar', 'en proceso'];
-    tb_incidencia.column([1]).search(biblio[search]).draw();
-}
-
 document.getElementById('form-incidencias').addEventListener('submit', async function (event) {
     event.preventDefault();
     fMananger.formModalLoding('modal_incidencias', 'show');
@@ -534,15 +518,15 @@ function ShowDetail(e, cod) {
 
             llenarInfoModal('modal_detalle', {
                 codigo: inc.cod_incidencia,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
                 problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
                 subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                observacion: inc.observacion,
+                observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
             });
 
             fMananger.formModalLoding('modal_detalle', 'hide');
@@ -618,8 +602,10 @@ function ShowEdit(cod) {
             $('#problema').val(dt.id_problema).trigger('change');
             CS_sproblema.selecionar(() => { return obj_problem[dt.id_problema]?.codigo ?? null; });
             $('#sproblema').val(dt.id_subproblema).trigger('change');
-            $('#fecha_imforme').val(dt.fecha_informe);
-            $('#hora_informe').val(dt.hora_informe);
+            setTimeout(() => {
+                fecha_imforme.val(dt.fecha_informe);
+                hora_informe.val(dt.hora_informe);
+            }, 300);
             $('#observacion').val(dt.observacion);
 
             const accion = dt.estado_informe == 2 ? false : true;
@@ -634,15 +620,15 @@ function ShowEdit(cod) {
 }
 
 function habilitarCodAviso(accion) {
-    var selector_material = $('#createMaterial').parent().parent();
+    // var selector_material = $('#createMaterial').parent().parent();
     var content_cantidad = $('#content-codAviso');
     var codAviso = $('#codAviso');
     if (accion) {
-        selector_material.addClass('col-lg-6').removeClass('col-lg-9');
+        // selector_material.addClass('col-lg-6').removeClass('col-lg-9');
         content_cantidad.removeClass('d-none');
         return codAviso.attr('name', 'codAviso');
     }
-    selector_material.addClass('col-lg-9').removeClass('col-lg-6');
+    // selector_material.addClass('col-lg-9').removeClass('col-lg-6');
     content_cantidad.addClass('d-none');
     codAviso.removeAttr('name');
 }
@@ -670,15 +656,15 @@ function ShowAssign(e, cod) {
 
             llenarInfoModal('modal_assign', {
                 codigo: inc.cod_incidencia,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
                 soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
                 problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
                 subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                observacion: inc.observacion,
+                observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
             });
 
             fMananger.formModalLoding('modal_assign', 'hide');
@@ -715,7 +701,9 @@ async function AssignPer() {
         success: function (data) {
             fMananger.formModalLoding('modal_assign', 'hide');
             if (data.success) {
-                $(`#modal_assign [aria-item="estado"]`).html(getBadgeIncidencia(data.data.estado));
+                llenarInfoModal('modal_assign', {
+                    estado: getBadgeIncidencia(data.data.estado, '.75', true, true),
+                });
                 cPersonal1.data = data.data.personal;
                 cPersonal1.updateTable({ del: (data.data.estado == 2 ? false : true) });
                 updateTable();
@@ -842,15 +830,15 @@ async function OrdenDetail(e, cod) {
                 llenarInfoModal('modal_orden', {
                     codigo: inc.cod_incidencia,
                     registrado: inc.created_at,
-                    tecnicos: '<i class="fas fa-user-gear"></i>' + tecnicos.join(', <i class="fas fa-user-gear ms-1"></i>'),
+                    tecnicos: personal.map(persona => `<span class="badge bg-light px-3 ms-2 rounded-pill" style="border: 1px solid rgb(50 68 93 / 70%);color: rgb(50 68 93);">${persona.tecnicos}</span>`).join(''),
                     razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                    direccion: empresa.direccion,
+                    direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                     sucursal: sucursal.nombre,
                     dir_sucursal: sucursal.direccion,
                     soporte: tipo_soporte[inc.id_tipo_soporte].descripcion,
                     problema: `${obj_problem[inc.id_problema].codigo} - ${obj_problem[inc.id_problema].descripcion}`,
                     subproblema: getBadgePrioridad(obj_subproblem[inc.id_subproblema].prioridad, .75) + obj_subproblem[inc.id_subproblema].descripcion,
-                    observacion: inc.observacion,
+                    observacion: inc.observacion || '<span class="fst-italic">No hay observaciones adicionales registradas para este incidente.</span>',
                     empresaFooter: `${empresa.ruc} - ${empresa.razon_social}`
                 });
             }
@@ -911,7 +899,7 @@ document.getElementById('form-orden').addEventListener('submit', async function 
         return boxAlert.box({ i: 'warning', t: 'Atencion', h: 'Agregaste una firma del cliente, se necesita agregar los datos del cliente.' });
     }
 
-    
+
 
     $.ajax({
         type: 'POST',
@@ -980,9 +968,9 @@ function AddCodAviso(e, cod) {
 
             llenarInfoModal('modal_addcod', {
                 codigo: inc.cod_incidencia,
-                estado: getBadgeIncidencia(inc.estado_informe),
+                estado: getBadgeIncidencia(inc.estado_informe, '.75', true, true),
                 razon_social: `${empresa.ruc} - ${empresa.razon_social}`,
-                direccion: empresa.direccion,
+                direccion: '<i class="fas fa-location-dot me-2"></i>' + empresa.direccion,
                 sucursal: sucursal.nombre,
                 dir_sucursal: sucursal.direccion,
             });

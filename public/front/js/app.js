@@ -1,5 +1,5 @@
 function fillSelect(selector, data, filterField, filterValue, optionValue, optionText, optionCondition) {
-    $(selector.join()).html($('<option>').val('').html('-- Seleccione --')).attr('disabled', true);
+    $(selector.join()).html($('<option>').val('').html('Seleccione...')).attr('disabled', true);
     if (!filterValue) return false;
 
     if (Array.isArray(data)) {
@@ -199,25 +199,35 @@ function formatUnique(data) {
     return `<ul style="font-size:.75rem;">${result}</ul>`;
 }
 
-function date(format) {
-    const now = new Date();
+function date(format, strtime = null) {
+    const baseDate = strtime ? new Date(strtime) : new Date();
+
+    // Intentar extraer año y mes del format si existen
+    const yearMatch = format.match(/(\d{4})/);
+    const monthMatch = format.match(/-(\d{2})-/);
+
+    const year = yearMatch ? Number(yearMatch[1]) : baseDate.getFullYear();
+    const month = monthMatch ? Number(monthMatch[1]) : baseDate.getMonth() + 1;
+
+    const lastDay = new Date(year, month, 0).getDate();
 
     const map = {
-        'Y': now.getFullYear(),                // Año completo (2024)
-        'm': String(now.getMonth() + 1).padStart(2, '0'),  // Mes (01-12)
-        'd': String(now.getDate()).padStart(2, '0'),       // Día del mes (01-31)
-        'H': String(now.getHours()).padStart(2, '0'),      // Horas (00-23)
-        'i': String(now.getMinutes()).padStart(2, '0'),    // Minutos (00-59)
-        's': String(now.getSeconds()).padStart(2, '0'),    // Segundos (00-59)
-        'j': now.getDate(),                                // Día del mes sin ceros iniciales (1-31)
-        'n': now.getMonth() + 1,                           // Mes sin ceros iniciales (1-12)
-        'w': now.getDay(),                                 // Día de la semana (0 = domingo, 6 = sábado)
-        'G': now.getHours(),                               // Horas sin ceros iniciales (0-23)
-        'a': now.getHours() >= 12 ? 'pm' : 'am',           // am o pm
-        'A': now.getHours() >= 12 ? 'PM' : 'AM'            // AM o PM en mayúsculas
+        'Y': year,
+        'm': String(month).padStart(2, '0'),
+        'd': String(baseDate.getDate()).padStart(2, '0'),
+        'H': String(baseDate.getHours()).padStart(2, '0'),
+        'i': String(baseDate.getMinutes()).padStart(2, '0'),
+        's': String(baseDate.getSeconds()).padStart(2, '0'),
+        't': String(lastDay).padStart(2, '0'),
+        'j': baseDate.getDate(),
+        'n': month,
+        'w': baseDate.getDay(),
+        'G': baseDate.getHours(),
+        'a': baseDate.getHours() >= 12 ? 'pm' : 'am',
+        'A': baseDate.getHours() >= 12 ? 'PM' : 'AM'
     };
 
-    return format.replace(/[YmdHisjwnGaA]/g, (match) => map[match]);
+    return format.replace(/[YmdHistjwnGaA]/g, match => map[match]);
 }
 
 /**
@@ -366,175 +376,263 @@ function llenarInfoTipoInc(id_modal, data) {
             }
         }
         return `
-            <div class="col-lg-4 col-md-6 mt-2">
+            <div class="mt-2 px-3 py-2 rounded-7" style="background-color: rgb(123 126 255 / 19%);">
                 <div class="d-flex align-items-center">
-                    <label class="badge badge-${tipoInc.color}">${tipoInc.tipo}</label>
+                    <label class="badge badge-${tipoInc.color} p-2 rounded-pill">${tipoInc.tipo}</label>
                     <div class="ms-2 w-100">
-                        <p class="d-flex justify-content-between mb-0 pe-lg-5 col-5 col-md-12" style="font-weight: 500;font-size: small;">${tipoInc.descripcion}<span>${calcularDuracion(fecha_ini, fecha_fin)}</span></p>
-                        <p class="text-muted mb-0" style="font-size: .675rem;"><b style="letter-spacing: 0.1em;">I: </b>${fecha_ini}</p>
-                        <p class="text-muted mb-0 ${dnone}" style="font-size: .675rem;"><b>F: </b>${fecha_fin}</p>
+                        <p class="align-items-center d-flex justify-content-between mb-1" style="font-weight: 500;font-size: .9rem;">
+                            ${tipoInc.descripcion}
+                            <span style="font-size: .68rem;">${calcularDuracion(fecha_ini, fecha_fin)}</span>
+                        </p>
+                        <p class="text-muted mb-0" style="font-size: .7rem;"><b style="letter-spacing: 0.1em;">I: </b>${fecha_ini}</p>
+                        <p class="text-muted mb-0 ${dnone}" style="font-size: .7rem;"><b>F: </b>${fecha_fin}</p>
                     </div>
                 </div>
             </div>
         `;
     }).join('');
 
-    $(`#${id_modal} [aria-item="incidencia"]`).html(`
-        <div class="row">
-            ${resultado}
-        </div>
-    `);
+    $(`#${id_modal} [aria-item="incidencia"]`).html(resultado);
 }
 
 function llenarInfoSeguimientoInc(id_modal, data) {
     const acciones = {
-        'registro': '<i class="fas fa-folder-open text-warning"></i> Registro de Incidencia',
-        'asignado': '<i class="fas fa-user-clock text-info"></i> Asignaciones',
-        'inicio': '<i class="fas fa-hourglass-start text-primary"></i> Inició la Incidencia',
-        'final': '<i class="fas fa-check-double text-success"></i> Finalizó la Incidencia',
+        registro: {
+            icon: {
+                icon: '<i class="fas fa-folder-open text-warning"></i>',
+                bg: 'rgb(228 161 27 / 15%)',
+            },
+            text: 'Registro de Incidencia',
+        },
+        asignado: {
+            icon: {
+                icon: '<i class="fas fa-user-clock text-info"></i>',
+                bg: 'rgb(84 180 211 / 15%)',
+            },
+            text: 'Asignaciones',
+        },
+        inicio: {
+            icon: {
+                icon: '<i class="far fa-circle-play text-primary"></i>',
+                bg: 'rgb(59 113 202 / 30%)',
+            },
+            text: 'Inició la Incidencia',
+        },
+        final: {
+            icon: {
+                icon: '<i class="fas fa-check text-success"></i>',
+                bg: 'rgb(20 164 77 / 15%)',
+            },
+            text: 'Finalizó la Incidencia',
+        },
     };
 
+    let total_acciones = Object.entries(data).length;
+    let acciones_realizadas = 0;
     let seguimiento = Object.entries(data).map(([key, e]) => {
+        acciones_realizadas++;
         let bodySeguimiento = "";
         if (key === "asignado") {
             if (!data["asignado"].length) return;
         }
 
         const contactoTemplate = (persona) => `
-            <div class="d-flex align-items-center mt-2">
-                <img src="${persona.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                <div class="ms-3">
-                    <p class="fw-bold mb-1">${persona.nombre}</p>
-                    <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
-                        <i class="fab fa-whatsapp text-success"></i> ${persona.telefono} / <i class="far fa-envelope text-danger"></i> ${persona.email}
-                    </p>
+            <div class="align-items-center d-flex gap-3 pt-3">
+                <img alt="Avatar" class="img-fluid rounded-circle" src="${persona.img}" style="width: 40px;height: 40px;">
+                <div>
+                    <p class="fw-bold mb-0" style="font-size: 0.875rem;">${persona.nombre}</p>
+                    <div class="align-items-center d-flex gap-3 mt-1">
+                        <a class="" href="${persona.telefono ? `https://wa.me/${persona.telefono}` : 'javascript:void(0)'}"
+                            style="color: rgb(16 185 129 / 1);font-size: 11px;line-height: 1rem;">
+                            <span class="fa-whatsapp fab me-1"></span>${persona.telefono || '--'}
+                        </a>
+                        <a class="" href="${persona.email ? `mailto:${persona.email}` : 'javascript:void(0)'}"
+                            style="font-size: 11px;">
+                            <span class="fa-envelope far me-1"></span>${persona.email || '--'}
+                        </a>
+                    </div>
                 </div>
             </div>
         `;
 
         if (key === "asignado") {
             bodySeguimiento = e.map(asignacion => {
-                const tecnicos = asignacion.tecnicos.map(tecnico => `
-                    <div class="col my-1 mx-2">
-                        <label class="d-flex align-items-center text-nowrap">
-                            <img src="${tecnico.img}" alt="" style="width: 24px; height: 24px" class="rounded-circle" />
-                            <div class="ms-2">
-                                <p class="mb-0" style="font-weight: 500;font-size: .75rem;">${tecnico.nombre}</p>
-                                <p class="text-muted mb-0" style="font-size: .675rem;">${tecnico.date}</p>
+                const asignados = asignacion.tecnicos.map(tecnico => `
+                    <div class="align-items-center d-flex gap-3 pt-3">
+                        <img alt="Avatar" class="img-fluid rounded-circle"
+                            src="${tecnico.img}"
+                            style="width: 30px;height: 30px;">
+                        <div>
+                            <p class="fw-bold mb-0" style="font-size: 0.875rem;">${tecnico.nombre}</p>
+                            <div class="align-items-center d-flex gap-3 mt-1">
+                                <span style="font-size: 11px;">${tecnico.date}</span>
+                                <!--<a class="" href="https://wa.me/954213548"
+                                    style="color: rgb(16 185 129 / 1);font-size: 11px;line-height: 1rem;">
+                                    <span class="fa-whatsapp fab me-1"></span>
+                                    954213548
+                                </a>
+                                <a class="" href="mailto:jcauper@email.com"
+                                    style="font-size: 11px;">
+                                    <span class="fa-envelope far me-1"></span>
+                                    jcauper@email.com
+                                </a>-->
                             </div>
-                        </label>
+                        </div>
                     </div>
                 `).join('');
 
                 return `
-                    <div class="d-flex align-items-center mt-2">
-                        <img src="${asignacion.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                        <div class="ms-3 w-100">
-                            <p class="fw-bold mb-1">${asignacion.nombre}</p>
-                            <p class="text-muted mb-1" style="font-size: .73rem;">Asignó la incidencia a:</p>
-                            <div class="row row-cols-1 row-cols-lg-5">${tecnicos}</div>
-                            <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
-                                <i class="fab fa-whatsapp text-success"></i> ${asignacion.telefono} / <i class="far fa-envelope text-danger"></i> ${asignacion.email}
-                            </p>
-                        </div>
-                    </div>
-                `;
+                    ${contactoTemplate(asignacion)}
+                    <div class="ms-4 mt-3 p-3 rounded-7" style="background-color: rgb(148 163 184 / 12%);">
+                        <h3 class="fw-bold mb-0 text-uppercase" style="letter-spacing: .05em;font-size: 12px;color: rgb(148 163 184 / 1);">
+                            Asignó la incidencia a:
+                        </h3>
+                        ${asignados}
+                    </div>`;
             }).join('');
         } else {
             bodySeguimiento = contactoTemplate(e);
         }
 
         return `
-            <li class="list-group-item border-0">
-                <div class="p-3 rounded-5 shadow-4-strong">
-                    <div class="d-flex justify-content-between align-items-center title-seguimiento">
-                        <span class="tt-upper font-weight-semibold">${acciones[key]}</span>
-                        <span class="font-weight-semibold">${e.date ?? ""}</span>
-                    </div>
-                    <div>${bodySeguimiento}</div>
+            <div class="position-relative card_seguimiento ${acciones_realizadas < total_acciones ? 'line_seguimiento' : ''} pb-4">
+                <div class="align-items-center d-flex justify-content-center position-absolute rounded-pill shadow-2-strong start-0 top-0"
+                    style="background-color: ${acciones[key].icon.bg};width: 3rem;height: 3rem;z-index: 2;">
+                    ${acciones[key].icon.icon}
                 </div>
-            </li>
+                <div class="detalle_body">
+                    <div class="align-items-start d-flex justify-content-between">
+                        <h3 class="fw-bold mb-0 text-uppercase"
+                            style="letter-spacing: .05em;font-size: 12px;">${acciones[key].text}</h3>
+                        ${e.date ? `<time class="px-2 py-1 rounded-pill" style="font-size: 10px;color: rgb(148 163 184 / 1);background-color: rgb(148 163 184 / 12%);">${e.date}</time>` : ''}
+                    </div>
+                    ${bodySeguimiento}
+                </div>
+            </div>
         `;
     }).join('');
 
-    $(`#${id_modal} [aria-item="contenedor-seguimiento"]`).html(`
-        <ul class="list-group list-group-light">
-            ${seguimiento}
-        </ul>
-    `);
+    $(`#${id_modal} [aria-item="contenedor-seguimiento"]`).html(seguimiento);
 }
 
 function llenarInfoSeguimientoVis(id_modal, data) {
     const acciones = {
-        'registro': '<i class="fas fa-folder-open text-warning"></i> Registro de Visita',
-        'asignado': '<i class="fas fa-user-clock text-info"></i> Asignaciones',
-        'inicio': '<i class="fas fa-hourglass-start text-primary"></i> Inició la Visita',
-        'final': '<i class="fas fa-check-double text-success"></i> Finalizó la Visita',
+        registro: {
+            icon: {
+                icon: '<i class="fas fa-folder-open text-warning"></i>',
+                bg: 'rgb(228 161 27 / 15%)',
+            },
+            text: 'Registro de la Visita',
+        },
+        asignado: {
+            icon: {
+                icon: '<i class="fas fa-user-clock text-info"></i>',
+                bg: 'rgb(84 180 211 / 15%)',
+            },
+            text: 'Asignaciones',
+        },
+        inicio: {
+            icon: {
+                icon: '<i class="far fa-circle-play text-primary"></i>',
+                bg: 'rgb(59 113 202 / 30%)',
+            },
+            text: 'Inició la Visita',
+        },
+        final: {
+            icon: {
+                icon: '<i class="fas fa-check text-success"></i>',
+                bg: 'rgb(20 164 77 / 15%)',
+            },
+            text: 'Finalizó la Visita',
+        },
     };
 
+    let total_acciones = Object.entries(data).length;
+    let acciones_realizadas = 0;
     let seguimiento = Object.entries(data).map(([key, e]) => {
+        acciones_realizadas++;
         let bodySeguimiento = "";
         if (key === "asignado") {
             if (!data["asignado"].length) return;
         }
 
         const contactoTemplate = (persona) => `
-            <div class="d-flex align-items-center mt-2">
-                <img src="${persona.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                <div class="ms-3">
-                    <p class="fw-bold mb-1">${persona.nombre}</p>
-                    <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
-                        <i class="fab fa-whatsapp text-success"></i> ${persona.telefono} / <i class="far fa-envelope text-danger"></i> ${persona.email}
-                    </p>
+            <div class="align-items-center d-flex gap-3 pt-3">
+                <img alt="Avatar" class="img-fluid rounded-circle" src="${persona.img}" style="width: 40px;height: 40px;">
+                <div>
+                    <p class="fw-bold mb-0" style="font-size: 0.875rem;">${persona.nombre}</p>
+                    <div class="align-items-center d-flex gap-3 mt-1">
+                        <a class="" href="${persona.telefono ? `https://wa.me/${persona.telefono}` : 'javascript:void(0)'}"
+                            style="color: rgb(16 185 129 / 1);font-size: 11px;line-height: 1rem;">
+                            <span class="fa-whatsapp fab me-1"></span>${persona.telefono || '--'}
+                        </a>
+                        <a class="" href="${persona.email ? `mailto:${persona.email}` : 'javascript:void(0)'}"
+                            style="font-size: 11px;">
+                            <span class="fa-envelope far me-1"></span>${persona.email || '--'}
+                        </a>
+                    </div>
                 </div>
             </div>
         `;
 
         if (key === "asignado") {
             bodySeguimiento = e.map(asignacion => {
-                const tecnicos = asignacion.tecnicos.map(tecnico => `
-                    <label class="p-1 rounded text-nowrap" role="button" data-mdb-ripple-init title="${tecnico.date}">
-                        <img src="${tecnico.img}" alt="" style="width: 24px; height: 24px" class="rounded-circle" />
-                        <span>${tecnico.nombre}</span>
-                    </label>
+                const asignados = asignacion.tecnicos.map(tecnico => `
+                    <div class="align-items-center d-flex gap-3 pt-3">
+                        <img alt="Avatar" class="img-fluid rounded-circle"
+                            src="${tecnico.img}"
+                            style="width: 30px;height: 30px;">
+                        <div>
+                            <p class="fw-bold mb-0" style="font-size: 0.875rem;">${tecnico.nombre}</p>
+                            <div class="align-items-center d-flex gap-3 mt-1">
+                                <span style="font-size: 11px;">${tecnico.date}</span>
+                                <!--<a class="" href="https://wa.me/954213548"
+                                    style="color: rgb(16 185 129 / 1);font-size: 11px;line-height: 1rem;">
+                                    <span class="fa-whatsapp fab me-1"></span>
+                                    954213548
+                                </a>
+                                <a class="" href="mailto:jcauper@email.com"
+                                    style="font-size: 11px;">
+                                    <span class="fa-envelope far me-1"></span>
+                                    jcauper@email.com
+                                </a>-->
+                            </div>
+                        </div>
+                    </div>
                 `).join('');
 
                 return `
-                    <div class="d-flex align-items-center mt-2">
-                        <img src="${asignacion.img}" alt="" style="width: 45px; height: 45px" class="rounded-circle" />
-                        <div class="ms-3">
-                            <p class="fw-bold mb-1">${asignacion.nombre}</p>
-                            <p class="text-muted mb-1" style="font-size: .73rem;">Asignó la visita a:</p>
-                            <div class="mb-0 ms-2" style="font-size: .73rem;">${tecnicos}</div>
-                            <p class="text-muted mb-0 mt-2" style="font-size: .73rem;">
-                                <i class="fab fa-whatsapp text-success"></i> ${asignacion.telefono} / <i class="far fa-envelope text-danger"></i> ${asignacion.email}
-                            </p>
-                        </div>
-                    </div>
-                `;
+                    ${contactoTemplate(asignacion)}
+                    <div class="ms-4 mt-3 p-3 rounded-7" style="background-color: rgb(148 163 184 / 12%);">
+                        <h3 class="fw-bold mb-0 text-uppercase" style="letter-spacing: .05em;font-size: 12px;color: rgb(148 163 184 / 1);">
+                            Asignó la visita a:
+                        </h3>
+                        ${asignados}
+                    </div>`;
             }).join('');
         } else {
             bodySeguimiento = contactoTemplate(e);
         }
 
         return `
-            <li class="list-group-item border-0">
-                <div class="p-3 rounded-5 shadow-4-strong">
-                    <div class="d-flex justify-content-between align-items-center title-seguimiento">
-                        <span class="tt-upper font-weight-semibold">${acciones[key]}</span>
-                        <span class="font-weight-semibold">${e.date ?? ""}</span>
-                    </div>
-                    <div>${bodySeguimiento}</div>
+            <div class="position-relative card_seguimiento ${acciones_realizadas < total_acciones ? 'line_seguimiento' : ''} pb-4">
+                <div class="align-items-center d-flex justify-content-center position-absolute rounded-pill shadow-2-strong start-0 top-0"
+                    style="background-color: ${acciones[key].icon.bg};width: 3rem;height: 3rem;z-index: 2;">
+                    ${acciones[key].icon.icon}
                 </div>
-            </li>
+                <div class="detalle_body">
+                    <div class="align-items-start d-flex justify-content-between">
+                        <h3 class="fw-bold mb-0 text-uppercase"
+                            style="letter-spacing: .05em;font-size: 12px;">${acciones[key].text}</h3>
+                        ${e.date ? `<time class="px-2 py-1 rounded-pill" style="font-size: 10px;color: rgb(148 163 184 / 1);background-color: rgb(148 163 184 / 12%);">${e.date}</time>` : ''}
+                    </div>
+                    ${bodySeguimiento}
+                </div>
+            </div>
         `;
     }).join('');
 
-    $(`#${id_modal} [aria-item="contenedor-seguimiento"]`).html(`
-        <ul class="list-group list-group-light">
-            ${seguimiento}
-        </ul>
-    `);
+    $(`#${id_modal} [aria-item="contenedor-seguimiento"]`).html(seguimiento);
 }
 
 /**
@@ -575,41 +673,44 @@ function calcularDuracion(fechaIni, fechaFin) {
 //   console.log(calcularDuracion(inicio, fin)); // "3h 6m 0s"
 
 
-function getBadgeIncidencia(estado, size = '.7') {
+function getBadgeIncidencia(estado, size = '.7', pill = false, icon = false) {
     estadoInforme = {
-        "0": { 'color': 'warning', 'text': 'Sin Asignar' },
-        "1": { 'color': 'info', 'text': 'Asignada' },
-        "2": { 'color': 'primary', 'text': 'En Proceso' },
-        "3": { 'color': 'success', 'text': 'Finalizado' },
-        "4": { 'color': 'danger', 'text': 'Faltan Datos' },
-        "5": { 'color': 'danger', 'text': 'Cierre Sistema' },
-    };
-    let tsize = `style="font-size: ${size}rem;"` ?? null;
+        "0": { 'color': 'warning', 'text': 'Sin Asignar', 'icon': 'fa-user-xmark' },
+        "1": { 'color': 'info', 'text': 'Asignada', 'icon': 'fa-user-check' },
+        "2": { 'color': 'primary', 'text': 'En Proceso', 'icon': 'fa-hourglass-half' },
+        "3": { 'color': 'success', 'text': 'Finalizado', 'icon': 'far fa-check-circle' },
+        "4": { 'color': 'danger', 'text': 'Faltan Datos', 'icon': 'fa-circle-exclamation' },
+        "5": { 'color': 'danger', 'text': 'Cierre Sistema', 'icon': 'fa-circle-exclamation' },
+    }[estado || 0];
 
-    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+    let icono = icon ? `<i class="fa ${estadoInforme.icon} me-2" style="font-size: ${size}rem;"></i>` : '';
+    let style = `style="font-size: ${size}rem; color: rgb(var(--mdb-${estadoInforme.color}-rgb)); background-color: rgb(var(--mdb-${estadoInforme.color}-rgb), 15%); border: 2px solid;"`;
+
+    return `<label class="badge ${pill ? 'rounded-pill' : ''}" ${style}>${icono + estadoInforme.text}</label>`;
 }
 
-function getBadgeTIncidencia(estado, size = '.7') {
+function getBadgeTIncidencia(estado, size = '.7') { 
     estadoInforme = {
         "1": { 'color': 'success', 'text': 'N1' },
         "2": { 'color': 'warning', 'text': 'N2' },
         "3": { 'color': 'danger', 'text': 'N3' },
     };
-    let tsize = `style="font-size: ${size}rem;"` ?? null;
+    let style = `style="font-size: ${size}rem;"` ?? null;
 
-    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${style}>${estadoInforme[estado]['text']}</label>`;
 }
 
-function getBadgeVisita(estado, size = null) {
+function getBadgeVisita(estado, size = '.7', pill = false, icon = false) {
     estadoInforme = {
-        "0": { 'color': 'warning', 'text': 'Sin Iniciar' },
-        "1": { 'color': 'primary', 'text': 'En Proceso' },
-        "2": { 'color': 'success', 'text': 'Finalizado' },
-        "4": { 'color': 'danger', 'text': 'Faltan Datos' },
-    };
-    let tsize = `style="font-size: ${size}rem;"` ?? null;
+        "0": { 'color': 'warning', 'text': 'Sin Iniciar', 'icon': 'fa-user-xmark' },
+        "1": { 'color': 'primary', 'text': 'En Proceso', 'icon': 'fa-user-check' },
+        "2": { 'color': 'success', 'text': 'Finalizado', 'icon': 'far fa-check-circle' },
+        "4": { 'color': 'danger', 'text': 'Faltan Datos', 'icon': 'fa-circle-exclamation' },
+    }[estado || 0];
+    let icono = icon ? `<i class="fa ${estadoInforme.icon} text-white me-2" style="font-size: ${size}rem;"></i>` : '';
+    let style = `style="font-size: ${size}rem; color: rgb(var(--mdb-${estadoInforme.color}-rgb)); background-color: rgb(var(--mdb-${estadoInforme.color}-rgb), 15%); border: 2px solid;"`;
 
-    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+    return `<label class="badge ${pill ? 'rounded-pill' : ''}" ${style}>${icono + estadoInforme.text}</label>`;
 }
 
 function getBadgeContrato(estado, size = null) {
@@ -617,9 +718,9 @@ function getBadgeContrato(estado, size = null) {
         { 'color': 'danger', 'text': 'Sin Contrato' },
         { 'color': 'success', 'text': 'En Contrato' },
     ];
-    let tsize = `style="font-size: ${size}rem;"` ?? null;
+    let style = `style="font-size: ${size}rem;"` ?? null;
 
-    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${style}>${estadoInforme[estado]['text']}</label>`;
 }
 
 function getBadgePrioridad(estado, size = null) {
@@ -629,9 +730,9 @@ function getBadgePrioridad(estado, size = null) {
         "P3": { 'color': 'warning', 'text': 'P3' },
         "P4": { 'color': 'success', 'text': 'P4' },
     };
-    let tsize = `style="font-size: ${size}rem;"` ?? null;
+    let style = `style="font-size: ${size}rem;"` ?? null;
 
-    return `<label class="badge badge-${estadoInforme[estado]['color']} me-2" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+    return `<label class="badge badge-${estadoInforme[estado]['color']} me-2" ${style}>${estadoInforme[estado]['text']}</label>`;
 }
 
 function mostrar_acciones(table = null) {
@@ -642,7 +743,6 @@ function mostrar_acciones(table = null) {
     const dataTables_scrollBody = $(`${idTabla ? `#${idTabla}_wrapper` : '.dataTables_wrapper'} .dataTables_scrollBody`);
     let filaAccionActivo = null;
     let filaAccionOld = null;
-    // let openOnCkick = false;
 
     const animateProperty = (element, property, start, end, duration, fps, callback = null) => {
         let current = start;
@@ -685,8 +785,9 @@ function mostrar_acciones(table = null) {
     table.off("draw.dt").on('draw.dt', function () {
         let nuevaPagina = table.page();
 
-        $("tr:has(.td-acciones)").off();
-        $("tr:has(.td-acciones)").each(function () {
+        const $tableBody = $(table.table().body());
+        $tableBody.find("tr:has(.td-acciones)").off();
+        $tableBody.find("tr:has(.td-acciones)").each(function () {
             const tdAcciones = $(this).find(".td-acciones");
             if (!tdAcciones.length) return;
 
@@ -874,6 +975,15 @@ function cargarIframeDocumento(url) {
     });
 }
 
+function generateUrl(baseUrl, params) {
+    const url = new URL(baseUrl);
+    Object.keys(params).forEach(key => params[key] ? url.searchParams.set(key, params[key]) : null);
+    return url.toString();
+}
+
 function esCelular() {
-    return /Android|iPhone|iPad|iPod|Windows Phone/i.test(navigator.userAgent);
+    return (
+        /android|iphone|ipod|ipad|mobile/i.test(navigator.userAgent.toLowerCase()) ||
+        navigator.maxTouchPoints > 1
+    );
 }

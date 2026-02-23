@@ -325,7 +325,7 @@ div:where(.swal2-container) div:where(.swal2-popup) {
   max-width: 100%;
   padding: 0 0 1.25em;
   border: none;
-  border-radius: 5px;
+  border-radius: 1rem;
   background: var(--mdb-surface-bg);
   color: var(--mdb-body-color);
   font-family: inherit;
@@ -405,7 +405,7 @@ div:where(.swal2-container) button:where(.swal2-styled):not([disabled]) {
 
 div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm) {
   border: 0;
-  border-radius: 0.25em;
+  border-radius: .75rem;
   background: initial;
   background-color: #7066e0;
   color: #fff;
@@ -418,7 +418,7 @@ div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-confirm):fo
 
 div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny) {
   border: 0;
-  border-radius: 0.25em;
+  border-radius: .75rem;
   background: initial;
   background-color: #dc3741;
   color: #fff;
@@ -431,7 +431,7 @@ div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-deny):focus
 
 div:where(.swal2-container) button:where(.swal2-styled):where(.swal2-cancel) {
   border: 0;
-  border-radius: 0.25em;
+  border-radius: .75rem;
   background: initial;
   background-color: #6e7881;
   color: #fff;
@@ -529,7 +529,7 @@ div:where(.swal2-container) .swal2-html-container {
   padding: 1em 1.6em 0.3em;
   overflow: auto;
   color: inherit;
-  font-size: 1.125em;
+  font-size: .95em;
   font-weight: normal;
   line-height: normal;
   text-align: center;
