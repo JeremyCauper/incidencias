@@ -39,11 +39,11 @@
         <div class="position-absolute" style="inset: calc(.25rem * 0);">
             <div class="img-wrapper position-absolute">
                 <img data-imagen="cliente" class="bg-img active"
-                    src="{{ secure_asset('../public/front/images/app/fondo_login_cliente.webp') }}"
+                    src="{{ secure_asset('front/images/app/fondo_login_cliente.webp') }}"
                     alt="Modern workspace">
 
                 <img data-imagen="soporte" class="bg-img"
-                    src="{{ secure_asset('../public/front/images/app/fondo_login_soporte.webp') }}"
+                    src="{{ secure_asset('front/images/app/fondo_login_soporte.webp') }}"
                     alt="Modern workspace">
             </div>
         </div>
