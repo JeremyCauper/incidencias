@@ -51,7 +51,7 @@
             style="z-index: 10;height: 100vh;">
             <div class="fade-in-down" style="opacity: 1; transform: none;animation-duration: .65s;">
                 <div class="d-flex align-items-center gap-3 mb-5">
-                    <img src="{{ secure_asset('../public/front/images/app/LogoRC_WBlanco.webp') }}"
+                    <img src="{{ secure_asset('front/images/app/LogoRC_WBlanco.webp') }}"
                         style="height: 5rem;">
                 </div>
             </div>
