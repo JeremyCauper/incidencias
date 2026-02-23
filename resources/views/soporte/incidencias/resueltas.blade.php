@@ -5,7 +5,7 @@
     <script type="text/javascript" src="{{ secure_asset($ft_js->daterangepicker_moment) }}"></script>
     <script type="text/javascript" src="{{ secure_asset($ft_js->daterangepicker) }}"></script>
     <link rel="stylesheet" type="text/css" href="{{ secure_asset($ft_css->daterangepicker) }}">
-    <link rel="stylesheet" href="{{ secure_asset('front/css/app/incidencias/resueltas.css') }}">
+    <link rel="stylesheet" href="{{ secure_asset('front/css/app/incidencias/resueltas.css') }}?v={{ config('app.version') }}">
     <script>
         let empresas = @json($data['company']);
         let sucursales = @json($data['scompany']);
@@ -78,7 +78,7 @@
     </div>
 
     <div class="col-12" id="contenedor_registros"></div>
-    <script src="{{ secure_asset('front/js/soporte/incidencia/vista-registros-resueltas.js') }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/vista-registros-resueltas.js') }}?v={{ config('app.version') }}"></script>
 
     <div class="modal fade" id="modal_detalle" aria-labelledby="modal_detalle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
@@ -245,7 +245,7 @@
 @endsection
 
 @section('scripts')
-    <script src="{{ secure_asset('front/js/app/SelectManeger.js') }}"></script>
-    <script src="{{ secure_asset('front/vendor/signature/signature_pad.js') }}"></script>
-    <script src="{{ secure_asset('front/js/soporte/incidencia/resueltas.js') }}"></script>
+    <script src="{{ secure_asset('front/js/app/SelectManeger.js') }}?v={{ config('app.version') }}"></script>
+    <script src="{{ secure_asset('front/vendor/signature/signature_pad.js') }}?v={{ config('app.version') }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/resueltas.js') }}?v={{ config('app.version') }}"></script>
 @endsection

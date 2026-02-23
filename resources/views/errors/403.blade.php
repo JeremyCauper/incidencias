@@ -5,7 +5,7 @@
     <!-- Requiredd meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}" />
+    <link rel="shortcut icon" href="{{secure_asset('front/images/app/icons/icon.webp')}}" />
     <title>RC Incidencias | Login</title>
     <!-- Font Awesome -->
     <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}">

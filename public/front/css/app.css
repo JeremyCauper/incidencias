@@ -1,22 +1,22 @@
 :root,
 [data-mdb-theme=light] {
-    --row-bg-primary: 59 113 202;
-    --row-bg-warning: 227 168 51;
-    --row-bg-info: 74 214 247;
+    --row-bg-primary: 138 182 255;
+    --row-bg-warning: 255 213 131;
+    --row-bg-info: 120 217 249;
     --row-bg-danger: 255 139 139;
     --root-font-weight: 400;
 
     --root-active-multiselect-bg: #ffffff;
     --root-dt-processing-bg: #ffffff75;
-    --root-dt-scrollHead-bg: var(--color-slate-400);
+    --root-dt-scrollHead-bg: var(--color-blue-300);
     --root-dt-shorting-after-bg: var(--color-slate-800);
 }
 
 [data-mdb-theme=dark] {
-    --row-bg-primary: 47 90 162;
-    --row-bg-warning: 171 115 16;
-    --row-bg-info: 38 125 145;
-    --row-bg-danger: 85 0 0;
+    --row-bg-primary: 16 32 59;
+    --row-bg-warning: 112 88 45;
+    --row-bg-info: 42 90 101;
+    --row-bg-danger: 96 40 40;
     --root-font-weight: 100;
 
     --root-active-multiselect-bg: #16181f;
@@ -932,13 +932,13 @@ label.custom-control {
 
 .modal-body::-webkit-scrollbar-thumb,
 .dataTables_scrollBody::-webkit-scrollbar-thumb {
-    background: rgb(var(--mdb-surface-inverted-color-rgb), 50%);
+    background: var(--root-scroll-bg);
     border-radius: 10px;
 }
 
 .modal-body::-webkit-scrollbar-thumb:hover,
 .dataTables_scrollBody::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--mdb-surface-inverted-color-rgb), 60%);
+    background: var(--root-scroll-bg-hover);
 }
 
 /* Quitar el cuadro blanco en la unión de los scrolls */
@@ -970,12 +970,12 @@ label.custom-control {
 }
 
 .personalized-scroll::-webkit-scrollbar-thumb {
-    background: rgb(var(--mdb-bg-scroll) / 90%);
+    background: var(--root-scroll-bg);
     border-radius: 10px;
 }
 
 .personalized-scroll::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--mdb-bg-scroll) / 100%);
+    background: var(--root-scroll-bg-hover);
 }
 
 /* Quitar el cuadro blanco en la unión de los scrolls */
@@ -1019,37 +1019,37 @@ label.custom-control {
 }
 
 .row-warning {
-    background-color: rgb(var(--row-bg-warning) / 30%);
+    background-color: rgb(var(--row-bg-warning) / 50%);
 }
 
 .row-info {
-    background-color: rgb(var(--row-bg-info) / 30%);
+    background-color: rgb(var(--row-bg-info) / 50%);
 }
 
 .row-primary {
-    background-color: rgb(var(--row-bg-primary) / 30%);
+    background-color: rgb(var(--row-bg-primary) / 50%);
 }
 
 .row-danger {
-    background-color: rgb(var(--row-bg-danger) / 30%);
+    background-color: rgb(var(--row-bg-danger) / 50%);
 }
 
 
 .row-warning:hover {
-    --mdb-table-hover-bg: rgb(var(--row-bg-warning) / 35%) !important;
+    --mdb-table-hover-bg: rgb(var(--row-bg-warning) / 100%) !important;
 }
 
 .row-info:hover {
-    --mdb-table-hover-bg: rgb(var(--row-bg-info) / 35%) !important;
+    --mdb-table-hover-bg: rgb(var(--row-bg-info) / 100%) !important;
     position: relative;
 }
 
 .row-primary:hover {
-    --mdb-table-hover-bg: rgb(var(--row-bg-primary) / 35%) !important;
+    --mdb-table-hover-bg: rgb(var(--row-bg-primary) / 100%) !important;
 }
 
 .row-danger:hover {
-    --mdb-table-hover-bg: rgb(var(--row-bg-danger) / 35%) !important;
+    --mdb-table-hover-bg: rgb(var(--row-bg-danger) / 100%) !important;
 }
 
 .row-warning .active-acciones {

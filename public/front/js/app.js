@@ -683,21 +683,21 @@ function getBadgeIncidencia(estado, size = '.7', pill = false, icon = false) {
         "5": { 'color': 'danger', 'text': 'Cierre Sistema', 'icon': 'fa-circle-exclamation' },
     }[estado || 0];
 
-    let icono = icon ? `<i class="fa ${estadoInforme.icon} text-white me-2" style="font-size: ${size}rem;"></i>` : '';
-    let tsize = `style="font-size: ${size}rem; line-height: 1.5em;"` ?? null;
+    let icono = icon ? `<i class="fa ${estadoInforme.icon} me-2" style="font-size: ${size}rem;"></i>` : '';
+    let style = `style="font-size: ${size}rem; color: rgb(var(--mdb-${estadoInforme.color}-rgb)); background-color: rgb(var(--mdb-${estadoInforme.color}-rgb), 15%); border: 2px solid;"`;
 
-    return `<label class="badge badge-${estadoInforme.color} ${pill ? 'rounded-pill' : ''}" ${tsize}>${icono + estadoInforme.text}</label>`;
+    return `<label class="badge ${pill ? 'rounded-pill' : ''}" ${style}>${icono + estadoInforme.text}</label>`;
 }
 
-function getBadgeTIncidencia(estado, size = '.7') {
+function getBadgeTIncidencia(estado, size = '.7') { 
     estadoInforme = {
         "1": { 'color': 'success', 'text': 'N1' },
         "2": { 'color': 'warning', 'text': 'N2' },
         "3": { 'color': 'danger', 'text': 'N3' },
     };
-    let tsize = `style="font-size: ${size}rem;"` ?? null;
+    let style = `style="font-size: ${size}rem;"` ?? null;
 
-    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${style}>${estadoInforme[estado]['text']}</label>`;
 }
 
 function getBadgeVisita(estado, size = '.7', pill = false, icon = false) {
@@ -708,9 +708,9 @@ function getBadgeVisita(estado, size = '.7', pill = false, icon = false) {
         "4": { 'color': 'danger', 'text': 'Faltan Datos', 'icon': 'fa-circle-exclamation' },
     }[estado || 0];
     let icono = icon ? `<i class="fa ${estadoInforme.icon} text-white me-2" style="font-size: ${size}rem;"></i>` : '';
-    let tsize = `style="font-size: ${size}rem; line-height: 1.5em;"` ?? null;
+    let style = `style="font-size: ${size}rem; color: rgb(var(--mdb-${estadoInforme.color}-rgb)); background-color: rgb(var(--mdb-${estadoInforme.color}-rgb), 15%); border: 2px solid;"`;
 
-    return `<label class="badge badge-${estadoInforme.color} ${pill ? 'rounded-pill' : ''}" ${tsize}>${icono + estadoInforme.text}</label>`;
+    return `<label class="badge ${pill ? 'rounded-pill' : ''}" ${style}>${icono + estadoInforme.text}</label>`;
 }
 
 function getBadgeContrato(estado, size = null) {
@@ -718,9 +718,9 @@ function getBadgeContrato(estado, size = null) {
         { 'color': 'danger', 'text': 'Sin Contrato' },
         { 'color': 'success', 'text': 'En Contrato' },
     ];
-    let tsize = `style="font-size: ${size}rem;"` ?? null;
+    let style = `style="font-size: ${size}rem;"` ?? null;
 
-    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+    return `<label class="badge badge-${estadoInforme[estado]['color']}" ${style}>${estadoInforme[estado]['text']}</label>`;
 }
 
 function getBadgePrioridad(estado, size = null) {
@@ -730,9 +730,9 @@ function getBadgePrioridad(estado, size = null) {
         "P3": { 'color': 'warning', 'text': 'P3' },
         "P4": { 'color': 'success', 'text': 'P4' },
     };
-    let tsize = `style="font-size: ${size}rem;"` ?? null;
+    let style = `style="font-size: ${size}rem;"` ?? null;
 
-    return `<label class="badge badge-${estadoInforme[estado]['color']} me-2" ${tsize}>${estadoInforme[estado]['text']}</label>`;
+    return `<label class="badge badge-${estadoInforme[estado]['color']} me-2" ${style}>${estadoInforme[estado]['text']}</label>`;
 }
 
 function mostrar_acciones(table = null) {

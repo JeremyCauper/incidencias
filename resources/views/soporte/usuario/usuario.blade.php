@@ -2,7 +2,7 @@
 @section('title', 'Panel de Control')
 
 @section('cabecera')
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}">
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/usuario/usuarios.css')}}?v={{ config('app.version') }}">
 @endsection
 @section('content')
 
@@ -256,6 +256,6 @@
         const imgFirmDefault = "{{secure_asset('front/images/firms/firm.png')}}";
         const imgUserDefault = "{{secure_asset('front/images/auth/user_auth.jpg')}}";
     </script>
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ config('app.version') }}"></script>
+    <script src="{{secure_asset('front/js/soporte/usuario/usuarios.js')}}?v={{ config('app.version') }}"></script>
 @endsection

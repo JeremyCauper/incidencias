@@ -60,14 +60,14 @@
 
     <div class="nav nav-tabs my-3 gap-2" id="myTab0" role="tablist">
         <div class="nav-item" role="presentation">
-            <button data-mdb-tab-init class="nav-link position-relative rounded-top-1 active" id="home-tab0"
+            <button data-mdb-tab-init class="nav-link position-relative rounded-top-4 active" id="home-tab0"
                 data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true"
                 data-mdb-ripple-init onclick="resetTable(false)">
                 Incidencias
             </button>
         </div>
         <div class="nav-item" role="presentation">
-            <button data-mdb-tab-init class="nav-link position-relative rounded-top-1" id="profile-tab0"
+            <button data-mdb-tab-init class="nav-link position-relative rounded-top-4" id="profile-tab0"
                 data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile" aria-selected="false"
                 data-mdb-ripple-init onclick="resetTable(true)">
                 Visitas
@@ -231,5 +231,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/buzon/resueltas.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/buzon/resueltas.js')}}?v={{ config('app.version') }}"></script>
 @endsection

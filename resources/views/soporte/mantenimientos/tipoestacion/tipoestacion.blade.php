@@ -112,5 +112,5 @@
 @section('scripts')
     <script>
     </script>
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/tipoestacion/tipoestacion.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/tipoestacion/tipoestacion.js')}}?v={{ config('app.version') }}"></script>
 @endsection

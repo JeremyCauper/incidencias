@@ -131,7 +131,7 @@ class RegistradasController extends Controller
                     "4" => ['c' => 'danger', 't' => 'Faltan Datos'],
                     "5" => ['c' => 'danger', 't' => 'Cierre Sistema'],
                 ];
-                $badge_informe = '<label class="badge badge-' . $estadoInforme[$val->estado_informe]['c'] . '" style="font-size: .8rem;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
+                $badge_informe = '<label class="badge rounded-pill" style="font-size: .75rem; color: rgb(var(--mdb-' . $estadoInforme[$val->estado_informe]['c'] . '-rgb)); border: 2px solid;">' . $estadoInforme[$val->estado_informe]['t'] . '</label>';
 
                 switch ($val->estado_informe) {
                     case 0:

@@ -105,5 +105,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/empresas/grupos.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/empresas/grupos.js')}}?v={{ config('app.version') }}"></script>
 @endsection

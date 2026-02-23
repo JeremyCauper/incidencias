@@ -13,7 +13,7 @@
             text-transform: capitalize;
         }
     </style>
-    <script src="{{ secure_asset('front/vendor/full-calendar/full-calendar.min.js') }}"></script>
+    <script src="{{ secure_asset('front/vendor/full-calendar/full-calendar.min.js') }}?v={{ config('app.version') }}"></script>
 @endsection
 @section('content')
 
@@ -189,5 +189,5 @@
     <script>
         let usuarios = <?=$data['usuarios']?>;
     </script>
-    <script src="{{ secure_asset('front/js/soporte/turno/turno.js') }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/turno/turno.js') }}?v={{ config('app.version') }}"></script>
 @endsection

@@ -53,7 +53,7 @@
     </div>
 
     <div class="col-12" id="contenedor_registros"></div>
-    <script src="{{ secure_asset('front/js/soporte/visitas/vista-registros-terminadas.js') }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/visitas/vista-registros-terminadas.js') }}?v={{ config('app.version') }}"></script>
 
     <!-- Modal -->
     <button class="d-none" data-mdb-modal-init data-mdb-target="#modal_seguimiento_visitasp"></button>
@@ -115,5 +115,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/visitas/terminadas.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/visitas/terminadas.js')}}?v={{ config('app.version') }}"></script>
 @endsection

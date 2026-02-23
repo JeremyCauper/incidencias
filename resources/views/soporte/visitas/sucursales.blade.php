@@ -62,7 +62,7 @@
             </div>
 
             <div class="col-12" id="contenedor_registros"></div>
-            <script src="{{ secure_asset('front/js/soporte/visitas/vista-registros-visitas.js') }}"></script>
+            <script src="{{ secure_asset('front/js/soporte/visitas/vista-registros-visitas.js') }}?v={{ config('app.version') }}"></script>
         </div>
 
         <div class="col-xl-6 mb-3">
@@ -105,7 +105,7 @@
             </div>
 
             <div class="col-12" id="contenedor_registros_programadas"></div>
-            <script src="{{ secure_asset('front/js/soporte/visitas/vista-registros-programadas.js') }}"></script>
+            <script src="{{ secure_asset('front/js/soporte/visitas/vista-registros-programadas.js') }}?v={{ config('app.version') }}"></script>
         </div>
     </div>
 
@@ -636,6 +636,6 @@
 
 @section('scripts')
     <script src="{{secure_asset($ft_js->RevisionMananger)}}"></script>
-    <script src="{{secure_asset('front/js/soporte/visitas/visitas.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/visitas/programadas.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/visitas/visitas.js')}}?v={{ config('app.version') }}"></script>
+    <script src="{{secure_asset('front/js/soporte/visitas/programadas.js')}}?v={{ config('app.version') }}"></script>
 @endsection

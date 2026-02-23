@@ -202,16 +202,15 @@
     --mdb-text-hover-opacity: 0.8;
     --mdb-surface-color: #4f4f4f;
     --mdb-surface-color-rgb: 79, 79, 79;
-    --mdb-surface-bg: #ffffff;
-    --mdb-surface-bg-rgb: 255, 255, 255;
+    --mdb-surface-bg: var(--color-slate-0);
+    --mdb-surface-bg-rgb: var(--color-slate-0);
     --mdb-surface-inverted-color: #16181f;
-    --mdb-surface-inverted-color-rgb: 22, 24, 31;
     --mdb-surface-inverted-bg: #6d6d6d;
-    --mdb-divider-color: #f5f5f5;
+    --mdb-divider-color: var(--color-slate-50);
     --mdb-divider-blurry-color: hsl(0, 0%, 40%);
     --mdb-highlight-bg-color: #eeeeee;
-    --mdb-scrollbar-rail-bg: #eeeeee;
-    --mdb-scrollbar-thumb-bg: #9e9e9e;
+    --root-scroll-bg: var(--color-slate-400);
+    --root-scroll-bg-hover: var(--color-slate-300);
     --mdb-picker-header-bg: #3b71ca;
     --mdb-timepicker-clock-face-bg: var(--mdb-secondary-bg);
     --mdb-sidenav-backdrop-opacity: 0.1;
@@ -221,26 +220,27 @@
     --mdb-form-control-disabled-bg: #e5e7eb;
     --mdb-box-shadow-color: #000;
     --mdb-box-shadow-color-rgb: 0, 0, 0;
-    --mdb-stepper-mobile-bg: #eeeeee;
+    --mdb-stepper-mobile-bg: var(--color-slate-200);
 
+    --mdb-dropdown-hover-bg: var(--color-slate-200);
     --mdb-table-hover-bg: rgb(220 226 237 / 25%);
     --mdb-box-shadow: 0 0px 15px -8px rgba(var(--mdb-box-shadow-color-rgb), .65), 0 0px 10px -8px rgba(var(--mdb-box-shadow-color-rgb), 0.25);
 }
 
 [data-mdb-theme=dark] {
     color-scheme: dark;
-    --mdb-surface-color: #fff;
-    --mdb-surface-color-rgb: 255, 255, 255;
+    --mdb-surface-color: var(--color-slate-0);
+    --mdb-surface-color-rgb: var(--color-slate-0);
     --mdb-surface-bg: #16181f;
     --mdb-surface-bg-rgb: 22, 24, 31;
-    --mdb-surface-inverted-color: #fff;
-    --mdb-surface-inverted-color-rgb: 255, 255, 255;
+    --mdb-surface-inverted-color: var(--color-slate-0);
+    --mdb-surface-inverted-color-rgb: var(--color-slate-0);
     --mdb-surface-inverted-bg: #757575;
     --mdb-divider-color: rgba(255, 255, 255, 0.12);
     --mdb-divider-blurry-color: hsl(0, 0%, 70%);
     --mdb-highlight-bg-color: #101219;
-    --mdb-scrollbar-rail-bg: #9e9e9e;
-    --mdb-scrollbar-thumb-bg: #eeeeee;
+    --root-scroll-bg: var(--color-slate-500);
+    --root-scroll-bg-hover: var(--color-slate-400);
     --mdb-picker-header-bg: #323232;
     --mdb-timepicker-clock-face-bg: #616161;
     --mdb-sidenav-backdrop-opacity: 0.5;
@@ -250,8 +250,9 @@
     --mdb-form-control-disabled-bg: #374151;
     --mdb-box-shadow-color: #000;
     --mdb-box-shadow-color-rgb: 0, 0, 0;
-    --mdb-stepper-mobile-bg: #1f222b;
+    --mdb-stepper-mobile-bg: var(--color-slate-600);
 
+    --mdb-dropdown-hover-bg: var(--color-slate-800);
     --mdb-table-hover-bg: rgb(46 57 76 / 20%);
     --mdb-box-shadow: 0 0px 15px -5px rgba(var(--mdb-box-shadow-color-rgb), 1), 0 0px 10px -8px rgba(var(--mdb-box-shadow-color-rgb), 1);
 }
@@ -5743,7 +5744,7 @@ fieldset:disabled .btn {
 
 .badge {
     --mdb-badge-padding-x: .65em;
-    --mdb-badge-padding-y: .225em;
+    --mdb-badge-padding-y: .2em;
     --mdb-badge-font-size: smaller;
     --mdb-badge-font-weight: 500;
     --mdb-badge-color: #fff;
@@ -5752,7 +5753,7 @@ fieldset:disabled .btn {
     padding: var(--mdb-badge-padding-y) var(--mdb-badge-padding-x);
     font-size: var(--mdb-badge-font-size);
     font-weight: var(--mdb-badge-font-weight);
-    /* line-height: 1; */
+    line-height: 1.5em;
     color: var(--mdb-badge-color);
     text-align: center;
     white-space: nowrap;
@@ -6553,12 +6554,12 @@ fieldset:disabled .btn {
 }
 
 .modal-dialog-scrollable .modal-body::-webkit-scrollbar-thumb {
-    background: rgb(var(--mdb-surface-inverted-color-rgb), 50%);
+    background: var(--root-scroll-bg);
     border-radius: 10px;
 }
 
 .modal-dialog-scrollable .modal-body::-webkit-scrollbar-thumb:hover {
-    background: rgb(var(--mdb-surface-inverted-color-rgb), 60%);
+    background: var(--root-scroll-bg-hover);
 }
 
 .modal-dialog-centered {
@@ -20708,14 +20709,14 @@ hr.divider-vertical-blurry {
 
 .dropdown-item {
     --mdb-dropdown-state-color: var(--mdb-surface-color);
-    --mdb-dropdown-state-background-color: var(--color-slate-800);
+    --mdb-dropdown-state-background-color: var(--mdb-dropdown-hover-bg);
     padding: var(--mdb-dropdown-item-padding-y) var(--mdb-dropdown-item-padding-x);
     color: var(--mdb-dropdown-color);
     border-radius: 0
 }
 
 .dropdown-item:last-child {
-    border-radius: 0 0 .5rem .5rem
+    border-radius: 0 0 .95rem .95rem
 }
 
 .dropdown-item:hover,

@@ -30,7 +30,7 @@ class VisitaController extends Controller
                         "0" => ['c' => 'warning', 't' => 'Sin Iniciar'],
                         "1" => ['c' => 'primary', 't' => 'En Proceso'],
                     ];
-                    $badge_visitas = '<label class="badge badge-' . $estadoVisita[$vis->estado]['c'] . '" style="font-size: .7rem;">' . $estadoVisita[$vis->estado]['t'] . '</label>';
+                    $badge_visitas = '<label class="badge rounded-pill" style="font-size: .75rem; color: rgb(var(--mdb-' . $estadoVisita[$vis->estado]['c'] . '-rgb)); border: 2px solid;">' . $estadoVisita[$vis->estado]['t'] . '</label>';
 
                     return [
                         'estado' => $badge_visitas,

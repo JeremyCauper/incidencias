@@ -133,5 +133,5 @@
 @endsection
 
 @section('scripts')
-    <script src="{{secure_asset('front/js/soporte/mantenimiento/problemas/subproblemas.js')}}"></script>
+    <script src="{{secure_asset('front/js/soporte/mantenimiento/problemas/subproblemas.js')}}?v={{ config('app.version') }}"></script>
 @endsection

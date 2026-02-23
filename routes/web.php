@@ -17,7 +17,6 @@ use App\Http\Controllers\Soporte\Empresas\GruposController;
 use App\Http\Controllers\Soporte\Empresas\SucursalesController;
 use App\Http\Controllers\Soporte\Incidencias\RegistradasController;
 use App\Http\Controllers\Soporte\Incidencias\ResueltasController;
-use App\Http\Controllers\Soporte\Inicio\PanelController;
 use App\Http\Controllers\Soporte\Inventario\InventarioTecnicoController;
 use App\Http\Controllers\Soporte\Inventario\MaterialesController;
 use App\Http\Controllers\Soporte\Mantenimientos\Menu\MenuController;
@@ -59,8 +58,6 @@ Route::post('/empresa/iniciar', [LoginController::class, 'loginCliente']);
 Route::get('/empresa/logout', [LoginController::class, 'logoutCliente'])->name('logout.cliente');
 
 Route::get('/validarTurno/{id}', [LoginController::class, 'validarTurno']);
-
-Route::get('/soporte/panel', [PanelController::class, 'view'])->middleware('auth');
 
 Route::get('/soporte/incidencias/registradas', [RegistradasController::class, 'view'])->middleware('auth');
 Route::get('/soporte/incidencias/registradas/index', [RegistradasController::class, 'index']);

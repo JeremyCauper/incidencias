@@ -6,7 +6,8 @@
     <!-- Requiredd meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ config('app.version') }}" />
+    <link rel="shortcut icon"
+        href="{{secure_asset('front/images/app/icons/icon.webp')}}?v={{ config('app.version') }}" />
     <title>RC Incidencias | Inicio</title>
 
     <link href="{{ secure_asset($ft_css->theme_colors) }}" rel="stylesheet">

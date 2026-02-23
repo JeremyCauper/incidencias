@@ -149,7 +149,7 @@
         <tr>
             <td class="w-50">
                 <div>
-                    <img src="{{public_path() . '/front/images/app/LogoRC.png'}}" alt="Logo" width="60">
+                    <img src="{{public_path() . '/front/images/app/icons/icon.webp'}}" alt="Logo" width="60">
                     <img src="{{public_path() . '/front/images/app/LogoRC_TNegro.png'}}" alt="Logo" width="210">
                 </div>
                 <div class="card">

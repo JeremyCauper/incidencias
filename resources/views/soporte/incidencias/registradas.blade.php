@@ -5,9 +5,9 @@
     <link rel="stylesheet" href="{{ secure_asset($ft_css->mdtp) }}">
     <script src="{{ secure_asset($ft_js->mdtp) }}"></script>
 
-    <link rel="stylesheet" href="{{ secure_asset('front/css/app/incidencias/registradas.css') }}">
-    <link rel="stylesheet" href="{{ secure_asset('front/vendor/selectize/selectize.default.min.css') }}">
-    <script src="{{ secure_asset('front/vendor/selectize/selectize.min.js') }}"></script>
+    <link rel="stylesheet" href="{{ secure_asset('front/css/app/incidencias/registradas.css') }}?v={{ config('app.version') }}">
+    <link rel="stylesheet" href="{{ secure_asset('front/vendor/selectize/selectize.default.min.css') }}?v={{ config('app.version') }}">
+    <script src="{{ secure_asset('front/vendor/selectize/selectize.min.js') }}?v={{ config('app.version') }}"></script>
 
     <script>
         let personal = {{ Auth::user()->id_usuario }};
@@ -131,7 +131,7 @@
     </script>
 
     <div class="col-12" id="contenedor_registros"></div>
-    <script src="{{ secure_asset('front/js/soporte/incidencia/vista-registros-registradas.js') }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/vista-registros-registradas.js') }}?v={{ config('app.version') }}"></script>
 
     <div class="modal fade" id="modal_incidencias" aria-labelledby="modal_incidencias" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
@@ -690,6 +690,6 @@
         // 
     </script>
     <script src="{{ secure_asset($ft_js->SelectManeger) }}"></script>
-    <script src="{{ secure_asset('front/vendor/signature/signature_pad.js') }}"></script>
-    <script src="{{ secure_asset('front/js/soporte/incidencia/registradas.js') }}"></script>
+    <script src="{{ secure_asset('front/vendor/signature/signature_pad.js') }}?v={{ config('app.version') }}"></script>
+    <script src="{{ secure_asset('front/js/soporte/incidencia/registradas.js') }}?v={{ config('app.version') }}"></script>
 @endsection

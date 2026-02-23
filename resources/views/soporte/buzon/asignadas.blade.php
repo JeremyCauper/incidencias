@@ -181,7 +181,7 @@
 
     <div class="nav nav-tabs my-3 gap-2" id="myTab0" role="tablist">
         <div class="nav-item" role="presentation">
-            <button data-mdb-tab-init class="nav-link position-relative active" id="home-tab0" data-mdb-target="#home0"
+            <button data-mdb-tab-init class="nav-link position-relative rounded-top-4 active" id="home-tab0" data-mdb-target="#home0"
                 type="button" role="tab" aria-controls="home" aria-selected="true" onclick="resetTable()">
                 Incidencias
                 <span id="count_asig"
@@ -189,7 +189,7 @@
             </button>
         </div>
         <div class="nav-item" role="presentation">
-            <button data-mdb-tab-init class="nav-link position-relative" id="profile-tab0" data-mdb-target="#profile0"
+            <button data-mdb-tab-init class="nav-link position-relative rounded-top-4" id="profile-tab0" data-mdb-target="#profile0"
                 type="button" role="tab" aria-controls="profile" aria-selected="false" onclick="resetTable()">
                 Visitas
                 <span id="count_vis"
@@ -848,6 +848,6 @@
 
 @section('scripts')
     <script src="{{secure_asset($ft_js->RevisionMananger)}}"></script>
-    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}"></script>
-    <script src="{{secure_asset('front/js/soporte/buzon/asignadas.js')}}"></script>
+    <script src="{{secure_asset('front/vendor/signature/signature_pad.js')}}?v={{ config('app.version') }}"></script>
+    <script src="{{secure_asset('front/js/soporte/buzon/asignadas.js')}}?v={{ config('app.version') }}"></script>
 @endsection
