@@ -7,8 +7,8 @@
     <link rel="stylesheet" type="text/css" href="{{secure_asset($ft_css->daterangepicker)}}">
     <style>
         /*////////////////////////////////////////
-                                                                                                        /        SCRIPT CSS FIRMA DIGITAL        /
-                                                                                                        ////////////////////////////////////////*/
+                                                                                                                /        SCRIPT CSS FIRMA DIGITAL        /
+                                                                                                                ////////////////////////////////////////*/
 
         .content-image {
             margin: auto;
@@ -109,8 +109,8 @@
         }
 
         /*////////////////////////////////////////
-                                                                                                        /          SCRIPT CSS Doc Firma          /
-                                                                                                        ////////////////////////////////////////*/
+                                                                                                                /          SCRIPT CSS Doc Firma          /
+                                                                                                                ////////////////////////////////////////*/
 
         .search_signature_group {
             flex-wrap: nowrap;
@@ -181,18 +181,16 @@
 
     <div class="nav nav-tabs my-3 gap-2" id="myTab0" role="tablist">
         <div class="nav-item" role="presentation">
-            <button data-mdb-tab-init class="nav-link position-relative active" id="home-tab0"
-                data-mdb-target="#home0" type="button" role="tab" aria-controls="home" aria-selected="true"
-                onclick="resetTable()">
+            <button data-mdb-tab-init class="nav-link position-relative active" id="home-tab0" data-mdb-target="#home0"
+                type="button" role="tab" aria-controls="home" aria-selected="true" onclick="resetTable()">
                 Incidencias
                 <span id="count_asig"
                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-danger"></span>
             </button>
         </div>
         <div class="nav-item" role="presentation">
-            <button data-mdb-tab-init class="nav-link position-relative" id="profile-tab0"
-                data-mdb-target="#profile0" type="button" role="tab" aria-controls="profile" aria-selected="false"
-                onclick="resetTable()">
+            <button data-mdb-tab-init class="nav-link position-relative" id="profile-tab0" data-mdb-target="#profile0"
+                type="button" role="tab" aria-controls="profile" aria-selected="false" onclick="resetTable()">
                 Visitas
                 <span id="count_vis"
                     class="position-absolute top-0 start-100 translate-middle badge rounded-pill badge-danger"></span>
@@ -204,9 +202,10 @@
         <div class="tab-content" id="myTabContent0">
             <div class="tab-pane fade show active" id="home0" role="tabpanel" aria-labelledby="home-tab0">
                 <div id="contenedor_registros_incidencias"></div>
-                <script src="{{ secure_asset('front/js/soporte/buzon/vista-registros-asignadas-incidencias.js') }}"></script>
+                <script
+                    src="{{ secure_asset('front/js/soporte/buzon/vista-registros-asignadas-incidencias.js') }}"></script>
             </div>
-            
+
 
             <div class="tab-pane fade" id="profile0" role="tabpanel" aria-labelledby="profile-tab0">
                 <div id="contenedor_registros_visitas"></div>
@@ -220,7 +219,7 @@
     <div class="modal fade" id="modal_detalle" aria-labelledby="modal_detalle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Detalle de incidencia
                         <span class="badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
@@ -234,7 +233,7 @@
                 <div class="modal-body modal-body-scrollable px-1 p-0">
                     <div class="row">
                         <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
-                            style="background-color: rgb(29 49 69 / 5%);">
+                            style="background-color: rgb(59 113 202 / 5%);">
                             <h6 class="text-uppercase mt-2 mb-4 title_detalle">
                                 <i class="fas fa-city me-2"></i> Información del Cliente
                             </h6>
@@ -302,7 +301,7 @@
     <div class="modal fade" id="modal_orden" aria-labelledby="modal_orden" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen-md-down modal-dialog-scrollable modal-xl">
             <form class="modal-content" id="form-orden">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">ORDEN DE SERVICIO
                         <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
@@ -474,7 +473,7 @@
     <div class="modal fade" id="modal_addcod" aria-labelledby="modal_addcod" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-addcod">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Añadir Codigo Aviso
                         <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
@@ -527,7 +526,7 @@
     <div class="modal fade" id="modal_seguimiento_visitasp" aria-labelledby="modal_detalle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Detalle de la visita</h5>
                     <div class="align-items-center d-flex gap-2">
                         <span aria-item="estado"></span>
@@ -538,7 +537,7 @@
                 <div class="modal-body modal-body-scrollable px-1 p-0">
                     <div class="row">
                         <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
-                            style="background-color: rgb(29 49 69 / 5%);">
+                            style="background-color: rgb(59 113 202 / 5%);">
                             <h6 class="text-uppercase mt-2 mb-4 title_detalle">
                                 <i class="fas fa-city me-2"></i> Información del Cliente
                             </h6>
@@ -582,7 +581,7 @@
     <div class="modal fade" id="modal_orden_visita" aria-labelledby="modal_orden_visita" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen-md-down modal-dialog-scrollable modal-xl">
             <form class="modal-content" id="form-orden-visita">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">ORDEN DE SERVICIO
                         <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo">{{$data['cod_ordenv']}}</span>

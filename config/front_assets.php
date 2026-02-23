@@ -4,8 +4,10 @@ return [
     'version' => $version,
     'css' => (object) [
         'app' => 'front/css/app.css?v=' . $version,
+        'theme_colors' => 'front/css/theme-colors.css?v=' . $version,
         'mdb_all_min6_0_0' => 'front/vendor/mdboostrap/css/all.min6.0.0.css?v=' . $version,
         'mdb_min7_2_0' => 'front/vendor/mdboostrap/css/mdb.min7.2.0.css?v=' . $version,
+        'bootstrap_multiselect' => 'front/vendor/multiselect/bootstrap_multiselect.css?v=' . $version,
         'customSelect2' => 'front/vendor/customSelect2/customSelect2.css?v=' . $version,
         'sweet_animate' => 'front/vendor/sweetalert/animate.min.css?v=' . $version,
         'sweet_default' => 'front/vendor/sweetalert/default.css?v=' . $version,

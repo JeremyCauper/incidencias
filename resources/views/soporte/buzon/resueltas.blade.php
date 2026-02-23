@@ -90,7 +90,7 @@
     <div class="modal fade" id="modal_seguimiento_visitasp" aria-labelledby="modal_detalle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Detalle de la visita</h5>
                     <div class="align-items-center d-flex gap-2">
                         <span aria-item="estado"></span>
@@ -101,7 +101,7 @@
                 <div class="modal-body modal-body-scrollable px-1 p-0">
                     <div class="row">
                         <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
-                            style="background-color: rgb(29 49 69 / 5%);">
+                            style="background-color: rgb(59 113 202 / 5%);">
                             <h6 class="text-uppercase mt-2 mb-4 title_detalle">
                                 <i class="fas fa-city me-2"></i> Información del Cliente
                             </h6>
@@ -145,7 +145,7 @@
     <div class="modal fade" id="modal_detalle" aria-labelledby="modal_detalle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Detalle de incidencia
                         <span class="text-nowrap">
                             <span class="badge badge-lg rounded-pill" style="background-color: #5a8bdb"
@@ -163,7 +163,7 @@
                 <div class="modal-body modal-body-scrollable px-1 p-0">
                     <div class="row">
                         <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
-                            style="background-color: rgb(29 49 69 / 5%);">
+                            style="background-color: rgb(59 113 202 / 5%);">
                             <h6 class="text-uppercase mt-2 mb-4 title_detalle">
                                 <i class="fas fa-city me-2"></i> Información del Cliente
                             </h6>

@@ -57,7 +57,7 @@
                             </div>
                         </div>
                         <div class="content-text flex-grow-1 ms-2">
-                            <p class="text-muted text-nowrap text-secondary fw-bold mb-1">Registradas</p>
+                            <p class="text-nowrap fw-bold mb-1" style="color: var(--color-surface)">Registradas</p>
                             <p class="fw-bold mb-0 fs-4" data-panel="totales">0</p>
                         </div>
                     </div>
@@ -76,7 +76,7 @@
                             </div>
                         </div>
                         <div class="content-text flex-grow-1 ms-2">
-                            <p class="text-muted text-nowrap text-secondary fw-bold mb-1">Asignadas</p>
+                            <p class="text-nowrap fw-bold mb-1" style="color: var(--color-surface)">Asignadas</p>
                             <p class="fw-bold mb-0 fs-4" data-panel="tAsignadas">0</p>
                         </div>
                     </div>
@@ -94,7 +94,7 @@
                             </div>
                         </div>
                         <div class="content-text flex-grow-1 ms-2">
-                            <p class="text-muted text-nowrap text-secondary fw-bold mb-1">Sin Asignar</p>
+                            <p class="text-nowrap fw-bold mb-1" style="color: var(--color-surface)">Sin Asignar</p>
                             <p class="fw-bold mb-0 fs-4" data-panel="tSinAsignar">0</p>
                         </div>
                     </div>
@@ -112,7 +112,7 @@
                             </div>
                         </div>
                         <div class="content-text flex-grow-1 ms-2">
-                            <p class="text-muted text-nowrap text-secondary fw-bold mb-1">En Proceso</p>
+                            <p class="text-nowrap fw-bold mb-1" style="color: var(--color-surface)">En Proceso</p>
                             <p class="fw-bold mb-0 fs-4" data-panel="tEnProceso">0</p>
                         </div>
                     </div>
@@ -138,7 +138,7 @@
             <form class="modal-content" id="form-incidencias" style="position: relative;">
                 <input type="hidden" name="id_inc" id="id_inc">
                 <input type="hidden" name="estado_info" id="estado_info">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">NUEVA INCIDENCIA
                         <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             id="cod_inc_text">{{ $data['cod_inc'] }}</span>
@@ -304,9 +304,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-danger btn-sm" data-mdb-ripple-init
+                    <button type="button" class="btn btn-link" data-mdb-ripple-init
                         data-mdb-dismiss="modal">Cerrar</button>
-                    <button type="submit" class="btn btn-primary btn-sm" data-mdb-ripple-init>Registrar</button>
+                    <button type="submit" class="btn btn-primary" data-mdb-ripple-init>Registrar</button>
                 </div>
             </form>
         </div>
@@ -315,7 +315,7 @@
     <div class="modal fade" id="modal_detalle" aria-labelledby="modal_detalle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Detalle de incidencia
                         <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
@@ -329,7 +329,7 @@
                 <div class="modal-body modal-body-scrollable px-1 p-0">
                     <div class="row">
                         <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
-                            style="background-color: rgb(29 49 69 / 5%);">
+                            style="background-color: rgb(59 113 202 / 5%);">
                             <h6 class="text-uppercase mt-2 mb-4 title_detalle">
                                 <i class="fas fa-city me-2"></i> Información del Cliente
                             </h6>
@@ -397,7 +397,7 @@
     <div class="modal fade" id="modal_assign" aria-labelledby="modal_assign" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen-md-down modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Asignar
                         <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
@@ -458,7 +458,7 @@
     <div class="modal fade" id="modal_orden" aria-labelledby="modal_orden" tabindex="-1" aria-hidden="true" style="overflow: clip;">
         <div class="modal-dialog modal-fullscreen-md-down modal-dialog-scrollable modal-xl" style="display: flex;">
             <form class="modal-content" id="form-orden">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">ORDEN DE SERVICIO 
                         <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>
@@ -634,7 +634,7 @@
     <div class="modal fade" id="modal_addcod" aria-labelledby="modal_addcod" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-addcod">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Añadir Codigo Aviso
                         <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo"></span>

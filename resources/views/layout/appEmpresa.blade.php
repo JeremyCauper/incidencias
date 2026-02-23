@@ -21,6 +21,8 @@
     <meta name="msapplication-TileImage" content="{{ secure_asset($ft_img->icon_192) }}">
     <meta name="msapplication-TileColor" content="#000000">
 
+    <link href="{{ secure_asset($ft_css->theme_colors) }}" rel="stylesheet">
+
     <!-- Font Awesome -->
     <link href="{{ secure_asset($ft_css->mdb_all_min6_0_0) }}" rel="stylesheet">
     <!-- MDB -->

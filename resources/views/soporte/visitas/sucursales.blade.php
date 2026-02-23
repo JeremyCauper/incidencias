@@ -35,7 +35,7 @@
                                     </div>
                                 </div>
                                 <div class="content-text flex-grow-1 ms-2">
-                                    <p class="text-muted text-nowrap text-secondary fw-bold mb-1">Sin Asignar</p>
+                                    <p class="text-nowrap fw-bold mb-1" style="color: var(--color-surface)">Sin Asignar</p>
                                     <p class="fw-bold mb-0 fs-4" data-panel="vSinAsignar">0</p>
                                 </div>
                             </div>
@@ -52,7 +52,7 @@
                                     </div>
                                 </div>
                                 <div class="content-text flex-grow-1 ms-2">
-                                    <p class="text-muted text-nowrap text-secondary fw-bold mb-1">Asignadas</p>
+                                    <p class="text-nowrap fw-bold mb-1" style="color: var(--color-surface)">Asignadas</p>
                                     <p class="fw-bold mb-0 fs-4" data-panel="vAsignadas">0</p>
                                 </div>
                             </div>
@@ -77,7 +77,7 @@
                                     </div>
                                 </div>
                                 <div class="content-text flex-grow-1 ms-2">
-                                    <p class="text-muted text-nowrap text-secondary fw-bold mb-1">En Proceso</p>
+                                    <p class="text-nowrap fw-bold mb-1" style="color: var(--color-surface)">En Proceso</p>
                                     <p class="fw-bold mb-0 fs-4" data-panel="vEnProceso">0</p>
                                 </div>
                             </div>
@@ -95,7 +95,7 @@
                                     </div>
                                 </div>
                                 <div class="content-text flex-grow-1 ms-2">
-                                    <p class="text-muted text-nowrap text-secondary fw-bold mb-1">Sin Iniciar</p>
+                                    <p class="text-nowrap fw-bold mb-1" style="color: var(--color-surface)">Sin Iniciar</p>
                                     <p class="fw-bold mb-0 fs-4" data-panel="vSinIniciar">0</p>
                                 </div>
                             </div>
@@ -103,7 +103,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="col-12" id="contenedor_registros_programadas"></div>
             <script src="{{ secure_asset('front/js/soporte/visitas/vista-registros-programadas.js') }}"></script>
         </div>
@@ -114,7 +114,7 @@
     <div class="modal fade" id="modal_visitas" tabindex="-1" aria-labelledby="modal_visitasLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <form class="modal-content" id="form-visita">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title" id="modal_visitasLabel">Asignar Personal Visita
                         <span aria-item="contrato"></span>
                     </h5>
@@ -173,7 +173,7 @@
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h6 class="modal-title" id="modal_detalle_visitasLabel">Asignar Personal Visita
                         <span aria-item="contrato"></span>
                     </h6>
@@ -270,7 +270,7 @@
     <div class="modal fade" id="modal_seguimiento_visitasp" aria-labelledby="modal_detalle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-scrollable modal-fullscreen-md-down modal-xl">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Detalle de la visita</h5>
                     <div class="align-items-center d-flex gap-2">
                         <span aria-item="estado"></span>
@@ -281,7 +281,7 @@
                 <div class="modal-body modal-body-scrollable px-1 p-0">
                     <div class="row">
                         <div class="col-lg-5 p-4 modal-col-scrollable personalized-scroll"
-                            style="background-color: rgb(29 49 69 / 5%);">
+                            style="background-color: rgb(59 113 202 / 5%);">
                             <h6 class="text-uppercase mt-2 mb-4 title_detalle">
                                 <i class="fas fa-city me-2"></i> Información del Cliente
                             </h6>
@@ -325,7 +325,7 @@
     <div class="modal fade" id="modal_assign" aria-labelledby="modal_assign" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">Asignar</h5>
                     <div class="align-items-center d-flex gap-2">
                         <button type="button" class="btn-close" data-mdb-ripple-init data-mdb-dismiss="modal"
@@ -368,7 +368,7 @@
     <div class="modal fade" id="modal_orden" aria-labelledby="modal_orden" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-fullscreen-md-down modal-dialog-scrollable modal-xl">
             <form class="modal-content" id="form-orden">
-                <div class="modal-header" style="background-color: rgb(59 113 202 / 25%);">
+                <div class="modal-header">
                     <h5 class="modal-title">ORDEN DE SERVICIO
                         <span class="ms-2 badge badge-lg rounded-pill" style="background-color: #5a8bdb"
                             aria-item="codigo">{{$data['cod_ordenv']}}</span>

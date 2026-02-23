@@ -207,7 +207,7 @@ class Controller extends BaseController
                         </span>' : '') . '
                 <button
                     type="button"
-                    class="' . ($sinAcciones ? 'disabled' : 'dropdown-toggle hover-btn') . ' btn btn-tertiary btn-sm p-1 shadow-0"
+                    class="' . ($sinAcciones ? 'disabled' : 'dropdown-toggle hover-btn') . ' btn btn-sm p-1 shadow-0"
                     data-mdb-ripple-init
                     aria-expanded="false"
                     data-mdb-dropdown-init
@@ -217,7 +217,7 @@ class Controller extends BaseController
                     data-mdb-dropdown-initialized="true">
                     <i class="fas fa-' . ($sinAcciones ? 'ban' : 'bars') . '" style="font-size: 1.125em;' . ($sinAcciones ? 'visibility: hidden;' : '') . '"></i>
                 </button>
-                <div class="dropdown-menu">
+                <div class="dropdown-menu rounded-7">
                     ' . $tittle . $button . '
                 </div>
             </div>';

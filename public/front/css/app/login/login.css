@@ -1,25 +1,5 @@
 :root,
 [data-mdb-theme=light] {
-    --color-blue-50: rgb(239 246 255);
-    --color-blue-100: rgb(219 234 254);
-    --color-blue-300: rgb(142 197 255);
-    --color-blue-400: rgb(81 162 255);
-    --color-blue-500: rgb(43 127 255);
-    --color-blue-600: rgb(21 93 251);
-    --color-blue-700: rgb(20 71 230);
-    --color-blue-800: rgb(25 60 184);
-    --color-blue-900: rgb(28 57 142);
-    --color-slate-0: rgb(255 255 255);
-    --color-slate-50: rgb(248 250 252);
-    --color-slate-100: rgb(241 245 249);
-    --color-slate-200: rgb(226 232 240);
-    --color-slate-300: rgb(202 213 226);
-    --color-slate-400: rgb(144 161 185);
-    --color-slate-500: rgb(98 116 142);
-    --color-slate-600: rgb(69 85 108);
-    --color-slate-700: rgb(49 65 88);
-    --color-slate-800: rgb(29 41 61);
-    --color-slate-900: rgb(15 23 43);
     --color-slate-inverted-900: rgb(255 255 255);
     --slots: to bottom right in oklab, oklch(.208 .042 265.755) 0%, oklch(.279 .041 260.031) 50%, oklch(.208 .042 265.755) 100%;
 

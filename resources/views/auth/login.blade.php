@@ -8,13 +8,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="shortcut icon" href="{{secure_asset('front/images/app/LogoRC.png')}}?v={{ config('app.version') }}" />
     <title>RC Incidencias | Inicio</title>
-    <!-- Font Awesome -->
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/all.min6.0.0.css')}}?v={{ config('app.version') }}">
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/mdboostrap/css/mdb.min7.2.0.css')}}?v={{ config('app.version') }}">
-    <link rel="stylesheet" href="{{secure_asset('front/vendor/sweetalert/default.css')}}?v={{ config('app.version') }}">
-    <link rel="stylesheet" href="{{secure_asset('front/css/app/login/login.css')}}?v={{ config('app.version') }}">
 
-    <script src="{{secure_asset('front/vendor/jquery/jquery.min.js')}}?v={{ config('app.version') }}"></script>
+    <link href="{{ secure_asset($ft_css->theme_colors) }}" rel="stylesheet">
+
+    <!-- Font Awesome -->
+    <link href="{{ secure_asset($ft_css->mdb_all_min6_0_0) }}" rel="stylesheet">
+    <!-- MDB -->
+    <link href="{{ secure_asset($ft_css->mdb_min7_2_0) }}" rel="stylesheet">
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->sweet_animate) }}">
+    <link rel="stylesheet" href="{{ secure_asset($ft_css->sweet_default) }}">
+
+    <link rel="stylesheet" href="{{secure_asset('front/css/app/login/login.css')}}?v={{ config('app.version') }}">
+    <!-- JQuery -->
+    <script src="{{ secure_asset($ft_js->jquery) }}"></script>
+    <script src="{{ secure_asset($ft_js->sweet_sweetalert2) }}"></script>
+    <script src="{{ secure_asset($ft_js->AlertMananger) }}"></script>
     <script>
         const intervalToken = setInterval(() => {
             if (!document.cookie.includes('XSRF-TOKEN')) {
@@ -26,8 +34,7 @@
 </head>
 
 <body class="d-flex" style="min-height: 100vh;">
-    <div
-        class="contenedor-imagen position-relative overflow-hidden">
+    <div class="contenedor-imagen position-relative overflow-hidden">
         <div class="position-absolute" style="inset: calc(.25rem * 0);">
             <div class="img-wrapper position-absolute">
                 <img data-imagen="cliente" class="bg-img active"
@@ -221,9 +228,8 @@
         </div>
     </div>
 
-    <script src="{{secure_asset('front/vendor/mdboostrap/js/mdb.umd.min7.2.0.js')}}?v={{ config('app.version') }}"></script>
-    <script src="{{secure_asset('front/vendor/sweetalert/sweetalert2@11.js')}}?v={{ config('app.version') }}"></script>
-    <script src="{{secure_asset('front/js/app/AlertMananger.js')}}?v={{ config('app.version') }}"></script>
+    <!-- MDB -->
+    <script type="text/javascript" src="{{ secure_asset($ft_js->mdb_umd_min7_2_0) }}"></script>
     <script>
         const __url = "{{secure_url('')}}";
         const __token = "{{ csrf_token() }}";
