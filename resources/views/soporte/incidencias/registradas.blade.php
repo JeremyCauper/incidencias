@@ -195,7 +195,7 @@
                         <div class="col-lg-4 col-5 mb-2">
                             <select class="select-tags" id="tel_contac" minlength="9" maxlength="9"
                                 onchange="validContac(this)">
-                                <option value=""></option>
+                                <option value="">Seleccione...</option>
                             </select>
                         </div>
                         <div class="col-lg-6 col-7 mb-2">
