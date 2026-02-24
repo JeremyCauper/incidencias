@@ -61,7 +61,7 @@ $(document).ready(function () {
             disabled: true
         },
         {
-            control: '#fecha_imforme',
+            control: '#fecha_informe',
             requested: true
         },
         {
@@ -230,7 +230,7 @@ $(document).ready(function () {
     $('.modal').on('shown.bs.modal', function () {
         switch ($(this).attr('id')) {
             case 'modal_incidencias':
-                fecha_imforme.val(date('Y-m-d'));
+                fecha_informe.val(date('Y-m-d'));
                 hora_informe.val(date('H:i'));
                 if ($('#tIncidencia').val() == "1" && $('#id_inc').val() == "") {
                     cPersonal.createRow(personal);
@@ -454,7 +454,10 @@ document.getElementById('form-incidencias').addEventListener('submit', async fun
     if (!personal) {
         return fMananger.formModalLoding('modal_incidencias', 'hide');
     }
+    
     valid.data.data['personal'] = personal;
+    valid.data.data.fecha_informe = fecha_informe.val();
+    valid.data.data.hora_informe = hora_informe.val();
 
     const hayRegistro = Object.values(personal).some(item => item.registro === 1);
     if (hayRegistro && $('#estado_info').val() == '2' && !await boxAlert.confirm({
@@ -603,7 +606,7 @@ function ShowEdit(cod) {
             CS_sproblema.selecionar(() => { return obj_problem[dt.id_problema]?.codigo ?? null; });
             $('#sproblema').val(dt.id_subproblema).trigger('change');
             setTimeout(() => {
-                fecha_imforme.val(dt.fecha_informe);
+                fecha_informe.val(dt.fecha_informe);
                 hora_informe.val(dt.hora_informe);
             }, 300);
             $('#observacion').val(dt.observacion);

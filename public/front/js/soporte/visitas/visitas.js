@@ -50,10 +50,6 @@ const config_personal = {
 const cPersonal = new CTable('createPersonal', config_personal);
 const cPersonal1 = new CTable('createPersonal1', config_personal);
 
-function updateTableVisitas() {
-    tb_visitas.ajax.reload();
-}
-
 function AsignarVisita(id) {
     $('#modal_visitas').modal('show');
     fMananger.formModalLoding('modal_visitas', 'show', true);
@@ -163,6 +159,8 @@ document.getElementById('form-visita').addEventListener('submit', function (even
     if (!valid.success)
         return fMananger.formModalLoding('modal_visitas', 'hide');
     valid.data.data['personal'] = cPersonal.extract();
+    valid.data.data.fecha_visita = fecha_visita.val();
+    
 
     $.ajax({
         type: 'POST',
@@ -179,6 +177,7 @@ document.getElementById('form-visita').addEventListener('submit', function (even
             $('#modal_visitas').modal('hide');
             boxAlert.box({ i: data.icon, t: data.title, h: data.message })
             updateTableVProgramadas();
+            cPersonal.llenar();
             return updateTableVisitas();
         },
         error: function (jqXHR, textStatus, errorThrown) {
