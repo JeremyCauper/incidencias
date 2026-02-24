@@ -3,7 +3,7 @@ let listado_vprogramadas;
 let getUrlListarProgramados = () => generateUrl(`${__url}/soporte/visitas/programadas/index`, {});
 let dataSetProgramados = (json) => {
     $.each(json.conteo, function (panel, count) {
-        $(`b[data-panel="${panel}"]`).html(count);
+        $(`p[data-panel="${panel}"]`).html(count);
     });
     return json.data;
 }

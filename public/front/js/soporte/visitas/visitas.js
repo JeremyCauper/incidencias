@@ -177,7 +177,6 @@ document.getElementById('form-visita').addEventListener('submit', function (even
             $('#modal_visitas').modal('hide');
             boxAlert.box({ i: data.icon, t: data.title, h: data.message })
             updateTableVProgramadas();
-            cPersonal.llenar();
             return updateTableVisitas();
         },
         error: function (jqXHR, textStatus, errorThrown) {

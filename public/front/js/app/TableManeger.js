@@ -215,12 +215,13 @@ class CTable {
     }
 
     updateTable({ data = this.data, del = true, newR = 0 } = {}) {
-        this.deleteTable();
+        this.deleteTable(this.data);
         this.fillTable(Object.keys(data), { del: del, newR: newR });
     }
 
-    deleteTable() {
+    deleteTable(data = {}) {
         if (this._table !== null) this._table.remove();
+        this.data = data;
         this.fillSelect();
         this._table = null;
     }
@@ -261,7 +262,7 @@ class CTable {
                     .attr(atributos)
             );
         });
-        this._selector.customSelect2('update');
+        this._selector.trigger('change').customSelect2('update');
     }
 
     _checkValidation(item) {
