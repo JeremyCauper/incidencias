@@ -269,7 +269,7 @@
                         <div class="col-sm-4">
                             <div class="row">
                                 <div class="col-sm-12 col-6 mb-2">
-                                    <input class="form-control" id="fecha_imforme">
+                                    <input class="form-control" id="fecha_informe">
                                 </div>
                                 <div class="col-sm-12 col-6 mb-2">
                                     <input class="form-control" id="hora_informe">
@@ -281,12 +281,12 @@
                         </div>
                     </div>
                     <script>
-                        const fecha_imforme = new MaterialDateTimePicker({
-                            inputId: 'fecha_imforme',
+                        const fecha_informe = new MaterialDateTimePicker({
+                            inputId: 'fecha_informe',
                             mode: 'date',
                             format: 'MMMM DD de YYYY'
                         });
-                        fecha_imforme.val("{{ date('Y-m-d') }}");
+                        fecha_informe.val("{{ date('Y-m-d') }}");
 
                         const hora_informe = new MaterialDateTimePicker({
                             inputId: 'hora_informe',

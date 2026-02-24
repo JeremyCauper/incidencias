@@ -67,8 +67,8 @@
     background: var(--mdtp-overlay);
     z-index: 9998;
     opacity: 0;
-    transition: opacity 0.3s var(--mdtp-transition);
-    backdrop-filter: blur(2px);
+    transition: opacity .1s var(--mdtp-transition);
+    backdrop-filter: blur(3px);
 }
 
 .mdtp-overlay.active {
@@ -90,7 +90,7 @@
     left: 50%;
     transform: translate(-50%, -50%) scale(0.9);
     opacity: 0;
-    transition: all 0.3s var(--mdtp-transition);
+    transition: all .1s var(--mdtp-transition);
 }
 
 .mdtp-picker.active {

@@ -3,7 +3,7 @@ let listado_visitas;
 let getUrlListar = () => generateUrl(`${__url}/soporte/visitas/sucursales/index`, {});
 let dataSet = (json) => {
     $.each(json.conteo, function (panel, count) {
-        $(`b[data-panel="${panel}"]`).html(count);
+        $(`p[data-panel="${panel}"]`).html(count);
     });
     return json.data;
 }
