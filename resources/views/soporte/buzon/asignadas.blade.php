@@ -416,7 +416,7 @@
                     <div class="col-12 my-2 px-4">
                         <div class="row justify-content-between firmas-orden">
                             <div class="col-sm-5 text-center my-2">
-                                <img class="border rounded-1" {{ Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : '' }}
+                                <img class="border rounded-1" {{ Auth::user()->firma_digital ? 'src=' . secure_asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : '' }}
                                     height="130" width="160">
                                 <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
                                     Firma Tecnico

@@ -201,7 +201,7 @@ class VProgramadasController extends Controller
     {
         $imagen = $usuario[$creador]->foto ?? 'user_auth.jpg';
         return [
-            'img' => asset("front/images/auth/{$imagen}"),
+            'img' => secure_asset("front/images/auth/{$imagen}"),
             'nombre' => $usuario[$creador]->tecnico,
             'telefono' => $usuario[$vPersonal]->telefono ?: "999999999",
             'email' => $usuario[$vPersonal]->email ?: "soporte01@rcingenieros.com",
