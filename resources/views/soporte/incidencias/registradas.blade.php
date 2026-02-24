@@ -121,7 +121,7 @@
         </div>
     </section>
     <script>
-        function fillSelectContac(data) {
+        function fillSelectContac(data = []) {
             $('#tel_contac').html('<option value=""></option>');
             Object.entries(data).forEach(([key, e]) => {
                 $('#tel_contac').append($('<option>').val(e.telefono).text(e.telefono));
@@ -195,7 +195,7 @@
                         <div class="col-lg-4 col-5 mb-2">
                             <select class="select-tags" id="tel_contac" minlength="9" maxlength="9"
                                 onchange="validContac(this)">
-                                <option value="">Seleccione...</option>
+                                <option value=""></option>
                             </select>
                         </div>
                         <div class="col-lg-6 col-7 mb-2">
@@ -573,7 +573,7 @@
                         <div class="row justify-content-between firmas-orden">
                             <div class="col-sm-5 text-center my-2">
                                 <img class="border rounded-1"
-                                    {{ Auth::user()->firma_digital ? 'src=' . asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : '' }}
+                                    {{ Auth::user()->firma_digital ? 'src=' . secure_asset('front/images/firms/' . Auth::user()->firma_digital) . '?v=' . time() : '' }}
                                     height="130" width="160">
                                 <p class="pt-1 text-secondary" style="font-weight: 600;font-size: .85rem;">
                                     Firma Tecnico

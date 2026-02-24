@@ -4,7 +4,7 @@ let base_url = `${__url}/soporte/incidencias/registradas/index`;
 let dataSet = (json) => {
     $.each(json.conteo_data, function (panel, count) {
         $(`p[data-panel="${panel}"]`).html(count);
-    });
+    });    
     fillSelectContac(json.contact);
     return json.data;
 }

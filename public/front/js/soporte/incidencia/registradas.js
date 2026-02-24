@@ -300,6 +300,8 @@ $(document).ready(function () {
     fObservador('.content-wrapper', () => {
         if (!esCelular()) listado_incidencia.columns.adjust().draw();
     });
+
+    CS_tel_contac.llenar();
 });
 
 let valorAnterior;
@@ -454,7 +456,7 @@ document.getElementById('form-incidencias').addEventListener('submit', async fun
     if (!personal) {
         return fMananger.formModalLoding('modal_incidencias', 'hide');
     }
-    
+
     valid.data.data['personal'] = personal;
     valid.data.data.fecha_informe = fecha_informe.val();
     valid.data.data.hora_informe = hora_informe.val();
