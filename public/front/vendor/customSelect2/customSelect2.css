@@ -255,7 +255,7 @@
     border: 1px solid rgba(255, 255, 255, 0.12);
     border-radius: .75rem;
     font-size: 14px;
-    color: var(--cs2-text);
+    color: #e7e7e7;
     background-color: #202020;
     outline: none;
     transition: all 0.2s ease;

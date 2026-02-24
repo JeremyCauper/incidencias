@@ -24,7 +24,7 @@ $(document).ready(function () {
         },
         "tags": {
             search: true,
-            placeholder: 'Buscar',
+            searchPlaceholder: 'Ingresar... 999999999',
             allowClear: true,
             tags: true,
             createTag: function (params) {
@@ -87,5 +87,36 @@ $(document).ready(function () {
     // Allow icons selection
     $('.select-icons').each(function () {
         initializeSelect2($(this), config.icons);
+    });
+
+    $('.select-tags').on('customSelect2:open', async function () {
+        let searchField = document.querySelector('.custom-select2-search__field');
+        if (searchField) {
+            searchField.setAttribute('maxlength', 9);
+            searchField.setAttribute('minlength', 9);
+            searchField.setAttribute('pattern', '^9[0-9]{8}$');
+
+            if (!searchField.value) {
+                searchField.value = '9';
+            }
+
+            searchField.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '');
+                if (this.value.length === 0) {
+                    this.value = '9';
+                    return;
+                }
+
+                if (this.value[0] !== '9') {
+                    this.value = '9' + this.value.substring(1);
+                }
+
+                if (this.value.length > 9) {
+                    this.value = this.value.substring(0, 9);
+                }
+            });
+
+            searchField.focus();
+        }
     });
 });
