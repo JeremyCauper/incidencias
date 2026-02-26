@@ -230,7 +230,7 @@
 [data-mdb-theme=dark] {
     color-scheme: dark;
     --mdb-surface-color: var(--color-slate-0);
-    --mdb-surface-color-rgb: var(--color-slate-0);
+    --mdb-surface-color-rgb: 255, 255, 255;
     --mdb-surface-bg: #16181f;
     --mdb-surface-bg-rgb: 22, 24, 31;
     --mdb-surface-inverted-color: var(--color-slate-0);
